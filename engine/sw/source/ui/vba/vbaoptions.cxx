@@ -30,7 +30,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaOptions::SwVbaOptions( uno::Reference<uno::XComponentContext > const & xContext ) : SwVbaOptions_BASE( uno::Reference< XHelperInterface >(), xContext )
+SwVbaOptions::SwVbaOptions( uno::Reference<cpo::uno::XComponentContext > const & xContext ) : SwVbaOptions_BASE( uno::Reference< XHelperInterface >(), xContext )
 {
 }
 

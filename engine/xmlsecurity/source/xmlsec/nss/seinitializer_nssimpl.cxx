@@ -35,7 +35,7 @@
 using namespace com::sun::star;
 
 
-SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
+SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< cpo::uno::XComponentContext > &rxContext )
 {
     m_xContext = rxContext;
 }
@@ -108,14 +108,14 @@ namespace {
 class NSSInitializer_NssImpl : public SEInitializer_NssImpl
 {
 public:
-    explicit NSSInitializer_NssImpl(const uno::Reference<uno::XComponentContext>& xContext);
+    explicit NSSInitializer_NssImpl(const uno::Reference<cpo::uno::XComponentContext>& xContext);
     OUString SAL_CALL getImplementationName() override;
     cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }
 
-NSSInitializer_NssImpl::NSSInitializer_NssImpl(const uno::Reference<uno::XComponentContext>& xContext)
+NSSInitializer_NssImpl::NSSInitializer_NssImpl(const uno::Reference<cpo::uno::XComponentContext>& xContext)
     : SEInitializer_NssImpl(xContext)
 {
 }
@@ -132,14 +132,14 @@ cpo::uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new NSSInitializer_NssImpl(pCtx));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SEInitializer_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
 #ifdef MACOSX
     // The macOS initializer extends the NSS one with Keychain support.

@@ -682,7 +682,7 @@ void OFileAccess::setHidden( const OUString& FileURL, bool bHidden )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_OFileAccess_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OFileAccess(context));
 }

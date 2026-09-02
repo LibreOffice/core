@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 ScVbaFont::ScVbaFont(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const ScVbaPalette& dPalette,
         const uno::Reference< beans::XPropertySet >& xPropertySet,
         ScCellRangeObj* pRangeObj, bool bFormControl ) :

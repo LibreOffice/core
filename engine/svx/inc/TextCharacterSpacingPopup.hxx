@@ -25,7 +25,7 @@ namespace svx
 class TextCharacterSpacingPopup final : public svt::PopupWindowController
 {
 public:
-    TextCharacterSpacingPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    TextCharacterSpacingPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~TextCharacterSpacingPopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

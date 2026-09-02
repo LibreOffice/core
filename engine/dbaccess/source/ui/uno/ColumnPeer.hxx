@@ -21,7 +21,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace dbaui
 {
@@ -33,7 +33,7 @@ namespace dbaui
     public:
 
         OColumnPeer(vcl::Window* _pParent
-                    ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+                    ,const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
         void setColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn);
         void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);

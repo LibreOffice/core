@@ -222,7 +222,7 @@ public:
     };
 
     librdf_TypeConverter(
-            uno::Reference< uno::XComponentContext > i_xContext,
+            uno::Reference< cpo::uno::XComponentContext > i_xContext,
             librdf_Repository &i_rRep)
         : m_xContext(std::move(i_xContext))
         , m_rRep(i_rRep)
@@ -264,7 +264,7 @@ public:
         const;
 
 private:
-    uno::Reference< uno::XComponentContext > const m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > const m_xContext;
     librdf_Repository & m_rRep;
 };
 
@@ -281,7 +281,7 @@ class librdf_Repository:
 public:
 
     explicit librdf_Repository(
-        uno::Reference< uno::XComponentContext > const & i_xContext);
+        uno::Reference< cpo::uno::XComponentContext > const & i_xContext);
     virtual ~librdf_Repository() override;
 
     // css::lang::XServiceInfo:
@@ -383,7 +383,7 @@ private:
     librdf_Repository& operator=(librdf_Repository const&) = delete;
 
     /// this is const, no need to lock m_aMutex to access it
-    uno::Reference< uno::XComponentContext > const m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > const m_xContext;
 
     /// librdf global data
     /** N.B.: The redland documentation gives the impression that you can have
@@ -872,7 +872,7 @@ sal_uInt32 librdf_Repository::m_NumInstances = 0;
 std::mutex librdf_Repository::m_aMutex;
 
 librdf_Repository::librdf_Repository(
-        uno::Reference< uno::XComponentContext > const & i_xContext)
+        uno::Reference< cpo::uno::XComponentContext > const & i_xContext)
     : /*BaseMutex(),*/ m_xContext(i_xContext)
 //    m_pWorld  (static_cast<librdf_world  *>(0), safe_librdf_free_world  ),
     , m_pStorage(static_cast<librdf_storage*>(nullptr), safe_librdf_free_storage)
@@ -2462,7 +2462,7 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_rdfRepository_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new librdf_Repository(context));
 }

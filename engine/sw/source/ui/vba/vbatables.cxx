@@ -38,7 +38,7 @@ using namespace ::ooo::vba;
 using namespace css;
 
 static cpo::uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xParent,
-                                 const uno::Reference< uno::XComponentContext >& xContext,
+                                 const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                  const rtl::Reference< SwXTextDocument >& xDocument,
                                  const cpo::uno::Any& aSource )
 {
@@ -131,13 +131,13 @@ public:
 class TableEnumerationImpl : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxDocument;
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     sal_Int32 mnCurIndex;
 public:
     TableEnumerationImpl( uno::Reference< XHelperInterface > xParent,
-                          uno::Reference< uno::XComponentContext > xContext,
+                          uno::Reference< cpo::uno::XComponentContext > xContext,
                           rtl::Reference< SwXTextDocument > xDocument,
                           uno::Reference< container::XIndexAccess >  xIndexAccess )
     : mxParent(std::move( xParent )), mxContext(std::move( xContext )),
@@ -160,7 +160,7 @@ public:
 }
 
 SwVbaTables::SwVbaTables( const uno::Reference< XHelperInterface >& xParent,
-                          const uno::Reference< uno::XComponentContext > & xContext,
+                          const uno::Reference< cpo::uno::XComponentContext > & xContext,
                           const rtl::Reference< SwXTextDocument >& xDocument )
 : SwVbaTables_BASE( xParent, xContext , uno::Reference< container::XIndexAccess >( new TableCollectionHelper( xDocument ) ) ),
   mxDocument( xDocument )

@@ -51,9 +51,9 @@ public:
 
     // XSingleComponentFactory impl
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
-        cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
 };
 
 void SingletonFactory::disposing()
@@ -62,7 +62,7 @@ void SingletonFactory::disposing()
 }
 
 css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWithContext(
-    css::uno::Reference< css::uno::XComponentContext > const & xContext )
+    css::uno::Reference< cpo::uno::XComponentContext > const & xContext )
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
     cpo::uno::Any arg( css::beans::NamedValue( u"UnoVirtualMachine"_ustr, cpo::uno::Any( handle ) ) );
@@ -72,7 +72,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
 }
 
 css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
-    cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
+    cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< cpo::uno::XComponentContext > const & xContext )
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.java.JavaVirtualMachine"_ustr,
@@ -98,8 +98,8 @@ namespace javaunohelper {
     }
 }
 
-css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
-    css::uno::Reference< css::uno::XComponentContext > const & xContext,
+css::uno::Reference< cpo::uno::XComponentContext > install_vm_singleton(
+    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
 {
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );

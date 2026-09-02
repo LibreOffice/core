@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/odbc.hxx>
 #include <odbc/odbcbasedllapi.hxx>
@@ -47,13 +47,13 @@ namespace connectivity::odbc
                                                     //  of all the Connection objects
                                                     //  for this Driver
 
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         virtual SQLHANDLE EnvironmentHandle() = 0;
 
     public:
 
-        ODBCDriver(css::uno::Reference< css::uno::XComponentContext > xContext);
+        ODBCDriver(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         // only possibility to get the odbc functions
         virtual const Functions& functions() const = 0;
@@ -72,7 +72,7 @@ namespace connectivity::odbc
         virtual sal_Int32 getMajorVersion(  ) override;
         virtual sal_Int32 getMinorVersion(  ) override;
 
-        const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_xContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const { return m_xContext; }
     };
 
 }

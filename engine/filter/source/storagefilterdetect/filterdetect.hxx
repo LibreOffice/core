@@ -22,7 +22,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -31,11 +31,11 @@ class StorageFilterDetect : public cppu::WeakImplHelper<
     css::lang::XInitialization,
     css::lang::XServiceInfo>
 {
-    css::uno::Reference<css::uno::XComponentContext> mxCxt;
+    css::uno::Reference<cpo::uno::XComponentContext> mxCxt;
 
 public:
 
-    explicit StorageFilterDetect (css::uno::Reference<css::uno::XComponentContext> xCxt);
+    explicit StorageFilterDetect (css::uno::Reference<cpo::uno::XComponentContext> xCxt);
     virtual ~StorageFilterDetect() override;
 
     // XExtendedFilterDetection

@@ -33,7 +33,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 /**
  * The <code>ServiceManager</code> class is an implementation of the
@@ -74,7 +74,7 @@ public class ServiceManager implements XMultiServiceFactory,
     java.util.HashMap<String, Object> factoriesByImplNames;
     java.util.HashMap<String, ArrayList<Object>> factoriesByServiceNames;  // keys:
 
-    private com.sun.star.uno.XComponentContext m_xDefaultContext;
+    private cpo.uno.XComponentContext m_xDefaultContext;
 
     /**
      * Creates a new instance of the <code>ServiceManager</code>.
@@ -206,7 +206,7 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     public java.lang.Object createInstanceWithContext(
         String rServiceSpecifier,
-        com.sun.star.uno.XComponentContext xContext )
+        cpo.uno.XComponentContext xContext )
         throws cpo.uno.Exception
     {
         Object fac = queryServiceFactory( rServiceSpecifier );
@@ -249,7 +249,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public java.lang.Object createInstanceWithArgumentsAndContext(
         String rServiceSpecifier,
         java.lang.Object[] rArguments,
-        com.sun.star.uno.XComponentContext xContext )
+        cpo.uno.XComponentContext xContext )
         throws cpo.uno.Exception
     {
         Object fac = queryServiceFactory( rServiceSpecifier );

@@ -31,7 +31,7 @@ namespace connectivity::dbase
     class ODriver : public file::OFileDriver
     {
     public:
-        ODriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext) : file::OFileDriver(_rxContext){}
+        ODriver(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext) : file::OFileDriver(_rxContext){}
 
         OUString getImplementationName(  ) override;
 

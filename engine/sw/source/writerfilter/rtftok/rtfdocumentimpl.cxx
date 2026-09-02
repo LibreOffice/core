@@ -295,7 +295,7 @@ lcl_findParentStyle(std::shared_ptr<RTFReferenceTable::Entries_t> pStyleTableEnt
     return ret;
 }
 
-RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
+RTFDocumentImpl::RTFDocumentImpl(uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                  uno::Reference<io::XInputStream> const& xInputStream,
                                  rtl::Reference<SwXTextDocument> const& xDstDoc,
                                  uno::Reference<frame::XFrame> const& xFrame,

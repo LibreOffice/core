@@ -21,7 +21,7 @@ import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;

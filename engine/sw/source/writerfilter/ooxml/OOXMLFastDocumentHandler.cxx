@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 
 
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
-    uno::Reference< uno::XComponentContext > context,
+    uno::Reference< cpo::uno::XComponentContext > context,
     Stream* pStream,
     OOXMLDocument* pDocument,
     sal_Int32 nXNoteId )

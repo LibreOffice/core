@@ -52,7 +52,7 @@ class MasterScriptProvider :
 public:
     /// @throws cpo::uno::RuntimeException
     explicit MasterScriptProvider(
-        const css::uno::Reference< css::uno::XComponentContext >
+        const css::uno::Reference< cpo::uno::XComponentContext >
         & xContext );
     virtual ~MasterScriptProvider() override;
 
@@ -102,7 +102,7 @@ private:
 
     ProviderCache* providerCache();
     /* to obtain other services if needed */
-    css::uno::Reference< css::uno::XComponentContext >              m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >              m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory >        m_xMgr;
     css::uno::Reference< css::frame::XModel >                       m_xModel;
     css::uno::Reference< css::document::XScriptInvocationContext >  m_xInvocationContext;

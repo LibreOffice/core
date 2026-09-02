@@ -11,7 +11,7 @@ canvas/source/vcl/canvasbitmap.hxx:113
 canvas/source/vcl/impltools.hxx:93
     vclcanvastools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/inc/dlg_DataEditor.hxx:48
-    chart::DataEditor m_xContext css::uno::Reference<css::uno::XComponentContext>
+    chart::DataEditor m_xContext css::uno::Reference<cpo::uno::XComponentContext>
 chart2/source/inc/ChartColorPalettes.hxx:29
     chart::ChartColorPalettes mxWindow std::unique_ptr<weld::ScrolledWindow>
 chart2/source/inc/ChartGradientPalettes.hxx:25
@@ -103,7 +103,7 @@ embeddedobj/source/msole/olecomponent.hxx:59
 embeddedobj/source/msole/olecomponent.hxx:60
     OleComponent m_aDataFlavors cpo::uno::Sequence<css::datatransfer::DataFlavor>
 embeddedobj/source/msole/olecomponent.hxx:62
-    OleComponent m_xContext css::uno::Reference<css::uno::XComponentContext>
+    OleComponent m_xContext css::uno::Reference<cpo::uno::XComponentContext>
 embeddedobj/source/msole/olecomponent.hxx:64
     OleComponent m_bOleInitialized _Bool
 emfio/source/emfuno/xemfparser.cxx:49

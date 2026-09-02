@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cpo/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -78,10 +78,10 @@ Reference< XMultiServiceFactory > getProcessServiceFactory()
     return xReturn;
 }
 
-Reference< XComponentContext > getComponentContext(
+Reference< cpo::uno::XComponentContext > getComponentContext(
     Reference< XMultiServiceFactory > const & factory)
 {
-    Reference< XComponentContext > xRet;
+    Reference< cpo::uno::XComponentContext > xRet;
     uno::Reference<beans::XPropertySet> const xProps( factory, uno::UNO_QUERY );
     if (xProps.is()) {
         try {
@@ -103,9 +103,9 @@ Reference< XComponentContext > getComponentContext(
     return xRet;
 }
 
-const Reference< XComponentContext > & getProcessComponentContext()
+const Reference< cpo::uno::XComponentContext > & getProcessComponentContext()
 {
-    static const uno::Reference<XComponentContext> processComponentContext = getComponentContext( getProcessServiceFactory() );
+    static const uno::Reference<cpo::uno::XComponentContext> processComponentContext = getComponentContext( getProcessServiceFactory() );
     return processComponentContext;
 }
 

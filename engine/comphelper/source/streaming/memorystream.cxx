@@ -30,7 +30,7 @@
 
 #include <string.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using ::cppu::OWeakObject;
 using ::cppu::WeakImplHelper;
@@ -212,7 +212,7 @@ void UNOMemoryStream::truncate()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_MemoryStream(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::comphelper::UNOMemoryStream());

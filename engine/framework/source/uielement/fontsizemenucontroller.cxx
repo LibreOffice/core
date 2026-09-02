@@ -67,7 +67,7 @@ cpo::uno::Sequence< OUString > FontSizeMenuController::getSupportedServiceNames(
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }
@@ -279,7 +279,7 @@ void FontSizeMenuController::updatePopupMenu()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_FontSizeMenuController_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::FontSizeMenuController(context));
 }

@@ -29,7 +29,7 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -77,7 +77,7 @@ class ChartTypeTemplate : public ::cppu::WeakImplHelper<
         css::lang::XServiceName >
 {
 public:
-    explicit ChartTypeTemplate( css::uno::Reference< css::uno::XComponentContext > const & xContext,
+    explicit ChartTypeTemplate( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         OUString aServiceName );
     virtual ~ChartTypeTemplate() override;
 
@@ -252,7 +252,7 @@ public:
     virtual void adaptAxes(
         const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys );
 
-    const css::uno::Reference< css::uno::XComponentContext >&
+    const css::uno::Reference< cpo::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}
 
     static void copyPropertiesFromOldToNewCoordinateSystem(
@@ -260,7 +260,7 @@ public:
                     const rtl::Reference< ChartType > & xNewChartType );
 
 protected:
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
     mutable rtl::Reference< ::chart::DataInterpreter > m_xDataInterpreter;
 
 private:

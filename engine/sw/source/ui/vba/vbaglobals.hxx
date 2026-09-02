@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <ooo/vba/word/XGlobals.hpp>
 #include <ooo/vba/word/XApplication.hpp>
 #include <ooo/vba/word/XSystem.hpp>
@@ -40,7 +40,7 @@ private:
 
 public:
     SwVbaGlobals(cpo::uno::Sequence<cpo::uno::Any> const& aArgs,
-                 css::uno::Reference<css::uno::XComponentContext> const& rxContext);
+                 css::uno::Reference<cpo::uno::XComponentContext> const& rxContext);
     virtual ~SwVbaGlobals() override;
 
     // XGlobals

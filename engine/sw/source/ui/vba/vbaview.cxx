@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 const sal_Int32 DEFAULT_BODY_DISTANCE = 500;
 
 SwVbaView::SwVbaView( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                      const uno::Reference< uno::XComponentContext >& rContext,
+                      const uno::Reference< cpo::uno::XComponentContext >& rContext,
                       rtl::Reference< SwXTextDocument > xModel ) :
     SwVbaView_BASE( rParent, rContext ), mxModel(std::move( xModel ))
 {

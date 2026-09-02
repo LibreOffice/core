@@ -20,7 +20,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XPageSetup.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <vbahelper/vbapagesetupbase.hxx>
 
@@ -35,7 +35,7 @@ class ScVbaPageSetup : public ScVbaPageSetup_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaPageSetup(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                   const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                   const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                    css::uno::Reference<css::sheet::XSpreadsheet> xSheet,
                    const css::uno::Reference<css::frame::XModel>& xModel);
 

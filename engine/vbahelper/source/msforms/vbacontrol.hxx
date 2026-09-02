@@ -20,7 +20,7 @@
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -54,7 +54,7 @@ protected:
     void fireChangeEvent();
     void fireClickEvent();
 public:
-    ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::uno::XInterface >  xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pHelper );
     virtual ~ScVbaControl() override;
     // This class will own the helper, so make sure it is allocated from
@@ -124,13 +124,13 @@ namespace ScVbaControlFactory
 {
     /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::msforms::XControl > createShapeControl(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::drawing::XControlShape >& xControlShape,
         const css::uno::Reference< css::frame::XModel >& xModel );
 
     /// @throws cpo::uno::RuntimeException
     css::uno::Reference< ov::msforms::XControl > createUserformControl(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xControl,
         const css::uno::Reference< css::awt::XControl >& xDialog,
         const css::uno::Reference< css::frame::XModel >& xModel,

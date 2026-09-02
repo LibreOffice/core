@@ -191,19 +191,19 @@ extensions/source/propctrlr/fontdialog.hxx:36
     class weld::Window * pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
     class weld::Window * _pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
     const class rtl::OUString & _sExplanation
     ""
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
     class rtl::OUString _sDetailLabel
     ""
 extensions/source/propctrlr/formlinkdialog.hxx:64
-    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
+    void pcr::FormLinkDialog::FormLinkDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class rtl::OUString,class rtl::OUString)
     class rtl::OUString _sMasterLabel
     ""
 extensions/source/propctrlr/listselectiondlg.hxx:37
@@ -211,11 +211,11 @@ extensions/source/propctrlr/listselectiondlg.hxx:37
     class weld::Window * _pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/taborder.hxx:60
-    void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+    void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
     class weld::Window * pParent
     impl_getDefaultDialogFrame_nothrow()
 extensions/source/propctrlr/taborder.hxx:60
-    void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+    void pcr::TabOrderDialog::TabOrderDialog(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::awt::XTabControllerModel> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
     const class com::sun::star::uno::Reference<class com::sun::star::awt::XControlContainer> & _rxControlCont
     impl_getContextControlContainer_nothrow()
 extensions/source/update/check/updatecheck.hxx:146
@@ -223,7 +223,7 @@ extensions/source/update/check/updatecheck.hxx:146
     const class rtl::OUString & rURL
     ""
 extensions/source/update/check/updateprotocol.hxx:33
-    _Bool checkForUpdates(struct UpdateInfo &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XInteractionHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> &)
+    _Bool checkForUpdates(struct UpdateInfo &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XInteractionHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> &)
     const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> & rxProvider
     createProvider()
 forms/source/component/ListBox.cxx:1549
@@ -259,11 +259,11 @@ include/comphelper/propertybag.hxx:107
     int _nHandle
     findFreeHandle()
 include/connectivity/dbtools.hxx:181
-    class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> getConnection_withFeedback(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> &)
+    class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> getConnection_withFeedback(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> &)
     const class rtl::OUString & _rUser
     ""
 include/connectivity/dbtools.hxx:181
-    class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> getConnection_withFeedback(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> &)
+    class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> getConnection_withFeedback(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> &)
     const class rtl::OUString & _rPwd
     ""
 include/connectivity/dbtools.hxx:703
@@ -563,7 +563,7 @@ sc/source/filter/inc/xechart.hxx:798
     _Bool b3dWallChart
     Is3dWallChart()
 sc/source/filter/inc/xestream.hxx:287
-    void XclExpXmlStream::XclExpXmlStream(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,_Bool,_Bool)
+    void XclExpXmlStream::XclExpXmlStream(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,_Bool,_Bool)
     _Bool bExportTemplate
     isExportTemplate()
 sc/source/filter/inc/xestyle.hxx:147
@@ -615,11 +615,11 @@ sc/source/ui/inc/viewfunc.hxx:286
     const class rtl::OUString & rOptions
     ""
 sc/source/ui/vba/vbasheetobject.hxx:174
-    void ScVbaButton::ScVbaButton(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> &)
+    void ScVbaButton::ScVbaButton(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexContainer> &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> &)
     const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexContainer> & rxFormIC
     createForm()
 sc/source/ui/vba/vbawindows.cxx:111
-    void (anonymous namespace)::WindowEnumImpl::WindowEnumImpl(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class cpo::uno::Any)
+    void (anonymous namespace)::WindowEnumImpl::WindowEnumImpl(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class cpo::uno::Any)
     class cpo::uno::Any aApplication
     Application()
 sd/source/console/PresenterConfigurationAccess.hxx:116
@@ -871,7 +871,7 @@ sw/source/filter/xml/xmltexti.hxx:38
     _Bool bBlockM
     IsBlockMode()
 sw/source/ui/vba/vbadocuments.cxx:54
-    void (anonymous namespace)::DocumentEnumImpl::DocumentEnumImpl(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XEnumeration> &,class cpo::uno::Any)
+    void (anonymous namespace)::DocumentEnumImpl::DocumentEnumImpl(const class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::container::XEnumeration> &,class cpo::uno::Any)
     class cpo::uno::Any aApplication
     Application()
 sw/source/uibase/lingu/sdrhhcwrap.hxx:42
@@ -975,7 +975,7 @@ vcl/unx/gtk3/gtkinst.cxx:13976
     const struct _GtkTreePath * lhs
     Compare()
 writerperfect/qa/unit/WpftLoader.hxx:70
-    void writerperfect::test::WpftLoader::WpftLoader(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::document::XFilter> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XDesktop2> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+    void writerperfect::test::WpftLoader::WpftLoader(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::document::XFilter> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XDesktop2> &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
     const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> & rxInputStream
     createDummyInput()
 xmlhelp/source/cxxhelp/provider/urlparameter.cxx:295

@@ -29,15 +29,12 @@ namespace beans
 {
 struct PropertyValue;
 }
-namespace uno
-{
-class XComponentContext;
-}
 namespace uri
 {
 class XUriReferenceFactory;
 }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerperfect::exp
 {
@@ -86,14 +83,14 @@ class XMLImport : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
     librevenge::RVNGPropertyListVector maCoverImages;
     /// Author, date, etc -- overwrites what would be from the document out of the box.
     librevenge::RVNGPropertyList maMetaData;
-    const css::uno::Reference<css::uno::XComponentContext>& mxContext;
+    const css::uno::Reference<cpo::uno::XComponentContext>& mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
     bool mbIsInPageSpan;
     const std::vector<FixedLayoutPage>& mrPageMetafiles;
 
 public:
-    XMLImport(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    XMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
               librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
               const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
               const std::vector<FixedLayoutPage>& rPageMetafiles);
@@ -123,7 +120,7 @@ public:
     const librevenge::RVNGPropertyList& GetMetaData() const;
     PopupState FillPopupData(const OUString& rURL, librevenge::RVNGPropertyList& rPropList);
     const std::vector<FixedLayoutPage>& GetPageMetafiles() const;
-    const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
+    const css::uno::Reference<cpo::uno::XComponentContext>& GetComponentContext() const;
 
     bool GetIsInPageSpan() const { return mbIsInPageSpan; }
     void HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList);

@@ -27,7 +27,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentContext > const &)
+OTempFileService::OTempFileService(css::uno::Reference< cpo::uno::XComponentContext > const &)
 : mpStream( nullptr )
 , mbRemoveFile( true )
 , mbInClosed( false )
@@ -441,7 +441,7 @@ cpo::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unotools_OTempFileService_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OTempFileService(context));
 }

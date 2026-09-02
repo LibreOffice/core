@@ -146,7 +146,7 @@ protected:
     virtual                 ~ODBExport() override {};
 public:
 
-    ODBExport(const css::uno::Reference< css::uno::XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
+    ODBExport(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;

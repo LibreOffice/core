@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXURI)
 {
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    uno::Reference<cpo::uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
     // createKnown()
     uno::Reference<rdf::XURI> xURIcreateKnown(

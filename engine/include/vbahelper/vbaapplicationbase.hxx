@@ -31,8 +31,8 @@
 
 namespace com::sun::star {
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XApplicationBase > ApplicationBase_BASE;
 
@@ -43,7 +43,7 @@ class VBAHELPER_DLLPUBLIC VbaApplicationBase : public ApplicationBase_BASE
     std::unique_ptr<VbaApplicationBase_Impl> m_pImpl;
 
 protected:
-    VbaApplicationBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    VbaApplicationBase( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~VbaApplicationBase() override;
 
     /// @throws cpo::uno::RuntimeException

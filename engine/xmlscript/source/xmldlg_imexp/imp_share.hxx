@@ -22,7 +22,7 @@
 #include <utility>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -110,7 +110,7 @@ struct DialogImport
 {
     friend class ImportContext;
 private:
-    css::uno::Reference< css::uno::XComponentContext > _xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > _xContext;
     css::uno::Reference< css::util::XNumberFormatsSupplier > _xSupplier;
 
     std::shared_ptr< std::vector< OUString > > _pStyleNames;
@@ -136,13 +136,13 @@ public:
     css::uno::Reference< css::xml::input::XElement > getStyle(
         std::u16string_view rStyleId ) const;
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
     const & getComponentContext() const { return _xContext; }
     css::uno::Reference< css::util::XNumberFormatsSupplier >
     const & getNumberFormatsSupplier();
 
     DialogImport(
-        css::uno::Reference<css::uno::XComponentContext> xContext,
+        css::uno::Reference<cpo::uno::XComponentContext> xContext,
         css::uno::Reference<css::container::XNameContainer>
         const & xDialogModel,
         std::shared_ptr< std::vector< OUString > > pStyleNames,

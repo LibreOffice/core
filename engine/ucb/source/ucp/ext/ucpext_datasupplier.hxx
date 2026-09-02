@@ -38,7 +38,7 @@ namespace ucb::ucp::ext
     {
     public:
         DataSupplier(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             rtl::Reference< Content > xContent
         );
 
@@ -76,7 +76,7 @@ namespace ucb::ucp::ext
         std::mutex                                  m_aMutex;
         ResultList                                  m_aResults;
         ::rtl::Reference< Content >                 m_xContent;
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     };
 
 

@@ -91,7 +91,7 @@ DlgEdHint::~DlgEdHint()
 
 void DlgEditor::ShowDialog()
 {
-    const uno::Reference< uno::XComponentContext >&  xContext = getProcessComponentContext();
+    const uno::Reference< cpo::uno::XComponentContext >&  xContext = getProcessComponentContext();
 
     // create a dialog
     uno::Reference< awt::XUnoControlDialog > xDlg = awt::UnoControlDialog::create( xContext );
@@ -437,7 +437,7 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
 {
     if ( !m_xSupplier.is() )
     {
-        const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         Reference< util::XNumberFormatsSupplier > xSupplier( util::NumberFormatsSupplier::createWithDefaultLocale(xContext) );
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

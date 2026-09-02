@@ -27,7 +27,7 @@
 #include <mutex>
 #include <optional>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper {
 
@@ -41,7 +41,7 @@ class OfficeInstallationDirectories : public OfficeInstallationDirectories_Base
 {
 public:
     explicit OfficeInstallationDirectories(
-        css::uno::Reference< css::uno::XComponentContext > xCtx );
+        css::uno::Reference< cpo::uno::XComponentContext > xCtx );
     virtual ~OfficeInstallationDirectories() override;
 
     // XOfficeInstallationDirectories
@@ -66,7 +66,7 @@ private:
     void initDirs();
 
     std::mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >    m_xCtx;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xCtx;
     std::optional<OUString>                  m_xOfficeBrandDir;
     std::optional<OUString>                  m_xUserDir;
 };

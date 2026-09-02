@@ -25,7 +25,7 @@ namespace svx
 class TextUnderlinePopup final : public svt::PopupWindowController
 {
 public:
-    TextUnderlinePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    TextUnderlinePopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~TextUnderlinePopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

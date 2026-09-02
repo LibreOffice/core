@@ -27,7 +27,7 @@ typedef  TitleImpl< cppu::WeakImplHelper< ov::excel::XAxisTitle > > AxisTitleBas
 class ScVbaAxisTitle : public AxisTitleBase
 {
 public:
-        ScVbaAxisTitle( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
+        ScVbaAxisTitle( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
         // XHelperInterface
         virtual OUString getServiceImplName() override;
         virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -41,7 +41,7 @@ class ObjectMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    explicit ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit ObjectMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override
@@ -69,7 +69,7 @@ private:
     void fillPopupMenu( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 };
 
-ObjectMenuController::ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+ObjectMenuController::ObjectMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }
@@ -123,7 +123,7 @@ void ObjectMenuController::statusChanged( const FeatureStateEvent& Event )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ObjectMenuController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ObjectMenuController(context));

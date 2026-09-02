@@ -50,7 +50,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace {
 
@@ -923,7 +923,7 @@ void SimpleRegistry::mergeKey(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_SimpleRegistry_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    SAL_UNUSED_PARAMETER cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SimpleRegistry);

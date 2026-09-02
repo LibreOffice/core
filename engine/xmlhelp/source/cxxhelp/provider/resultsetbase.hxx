@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/Property.hpp>
 
 
@@ -49,7 +49,7 @@ namespace chelp {
     {
     public:
 
-        ResultSetBase( css::uno::Reference< css::uno::XComponentContext > xContext,
+        ResultSetBase( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                        css::uno::Reference< css::ucb::XContentProvider > xProvider,
                        const cpo::uno::Sequence< css::beans::Property >& seq );
 
@@ -373,7 +373,7 @@ namespace chelp {
 
     protected:
 
-        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
         css::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;

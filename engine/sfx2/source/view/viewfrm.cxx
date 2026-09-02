@@ -2570,7 +2570,7 @@ void SfxViewFrame::ExecView_Impl
 */
 static bool impl_maxOpenDocCountReached()
 {
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get());
     // NIL means: count of allowed documents = infinite !
     if (!x)
@@ -3051,7 +3051,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             else if ( rReq.GetSlot() == SID_RECORDMACRO )
             {
                 // enable recording
-                const css::uno::Reference< css::uno::XComponentContext >& xContext(
+                const css::uno::Reference< cpo::uno::XComponentContext >& xContext(
                         ::comphelper::getProcessComponentContext());
 
                 xRecorder = css::frame::DispatchRecorder::create( xContext );

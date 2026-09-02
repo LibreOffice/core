@@ -56,7 +56,7 @@ public:
     TypeDetectionImporter();
     virtual ~TypeDetectionImporter() override;
 
-    static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS,
+    static void doImport( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS,
                           std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
 
     virtual void startDocument(  ) override;

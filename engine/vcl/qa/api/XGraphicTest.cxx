@@ -119,7 +119,7 @@ void XGraphicTest::testGraphicProvider()
     OUString aGraphicURL = getFullUrl(u"TestGraphic.png");
 
     { // Load lazy
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
         uno::Reference<graphic::XGraphicProvider> xGraphicProvider;
         xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
@@ -158,7 +158,7 @@ void XGraphicTest::testGraphicProvider()
     }
 
     { // Load as link
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
         uno::Reference<graphic::XGraphicProvider> xGraphicProvider;
         xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 
@@ -195,7 +195,7 @@ void XGraphicTest::testGraphicProvider()
     }
 
     { // Load lazy and as link
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
         uno::Reference<graphic::XGraphicProvider> xGraphicProvider;
         xGraphicProvider.set(graphic::GraphicProvider::create(xContext), uno::UNO_SET_THROW);
 

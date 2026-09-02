@@ -42,7 +42,7 @@ class ScVbaAxis : public ScVbaAxis_BASE
     bool isValueAxis();
 
 public:
-    ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
+    ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
     // Methods
     virtual void SAL_CALL Delete(  ) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL getAxisTitle(  ) override;

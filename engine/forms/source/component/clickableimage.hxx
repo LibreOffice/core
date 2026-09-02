@@ -89,14 +89,14 @@ namespace frm
 
     public:
         OClickableImageBaseModel(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault
         );
 
         OClickableImageBaseModel (
         const OClickableImageBaseModel* _pOriginal,
-        const   css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const   css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
 
         virtual ~OClickableImageBaseModel() override;
@@ -211,7 +211,7 @@ namespace frm
 
     public:
         OClickableImageBaseControl(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
             const OUString& _aService);
         virtual ~OClickableImageBaseControl() override;
 

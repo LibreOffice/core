@@ -446,7 +446,7 @@ class SwVbaBuiltInDocumentProperty : public SwVbaDocumentProperty_BASE
 protected:
     DocPropInfo mPropInfo;
 public:
-    SwVbaBuiltInDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, DocPropInfo  rInfo );
+    SwVbaBuiltInDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, DocPropInfo  rInfo );
     // XDocumentProperty
     virtual void SAL_CALL Delete(  ) override;
     virtual OUString SAL_CALL getName(  ) override;
@@ -470,7 +470,7 @@ class SwVbaCustomDocumentProperty : public SwVbaBuiltInDocumentProperty
 {
 public:
 
-    SwVbaCustomDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo );
+    SwVbaCustomDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const DocPropInfo& rInfo );
 
     virtual bool SAL_CALL getLinkToContent(  ) override;
     virtual void SAL_CALL setLinkToContent( bool LinkToContent ) override;
@@ -485,7 +485,7 @@ public:
 
 }
 
-SwVbaCustomDocumentProperty::SwVbaCustomDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo ) : SwVbaBuiltInDocumentProperty( xParent, xContext, rInfo )
+SwVbaCustomDocumentProperty::SwVbaCustomDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const DocPropInfo& rInfo ) : SwVbaBuiltInDocumentProperty( xParent, xContext, rInfo )
 {
 }
 
@@ -537,7 +537,7 @@ SwVbaCustomDocumentProperty::Delete(  )
     xContainer->removeProperty( getName() );
 }
 
-SwVbaBuiltInDocumentProperty::SwVbaBuiltInDocumentProperty( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, DocPropInfo  rInfo ) : SwVbaDocumentProperty_BASE( xParent, xContext ), mPropInfo(std::move( rInfo ))
+SwVbaBuiltInDocumentProperty::SwVbaBuiltInDocumentProperty( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, DocPropInfo  rInfo ) : SwVbaDocumentProperty_BASE( xParent, xContext ), mPropInfo(std::move( rInfo ))
 {
 }
 
@@ -675,7 +675,7 @@ protected:
     DocPropsByName mNamedDocProps;
 
     public:
-    BuiltInPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, rtl::Reference< SwXTextDocument >  xModel ) : m_xModel(std::move( xModel ))
+    BuiltInPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, rtl::Reference< SwXTextDocument >  xModel ) : m_xModel(std::move( xModel ))
     {
         BuiltInIndexHelper builtIns( m_xModel );
         for ( sal_Int32 index = word::WdBuiltInProperty::wdPropertyTitle; index <= word::WdBuiltInProperty::wdPropertyCharsWSpaces; ++index )
@@ -743,7 +743,7 @@ protected:
 
 SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties(
     const uno::Reference< XHelperInterface >& xParent,
-    const uno::Reference< uno::XComponentContext >& xContext,
+    const uno::Reference< cpo::uno::XComponentContext >& xContext,
     const rtl::Reference< SwXTextDocument >& xModel )
 : SwVbaDocumentproperties_BASE( xParent, xContext,  uno::Reference< container::XIndexAccess >( new BuiltInPropertiesImpl( xParent, xContext, xModel ) ) )
 {
@@ -799,13 +799,13 @@ namespace {
 class CustomPropertiesImpl : public PropertiesImpl_BASE
 {
     uno::Reference< XHelperInterface > m_xParent;
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     rtl::Reference< SwXTextDocument > m_xModel;
     uno::Reference< beans::XPropertySet > mxUserDefinedProp;
     std::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 public:
     CustomPropertiesImpl( uno::Reference< XHelperInterface > xParent,
-                          uno::Reference< uno::XComponentContext > xContext,
+                          uno::Reference< cpo::uno::XComponentContext > xContext,
                           rtl::Reference< SwXTextDocument >  xModel )
         : m_xParent(std::move( xParent )),
           m_xContext(std::move( xContext )),
@@ -891,7 +891,7 @@ public:
 
 }
 
-SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::Reference< SwXTextDocument >& xModel ) : SwVbaBuiltinDocumentProperties( xParent, xContext, xModel )
+SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const rtl::Reference< SwXTextDocument >& xModel ) : SwVbaBuiltinDocumentProperties( xParent, xContext, xModel )
 {
     // replace the m_xIndexAccess implementation ( we need a virtual init )
     m_xIndexAccess.set( new CustomPropertiesImpl( xParent, xContext, xModel ) );

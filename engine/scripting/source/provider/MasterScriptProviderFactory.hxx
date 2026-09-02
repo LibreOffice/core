@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
@@ -43,7 +43,7 @@ private:
 
     mutable rtl::Reference< ActiveMSPList > m_MSPList;
 
-    const css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
+    const css::uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
 
     const rtl::Reference< ActiveMSPList > & getActiveMSPList() const;
 
@@ -52,7 +52,7 @@ protected:
 
 public:
     explicit MasterScriptProviderFactory(
-        css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
+        css::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

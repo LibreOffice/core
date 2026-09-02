@@ -36,7 +36,7 @@
 
 using namespace css;
 
-GraphicExportFilter::GraphicExportFilter( uno::Reference< uno::XComponentContext > xContext  )
+GraphicExportFilter::GraphicExportFilter( uno::Reference< cpo::uno::XComponentContext > xContext  )
     : mxContext(std::move(xContext))
     , mnTargetWidth(0)
     , mnTargetHeight(0)
@@ -252,7 +252,7 @@ void GraphicExportFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any > 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_GraphicExportFilter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GraphicExportFilter(context));
 }

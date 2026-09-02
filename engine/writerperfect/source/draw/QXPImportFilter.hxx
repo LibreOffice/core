@@ -17,7 +17,7 @@
 class QXPImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    explicit QXPImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit QXPImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

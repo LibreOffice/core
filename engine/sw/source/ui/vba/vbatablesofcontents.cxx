@@ -61,13 +61,13 @@ class TableOfContentsCollectionHelper : public ::cppu::WeakImplHelper< container
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxTextDocument;
     std::vector< uno::Reference< text::XDocumentIndex > > maToc;
 
 public:
     /// @throws uno::RuntimeException
-    TableOfContentsCollectionHelper( uno::Reference< ov::XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, rtl::Reference< SwXTextDocument >  xDoc )
+    TableOfContentsCollectionHelper( uno::Reference< ov::XHelperInterface > xParent, uno::Reference< cpo::uno::XComponentContext > xContext, rtl::Reference< SwXTextDocument >  xDoc )
         : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextDocument(std::move( xDoc ))
     {
         rtl::Reference< SwXDocumentIndexes > xDocIndexes = mxTextDocument->getSwDocumentIndexes();
@@ -111,7 +111,7 @@ public:
 
 }
 
-SwVbaTablesOfContents::SwVbaTablesOfContents( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc )
+SwVbaTablesOfContents::SwVbaTablesOfContents( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc )
     : SwVbaTablesOfContents_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new TableOfContentsCollectionHelper( xParent, xContext, xDoc ) ) ),  mxTextDocument( xDoc )
 {
 }

@@ -38,7 +38,7 @@ namespace framework
 {
 
 GenericStatusbarController::GenericStatusbarController(
-    const Reference< XComponentContext >& rxContext,
+    const Reference< cpo::uno::XComponentContext >& rxContext,
     const Reference< XFrame >& rxFrame,
     const Reference< ui::XStatusbarItem >& rxItem,
     AddonStatusbarItemData *pItemData )

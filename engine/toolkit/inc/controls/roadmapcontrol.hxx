@@ -86,7 +86,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     public:
-        UnoControlRoadmapModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+        UnoControlRoadmapModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
         UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) :
             UnoControlRoadmapModel_Base( rModel ),
             UnoControlRoadmapModel_IBase( rModel ),

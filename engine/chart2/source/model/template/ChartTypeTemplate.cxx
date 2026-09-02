@@ -33,7 +33,7 @@
 #include <BaseCoordinateSystem.hxx>
 #include <unonames.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
@@ -127,7 +127,7 @@ namespace chart
 {
 
 ChartTypeTemplate::ChartTypeTemplate(
-    Reference< uno::XComponentContext > const & xContext,
+    Reference< cpo::uno::XComponentContext > const & xContext,
     OUString aServiceName ) :
         m_xContext( xContext ),
         m_aServiceName(std::move( aServiceName ))

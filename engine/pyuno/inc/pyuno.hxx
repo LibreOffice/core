@@ -25,7 +25,7 @@
 
 #include <cpo/uno/Any.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 /**
@@ -198,7 +198,7 @@ public:
                                 has not been initialized.
     */
     static void initialize(
-        const css::uno::Reference< css::uno::XComponentContext > & ctx );
+        const css::uno::Reference< cpo::uno::XComponentContext > & ctx );
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
 

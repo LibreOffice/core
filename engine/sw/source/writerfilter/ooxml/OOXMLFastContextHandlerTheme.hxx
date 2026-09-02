@@ -11,7 +11,7 @@
 
 #include <docmodel/theme/Theme.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <oox/mathml/importutils.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>

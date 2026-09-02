@@ -27,8 +27,8 @@ namespace com::sun::star {
     namespace chart2 { class XChartDocument; }
     namespace chart2 { class XTitle; }
     namespace drawing { class XShape; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 namespace oox::core { class XmlFilterBase; }
 
 namespace oox::drawingml::chart {
@@ -65,7 +65,7 @@ public:
     /** Creates an instance for the passed service name, using the process service factory. */
     css::uno::Reference< css::uno::XInterface >
                         createInstance( const OUString& rServiceName ) const;
-    css::uno::Reference< css::uno::XComponentContext > const &
+    css::uno::Reference< cpo::uno::XComponentContext > const &
                         getComponentContext() const;
 
 protected:

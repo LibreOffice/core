@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 
 #include <ooo/vba/excel/XPivotCache.hpp>
@@ -29,7 +29,7 @@ class ScVbaPivotCache : public PivotCacheImpl_BASE
 {
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
-    ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::sheet::XDataPilotTable > xTable );
+    ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::sheet::XDataPilotTable > xTable );
 
     virtual void SAL_CALL Refresh() override;
     // XHelperInterface

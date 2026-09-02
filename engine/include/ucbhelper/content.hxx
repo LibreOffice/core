@@ -54,7 +54,7 @@ struct ContentInfo;
 struct NumberedSortingInfo;
 }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class XComponentContext;
 }
@@ -123,7 +123,7 @@ public:
       * @throws cpo::uno::RuntimeException
       */
     Content(const OUString& rURL, const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
-            const css::uno::Reference<css::uno::XComponentContext>& rCtx);
+            const css::uno::Reference<cpo::uno::XComponentContext>& rCtx);
     /**
       * Constructor.
       *
@@ -137,7 +137,7 @@ public:
       */
     Content(const css::uno::Reference<css::ucb::XContent>& rContent,
             const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
-            const css::uno::Reference<css::uno::XComponentContext>& rCtx);
+            const css::uno::Reference<cpo::uno::XComponentContext>& rCtx);
     /**
       * Copy Constructor.
       *
@@ -182,7 +182,7 @@ public:
       */
     static bool create(const OUString& rURL,
                        const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
-                       const css::uno::Reference<css::uno::XComponentContext>& rCtx,
+                       const css::uno::Reference<cpo::uno::XComponentContext>& rCtx,
                        Content& rContent);
 
     // Direct access to UCB content.

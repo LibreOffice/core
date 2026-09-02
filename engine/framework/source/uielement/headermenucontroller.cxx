@@ -67,7 +67,7 @@ cpo::uno::Sequence< OUString > HeaderMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-HeaderMenuController::HeaderMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext, bool _bFooter ) :
+HeaderMenuController::HeaderMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, bool _bFooter ) :
     svt::PopupMenuControllerBase( xContext )
     ,m_bFooter(_bFooter)
 {
@@ -226,7 +226,7 @@ void HeaderMenuController::updatePopupMenu()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_HeaderMenuController_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::HeaderMenuController(context));
 }

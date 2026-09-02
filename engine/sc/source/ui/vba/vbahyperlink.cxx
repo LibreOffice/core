@@ -35,7 +35,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 ScVbaHyperlink::ScVbaHyperlink( const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
-        const uno::Reference< uno::XComponentContext >& rxContext ) :
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext ) :
     HyperlinkImpl_BASE( getXSomethingFromArgs< XHelperInterface >( rArgs, 0 ), rxContext ),
     mxCell( getXSomethingFromArgs< table::XCell >( rArgs, 1, false ) ),
     mnType( office::MsoHyperlinkType::msoHyperlinkRange )
@@ -46,7 +46,7 @@ ScVbaHyperlink::ScVbaHyperlink( const cpo::uno::Sequence< cpo::uno::Any >& rArgs
 }
 
 ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnchor,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
         const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay ) :
     HyperlinkImpl_BASE( rxAnchor, rxContext ) // parent of Hyperlink is the anchor object
@@ -227,7 +227,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaHyperlink_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaHyperlink(args, context));
 }

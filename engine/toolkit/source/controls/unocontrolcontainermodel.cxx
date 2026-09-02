@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
 #include <helper/property.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 
 
-UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
+UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -84,7 +84,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::ge
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlContainerModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlContainerModel(context));

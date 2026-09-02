@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 VbaFontBase::VbaFontBase(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const uno::Reference< css::container::XIndexAccess >& xPalette,
         const uno::Reference< beans::XPropertySet >& xPropertySet,
         Component eWhich,

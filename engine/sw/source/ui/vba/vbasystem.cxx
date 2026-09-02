@@ -167,7 +167,7 @@ void PrivateProfileStringListener::setValueEvent( const cpo::uno::Any& value )
 
 }
 
-SwVbaSystem::SwVbaSystem( uno::Reference<uno::XComponentContext > const & xContext ): SwVbaSystem_BASE( uno::Reference< XHelperInterface >(), xContext )
+SwVbaSystem::SwVbaSystem( uno::Reference<cpo::uno::XComponentContext > const & xContext ): SwVbaSystem_BASE( uno::Reference< XHelperInterface >(), xContext )
 {
 }
 

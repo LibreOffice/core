@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -46,7 +46,7 @@ class ConfigurationAccess_ControllerFactory final : // interfaces
                                                     public  ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
 public:
-                    ConfigurationAccess_ControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString _sRoot );
+                    ConfigurationAccess_ControllerFactory( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, OUString _sRoot );
     virtual       ~ConfigurationAccess_ControllerFactory() override;
 
     void          readConfigurationData();

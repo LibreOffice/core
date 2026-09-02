@@ -21,7 +21,7 @@
 #include <ooo/vba/excel/XFileDialog.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace ooo::vba { class XHelperInterface; }
 namespace ooo::vba::excel { class XFileDialogSelectedItems; }
 
@@ -36,7 +36,7 @@ private:
     bool m_bMultiSelectMode;
     css::uno::Reference< ov::excel::XFileDialogSelectedItems> m_xItems;
 public:
-    ScVbaFileDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const sal_Int32 nType);
+    ScVbaFileDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const sal_Int32 nType);
 
     virtual cpo::uno::Any SAL_CALL getInitialFileName() override;
     virtual void SAL_CALL setInitialFileName( const cpo::uno::Any& rName ) override;

@@ -14,7 +14,7 @@
 #include "StarOfficeCalcImportFilter.hxx"
 
 using cpo::uno::Sequence;
-using com::sun::star::uno::XComponentContext;
+using cpo::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
 static bool handleEmbeddedSTOFFGraphicObject(const librevenge::RVNGBinaryData& data,
@@ -93,7 +93,7 @@ Sequence<OUString> SAL_CALL StarOfficeCalcImportFilter::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Calc_StarOfficeCalcImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
+    cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new StarOfficeCalcImportFilter(context));
 }

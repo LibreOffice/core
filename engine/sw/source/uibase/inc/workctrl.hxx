@@ -153,7 +153,7 @@ class NavElementToolBoxControl final : public NavElementToolBoxControl_Base
 {
 public:
     explicit NavElementToolBoxControl(
-        const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

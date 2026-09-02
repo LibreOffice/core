@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -58,7 +58,7 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
     private:
 
         /// may we need a uno service manager to create own services
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /// reference to the frame which was created by the office himself
         cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
@@ -68,7 +68,7 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
     public:
 
         // ctor/dtor
-                 TitleBarUpdate(css::uno::Reference< css::uno::XComponentContext > xContext);
+                 TitleBarUpdate(css::uno::Reference< cpo::uno::XComponentContext > xContext);
         virtual ~TitleBarUpdate(                                                                   ) override;
 
         // XInterface, XTypeProvider

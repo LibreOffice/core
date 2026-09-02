@@ -44,7 +44,7 @@ protected:
     css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
 
 protected:
-    ODatabaseAdministrationDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    ODatabaseAdministrationDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
     virtual ~ODatabaseAdministrationDialog() override;
 protected:
 // OGenericUnoDialog overridables

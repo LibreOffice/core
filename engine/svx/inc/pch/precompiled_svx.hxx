@@ -196,7 +196,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XWeak.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

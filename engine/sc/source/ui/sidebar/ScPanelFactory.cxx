@@ -141,7 +141,7 @@ cpo::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
 } // end of namespace sc::sidebar
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScPanelFactory_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
+ScPanelFactory_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sc::sidebar::ScPanelFactory());
 }

@@ -97,7 +97,7 @@ static Sequence< Any > make_seq_out_of_struct(
     return Sequence< Any >( vec.data(), vec.size() );
 }
 
-DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xContext )
+DispatchRecorder::DispatchRecorder( const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : m_nRecordingID(0)
     , m_xConverter(css::script::Converter::create(xContext))
 {
@@ -424,7 +424,7 @@ void DispatchRecorder::replaceByIndex(sal_Int32 idx, const cpo::uno::Any& elemen
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchRecorder_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::DispatchRecorder(context));
 }

@@ -37,7 +37,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaTablesOfContents( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc );
+    SwVbaTablesOfContents( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc );
 
     // Methods
     virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& UseHeadingStyles, const cpo::uno::Any& UpperHeadingLevel, const cpo::uno::Any& LowerHeadingLevel, const cpo::uno::Any& UseFields, const cpo::uno::Any& TableID, const cpo::uno::Any& RightAlignPageNumbers, const cpo::uno::Any& IncludePageNumbers, const cpo::uno::Any& AddedStyles, const cpo::uno::Any& UseHyperlinks, const cpo::uno::Any& HidePageNumbersInWeb, const cpo::uno::Any& UseOutlineLevels ) override;

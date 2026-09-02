@@ -22,7 +22,7 @@
 #include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace chart { class ChartModel; }
 namespace chart { class BaseCoordinateSystem; }
 namespace chart { class DataSeries; }
@@ -35,7 +35,7 @@ class SeriesOptionsItemConverter final : public ItemConverter
 public:
     SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel> & xChartModel,
-        css::uno::Reference< css::uno::XComponentContext > xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > xContext,
         const rtl::Reference<::chart::DataSeries> & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~SeriesOptionsItemConverter() override;
@@ -49,7 +49,7 @@ protected:
 
 private:
     rtl::Reference<::chart::ChartModel>  m_xChartModel;
-    css::uno::Reference< css::uno::XComponentContext>   m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext>   m_xCC;
 
     bool m_bAttachToMainAxis;
     bool m_bSupportingOverlapAndGapWidthProperties;

@@ -54,7 +54,7 @@ bool IndexingExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_IndexingExportFilter_get_implementation(
-    css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new sw::IndexingExportFilter());
 }

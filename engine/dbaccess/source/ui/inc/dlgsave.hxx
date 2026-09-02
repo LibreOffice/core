@@ -21,7 +21,7 @@
 
 #include "SqlNameEdit.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/weld.hxx>
 #include <memory>
@@ -48,7 +48,7 @@ namespace dbaui
     class OSaveAsDlg : public weld::GenericDialogController
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         OUString                   m_aName;
         const IObjectNameCheck&    m_rObjectNameCheck;
         sal_Int32                  m_nType;
@@ -69,7 +69,7 @@ namespace dbaui
 
     public:
         OSaveAsDlg( weld::Window* _pParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,
                     const OUString& _sLabel,
                     const IObjectNameCheck& _rObjectNameCheck,

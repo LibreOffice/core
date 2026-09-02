@@ -32,9 +32,7 @@
 #include <set>
 #include <string_view>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace com::sun::star::smarttags {
     class XSmartTagRecognizer;
@@ -91,7 +89,7 @@ private:
     std::set< OUString > maDisabledSmartTagTypes;
     std::multimap < OUString, ActionReference > maSmartTagMap;
     mutable css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
-    css::uno::Reference< css::uno::XComponentContext> mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext> mxContext;
     css::uno::Reference< css::beans::XPropertySet > mxConfigurationSettings;
     bool mbLabelTextWithSmartTags;
 

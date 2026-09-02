@@ -396,7 +396,7 @@ private:
     /** @short  the global uno service manager.
         @descr  Must be used to create own needed services.
      */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** @short  points to the underlying recovery configuration.
         @descr  This instance does not cache - it calls directly the
@@ -493,7 +493,7 @@ private:
 
 public:
 
-    explicit AutoRecovery(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    explicit AutoRecovery(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
     virtual ~AutoRecovery(                                                                   ) override;
 
     virtual OUString getImplementationName() override
@@ -1228,7 +1228,7 @@ void DispatchParams::forget()
     m_xHoldRefForAsyncOpAlive.clear();
 };
 
-AutoRecovery::AutoRecovery(css::uno::Reference< css::uno::XComponentContext >  xContext)
+AutoRecovery::AutoRecovery(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : AutoRecovery_BASE         (m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     , m_xContext                (std::move(xContext                                           ))
@@ -4294,7 +4294,7 @@ void AutoRecovery::st_impl_removeLockFile()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_AutoRecovery_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<AutoRecovery> xAutoRecovery = new AutoRecovery(context);

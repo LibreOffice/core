@@ -34,7 +34,7 @@
 #include <utility>
 #include <sal/types.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
 
 namespace {
@@ -45,7 +45,7 @@ class Factory:
 {
 public:
     explicit Factory(
-        css::uno::Reference< css::uno::XComponentContext > context):
+        css::uno::Reference< cpo::uno::XComponentContext > context):
         m_context(std::move(context)) {}
 
     Factory(const Factory&) = delete;
@@ -65,7 +65,7 @@ public:
 private:
     virtual ~Factory() override {}
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 OUString Factory::getImplementationName()
@@ -111,7 +111,7 @@ Factory::createVndSunStarPkgUrlReference(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation(css::uno::XComponentContext* rxContext,
+com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation(cpo::uno::XComponentContext* rxContext,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return ::cppu::acquire(new Factory(rxContext));

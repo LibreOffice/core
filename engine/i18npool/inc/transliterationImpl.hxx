@@ -24,7 +24,7 @@
 #include <sal/types.h>
 
 namespace com::sun::star::i18n { class XLocaleData5; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -36,7 +36,7 @@ class TransliterationImpl final : public cppu::WeakImplHelper
 {
 public:
     // Constructors
-    TransliterationImpl(const css::uno::Reference < css::uno::XComponentContext >& xContext);
+    TransliterationImpl(const css::uno::Reference < cpo::uno::XComponentContext >& xContext);
     // Destructor
     virtual ~TransliterationImpl() override;
 
@@ -86,7 +86,7 @@ private:
     css::uno::Reference< css::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
     sal_Int16 numCascade;
     bool caseignoreOnly;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     css::uno::Reference< css::i18n::XLocaleData5 > mxLocaledata;
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 

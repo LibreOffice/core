@@ -18,7 +18,7 @@ namespace chart
 class TreemapChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    TreemapChartTypeTemplate(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    TreemapChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                              const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~TreemapChartTypeTemplate() override;
 

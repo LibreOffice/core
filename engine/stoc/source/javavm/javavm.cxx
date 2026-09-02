@@ -43,7 +43,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
@@ -162,7 +162,7 @@ bool askForRetry(cpo::uno::Any const & rException)
 /// @throws cpo::uno::Exception
 void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-                            const css::uno::Reference<css::uno::XComponentContext> &xCtx )
+                            const css::uno::Reference<cpo::uno::XComponentContext> &xCtx )
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
             u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
@@ -226,7 +226,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 void getDefaultLocaleFromConfig(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext> &xCtx )
+    const css::uno::Reference<cpo::uno::XComponentContext> &xCtx )
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext( u"com.sun.star.configuration.ConfigurationRegistry"_ustr, xCtx );
@@ -325,7 +325,7 @@ void getDefaultLocaleFromConfig(
 /// @throws cpo::uno::Exception
 void getJavaPropsFromJavaSettings(
     stoc_javavm::JVM * pjvm,
-    const css::uno::Reference<css::uno::XComponentContext> &xCtx)
+    const css::uno::Reference<cpo::uno::XComponentContext> &xCtx)
 {
     css::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
         xCtx->getValueByName(
@@ -424,7 +424,7 @@ void setTimeZone(stoc_javavm::JVM * pjvm) noexcept {
 void initVMConfiguration(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext > &xCtx)
+    const css::uno::Reference<cpo::uno::XComponentContext > &xCtx)
 {
     stoc_javavm::JVM jvm;
     try {
@@ -490,7 +490,7 @@ private:
 }
 
 JavaVirtualMachine::JavaVirtualMachine(
-    css::uno::Reference< css::uno::XComponentContext > xContext):
+    css::uno::Reference< cpo::uno::XComponentContext > xContext):
     WeakComponentImplHelper(m_aMutex),
     m_xContext(std::move(xContext)),
     m_bDisposed(false),
@@ -1318,7 +1318,7 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaVM_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new JavaVirtualMachine(context));
 }

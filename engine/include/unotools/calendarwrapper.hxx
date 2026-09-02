@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <unotools/unotoolsdllapi.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCalendar4; }
 namespace com::sun::star::lang { struct Locale; }
 
@@ -38,7 +38,7 @@ class UNOTOOLS_DLLPUBLIC CalendarWrapper
 
 public:
                                 CalendarWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext
+                                    const css::uno::Reference< cpo::uno::XComponentContext > & rxContext
                                     );
                                 ~CalendarWrapper();
 

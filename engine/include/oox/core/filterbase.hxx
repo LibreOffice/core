@@ -45,8 +45,8 @@ namespace com::sun::star {
     namespace io { class XStream; }
     namespace lang { class XMultiServiceFactory; }
     namespace task { class XStatusIndicator; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper {
     class SequenceAsHashMap;
@@ -92,7 +92,7 @@ class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit            FilterBase(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual             ~FilterBase() override;
 
@@ -111,7 +111,7 @@ public:
 
 
     /** Returns the component context passed in the filter constructor (always existing). */
-    const css::uno::Reference< css::uno::XComponentContext >&
+    const css::uno::Reference< cpo::uno::XComponentContext >&
                         getComponentContext() const;
 
     /** Returns the document model (always existing). */

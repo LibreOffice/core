@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBADIALOGS_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBADIALOGS_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <ooo/vba/word/XDialogs.hpp>
 #include <vbahelper/vbadialogsbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -33,7 +33,7 @@ class SwVbaDialogs : public SwVbaDialogs_BASE
 {
 public:
     SwVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                  const css::uno::Reference< css::uno::XComponentContext > &xContext,
+                  const css::uno::Reference< cpo::uno::XComponentContext > &xContext,
                   const rtl::Reference< SwXTextDocument >& xModel );
 
     // XCollection

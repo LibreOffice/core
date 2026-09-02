@@ -27,7 +27,7 @@
 
 #include <dp_backenddb.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dp_registry::backend::component {
 
@@ -78,7 +78,7 @@ public:
 
 public:
 
-    ComponentBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    ComponentBackendDb( css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
                         OUString const & url);
 
     void addEntry(OUString const & url, Data const & data);

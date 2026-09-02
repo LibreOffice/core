@@ -33,7 +33,7 @@ namespace chart { struct ExplicitScaleData; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2 { class XTitle; }
 namespace com::sun::star::container { class XNameContainer; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 
 namespace chart
@@ -46,7 +46,7 @@ namespace wrapper
 class Chart2ModelContact final
 {
 public:
-    explicit Chart2ModelContact( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit Chart2ModelContact( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     ~Chart2ModelContact();
 
 public:
@@ -122,7 +122,7 @@ private: //methods
     rtl::Reference< ChartView > const & getChartView() const;
 
 public: //member
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
 private: //member
     unotools::WeakReference< ChartModel >   m_xChartModel;

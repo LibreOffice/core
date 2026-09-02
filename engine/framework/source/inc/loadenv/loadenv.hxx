@@ -22,7 +22,7 @@
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <rtl/ref.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -101,7 +101,7 @@ private:
     /** @short  reference to a uno service manager, which must be used
                 to created on needed services on demand.
      */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** @short  points to the frame, which uses this LoadEnv object
                 and must be used to start target search there.
@@ -206,7 +206,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    LoadEnv(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    LoadEnv(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     /** @short  deinitialize an instance of this class in the right way.
      */
@@ -216,7 +216,7 @@ public:
     /// @throws css::io::IOException
     /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< css::lang::XComponent > loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                             const css::uno::Reference< css::uno::XComponentContext >&     xContext,
+                                                                             const css::uno::Reference< cpo::uno::XComponentContext >&     xContext,
                                                                              const OUString&                                        sURL   ,
                                                                              const OUString&                                        sTarget,
                                                                                    sal_Int32                                               nFlags ,
@@ -337,7 +337,7 @@ public:
 
     /** TODO document me ... */
     static  void initializeUIDefaults(
-                const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& i_rxContext,
                 comphelper::SequenceAsHashMap& io_lMediaDescriptor,
                 const bool _bUIMode,
                 rtl::Reference<QuietInteraction>* o_ppQuiteInteraction

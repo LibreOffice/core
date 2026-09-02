@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <ContentHelper.hxx>
 #include <apitools.hxx>
 #include <column.hxx>
@@ -97,7 +97,7 @@ protected:
             OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl ); }
 public:
     OComponentDefinition(
-        const css::uno::Reference< css::uno::XComponentContext >&,
+        const css::uno::Reference< cpo::uno::XComponentContext >&,
         const css::uno::Reference< css::uno::XInterface >& _xParentContainer,
         const TContentPtr& _pImpl,
         bool _bTable = true);
@@ -105,7 +105,7 @@ public:
     OComponentDefinition(
              const css::uno::Reference< css::uno::XInterface >& _rxContainer
             ,const OUString& _rElementName
-            ,const css::uno::Reference< css::uno::XComponentContext >&
+            ,const css::uno::Reference< cpo::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
             ,bool _bTable = true
         );

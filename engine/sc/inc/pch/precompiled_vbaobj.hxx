@@ -189,7 +189,7 @@
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/PathSettings.hpp>

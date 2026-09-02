@@ -41,13 +41,13 @@ namespace {
 class RowsEnumWrapper : public EnumerationHelper_BASE
 {
     unotools::WeakReference< SwVbaRows > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     uno::Reference< text::XTextTable > mxTextTable;
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     sal_Int32 m_nIndex;
 
 public:
-    RowsEnumWrapper( const rtl::Reference< SwVbaRows >& xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), m_nIndex( 0 )
+    RowsEnumWrapper( const rtl::Reference< SwVbaRows >& xParent, uno::Reference< cpo::uno::XComponentContext >  xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), m_nIndex( 0 )
     {
         mxIndexAccess = mxTextTable->getRows();
     }
@@ -69,7 +69,7 @@ public:
 }
 
 SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent,
-                      const uno::Reference< uno::XComponentContext > & xContext,
+                      const uno::Reference< cpo::uno::XComponentContext > & xContext,
                       rtl::Reference< SwXTextTable > xTextTable,
                       const uno::Reference< table::XTableRows >& xTableRows )
 : SwVbaRows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableRows, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mxTableRows( xTableRows )
@@ -79,7 +79,7 @@ SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent,
 }
 
 SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent,
-                      const uno::Reference< uno::XComponentContext > & xContext,
+                      const uno::Reference< cpo::uno::XComponentContext > & xContext,
                       rtl::Reference< SwXTextTable > xTextTable,
                       const uno::Reference< table::XTableRows >& xTableRows,
                       sal_Int32 nStarIndex, sal_Int32 nEndIndex )

@@ -52,7 +52,7 @@ cpo::uno::Sequence<OUString> DispatchHelper::getSupportedServiceNames()
 
     @param xSMGR    the global uno service manager, which can be used to create own needed services.
 */
-DispatchHelper::DispatchHelper(css::uno::Reference<css::uno::XComponentContext> xContext)
+DispatchHelper::DispatchHelper(css::uno::Reference<cpo::uno::XComponentContext> xContext)
     : m_xContext(std::move(xContext))
     , m_aBlockFlag(false)
 {
@@ -210,7 +210,7 @@ void DispatchHelper::disposing(const css::lang::EventObject&)
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-framework_DispatchHelper_get_implementation(css::uno::XComponentContext* context,
+framework_DispatchHelper_get_implementation(cpo::uno::XComponentContext* context,
                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new framework::DispatchHelper(context));

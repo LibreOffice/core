@@ -90,7 +90,7 @@ std::u16string_view InputOutputHelper::getFileNameExtension( std::u16string_view
 // input streams --------------------------------------------------------------
 
 Reference< XInputStream > InputOutputHelper::openInputStream(
-        const Reference< XComponentContext >& rxContext, const OUString& rFileName )
+        const Reference< cpo::uno::XComponentContext >& rxContext, const OUString& rFileName )
 {
     Reference< XInputStream > xInStrm;
     if( rxContext.is() ) try
@@ -107,7 +107,7 @@ Reference< XInputStream > InputOutputHelper::openInputStream(
 // output streams -------------------------------------------------------------
 
 Reference< XOutputStream > InputOutputHelper::openOutputStream(
-        const Reference< XComponentContext >& rxContext, const OUString& rFileName )
+        const Reference< cpo::uno::XComponentContext >& rxContext, const OUString& rFileName )
 {
     Reference< XOutputStream > xOutStrm;
     if( rxContext.is() ) try
@@ -122,7 +122,7 @@ Reference< XOutputStream > InputOutputHelper::openOutputStream(
 }
 
 Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
-        const Reference< XComponentContext >& rxContext, const Reference< XOutputStream >& rxOutStrm, rtl_TextEncoding eTextEnc )
+        const Reference< cpo::uno::XComponentContext >& rxContext, const Reference< XOutputStream >& rxOutStrm, rtl_TextEncoding eTextEnc )
 {
     Reference< XTextOutputStream2 > xTextOutStrm;
     const char* pcCharset = rtl_getMimeCharsetFromTextEncoding( eTextEnc );
@@ -139,7 +139,7 @@ Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
 }
 
 Reference< XTextOutputStream2 > InputOutputHelper::openTextOutputStream(
-        const Reference< XComponentContext >& rxContext, const OUString& rFileName, rtl_TextEncoding eTextEnc )
+        const Reference< cpo::uno::XComponentContext >& rxContext, const OUString& rFileName, rtl_TextEncoding eTextEnc )
 {
     return openTextOutputStream( rxContext, openOutputStream( rxContext, rFileName ), eTextEnc );
 }
@@ -1256,7 +1256,7 @@ const NameListRef & NameListWrapper::getNameList( const Config& rCfg ) const
 }
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
-        const Reference< XComponentContext >& rxContext, StorageRef xRootStrg,
+        const Reference< cpo::uno::XComponentContext >& rxContext, StorageRef xRootStrg,
         OUString aSysFileName ) :
     mxContext( rxContext ),
     mxRootStrg(std::move( xRootStrg )),
@@ -1393,7 +1393,7 @@ Config::Config( const char* pcEnvVar, const FilterBase& rFilter )
     construct( pcEnvVar, rFilter );
 }
 
-Config::Config( const char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
+Config::Config( const char* pcEnvVar, const Reference< cpo::uno::XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
 {
     construct( pcEnvVar, rxContext, rxRootStrg, rSysFileName );
 }
@@ -1408,7 +1408,7 @@ void Config::construct( const char* pcEnvVar, const FilterBase& rFilter )
         construct( pcEnvVar, rFilter.getComponentContext(), rFilter.getStorage(), rFilter.getFileUrl() );
 }
 
-void Config::construct( const char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
+void Config::construct( const char* pcEnvVar, const Reference< cpo::uno::XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName )
 {
     if( pcEnvVar && rxRootStrg && !rSysFileName.isEmpty() )
         if( const char* pcFileName = ::getenv( pcEnvVar ) )
@@ -1457,7 +1457,7 @@ const OUString* Config::implGetOption( const OUString& rKey ) const
     return mxCfgData->getOption( rKey );
 }
 
-Output::Output( const Reference< XComponentContext >& rxContext, const OUString& rFileName ) :
+Output::Output( const Reference< cpo::uno::XComponentContext >& rxContext, const OUString& rFileName ) :
     mxStrm( InputOutputHelper::openTextOutputStream( rxContext, rFileName, RTL_TEXTENCODING_UTF8 ) ),
     mnCol( 0 ),
     mnItemLevel( 0 ),

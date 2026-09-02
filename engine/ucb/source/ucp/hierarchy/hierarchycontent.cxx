@@ -82,7 +82,7 @@ using namespace hierarchy_ucp;
 
 // static ( "virtual" ctor )
 rtl::Reference<HierarchyContent> HierarchyContent::create(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
@@ -97,7 +97,7 @@ rtl::Reference<HierarchyContent> HierarchyContent::create(
 
 // static ( "virtual" ctor )
 rtl::Reference<HierarchyContent> HierarchyContent::create(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
@@ -113,7 +113,7 @@ rtl::Reference<HierarchyContent> HierarchyContent::create(
 
 
 HierarchyContent::HierarchyContent(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties aProps )
@@ -129,7 +129,7 @@ HierarchyContent::HierarchyContent(
 
 
 HierarchyContent::HierarchyContent(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
@@ -575,7 +575,7 @@ OUString HierarchyContent::getParentURL()
 
 //static
 bool HierarchyContent::hasData(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
@@ -596,7 +596,7 @@ bool HierarchyContent::hasData(
 
 //static
 bool HierarchyContent::loadData(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps )
@@ -829,7 +829,7 @@ bool HierarchyContent::exchangeIdentity(
 
 // static
 uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
-                const uno::Reference< uno::XComponentContext >& rxContext,
+                const uno::Reference< cpo::uno::XComponentContext >& rxContext,
                 const cpo::uno::Sequence< beans::Property >& rProperties,
                 const HierarchyContentProperties& rData,
                 HierarchyContentProvider* pProvider,

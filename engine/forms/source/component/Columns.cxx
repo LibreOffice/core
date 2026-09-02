@@ -547,7 +547,7 @@ void OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
     }
 }
 
-TextFieldColumn::TextFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+TextFieldColumn::TextFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_TEXTFIELD)
 {
 }
@@ -581,7 +581,7 @@ rtl::Reference<OGridColumn> TextFieldColumn::createCloneColumn() const
     return new TextFieldColumn(this);
 }
 
-PatternFieldColumn::PatternFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+PatternFieldColumn::PatternFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_PATTERNFIELD)
 {
 }
@@ -615,7 +615,7 @@ rtl::Reference<OGridColumn> PatternFieldColumn::createCloneColumn() const
     return new PatternFieldColumn(this);
 }
 
-DateFieldColumn::DateFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+DateFieldColumn::DateFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_DATEFIELD)
 {
 }
@@ -649,7 +649,7 @@ rtl::Reference<OGridColumn> DateFieldColumn::createCloneColumn() const
     return new DateFieldColumn(this);
 }
 
-TimeFieldColumn::TimeFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+TimeFieldColumn::TimeFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_TIMEFIELD)
 {
 }
@@ -683,7 +683,7 @@ rtl::Reference<OGridColumn> TimeFieldColumn::createCloneColumn() const
     return new TimeFieldColumn(this);
 }
 
-NumericFieldColumn::NumericFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+NumericFieldColumn::NumericFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_NUMERICFIELD)
 {
 }
@@ -717,7 +717,7 @@ rtl::Reference<OGridColumn> NumericFieldColumn::createCloneColumn() const
     return new NumericFieldColumn(this);
 }
 
-CurrencyFieldColumn::CurrencyFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+CurrencyFieldColumn::CurrencyFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_CURRENCYFIELD)
 {
 }
@@ -751,7 +751,7 @@ rtl::Reference<OGridColumn> CurrencyFieldColumn::createCloneColumn() const
     return new CurrencyFieldColumn(this);
 }
 
-CheckBoxColumn::CheckBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+CheckBoxColumn::CheckBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_CHECKBOX)
 {
 }
@@ -785,7 +785,7 @@ rtl::Reference<OGridColumn> CheckBoxColumn::createCloneColumn() const
     return new CheckBoxColumn(this);
 }
 
-ComboBoxColumn::ComboBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+ComboBoxColumn::ComboBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_COMBOBOX)
 {
 }
@@ -819,7 +819,7 @@ rtl::Reference<OGridColumn> ComboBoxColumn::createCloneColumn() const
     return new ComboBoxColumn(this);
 }
 
-ListBoxColumn::ListBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+ListBoxColumn::ListBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_LISTBOX)
 {
 }
@@ -853,7 +853,7 @@ rtl::Reference<OGridColumn> ListBoxColumn::createCloneColumn() const
     return new ListBoxColumn(this);
 }
 
-FormattedFieldColumn::FormattedFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext)
+FormattedFieldColumn::FormattedFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_FORMATTEDFIELD)
 {
 }

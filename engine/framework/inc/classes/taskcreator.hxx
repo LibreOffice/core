@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
@@ -43,12 +43,12 @@ class TaskCreator final
     // member
     private:
 
-        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
     // interface
     public:
 
-                 TaskCreator( css::uno::Reference< css::uno::XComponentContext > xContext );
+                 TaskCreator( css::uno::Reference< cpo::uno::XComponentContext > xContext );
                  ~TaskCreator(                                                                     );
 
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor );

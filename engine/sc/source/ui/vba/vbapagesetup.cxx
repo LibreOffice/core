@@ -42,7 +42,7 @@ using namespace ::ooo::vba;
 #define ZOOM_MAX 400
 
 ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
-                const uno::Reference< uno::XComponentContext >& xContext,
+                const uno::Reference< cpo::uno::XComponentContext >& xContext,
                 uno::Reference< sheet::XSpreadsheet > xSheet,
                 const uno::Reference< frame::XModel >& xModel)
 : ScVbaPageSetup_BASE( xParent, xContext ),

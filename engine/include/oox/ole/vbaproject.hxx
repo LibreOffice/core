@@ -35,10 +35,10 @@ namespace com::sun::star {
     namespace frame { class XModel; }
     namespace script { class XLibraryContainer; }
     namespace script::vba { class XVBAMacroResolver; }
-    namespace uno { class XComponentContext; }
     namespace uno { class XInterface; }
     namespace io { class XInputStream; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
     class GraphicHelper;
@@ -53,7 +53,7 @@ class VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             std::u16string_view rConfigCompName );
                         ~VbaFilterConfig();
 
@@ -114,7 +114,7 @@ class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 {
 public:
     explicit            VbaProject(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             std::u16string_view rConfigCompName );
     virtual             ~VbaProject();
@@ -184,7 +184,7 @@ private:
     typedef RefVector< VbaMacroAttacherBase >           MacroAttacherVector;
     typedef ::std::map< OUString, sal_Int32 >    DummyModuleMap;
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
     css::uno::Reference< css::frame::XModel >
                         mxDocModel;         ///< Document model used to import/export the VBA project.

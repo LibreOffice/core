@@ -25,7 +25,7 @@
 #include <rtl/ref.hxx>
 #include <ChartTypeTemplate.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -37,7 +37,7 @@ class ChartTypeManager final :
 {
 public:
     explicit ChartTypeManager(
-        css::uno::Reference< css::uno::XComponentContext > xContext );
+        css::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~ChartTypeManager() override;
 
     virtual OUString
@@ -63,7 +63,7 @@ public:
     rtl::Reference< ::chart::ChartTypeTemplate > createTemplate( const OUString& aServiceSpecifier );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
         m_xContext;
 };
 

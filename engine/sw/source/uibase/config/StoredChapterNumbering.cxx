@@ -164,7 +164,7 @@ class StoredChapterNumberingExport
 {
 public:
     StoredChapterNumberingExport(
-            uno::Reference<uno::XComponentContext> const& xContext,
+            uno::Reference<cpo::uno::XComponentContext> const& xContext,
             OUString const& rFileName,
             uno::Reference<xml::sax::XDocumentHandler> const& xHandler)
         : SvXMLExport(xContext, u"sw::StoredChapterNumberingExport"_ustr, rFileName,
@@ -361,7 +361,7 @@ private:
 
 public:
     StoredChapterNumberingImport(
-            uno::Reference<uno::XComponentContext> const& xContext,
+            uno::Reference<cpo::uno::XComponentContext> const& xContext,
             SwChapterNumRules & rNumRules)
         : SvXMLImport(xContext, u"sw::StoredChapterNumberingImport"_ustr, SvXMLImportFlags::ALL)
         , m_rNumRules(rNumRules)
@@ -382,7 +382,7 @@ public:
 void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)
 {
-    uno::Reference<uno::XComponentContext> const& xContext(
+    uno::Reference<cpo::uno::XComponentContext> const& xContext(
             ::comphelper::getProcessComponentContext());
 
     uno::Reference<io::XOutputStream> const xOutStream(
@@ -430,7 +430,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
 void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)
 {
-    uno::Reference<uno::XComponentContext> const& xContext(
+    uno::Reference<cpo::uno::XComponentContext> const& xContext(
             ::comphelper::getProcessComponentContext());
 
     uno::Reference<io::XInputStream> const xInStream(

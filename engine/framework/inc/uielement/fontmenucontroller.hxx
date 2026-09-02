@@ -31,7 +31,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            FontMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            FontMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~FontMenuController() override;
 
             /* interface XServiceInfo */

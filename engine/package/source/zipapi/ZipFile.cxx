@@ -117,14 +117,14 @@ void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream
     aGrabber.setInputStream ( xStream );
 }
 
-uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextForChecksum( const uno::Reference< uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData )
+uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextForChecksum( const uno::Reference< cpo::uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData )
 {
     assert(xEncryptionData->m_oCheckAlg); // callers checked it already
 
     uno::Reference< xml::crypto::XDigestContext > xDigestContext;
     if (*xEncryptionData->m_oCheckAlg == xml::crypto::DigestID::SHA256_1K)
     {
-        uno::Reference< uno::XComponentContext > xContext = xArgContext;
+        uno::Reference< cpo::uno::XComponentContext > xContext = xArgContext;
         if ( !xContext.is() )
             xContext = comphelper::getProcessComponentContext();
 
@@ -149,7 +149,7 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
     return xDigestContext;
 }
 
-uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const uno::Reference< uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData, bool bEncrypt )
+uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const uno::Reference< cpo::uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData, bool bEncrypt )
 {
     uno::Reference< xml::crypto::XCipherContext > xResult;
 
@@ -212,7 +212,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     if (xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING
         || xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_GCM_W3C)
     {
-        uno::Reference< uno::XComponentContext > xContext = xArgContext;
+        uno::Reference< cpo::uno::XComponentContext > xContext = xArgContext;
         if ( !xContext.is() )
             xContext = comphelper::getProcessComponentContext();
 
@@ -480,7 +480,7 @@ void CheckSequence( const cpo::uno::Sequence< sal_Int8 >& aSequence )
 }
 #endif
 
-bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
+bool ZipFile::StaticHasValidPassword( const uno::Reference< cpo::uno::XComponentContext >& rxContext, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
     assert(rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C); // should not be called for AEAD
 
@@ -752,7 +752,7 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
 
 uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(
         const rtl::Reference<comphelper::RefCountedMutex>& rMutexHolder,
-        const uno::Reference<uno::XComponentContext>& rxContext,
+        const uno::Reference<cpo::uno::XComponentContext>& rxContext,
         const uno::Reference<XInputStream>& xStream,
         const ::rtl::Reference<EncryptionData> &rData)
 {

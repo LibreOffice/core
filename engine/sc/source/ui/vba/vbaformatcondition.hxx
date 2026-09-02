@@ -39,7 +39,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
     ScVbaFormatCondition( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                          const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                          const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                           const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
                           css::uno::Reference< ov::excel::XStyle > ,
                           css::uno::Reference< ov::excel::XFormatConditions >  _xFormatConditions,

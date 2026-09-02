@@ -67,7 +67,7 @@ private:
 
 public:
 
-    explicit    PDFDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit    PDFDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual     ~PDFDialog() override;
 };
 

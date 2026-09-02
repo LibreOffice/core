@@ -345,7 +345,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
     try
     {
-        const uno::Reference< uno::XComponentContext >& xContext(
+        const uno::Reference< cpo::uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager(), UNO_QUERY_THROW );

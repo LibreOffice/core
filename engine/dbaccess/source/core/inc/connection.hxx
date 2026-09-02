@@ -86,7 +86,7 @@ class OConnection final     :public OConnection_Base
     // the filter as set on the parent data link at construction of the connection
     cpo::uno::Sequence< OUString >                                    m_aTableFilter;
     cpo::uno::Sequence< OUString >                                    m_aTableTypeFilter;
-    css::uno::Reference< css::uno::XComponentContext >                m_aContext;
+    css::uno::Reference< cpo::uno::XComponentContext >                m_aContext;
     css::uno::Reference< css::sdbc::XConnection >                     m_xMasterConnection;
     css::uno::Reference< css::sdb::tools::XConnectionTools >          m_xConnectionTools;
     css::uno::Reference< css::sdb::application::XTableUIProvider >    m_xTableUIProvider;
@@ -108,7 +108,7 @@ class OConnection final     :public OConnection_Base
 public:
     OConnection(ODatabaseSource& _rDB
                 ,css::uno::Reference< css::sdbc::XConnection > const & _rxMaster
-                ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+                ,const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
 // css::lang::XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;

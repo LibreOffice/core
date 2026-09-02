@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -56,7 +56,7 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
-        css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
         css::uno::Reference< css::beans::XPropertySet >               m_xField;
         css::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;
         css::uno::Reference< css::sdbc::XConnection >                 m_xConnection;
@@ -75,7 +75,7 @@ namespace frm
         void initControlModel(css::uno::Reference< css::beans::XPropertySet > const & xControlModel);
 
     public:
-        explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
+        explicit OFilterControl( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
         cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;

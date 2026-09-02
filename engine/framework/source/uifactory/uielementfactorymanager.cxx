@@ -349,7 +349,7 @@ class UIElementFactoryManager : public UIElementFactoryManager_BASE
 {
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 public:
-    explicit UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit UIElementFactoryManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual OUString getImplementationName() override
     {
@@ -377,7 +377,7 @@ public:
 
 private:
     bool                                                  m_bConfigRead;
-    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
     rtl::Reference<ConfigurationAccess_FactoryManager> m_pConfigAccess;
 };
 
@@ -544,7 +544,7 @@ void UIElementFactoryManager::deregisterFactory( const OUString& aType, const OU
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UIElementFactoryManager_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UIElementFactoryManager(context));

@@ -50,12 +50,12 @@ public:
     virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     explicit CDOTransferable(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard,
         const std::vector<sal_uInt32>& rFormats);
 
     explicit CDOTransferable(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         sal::systools::COMReference<IDataObject> rDataObject );
 
 private:
@@ -80,7 +80,7 @@ private:
     cpo::uno::WeakReference<css::datatransfer::clipboard::XClipboard> m_xClipboard;
     sal::systools::COMReference<IDataObject>                          m_rDataObject;
     cpo::uno::Sequence< css::datatransfer::DataFlavor >               m_FlavorList;
-    const css::uno::Reference< css::uno::XComponentContext >          m_xContext;
+    const css::uno::Reference< cpo::uno::XComponentContext >          m_xContext;
     CDataFormatTranslator                                             m_DataFormatTranslator;
     css::uno::Reference< css::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;
     std::mutex                                                        m_aMutex;

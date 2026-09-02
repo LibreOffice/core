@@ -24,7 +24,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 inline constexpr OUString NSS_SERVICE_NAME = u"com.sun.star.xml.crypto.NSSInitializer"_ustr;
 
@@ -35,18 +35,18 @@ class ONSSInitializer : public cppu::WeakImplHelper
 >
 {
 protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     static OUString m_sNSSPath;
     static bool m_bIsNSSinitialized;
 
     ONSSInitializer();
 
 public:
-    explicit ONSSInitializer(css::uno::Reference<css::uno::XComponentContext> xContext);
+    explicit ONSSInitializer(css::uno::Reference<cpo::uno::XComponentContext> xContext);
     virtual ~ONSSInitializer() override;
 
-    static bool initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext );
-    static const OUString & getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive = false);
+    static bool initNSS( const css::uno::Reference< cpo::uno::XComponentContext > &rxContext );
+    static const OUString & getMozillaCurrentProfile(const css::uno::Reference< cpo::uno::XComponentContext > &rxContext, bool bSetActive = false);
 
     /* XNSSInitializer */
     virtual OUString SAL_CALL getNSSPath() override;

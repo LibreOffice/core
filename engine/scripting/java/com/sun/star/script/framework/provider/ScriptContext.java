@@ -34,7 +34,7 @@ import com.sun.star.script.provider.XScriptContext;
 
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 public class ScriptContext extends PropertySet implements XScriptContext {
 

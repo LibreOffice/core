@@ -16,7 +16,7 @@ using namespace com::sun::star::uno;
 namespace cmis
 {
     DynamicResultSet::DynamicResultSet(
-        const Reference< XComponentContext >& rxContext,
+        const Reference< cpo::uno::XComponentContext >& rxContext,
         ChildrenProvider* pChildrenProvider,
         const OpenCommandArgument2& rCommand,
         const Reference< XCommandEnvironment >& rxEnv ) :

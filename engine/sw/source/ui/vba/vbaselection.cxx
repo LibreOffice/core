@@ -72,7 +72,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                                const uno::Reference< uno::XComponentContext >& rContext,
+                                const uno::Reference< cpo::uno::XComponentContext >& rContext,
                                 rtl::Reference< SwXTextDocument > xModel )
 : SwVbaSelection_BASE( rParent, rContext ),
   mxModel(std::move( xModel ))

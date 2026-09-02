@@ -26,7 +26,7 @@
 
 namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
 
 namespace comphelper
@@ -86,7 +86,7 @@ public:
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. cpo::uno::Exception if the configuration could not be opened.
      */
-    static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                   const OUString&                                           sPackage,
                                                                         EConfigurationModes                                 eMode   );
 
@@ -208,7 +208,7 @@ public:
      * So it's not very useful to use this method for reading multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
-    static cpo::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
+    static cpo::uno::Any readDirectKey(const css::uno::Reference< cpo::uno::XComponentContext >&    rxContext,
                                        const OUString&                                       sPackage,
                                        const OUString&                                       sRelPath,
                                        const OUString&                                       sKey    ,
@@ -224,7 +224,7 @@ public:
      * So it's not very useful to use this method for writing multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
-    static void writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
+    static void writeDirectKey(const css::uno::Reference< cpo::uno::XComponentContext >&    rxContext,
                                const OUString&                                       sPackage,
                                const OUString&                                       sRelPath,
                                const OUString&                                       sKey    ,

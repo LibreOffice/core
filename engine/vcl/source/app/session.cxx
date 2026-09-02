@@ -411,7 +411,7 @@ void VCLSession::disposing(std::unique_lock<std::mutex>& rGuard) {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_frame_VCLSessionManagerClient_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new VCLSession);
 }

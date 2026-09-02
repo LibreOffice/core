@@ -56,7 +56,7 @@ static bool UseSystemFileDialog()
 }
 
 Reference< css::uno::XInterface > FilePicker_CreateInstance (
-    Reference< css::uno::XComponentContext > const & context)
+    Reference< cpo::uno::XComponentContext > const & context)
 {
     Reference< css::uno::XInterface > xResult;
 
@@ -124,7 +124,7 @@ static OUString FolderPicker_getSystemPickerServiceName()
 }
 
 Reference< css::uno::XInterface > FolderPicker_CreateInstance (
-    Reference< css::uno::XComponentContext > const & context)
+    Reference< cpo::uno::XComponentContext > const & context)
 {
     Reference< css::uno::XInterface > xResult;
 

@@ -26,7 +26,7 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import cpo.uno.Exception;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.awt.XContainerWindowEventHandler;

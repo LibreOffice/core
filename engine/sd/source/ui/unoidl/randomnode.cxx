@@ -553,7 +553,7 @@ Sequence< OUString > RandomAnimationNode::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-RandomAnimationNode_get_implementation(css::uno::XComponentContext*,
+RandomAnimationNode_get_implementation(cpo::uno::XComponentContext*,
                                                                     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::RandomAnimationNode());

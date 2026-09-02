@@ -24,7 +24,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 VbaPageSetupBase::VbaPageSetupBase(const uno::Reference< XHelperInterface >& xParent,
-                const uno::Reference< uno::XComponentContext >& xContext )
+                const uno::Reference< cpo::uno::XComponentContext >& xContext )
     : VbaPageSetupBase_BASE( xParent, xContext )
     , mnOrientLandscape(0)
     , mnOrientPortrait(0)

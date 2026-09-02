@@ -40,7 +40,7 @@
 #include <com/sun/star/text/XMultiTextMarkup.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -574,7 +574,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         {
             try
             {
-                const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
+                const uno::Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
                 uno::Reference< linguistic2::XProofreader > xGC(
                         xContext->getServiceManager()->createInstanceWithContext(aSvcImplName, xContext),
                         uno::UNO_QUERY_THROW );
@@ -915,7 +915,7 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 
     if (!m_xBreakIterator.is())
     {
-        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         m_xBreakIterator = i18n::BreakIterator::create(xContext);
     }
     sal_Int32 nTextLen = rText.getLength();
@@ -1131,7 +1131,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
         try
         {
             // get configuration provider
-            const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+            const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                     configuration::theDefaultProvider::get( xContext );
 
@@ -1255,7 +1255,7 @@ cpo::uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_GrammarCheckingIterator_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GrammarCheckingIterator());
 }

@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ooo/vba/excel/XWindow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/excel/XPane.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -56,13 +56,13 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const rtl::Reference< ScModelObj >& xModel,
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws cpo::uno::RuntimeException
     ScVbaWindow(
         const cpo::uno::Sequence< cpo::uno::Any >& aArgs,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XWindow
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) override;

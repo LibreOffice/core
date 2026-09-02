@@ -29,13 +29,13 @@ class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
                                                 css::embed::XEmbeddedObjectCreator,
                                                 css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
     explicit OOoEmbeddedObjectFactory(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : m_xContext( rxContext )
     , m_aConfigHelper( rxContext )
     {
@@ -64,13 +64,13 @@ class OOoSpecialEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
                                                 css::embed::XEmbedObjectFactory,
                                                 css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
     explicit OOoSpecialEmbeddedObjectFactory(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : m_xContext( rxContext )
     , m_aConfigHelper( rxContext )
     {

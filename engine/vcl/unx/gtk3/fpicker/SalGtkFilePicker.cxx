@@ -116,7 +116,7 @@ void SalGtkFilePicker::InitialMapping()
     gtk_widget_set_size_request (m_pPreview, -1, -1);
 }
 
-SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext >& xContext ) :
+SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext ),
     SalGtkFilePicker_Base( m_rbHelperMtx ),
     m_pVBox ( nullptr ),
@@ -1977,7 +1977,7 @@ SalGtkFilePicker::~SalGtkFilePicker()
 }
 
 uno::Reference< ui::dialogs::XFilePicker2 >
-GtkInstance::createFilePicker( const css::uno::Reference< css::uno::XComponentContext > &xMSF )
+GtkInstance::createFilePicker( const css::uno::Reference< cpo::uno::XComponentContext > &xMSF )
 {
     return uno::Reference< ui::dialogs::XFilePicker2 >(
                 new SalGtkFilePicker( xMSF ) );

@@ -42,7 +42,7 @@ namespace com::sun::star {
 }
 
 namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
 namespace com::sun::star::xml::sax { class XWriter; }
@@ -63,7 +63,7 @@ namespace com::sun::star::xml::sax { class XWriter; }
 class XMLSignatureHelper
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxCtx;
+    css::uno::Reference< cpo::uno::XComponentContext > mxCtx;
     rtl::Reference<UriBindingHelper> mxUriBinding;
 
     rtl::Reference<XSecController> mpXSecController;
@@ -75,7 +75,7 @@ private:
     XMLSignatureHelper(const XMLSignatureHelper&) = delete;
 
 public:
-    XMLSignatureHelper(const css::uno::Reference< css::uno::XComponentContext >& mrCtx );
+    XMLSignatureHelper(const css::uno::Reference< cpo::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
 
     void StartVerifySignatureElement();

@@ -535,7 +535,7 @@ void CuiConfigGroupListBox::FillFunctionsList(const cpo::uno::Sequence<DispatchI
     m_pFunctionListBox->thaw();
 }
 
-void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+void CuiConfigGroupListBox::Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     const css::uno::Reference< css::frame::XFrame >& xFrame,
     const OUString& sModuleLongName,
     bool bEventMode)

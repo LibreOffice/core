@@ -771,7 +771,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_VBAMacroResolver_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ooo::vba::VBAMacroResolver());
 }

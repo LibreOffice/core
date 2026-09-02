@@ -19,6 +19,7 @@
 package complex.framework.autosave;
 
 import com.sun.star.uno.*;
+import cpo.uno.*;
 import com.sun.star.lang.*;
 import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.*;

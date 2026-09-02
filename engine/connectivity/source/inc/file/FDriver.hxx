@@ -43,9 +43,9 @@ namespace connectivity::file
         std::vector<unotools::WeakReference<OConnection>>   m_xConnections; //  vector containing a list
                                                                             //  of all the Connection objects
                                                                             //  for this Driver
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     public:
-        OFileDriver(css::uno::Reference< css::uno::XComponentContext > _xContext);
+        OFileDriver(css::uno::Reference< cpo::uno::XComponentContext > _xContext);
 
         // OComponentHelper
         virtual void disposing() override;
@@ -66,7 +66,7 @@ namespace connectivity::file
         virtual css::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
         virtual css::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByURL( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
 
-        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
     };
 
 }

@@ -122,12 +122,12 @@ private:
 public:
     /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference<
-        css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
+        cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier);
 
     /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference<
-        css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
+        cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         bool bIsFolder);
 

@@ -21,7 +21,7 @@
 #include "cpo/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "cpo/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include "cpo/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -55,7 +55,7 @@ private:
 namespace CppServer {
 
 css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+    css::uno::Reference< cpo::uno::XComponentContext > const &)
 {
     return static_cast< ::cppu::OWeakObject * >(new Service);
 }

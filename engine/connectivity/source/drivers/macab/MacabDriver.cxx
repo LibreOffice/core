@@ -177,7 +177,7 @@ void MacabImplModule::shutdown()
 // = MacabDriver
 
 MacabDriver::MacabDriver(
-    const Reference< css::uno::XComponentContext >& _rxContext)
+    const Reference< cpo::uno::XComponentContext >& _rxContext)
     : MacabDriver_BASE(m_aMutex),
       m_xContext(_rxContext),
       m_aImplModule()
@@ -303,7 +303,7 @@ OUString MacabDriver::impl_getConfigurationSettingsPath()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_MacabDriver_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new MacabDriver(context));
 }

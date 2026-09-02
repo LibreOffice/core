@@ -111,7 +111,7 @@ using namespace ::formula;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisImporter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -123,7 +123,7 @@ Calc_XMLOasisImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisMetaImporter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -135,7 +135,7 @@ Calc_XMLOasisMetaImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisStylesImporter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -147,7 +147,7 @@ Calc_XMLOasisStylesImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisContentImporter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ScXMLImport(
         context,
@@ -159,7 +159,7 @@ Calc_XMLOasisContentImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisSettingsImporter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -345,7 +345,7 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
 }
 
 ScXMLImport::ScXMLImport(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag,
     const cpo::uno::Sequence< OUString > & sSupportedServiceNames)
 :   SvXMLImport( rContext, implementationName, nImportFlag, sSupportedServiceNames ),

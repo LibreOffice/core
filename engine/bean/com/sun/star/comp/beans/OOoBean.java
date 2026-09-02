@@ -166,7 +166,7 @@ public class OOoBean
             throw new HasConnectionException();
 
         // is there a real connection, not just the proxy?
-        com.sun.star.uno.XComponentContext xComponentContext = null;
+        cpo.uno.XComponentContext xComponentContext = null;
         try {
             xComponentContext = iNewConnection.getComponentContext();
         } catch (java.lang.Throwable aExc) {
@@ -291,7 +291,7 @@ public class OOoBean
             // avoid concurrent access from multiple threads
             final OfficeConnection iConn = getOOoConnection();
 
-            com.sun.star.uno.XComponentContext xComponentContext = iConn.getComponentContext();
+            cpo.uno.XComponentContext xComponentContext = iConn.getComponentContext();
             if (xComponentContext == null)
                 throw new NoConnectionException();
 

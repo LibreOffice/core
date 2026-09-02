@@ -16,10 +16,10 @@
 #include <comphelper/getexpandeduri.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 OUString comphelper::getExpandedUri(
-    css::uno::Reference<css::uno::XComponentContext> const & context,
+    css::uno::Reference<cpo::uno::XComponentContext> const & context,
     OUString const & uri)
 {
     css::uno::Reference<css::uri::XVndSunStarExpandUrlReference> ref(

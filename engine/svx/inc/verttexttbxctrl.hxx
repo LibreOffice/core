@@ -39,7 +39,7 @@ class SvxVertCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl_Base
 
 public:
     explicit SvxVertCTLTextTbxCtrl(
-        const css::uno::Reference<css::uno::XComponentContext>& rContext);
+        const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
 
     virtual ~SvxVertCTLTextTbxCtrl() override;
 
@@ -58,7 +58,7 @@ public:
 class SvxCTLTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 {
 public:
-    SvxCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    SvxCTLTextTbxCtrl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
 
     virtual OUString getImplementationName() override;
 };
@@ -66,7 +66,7 @@ public:
 class SvxVertTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 {
 public:
-    SvxVertTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    SvxVertTextTbxCtrl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
 
     virtual OUString getImplementationName() override;
 };

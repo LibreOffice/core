@@ -55,19 +55,19 @@ namespace {
 class WrappedTitleStringProperty : public WrappedProperty
 {
 public:
-    explicit WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
+    explicit WrappedTitleStringProperty( const Reference< cpo::uno::XComponentContext >& xContext );
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
     virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
-    Reference< uno::XComponentContext > m_xContext;
+    Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
 }
 
-WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext )
+WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< cpo::uno::XComponentContext >& xContext )
     : ::chart::WrappedProperty( u"String"_ustr, OUString() )
     , m_xContext( xContext )
 {

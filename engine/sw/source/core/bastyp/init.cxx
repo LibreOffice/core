@@ -637,7 +637,7 @@ namespace
     public:
         TransWrp()
         {
-            const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
             m_xTransWrp.reset(new ::utl::TransliterationWrapper( xContext,
                     TransliterationFlags::IGNORE_CASE |

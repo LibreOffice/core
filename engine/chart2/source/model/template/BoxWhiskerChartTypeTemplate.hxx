@@ -18,7 +18,7 @@ namespace chart
 class BoxWhiskerChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    BoxWhiskerChartTypeTemplate(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    BoxWhiskerChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                 const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~BoxWhiskerChartTypeTemplate() override;
 

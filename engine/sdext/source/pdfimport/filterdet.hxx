@@ -21,7 +21,7 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
 #include <comphelper/compbase.hxx>
@@ -38,11 +38,11 @@ class PDFDetector : public PDFDetectorBase
 {
 private:
     css::uno::Reference<
-        css::uno::XComponentContext > m_xContext;
+        cpo::uno::XComponentContext > m_xContext;
 
 public:
     explicit PDFDetector( css::uno::Reference<
-                                css::uno::XComponentContext > xContext );
+                                cpo::uno::XComponentContext > xContext );
 
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect( cpo::uno::Sequence<
@@ -87,7 +87,7 @@ css::uno::Reference< css::io::XStream >
    getAdditionalStream( const OUString&                                                            rPDFFile,
                         OUString&                                                                  o_rOutMimetype,
                         OUString&                                                                  io_rOutPwd,
-                        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                         const cpo::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                         bool                                                                            bMayUseUI );
 
@@ -122,7 +122,7 @@ css::uno::Reference< css::io::XStream >
    getEmbeddedFile( const OUString&                                                            rPDFFile,
                     OUString&                                                                  o_rOutMimetype,
                     OUString&                                                                  io_rOutPwd,
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     const cpo::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                     bool                                                                            bMayUseUI );
 

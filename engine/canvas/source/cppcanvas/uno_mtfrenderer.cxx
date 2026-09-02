@@ -11,7 +11,7 @@
 #include <o3tl/any.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XMtfRenderer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/processfactory.hxx>
@@ -33,7 +33,7 @@ class MtfRenderer : public MtfRendererBase
 {
 public:
     MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const& args,
-                 css::uno::Reference<css::uno::XComponentContext> const&);
+                 css::uno::Reference<cpo::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
     sal_Int64 draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
@@ -68,7 +68,7 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     return reinterpret_cast<sal_Int64>(new Bitmap(aBitmap));
 }
 
-MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const&, uno::Reference<uno::XComponentContext> const&)
+MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const&, uno::Reference<cpo::uno::XComponentContext> const&)
 {
 }
 
@@ -76,7 +76,7 @@ MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const&, uno::Referen
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_MtfRenderer_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new MtfRenderer(args, context));
 }

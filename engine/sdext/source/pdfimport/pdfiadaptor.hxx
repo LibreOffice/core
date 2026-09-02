@@ -21,7 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -40,13 +40,13 @@ namespace pdfi
     {
     private:
         css::uno::Reference<
-            css::uno::XComponentContext >  m_xContext;
+            cpo::uno::XComponentContext >  m_xContext;
         css::uno::Reference<
             css::frame::XModel >           m_xModel;
 
     public:
         explicit PDFIHybridAdaptor( const css::uno::Reference<
-                                          css::uno::XComponentContext >& xContext );
+                                          cpo::uno::XComponentContext >& xContext );
 
         // XFilter
         virtual bool SAL_CALL filter( const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;

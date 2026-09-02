@@ -37,7 +37,7 @@
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XLayoutManager; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XURLTransformer; }
 
 class ToolBox;
@@ -71,14 +71,14 @@ class SVT_DLLPUBLIC ToolboxController :
     private:
         bool  m_bSupportVisible;
     public:
-        ToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                            const css::uno::Reference< css::frame::XFrame >& xFrame,
                            OUString aCommandURL );
         ToolboxController();
         virtual ~ToolboxController() override;
 
         css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
-        const css::uno::Reference< css::uno::XComponentContext >& getContext() const;
+        const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const;
         css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
         void updateStatus( const OUString& rCommandURL );
@@ -164,7 +164,7 @@ class SVT_DLLPUBLIC ToolboxController :
                                                                   m_bSidebar;
         ToolBoxItemId                                             m_nToolBoxId;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
 

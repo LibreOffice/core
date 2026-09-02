@@ -15,7 +15,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart {
 
@@ -113,7 +113,7 @@ cpo::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_libreoffice_chart2_Chart2ToolboxController(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const & rProperties)
+org_libreoffice_chart2_Chart2ToolboxController(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const & rProperties)
 {
     return cppu::acquire(new ::chart::ChartToolbarController(rProperties));
 }

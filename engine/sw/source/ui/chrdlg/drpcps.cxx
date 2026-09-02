@@ -358,7 +358,7 @@ void SwDropCapsPict::CheckScript()
     maScriptChanges.clear();
     if( !m_xBreak.is() )
     {
-        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         m_xBreak = css::i18n::BreakIterator::create(xContext);
     }
     sal_Int16 nScript = m_xBreak->getScriptType( maText, 0 );

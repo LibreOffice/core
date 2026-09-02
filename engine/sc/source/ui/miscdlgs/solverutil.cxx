@@ -42,7 +42,7 @@ void ScSolverUtil::GetImplementations( cpo::uno::Sequence<OUString>& rImplNames,
     rImplNames.realloc(0);      // clear
     rDescriptions.realloc(0);
 
-    const uno::Reference<uno::XComponentContext>& xCtx(
+    const uno::Reference<cpo::uno::XComponentContext>& xCtx(
         comphelper::getProcessComponentContext() );
 
     uno::Reference<container::XContentEnumerationAccess> xEnAc(
@@ -99,7 +99,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( std::u16string_view rImp
 {
     uno::Reference<sheet::XSolver> xSolver;
 
-    const uno::Reference<uno::XComponentContext>& xCtx(
+    const uno::Reference<cpo::uno::XComponentContext>& xCtx(
         comphelper::getProcessComponentContext() );
 
     uno::Reference<container::XContentEnumerationAccess> xEnAc(

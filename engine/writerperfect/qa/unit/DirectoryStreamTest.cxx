@@ -59,7 +59,7 @@ private:
 DirectoryStreamTest::DirectoryStreamTest()
 {
     const uno::Reference<ucb::XCommandEnvironment> xCmdEnv;
-    const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     using ucbhelper::Content;
 

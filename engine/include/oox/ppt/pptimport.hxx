@@ -32,9 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace uno { class XComponentContext; }
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
     namespace drawingml::chart { class ChartConverter; }
@@ -47,7 +45,7 @@ class PowerPointImport final : public oox::core::XmlFilterBase
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    PowerPointImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    PowerPointImport( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~PowerPointImport() override;
 
     // from FilterBase

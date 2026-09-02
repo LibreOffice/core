@@ -140,7 +140,7 @@ void Desktop::constructorInit()
                 The value must be different from NULL!
     @onerror    We throw an ASSERT in debug version or do nothing in release version.
 *//*-*************************************************************************************************************/
-Desktop::Desktop( css::uno::Reference< css::uno::XComponentContext >  xContext )
+Desktop::Desktop( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
         :   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
@@ -1688,7 +1688,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
 namespace {
 
 rtl::Reference<framework::Desktop> createDesktop(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
+    css::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     SolarMutexGuard g; // tdf#114025 init with SolarMutex to avoid deadlock
     rtl::Reference<framework::Desktop> desktop(new framework::Desktop(context));
@@ -1699,7 +1699,7 @@ rtl::Reference<framework::Desktop> createDesktop(
 }
 
 const rtl::Reference<framework::Desktop> & framework::getDesktop(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
+    css::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     static auto const instance = createDesktop(context);
     return instance;
@@ -1707,7 +1707,7 @@ const rtl::Reference<framework::Desktop> & framework::getDesktop(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Desktop_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(framework::getDesktop(context).get());

@@ -30,7 +30,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::sdbc { class XConnection; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace connectivity
 {

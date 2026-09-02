@@ -21,7 +21,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
@@ -635,7 +635,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             rViewShell.ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
         //open wizard
-        uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+        uno::Reference< cpo::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
         if(xContext.is())
         {
             uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );

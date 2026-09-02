@@ -30,7 +30,7 @@ namespace abp
 {
     class OAddressBookSourcePilot final : public vcl::RoadmapWizardMachine
     {
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                 m_xORB;
         AddressSettings         m_aSettings;
 
@@ -41,12 +41,12 @@ namespace abp
         /// ctor
         OAddressBookSourcePilot(
             weld::Window* _pParent,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
         virtual short run() override;
 
         /// get the service factory which was used to create the dialog
-        const css::uno::Reference< css::uno::XComponentContext >&
+        const css::uno::Reference< cpo::uno::XComponentContext >&
                                 getORB() const { return m_xORB; }
         AddressSettings&        getSettings() { return m_aSettings; }
         const AddressSettings&  getSettings() const { return m_aSettings; }

@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XCurrentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
@@ -254,7 +254,7 @@ cpo::uno::Any Default::getPropertyValue(OUString const & PropertyName)
 }
 
 css::uno::Reference< css::uno::XInterface > createBackend(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & name)
 {
     try {
@@ -273,7 +273,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_DesktopBackend_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;

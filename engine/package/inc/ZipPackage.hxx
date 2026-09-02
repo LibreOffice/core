@@ -43,8 +43,8 @@ class ZipOutputStream;
 class ZipPackageFolder;
 namespace com::sun::star {
     namespace io { class XStream; class XInputStream; class XSeekable; class XActiveDataStreamer; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 enum InitialisationMode
 {
@@ -94,7 +94,7 @@ class ZipPackage final : public cppu::WeakImplHelper
     css::uno::Reference < css::io::XStream > m_xStream;
     css::uno::Reference < css::io::XInputStream > m_xContentStream;
     css::uno::Reference < css::io::XSeekable > m_xContentSeek;
-    const css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    const css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     std::optional<ZipFile> m_pZipFile;
     bool m_bDisableFileSync = false;
@@ -116,7 +116,7 @@ class ZipPackage final : public cppu::WeakImplHelper
             const css::uno::Reference< css::io::XInputStream >& xTempStream );
 
 public:
-    ZipPackage( css::uno::Reference < css::uno::XComponentContext > xContext );
+    ZipPackage( css::uno::Reference < cpo::uno::XComponentContext > xContext );
     virtual ~ZipPackage() override;
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }

@@ -19,7 +19,7 @@
 
 #include <inputsequencechecker.hxx>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/unicode.hxx>
 
@@ -153,7 +153,7 @@ InputSequenceCheckerImpl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_InputSequenceChecker_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::InputSequenceCheckerImpl(context));

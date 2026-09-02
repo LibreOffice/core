@@ -30,7 +30,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -56,7 +56,7 @@ public:
      */
     CachedDataSequence();
 
-    explicit CachedDataSequence( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit CachedDataSequence( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     /** creates a sequence and initializes it with the given string.  This is
         especially useful for labels, which only have one element.

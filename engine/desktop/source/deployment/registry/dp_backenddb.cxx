@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -40,7 +40,7 @@ using namespace cpo::uno;
 namespace dp_registry::backend {
 
 BackendDb::BackendDb(
-    Reference<css::uno::XComponentContext> const &  xContext,
+    Reference<cpo::uno::XComponentContext> const &  xContext,
     OUString const & url):
     m_xContext(xContext)
 {

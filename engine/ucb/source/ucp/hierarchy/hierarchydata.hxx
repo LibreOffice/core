@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <mutex>
 
 namespace com::sun::star {
@@ -78,7 +78,7 @@ class HierarchyEntry
     OUString m_aName;
     OUString m_aPath;
     std::mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
     css::uno::Reference< css::container::XHierarchicalNameAccess >
                                                            m_xRootReadAccess;
@@ -92,7 +92,7 @@ private:
     getRootReadAccess();
 
 public:
-    HierarchyEntry( css::uno::Reference< css::uno::XComponentContext > xContext,
+    HierarchyEntry( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                     HierarchyContentProvider* pProvider,
                     const OUString& rURL );
 

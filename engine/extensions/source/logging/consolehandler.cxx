@@ -39,7 +39,7 @@ namespace logging
     using ::com::sun::star::logging::XConsoleHandler;
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::logging::XLogFormatter;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;
@@ -255,7 +255,7 @@ namespace logging
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_ConsoleHandler(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new logging::ConsoleHandler(context, arguments));

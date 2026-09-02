@@ -62,7 +62,7 @@ namespace abp
         return m_pDialog->getSettings();
     }
 
-    const Reference< XComponentContext > & AddressBookSourcePage::getORB() const
+    const Reference< cpo::uno::XComponentContext > & AddressBookSourcePage::getORB() const
     {
         return m_pDialog->getORB();
     }

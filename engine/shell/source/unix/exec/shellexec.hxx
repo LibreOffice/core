@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
@@ -31,10 +31,10 @@
 
 class ShellExec : public ::cppu::WeakImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
-    explicit ShellExec(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit ShellExec(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
 
     // XSystemShellExecute

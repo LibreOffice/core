@@ -21,7 +21,7 @@
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class BasicManager;
@@ -40,7 +40,7 @@ namespace basprov
     class BasicLibraryNodeImpl : public BasicLibraryNodeImpl_BASE
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         OUString                                              m_sScriptingContext;
         BasicManager*                                         m_pBasicManager;
         css::uno::Reference< css::script::XLibraryContainer > m_xLibContainer;
@@ -49,7 +49,7 @@ namespace basprov
         bool                                                  m_bIsAppScript;
 
     public:
-        BasicLibraryNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        BasicLibraryNodeImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         OUString  sScriptingContext,
             BasicManager* pBasicManager,
             const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer,

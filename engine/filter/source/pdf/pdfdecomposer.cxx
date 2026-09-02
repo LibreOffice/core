@@ -21,7 +21,7 @@
 
 #include <com/sun/star/graphic/XPdfDecomposer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XBinaryDataContainer.hpp>
 
 using namespace css;
@@ -32,7 +32,7 @@ namespace
 class XPdfDecomposer : public ::cppu::WeakImplHelper<graphic::XPdfDecomposer, lang::XServiceInfo>
 {
 public:
-    explicit XPdfDecomposer(uno::Reference<uno::XComponentContext> const& context);
+    explicit XPdfDecomposer(uno::Reference<cpo::uno::XComponentContext> const& context);
     XPdfDecomposer(const XPdfDecomposer&) = delete;
     XPdfDecomposer& operator=(const XPdfDecomposer&) = delete;
 
@@ -47,7 +47,7 @@ public:
     cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
-XPdfDecomposer::XPdfDecomposer(uno::Reference<uno::XComponentContext> const&) {}
+XPdfDecomposer::XPdfDecomposer(uno::Reference<cpo::uno::XComponentContext> const&) {}
 
 /** Get PDF page size in mm100 */
 bool getPdfPageSizeMM100(const BinaryDataContainer& rDataContainer, sal_Int32 nPageIndex,
@@ -124,7 +124,7 @@ cpo::uno::Sequence<OUString> XPdfDecomposer::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-filter_PdfDecomposer_get_implementation(css::uno::XComponentContext* context,
+filter_PdfDecomposer_get_implementation(cpo::uno::XComponentContext* context,
                                         cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XPdfDecomposer(context));

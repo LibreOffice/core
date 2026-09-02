@@ -33,7 +33,7 @@ class ImageButtonToolbarController final : public ComplexToolbarController
 
 {
     public:
-        ImageButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ImageButtonToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                       const css::uno::Reference< css::frame::XFrame >& rFrame,
                                       ToolBox* pToolBar,
                                       ToolBoxItemId nID,

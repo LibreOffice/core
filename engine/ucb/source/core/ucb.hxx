@@ -49,7 +49,7 @@ class UniversalContentBroker :
                     css::util::XChangesListener>
 {
 public:
-    explicit UniversalContentBroker( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit UniversalContentBroker( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~UniversalContentBroker() override;
 
     // XServiceInfo
@@ -143,7 +143,7 @@ private:
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);
 
     css::uno::Reference<
-        css::uno::XComponentContext > m_xContext;
+        cpo::uno::XComponentContext > m_xContext;
 
     css::uno::Reference<
         css::util::XChangesNotifier > m_xNotifier;

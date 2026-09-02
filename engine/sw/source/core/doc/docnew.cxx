@@ -130,7 +130,7 @@ using namespace ::com::sun::star::document;
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
     {
-        const uno::Reference< uno::XComponentContext >&  xContext( comphelper::getProcessComponentContext() );
+        const uno::Reference< cpo::uno::XComponentContext >&  xContext( comphelper::getProcessComponentContext() );
         try
         {
             m_xGCIterator = sw::proofreadingiterator::get( xContext );

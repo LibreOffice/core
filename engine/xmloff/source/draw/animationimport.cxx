@@ -1371,7 +1371,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
 } // namespace xmloff
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Xmloff_AnimationsImport(uno::XComponentContext* pCtx,
+com_sun_star_comp_Xmloff_AnimationsImport(cpo::uno::XComponentContext* pCtx,
                                           cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new xmloff::AnimationsImport(pCtx));

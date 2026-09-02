@@ -29,7 +29,7 @@ class SwCalendarWrapper : public CalendarWrapper
     LanguageType m_nLang;
 
 public:
-    SwCalendarWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext = ::comphelper::getProcessComponentContext() )
+    SwCalendarWrapper( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext = ::comphelper::getProcessComponentContext() )
         : CalendarWrapper( rxContext ), m_nLang( LANGUAGE_SYSTEM )
     {}
 

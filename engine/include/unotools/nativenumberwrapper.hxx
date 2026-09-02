@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XNativeNumberSupplier2; }
 
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) NativeNumberWrapper
@@ -36,7 +36,7 @@ class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) NativeNumberWrapper
 
 public:
                                 NativeNumberWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext
+                                    const css::uno::Reference< cpo::uno::XComponentContext > & rxContext
                                     );
 
                                 ~NativeNumberWrapper();

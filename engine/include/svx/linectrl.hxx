@@ -41,7 +41,7 @@ private:
     LineStyleIsNoneFunction m_aLineStyleIsNoneFunction;
 
 public:
-    SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+    SvxLineStyleToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;

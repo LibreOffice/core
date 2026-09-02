@@ -25,7 +25,7 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XStringSubstitution;
 

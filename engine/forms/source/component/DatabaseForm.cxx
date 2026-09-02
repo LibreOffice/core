@@ -4094,7 +4094,7 @@ void ODatabaseForm::setName(const OUString& aName)
 }   // namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_forms_ODatabaseForm_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_forms_ODatabaseForm_get_implementation(cpo::uno::XComponentContext* context,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ODatabaseForm(context));

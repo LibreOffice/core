@@ -46,7 +46,7 @@ IMPL_LINK(OSaveAsDlg, TextFilterHdl, OUString&, rTest, bool)
 }
 
 OSaveAsDlg::OSaveAsDlg(weld::Window * pParent,
-                       const Reference< XComponentContext >& _rxContext,
+                       const Reference< cpo::uno::XComponentContext >& _rxContext,
                        const OUString& rDefault,
                        const OUString& _sLabel,
                        const IObjectNameCheck& _rObjectNameCheck,

@@ -34,7 +34,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -214,7 +214,7 @@ namespace fileaccess
 
         typedef std::unordered_map< OUString,UnqPathData > ContentMap;
 
-        TaskManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        TaskManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                FileProvider* pProvider, bool bWithConfig );
         ~TaskManager();
 
@@ -473,7 +473,7 @@ namespace fileaccess
 
 
         FileProvider*                                             m_pProvider;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::ucb::XPropertySetRegistry >     m_xFileRegistry;
 
     private:

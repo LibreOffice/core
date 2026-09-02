@@ -24,7 +24,7 @@
 class CharmapPopup final : public svt::PopupWindowController
 {
 public:
-    CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    CharmapPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~CharmapPopup() override;
 
     virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;

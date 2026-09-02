@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
@@ -247,7 +247,7 @@ namespace dbaui
         const ICopyTableSourceObject&                         m_rSourceObject;
 
         css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
-        css::uno::Reference< css::uno::XComponentContext>     m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
         css::uno::Reference< css::task::XInteractionHandler>  m_xInteractionHandler;
 
         OUString                m_sTypeNames;       // these type names are the ones out of the resource file
@@ -302,7 +302,7 @@ namespace dbaui
             const ICopyTableSourceObject&                                                           _rSourceObject,
             const css::uno::Reference< css::sdbc::XConnection >&          _xSourceConnection,
             const css::uno::Reference< css::sdbc::XConnection >&          _xConnection,
-            const css::uno::Reference< css::uno::XComponentContext >&     _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >&     _rxContext,
             const css::uno::Reference< css::task::XInteractionHandler>&   _xInteractionHandler
         );
 
@@ -317,7 +317,7 @@ namespace dbaui
             const css::uno::Reference< css::util::XNumberFormatter >& _xFormatter,
             TypeSelectionPageFactory _pTypeSelectionPageFactory,
             SvStream& _rTypeSelectionPageArg,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         virtual ~OCopyTableWizard() override;
@@ -372,7 +372,7 @@ namespace dbaui
 
         const css::lang::Locale&  GetLocale() const { return m_aLocale; }
         const css::uno::Reference< css::util::XNumberFormatter >& GetFormatter() const { return m_xFormatter; }
-        const css::uno::Reference< css::uno::XComponentContext>& GetComponentContext() const { return m_xContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext>& GetComponentContext() const { return m_xContext; }
 
         const ODatabaseExport::TColumns&        getSourceColumns() const{ return m_vSourceColumns; }
         const ODatabaseExport::TColumnVector&   getSrcVector() const    { return m_vSourceVec; }

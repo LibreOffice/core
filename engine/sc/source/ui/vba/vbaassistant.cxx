@@ -26,7 +26,7 @@ using namespace ooo::vba;
 
 using namespace ooo::vba::office::MsoAnimationType;
 
-ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext)
+ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext)
 {
     m_bIsVisible = false;
     m_nPointsLeft = 795;

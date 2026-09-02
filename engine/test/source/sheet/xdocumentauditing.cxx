@@ -29,7 +29,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -44,7 +44,7 @@ namespace apitest
 void XDocumentAuditing::dispatch(const uno::Reference<frame::XFrame>& xFrame,
                                  const cpo::uno::Sequence<beans::PropertyValue>& rArguments)
 {
-    const uno::Reference<uno::XComponentContext>& xContext
+    const uno::Reference<cpo::uno::XComponentContext>& xContext
         = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext),
                                                            UNO_SET_THROW);

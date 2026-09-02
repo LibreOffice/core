@@ -204,7 +204,7 @@ void VBATest::testMiscOLEStuff()
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
-    uno::Reference< uno::XComponentContext > xContext(
+    uno::Reference< cpo::uno::XComponentContext > xContext(
         comphelper::getProcessComponentContext() );
     if( xContext.is() )
     {

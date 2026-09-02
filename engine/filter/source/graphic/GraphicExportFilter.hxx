@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -38,7 +38,7 @@ namespace com::sun::star {
 class GraphicExportFilter :
     public cppu::WeakImplHelper < css::document::XFilter, css::document::XExporter, css::lang::XInitialization, css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext >  mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >  mxContext;
     css::uno::Reference< css::lang::XComponent >        mxDocument;
     css::uno::Reference< css::io::XOutputStream >       mxOutputStream;
 
@@ -58,7 +58,7 @@ class GraphicExportFilter :
             const css::uno::Reference< css::drawing::XShape > & rxShape ) const;
 
 public:
-    explicit GraphicExportFilter( css::uno::Reference< css::uno::XComponentContext > xContext );
+    explicit GraphicExportFilter( css::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~GraphicExportFilter() override;
 
     //  XServiceInfo

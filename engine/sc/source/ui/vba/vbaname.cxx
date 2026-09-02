@@ -35,7 +35,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             css::uno::Reference< css::sheet::XNamedRange > xName,
             css::uno::Reference< css::sheet::XNamedRanges > xNames,
             css::uno::Reference< css::frame::XModel > xModel ):

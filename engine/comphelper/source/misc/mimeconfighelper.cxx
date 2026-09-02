@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 using namespace comphelper;
 
 
-MimeConfigurationHelper::MimeConfigurationHelper( uno::Reference< uno::XComponentContext > xContext )
+MimeConfigurationHelper::MimeConfigurationHelper( uno::Reference< cpo::uno::XComponentContext > xContext )
 : m_xContext(std::move( xContext ))
 {
     if ( !m_xContext.is() )

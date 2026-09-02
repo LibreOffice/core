@@ -35,10 +35,10 @@ namespace com::sun::star {
     namespace document { class XDocumentProperties; }
     namespace drawing { class XShape; }
     namespace io { class XOutputStream; }
-    namespace uno { class XComponentContext; }
     namespace xml::dom { class XDocument; }
     namespace xml::sax { class XFastSAXSerializable; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
     namespace drawingml { class Theme; }
@@ -80,7 +80,7 @@ class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 public:
     /// @throws cpo::uno::RuntimeException
     explicit            XmlFilterBase(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual             ~XmlFilterBase() override;
 

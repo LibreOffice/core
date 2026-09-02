@@ -29,7 +29,7 @@ class ScVbaComments : public ScVbaComments_BASE
 public:
     ScVbaComments(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 

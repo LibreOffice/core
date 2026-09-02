@@ -49,7 +49,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -62,7 +62,7 @@ using com::sun::star::uno::Reference;
 using cpo::uno::Any;
 using cpo::uno::RuntimeException;
 using com::sun::star::uno::TypeDescription;
-using com::sun::star::uno::XComponentContext;
+using cpo::uno::XComponentContext;
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::reflection::XIdlClass;
 using com::sun::star::script::XInvocation2;

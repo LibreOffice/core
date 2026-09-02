@@ -36,7 +36,7 @@ using namespace ::com::sun::star::lang;
 namespace framework
 {
 
-ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext, bool bForModule ) :
+ImageManager::ImageManager( const uno::Reference< cpo::uno::XComponentContext >& rxContext, bool bForModule ) :
     m_pImpl( new ImageManagerImpl(rxContext, this, bForModule) )
 {
 }
@@ -162,7 +162,7 @@ bool ImageManager::isReadOnly()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ImageManager_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::ImageManager(context, /*bForModule*/false));

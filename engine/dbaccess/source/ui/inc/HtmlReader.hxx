@@ -22,7 +22,7 @@
 #include <svtools/parhtml.hxx>
 #include <editeng/svxenum.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 class SvStream;
 
@@ -50,13 +50,13 @@ namespace dbaui
         OHTMLReader(SvStream& rIn,
                     const SharedConnection& _rxConnection,
                     const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         // required for automatic type recognition
         OHTMLReader(SvStream& rIn,
                     sal_Int32 nRows,
                     TPositions&& _rColumnPositions,
                     const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,
                     const OTypeInfoMap* _pInfoMap,
                     bool _bAutoIncrementEnabled);

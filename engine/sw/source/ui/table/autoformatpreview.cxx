@@ -57,7 +57,7 @@ AutoFormatPreview::AutoFormatPreview()
     , maStringSouth(SwResId(STR_SOUTH))
     , maStringSum(SwResId(STR_SUM))
 {
-    const uno::Reference<uno::XComponentContext>& xContext
+    const uno::Reference<cpo::uno::XComponentContext>& xContext
         = comphelper::getProcessComponentContext();
     m_xBreak = i18n::BreakIterator::create(xContext);
     mxNumFormat.reset(new SvNumberFormatter(xContext, LANGUAGE_SYSTEM));

@@ -26,7 +26,7 @@
 
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <map>
 #include <unordered_map>
@@ -48,7 +48,7 @@ class ActiveMSPList : public ::cppu::WeakImplHelper< css::lang::XEventListener  
 public:
 
     explicit ActiveMSPList(  const css::uno::Reference<
-        css::uno::XComponentContext > & xContext  );
+        cpo::uno::XComponentContext > & xContext  );
     virtual ~ActiveMSPList() override;
 
     css::uno::Reference< css::script::provider::XScriptProvider >
@@ -85,7 +85,7 @@ private:
     OUString userDirString;
     OUString shareDirString;
     OUString bundledDirString;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 } // func_provider
 

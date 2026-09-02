@@ -331,7 +331,7 @@ bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextFiel
 }
 
 SVGExport::SVGExport(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
     : SvXMLExport( rContext, u""_ustr,

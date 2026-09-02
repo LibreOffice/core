@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
     xStorable->storeSelf({});
 
     // Check the contents of the updated copy.
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(xContext, maTempFile.GetURL());
 

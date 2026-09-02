@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace com::sun::star {
     namespace sdbc {
@@ -46,7 +46,7 @@ namespace dbaui
     class SAL_NO_VTABLE IDatabaseSettingsDialog
     {
     public:
-        virtual css::uno::Reference< css::uno::XComponentContext > getORB() const = 0;
+        virtual css::uno::Reference< cpo::uno::XComponentContext > getORB() const = 0;
         virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,bool> createConnection() = 0;
         virtual OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;
         virtual void clearPassword() = 0;

@@ -24,7 +24,7 @@
 #include <com/sun/star/script/XEventAttacher.hpp>
 #include <com/sun/star/script/XScriptEventsAttacher.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -48,7 +48,7 @@ namespace dlgprov
     private:
         bool mbUseFakeVBAEvents;
         ListenerHash listenersForTypes;
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         css::uno::Reference< css::script::XEventAttacher > m_xEventAttacher;
         /// @throws cpo::uno::RuntimeException
         css::uno::Reference< css::script::XScriptListener > const & getScriptListenerForKey( const OUString& sScriptName );
@@ -57,7 +57,7 @@ namespace dlgprov
         void nestedAttachEvents( const css::uno::Reference< css::awt::XControl >& xControl, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
         void attachEventsToControl( const css::uno::Reference< css::awt::XControl>& xControl, const css::uno::Reference< css::script::XScriptEventsSupplier >& events, const cpo::uno::Any& Helper  );
     public:
-        DialogEventsAttacherImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        DialogEventsAttacherImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              const css::uno::Reference< css::frame::XModel >& xModel,
              const css::uno::Reference< css::awt::XControl >& xControl,
              const css::uno::Reference< css::uno::XInterface >& xHandler,
@@ -112,10 +112,10 @@ namespace dlgprov
     class DialogScriptListenerImpl : public DialogScriptListenerImpl_BASE
     {
     protected:
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         virtual void firing_impl( const css::script::ScriptEvent& aScriptEvent, cpo::uno::Any* pRet ) = 0;
     public:
-        explicit DialogScriptListenerImpl( css::uno::Reference< css::uno::XComponentContext > xContext ) : m_xContext(std::move( xContext )) {}
+        explicit DialogScriptListenerImpl( css::uno::Reference< cpo::uno::XComponentContext > xContext ) : m_xContext(std::move( xContext )) {}
         virtual ~DialogScriptListenerImpl() override;
 
         // XEventListener

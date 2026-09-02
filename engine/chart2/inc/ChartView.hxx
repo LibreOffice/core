@@ -44,7 +44,7 @@
 #include <vcl/timer.hxx>
 
 namespace com::sun::star::io { class XOutputStream; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XUpdatable2; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
@@ -103,7 +103,7 @@ private:
 
 public:
     ChartView() = delete;
-    ChartView(css::uno::Reference<css::uno::XComponentContext> xContext, ChartModel& rModel);
+    ChartView(css::uno::Reference<cpo::uno::XComponentContext> xContext, ChartModel& rModel);
 
     virtual ~ChartView() override;
 
@@ -185,7 +185,7 @@ public:
 
     void setViewDirty();
 
-    css::uno::Reference<css::uno::XComponentContext> const& getComponentContext() { return m_xCC;}
+    css::uno::Reference<cpo::uno::XComponentContext> const& getComponentContext() { return m_xCC;}
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
@@ -226,7 +226,7 @@ private: //methods
 private: //member
     std::mutex m_aMutex;
 
-    css::uno::Reference< css::uno::XComponentContext> m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext> m_xCC;
 
     ChartModel& mrChartModel;
 

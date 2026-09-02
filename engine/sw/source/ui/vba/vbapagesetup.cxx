@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
-                const uno::Reference< uno::XComponentContext >& xContext,
+                const uno::Reference< cpo::uno::XComponentContext >& xContext,
                 const rtl::Reference< SwXTextDocument >& xModel,
                 const uno::Reference< beans::XPropertySet >& xProps ):
            SwVbaPageSetup_BASE( xParent, xContext ),

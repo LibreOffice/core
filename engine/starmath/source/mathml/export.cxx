@@ -70,7 +70,7 @@ using namespace ::xmloff::token;
 bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 {
     bool bRet = true;
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
 
     // Check all fine
@@ -226,7 +226,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 
 OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
 {
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
 
     // Check all fine
@@ -278,7 +278,7 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
 // export through an XML exporter component (output stream version)
 bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStream>& xOutputStream,
                                                 const Reference<XComponent>& xComponent,
-                                                Reference<uno::XComponentContext> const& rxContext,
+                                                Reference<cpo::uno::XComponentContext> const& rxContext,
                                                 Reference<beans::XPropertySet> const& rPropSet,
                                                 const char16_t* pComponentName,
                                                 int_fast16_t nSyntaxVersion)
@@ -351,7 +351,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
 bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>& xStorage,
                                                const Reference<XComponent>& xComponent,
                                                const char16_t* pStreamName,
-                                               Reference<uno::XComponentContext> const& rxContext,
+                                               Reference<cpo::uno::XComponentContext> const& rxContext,
                                                Reference<beans::XPropertySet> const& rPropSet,
                                                const char16_t* pComponentName,
                                                int_fast16_t nSyntaxVersion)
@@ -395,7 +395,7 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
 // export through an XML exporter component (memory stream version)
 OUString
 SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xComponent,
-                                           Reference<uno::XComponentContext> const& rxContext,
+                                           Reference<cpo::uno::XComponentContext> const& rxContext,
                                            Reference<beans::XPropertySet> const& rPropSet)
 {
     // We need a component but it is already checked by caller
@@ -429,7 +429,7 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 /*************************************************************************************************/
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
+Math_MLExporter_get_implementation(cpo::uno::XComponentContext* context,
                                    cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context, u"com.sun.star.comp.Math.XMLExporter"_ustr,
@@ -437,7 +437,7 @@ Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
+Math_MLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context,
@@ -446,7 +446,7 @@ Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+Math_MLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
                                                 cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context,
@@ -455,7 +455,7 @@ Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* con
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
+Math_MLContentExporter_get_implementation(cpo::uno::XComponentContext* context,
                                           cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context, u"com.sun.star.comp.Math.XMLContentExporter"_ustr,
@@ -584,7 +584,7 @@ void SmMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     }
 }
 
-SmMLExport::SmMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+SmMLExport::SmMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                        OUString const& implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , m_pElementTree(nullptr)

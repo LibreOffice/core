@@ -891,7 +891,7 @@ cpo::uno::Any ScVbaEventsHelper::createWindow( const cpo::uno::Sequence< cpo::un
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 ScVbaEventsHelper_get_implementation(
-    css::uno::XComponentContext * /*context*/,
+    cpo::uno::XComponentContext * /*context*/,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ScVbaEventsHelper(arguments));

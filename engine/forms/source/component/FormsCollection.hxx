@@ -45,7 +45,7 @@ class OFormsCollection
     css::uno::Reference<css::uno::XInterface>  m_xParent; // Parent
 
 public:
-    explicit OFormsCollection(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OFormsCollection(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     OFormsCollection( const OFormsCollection& _cloneSource );
     virtual ~OFormsCollection() override;
 

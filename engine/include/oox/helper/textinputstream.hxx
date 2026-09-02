@@ -28,8 +28,8 @@
 namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace io { class XTextInputStream2; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
 
@@ -40,12 +40,12 @@ class TextInputStream
 {
 public:
     explicit            TextInputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 
     explicit            TextInputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             BinaryInputStream& rInStrm,
                             rtl_TextEncoding eTextEnc );
 
@@ -93,14 +93,14 @@ public:
      */
     static css::uno::Reference< css::io::XTextInputStream2 >
                         createXTextInputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 
 
 private:
     void                init(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 

@@ -26,7 +26,7 @@ public:
     std::vector<OUString> & m_rSectionList;
 
     SwXMLSectionList(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         std::vector<OUString> & rNewSectionList);
 
     virtual ~SwXMLSectionList ( ) noexcept override;

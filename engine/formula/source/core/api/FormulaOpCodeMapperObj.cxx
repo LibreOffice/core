@@ -28,7 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace formula
 {
@@ -96,7 +96,7 @@ cpo::uno::Sequence< OUString > FormulaOpCodeMapperObj::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 simple_formula_FormulaOpCodeMapperObj(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
             new formula::FormulaOpCodeMapperObj(std::make_unique<formula::FormulaCompiler>()));

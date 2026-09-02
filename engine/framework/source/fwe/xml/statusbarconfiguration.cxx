@@ -36,7 +36,7 @@ namespace framework
 {
 
 bool StatusBarConfiguration::LoadStatusBar(
-    const Reference< XComponentContext >& rxContext,
+    const Reference< cpo::uno::XComponentContext >& rxContext,
     const Reference< XInputStream >& xInputStream,
     const Reference< XIndexContainer >& rStatusbarConfiguration )
 {
@@ -73,7 +73,7 @@ bool StatusBarConfiguration::LoadStatusBar(
 }
 
 bool StatusBarConfiguration::StoreStatusBar(
-    const Reference< XComponentContext >& rxContext,
+    const Reference< cpo::uno::XComponentContext >& rxContext,
     const Reference< XOutputStream >& xOutputStream,
     const Reference< XIndexAccess >& rStatusbarConfiguration )
 {

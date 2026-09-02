@@ -28,13 +28,13 @@ namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
-    namespace uno { class XComponentContext; }
     namespace uno { template <class E> class Sequence; }
     namespace embed { class XStorage; }
     namespace xml {
         namespace sax { struct InputSource; class XWriter; }
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 class ScDocument;
 class SfxMedium;
@@ -67,14 +67,14 @@ class ScXMLImportWrapper
 
     css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
 
-    ErrCodeMsg ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    ErrCodeMsg ImportFromComponent(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::frame::XModel>& xModel,
         css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName,
         const cpo::uno::Sequence<cpo::uno::Any>& aArgs,
         bool bMustBeSuccessful);
 
-    bool ExportToComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    bool ExportToComponent(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::frame::XModel>& xModel,
         const css::uno::Reference<css::xml::sax::XWriter>& xWriter,
         const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor,

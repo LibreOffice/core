@@ -42,7 +42,7 @@ using namespace tdoc_ucp;
 
 
 StorageElementFactory::StorageElementFactory(
-    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< cpo::uno::XComponentContext > xContext,
     rtl::Reference< OfficeDocumentsManager > xDocsMgr )
 : m_xDocsMgr(std::move( xDocsMgr )),
   m_xContext(std::move( xContext ))

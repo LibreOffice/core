@@ -2291,7 +2291,7 @@ input for the following reasons:
             sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
             sal_Int16 nZO, nDST1, nDST2, nDST, nZOmillis, nDST1millis, nDST2millis, nDSTmillis;
             sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
-            uno::Reference< uno::XComponentContext > xContext =
+            uno::Reference< cpo::uno::XComponentContext > xContext =
                 ::comphelper::getProcessComponentContext();
             uno::Reference< i18n::XCalendar4 > xCal = i18n::LocaleCalendar2::create(xContext);
             for ( const entry* p = cals; p->lan; ++p )

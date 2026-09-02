@@ -56,7 +56,7 @@ cpo::uno::Sequence< OUString > ShellJob::getSupportedServiceNames()
 }
 
 
-ShellJob::ShellJob(css::uno::Reference< css::uno::XComponentContext >  xContext)
+ShellJob::ShellJob(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext    (std::move(xContext))
 {
 }
@@ -160,7 +160,7 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ShellJob_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ShellJob(context));
 }

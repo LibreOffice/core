@@ -32,14 +32,12 @@ namespace com::sun::star {
     namespace document {
         class XScriptInvocationContext;
     }
-    namespace uno {
-        class XComponentContext;
-    }
     namespace frame {
         class XFrame;
         class XNotifyingDispatch;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace scripting_protocolhandler
 {
@@ -50,7 +48,7 @@ public ::cppu::WeakImplHelper< css::frame::XDispatchProvider,
 {
 private:
     bool m_bInitialised;
-    css::uno::Reference < css::uno::XComponentContext >             m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext >             m_xContext;
     css::uno::Reference < css::frame::XFrame >                      m_xFrame;
     css::uno::Reference < css::script::provider::XScriptProvider >  m_xScriptProvider;
     css::uno::Reference< css::document::XScriptInvocationContext >  m_xScriptInvocation;
@@ -59,7 +57,7 @@ private:
     bool getScriptInvocation();
 
 public:
-    explicit ScriptProtocolHandler( const css::uno::Reference < css::uno::XComponentContext >& xContext );
+    explicit ScriptProtocolHandler( const css::uno::Reference < cpo::uno::XComponentContext >& xContext );
     virtual ~ScriptProtocolHandler() override;
 
     /* XServiceInfo */

@@ -36,8 +36,8 @@ namespace com::sun::star {
     namespace form { class XFormComponent; }
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 class SotStorage;
 class SotStorageStream;
@@ -143,7 +143,7 @@ class OOX_DLLPUBLIC OleFormCtrlExportHelper final
     OUString maFullName;
     OUString maGUID;
 public:
-    OleFormCtrlExportHelper( const css::uno::Reference< css::uno::XComponentContext >& rxCtx, const css::uno::Reference< css::frame::XModel >& xDocModel, const css::uno::Reference< css::awt::XControlModel >& xModel );
+    OleFormCtrlExportHelper( const css::uno::Reference< cpo::uno::XComponentContext >& rxCtx, const css::uno::Reference< css::frame::XModel >& xDocModel, const css::uno::Reference< css::awt::XControlModel >& xModel );
     ~OleFormCtrlExportHelper();
 
     std::u16string_view getGUID() const
@@ -169,7 +169,7 @@ public:
 // implementation into the sd module itself.
 class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
-    css::uno::Reference< css::uno::XComponentContext > mxCtx;
+    css::uno::Reference< cpo::uno::XComponentContext > mxCtx;
     ::oox::GraphicHelper maGrfHelper;
 
 protected:

@@ -43,7 +43,7 @@ namespace com::sun::star::frame {
     class XModel;
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class SfxObjectShell;
 
@@ -61,7 +61,7 @@ namespace sfx2 {
  */
 css::uno::Reference< css::rdf::XURI> SFX2_DLLPUBLIC
 createBaseURI(
-    css::uno::Reference<css::uno::XComponentContext> const & i_xContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & i_xContext,
     css::uno::Reference<css::frame::XModel> const & i_xModel,
     OUString const & i_rPkgURI,
     std::u16string_view i_rSubDocument = std::u16string_view());
@@ -75,12 +75,12 @@ class DocumentMetadataAccess final :
     DocumentMetadataAccess(const DocumentMetadataAccess&) = delete;
     DocumentMetadataAccess& operator=( const DocumentMetadataAccess& ) = delete;
 public:
-    explicit DocumentMetadataAccess(css::uno::Reference< css::uno::XComponentContext > const & i_xContext,
+    explicit DocumentMetadataAccess(css::uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
                 SfxObjectShell const & i_rRegistrySupplier,
                 OUString const & i_rBaseURI);
     // N.B.: in contrast to previous, this constructor does _not_ initialize!
     //       caller must immediately call loadFromStorage/Medium!
-    explicit DocumentMetadataAccess(css::uno::Reference< css::uno::XComponentContext > const & i_xContext,
+    explicit DocumentMetadataAccess(css::uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
                 SfxObjectShell const & i_rRegistrySupplier);
     virtual ~DocumentMetadataAccess() override;
 

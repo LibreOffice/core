@@ -19,15 +19,12 @@ namespace embed
 {
 class XStorage;
 }
-namespace uno
-{
-class XComponentContext;
-}
 namespace xml::sax
 {
 class XDocumentHandler;
 }
 }
+namespace cpo::uno { class XComponentContext; }
 
 /// Writes a single OOXML digital signature.
 class OOXMLSecExporter
@@ -36,7 +33,7 @@ class OOXMLSecExporter
     std::unique_ptr<Impl> m_pImpl;
 
 public:
-    OOXMLSecExporter(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext,
+    OOXMLSecExporter(const css::uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
                      const css::uno::Reference<css::embed::XStorage>& xRootStorage,
                      const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
                      const SignatureInformation& rInformation);

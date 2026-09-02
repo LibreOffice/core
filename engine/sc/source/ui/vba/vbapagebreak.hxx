@@ -24,7 +24,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace ooo::vba::excel { class XRange; }
 
 template< typename... Ifc >
@@ -37,7 +37,7 @@ protected:
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::beans::XPropertySet > xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData);
 
@@ -55,7 +55,7 @@ class ScVbaHPageBreak :  public ScVbaHPageBreak_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaHPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::beans::XPropertySet >& xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData):
               ScVbaHPageBreak_BASE( xParent,xContext,xProps,aTablePageBreakData ){}
@@ -73,7 +73,7 @@ class ScVbaVPageBreak :  public ScVbaVPageBreak_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                     const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                      const css::uno::Reference< css::beans::XPropertySet >& xProps,
                      css::sheet::TablePageBreakData aTablePageBreakData);
 

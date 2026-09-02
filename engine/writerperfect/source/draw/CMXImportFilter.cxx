@@ -53,7 +53,7 @@ cpo::uno::Sequence<OUString> SAL_CALL CMXImportFilter::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Draw_CMXImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
+    cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new CMXImportFilter(context));
 }

@@ -34,7 +34,7 @@ public:
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
     SwVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel );
 
     virtual cpo::uno::Any SAL_CALL Item(const cpo::uno::Any& Index1, const cpo::uno::Any& Index2) override;

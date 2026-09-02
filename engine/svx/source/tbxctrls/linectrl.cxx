@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 
 // For End Line Controller
 
-SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
+SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
     addStatusListener(u".uno:LineDash"_ustr);
@@ -214,7 +214,7 @@ cpo::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineStyleToolBoxControl( rContext ) );
@@ -225,7 +225,7 @@ namespace {
 class SvxLineEndToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+    explicit SvxLineEndToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
@@ -477,7 +477,7 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
     }
 }
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
 }
@@ -541,7 +541,7 @@ cpo::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineEndToolBoxControl( rContext ) );

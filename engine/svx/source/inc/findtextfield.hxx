@@ -22,7 +22,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace svt
 {
@@ -33,7 +33,7 @@ class FindTextFieldControl final : public InterimItemWindow
 {
 public:
     FindTextFieldControl(ToolBox* pParent, css::uno::Reference<css::frame::XFrame> xFrame,
-                         css::uno::Reference<css::uno::XComponentContext> xContext);
+                         css::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     virtual void dispose() override;
 
@@ -54,7 +54,7 @@ private:
     ImplSVEvent* m_nAsyncGetFocusId;
     std::unique_ptr<weld::ComboBox> m_xWidget;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     std::unique_ptr<svt::AcceleratorExecute> m_pAcc;
     Link<weld::ComboBox&, void> m_aChangeHdl;
 

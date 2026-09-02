@@ -51,7 +51,7 @@ namespace com::sun::star::document { class XUndoManager; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XLayoutManagerEventBroadcaster; }
 namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::view { class XSelectionSupplier; }
 
 class SdrModel;
@@ -101,7 +101,7 @@ class ChartController final : public ::cppu::WeakImplHelper <
 {
 public:
     ChartController() = delete;
-    explicit ChartController(css::uno::Reference< css::uno::XComponentContext > xContext);
+    explicit ChartController(css::uno::Reference< cpo::uno::XComponentContext > xContext);
     virtual ~ChartController() override;
 
     OUString GetContextName();
@@ -377,7 +377,7 @@ private:
 
     bool m_bSuspended;
 
-    css::uno::Reference< css::uno::XComponentContext> m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext> m_xCC;
 
     //model
     css::uno::Reference< css::frame::XFrame > m_xFrame;

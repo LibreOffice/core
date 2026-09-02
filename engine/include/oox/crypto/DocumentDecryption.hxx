@@ -19,9 +19,9 @@
 namespace com::sun::star {
     namespace beans { struct NamedValue; }
     namespace io { class XStream; }
-    namespace uno { class XComponentContext; }
     namespace packages { class XPackageEncryption; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::ole { class OleStorage; }
 
@@ -30,13 +30,13 @@ namespace oox::crypto {
 class DocumentDecryption
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     oox::ole::OleStorage&                      mrOleStorage;
     cpo::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
 
 public:
-    DocumentDecryption(css::uno::Reference< css::uno::XComponentContext > xContext, oox::ole::OleStorage& rOleStorage);
+    DocumentDecryption(css::uno::Reference< cpo::uno::XComponentContext > xContext, oox::ole::OleStorage& rOleStorage);
 
     bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();

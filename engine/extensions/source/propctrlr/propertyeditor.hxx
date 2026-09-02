@@ -23,7 +23,7 @@
 #include "pcrcommon.hxx"
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 #include <map>
 
@@ -51,7 +51,7 @@ namespace pcr
         std::unique_ptr<weld::Notebook> m_xTabControl;
         // controls initially have this parent before they are moved
         std::unique_ptr<weld::Container> m_xControlHoldingParent;
-        css::uno::Reference<css::uno::XComponentContext> m_xContext;
+        css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
@@ -63,7 +63,7 @@ namespace pcr
         std::map<sal_uInt16, PropertyPage> m_aHiddenPages;
 
     public:
-        explicit OPropertyEditor(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
+        explicit OPropertyEditor(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyEditor();
 
         void                        SetLineListener( IPropertyLineListener* );

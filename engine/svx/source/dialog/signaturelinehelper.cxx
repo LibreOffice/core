@@ -125,7 +125,7 @@ uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
     SvMemoryStream aSvgStream(4096, 4096);
     aSvgStream.WriteOString(OUStringToOString(rSVG, RTL_TEXTENCODING_UTF8));
     uno::Reference<io::XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     uno::Reference<graphic::XGraphicProvider> xProvider
         = graphic::GraphicProvider::create(xContext);

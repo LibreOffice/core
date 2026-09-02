@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <rtl/ref.hxx>
 
@@ -33,7 +33,7 @@
 #include <tools/link.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -50,7 +50,7 @@ class CreationWizardUnoDlg final : public cppu::BaseMutex
 public:
     CreationWizardUnoDlg() = delete;
 
-    CreationWizardUnoDlg( css::uno::Reference< css::uno::XComponentContext > xContext );
+    CreationWizardUnoDlg( css::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~CreationWizardUnoDlg() override;
 
     // XInterface
@@ -101,7 +101,7 @@ private:
 
 private:
     rtl::Reference< ::chart::ChartModel     >            m_xChartModel;
-    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext>    m_xCC;
     css::uno::Reference< css::awt::XWindow >             m_xParentWindow;
 
     std::shared_ptr<CreationWizard> m_xDialog;

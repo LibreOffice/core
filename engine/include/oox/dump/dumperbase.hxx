@@ -47,8 +47,8 @@ namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XTextOutputStream2; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
     class TextInputStream;
@@ -109,25 +109,25 @@ public:
 
     static css::uno::Reference< css::io::XInputStream >
                         openInputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
     // output streams ---------------------------------------------------------
 
     static css::uno::Reference< css::io::XOutputStream >
                         openOutputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
     static css::uno::Reference< css::io::XTextOutputStream2 >
                         openTextOutputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XOutputStream >& rxOutStrm,
                             rtl_TextEncoding eTextEnc );
 
     static css::uno::Reference< css::io::XTextOutputStream2 >
                         openTextOutputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const OUString& rFileName,
                             rtl_TextEncoding eTextEnc );
 };
@@ -760,13 +760,13 @@ class SharedConfigData : public Base, public ConfigItemBase
 public:
     explicit            SharedConfigData(
                             const OUString& rFileName,
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             StorageRef xRootStrg,
                             OUString aSysFileName );
 
     virtual             ~SharedConfigData() override;
 
-    const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxContext; }
+    const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const { return mxContext; }
     const StorageRef& getRootStorage() const { return mxRootStrg; }
     const OUString& getSysFileName() const { return maSysFileName; }
 
@@ -797,7 +797,7 @@ private:
     typedef ::std::map< OUString, OUString >  ConfigDataMap;
     typedef ::std::map< OUString, NameListRef >      NameListMap;
 
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     StorageRef          mxRootStrg;
     OUString            maSysFileName;
     ConfigFileSet       maConfigFiles;
@@ -837,7 +837,7 @@ public:
                             const ::oox::core::FilterBase& rFilter );
     explicit            Config(
                             const char* pcEnvVar,
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
@@ -848,7 +848,7 @@ public:
     Config & operator =(Config const &) = default;
     Config & operator =(Config &&) = default;
 
-    const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
+    const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
     const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
     const OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
 
@@ -879,7 +879,7 @@ protected:
                             const ::oox::core::FilterBase& rFilter );
     void                construct(
                             const char* pcEnvVar,
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
@@ -927,7 +927,7 @@ class Output : public Base
 {
 public:
     explicit            Output(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const OUString& rFileName );
 
 
@@ -1101,7 +1101,7 @@ public:
     ObjectBase & operator =(ObjectBase const &) = default;
     ObjectBase & operator =(ObjectBase &&) = default;
 
-    const css::uno::Reference< css::uno::XComponentContext >&
+    const css::uno::Reference< cpo::uno::XComponentContext >&
                         getContext() const { return mxConfig->getContext(); }
 
     void                dump();

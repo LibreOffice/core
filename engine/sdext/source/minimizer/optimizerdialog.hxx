@@ -23,7 +23,7 @@
 #include "optimizationstats.hxx"
 #include "configurationaccess.hxx"
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/roadmapwizardmachine.hxx>
@@ -177,7 +177,7 @@ class OptimizerDialog : public vcl::RoadmapWizardMachine, public ConfigurationAc
 {
 public:
 
-    OptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame > const & rxFrame,
+    OptimizerDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame > const & rxFrame,
         css::uno::Reference< css::frame::XDispatch > const & rxStatusDispatcher );
     std::unique_ptr<BuilderPage> createPage(vcl::WizardTypes::WizardState nState) override;
     ~OptimizerDialog();

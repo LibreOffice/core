@@ -22,7 +22,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ref.hxx>
@@ -186,7 +186,7 @@ void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_ClipboardManager_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     std::unique_lock aGuard(g_InstanceGuard);
     if (g_Disposed)

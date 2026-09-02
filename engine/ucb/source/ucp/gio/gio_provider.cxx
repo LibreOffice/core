@@ -57,7 +57,7 @@ ContentProvider::queryContent(
 }
 
 ContentProvider::ContentProvider(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
@@ -126,7 +126,7 @@ static bool isDisabled()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_gio_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     if (isDisabled())
         return nullptr;

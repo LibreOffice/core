@@ -39,7 +39,7 @@
 
 namespace framework{
 
-PersistentWindowState::PersistentWindowState(css::uno::Reference< css::uno::XComponentContext >  xContext)
+PersistentWindowState::PersistentWindowState(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext              (std::move(xContext                     ))
     , m_bWindowStateAlreadySet(false                    )
 {
@@ -81,7 +81,7 @@ void PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEve
     if( comphelper::COKit::isActive() )
         return;
 
-    css::uno::Reference< css::uno::XComponentContext >     xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame;
     bool                                               bRestoreWindowState;
     {
@@ -152,7 +152,7 @@ void PersistentWindowState::disposing(const css::lang::EventObject&)
     // nothing todo here - because we hold the frame as weak reference only
 }
 
-OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     OUString sModuleName;
@@ -173,7 +173,7 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
 }
 
 OUString PersistentWindowState::implst_getWindowStateFromConfig(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         std::u16string_view sModuleName)
 {
     OUString sWindowState;
@@ -194,7 +194,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
 }
 
 void PersistentWindowState::implst_setWindowStateOnConfig(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         std::u16string_view sModuleName, const OUString& sWindowState)
 {
     try
@@ -271,7 +271,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 }
 
 //static
-void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                                                     const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
     // We don't want to do this stuff when being used through COKit

@@ -219,7 +219,7 @@ IMPL_STATIC_LINK(RunDialog, TerminateDesktop, void*, p, void)
     delete pExecuteInfo;
 }
 
-SalGtkPicker::SalGtkPicker( uno::Reference<uno::XComponentContext> xContext )
+SalGtkPicker::SalGtkPicker( uno::Reference<cpo::uno::XComponentContext> xContext )
     : m_pParentWidget(nullptr)
     , m_pDialog(nullptr)
     , m_xContext(std::move(xContext))

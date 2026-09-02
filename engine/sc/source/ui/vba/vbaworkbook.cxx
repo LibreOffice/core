@@ -189,7 +189,7 @@ ScVbaWorkbook::init()
 }
 
 ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                              const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                              const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                               rtl::Reference< ScModelObj > const & xModel )
 : ScVbaWorkbook_BASE( xParent, xContext ),
   mxModel(xModel)
@@ -198,7 +198,7 @@ ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >&
 }
 
 ScVbaWorkbook::ScVbaWorkbook( cpo::uno::Sequence< cpo::uno::Any> const & args,
-                              uno::Reference< uno::XComponentContext> const & xContext )
+                              uno::Reference< cpo::uno::XComponentContext> const & xContext )
 : ScVbaWorkbook_BASE( args, xContext ),
   mxModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1 ).get()))
 {
@@ -432,7 +432,7 @@ ScVbaWorkbook::getSomething(const cpo::uno::Sequence<sal_Int8 >& rId )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWorkbook_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWorkbook(args, context));
 }

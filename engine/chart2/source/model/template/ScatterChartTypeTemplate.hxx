@@ -31,7 +31,7 @@ class ScatterChartTypeTemplate :
 {
 public:
     explicit ScatterChartTypeTemplate(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         bool bSymbols,
         bool bHasLines = true,

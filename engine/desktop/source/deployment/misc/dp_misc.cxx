@@ -474,7 +474,7 @@ void syncRepositories(
 #endif
 }
 
-void disposeBridges(Reference<css::uno::XComponentContext> const & ctx)
+void disposeBridges(Reference<cpo::uno::XComponentContext> const & ctx)
 {
     if (!ctx.is())
         return;

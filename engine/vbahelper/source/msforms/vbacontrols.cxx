@@ -146,7 +146,7 @@ public:
 
 class ControlsEnumWrapper : public EnumerationHelper_BASE
 {
-    uno::Reference<uno::XComponentContext > m_xContext;
+    uno::Reference<cpo::uno::XComponentContext > m_xContext;
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
     uno::Reference<awt::XControl > m_xDlg;
     uno::Reference< frame::XModel > m_xModel;
@@ -157,7 +157,7 @@ class ControlsEnumWrapper : public EnumerationHelper_BASE
 public:
 
     ControlsEnumWrapper(
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         uno::Reference< container::XIndexAccess > xIndexAccess,
         uno::Reference< awt::XControl > xDlg,
         uno::Reference< frame::XModel > xModel,
@@ -202,7 +202,7 @@ lcl_controlsWrapper( const uno::Reference< awt::XControl >& xDlg )
 
 ScVbaControls::ScVbaControls(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< awt::XControl >& xDialog,
         uno::Reference< frame::XModel > xModel,
         double fOffsetX, double fOffsetY ) :

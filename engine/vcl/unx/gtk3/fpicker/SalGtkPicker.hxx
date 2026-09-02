@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <strings.hrc>
 #include <svdata.hxx>
@@ -51,7 +51,7 @@
 class SalGtkPicker
 {
     public:
-                 SalGtkPicker( css::uno::Reference<css::uno::XComponentContext> xContext );
+                 SalGtkPicker( css::uno::Reference<cpo::uno::XComponentContext> xContext );
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
@@ -71,7 +71,7 @@ class SalGtkPicker
         OString unicodetouri(const OUString &rURL) const;
 
         // to instantiate own services
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         static GtkWidget* GetParentWidget(const cpo::uno::Sequence<cpo::uno::Any>& rArguments);
 

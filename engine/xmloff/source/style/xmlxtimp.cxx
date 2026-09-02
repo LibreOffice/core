@@ -374,7 +374,7 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttribut
 
 
 SvxXMLXTableImport::SvxXMLXTableImport(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference<XGraphicStorageHandler> const & xGraphicStorageHandler)
 :   SvXMLImport(rContext, u""_ustr, SvXMLImportFlags::NONE),
@@ -430,7 +430,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
     try
     {
-        const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference<cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         xml::sax::InputSource aParserInput;
         comphelper::LifecycleProxy aNasty;

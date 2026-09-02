@@ -69,7 +69,7 @@ namespace com::sun::star::chart2::data { class XDataProvider; }
 namespace com::sun::star::document { class XFilter; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class SvNumberFormatter;
 class SvNumberFormatsSupplierObj;
@@ -156,7 +156,7 @@ private:
     css::uno::Reference< css::frame::XController >     m_xCurrentController;
     sal_uInt16                                         m_nControllerLockCount;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     rtl::Reference< wrapper::ChartDocumentWrapper >    m_xOldModelAgg;
 
     css::uno::Reference< css::embed::XStorage >        m_xStorage;
@@ -245,7 +245,7 @@ private:
 
 public:
     ChartModel() = delete;
-    ChartModel(css::uno::Reference< css::uno::XComponentContext > xContext);
+    ChartModel(css::uno::Reference< cpo::uno::XComponentContext > xContext);
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel() override;
 

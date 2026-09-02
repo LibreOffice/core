@@ -34,7 +34,7 @@ class EditToolbarController final : public ComplexToolbarController
 
 {
     public:
-        EditToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        EditToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                const css::uno::Reference< css::frame::XFrame >& rFrame,
                                ToolBox* pToolBar,
                                ToolBoxItemId nID,

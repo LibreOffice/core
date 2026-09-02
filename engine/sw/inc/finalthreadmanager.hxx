@@ -30,7 +30,7 @@
 #include <list>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class CancelJobsThread;
 class TerminateOfficeThread;
@@ -41,7 +41,7 @@ class FinalThreadManager final : public ::cppu::WeakImplHelper< css::lang::XServ
                                                            css::frame::XTerminateListener2 >
 {
 public:
-    explicit FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > context);
+    explicit FinalThreadManager(css::uno::Reference< cpo::uno::XComponentContext > context);
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
@@ -71,7 +71,7 @@ private:
 
     void registerAsListenerAtDesktop();
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     osl::Mutex maMutex;
 

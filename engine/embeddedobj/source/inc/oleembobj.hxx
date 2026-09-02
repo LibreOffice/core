@@ -31,7 +31,7 @@
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -131,7 +131,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     sal_Int32 m_nTargetState;
     sal_Int32 m_nUpdateMode;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     cpo::uno::Sequence< sal_Int8 > m_aClassID;
     OUString m_aClassName;
@@ -294,17 +294,17 @@ protected:
 
 public:
     // in case a new object must be created the class ID must be specified
-    OleEmbeddedObject( css::uno::Reference< css::uno::XComponentContext > xContext,
+    OleEmbeddedObject( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                         const cpo::uno::Sequence< sal_Int8 >& aClassID,
                         OUString  aClassName );
 
     // in case object will be loaded from a persistent entry or from a file the class ID will be detected on loading
     // factory can do it for OOo objects, but for OLE objects OS dependent code is required
-    OleEmbeddedObject( css::uno::Reference< css::uno::XComponentContext > xContext,
+    OleEmbeddedObject( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                         bool bLink );
 #ifdef _WIN32
     // this constructor let object be initialized from clipboard
-    OleEmbeddedObject( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    OleEmbeddedObject( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 #endif
 
     virtual ~OleEmbeddedObject() override;

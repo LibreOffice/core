@@ -44,7 +44,7 @@ namespace sdbtools
     using ::cpo::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
 
     namespace CompositionType = ::com::sun::star::sdb::tools::CompositionType;
 

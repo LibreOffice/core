@@ -32,7 +32,7 @@
 namespace comphelper{
 
 
-css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                             const OUString&                                           sPackage,
                                                                                   EConfigurationModes                                 eMode   )
 {
@@ -135,7 +135,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
 }
 
 
-cpo::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
+cpo::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< cpo::uno::XComponentContext >&    rxContext,
                                                  const OUString&                                       sPackage,
                                                  const OUString&                                       sRelPath,
                                                  const OUString&                                       sKey    ,
@@ -146,7 +146,7 @@ cpo::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css:
 }
 
 
-void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
+void ConfigurationHelper::writeDirectKey(const css::uno::Reference< cpo::uno::XComponentContext >&    rxContext,
                                          const OUString&                                       sPackage,
                                          const OUString&                                       sRelPath,
                                          const OUString&                                       sKey    ,

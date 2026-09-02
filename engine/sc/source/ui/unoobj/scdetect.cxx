@@ -22,7 +22,7 @@
 #include <sal/macros.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/sequenceashashmap.hxx>
@@ -345,7 +345,7 @@ cpo::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_calc_FormatDetector_get_implementation(css::uno::XComponentContext* /*context*/,
+com_sun_star_comp_calc_FormatDetector_get_implementation(cpo::uno::XComponentContext* /*context*/,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScFilterDetect);

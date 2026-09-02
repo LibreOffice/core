@@ -44,7 +44,7 @@ DlgEdTransferableImpl::~DlgEdTransferableImpl()
 bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
     // compare mime content types
-    const Reference< uno::XComponentContext >&  xContext = getProcessComponentContext();
+    const Reference< cpo::uno::XComponentContext >&  xContext = getProcessComponentContext();
     Reference< datatransfer::XMimeContentTypeFactory >
         xMCntTypeFactory = MimeContentTypeFactory::create(xContext);
 

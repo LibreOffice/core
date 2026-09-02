@@ -141,13 +141,13 @@ private:
 
 public:
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr pObject = libcmis::ObjectPtr( ) );
 
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         bool bIsFolder);

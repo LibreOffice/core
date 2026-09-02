@@ -48,7 +48,7 @@ namespace com::sun::star::beans {
     class XPropertySetInfo;
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ucbhelper_impl { struct ContentImplHelper_Impl; }
 
@@ -98,7 +98,7 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
 
 protected:
     osl::Mutex                       m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                                      m_xContext;
     css::uno::Reference< css::ucb::XContentIdentifier >
                                      m_xIdentifier;
@@ -293,7 +293,7 @@ public:
       * @param Identifier is the content identifier for the content.
       */
     ContentImplHelper(
-            css::uno::Reference< css::uno::XComponentContext > xContext,
+            css::uno::Reference< cpo::uno::XComponentContext > xContext,
             rtl::Reference< ContentProviderImplHelper > xProvider,
             css::uno::Reference< css::ucb::XContentIdentifier > Identifier );
 

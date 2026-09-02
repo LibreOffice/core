@@ -471,7 +471,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	XUnloadingPreference \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
-	XComponentContext \
 	XInterface \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uri,\
@@ -493,6 +492,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/util,\
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	Exception \
 	XAggregation \
+	XComponentContext \
 	XCurrentContext \
 	XReference \
 	XWeak \

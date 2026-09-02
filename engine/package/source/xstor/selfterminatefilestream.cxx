@@ -25,10 +25,10 @@
 
 using namespace ::com::sun::star;
 
-OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext >& xContext, utl::TempFileFast aTempFile )
+OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< cpo::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile )
 : m_oTempFile( std::move(aTempFile) )
 {
-    uno::Reference< uno::XComponentContext > xOwnContext = xContext;
+    uno::Reference< cpo::uno::XComponentContext > xOwnContext = xContext;
     if ( !xOwnContext.is() )
         xOwnContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
 

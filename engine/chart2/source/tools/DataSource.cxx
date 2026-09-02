@@ -21,7 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -79,7 +79,7 @@ cpo::uno::Sequence< OUString > DataSource::getSupportedServiceNames()
 } // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_DataSource_get_implementation(css::uno::XComponentContext *,
+com_sun_star_comp_chart_DataSource_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::DataSource);

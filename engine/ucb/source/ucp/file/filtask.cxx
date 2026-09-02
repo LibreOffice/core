@@ -128,7 +128,7 @@ constexpr OUString ContentType( u"ContentType"_ustr );
 constexpr OUString IsReadOnly( u"IsReadOnly"_ustr );
 constexpr OUString CreatableContentsInfo( u"CreatableContentsInfo"_ustr );
 
-TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
+TaskManager::TaskManager( const uno::Reference< cpo::uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )
     : m_nCommandId( 0 ),
       m_pProvider( pProvider ),

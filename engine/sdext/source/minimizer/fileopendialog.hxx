@@ -23,7 +23,7 @@
 
 #include <vector>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 class FileOpenDialog
 {
@@ -42,7 +42,7 @@ class FileOpenDialog
     std::vector< FilterEntry > aFilterEntryList;
 
 public:
-        explicit FileOpenDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit FileOpenDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         ~FileOpenDialog();
 
         sal_Int16 execute();

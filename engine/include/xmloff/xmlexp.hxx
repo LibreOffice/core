@@ -62,7 +62,7 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::lang { class XEventListener; }
 namespace com::sun::star::task { class XStatusIndicator; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
@@ -120,7 +120,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
 {
     std::unique_ptr<SvXMLExport_Impl>            mpImpl;            // dummy
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     OUString m_implementationName;
 
     css::uno::Reference< css::frame::XModel > mxModel;
@@ -281,21 +281,21 @@ protected:
 public:
 
     SvXMLExport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString implementationName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
         const enum ::xmloff::token::XMLTokenEnum eClass,
         SvXMLExportFlags nExportFlag );
 
     SvXMLExport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString implementationName,
         OUString fileName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler);
 
     SvXMLExport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString implementationName,
         OUString fileName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
@@ -541,7 +541,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
+    const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const

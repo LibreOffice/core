@@ -36,12 +36,12 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaHyperlink(
         const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     /// @throws cpo::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
         const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay );
 

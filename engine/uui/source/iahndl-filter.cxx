@@ -66,7 +66,7 @@ executeFilterDialog(
 void
 handleNoSuchFilterRequest_(
     weld::Window* pParent,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     document::NoSuchFilterRequest const & rRequest,
     cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
             rContinuations )
@@ -179,7 +179,7 @@ handleNoSuchFilterRequest_(
 void
 handleFilterOptionsRequest_(
     uno::Reference<awt::XWindow> const & rWindow,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     document::FilterOptionsRequest const & rRequest,
     cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)

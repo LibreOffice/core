@@ -75,12 +75,12 @@ class TabStopCollectionHelper : public ::cppu::WeakImplHelper< container::XIndex
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     sal_Int32 mnTabStops;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    TabStopCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
+    TabStopCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< cpo::uno::XComponentContext > xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
     {
     }
 
@@ -112,7 +112,7 @@ public:
 
 }
 
-SwVbaTabStops::SwVbaTabStops( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& xParaProps ) : SwVbaTabStops_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new TabStopCollectionHelper( xParent, xContext, xParaProps ) ) ), mxParaProps( xParaProps )
+SwVbaTabStops::SwVbaTabStops( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& xParaProps ) : SwVbaTabStops_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new TabStopCollectionHelper( xParent, xContext, xParaProps ) ) ), mxParaProps( xParaProps )
 {
 }
 

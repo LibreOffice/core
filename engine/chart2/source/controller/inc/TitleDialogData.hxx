@@ -22,7 +22,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -42,7 +42,7 @@ struct TitleDialogData
     when pOldState is NULL then all data are written to the model
     */
     bool writeDifferenceToModel( const rtl::Reference<::chart::ChartModel>& xChartModel
-                        , const css::uno::Reference< css::uno::XComponentContext >& xContext
+                        , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
                         , const TitleDialogData* pOldState=nullptr );
 };
 

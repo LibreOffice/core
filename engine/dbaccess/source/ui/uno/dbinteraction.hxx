@@ -29,7 +29,7 @@
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdb/DocumentSaveRequest.hpp>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dbtools
 {
@@ -59,13 +59,13 @@ namespace dbaui
                 :public BasicInteractionHandler_Base
     {
         css::uno::Reference< css::awt::XWindow > m_xParentWindow;
-        const css::uno::Reference< css::uno::XComponentContext >
+        const css::uno::Reference< cpo::uno::XComponentContext >
                             m_xContext;
         const bool          m_bFallbackToGeneric;
 
     public:
         BasicInteractionHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const bool i_bFallbackToGeneric
         );
 
@@ -125,7 +125,7 @@ namespace dbaui
     {
     public:
         explicit SQLExceptionInteractionHandler(
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, false )
         {
@@ -153,7 +153,7 @@ namespace dbaui
     {
     public:
         explicit LegacyInteractionHandler(
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext
+                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, true )
         {

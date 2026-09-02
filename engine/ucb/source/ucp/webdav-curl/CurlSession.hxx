@@ -25,7 +25,7 @@ class CurlSession : public DAVSession
 private:
     /// mutex required to access all other non-const members
     ::std::mutex m_Mutex;
-    css::uno::Reference<css::uno::XComponentContext> const m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> const m_xContext;
     /// flags may be passed to constructor, e.g. "KeepAlive"
     cpo::uno::Sequence<css::beans::NamedValue> const m_Flags;
     CurlUri const m_URI;
@@ -50,7 +50,7 @@ private:
     friend struct CurlProcessor;
 
 public:
-    explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> xContext,
+    explicit CurlSession(css::uno::Reference<cpo::uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          cpo::uno::Sequence<css::beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);

@@ -32,7 +32,7 @@ namespace chart
 {
 
 StatusBarCommandDispatch::StatusBarCommandDispatch(
-    const Reference< uno::XComponentContext > & xContext,
+    const Reference< cpo::uno::XComponentContext > & xContext,
     rtl::Reference<::chart::ChartModel> xModel,
     const Reference< view::XSelectionSupplier > & xSelSupp ) :
         impl::StatusBarCommandDispatch_Base( xContext ),

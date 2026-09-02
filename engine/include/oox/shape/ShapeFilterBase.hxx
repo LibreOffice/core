@@ -44,7 +44,7 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     explicit            ShapeFilterBase(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual             ~ShapeFilterBase() override;
 

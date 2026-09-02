@@ -61,7 +61,7 @@ public:
     ErrCode
     ReadThroughComponentIS(const css::uno::Reference<css::io::XInputStream>& xInputStream,
                            const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                           css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                            css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                            const char16_t* pFilterName, bool bEncrypted,
                            int_fast16_t nSyntaxVersion);
@@ -71,7 +71,7 @@ public:
     ErrCode ReadThroughComponentS(const css::uno::Reference<css::embed::XStorage>& xStorage,
                                   const css::uno::Reference<css::lang::XComponent>& xModelComponent,
                                   const char16_t* pStreamName,
-                                  css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                                  css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                                   css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                   const char16_t* pFilterName, int_fast16_t nSyntaxVersion);
 
@@ -80,7 +80,7 @@ public:
     ErrCode
     ReadThroughComponentMS(std::u16string_view aText,
                            const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                           css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                            css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
@@ -108,7 +108,7 @@ public:
 public:
     /** Constructor
     */
-    SmMLImport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+    SmMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                OUString const& implementationName, SvXMLImportFlags nImportFlags);
 
     /** Destructor

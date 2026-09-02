@@ -23,7 +23,7 @@
 #include <officecfg/Setup.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -42,7 +42,7 @@ using namespace chelp;
 
 // ContentProvider Implementation.
 
-ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >& rxContext )
+ContentProvider::ContentProvider( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : ContentProvider_Base( rxContext )
     , isInitialized( false )
 {
@@ -190,7 +190,7 @@ void ContentProvider::subst( OUString& instpath )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 CHelpContentProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

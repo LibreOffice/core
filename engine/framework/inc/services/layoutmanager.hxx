@@ -62,7 +62,7 @@ namespace framework
                           public  LayoutManager_PBase
     {
         public:
-            LayoutManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            LayoutManager( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~LayoutManager() override;
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
@@ -154,7 +154,7 @@ namespace framework
             static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
                     const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
                     std::unique_ptr<GlobalSettings> &rGlobalSettings, bool &bInGlobalSettings,
-                    const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
+                    const css::uno::Reference< cpo::uno::XComponentContext > &rComponentContext );
 
         private:
             DECL_LINK(AsyncLayoutHdl, Timer *, void);
@@ -229,7 +229,7 @@ namespace framework
             virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
             virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
-            css::uno::Reference< css::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
+            css::uno::Reference< cpo::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >              m_xURLTransformer;
             css::uno::Reference< css::frame::XFrame >                      m_xFrame;
             css::uno::Reference< css::ui::XUIConfigurationManager >        m_xModuleCfgMgr;

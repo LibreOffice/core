@@ -23,7 +23,7 @@
 #include <com/sun/star/resource/XStringResourceWithLocation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -83,7 +83,7 @@ class StringResourceImpl : public StringResourceImpl_BASE
 {
 protected:
     std::mutex                                                m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
 
     LocaleItem*                                               m_pCurrentLocaleItem;
     LocaleItem*                                               m_pDefaultLocaleItem;
@@ -142,7 +142,7 @@ protected:
 
 public:
     explicit StringResourceImpl(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourceImpl() override;
 
     // XServiceInfo
@@ -270,7 +270,7 @@ protected:
 
 public:
     explicit StringResourcePersistenceImpl(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourcePersistenceImpl() override;
 
     // XServiceInfo
@@ -339,7 +339,7 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
     virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
 public:
-    explicit StringResourceWithStorageImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit StringResourceWithStorageImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourceWithStorageImpl() override;
 
     // XServiceInfo
@@ -421,7 +421,7 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
     virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
 public:
-    explicit StringResourceWithLocationImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit StringResourceWithLocationImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourceWithLocationImpl() override;
 
     // XServiceInfo

@@ -41,13 +41,13 @@ namespace dbaui
         ORTFReader( SvStream& rIn,
                     const SharedConnection& _rxConnection,
                     const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         // required for automatic type recognition
         ORTFReader( SvStream& rIn,
                     sal_Int32 nRows,
                     TPositions&& _rColumnPositions,
                     const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,
                     const OTypeInfoMap* _pInfoMap,
                     bool _bAutoIncrementEnabled);

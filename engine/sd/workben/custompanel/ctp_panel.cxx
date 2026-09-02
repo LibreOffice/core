@@ -41,7 +41,7 @@ namespace sd::colortoolpanel
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Type;
     using ::com::sun::star::drawing::framework::XResourceId;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::drawing::framework::AbstractPane;
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::lang::DisposedException;

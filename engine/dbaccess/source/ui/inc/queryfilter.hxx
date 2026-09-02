@@ -92,7 +92,7 @@ namespace dbaui
 
     public:
         DlgFilterCrit(weld::Window * pParent,
-                      const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                      const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                       const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
                       const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
                       const css::uno::Reference< css::container::XNameAccess>& _rxCols);

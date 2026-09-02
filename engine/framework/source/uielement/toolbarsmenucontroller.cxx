@@ -141,7 +141,7 @@ cpo::uno::Sequence< OUString > ToolbarsMenuController::getSupportedServiceNames(
 constexpr OUString g_aPropUIName( u"UIName"_ustr );
 constexpr OUString g_aPropResourceURL( u"ResourceURL"_ustr );
 
-ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext ),
     m_bResetActive( false ),
@@ -754,7 +754,7 @@ IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ToolbarsMenuController_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ToolbarsMenuController(context));
 }

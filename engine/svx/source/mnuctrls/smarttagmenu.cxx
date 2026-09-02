@@ -31,7 +31,7 @@ namespace {
 class SmartTagMenuController : public svt::PopupMenuControllerBase
 {
 public:
-    explicit SmartTagMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit SmartTagMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XStatusListener
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -61,7 +61,7 @@ private:
 
 }
 
-SmartTagMenuController::SmartTagMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+SmartTagMenuController::SmartTagMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : svt::PopupMenuControllerBase( rxContext )
 {
 }
@@ -240,7 +240,7 @@ cpo::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_SmartTagMenuController_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence< cpo::uno::Any > const & )
 {
     return cppu::acquire( new SmartTagMenuController( xContext ) );

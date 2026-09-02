@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
-                    uno::Reference< uno::XComponentContext > const & xContext )
+                    uno::Reference< cpo::uno::XComponentContext > const & xContext )
 : m_aURL( aContent.getURL() )
 , m_aContent( aContent )
 , m_nMode( nMode )

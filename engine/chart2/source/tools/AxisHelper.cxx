@@ -48,7 +48,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <cstddef>
@@ -317,7 +317,7 @@ rtl::Reference< Axis > AxisHelper::createAxis(
           sal_Int32 nDimensionIndex
         , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
         , const rtl::Reference< BaseCoordinateSystem >& xCooSys
-        , const Reference< uno::XComponentContext > & xContext
+        , const Reference< cpo::uno::XComponentContext > & xContext
         , ReferenceSizeProvider * pRefSizeProvider )
 {
     if( !xContext.is() || !xCooSys.is() )
@@ -372,7 +372,7 @@ rtl::Reference< Axis > AxisHelper::createAxis(
 
 rtl::Reference< Axis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< Diagram >& xDiagram
-                , const Reference< uno::XComponentContext >& xContext
+                , const Reference< cpo::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider )
 {
     OSL_ENSURE( xContext.is(), "need a context to create an axis" );
@@ -389,7 +389,7 @@ rtl::Reference< Axis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool b
 
 void AxisHelper::showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< Diagram >& xDiagram
-                , const Reference< uno::XComponentContext >& xContext
+                , const Reference< cpo::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider )
 {
     if( !xDiagram.is() )
@@ -937,7 +937,7 @@ void AxisHelper::getAxisOrGridExistence( Sequence< bool >& rExistenceList
 bool AxisHelper::changeVisibilityOfAxes( const rtl::Reference< Diagram >& xDiagram
                         , const Sequence< bool >& rOldExistenceList
                         , const Sequence< bool >& rNewExistenceList
-                        , const Reference< uno::XComponentContext >& xContext
+                        , const Reference< cpo::uno::XComponentContext >& xContext
                         , ReferenceSizeProvider * pRefSizeProvider )
 {
     bool bChanged = false;

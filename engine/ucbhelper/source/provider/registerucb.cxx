@@ -24,7 +24,7 @@
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
 #include <com/sun/star/ucb/ContentProviderProxyFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 
 #include <osl/diagnose.h>
@@ -36,7 +36,7 @@ namespace ucbhelper {
 bool
 registerAtUcb(
     uno::Reference< ucb::XContentProviderManager > const & rManager,
-    uno::Reference< uno::XComponentContext > const & rxContext,
+    uno::Reference< cpo::uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate)

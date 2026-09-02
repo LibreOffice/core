@@ -38,7 +38,7 @@ namespace abp
         OUString m_sDataSourceName;
 
     public:
-        explicit OABSPilotUno(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+        explicit OABSPilotUno(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
     private:
         // XServiceInfo

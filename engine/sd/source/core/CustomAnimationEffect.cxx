@@ -304,7 +304,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
         if( xShape.is() )
         {
             // TODO/LATER: Optimize this, don't create a break iterator each time
-            const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+            const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             Reference < i18n::XBreakIterator > xBI = i18n::BreakIterator::create(xContext);
 
             Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );

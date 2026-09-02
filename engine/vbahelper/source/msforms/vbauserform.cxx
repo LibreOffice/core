@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 //     the models in ControlModels can be accessed by name
 // also the XDialog is a XControl ( to access the model above
 
-ScVbaUserForm::ScVbaUserForm( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+ScVbaUserForm::ScVbaUserForm( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& xContext )
     :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), nullptr ),
        mbDispose( true )
 {
@@ -306,7 +306,7 @@ ScVbaUserForm::hasProperty( const OUString& aName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScVbaUserForm_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaUserForm(args, context));
 }

@@ -22,7 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/GraphicObject.hxx>
 #include <mutex>
 
@@ -92,7 +92,7 @@ void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> co
 
 extern "C" SAL_DLLPUBLIC_EXPORT
 css::uno::XInterface* com_sun_star_graphic_GraphicObject_get_implementation(
-                            SAL_UNUSED_PARAMETER uno::XComponentContext*,
+                            SAL_UNUSED_PARAMETER cpo::uno::XComponentContext*,
                             cpo::uno::Sequence<cpo::uno::Any> const & rArguments)
 {
     return cppu::acquire(new GraphicObjectImpl(rArguments));

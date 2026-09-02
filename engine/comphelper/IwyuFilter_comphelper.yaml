@@ -83,7 +83,7 @@ excludelist:
     # Needed for linker visibility
     - comphelper/processfactory.hxx
     # Needed for direct member access
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     comphelper/source/property/genericpropertyset.cxx:
     # Needed for linker visibility
     - comphelper/genericpropertyset.hxx

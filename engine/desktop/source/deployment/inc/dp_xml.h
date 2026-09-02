@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 
@@ -35,7 +35,7 @@ namespace dp_misc
 void xml_parse(
     css::uno::Reference< css::xml::sax::XDocumentHandler > const & xDocHandler,
     ::ucbhelper::Content & ucb_content,
-    css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
 }
 

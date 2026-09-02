@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
 #define INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -20,7 +20,7 @@ namespace shell::sessioninstall
     class SyncDbusSessionHelper : public ::cppu::WeakImplHelper< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper, css::lang::XServiceInfo >
     {
         public:
-            SyncDbusSessionHelper(css::uno::Reference< css::uno::XComponentContext> const&);
+            SyncDbusSessionHelper(css::uno::Reference< cpo::uno::XComponentContext> const&);
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;

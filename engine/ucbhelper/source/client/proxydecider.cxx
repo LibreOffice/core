@@ -140,7 +140,7 @@ private:
                          bool bUseFullyQualified ) const;
 public:
     explicit InternetProxyDecider_Impl(
-        const uno::Reference< uno::XComponentContext >& rxContext );
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     void dispose();
 
@@ -287,7 +287,7 @@ static bool getConfigInt32Value(
 
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
-    const uno::Reference< uno::XComponentContext >& rxContext )
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : m_nProxyType( ProxyType::NoProxy ),
       m_aHostnames()
 {
@@ -883,7 +883,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
 
 InternetProxyDecider::InternetProxyDecider(
-    const uno::Reference< uno::XComponentContext>& rxContext )
+    const uno::Reference< cpo::uno::XComponentContext>& rxContext )
 : m_xImpl( new proxydecider_impl::InternetProxyDecider_Impl( rxContext ) )
 {
 }

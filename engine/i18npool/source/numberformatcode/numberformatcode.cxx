@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
-            const css::uno::Reference < css::uno::XComponentContext >& rxContext )
+            const css::uno::Reference < cpo::uno::XComponentContext >& rxContext )
 {
         m_xLocaleData.set( css::i18n::LocaleData2::create( rxContext ) );
 }
@@ -256,7 +256,7 @@ NumberFormatCodeMapper::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_NumberFormatCodeMapper_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NumberFormatCodeMapper(context));

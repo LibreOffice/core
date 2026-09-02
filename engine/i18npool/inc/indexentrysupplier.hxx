@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -39,7 +39,7 @@ class IndexEntrySupplier final : public cppu::WeakImplHelper
 >
 {
 public:
-    IndexEntrySupplier( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
     // Methods
     virtual cpo::uno::Sequence < css::lang::Locale > getLocaleList() override;
@@ -78,7 +78,7 @@ public:
 
 private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     /// @throws cpo::uno::RuntimeException
     bool createLocaleSpecificIndexEntrySupplier(std::u16string_view name);
     /// @throws cpo::uno::RuntimeException

@@ -260,7 +260,7 @@ using namespace cpo::uno;
 }   // namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_forms_OSpinButtonModel_get_implementation(css::uno::XComponentContext* component,
+com_sun_star_comp_forms_OSpinButtonModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OSpinButtonModel(component));

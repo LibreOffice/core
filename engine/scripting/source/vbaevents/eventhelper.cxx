@@ -925,7 +925,7 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ooo_vba_EventListener_get_implementation(css::uno::XComponentContext*,
+ooo_vba_EventListener_get_implementation(cpo::uno::XComponentContext*,
                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new EventListener);
@@ -933,7 +933,7 @@ ooo_vba_EventListener_get_implementation(css::uno::XComponentContext*,
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ooo_vba_VBAToOOEventDesc_get_implementation(css::uno::XComponentContext*,
+ooo_vba_VBAToOOEventDesc_get_implementation(cpo::uno::XComponentContext*,
                                             cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VBAToOOEventDescGen);

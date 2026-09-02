@@ -48,7 +48,7 @@ public:
         @param  xSMGR
                 reference to a uno service manager, which is used internally.
      */
-    explicit GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit GlobalAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
     virtual OUString getImplementationName() override
     {
@@ -74,7 +74,7 @@ private:
     rtl::Reference< WeakChangesListener > m_xCfgListener;
 };
 
-GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : GlobalAcceleratorConfiguration_BASE(xContext)
 {
     // force keyboard string registration.
@@ -113,7 +113,7 @@ void GlobalAcceleratorConfiguration::fillCache()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<GlobalAcceleratorConfiguration> xGAC = new GlobalAcceleratorConfiguration(context);

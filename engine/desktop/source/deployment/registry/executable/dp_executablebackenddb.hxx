@@ -22,10 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <dp_backenddb.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace dp_registry::backend::executable
 {
@@ -47,7 +44,7 @@ protected:
     virtual OUString getKeyElementName() override;
 
 public:
-    ExecutableBackendDb(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    ExecutableBackendDb(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                         OUString const& url);
 };
 }

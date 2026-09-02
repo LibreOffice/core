@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 
-SwVbaEventsHelper::SwVbaEventsHelper( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& /*xContext*/ ) :
+SwVbaEventsHelper::SwVbaEventsHelper( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext > const& /*xContext*/ ) :
     VbaEventsHelperBase( aArgs )
 {
     using namespace ::com::sun::star::script::ModuleType;
@@ -86,7 +86,7 @@ cpo::uno::Sequence< OUString > SwVbaEventsHelper::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaEventsHelper_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaEventsHelper(args, context));
 }

@@ -34,7 +34,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
@@ -138,7 +138,7 @@ namespace chelp {
                  const OUString& productName,
                  const OUString& productVersion,
                  const OUString& styleSheet,
-                 css::uno::Reference< css::uno::XComponentContext > const & xContext );
+                 css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
         ~Databases();
 
@@ -222,12 +222,12 @@ namespace chelp {
         OUString expandURL( std::unique_lock<std::mutex>& rGuard, const OUString& aURL );
 
         static OUString expandURL( const OUString& aURL,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     private:
 
         std::mutex                                               m_aMutex;
-        css::uno::Reference< css::uno::XComponentContext >       m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
 
         bool   m_bShowBasic;
@@ -305,7 +305,7 @@ namespace chelp {
         static ExtensionHelpExistenceMap    aHelpExistenceMap;
 
     public:
-        ExtensionIteratorBase( css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        ExtensionIteratorBase( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, OUString aInitialModule, OUString aLanguage );
         ExtensionIteratorBase( Databases& rDatabases, OUString  aInitialModule,
             OUString  aLanguage );
@@ -331,7 +331,7 @@ namespace chelp {
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
         Databases&                                            m_rDatabases;
 
@@ -361,7 +361,7 @@ namespace chelp {
     class DataBaseIterator : public ExtensionIteratorBase
     {
     public:
-        DataBaseIterator( css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        DataBaseIterator( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage, bool bHelpText )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
                 , m_bHelpText( bHelpText )
@@ -386,7 +386,7 @@ namespace chelp {
     class KeyDataBaseFileIterator : public ExtensionIteratorBase
     {
     public:
-        KeyDataBaseFileIterator( css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        KeyDataBaseFileIterator( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
@@ -402,7 +402,7 @@ namespace chelp {
     class JarFileIterator : public ExtensionIteratorBase
     {
     public:
-        JarFileIterator( css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        JarFileIterator( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}

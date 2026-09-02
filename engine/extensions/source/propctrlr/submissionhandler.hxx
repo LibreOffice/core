@@ -66,7 +66,7 @@ namespace pcr
 
     public:
         explicit SubmissionPropertyHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         virtual ~SubmissionPropertyHandler() override;

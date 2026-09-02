@@ -28,7 +28,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     SwVbaFormFieldDropDownListEntry(
         const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-        const css::uno::Reference<css::uno::XComponentContext>& rContext,
+        const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
         sw::mark::DropDownFieldmark& rFormField, sal_Int32 nZIndex);
     ~SwVbaFormFieldDropDownListEntry() override;
 

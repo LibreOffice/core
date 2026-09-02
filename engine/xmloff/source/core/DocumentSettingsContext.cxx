@@ -60,10 +60,10 @@ class XMLMyList
     std::vector<beans::PropertyValue> aProps;
     sal_uInt32                        nCount;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
-    explicit XMLMyList(uno::Reference<uno::XComponentContext> xContext);
+    explicit XMLMyList(uno::Reference<cpo::uno::XComponentContext> xContext);
 
     void push_back(beans::PropertyValue const & aProp) { aProps.push_back(aProp); nCount++; }
     cpo::uno::Sequence<beans::PropertyValue> GetSequence();
@@ -73,7 +73,7 @@ public:
 
 }
 
-XMLMyList::XMLMyList(uno::Reference<uno::XComponentContext> xContext)
+XMLMyList::XMLMyList(uno::Reference<cpo::uno::XComponentContext> xContext)
 :   nCount(0),
     m_xContext(std::move(xContext))
 {
@@ -514,7 +514,7 @@ void XMLConfigItemContext::ManipulateConfigItem()
     {
         try
         {
-            uno::Reference< uno::XComponentContext > xContext( GetImport().GetComponentContext() );
+            uno::Reference< cpo::uno::XComponentContext > xContext( GetImport().GetComponentContext() );
             uno::Reference< util::XStringSubstitution > xStringSubstitution( util::PathSubstitution::create(xContext) );
 
             OUString aURL;

@@ -62,7 +62,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
         css::lang::XServiceInfo,
         css::beans::XPropertySet >
 {
-    css::uno::Reference < css::uno::XComponentContext > mxContext;
+    css::uno::Reference < cpo::uno::XComponentContext > mxContext;
     css::uno::Reference < css::frame::XFrame2 > mxFrame;
     css::uno::Reference < css::embed::XEmbeddedObject > mxObj;
     SfxItemPropertyMap  maPropMap;
@@ -71,7 +71,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
 public:
     /// @throws cpo::uno::Exception
     /// @throws cpo::uno::RuntimeException
-    IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
+    IFrameObject(css::uno::Reference < cpo::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString getImplementationName() override
     {
@@ -149,7 +149,7 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
+IFrameObject::IFrameObject(uno::Reference < cpo::uno::XComponentContext > xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
     : mxContext(std::move( xContext ))
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
@@ -445,7 +445,7 @@ void IFrameObject::setTitle( const OUString& )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_IFrameObject_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new IFrameObject(context, arguments));

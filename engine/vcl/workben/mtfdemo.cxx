@@ -168,7 +168,7 @@ private:
                 throw cpo::uno::RuntimeException("Can not get file url from system path: " + aFilename);
             }
 
-            uno::Reference<uno::XComponentContext> xComponentContext
+            uno::Reference<cpo::uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
             xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);
             if(!xMSF.is())

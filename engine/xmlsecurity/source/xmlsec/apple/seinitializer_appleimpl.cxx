@@ -19,7 +19,7 @@
 using namespace css;
 
 SEInitializer_AppleImpl::SEInitializer_AppleImpl(
-    const uno::Reference<uno::XComponentContext>& rxContext)
+    const uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : SEInitializer_NssImpl(rxContext)
 {
 }

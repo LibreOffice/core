@@ -30,7 +30,7 @@ namespace com::sun::star::container { class XContainerQuery; }
 namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::embed { struct VerbDescriptor; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 enum class SfxFilterFlags;
 
@@ -39,7 +39,7 @@ namespace comphelper {
 class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
 {
     std::mutex                                             m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
 
     css::uno::Reference< css::container::XNameAccess > m_xObjectConfig;
@@ -50,7 +50,7 @@ class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
 
 public:
 
-    MimeConfigurationHelper( css::uno::Reference< css::uno::XComponentContext > xContext );
+    MimeConfigurationHelper( css::uno::Reference< cpo::uno::XComponentContext > xContext );
 
 
     static OUString GetStringClassIDRepresentation( const cpo::uno::Sequence< sal_Int8 >& aClassID );

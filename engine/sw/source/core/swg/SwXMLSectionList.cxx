@@ -81,7 +81,7 @@ public:
 
 }
 
-SwXMLSectionList::SwXMLSectionList(const css::uno::Reference< css::uno::XComponentContext >& rContext, std::vector<OUString> &rNewSectionList)
+SwXMLSectionList::SwXMLSectionList(const css::uno::Reference< cpo::uno::XComponentContext >& rContext, std::vector<OUString> &rNewSectionList)
 : SvXMLImport(rContext, u""_ustr)
 , m_rSectionList(rNewSectionList)
 {

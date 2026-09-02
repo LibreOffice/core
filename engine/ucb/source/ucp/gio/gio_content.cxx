@@ -73,7 +73,7 @@ namespace gio
 {
 
 Content::Content(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
     const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier)
     : ContentImplHelper( rxContext, pProvider, Identifier ),
@@ -83,7 +83,7 @@ Content::Content(
 }
 
 Content::Content(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
     const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
     bool bIsFolder)

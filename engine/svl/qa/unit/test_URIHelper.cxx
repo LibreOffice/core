@@ -33,7 +33,7 @@
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -194,7 +194,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static css::uno::Reference< css::uno::XComponentContext > m_context;
+    static css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 void Test::setUp() {
@@ -517,7 +517,7 @@ void Test::testResolveIdnaHost() {
         URIHelper::resolveIdnaHost(u"foo://пример.рф:0"_ustr));
 }
 
-css::uno::Reference< css::uno::XComponentContext > Test::m_context;
+css::uno::Reference< cpo::uno::XComponentContext > Test::m_context;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

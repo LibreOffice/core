@@ -40,7 +40,7 @@
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace accessibility
 {
@@ -77,7 +77,7 @@ public:
             The XAccessible which is our parent
     */
     OAccessibleWrapper(
-        const css::uno::Reference< css::uno::XComponentContext >&     _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >&     _rxContext,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxInnerAccessible,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
     );
@@ -157,7 +157,7 @@ protected:
             The XAccessible to return in the getAccessibleParent call
     */
     OAccessibleContextWrapperHelper(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         ::cppu::OBroadcastHelper& _rBHelper,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
@@ -239,7 +239,7 @@ public:
             The XAccessible to return in the getAccessibleParent call
     */
     OAccessibleContextWrapper(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
@@ -301,7 +301,7 @@ typedef ::cppu::WeakImplHelper<   css::lang::XEventListener
 */
 class OWrappedAccessibleChildrenManager final : public OWrappedAccessibleChildrenManager_Base
 {
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                             m_xContext;
     cpo::uno::WeakReference< css::accessibility::XAccessible >
                             m_aOwningAccessible;    // the XAccessible which belongs to the XAccessibleContext which we work for
@@ -311,7 +311,7 @@ class OWrappedAccessibleChildrenManager final : public OWrappedAccessibleChildre
 public:
     /// ctor
     OWrappedAccessibleChildrenManager(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
     );
 
     /** specifies if the children are to be considered transient (i.e.: not cached)

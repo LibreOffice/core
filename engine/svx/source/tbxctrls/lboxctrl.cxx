@@ -226,7 +226,7 @@ void SvxUndoRedoControl::Do(sal_Int16 nCount)
     }
 }
 
-SvxUndoRedoControl::SvxUndoRedoControl(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+SvxUndoRedoControl::SvxUndoRedoControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }
@@ -339,7 +339,7 @@ cpo::uno::Sequence<OUString> SvxUndoRedoControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_UndoRedoToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new SvxUndoRedoControl(rContext));

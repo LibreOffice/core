@@ -126,7 +126,7 @@ class ContentControlCollectionHelper
 {
 private:
     uno::Reference<XHelperInterface> mxParent;
-    uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<cpo::uno::XComponentContext> mxContext;
     rtl::Reference<SwXTextDocument> mxTextDocument;
     const OUString m_sTag;
     const OUString m_sTitle;
@@ -135,7 +135,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     ContentControlCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
-                                   uno::Reference<uno::XComponentContext> xContext,
+                                   uno::Reference<cpo::uno::XComponentContext> xContext,
                                    rtl::Reference<SwXTextDocument> xTextDocument,
                                    const OUString& rTag, const OUString& rTitle)
 
@@ -217,7 +217,7 @@ public:
  * TODO: add filtering for Range, SelectLinkedControls, SelectUnlinkedControls
  */
 SwVbaContentControls::SwVbaContentControls(const uno::Reference<XHelperInterface>& xParent,
-                                           const uno::Reference<uno::XComponentContext>& xContext,
+                                           const uno::Reference<cpo::uno::XComponentContext>& xContext,
                                            const rtl::Reference<SwXTextDocument>& xTextDocument,
                                            const OUString& rTag, const OUString& rTitle)
     : SwVbaContentControls_BASE(

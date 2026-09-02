@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <docuno.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace ooo::vba { class XSink; }
 namespace ooo::vba::excel { class XFileDialog; }
 
@@ -54,7 +54,7 @@ protected:
     virtual ScModelObj* getCurrentDocument() override;
 
 public:
-    explicit ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
+    explicit ScVbaApplication( const css::uno::Reference< cpo::uno::XComponentContext >& m_xContext );
     virtual ~ScVbaApplication() override;
 
     /** Returns true, if VBA document events are enabled. */

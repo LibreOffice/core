@@ -43,10 +43,10 @@ namespace connectivity::evoab
     {
         ::osl::Mutex                                        m_aMutex;
         std::vector<unotools::WeakReference<OEvoabConnection>> m_xConnections;
-        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
     public:
-        explicit OEvoabDriver(const css::uno::Reference< css::uno::XComponentContext >& );
+        explicit OEvoabDriver(const css::uno::Reference< cpo::uno::XComponentContext >& );
         virtual ~OEvoabDriver() override;
 
         // OComponentHelper
@@ -66,7 +66,7 @@ namespace connectivity::evoab
         virtual sal_Int32 getMinorVersion(  ) override;
 
     public:
-        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext( ) const { return m_xContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext( ) const { return m_xContext; }
 
         // static methods
         static bool acceptsURL_Stat( std::u16string_view url );

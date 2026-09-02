@@ -61,7 +61,7 @@ ScVbaFormatConditions::getElementType()
     return cppu::UnoType<excel::XFormatCondition>::get();
 }
 
-static cpo::uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const cpo::uno::Any& aObject )
+static cpo::uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const cpo::uno::Any& aObject )
 {
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
     aObject >>= xSheetConditionalEntry;
@@ -83,14 +83,14 @@ class EnumWrapper : public EnumerationHelper_BASE
 {
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         uno::Reference<excel::XRange > m_xParentRange;
-        uno::Reference<uno::XComponentContext > m_xContext;
+        uno::Reference<cpo::uno::XComponentContext > m_xContext;
         uno::Reference<excel::XStyles > m_xStyles;
         uno::Reference<excel::XFormatConditions > m_xParentCollection;
         uno::Reference<beans::XPropertySet > m_xProps;
 
         sal_Int32 nIndex;
 public:
-        EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<excel::XRange > xRange, uno::Reference<uno::XComponentContext > xContext, uno::Reference<excel::XStyles > xStyles, uno::Reference< excel::XFormatConditions > xCollection, uno::Reference<beans::XPropertySet > xProps  ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParentRange(std::move( xRange )), m_xContext(std::move( xContext )), m_xStyles(std::move( xStyles )), m_xParentCollection(std::move( xCollection )), m_xProps(std::move( xProps )), nIndex( 0 ) {}
+        EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<excel::XRange > xRange, uno::Reference<cpo::uno::XComponentContext > xContext, uno::Reference<excel::XStyles > xStyles, uno::Reference< excel::XFormatConditions > xCollection, uno::Reference<beans::XPropertySet > xProps  ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParentRange(std::move( xRange )), m_xContext(std::move( xContext )), m_xStyles(std::move( xStyles )), m_xParentCollection(std::move( xCollection )), m_xProps(std::move( xProps )), nIndex( 0 ) {}
         virtual bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );

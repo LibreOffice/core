@@ -26,7 +26,7 @@
 
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
@@ -74,7 +74,7 @@ namespace pcr
         typedef std::vector< css::uno::Reference< css::uno::XInterface > >
                                                                             InterfaceArray;
 
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         css::uno::Reference< css::frame::XFrame > m_xFrame;
         css::uno::Reference< css::awt::XWindow >  m_xView;
 
@@ -161,7 +161,7 @@ namespace pcr
 
     public:
         explicit OPropertyBrowserController(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     protected:
         virtual ~OPropertyBrowserController() override;

@@ -48,12 +48,12 @@ class DAVResourceAccess
     cpo::uno::Sequence< css::beans::NamedValue > m_aFlags;
     rtl::Reference< DAVSession > m_xSession;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     std::vector<CurlUri> m_aRedirectURIs;
 
 public:
     DAVResourceAccess() = default;
-    DAVResourceAccess( css::uno::Reference< css::uno::XComponentContext > xContext,
+    DAVResourceAccess( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                        rtl::Reference< DAVSessionFactory > xSessionFactory,
                        OUString aURL );
     DAVResourceAccess( const DAVResourceAccess & rOther );

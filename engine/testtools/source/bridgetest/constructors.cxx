@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/factory.hxx>
@@ -404,7 +404,7 @@ OUString Impl2::fn12( const OUString& arg )
 }
 
 css::uno::Reference< css::uno::XInterface > create(
-    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+    SAL_UNUSED_PARAMETER css::uno::Reference< cpo::uno::XComponentContext >
         const &)
 {
     return getXWeak(new Impl);
@@ -420,7 +420,7 @@ cpo::uno::Sequence< OUString > getSupportedServiceNames() {
 }
 
 css::uno::Reference< css::uno::XInterface > create2(
-    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
+    SAL_UNUSED_PARAMETER css::uno::Reference< cpo::uno::XComponentContext >
         const &)
 {
     return getXWeak(new Impl2);

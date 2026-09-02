@@ -43,11 +43,8 @@ namespace lang
 {
 class XComponent;
 }
-namespace uno
-{
-class XComponentContext;
 }
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerperfect
 {
@@ -60,12 +57,12 @@ public:
                const OUString& rFactoryURL,
                const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
                const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
-               const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+               const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
                const css::uno::Reference<css::document::XFilter>& rxFilter,
                const OUString& rFactoryURL,
                const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
-               const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+               const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     ~WpftLoader();
 
     const css::uno::Reference<css::lang::XComponent>& getDocument() const;
@@ -84,7 +81,7 @@ private:
     const css::uno::Reference<css::document::XFilter> m_xFilter;
     const css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
     const css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
-    const css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    const css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::lang::XComponent> m_xDoc;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 };

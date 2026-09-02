@@ -32,7 +32,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListGalleries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc );
+    SwVbaListGalleries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ ) override;

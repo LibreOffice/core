@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
@@ -892,7 +892,7 @@ cpo::uno::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSuppor
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_wrapper_XMLDocumentWrapper_get_implementation(
-    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLDocumentWrapper_XmlSecImpl());
 }

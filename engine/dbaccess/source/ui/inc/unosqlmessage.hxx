@@ -36,7 +36,7 @@ class OSQLMessageDialog final
     // </properties>
 
 public:
-    OSQLMessageDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    OSQLMessageDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
     // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;

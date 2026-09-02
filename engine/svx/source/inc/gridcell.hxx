@@ -490,7 +490,7 @@ private:
 class DbPatternField final : public DbCellControl
 {
 public:
-    DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
@@ -507,7 +507,7 @@ private:
 
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
-    css::uno::Reference<css::uno::XComponentContext>    m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext>    m_xContext;
 };
 
 
@@ -631,7 +631,7 @@ class DbFilterField final
         ,public ::svxform::OSQLParserClient
 {
 public:
-    DbFilterField(const css::uno::Reference< css::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
+    DbFilterField(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
     virtual ~DbFilterField() override;
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;

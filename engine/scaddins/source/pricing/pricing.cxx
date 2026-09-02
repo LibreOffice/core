@@ -81,7 +81,7 @@ void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_ScaPricingAddIn_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScaPricingAddIn());
 }

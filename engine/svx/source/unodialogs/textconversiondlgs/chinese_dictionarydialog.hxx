@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/weld.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 
 #include <vector>

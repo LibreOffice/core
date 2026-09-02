@@ -715,7 +715,7 @@ Any WrappedNullDateProperty::getPropertyDefault( const Reference< beans::XProper
 }
 
 ChartDocumentWrapper::ChartDocumentWrapper(
-    const Reference< uno::XComponentContext > & xContext ) :
+    const Reference< cpo::uno::XComponentContext > & xContext ) :
         m_spChart2ModelContact( std::make_shared<Chart2ModelContact>( xContext ) ),
         m_bUpdateAddIn( true ),
         m_bIsDisposed( false )
@@ -1565,7 +1565,7 @@ cpo::uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames()
 } //  namespace chart::wrapper
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation(cpo::uno::XComponentContext *context,
                                                                 cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::wrapper::ChartDocumentWrapper(context));

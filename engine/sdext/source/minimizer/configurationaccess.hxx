@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <map>
@@ -76,7 +76,7 @@ class ConfigurationAccess
 {
     public:
 
-        explicit ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory );
+        explicit ConfigurationAccess( const css::uno::Reference< cpo::uno::XComponentContext >& rXFactory );
         ~ConfigurationAccess();
         void SaveConfiguration();
 
@@ -95,7 +95,7 @@ class ConfigurationAccess
         std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const OUString& rName );
 
     protected:
-        css::uno::Reference< css::uno::XComponentContext > mxContext;
+        css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 
     private:
         std::vector< OptimizerSettings > maSettings;

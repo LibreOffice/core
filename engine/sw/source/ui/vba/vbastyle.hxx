@@ -42,7 +42,7 @@ public:
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
     SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                 rtl::Reference< SwXTextDocument > xModel,
                 const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 

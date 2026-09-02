@@ -407,7 +407,7 @@ namespace {
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
 public:
-    explicit FontworkAlignmentControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit FontworkAlignmentControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -476,7 +476,7 @@ Sequence< OUString > FontworkAlignmentControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FontworkAlignmentControl(xContext));
@@ -727,7 +727,7 @@ namespace {
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {
 public:
-    explicit FontworkCharacterSpacingControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit FontworkCharacterSpacingControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -797,7 +797,7 @@ Sequence< OUString > FontworkCharacterSpacingControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FontworkCharacterSpacingControl(xContext));

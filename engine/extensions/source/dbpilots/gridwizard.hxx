@@ -40,7 +40,7 @@ namespace dbp
     public:
         OGridWizard(weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
         OGridSettings& getSettings() { return m_aSettings; }
 

@@ -119,7 +119,7 @@ SfxObjectShell* getParentShell(const uno::Reference<frame::XModel>& xDocModel)
 }
 }
 
-ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
+ChartModel::ChartModel(uno::Reference<cpo::uno::XComponentContext > xContext)
     : m_aLifeTimeManager( this, this )
     , m_bReadOnly( false )
     , m_bModified( false )
@@ -1765,7 +1765,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_ChartModel_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_ChartModel_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ChartModel(context));

@@ -67,7 +67,7 @@ import com.sun.star.task.XJob;
 import cpo.uno.Exception;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.util.InvalidStateException;
 import com.sun.star.util.NotLockedException;
 import com.sun.star.view.XControlAccess;

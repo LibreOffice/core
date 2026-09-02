@@ -23,7 +23,7 @@ class SwVbaContentControls : public SwVbaContentControls_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaContentControls(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                         const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                         const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                          const rtl::Reference<SwXTextDocument>& xTextDocument, const OUString& rTag,
                          const OUString& rTitle);
 

@@ -53,7 +53,7 @@ using ::cpo::uno::Sequence;
 namespace chart
 {
 
-DrawCommandDispatch::DrawCommandDispatch( const Reference< uno::XComponentContext >& rxContext,
+DrawCommandDispatch::DrawCommandDispatch( const Reference< cpo::uno::XComponentContext >& rxContext,
     ChartController* pController )
     :FeatureCommandDispatchBase( rxContext )
     ,m_pChartController( pController )

@@ -32,7 +32,6 @@
 /// @HTML
 
 namespace com::sun::star {
-    namespace uno { class XComponentContext; }
     namespace xml {
         namespace dom {
             class XNode;
@@ -41,6 +40,7 @@ namespace com::sun::star {
         namespace xpath { class XXPathAPI; }
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dp_misc {
 
@@ -73,7 +73,7 @@ public:
        with no content)
     */
     DescriptionInfoset(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         css::uno::Reference< css::xml::dom::XNode > const & element);
 
     ~DescriptionInfoset();
@@ -225,7 +225,7 @@ private:
         checkDenylistVersion(std::u16string_view currentversion,
                               cpo::uno::Sequence< OUString > const & versions);
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
     css::uno::Reference< css::xml::dom::XNode >        m_element;
     css::uno::Reference< css::xml::xpath::XXPathAPI >  m_xpath;
 };

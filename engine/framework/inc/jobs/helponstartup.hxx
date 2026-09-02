@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace framework{
 
@@ -48,7 +48,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
         std::mutex m_mutex;
 
         /** @short  reference to a uno service manager. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** @short  such module manager is used to classify new opened documents. */
         css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
@@ -78,7 +78,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
                     reference to the uno service manager, which created this instance.
                     Can be used later to create own needed uno resources on demand.
          */
-        HelpOnStartup(css::uno::Reference< css::uno::XComponentContext > xContext);
+        HelpOnStartup(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         /** @short  does nothing real ...
 

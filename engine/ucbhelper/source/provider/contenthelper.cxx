@@ -125,7 +125,7 @@ using namespace ucbhelper_impl;
 namespace ucbhelper {
 
 ContentImplHelper::ContentImplHelper(
-            uno::Reference< uno::XComponentContext > xContext,
+            uno::Reference< cpo::uno::XComponentContext > xContext,
             rtl::Reference< ContentProviderImplHelper > xProvider,
             uno::Reference<
             css::ucb::XContentIdentifier > Identifier )

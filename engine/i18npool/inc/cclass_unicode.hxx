@@ -26,7 +26,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XNativeNumberSupplier; }
 namespace com::sun::star::i18n { class XLocaleData5; }
 namespace i18npool { class Transliteration_casemapping; }
@@ -64,7 +64,7 @@ namespace i18npool {
 class cclass_Unicode final : public cppu::WeakImplHelper < css::i18n::XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
-    cclass_Unicode(css::uno::Reference < css::uno::XComponentContext > xContext );
+    cclass_Unicode(css::uno::Reference < cpo::uno::XComponentContext > xContext );
     virtual ~cclass_Unicode() override;
 
     virtual OUString toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
@@ -125,7 +125,7 @@ private:
     static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_uInt32 c );
 
 
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// used for parser only
     css::lang::Locale    aParserLocale;

@@ -39,7 +39,7 @@ using ::com::sun::star::container::XNameReplace;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 XMLAutoTextEventImport::XMLAutoTextEventImport(
-    const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : SvXMLImport(xContext, u"com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"_ustr)
 {
 }
@@ -80,7 +80,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XMLAutoTextEventImport(context));
 }

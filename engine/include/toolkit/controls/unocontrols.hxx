@@ -81,7 +81,7 @@ class UnoControlEditModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlEditModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlEditModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlEditModel( const UnoControlEditModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlEditModel( *this ); }
@@ -184,7 +184,7 @@ class UnoControlFileControlModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlFileControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlFileControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlFileControlModel( const UnoControlFileControlModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFileControlModel( *this ); }
@@ -224,7 +224,7 @@ private:
     bool                                                                                    mbAdjustingGraphic;
 
 protected:
-    GraphicControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    GraphicControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
         ,mbAdjustingImagePosition( false )
         ,mbAdjustingGraphic( false )
@@ -250,7 +250,7 @@ class TOOLKIT_DLLPUBLIC UnoControlButtonModel final : public GraphicControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlButtonModel( const UnoControlButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlButtonModel( *this ); }
@@ -329,7 +329,7 @@ private:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                                    UnoControlImageControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                                    UnoControlImageControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                                     UnoControlImageControlModel( const UnoControlImageControlModel& rModel ) : GraphicControlModel( rModel ), mbAdjustingImageScaleMode( false ) { }
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlImageControlModel( *this ); }
@@ -388,7 +388,7 @@ class UnoControlRadioButtonModel final : public GraphicControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlRadioButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlRadioButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlRadioButtonModel( const UnoControlRadioButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlRadioButtonModel( *this ); }
@@ -466,7 +466,7 @@ class UnoControlCheckBoxModel final : public GraphicControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlCheckBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlCheckBoxModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlCheckBoxModel( const UnoControlCheckBoxModel& rModel ) : GraphicControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlCheckBoxModel( *this ); }
@@ -546,7 +546,7 @@ class UnoControlFixedHyperlinkModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    UnoControlFixedHyperlinkModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoControlFixedHyperlinkModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedHyperlinkModel( *this ); }
@@ -617,7 +617,7 @@ class TOOLKIT_DLLPUBLIC UnoControlFixedTextModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlFixedTextModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlFixedTextModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlFixedTextModel( const UnoControlFixedTextModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedTextModel( *this ); }
@@ -681,7 +681,7 @@ class UnoControlGroupBoxModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlGroupBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlGroupBoxModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlGroupBoxModel( const UnoControlGroupBoxModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlGroupBoxModel( *this ); }
@@ -731,7 +731,7 @@ protected:
 
 public:
                         UnoControlListBoxModel(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             ConstructorMode const i_mode = ConstructDefault
                         );
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
@@ -904,7 +904,7 @@ class UnoControlComboBoxModel final : public UnoControlListBoxModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlComboBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlComboBoxModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlComboBoxModel( const UnoControlComboBoxModel& rModel ) : UnoControlListBoxModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlComboBoxModel( *this ); }
@@ -1034,7 +1034,7 @@ class UnoControlDateFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                UnoControlDateFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                UnoControlDateFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                 UnoControlDateFieldModel( const UnoControlDateFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlDateFieldModel( *this ); }
@@ -1110,7 +1110,7 @@ class UnoControlTimeFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlTimeFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlTimeFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlTimeFieldModel( const UnoControlTimeFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlTimeFieldModel( *this ); }
@@ -1184,7 +1184,7 @@ class UnoControlNumericFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                UnoControlNumericFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                UnoControlNumericFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                 UnoControlNumericFieldModel( const UnoControlNumericFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlNumericFieldModel( *this ); }
@@ -1260,7 +1260,7 @@ class UnoControlCurrencyFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlCurrencyFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlCurrencyFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlCurrencyFieldModel( const UnoControlCurrencyFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlCurrencyFieldModel( *this ); }
@@ -1336,7 +1336,7 @@ class UnoControlPatternFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlPatternFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlPatternFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlPatternFieldModel( const UnoControlPatternFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlPatternFieldModel( *this ); }
@@ -1395,7 +1395,7 @@ class UnoControlProgressBarModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlProgressBarModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlProgressBarModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlProgressBarModel( *this ); }
@@ -1451,7 +1451,7 @@ class UnoControlFixedLineModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlFixedLineModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        UnoControlFixedLineModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedLineModel( *this ); }

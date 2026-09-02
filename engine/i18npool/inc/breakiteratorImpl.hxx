@@ -23,14 +23,14 @@
 #include <utility>
 #include <vector>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
 class BreakIteratorImpl : public BreakIterator
 {
 public:
-    BreakIteratorImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    BreakIteratorImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     BreakIteratorImpl();
     virtual ~BreakIteratorImpl() override;
 
@@ -106,7 +106,7 @@ private:
     std::vector<lookupTableItem>                        lookupTable;
     css::lang::Locale                                   aLocale;
     css::uno::Reference < XBreakIterator >              xBI;
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// @throws cpo::uno::RuntimeException
     bool createLocaleSpecificBreakIterator( const OUString& aLocaleName );

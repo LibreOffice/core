@@ -31,7 +31,7 @@ namespace {
 
 class CommandBarControlEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
-    //uno::Reference< uno::XComponentContext > m_xContext;
+    //uno::Reference< cpo::uno::XComponentContext > m_xContext;
     CommandBarControls_BASE* m_pCommandBarControls;
     sal_Int32 m_nCurrentPosition;
 public:
@@ -53,7 +53,7 @@ public:
 
 }
 
-ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef  pHelper, uno::Reference< container::XIndexAccess>  xBarSettings, const OUString& sResourceUrl ) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper(std::move( pHelper )), m_xBarSettings(std::move( xBarSettings )), m_sResourceUrl( sResourceUrl )
+ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef  pHelper, uno::Reference< container::XIndexAccess>  xBarSettings, const OUString& sResourceUrl ) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper(std::move( pHelper )), m_xBarSettings(std::move( xBarSettings )), m_sResourceUrl( sResourceUrl )
 {
     m_bIsMenu = sResourceUrl == ITEM_MENUBAR_URL;
 }
@@ -258,7 +258,7 @@ public:
 
 VbaDummyCommandBarControls::VbaDummyCommandBarControls(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext ) :
+        const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     CommandBarControls_BASE( xParent, xContext, new VbaDummyIndexAccess )
 {
 }

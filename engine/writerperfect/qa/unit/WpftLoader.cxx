@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <ucbhelper/content.hxx>
@@ -44,7 +44,7 @@ WpftLoader::WpftLoader(const OUString& rURL,
                        const OUString& rFactoryURL,
                        const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
                        const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
-                       const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+                       const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : m_aURL(rURL)
     , m_aFactoryURL(rFactoryURL)
     , m_xFilter(rxFilter)
@@ -60,7 +60,7 @@ WpftLoader::WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInput
                        const css::uno::Reference<css::document::XFilter>& rxFilter,
                        const OUString& rFactoryURL,
                        const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
-                       const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+                       const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : m_xInputStream(rxInputStream)
     , m_aFactoryURL(rFactoryURL)
     , m_xFilter(rxFilter)

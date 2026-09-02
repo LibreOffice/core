@@ -55,7 +55,7 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -268,7 +268,7 @@ void lcl_CloneCoordinateSystems(
 namespace chart
 {
 
-Diagram::Diagram( uno::Reference< uno::XComponentContext > xContext ) :
+Diagram::Diagram( uno::Reference< cpo::uno::XComponentContext > xContext ) :
         m_xContext(std::move( xContext )),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
@@ -1434,7 +1434,7 @@ rtl::Reference< Axis > Diagram::getAttachedAxis(
 
 bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
                         , const rtl::Reference< DataSeries >& xDataSeries
-                        , const uno::Reference< uno::XComponentContext > & xContext
+                        , const uno::Reference< cpo::uno::XComponentContext > & xContext
                         , bool bAdaptAxes )
 {
     bool bChanged = false;
@@ -2295,7 +2295,7 @@ void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_Diagram_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_Diagram_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::Diagram(context));

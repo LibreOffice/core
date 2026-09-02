@@ -40,7 +40,7 @@ published interface XMultiComponentFactory : com::sun::star::uno::XInterface
     */
     com::sun::star::uno::XInterface createInstanceWithContext(
         [in] string aServiceSpecifier,
-        [in] com::sun::star::uno::XComponentContext Context )
+        [in] cpo::uno::XComponentContext Context )
         raises (cpo::uno::Exception);
 
     /** Creates an instance of a component which supports the
@@ -59,7 +59,7 @@ published interface XMultiComponentFactory : com::sun::star::uno::XInterface
     com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext(
         [in] string ServiceSpecifier,
         [in] sequence<any> Arguments,
-        [in] com::sun::star::uno::XComponentContext Context )
+        [in] cpo::uno::XComponentContext Context )
         raises (cpo::uno::Exception);
 
     /** Gets the names of all supported services.

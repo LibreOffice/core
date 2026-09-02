@@ -32,7 +32,7 @@
 #include <xmloff/maptype.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -353,7 +353,7 @@ XMLTokenEnum getTokenByChartType(
 
 Reference< chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence()
 {
-    const Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
+    const Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     Reference< chart2::data::XLabeledDataSequence2 > xResult = chart2::data::LabeledDataSequence::create(xContext);
     return xResult;
 }

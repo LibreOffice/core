@@ -25,7 +25,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaTextFrame::ScVbaTextFrame( cpo::uno::Sequence< cpo::uno::Any> const & args, uno::Reference< uno::XComponentContext> const & xContext ) :  ScVbaTextFrame_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext, getXSomethingFromArgs< drawing::XShape >( args, 1, false ) )
+ScVbaTextFrame::ScVbaTextFrame( cpo::uno::Sequence< cpo::uno::Any> const & args, uno::Reference< cpo::uno::XComponentContext> const & xContext ) :  ScVbaTextFrame_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext, getXSomethingFromArgs< drawing::XShape >( args, 1, false ) )
 {
 }
 
@@ -58,7 +58,7 @@ ScVbaTextFrame::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 ScVbaTextFrame_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ScVbaTextFrame(arguments, context));

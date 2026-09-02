@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_VBA_VBABORDERS_HXX
 
 #include <ooo/vba/word/XBorders.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -33,7 +33,7 @@ class SwVbaBorders : public SwVbaBorders_BASE
     virtual cpo::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
-    SwVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, VbaPalette const & rPalette );
+    SwVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, VbaPalette const & rPalette );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

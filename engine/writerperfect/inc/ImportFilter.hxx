@@ -16,7 +16,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
 #include <osl/diagnose.h>
@@ -45,12 +45,12 @@ class ImportFilterImpl
                                   css::lang::XInitialization>
 {
 public:
-    ImportFilterImpl(css::uno::Reference<css::uno::XComponentContext> xContext)
+    ImportFilterImpl(css::uno::Reference<cpo::uno::XComponentContext> xContext)
         : mxContext(std::move(xContext))
     {
     }
 
-    const css::uno::Reference<css::uno::XComponentContext>& getXContext() const
+    const css::uno::Reference<cpo::uno::XComponentContext>& getXContext() const
     {
         return mxContext;
     }
@@ -163,7 +163,7 @@ private:
         = 0;
     virtual void doRegisterHandlers(Generator&){};
 
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxDoc;
 };
 }
@@ -174,7 +174,7 @@ template <class Generator>
 struct ImportFilter : public cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>,
                                                          css::lang::XServiceInfo>
 {
-    ImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    ImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, css::lang::XServiceInfo>(
               rxContext)
     {

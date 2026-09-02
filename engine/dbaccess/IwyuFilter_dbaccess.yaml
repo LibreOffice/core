@@ -108,7 +108,7 @@ excludelist:
     dbaccess/source/ui/misc/DExport.cxx:
     # Actually used
     - com/sun/star/awt/FontDescriptor.hpp
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     dbaccess/source/ui/misc/UITools.cxx:
     # Actually used
     - com/sun/star/container/XHierarchicalNameContainer.hpp

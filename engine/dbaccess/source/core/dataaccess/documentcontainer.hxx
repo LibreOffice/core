@@ -53,7 +53,7 @@ public:
     /** constructs the container.<BR>
     */
     ODocumentContainer(
-          const css::uno::Reference< css::uno::XComponentContext >& _xORB
+          const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
         , const css::uno::Reference< css::uno::XInterface >&  _xParentContainer
         ,const TContentPtr& _pImpl
         , bool _bFormsContainer

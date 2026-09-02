@@ -144,7 +144,7 @@ protected:
     std::unique_ptr<SdrUndoAction> createUndoAnnotation();
 
 public:
-    Annotation(const css::uno::Reference<css::uno::XComponentContext>& context, SdrPage* pPage);
+    Annotation(const css::uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage);
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 

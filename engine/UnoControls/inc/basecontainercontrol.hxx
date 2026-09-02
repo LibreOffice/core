@@ -41,7 +41,7 @@ class BaseContainerControl : public BaseContainerControl_BASE
 {
 public:
 
-    BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    BaseContainerControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~BaseContainerControl() override;
 

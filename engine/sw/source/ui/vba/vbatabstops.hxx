@@ -32,7 +32,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaTabStops( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps );
+    SwVbaTabStops( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps );
 
     // Methods
     virtual css::uno::Reference< ::ooo::vba::word::XTabStop > SAL_CALL Add( float Position, const cpo::uno::Any& Alignment, const cpo::uno::Any& Leader ) override;

@@ -40,7 +40,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaButtonCharacters(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::beans::XPropertySet >& rxPropSet,
         const ScVbaPalette& rPalette,
         const cpo::uno::Any& rStart,
@@ -85,7 +85,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaSheetObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::frame::XModel >& rxModel,
         const css::uno::Reference< css::drawing::XShape >& rxShape );
 
@@ -135,7 +135,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaControlObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::frame::XModel >& rxModel,
         const css::uno::Reference< css::container::XIndexContainer >& rxFormIC,
         const css::uno::Reference< css::drawing::XControlShape >& rxControlShape );
@@ -173,7 +173,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaButton(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::frame::XModel >& rxModel,
         const css::uno::Reference< css::container::XIndexContainer >& rxFormIC,
         const css::uno::Reference< css::drawing::XControlShape >& rxControlShape );

@@ -133,7 +133,7 @@ protected:
     virtual ~OSharedConnectionManager() override;
 
 public:
-    explicit OSharedConnectionManager(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+    explicit OSharedConnectionManager(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     void disposing( const css::lang::EventObject& Source ) override;
     css::uno::Reference< css::sdbc::XConnection > getConnection(   const OUString& url,
@@ -215,7 +215,7 @@ private:
 
 public:
     OWeakConnectionArray                                                        m_aConnections;
-    const css::uno::Reference< css::uno::XComponentContext >  m_aContext;
+    const css::uno::Reference< cpo::uno::XComponentContext >  m_aContext;
 
 public:
     cpo::uno::WeakReference< css::container::XNameAccess >    m_xCommandDefinitions;
@@ -266,14 +266,14 @@ public:
     void commitStorages();
 
     ODatabaseModelImpl(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _pDBContext
     );
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
         OUString _sRegistrationName,
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _rDBContext
         );
 

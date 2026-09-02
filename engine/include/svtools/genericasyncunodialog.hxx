@@ -56,7 +56,7 @@ protected:
     std::shared_ptr<T> m_xAsyncDialog;
 
 protected:
-    OGenericUnoAsyncDialog(const css::uno::Reference<css::uno::XComponentContext>& _rxContext)
+    OGenericUnoAsyncDialog(const css::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
         : OGenericUnoAsyncDialogBase(_rxContext)
     {
     }

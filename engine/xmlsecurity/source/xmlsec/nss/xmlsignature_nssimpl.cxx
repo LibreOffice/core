@@ -37,7 +37,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
@@ -290,7 +290,7 @@ Sequence<OUString> SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_xml_crypto_XMLSignature_get_implementation(uno::XComponentContext* /*pCtx*/,
+com_sun_star_xml_crypto_XMLSignature_get_implementation(cpo::uno::XComponentContext* /*pCtx*/,
                                                         cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
 #ifdef MACOSX

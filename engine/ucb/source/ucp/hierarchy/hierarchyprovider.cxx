@@ -48,7 +48,7 @@ using namespace hierarchy_ucp;
 
 
 HierarchyContentProvider::HierarchyContentProvider(
-            const uno::Reference< uno::XComponentContext >& rxContext )
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : HierarchyContentProvider_Base( rxContext )
 {
 }
@@ -78,7 +78,7 @@ cpo::uno::Sequence< OUString > HierarchyContentProvider::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyContentProvider_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new HierarchyContentProvider(context));
 }

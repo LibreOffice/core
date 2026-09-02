@@ -31,7 +31,7 @@
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -136,7 +136,7 @@ namespace chart
 
 PieChartTypeTemplate::PieChartTypeTemplate(
     uno::Reference<
-        uno::XComponentContext > const & xContext,
+        cpo::uno::XComponentContext > const & xContext,
     const OUString & rServiceName,
     chart2::PieChartOffsetMode eMode,
     bool bRings,

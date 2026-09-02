@@ -38,7 +38,7 @@ class DialogModelProvider:
         css::lang::XServiceInfo>
 {
 public:
-    explicit DialogModelProvider(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit DialogModelProvider(css::uno::Reference< cpo::uno::XComponentContext > const & context);
 private:
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
@@ -78,7 +78,7 @@ private:
 
     // destructor is private and will be called indirectly by the release call    virtual ~DialogModelProvider() {}
 
-    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
     css::uno::Reference< css::container::XNameContainer>    m_xDialogModel;
     css::uno::Reference< css::beans::XPropertySet>          m_xDialogModelProp;
 };

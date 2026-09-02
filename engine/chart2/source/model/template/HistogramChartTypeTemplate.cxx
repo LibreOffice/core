@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 
@@ -58,7 +58,7 @@ void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
 namespace chart
 {
 HistogramChartTypeTemplate::HistogramChartTypeTemplate(
-    uno::Reference<uno::XComponentContext> const& xContext, const OUString& rServiceName,
+    uno::Reference<cpo::uno::XComponentContext> const& xContext, const OUString& rServiceName,
     StackMode eStackMode, sal_Int32 nDim /* = 2 */)
     : ChartTypeTemplate(xContext, rServiceName)
     , m_eStackMode(eStackMode)

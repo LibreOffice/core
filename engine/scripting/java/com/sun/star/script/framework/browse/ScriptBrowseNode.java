@@ -46,7 +46,7 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 public class ScriptBrowseNode extends PropertySet implements
     XBrowseNode, XInvocation {

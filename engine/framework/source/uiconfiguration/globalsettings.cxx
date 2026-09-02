@@ -49,7 +49,7 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
                                   css::lang::XEventListener>
 {
     public:
-        explicit GlobalSettings_Access( css::uno::Reference< css::uno::XComponentContext > xContext );
+        explicit GlobalSettings_Access( css::uno::Reference< cpo::uno::XComponentContext > xContext );
 
         // XComponent
         virtual void dispose() override;
@@ -74,12 +74,12 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         OUString                                                  m_aPropLocked;
         OUString                                                  m_aPropDocked;
         css::uno::Reference< css::container::XNameAccess >        m_xConfigAccess;
-        css::uno::Reference< css::uno::XComponentContext>         m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext>         m_xContext;
 };
 
 }
 
-GlobalSettings_Access::GlobalSettings_Access( css::uno::Reference< css::uno::XComponentContext > xContext ) :
+GlobalSettings_Access::GlobalSettings_Access( css::uno::Reference< cpo::uno::XComponentContext > xContext ) :
     m_bDisposed( false ),
     m_bConfigRead( false ),
     m_aNodeRefStates( u"States"_ustr ),
@@ -221,13 +221,13 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
 //  global class
 
-static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
 {
     static rtl::Reference<GlobalSettings_Access> pStaticSettings = new GlobalSettings_Access( rxContext );
     return pStaticSettings.get();
 }
 
-GlobalSettings::GlobalSettings( css::uno::Reference< css::uno::XComponentContext > xContext ) :
+GlobalSettings::GlobalSettings( css::uno::Reference< cpo::uno::XComponentContext > xContext ) :
     m_xContext(std::move( xContext ))
 {
 }

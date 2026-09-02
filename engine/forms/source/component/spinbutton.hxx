@@ -33,11 +33,11 @@ namespace frm
 
     public:
         OSpinButtonModel(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         OSpinButtonModel(
             const OSpinButtonModel* _pOriginal,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~OSpinButtonModel() override;
 

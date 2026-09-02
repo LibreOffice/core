@@ -52,7 +52,7 @@ static sal_Int32 PointsToHmm(double fPoints)
 
 ScVbaButtonCharacters::ScVbaButtonCharacters(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< beans::XPropertySet >& rxPropSet,
         const ScVbaPalette& rPalette,
         const cpo::uno::Any& rStart,
@@ -166,7 +166,7 @@ void ScVbaButtonCharacters::setFullString( const OUString& rString )
 
 ScVbaSheetObjectBase::ScVbaSheetObjectBase(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< drawing::XShape >& rxShape ) :
     ScVbaSheetObject_BASE( rxParent, rxContext ),
@@ -303,7 +303,7 @@ void ScVbaSheetObjectBase::implSetDefaultProperties()
 
 ScVbaControlObjectBase::ScVbaControlObjectBase(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< container::XIndexContainer >& rxFormIC,
         const uno::Reference< drawing::XControlShape >& rxControlShape ) :
@@ -415,7 +415,7 @@ sal_Int32 ScVbaControlObjectBase::getModelIndexInForm() const
 
 ScVbaButton::ScVbaButton(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< container::XIndexContainer >& rxFormIC,
         const uno::Reference< drawing::XControlShape >& rxControlShape ) :

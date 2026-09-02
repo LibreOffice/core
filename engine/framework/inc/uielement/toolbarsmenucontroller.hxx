@@ -37,7 +37,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            ToolbarsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~ToolbarsMenuController() override;
 
             /* interface XServiceInfo */
@@ -75,7 +75,7 @@ namespace framework
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
 
-            css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+            css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
             css::uno::Reference< css::container::XNameAccess >        m_xPersistentWindowState;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
             css::uno::Reference< css::ui::XUIConfigurationManager >   m_xDocCfgMgr;

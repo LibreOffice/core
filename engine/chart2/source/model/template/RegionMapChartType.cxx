@@ -11,10 +11,7 @@
 #include <servicenames_charttypes.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 
@@ -67,7 +64,7 @@ cpo::uno::Sequence<OUString> RegionMapChartType::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_RegionMapChartType_get_implementation(
-    css::uno::XComponentContext* /*context*/, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* /*context*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::RegionMapChartType);
 }

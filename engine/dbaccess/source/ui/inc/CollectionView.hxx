@@ -21,7 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace ucbhelper { class CommandEnvironment; }
 
@@ -32,7 +32,7 @@ namespace dbaui
     class OCollectionView : public weld::GenericDialogController
     {
         css::uno::Reference< css::ucb::XContent>                  m_xContent;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         rtl::Reference< ::ucbhelper::CommandEnvironment >         m_xCmdEnv;
         bool                   m_bCreateForm;
 
@@ -56,7 +56,7 @@ namespace dbaui
         OCollectionView(weld::Window * pParent,
                         const css::uno::Reference< css::ucb::XContent>& _xContent,
                         const OUString& _sDefaultName,
-                        css::uno::Reference< css::uno::XComponentContext > _xContext);
+                        css::uno::Reference< cpo::uno::XComponentContext > _xContext);
         virtual ~OCollectionView() override;
         const css::uno::Reference< css::ucb::XContent>& getSelectedFolder() const { return m_xContent;}
         OUString getName() const;

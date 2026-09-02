@@ -91,7 +91,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
 
 public:
     TextConvWrapper(weld::Widget* pWindow,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::lang::Locale& rSourceLocale,
             const css::lang::Locale& rTargetLocale,
             const vcl::Font* pTargetFont,

@@ -34,7 +34,7 @@ namespace unocontrols {
 
 //  construct/destruct
 
-ProgressBar::ProgressBar( const Reference< XComponentContext >& rxContext )
+ProgressBar::ProgressBar( const Reference< cpo::uno::XComponentContext >& rxContext )
     : ProgressBar_BASE      (    rxContext                   )
     , m_bHorizontal         (    PROGRESSBAR_DEFAULT_HORIZONTAL         )
     , m_aBlockSize          (    PROGRESSBAR_DEFAULT_BLOCKDIMENSION     )
@@ -314,7 +314,7 @@ void ProgressBar::impl_recalcRange ()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_ProgressBar_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::ProgressBar(context));
 }

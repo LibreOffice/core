@@ -24,7 +24,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaVariable::SwVbaVariable( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
+SwVbaVariable::SwVbaVariable( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext,
     uno::Reference< beans::XPropertyAccess > xUserDefined, OUString aVariableName ) :
     SwVbaVariable_BASE( rParent, rContext ), mxUserDefined(std::move( xUserDefined )), maVariableName(std::move( aVariableName ))
 {

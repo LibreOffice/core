@@ -46,7 +46,7 @@ SwRDFHelper::getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
 {
     try
     {
-        const uno::Reference<uno::XComponentContext>& xComponentContext(
+        const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(
             comphelper::getProcessComponentContext());
         // rdf::URI::create may fail with type: cpo.uno.DeploymentException
         // message: component context fails to supply service com.sun.star.rdf.URI of type com.sun.star.rdf.XURI
@@ -101,7 +101,7 @@ void SwRDFHelper::addStatement(const rtl::Reference<SwXTextDocument>& xModel,
                                const css::uno::Reference<css::rdf::XResource>& xSubject,
                                const OUString& rKey, const OUString& rValue)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     uno::Reference<rdf::XURI> xGraphName;
@@ -120,7 +120,7 @@ void SwRDFHelper::addStatement(const rtl::Reference<SwXTextDocument>& xModel,
 
 bool SwRDFHelper::hasMetadataGraph(const rtl::Reference<SwXTextDocument>& xModel, const OUString& rType)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     return getGraphNames(xModel, xType).hasElements();
 }
@@ -130,7 +130,7 @@ void SwRDFHelper::removeStatement(const rtl::Reference<SwXTextDocument>& xModel,
                                   const css::uno::Reference<css::rdf::XResource>& xSubject,
                                   const OUString& rKey, const OUString& rValue)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     if (!aGraphNames.hasElements())
@@ -146,7 +146,7 @@ void SwRDFHelper::clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
                                   const OUString& rType,
                                   const css::uno::Reference<css::rdf::XResource>& xSubject)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     if (!aGraphNames.hasElements())
@@ -186,7 +186,7 @@ void SwRDFHelper::addTextNodeStatement(const OUString& rType, const OUString& rP
 
 void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     SwDocShell* pShell = rTextNode.GetDoc().GetDocShell();
     if (!pShell)
@@ -206,7 +206,7 @@ void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTe
 
 void SwRDFHelper::updateTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rOldValue, const OUString& rNewValue)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     SwDocShell* pShell = rTextNode.GetDoc().GetDocShell();
     if (!pShell)

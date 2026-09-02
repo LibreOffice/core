@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -27,7 +27,7 @@ namespace framework
 class GlobalSettings
 {
     public:
-        GlobalSettings( css::uno::Reference< css::uno::XComponentContext > xContext );
+        GlobalSettings( css::uno::Reference< cpo::uno::XComponentContext > xContext );
         ~GlobalSettings();
 
         enum StateInfo
@@ -44,7 +44,7 @@ class GlobalSettings
         GlobalSettings(const GlobalSettings&) = delete;
         GlobalSettings& operator=(const GlobalSettings& ) = delete;
 
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
 } // namespace framework

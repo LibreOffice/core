@@ -37,7 +37,7 @@
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -250,7 +250,7 @@ OUString normalize(
 
 css::uno::Reference< css::uri::XUriReference >
 URIHelper::normalizedMakeRelative(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & baseUriReference, OUString const & uriReference)
 {
     OSL_ASSERT(context.is());

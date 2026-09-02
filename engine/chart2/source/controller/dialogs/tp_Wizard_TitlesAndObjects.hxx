@@ -28,7 +28,7 @@
 
 namespace chart { class LegendPositionResources; }
 namespace chart { class TitleResources; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -39,7 +39,7 @@ class TitlesAndObjectsTabPage final : public vcl::OWizardPage
 public:
     TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
                             rtl::Reference<::chart::ChartModel> xChartModel,
-                            const css::uno::Reference< css::uno::XComponentContext >& xContext);
+                            const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
     virtual ~TitlesAndObjectsTabPage() override;
 
     virtual void        initializePage() override;
@@ -56,7 +56,7 @@ private:
     std::unique_ptr< LegendPositionResources >   m_xLegendPositionResources;
 
     rtl::Reference<::chart::ChartModel>   m_xChartModel;
-    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext>    m_xCC;
 
     bool    m_bCommitToModel;
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;

@@ -28,7 +28,7 @@
 
 #include <sal/config.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -52,7 +52,7 @@ private:
     bool isCertificateTrust(const OUString& url, std::u16string_view certificate_name);
 
 public:
-    explicit CertificateContainer(const uno::Reference<uno::XComponentContext>&) {}
+    explicit CertificateContainer(const uno::Reference<cpo::uno::XComponentContext>&) {}
     virtual bool SAL_CALL addCertificate(const OUString& url, const OUString& certificate_name,
                                              bool trust) override;
     virtual css::security::CertificateContainerStatus SAL_CALL
@@ -144,7 +144,7 @@ CertificateContainer::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_security_CertificateContainer_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     static rtl::Reference<CertificateContainer> gContainer = new CertificateContainer(context);
     return cppu::acquire(gContainer.get());

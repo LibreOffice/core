@@ -22,7 +22,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaMenuBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< ov::XCommandBars > xCommandBars );
+    ScVbaMenuBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< ov::XCommandBars > xCommandBars );
     virtual ~ScVbaMenuBars() override;
 
     // XEnumerationAccess

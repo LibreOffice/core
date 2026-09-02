@@ -45,7 +45,7 @@ namespace ucbhelper {
 
 
 ResultSetImplHelper::ResultSetImplHelper(
-    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< cpo::uno::XComponentContext > xContext,
     css::ucb::OpenCommandArgument2 aCommand )
 : m_bStatic( false ),
   m_bInitDone( false ),

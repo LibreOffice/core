@@ -22,7 +22,7 @@
 #include <osl/process.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 using namespace com::sun::star;
 
@@ -120,7 +120,7 @@ cpo::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_UnxSplash_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new desktop::UnxSplashScreen());
 }

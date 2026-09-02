@@ -180,7 +180,7 @@ rtl::Reference< Title > TitleHelper::createOrShowTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
     , const rtl::Reference<ChartModel>& xModel
-    , const uno::Reference< uno::XComponentContext > & xContext )
+    , const uno::Reference< cpo::uno::XComponentContext > & xContext )
 {
     rtl::Reference< Title > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
     if( xTitled.is())
@@ -198,7 +198,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
     , const rtl::Reference<ChartModel>& xModel
-    , const uno::Reference< uno::XComponentContext > & xContext
+    , const uno::Reference< cpo::uno::XComponentContext > & xContext
     , ReferenceSizeProvider * pRefSizeProvider )
 {
     rtl::Reference< ::chart::Title > xTitle;
@@ -351,7 +351,7 @@ void TitleHelper::setFormattedString( const rtl::Reference< Title >& xTitle,
 
 void TitleHelper::setCompleteString( const OUString& rNewText
                     , const rtl::Reference< Title >& xTitle
-                    , const uno::Reference< uno::XComponentContext > & xContext
+                    , const uno::Reference< cpo::uno::XComponentContext > & xContext
                     , const float * pDefaultCharHeight /* = 0 */
                     , bool bDialogTitle /*= false*/ )
 {

@@ -23,7 +23,7 @@
 #include <dp_backenddb.hxx>
 #include <optional>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dp_registry::backend::script {
 
@@ -44,7 +44,7 @@ protected:
 
 public:
 
-    ScriptBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    ScriptBackendDb( css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
                         OUString const & url);
 };
 

@@ -626,7 +626,7 @@ void Dialog::dispose()
     mpActionArea.reset();
     mpContentArea.reset();
 
-    const css::uno::Reference< css::uno::XComponentContext >& xContext(
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
     css::document::DocumentEvent aObject;
@@ -1033,7 +1033,7 @@ bool Dialog::ImplStartExecute(bool async)
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
 
-    const css::uno::Reference< css::uno::XComponentContext >& xContext(
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext(
         comphelper::getProcessComponentContext());
     bool bForceFocusAndToFront(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get());
     ShowFlags showFlags = bForceFocusAndToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE;
@@ -1658,7 +1658,7 @@ void Dialog::Activate()
 {
     if (GetType() == WindowType::MODELESSDIALOG)
     {
-        const css::uno::Reference< css::uno::XComponentContext >& xContext(
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext(
                 comphelper::getProcessComponentContext() );
         css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_SET_THROW);
         css::document::DocumentEvent aObject;

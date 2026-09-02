@@ -29,8 +29,8 @@ namespace com::sun::star {
     namespace container { class XNameContainer; }
     namespace io { class XInputStream; }
     namespace io { class XStream; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::ole {
 
@@ -40,12 +40,12 @@ class OOX_DLLPUBLIC OleStorage final : public StorageBase
 {
 public:
     explicit            OleStorage(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStream,
                             bool bBaseStreamAccess );
 
     explicit            OleStorage(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
@@ -96,7 +96,7 @@ private:
     virtual void        implCommit() const override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
     css::uno::Reference< css::container::XNameContainer >
                         mxStorage;          ///< Access to elements of this sub storage.

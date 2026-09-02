@@ -12,7 +12,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -76,7 +76,7 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
-    explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
+    explicit ClassificationCategoriesController(const uno::Reference<cpo::uno::XComponentContext>& rContext);
 
     // XServiceInfo
     OUString getImplementationName() override;
@@ -144,7 +144,7 @@ void ClassificationPropertyListener::setProperty(const cpo::uno::Any& /*rPropert
     m_rController.removeEntries();
 }
 
-ClassificationCategoriesController::ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext)
+ClassificationCategoriesController::ClassificationCategoriesController(const uno::Reference<cpo::uno::XComponentContext>& rContext)
     : ClassificationCategoriesControllerBase(rContext, uno::Reference<frame::XFrame>(), u".uno:ClassificationApply"_ustr)
     , m_pClassification(nullptr)
     , m_xListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Paths/Paths/Classification"_ustr))
@@ -359,7 +359,7 @@ void ClassificationControl::setCategoryStateFromPolicy(const SfxClassificationHe
 
 } // namespace sfx2
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(uno::XComponentContext* pContext, const cpo::uno::Sequence<cpo::uno::Any>&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(cpo::uno::XComponentContext* pContext, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new sfx2::ClassificationCategoriesController(pContext));
 }

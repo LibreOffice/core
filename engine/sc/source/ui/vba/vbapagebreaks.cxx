@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -36,13 +36,13 @@ class RangePageBreaks : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     uno::Reference< sheet::XSheetPageBreak > mxSheetPageBreak;
     bool m_bColumn;
 
 public:
     RangePageBreaks( uno::Reference< XHelperInterface > xParent,
-                     uno::Reference< uno::XComponentContext > xContext,
+                     uno::Reference< cpo::uno::XComponentContext > xContext,
                      uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak,
                      bool bColumn ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxSheetPageBreak(std::move( xSheetPageBreak )), m_bColumn( bColumn )
     {
@@ -213,7 +213,7 @@ public:
 }
 
 ScVbaHPageBreaks::ScVbaHPageBreaks( const uno::Reference< XHelperInterface >& xParent,
-                                    const uno::Reference< uno::XComponentContext >& xContext,
+                                    const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                     const uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak):
                           ScVbaHPageBreaks_BASE( xParent,xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, false ))
 {
@@ -265,7 +265,7 @@ ScVbaHPageBreaks::getServiceNames()
 
 //VPageBreak
 ScVbaVPageBreaks::ScVbaVPageBreaks( const uno::Reference< XHelperInterface >& xParent,
-                                    const uno::Reference< uno::XComponentContext >& xContext,
+                                    const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                     const uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak )
 :   ScVbaVPageBreaks_BASE( xParent, xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, true ) )
 {

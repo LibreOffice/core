@@ -19,7 +19,7 @@
 
 package com.sun.star.comp.urlresolver;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.bridge.UnoUrlResolver;

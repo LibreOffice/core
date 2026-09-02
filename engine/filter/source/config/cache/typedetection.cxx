@@ -60,7 +60,7 @@ using namespace com::sun::star;
 
 namespace filter::config{
 
-TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+TypeDetection::TypeDetection(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
    : m_xContext(rxContext)
    , m_xTerminateListener(new TerminateDetection(this))
    , m_bCancel(false)
@@ -871,7 +871,7 @@ void TypeDetection::impl_getAllFormatTypes(
 
 
 static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStream,
-                        const css::uno::Reference<css::uno::XComponentContext>& xContext)
+                        const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     try
     {
@@ -968,7 +968,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
                     utl::MediaDescriptor::PROP_INPUTSTREAM,
                     css::uno::Reference<css::io::XInputStream>()))
             {
-                css::uno::Reference<css::uno::XComponentContext> xContext;
+                css::uno::Reference<cpo::uno::XComponentContext> xContext;
 
                 // SAFE ->
                 {
@@ -1123,7 +1123,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     impl_seekStreamToZero(rDescriptor);
 
     css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
-    css::uno::Reference< css::uno::XComponentContext >         xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >         xContext;
 
     // SAFE ->
     {
@@ -1335,7 +1335,7 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor( comphelper::SequenceA
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_TypeDetection_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::TypeDetection(context));
 }

@@ -23,7 +23,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
@@ -64,9 +64,9 @@ class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc...
 {
 protected:
     cpo::uno::WeakReference< ov::XHelperInterface > mxParent;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 public:
-    InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< css::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}
+    InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< cpo::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}
     virtual OUString getServiceImplName() = 0;
     virtual cpo::uno::Sequence<OUString> getServiceNames() = 0;
 
@@ -103,7 +103,7 @@ class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceWeakImpl : public Inherited
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper< Ifc... > > Base;
 public:
-    InheritedHelperInterfaceWeakImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+    InheritedHelperInterfaceWeakImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 
 

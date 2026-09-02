@@ -28,7 +28,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
 CalendarWrapper::CalendarWrapper(
-            const Reference< uno::XComponentContext > & rxContext
+            const Reference< cpo::uno::XComponentContext > & rxContext
             )
         :
         aEpochStart( Date( 1, 1, 1970 ) )

@@ -50,8 +50,8 @@ protected:
     virtual SfxBaseModel* getModel() const override;
 
 public:
-    SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );
-    SwVbaDocument(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );
+    SwVbaDocument(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
     virtual ~SwVbaDocument() override;
 
     sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );

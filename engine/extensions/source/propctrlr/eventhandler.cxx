@@ -71,7 +71,7 @@ namespace pcr
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::cpo::uno::Any;
     using ::cpo::uno::TypeClass_STRING;
     using ::cpo::uno::Type;
@@ -1098,7 +1098,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_EventHandler_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::EventHandler(context));
 }

@@ -41,7 +41,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.h>
@@ -60,7 +60,7 @@ class Empty1:
 {
 public:
     explicit Empty1(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         cppu::PropertySetMixin< css::lang::XComponent >(
             context, static_cast< Implements >(0),
             cpo::uno::Sequence< OUString >())
@@ -115,7 +115,7 @@ class Empty2:
 {
 public:
     explicit Empty2(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         cppu::PropertySetMixin< css::lang::XComponent >(
             context,
             static_cast< Implements >(
@@ -179,7 +179,7 @@ class Full:
 {
 public:
     explicit Full(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         cppu::PropertySetMixin<
         test::cppuhelper::propertysetmixin::XTest3 >(
             context,
@@ -349,7 +349,7 @@ class Supplier:
 {
 public:
     explicit Supplier(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         m_context(context) {}
 
     virtual css::uno::Reference< css::lang::XComponent > getEmpty1()
@@ -370,11 +370,11 @@ private:
 
     virtual ~Supplier() {}
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return static_cast< cppu::OWeakObject * >(new Supplier(context));
 }

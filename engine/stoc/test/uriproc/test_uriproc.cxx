@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp>
@@ -128,7 +128,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
     css::uno::Reference< css::uri::XUriReferenceFactory > m_uriFactory;
 };
 

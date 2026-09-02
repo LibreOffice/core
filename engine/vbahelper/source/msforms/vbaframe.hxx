@@ -33,7 +33,7 @@ class ScVbaFrame : public FrameImpl_BASE
 public:
     ScVbaFrame(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::uno::XInterface >& xControl,
         const css::uno::Reference< css::frame::XModel >& xModel,
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper,

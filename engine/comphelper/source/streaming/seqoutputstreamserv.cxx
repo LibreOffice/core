@@ -27,7 +27,7 @@
 #include <com/sun/star/io/XSequenceOutputStream.hpp>
 #include <mutex>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 
@@ -135,7 +135,7 @@ cpo::uno::Sequence< ::sal_Int8 > SequenceOutputStreamService::getWrittenBytes()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_SequenceOutputStreamService(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SequenceOutputStreamService());

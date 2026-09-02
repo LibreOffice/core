@@ -12,7 +12,7 @@
 #include <ooo/vba/word/WdMailMergeMainDocType.hpp>
 
 SwVbaMailMerge::SwVbaMailMerge(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
-                               const css::uno::Reference<css::uno::XComponentContext>& xContext)
+                               const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : SwVbaMailMerge_BASE(xParent, xContext)
     , m_nMainDocType(ooo::vba::word::WdMailMergeMainDocType::wdNotAMergeDocument)
 {
@@ -22,7 +22,7 @@ SwVbaMailMerge::~SwVbaMailMerge() {}
 
 rtl::Reference<SwVbaMailMerge> const&
 SwVbaMailMerge::get(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
-                    const css::uno::Reference<css::uno::XComponentContext>& xContext)
+                    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     static rtl::Reference<SwVbaMailMerge> xInstance(new SwVbaMailMerge(xParent, xContext));
 

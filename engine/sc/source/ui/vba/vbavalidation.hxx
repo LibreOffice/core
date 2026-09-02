@@ -23,7 +23,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 
 namespace com::sun::star::table { class XCellRange; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 typedef InheritedHelperInterfaceWeakImpl<ov::excel::XValidation > ValidationImpl_BASE;
 
@@ -32,7 +32,7 @@ class ScVbaValidation : public ValidationImpl_BASE
     css::uno::Reference< css::table::XCellRange > m_xRange;
 
 public:
-    ScVbaValidation( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::table::XCellRange > xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange(std::move( xRange)) {}
+    ScVbaValidation( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::table::XCellRange > xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange(std::move( xRange)) {}
     // Attributes
     virtual bool SAL_CALL getIgnoreBlank() override;
     virtual void SAL_CALL setIgnoreBlank( bool _ignoreblank ) override;

@@ -45,7 +45,7 @@ cpo::uno::Sequence< OUString > UriAbbreviation::getSupportedServiceNames()
     return { u"com.sun.star.util.UriAbbreviation"_ustr };
 }
 
-UriAbbreviation::UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & )
+UriAbbreviation::UriAbbreviation(css::uno::Reference< cpo::uno::XComponentContext > const & )
 {
 }
 
@@ -67,7 +67,7 @@ OUString UriAbbreviation::abbreviateString(const css::uno::Reference< css::util:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_UriAbbreviation_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::UriAbbreviation(context));
 }

@@ -109,12 +109,12 @@ class HierarchyContent : public ::ucbhelper::ContentImplHelper,
 
 private:
     HierarchyContent(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties aProps );
     HierarchyContent(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const css::ucb::ContentInfo& Info );
@@ -126,14 +126,14 @@ private:
     virtual OUString getParentURL() override;
 
     static bool hasData(
-            const css::uno::Reference<  css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference<  cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
     bool hasData(
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
     { return hasData( m_xContext, m_pProvider, Identifier ); }
     static bool loadData(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps );
@@ -181,14 +181,14 @@ private:
 public:
     // Create existing content. Fail, if not already exists.
     static rtl::Reference<HierarchyContent> create(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference<
                 css::ucb::XContentIdentifier >& Identifier );
 
     // Create new content. Fail, if already exists.
     static rtl::Reference<HierarchyContent> create(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const css::ucb::ContentInfo& Info );
@@ -241,7 +241,7 @@ public:
 
 
     static css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    getPropertyValues( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                        const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,
                        HierarchyContentProvider* pProvider,

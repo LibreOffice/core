@@ -130,7 +130,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.Uik",
         "cpo.uno.XAdapter",
         "cpo.uno.XAggregation",
-        "com.sun.star.uno.XComponentContext",
+        "cpo.uno.XComponentContext",
         "cpo.uno.XCurrentContext",
         "com.sun.star.uno.XInterface",
         "cpo.uno.XReference",
@@ -3447,7 +3447,7 @@ void ServiceType::dumpHppFile(
         includes.addRtlUstringH();
         includes.addRtlUstringHxx();
         includes.add("cpo.uno.DeploymentException"_ostr);
-        includes.add("com.sun.star.uno.XComponentContext"_ostr);
+        includes.add("cpo.uno.XComponentContext"_ostr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons : entity_->getConstructors()) {
             if (cons.defaultConstructor) {
                 includes.add("cpo.uno.Exception"_ostr);
@@ -3496,7 +3496,7 @@ void ServiceType::dumpHppFile(
           << name_.replaceAll(".", "_dot_")
           << "\nextern \"C\" ::css::uno::XInterface * LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "(::css::uno::XComponentContext *, ::cpo::uno::Sequence< "
+          << "(::cpo::uno::XComponentContext *, ::cpo::uno::Sequence< "
           "::cpo::uno::Any > const &);\n#endif\n";
     }
     o << "\n";
@@ -3517,7 +3517,7 @@ void ServiceType::dumpHppFile(
                   << codemaker::cpp::translateUnoToCppIdentifier(
                       "create"_ostr, "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
-                  << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
+                  << ("(::css::uno::Reference< ::cpo::uno::XComponentContext > const &"
                       " the_context) {\n");
                 inc();
                 o << indent() << "assert(the_context.is());\n" << indent()
@@ -3575,7 +3575,7 @@ void ServiceType::dumpHppFile(
                   << codemaker::cpp::translateUnoToCppIdentifier(
                       u2b(cons.name), "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
-                  << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
+                  << ("(::css::uno::Reference< ::cpo::uno::XComponentContext > const &"
                       " the_context");
                 bool rest = hasRestParameter(cons);
                 for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter& param :
@@ -3785,7 +3785,7 @@ void SingletonType::dumpHppFile(
     //TODO: Decide whether the types added to includes should rather be added to
     // m_dependencies (and thus be generated during dumpDependedTypes):
     includes.add("cpo.uno.DeploymentException"_ostr);
-    includes.add("com.sun.star.uno.XComponentContext"_ostr);
+    includes.add("cpo.uno.XComponentContext"_ostr);
     includes.addCassert();
     includes.addAny();
     includes.addReference();
@@ -3802,7 +3802,7 @@ void SingletonType::dumpHppFile(
       << name_.replaceAll(".", "_dot_")
       << "\nextern \"C\" ::css::uno::XInterface * LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
-      << "(::css::uno::XComponentContext *, ::cpo::uno::Sequence< "
+      << "(::cpo::uno::XComponentContext *, ::cpo::uno::Sequence< "
       "::cpo::uno::Any > const &);\n#endif\n";
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
@@ -3815,7 +3815,7 @@ void SingletonType::dumpHppFile(
       << codemaker::cpp::translateUnoToCppIdentifier(
           "get"_ostr, "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal, &cppName)
       << ("(::css::uno::Reference<"
-          " ::css::uno::XComponentContext > const & the_context)"
+          " ::cpo::uno::XComponentContext > const & the_context)"
           " {\n");
     inc();
     o << indent() << "assert(the_context.is());\n" << indent()

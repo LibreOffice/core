@@ -63,7 +63,7 @@ class PowerPointExport final : public XmlFilterBase, public PPTWriterBase
     friend class PowerPointShapeExport;
 public:
 
-    PowerPointExport(const css::uno::Reference<css::uno::XComponentContext> & rContext, const cpo::uno::Sequence<cpo::uno::Any>& rArguments);
+    PowerPointExport(const css::uno::Reference<cpo::uno::XComponentContext> & rContext, const cpo::uno::Sequence<cpo::uno::Any>& rArguments);
 
     virtual ~PowerPointExport() override;
 

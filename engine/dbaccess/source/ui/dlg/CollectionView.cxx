@@ -58,7 +58,7 @@ using namespace comphelper;
 OCollectionView::OCollectionView(weld::Window* pParent,
                                  const Reference< XContent>& _xContent,
                                  const OUString& _sDefaultName,
-                                 css::uno::Reference< css::uno::XComponentContext > _xContext)
+                                 css::uno::Reference< cpo::uno::XComponentContext > _xContext)
     : GenericDialogController(pParent, u"dbaccess/ui/collectionviewdialog.ui"_ustr, u"CollectionView"_ustr)
     , m_xContent(_xContent)
     , m_xContext(std::move(_xContext))

@@ -31,7 +31,7 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;
 
 import java.io.BufferedReader;

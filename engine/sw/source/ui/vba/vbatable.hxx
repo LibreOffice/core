@@ -38,7 +38,7 @@ class SwVbaTable : public SwVbaTable_BASE
     rtl::Reference< SwXTextTable > mxTextTable;
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xDocument, const rtl::Reference< SwXTextTable >& xTextTable);
+    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xDocument, const rtl::Reference< SwXTextTable >& xTextTable);
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) override;
     virtual void SAL_CALL Select(  ) override;
     virtual void SAL_CALL Delete(  ) override;

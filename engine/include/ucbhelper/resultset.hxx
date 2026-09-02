@@ -37,7 +37,7 @@
 #include <memory>
 #include <mutex>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 namespace ucbhelper {
@@ -81,7 +81,7 @@ public:
       * @param rDataSupplier is a supplier for the resultset data.
       */
     UCBHELPER_DLLPUBLIC ResultSet(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier );
     /**
@@ -95,7 +95,7 @@ public:
       *        ...
       */
     UCBHELPER_DLLPUBLIC ResultSet(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );

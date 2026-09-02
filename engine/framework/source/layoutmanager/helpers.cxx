@@ -155,7 +155,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     return bRet;
 }
 
-uno::Reference< awt::XVclWindowPeer > createToolkitWindow( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Reference< awt::XVclWindowPeer >& rParent, const OUString& pService )
+uno::Reference< awt::XVclWindowPeer > createToolkitWindow( const uno::Reference< cpo::uno::XComponentContext >& rxContext, const uno::Reference< awt::XVclWindowPeer >& rParent, const OUString& pService )
 {
     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create( rxContext );
 
@@ -288,7 +288,7 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
     return false;
 }
 
-void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible )
+void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible )
 {
     sal_Int32 nID    = o3tl::toInt32(rDockingWindowName);
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;

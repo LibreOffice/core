@@ -59,9 +59,6 @@ namespace lang {
 namespace container {
     class XNameAccess;
 }
-namespace uno {
-    class XComponentContext;
-}
 namespace util {
     class XNumberFormatTypes;
     class XNumberFormatsSupplier;
@@ -71,6 +68,7 @@ namespace task {
 }
 
 }
+namespace cpo::uno { class XComponentContext; }
 
 class SvStream;
 namespace dbtools { class SQLExceptionInfo; }
@@ -147,7 +145,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     css::uno::Reference< css::sdbc::XConnection> connectRowset(
         const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
         const css::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
@@ -171,7 +169,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS SharedConnection    ensureRowSetConnection(
         const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
         const css::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
@@ -184,7 +182,7 @@ namespace dbtools
             const OUString& _rDataSourceName,
             const OUString& _rUser,
             const OUString& _rPwd,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
             const css::uno::Reference< css::awt::XWindow>& _rxParent);
 
 
@@ -359,7 +357,7 @@ namespace dbtools
         cpo::uno::Any& /* [out] */ _rSettingsValue
     );
 
-    OOO_DLLPUBLIC_DBTOOLS OUString getDefaultReportEngineServiceName(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    OOO_DLLPUBLIC_DBTOOLS OUString getDefaultReportEngineServiceName(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     /** quote the given name with the given quote string.
     */
@@ -394,7 +392,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::util::XNumberFormatsSupplier> getNumberFormats(
         const css::uno::Reference< css::sdbc::XConnection>& _rxConn,
         bool _bAllowDefault = false,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext = css::uno::Reference< css::uno::XComponentContext>()
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext = css::uno::Reference< cpo::uno::XComponentContext>()
     );
 
     /** create a css::sdb::XSingleSelectQueryComposer which represents
@@ -407,7 +405,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdb::XSingleSelectQueryComposer > getCurrentSettingsComposer(
         const css::uno::Reference< css::beans::XPropertySet>& _rxRowSetProps,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
         const css::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
@@ -484,7 +482,7 @@ namespace dbtools
                                     sal_Int32 _nDataType);
     // return the datasource for the given datasource name
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XDataSource> getDataSource(const OUString& _rsDataSourceName,
-                        const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+                        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     /** search for a name that is NOT in the NameAcces
         @param  _rxSupplier
@@ -544,7 +542,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     void showError( const SQLExceptionInfo& _rInfo,
                     const css::uno::Reference< css::awt::XWindow>& _pParent,
-                    const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+                    const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     /** implements <method scope="com.sun.star.sdb">XRowUpdate::updateObject</method>
         <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there
@@ -733,7 +731,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
             const OUString& _rsUrl,
             const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     /** returns the table privileges to the given parameters
         @param  _xMetaData

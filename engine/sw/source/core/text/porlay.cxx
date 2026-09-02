@@ -923,7 +923,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, sw::mark::Bookmark* pBook
         {
             rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
 
-            static uno::Reference< uno::XComponentContext > xContext(
+            static uno::Reference< cpo::uno::XComponentContext > xContext(
                 ::comphelper::getProcessComponentContext());
 
             static uno::Reference< rdf::XURI > xODF_SHADING(
@@ -961,7 +961,7 @@ static OUString getBookmarkType(const SwTextNode& rNode, sw::mark::Bookmark* pBo
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc, pBookmark);
         if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
-            static uno::Reference< uno::XComponentContext > xContext(
+            static uno::Reference< cpo::uno::XComponentContext > xContext(
                 ::comphelper::getProcessComponentContext());
 
             static uno::Reference< rdf::XURI > xODF_PREFIX(

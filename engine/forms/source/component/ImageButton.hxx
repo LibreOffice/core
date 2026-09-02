@@ -31,11 +31,11 @@ class OImageButtonModel
 {
 public:
     OImageButtonModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OImageButtonModel(
         const OImageButtonModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OImageButtonModel() override;
 
@@ -68,7 +68,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OImageButtonControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString getImplementationName() override

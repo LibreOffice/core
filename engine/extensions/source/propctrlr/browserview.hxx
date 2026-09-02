@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <o3tl/deleter.hxx>
 #include <vcl/weld.hxx>
 
@@ -34,7 +34,7 @@ namespace pcr
         Link<LinkParamNone*,void>   m_aPageActivationHandler;
 
     public:
-        explicit OPropertyBrowserView(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
+        explicit OPropertyBrowserView(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyBrowserView();
 
         OPropertyEditor&    getPropertyBox() { return *m_xPropBox; }

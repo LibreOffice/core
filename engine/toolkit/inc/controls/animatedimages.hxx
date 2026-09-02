@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 namespace com::sun::star::container { class XContainerListener; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace toolkit
 {
@@ -36,7 +36,7 @@ namespace toolkit
     class AnimatedImagesControlModel : public AnimatedImagesControlModel_Base
     {
     public:
-                                        AnimatedImagesControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
+                                        AnimatedImagesControlModel( css::uno::Reference< cpo::uno::XComponentContext > const & i_factory );
                                         AnimatedImagesControlModel( const AnimatedImagesControlModel& i_copySource );
 
         virtual rtl::Reference<UnoControlModel> Clone() const override;

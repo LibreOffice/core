@@ -22,7 +22,7 @@
 
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace oox::docprop {
@@ -34,7 +34,7 @@ class DocumentPropertiesImport :
 {
 public:
     explicit            DocumentPropertiesImport(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -53,7 +53,7 @@ public:
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 } // namespace oox::docprop

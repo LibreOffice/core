@@ -22,7 +22,7 @@
 #include <vcl/weld.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -34,7 +34,7 @@ class DataEditor final : public weld::GenericDialogController
 public:
     DataEditor(weld::Window* pParent,
                rtl::Reference<::chart::ChartModel> xChartDoc,
-               const css::uno::Reference<css::uno::XComponentContext> & xContext);
+               const css::uno::Reference<cpo::uno::XComponentContext> & xContext);
     virtual ~DataEditor() override;
 
     DECL_LINK(CloseHdl, weld::Button&, void);
@@ -45,7 +45,7 @@ private:
     bool                           m_bReadOnly;
 
     rtl::Reference<::chart::ChartModel> m_xChartDoc;
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
     std::unique_ptr<weld::Toolbar> m_xTbxData;
     std::unique_ptr<weld::Button> m_xCloseBtn;

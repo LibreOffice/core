@@ -24,7 +24,7 @@
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <comphelper/propagg.hxx>
@@ -57,7 +57,7 @@ class OGridColumn   :public ::cppu::BaseMutex
 // [properties]
 
 public:
-    OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, OUString _sModelName);
+    OGridColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext, OUString _sModelName);
     explicit OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn() override;
 
@@ -129,7 +129,7 @@ class TextFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< TextFieldColumn >
 {
 public:
-    explicit TextFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit TextFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit TextFieldColumn(const TextFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -148,7 +148,7 @@ class PatternFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< PatternFieldColumn >
 {
 public:
-    explicit PatternFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit PatternFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit PatternFieldColumn(const PatternFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -167,7 +167,7 @@ class DateFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< DateFieldColumn >
 {
 public:
-    explicit DateFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit DateFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit DateFieldColumn(const DateFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -186,7 +186,7 @@ class TimeFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< TimeFieldColumn >
 {
 public:
-    explicit TimeFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit TimeFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit TimeFieldColumn(const TimeFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -205,7 +205,7 @@ class NumericFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< NumericFieldColumn >
 {
 public:
-    explicit NumericFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit NumericFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit NumericFieldColumn(const NumericFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -224,7 +224,7 @@ class CurrencyFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< CurrencyFieldColumn >
 {
 public:
-    explicit CurrencyFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit CurrencyFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit CurrencyFieldColumn(const CurrencyFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -243,7 +243,7 @@ class CheckBoxColumn
     ,public comphelper::OAggregationArrayUsageHelper< CheckBoxColumn >
 {
 public:
-    explicit CheckBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit CheckBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit CheckBoxColumn(const CheckBoxColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -262,7 +262,7 @@ class ComboBoxColumn
     ,public comphelper::OAggregationArrayUsageHelper< ComboBoxColumn >
 {
 public:
-    explicit ComboBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit ComboBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit ComboBoxColumn(const ComboBoxColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -281,7 +281,7 @@ class ListBoxColumn
     ,public comphelper::OAggregationArrayUsageHelper< ListBoxColumn >
 {
 public:
-    explicit ListBoxColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit ListBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit ListBoxColumn(const ListBoxColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
@@ -300,7 +300,7 @@ class FormattedFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< FormattedFieldColumn >
 {
 public:
-    explicit FormattedFieldColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+    explicit FormattedFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit FormattedFieldColumn(const FormattedFieldColumn* _pCloneFrom);
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;

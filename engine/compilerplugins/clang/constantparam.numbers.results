@@ -59,7 +59,7 @@ chart2/source/inc/StatisticsHelper.hxx:77
     int nStyle
     2
 chart2/source/model/template/PieChartTypeTemplate.hxx:36
-    void chart::PieChartTypeTemplate::PieChartTypeTemplate(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum com::sun::star::chart2::PieChartOffsetMode,_Bool,enum com::sun::star::chart2::PieChartSubType,int,int)
+    void chart::PieChartTypeTemplate::PieChartTypeTemplate(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum com::sun::star::chart2::PieChartOffsetMode,_Bool,enum com::sun::star::chart2::PieChartSubType,int,int)
     int nCompositeSize
     3
 chart2/source/tools/RangeHighlighter.cxx:50
@@ -515,7 +515,7 @@ include/comphelper/seqstream.hxx:117
     int _nMinimumResize
     128
 include/comphelper/storagehelper.hxx:119
-    class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> comphelper::OStorageHelper::GetStorageFromStream(const class com::sun::star::uno::Reference<class com::sun::star::io::XStream> &,int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+    class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> comphelper::OStorageHelper::GetStorageFromStream(const class com::sun::star::uno::Reference<class com::sun::star::io::XStream> &,int,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
     int nStorageMode
     7
 include/comphelper/string.hxx:74
@@ -879,7 +879,7 @@ include/oox/helper/propertyset.hxx:110
     int nPropId
     574
 include/oox/helper/textinputstream.hxx:42
-    void oox::TextInputStream::TextInputStream(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,unsigned short)
+    void oox::TextInputStream::TextInputStream(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,unsigned short)
     unsigned short eTextEnc
     76
 include/oox/mathml/importutils.hxx:123
@@ -1503,11 +1503,11 @@ include/ucbhelper/simpleinteractionrequest.hxx:79
     const enum ContinuationFlags nContinuations
     12
 include/unotools/confignode.hxx:239
-    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
+    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
     int _nDepth
     -1
 include/unotools/configvaluecontainer.hxx:83
-    void utl::OConfigurationValueContainer::OConfigurationValueContainer(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class std::mutex &,const class rtl::OUString &,const int)
+    void utl::OConfigurationValueContainer::OConfigurationValueContainer(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class std::mutex &,const class rtl::OUString &,const int)
     const int _nLevels
     2
 include/unotools/fontdefs.hxx:43
@@ -1707,7 +1707,7 @@ include/xmloff/xmlerror.hxx:135
     int nIdMask
     1073741824
 include/xmloff/xmlexp.hxx:275
-    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class rtl::OUString,class rtl::OUString,const short,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
+    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class rtl::OUString,class rtl::OUString,const short,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
     const short eDefaultMeasureUnit
     3
 include/xmloff/xmlexp.hxx:511
@@ -2407,7 +2407,7 @@ sc/source/ui/unoobj/cellsuno.cxx:1184
     const enum formula::FormulaGrammar::Grammar eGrammar
     16908294
 sc/source/ui/vba/vbarange.hxx:167
-    class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaRange::getRangeObjectForName(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,class ScDocShell *,enum formula::FormulaGrammar::AddressConvention)
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaRange::getRangeObjectForName(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class ScDocShell *,enum formula::FormulaGrammar::AddressConvention)
     enum formula::FormulaGrammar::AddressConvention eConv
     3
 sc/source/ui/view/printfun.cxx:79

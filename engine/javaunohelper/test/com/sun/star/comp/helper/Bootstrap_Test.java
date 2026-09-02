@@ -21,7 +21,7 @@ package com.sun.star.comp.helper;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 

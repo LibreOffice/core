@@ -43,7 +43,7 @@ const WordDialogTable aWordDialogTable[] =
 };
 
 SwVbaDialog::SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel,
                  sal_Int32 nIndex )
     : SwVbaDialog_BASE( xParent, xContext, nIndex ), m_xModel(xModel) {}

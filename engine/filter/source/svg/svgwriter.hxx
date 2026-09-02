@@ -375,12 +375,12 @@ public:
 class SVGWriter : public cppu::WeakImplHelper< css::svg::XSVGWriter, css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     cpo::uno::Sequence< css::beans::PropertyValue >    maFilterData;
 
 public:
     explicit SVGWriter( const cpo::uno::Sequence<cpo::uno::Any>& args,
-                        const css::uno::Reference< css::uno::XComponentContext >& rxCtx );
+                        const css::uno::Reference< cpo::uno::XComponentContext >& rxCtx );
     virtual ~SVGWriter() override;
 
     // XSVGWriter

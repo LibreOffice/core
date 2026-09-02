@@ -74,7 +74,7 @@ namespace
 
 wrapper::ItemConverter* createItemConverter(
     std::u16string_view aObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel,
-    const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
+    const uno::Reference<cpo::uno::XComponentContext>& xContext, SdrModel& rDrawModel,
     ChartView* pExplicitValueProvider, ReferenceSizeProvider const * pRefSizeProvider )
 {
     wrapper::ItemConverter* pItemConverter=nullptr;

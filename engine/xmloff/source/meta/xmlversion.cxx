@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 constexpr OUString XMLN_VERSIONSLIST = u"VersionList.xml"_ustr;
 
 XMLVersionListExport::XMLVersionListExport(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const cpo::uno::Sequence < css::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > const &rHandler )
@@ -103,7 +103,7 @@ ErrCode XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 XMLVersionListImport::XMLVersionListImport(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
     cpo::uno::Sequence < css::util::RevisionTag >& rVersions )
 :   SvXMLImport(rContext, u""_ustr),
     maVersions( rVersions )
@@ -308,7 +308,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
         return;
 
     // get the services needed for writing the xml data
-    const Reference< uno::XComponentContext >& xContext =
+    const Reference< cpo::uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
     Reference< XWriter > xWriter = Writer::create(xContext);
@@ -352,7 +352,7 @@ cpo::uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load
     try {
         if ( xRoot.is() && xRoot->hasByName( sDocName ) && xRoot->isStreamElement( sDocName ) )
         {
-            const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+            const Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
             InputSource aParserInput;
 
@@ -420,7 +420,7 @@ XMLVersionListPersistence::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLVersionListPersistence_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new XMLVersionListPersistence);

@@ -28,7 +28,7 @@ class ScVbaTextBoxShape : public TextBoxShapeImpl_BASE
 {
     css::uno::Reference< css::text::XTextRange > m_xTextRange;
 public:
-    ScVbaTextBoxShape( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaTextBoxShape( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
 
    // Attributes
     virtual OUString SAL_CALL getText() override;

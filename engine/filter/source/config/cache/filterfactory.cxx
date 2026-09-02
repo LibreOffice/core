@@ -53,7 +53,7 @@ FilterCache& GetTheFilterCache()
             case_sensitive                  compare "sort_prop" case sensitive              false
  */
 
-FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+FilterFactory::FilterFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
 {
     static const cpo::uno::Sequence<OUString> sServiceNames { u"com.sun.star.document.FilterFactory"_ustr };
@@ -488,7 +488,7 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_FilterFactory_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::FilterFactory(context));
 }

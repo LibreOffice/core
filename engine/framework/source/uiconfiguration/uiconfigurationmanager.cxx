@@ -92,7 +92,7 @@ public:
         return {u"com.sun.star.ui.UIConfigurationManager"_ustr};
     }
 
-    explicit UIConfigurationManager( css::uno::Reference< css::uno::XComponentContext > xContext );
+    explicit UIConfigurationManager( css::uno::Reference< cpo::uno::XComponentContext > xContext );
 
     // XComponent
     virtual void dispose() override;
@@ -195,7 +195,7 @@ private:
     bool                                                      m_bModified;
     bool                                                      m_bDisposed;
     OUString                                                  m_aPropUIName;
-    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
     std::mutex                                                m_mutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>               m_aEventListeners;
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener>       m_aConfigListeners;
@@ -673,7 +673,7 @@ void UIConfigurationManager::impl_Initialize()
     }
 }
 
-UIConfigurationManager::UIConfigurationManager( css::uno::Reference< css::uno::XComponentContext > xContext ) :
+UIConfigurationManager::UIConfigurationManager( css::uno::Reference< cpo::uno::XComponentContext > xContext ) :
       m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
@@ -1395,7 +1395,7 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UIConfigurationManager_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UIConfigurationManager(context));

@@ -39,7 +39,7 @@ excludelist:
     - com/sun/star/container/XNameAccess.hpp
     framework/source/uifactory/menubarfactory.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     framework/source/xml/imagesconfiguration.cxx:
     # Actually used
     - com/sun/star/io/XInputStream.hpp
@@ -68,13 +68,13 @@ excludelist:
     - com/sun/star/frame/XFrame.hpp
     framework/source/uielement/imagebuttontoolbarcontroller.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     framework/source/uielement/menubarmanager.cxx:
     # Needed on WIN32
     - com/sun/star/lang/SystemDependent.hpp
     # Actually used
     - com/sun/star/frame/XDispatch.hpp
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     framework/source/uielement/menubarwrapper.cxx:
     # Actually used
     - com/sun/star/container/XNameAccess.hpp

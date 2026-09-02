@@ -27,9 +27,9 @@
 #include <tools/urlobj.hxx>
 
 namespace com::sun::star {
-    namespace uno { class XComponentContext; }
     namespace uri { class XUriReference; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 class CharClass;
 
@@ -84,7 +84,7 @@ SVL_DLLPUBLIC Link<OUString *, bool> const & GetMaybeFileHdl();
  */
 SVL_DLLPUBLIC css::uno::Reference< css::uri::XUriReference >
 normalizedMakeRelative(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & baseUriReference,
     OUString const & uriReference);
 

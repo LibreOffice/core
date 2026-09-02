@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <o3tl/safeint.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
@@ -229,7 +229,7 @@ namespace toolkit {
     }
 
 
-    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< css::uno::XComponentContext > const & i_factory )
+    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< cpo::uno::XComponentContext > const & i_factory )
         :AnimatedImagesControlModel_Base( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_AUTO_REPEAT );
@@ -476,7 +476,7 @@ namespace toolkit {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AnimatedImagesControl());
@@ -484,7 +484,7 @@ org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControlModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::AnimatedImagesControlModel(context));

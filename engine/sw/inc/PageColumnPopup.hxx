@@ -23,7 +23,7 @@
 class PageColumnPopup final : public svt::PopupWindowController
 {
 public:
-    PageColumnPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    PageColumnPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~PageColumnPopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

@@ -27,7 +27,7 @@
 #include "servicemanager.hxx"
 #include "typemanager.hxx"
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace {
 
@@ -44,7 +44,7 @@ OUString getBootstrapVariable(
 
 }
 
-css::uno::Reference< css::uno::XComponentContext >
+css::uno::Reference< cpo::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
 {
     rtl::Bootstrap bs(iniUri);
@@ -78,14 +78,14 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
             true)
     };
     smgr->addSingletonContextEntries(&context_values);
-    css::uno::Reference< css::uno::XComponentContext > context(
+    css::uno::Reference< cpo::uno::XComponentContext > context(
         createComponentContext(context_values.data(), context_values.size()));
     smgr->setContext(context);
     cppu::installTypeDescriptionManager(tmgr);
     return context;
 }
 
-css::uno::Reference< css::uno::XComponentContext >
+css::uno::Reference< cpo::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext()
 {
     return defaultBootstrap_InitialComponentContext(getUnoIniUri());

@@ -336,7 +336,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, cpo::uno::Any& rRetval,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new SfxMacroLoader(arguments));

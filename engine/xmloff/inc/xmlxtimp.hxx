@@ -32,7 +32,7 @@ class SvxXMLXTableImport final : public SvXMLImport
 {
 public:
     SvxXMLXTableImport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::container::XNameContainer > & rTable,
         css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 

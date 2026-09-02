@@ -73,9 +73,9 @@ namespace com::sun::star {
     namespace sdb { class XDatabaseContext; }
     namespace sdbc { class XConnection; }
     namespace sdbc { class XDataSource; }
-    namespace uno { class XComponentContext; }
     namespace util { class XURLTransformer; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace vcl { class Window; }
 namespace weld { class Window; }
@@ -220,7 +220,7 @@ namespace dbaui
         OAsynchronousLink       m_aAsyncCloseTask;      // called when a task should be closed
 
         css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         ControllerFrame                                                                     m_aCurrentFrame;
         css::uno::Reference< css::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
         css::uno::Reference< css::frame::XDispatchProvider >      m_xMasterDispatcher;    // ditto
@@ -238,7 +238,7 @@ namespace dbaui
         using OGenericUnoController_MBASE::getMutex;
 
         // methods
-        OGenericUnoController( const css::uno::Reference< css::uno::XComponentContext >& _rM );
+        OGenericUnoController( const css::uno::Reference< cpo::uno::XComponentContext >& _rM );
         OGenericUnoController() = delete;
 
         // closes the task when possible
@@ -327,7 +327,7 @@ namespace dbaui
         DECL_DLLPRIVATE_LINK(OnAsyncCloseTask, void*, void);
 
     public:
-        const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
         weld::Window* getFrameWeld() const;
         void        setView( const VclPtr<ODataView>& i_rView );

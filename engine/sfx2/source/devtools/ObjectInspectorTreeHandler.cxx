@@ -53,7 +53,7 @@ using namespace css;
 namespace
 {
 OUString enumValueToEnumName(cpo::uno::Any const& aValue,
-                             uno::Reference<uno::XComponentContext> const& xContext)
+                             uno::Reference<cpo::uno::XComponentContext> const& xContext)
 {
     sal_Int32 nIntValue = 0;
     if (!cppu::enum2int(nIntValue, aValue))
@@ -84,7 +84,7 @@ OUString getInterfaceImplementationClass(uno::Reference<uno::XInterface> const& 
 
 /** converts basic any value to a string */
 OUString convertBasicValueToString(const cpo::uno::Any& aValue,
-                                   const uno::Reference<uno::XComponentContext>& xContext)
+                                   const uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     OUString aRetStr;
 
@@ -187,7 +187,7 @@ OUString convertBasicValueToString(const cpo::uno::Any& aValue,
 
 // returns a name of the object, if available
 OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
-                          const uno::Reference<uno::XComponentContext>& xContext)
+                          const uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     uno::Reference<container::XNamed> xNamed(xInterface, uno::UNO_QUERY);
     if (xNamed.is())
@@ -210,7 +210,7 @@ OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
 }
 
 OUString convertAnyToString(const cpo::uno::Any& aValue,
-                            const uno::Reference<uno::XComponentContext>& xContext)
+                            const uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     // return early if we don't have any value
     if (!aValue.hasValue())
@@ -256,7 +256,7 @@ OUString convertAnyToString(const cpo::uno::Any& aValue,
 }
 
 OUString convertAnyToShortenedString(const cpo::uno::Any& aValue,
-                                     const uno::Reference<uno::XComponentContext>& xContext)
+                                     const uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     // return early if we don't have any value
     if (!aValue.hasValue())
@@ -305,7 +305,7 @@ OUString getAnyType(const cpo::uno::Any& aValue)
 /** converts a Type to a XIdlClass */
 uno::Reference<reflection::XIdlClass>
 convertTypeToIdlClass(const cpo::uno::Type& rType,
-                      const uno::Reference<uno::XComponentContext>& xContext)
+                      const uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     auto xReflection = reflection::theCoreReflection::get(xContext);
     return xReflection->forName(rType.getTypeName());
@@ -531,7 +531,7 @@ class BasicValueNode : public SimpleStringNode
 protected:
     cpo::uno::Any maAny;
     OUString mrInfo;
-    uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<cpo::uno::XComponentContext> mxContext;
 
     ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName,
                                                          const cpo::uno::Any& rAny,
@@ -539,7 +539,7 @@ protected:
 
 public:
     BasicValueNode(OUString const& rName, cpo::uno::Any aAny, OUString aInfo,
-                   uno::Reference<uno::XComponentContext> xContext)
+                   uno::Reference<cpo::uno::XComponentContext> xContext)
         : SimpleStringNode(rName)
         , maAny(std::move(aAny))
         , mrInfo(std::move(aInfo))
@@ -583,7 +583,7 @@ class GenericPropertiesNode : public BasicValueNode
 {
 public:
     GenericPropertiesNode(OUString const& rName, cpo::uno::Any const& rAny, OUString const& rInfo,
-                          uno::Reference<uno::XComponentContext> const& xContext)
+                          uno::Reference<cpo::uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
     }
@@ -597,7 +597,7 @@ class StructNode : public BasicValueNode
 {
 public:
     StructNode(OUString const& rName, cpo::uno::Any const& rAny, OUString const& rInfo,
-               uno::Reference<uno::XComponentContext> const& xContext)
+               uno::Reference<cpo::uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
     }
@@ -615,7 +615,7 @@ class SequenceNode : public BasicValueNode
 
 public:
     SequenceNode(OUString const& rName, cpo::uno::Any const& rAny, OUString const& rInfo,
-                 uno::Reference<uno::XComponentContext> const& xContext)
+                 uno::Reference<cpo::uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
         auto xClass = convertTypeToIdlClass(maAny.getValueType(), mxContext);

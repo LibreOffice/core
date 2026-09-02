@@ -44,7 +44,7 @@ using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
-    const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
+    const Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     try
     {
         m_xDesktop = frame::Desktop::create(xContext);

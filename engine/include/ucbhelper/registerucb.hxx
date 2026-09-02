@@ -27,10 +27,9 @@
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star {
-    namespace uno { class XComponentContext; }
     namespace ucb { class XContentProviderManager; }
 }
-
+namespace cpo::uno { class XComponentContext; }
 
 namespace ucbhelper {
 
@@ -85,7 +84,7 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
 
 UCBHELPER_DLLPUBLIC bool registerAtUcb(
     css::uno::Reference< css::ucb::XContentProviderManager > const & rManager,
-    css::uno::Reference< css::uno::XComponentContext > const & rxContext,
+    css::uno::Reference< cpo::uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate);

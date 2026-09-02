@@ -1739,7 +1739,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     // do the normal GDIMetaFile export instead
                     try
                     {
-                        const css::uno::Reference< css::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                        const css::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
                         css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
                             css::xml::sax::Writer::create( xContext ), css::uno::UNO_QUERY_THROW);

@@ -57,7 +57,7 @@ using ProgressMonitor_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
 class ProgressMonitor final : public ProgressMonitor_BASE
 {
 public:
-    ProgressMonitor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    ProgressMonitor( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressMonitor() override;
 

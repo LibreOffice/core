@@ -129,7 +129,7 @@ css::uno::Reference< css::uno::XInterface > SIDEModel::getCurrentSelection()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_basic_BasicID_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     SolarMutexGuard aGuard;
     basctl::EnsureIde();

@@ -101,7 +101,7 @@ protected:
         */
     bool WriteThroughComponentOS(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
                                  const css::uno::Reference<css::lang::XComponent>& xComponent,
-                                 css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                                 css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                  const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
@@ -110,7 +110,7 @@ protected:
     bool WriteThroughComponentS(const css::uno::Reference<css::embed::XStorage>& xStor,
                                 const css::uno::Reference<css::lang::XComponent>& xComponent,
                                 const char16_t* pStreamName,
-                                css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                                css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                 const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
@@ -118,7 +118,7 @@ protected:
       */
     OUString
     WriteThroughComponentMS(const css::uno::Reference<css::lang::XComponent>& xComponent,
-                            css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                            css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                             css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
@@ -196,7 +196,7 @@ public:
 public:
     /** Constructor
      */
-    SmMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+    SmMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
 private:

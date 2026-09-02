@@ -190,7 +190,7 @@ void
 handleAuthenticationRequest_(
     weld::Window * pParent,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     ucb::AuthenticationRequest const & rRequest,
     cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,

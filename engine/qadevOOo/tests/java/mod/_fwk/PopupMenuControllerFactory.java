@@ -24,7 +24,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.util.XCloseable;
 import com.sun.star.frame.XUIControllerRegistration;
 import lib.TestCase;

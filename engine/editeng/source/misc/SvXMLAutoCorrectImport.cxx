@@ -26,7 +26,7 @@ using namespace css;
 using namespace css::xml::sax;
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
-    const uno::Reference< uno::XComponentContext > & xContext,
+    const uno::Reference< cpo::uno::XComponentContext > & xContext,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
     css::uno::Reference < css::embed::XStorage > xNewStorage)
@@ -103,7 +103,7 @@ SvXMLWordContext::~SvXMLWordContext()
 }
 
 SvXMLExceptionListImport::SvXMLExceptionListImport(
-    const uno::Reference< uno::XComponentContext > & xContext,
+    const uno::Reference< cpo::uno::XComponentContext > & xContext,
     SvStringsISortDtor & rNewList )
 :   SvXMLImport( xContext, u""_ustr ),
     rList (rNewList)

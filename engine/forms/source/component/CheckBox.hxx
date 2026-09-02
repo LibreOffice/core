@@ -31,11 +31,11 @@ class OCheckBoxModel final : public OReferenceValueComponent
 
 public:
     OCheckBoxModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OCheckBoxModel(
         const OCheckBoxModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OCheckBoxModel() override;
 
@@ -68,7 +68,7 @@ private:
 class OCheckBoxControl : public OBoundControl
 {
 public:
-    explicit OCheckBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OCheckBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     OUString getImplementationName() override

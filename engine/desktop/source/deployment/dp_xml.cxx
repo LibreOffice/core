@@ -33,7 +33,7 @@ namespace dp_misc
 void xml_parse(
     Reference<xml::sax::XDocumentHandler> const & xDocHandler,
     ::ucbhelper::Content & ucb_content,
-    Reference<XComponentContext> const & xContext )
+    Reference<cpo::uno::XComponentContext> const & xContext )
 {
     // raise sax parser:
     Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);

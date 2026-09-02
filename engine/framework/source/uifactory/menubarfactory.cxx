@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-MenuBarFactory::MenuBarFactory( css::uno::Reference< css::uno::XComponentContext >  xContext )
+MenuBarFactory::MenuBarFactory( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
     : m_xContext(std::move( xContext ))
 {
 }
@@ -65,7 +65,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                                      ,const Sequence< PropertyValue >& Args
                                      ,std::u16string_view ResourceType
                                      ,const Reference< css::ui::XUIElement >& _xMenuBar
-                                     ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
+                                     ,const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext)
 {
     sal_Int32 nConfigPropertyIndex( Args.getLength() );
     sal_Int32 nURLPropertyIndex( Args.getLength() );
@@ -163,7 +163,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_MenuBarFactory_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::MenuBarFactory(context));

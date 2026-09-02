@@ -40,7 +40,7 @@ class FrameControl final : public FrameControl_BASE     // This order is necessa
 {
 public:
 
-    FrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    FrameControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~FrameControl() override;
 

@@ -30,7 +30,7 @@ using namespace ooo::vba;
 
 ScVbaPane::ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rModel,
         const uno::Reference< sheet::XViewPane >& rViewPane ) :
     m_xModel(rModel, uno::UNO_SET_THROW),

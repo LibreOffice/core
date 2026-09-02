@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& rxContext )
+OZipFileAccess::OZipFileAccess( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )
 , m_xContext( rxContext )
 , m_bDisposed( false )
@@ -464,7 +464,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OZipFileAccess_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OZipFileAccess(context));
 }

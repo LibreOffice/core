@@ -39,7 +39,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <tools/globname.hxx>
 #include <unotools/streamwrap.hxx>
@@ -57,7 +57,7 @@ using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::XComponentContext;
+using ::cpo::uno::XComponentContext;
 using ::com::sun::star::lang::XServiceInfo;
 
 using namespace ::com::sun::star::form;

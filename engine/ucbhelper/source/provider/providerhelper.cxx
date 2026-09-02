@@ -61,7 +61,7 @@ struct ContentProviderImplHelper_Impl
 namespace ucbhelper {
 
 ContentProviderImplHelper::ContentProviderImplHelper(
-    uno::Reference< uno::XComponentContext > xContext )
+    uno::Reference< cpo::uno::XComponentContext > xContext )
 : m_pImpl( new ucbhelper_impl::ContentProviderImplHelper_Impl ),
   m_xContext(std::move( xContext ))
 {

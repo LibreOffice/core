@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ooo/vba/excel/XInterior.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -55,7 +55,7 @@ class ScVbaInterior final :  public ScVbaInterior_BASE
 
 public:
         /// @throws css::lang::IllegalArgumentException
-        ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                  css::uno::Reference< css::beans::XPropertySet > xProps, ScDocument* pScDoc = nullptr);
 
     virtual cpo::uno::Any SAL_CALL getColor() override ;

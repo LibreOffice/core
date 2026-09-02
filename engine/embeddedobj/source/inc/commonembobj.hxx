@@ -97,7 +97,7 @@ protected:
     sal_Int32 m_nTargetState; // should be -1 except during state changing
     sal_Int32 m_nUpdateMode;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     cpo::uno::Sequence< css::beans::PropertyValue > m_aDocMediaDescriptor;
 
@@ -252,12 +252,12 @@ protected:
 
 public:
     OCommonEmbeddedObject(
-        css::uno::Reference< css::uno::XComponentContext > xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > xContext,
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // no persistence for linked objects, so the descriptors are provided in constructor
     OCommonEmbeddedObject(
-        css::uno::Reference< css::uno::XComponentContext > xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > xContext,
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectDescr );

@@ -33,8 +33,8 @@ namespace com::sun::star {
     namespace drawing { class XDrawPage; }
     namespace drawing { class XShapes; }
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -56,7 +56,7 @@ private:
     /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::drawing::XShapes > const & getShapes() ;
 public:
-    VBAHELPER_DLLPUBLIC ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::drawing::XDrawPage> xDrawShape, css::uno::Reference< css::frame::XModel > xModel );
+    VBAHELPER_DLLPUBLIC ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::drawing::XDrawPage> xDrawShape, css::uno::Reference< css::frame::XModel > xModel );
 
     // Methods
     virtual void SAL_CALL Select(  ) override;

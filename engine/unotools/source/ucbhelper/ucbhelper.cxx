@@ -53,7 +53,7 @@
 #include <unotools/ucbhelper.hxx>
 
 namespace com::sun::star::ucb { class XProgressHandler; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { struct DateTime; }
 
 namespace {
@@ -386,7 +386,7 @@ bool utl::UCBContentHelper::EqualURLs(
 }
 
 bool utl::UCBContentHelper::ensureFolder(
-    const css::uno::Reference< css::uno::XComponentContext >& xCtx,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xCtx,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
     std::u16string_view rFolder, ucbhelper::Content & result) noexcept
 {

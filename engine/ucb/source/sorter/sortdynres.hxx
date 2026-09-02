@@ -45,7 +45,7 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper <
     css::uno::Reference < css::ucb::XDynamicResultSet >      mxOriginal;
     cpo::uno::Sequence  < css::ucb::NumberedSortingInfo >    maOptions;
     css::uno::Reference < css::ucb::XAnyCompareFactory >     mxCompFac;
-    css::uno::Reference < css::uno::XComponentContext >      m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext >      m_xContext;
 
     rtl::Reference<SortedResultSet>                          mxOne;
     rtl::Reference<SortedResultSet>                          mxTwo;
@@ -64,7 +64,7 @@ public:
     SortedDynamicResultSet( const css::uno::Reference < css::ucb::XDynamicResultSet >    &xOriginal,
                             const cpo::uno::Sequence  < css::ucb::NumberedSortingInfo >  &aOptions,
                             const css::uno::Reference < css::ucb::XAnyCompareFactory >   &xCompFac,
-                            const css::uno::Reference < css::uno::XComponentContext >    &rxContext );
+                            const css::uno::Reference < cpo::uno::XComponentContext >    &rxContext );
 
     virtual ~SortedDynamicResultSet() override;
 
@@ -139,11 +139,11 @@ class SortedDynamicResultSetFactory: public cppu::WeakImplHelper <
     css::ucb::XSortedDynamicResultSetFactory >
 {
 
-    css::uno::Reference< css::uno::XComponentContext >   m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >   m_xContext;
 
 public:
     SortedDynamicResultSetFactory(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext);
 
     virtual ~SortedDynamicResultSetFactory() override;
 

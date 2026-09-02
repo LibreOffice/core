@@ -133,7 +133,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
 }
 
 /// Picks up XMP metadata from the base directory.
-void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
+void FindXMPMetadata(const uno::Reference<cpo::uno::XComponentContext>& xContext,
                      const OUString& rDocumentBaseURL,
                      const cpo::uno::Sequence<beans::PropertyValue>& rFilterData,
                      librevenge::RVNGPropertyList& rMetaData)
@@ -281,7 +281,7 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(
 
 void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bool bFirst)
 {
-    uno::Reference<uno::XComponentContext> xCtx = GetImport().GetComponentContext();
+    uno::Reference<cpo::uno::XComponentContext> xCtx = GetImport().GetComponentContext();
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(xCtx);
     if (!xSaxWriter.is())
         return;
@@ -343,7 +343,7 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bo
     GetImport().GetGenerator().closePageSpan();
 }
 
-XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,
+XMLImport::XMLImport(const uno::Reference<cpo::uno::XComponentContext>& xContext,
                      librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
                      const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor,
                      const std::vector<FixedLayoutPage>& rPageMetafiles)
@@ -446,7 +446,7 @@ PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGProper
 
 const std::vector<FixedLayoutPage>& XMLImport::GetPageMetafiles() const { return mrPageMetafiles; }
 
-const uno::Reference<uno::XComponentContext>& XMLImport::GetComponentContext() const
+const uno::Reference<cpo::uno::XComponentContext>& XMLImport::GetComponentContext() const
 {
     return mxContext;
 }

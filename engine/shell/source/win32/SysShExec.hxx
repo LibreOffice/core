@@ -23,7 +23,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
@@ -42,12 +42,12 @@ class CSysShExec :
             css::system::XSystemShellExecute,
             css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     // to put back all the inits with COINIT_MULTITHREADED if needed
     int mnNbCallCoInitializeExForReinit;
 
 public:
-    explicit CSysShExec(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit CSysShExec(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
     ~CSysShExec();
 
 

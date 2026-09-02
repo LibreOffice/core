@@ -391,7 +391,7 @@ static OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
 }
 
 
-OleComponent::OleComponent( const uno::Reference< uno::XComponentContext >& xContext, OleEmbeddedObject* pUnoOleObject )
+OleComponent::OleComponent( const uno::Reference< cpo::uno::XComponentContext >& xContext, OleEmbeddedObject* pUnoOleObject )
 : m_pInterfaceContainer( nullptr )
 , m_bDisposed( false )
 , m_bModified( false )

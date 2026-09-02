@@ -85,7 +85,7 @@ class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
 public:
     SwHHCWrapper(
         SwView& rView,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage, LanguageType nTargetLanguage,
         const vcl::Font *pTargetFont,
         sal_Int32 nConvOptions, bool bIsInteractive,

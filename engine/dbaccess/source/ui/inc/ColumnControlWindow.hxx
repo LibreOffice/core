@@ -20,7 +20,7 @@
 
 #include "FieldDescControl.hxx"
 #include "TypeInfo.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <vcl/InterimItemWindow.hxx>
 
@@ -30,7 +30,7 @@ namespace dbaui
     class OColumnControlWindow : public OFieldDescControl
     {
         css::lang::Locale      m_aLocale;
-        css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
         css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
         mutable css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
@@ -54,7 +54,7 @@ namespace dbaui
 
     public:
         OColumnControlWindow(weld::Container* pParent,
-                             const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+                             const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
         void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
 
@@ -69,7 +69,7 @@ namespace dbaui
         std::unique_ptr<OColumnControlWindow> m_xControl;
     public:
         OColumnControlTopLevel(vcl::Window* pParent,
-                               const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+                               const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
         virtual void dispose() override;
 
         OColumnControlWindow& GetControl() { return *m_xControl; }

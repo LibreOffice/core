@@ -30,7 +30,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& rParent,
-        css::uno::Reference< css::uno::XComponentContext > xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > xContext,
         const css::uno::Reference< css::frame::XModel >& rModel,
         const css::uno::Reference< css::sheet::XViewPane >& rViewPane );
 
@@ -49,7 +49,7 @@ private:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
     cpo::uno::WeakReference< ov::XHelperInterface > m_xParent;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,12 +46,12 @@ namespace emfio::emfreader
         class XEmfParser : public ::cppu::WeakImplHelper< graphic::XEmfParser, lang::XServiceInfo >
         {
         private:
-            uno::Reference< uno::XComponentContext > context_;
+            uno::Reference< cpo::uno::XComponentContext > context_;
             basegfx::B2DTuple maSizeHint;
 
         public:
             explicit XEmfParser(
-                uno::Reference< uno::XComponentContext > context);
+                uno::Reference< cpo::uno::XComponentContext > context);
             XEmfParser(const XEmfParser&) = delete;
             XEmfParser& operator=(const XEmfParser&) = delete;
 
@@ -71,7 +71,7 @@ namespace emfio::emfreader
         }
 
         XEmfParser::XEmfParser(
-            uno::Reference< uno::XComponentContext > context):
+            uno::Reference< cpo::uno::XComponentContext > context):
             context_(std::move(context))
         {
         }
@@ -231,7 +231,7 @@ namespace emfio::emfreader
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 emfio_emfreader_XEmfParser_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new emfio::emfreader::XEmfParser(context));
 }

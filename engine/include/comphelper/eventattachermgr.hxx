@@ -22,10 +22,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star {
-namespace uno {
-    class XComponentContext;
-}
 namespace script {
     class XEventAttacherManager;
 }
@@ -39,7 +37,7 @@ namespace comphelper
 /// @throws cpo::uno::Exception
 COMPHELPER_DLLPUBLIC css::uno::Reference< css::script::XEventAttacherManager >
 createEventAttacherManager(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
 
 }
 

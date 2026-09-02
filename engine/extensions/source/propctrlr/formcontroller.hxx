@@ -51,7 +51,7 @@ namespace pcr
         cpo::uno::Sequence<OUString> m_aSupportedServiceNames;
     public:
         FormController(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             OUString sImplementName,
             const cpo::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers

@@ -20,7 +20,7 @@
 class CDRImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    explicit CDRImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit CDRImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ooo/vba/excel/XCharacters.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
@@ -37,7 +37,7 @@ private:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, css::uno::Reference< css::text::XSimpleText > xRange, const cpo::uno::Any& Start, const cpo::uno::Any& Length, bool bReplace = false  );
+    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, css::uno::Reference< css::text::XSimpleText > xRange, const cpo::uno::Any& Start, const cpo::uno::Any& Length, bool bReplace = false  );
 
     // Attributes
     virtual OUString SAL_CALL getCaption() override;

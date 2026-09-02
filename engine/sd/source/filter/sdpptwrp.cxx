@@ -30,7 +30,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/packages/XPackageEncryption.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <sdpptwrp.hxx>
 #include <DrawDocShell.hxx>

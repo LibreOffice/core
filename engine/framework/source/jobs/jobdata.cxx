@@ -46,7 +46,7 @@ namespace framework{
     @param      rxContext
                     reference to the uno service manager
 */
-JobData::JobData( css::uno::Reference< css::uno::XComponentContext > xContext )
+JobData::JobData( css::uno::Reference< cpo::uno::XComponentContext > xContext )
     : m_xContext    (std::move(xContext                    ))
 {
     // share code for member initialization with defaults!
@@ -416,7 +416,7 @@ static bool isEnabled( std::u16string_view sAdminTime ,
            );
 }
 
-void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
+void JobData::appendEnabledJobsForEvent( const css::uno::Reference< cpo::uno::XComponentContext >&              rxContext,
                                          const OUString&                                                 sEvent ,
                                                ::std::vector< JobData::TJob2DocEventBinding >& lJobs  )
 {
@@ -452,7 +452,7 @@ bool JobData::hasCorrectContext(std::u16string_view rModuleIdent) const
     return false;
 }
 
-std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                        std::u16string_view                                sEvent )
 {
     // create a config access to "/org.openoffice.Office.Jobs/Events"

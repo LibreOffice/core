@@ -26,7 +26,7 @@ namespace gio
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
 public:
-    explicit ContentProvider(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit ContentProvider(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     virtual ~ContentProvider() override;
 
     // XInterface

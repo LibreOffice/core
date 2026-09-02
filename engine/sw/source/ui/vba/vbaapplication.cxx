@@ -75,7 +75,7 @@ public:
 
 }
 
-SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
+SwVbaApplication::SwVbaApplication( uno::Reference<cpo::uno::XComponentContext >& xContext ):
     SwVbaApplication_BASE( xContext )
 {
 }
@@ -127,7 +127,7 @@ SwVbaApplication::getActiveSwVbaWindow()
     return new SwVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel, xController );
 }
 
-uno::Reference< css::uno::XComponentContext > const &
+uno::Reference< cpo::uno::XComponentContext > const &
 SwVbaApplication::getContext() const
 {
     return mxContext;

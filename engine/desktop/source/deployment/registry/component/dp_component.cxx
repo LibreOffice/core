@@ -309,7 +309,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                           Reference<XCommandEnvironment> const & xCmdEnv );
     bool hasInUnoRc( RcItem kind, OUString const & url );
 
-    css::uno::Reference< css::uno::XComponentContext > getRootContext() const;
+    css::uno::Reference< cpo::uno::XComponentContext > getRootContext() const;
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -1006,10 +1006,10 @@ bool BackendImpl::hasInUnoRc(
     return std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
 }
 
-css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
+css::uno::Reference< cpo::uno::XComponentContext > BackendImpl::getRootContext()
     const
 {
-    css::uno::Reference< css::uno::XComponentContext > rootContext(
+    css::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getComponentContext()->getValueByName(u"_root"_ustr),
         css::uno::UNO_QUERY);
     return rootContext.is() ? rootContext : getComponentContext();
@@ -1099,7 +1099,7 @@ Reference<XComponentContext> raise_uno_process(
 }
 
 void extractComponentData(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     css::uno::Reference< css::registry::XRegistryKey > const & registry,
     ComponentBackendDb::Data * data,
     std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
@@ -1179,7 +1179,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
     std::vector< css::uno::Reference< css::uno::XInterface > > const &
         factories)
 {
-    css::uno::Reference< css::uno::XComponentContext > rootContext(
+    css::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getMyBackend()->getRootContext());
     css::uno::Reference< css::container::XSet > set(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
@@ -1221,7 +1221,7 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
 void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
     ComponentBackendDb::Data const & data)
 {
-    css::uno::Reference< css::uno::XComponentContext > rootContext(
+    css::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getMyBackend()->getRootContext());
     css::uno::Reference< css::container::XSet > set(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
@@ -1346,7 +1346,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     OUString url(getURL());
     if (doRegisterPackage) {
         ComponentBackendDb::Data data;
-        css::uno::Reference< css::uno::XComponentContext > context;
+        css::uno::Reference< cpo::uno::XComponentContext > context;
         if (startup) {
             context = that->getComponentContext();
         } else {
@@ -1394,7 +1394,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     } else { // revoke
         m_registered = Reg::Void;
         ComponentBackendDb::Data data(that->readDataFromDb(url));
-        css::uno::Reference< css::uno::XComponentContext > context(
+        css::uno::Reference< cpo::uno::XComponentContext > context(
             that->getObject(url), css::uno::UNO_QUERY);
         bool remoteContext = context.is();
         if (!remoteContext) {
@@ -1650,7 +1650,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
     OUString url(getURL());
     if (doRegisterPackage) {
         if (!startup) {
-            css::uno::Reference< css::uno::XComponentContext > context(
+            css::uno::Reference< cpo::uno::XComponentContext > context(
                 that->getObject(url), css::uno::UNO_QUERY);
             if (!context.is()) {
                 context.set(
@@ -1705,7 +1705,7 @@ BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new dp_registry::backend::component::BackendImpl(args, context));
 }

@@ -36,7 +36,7 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
     bool getData(std::unique_lock<std::mutex>& rResultSetGuard);
 
 public:
-    DataSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    DataSupplier( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
               const rtl::Reference< Content >& rContent,
               sal_Int32 nOpenMode);
 
@@ -79,7 +79,7 @@ private:
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_Results;
     rtl::Reference< Content >                    m_xContent;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     sal_Int32                                    m_nOpenMode;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;

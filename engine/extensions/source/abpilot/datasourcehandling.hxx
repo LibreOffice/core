@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <memory>
 
 #include "abptypes.hxx"
@@ -48,7 +48,7 @@ namespace abp
 
     public:
         explicit ODataSourceContext(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
         ~ODataSourceContext();
 
@@ -99,7 +99,7 @@ namespace abp
 
         /// constructs an object which is initially invalid
         explicit ODataSource(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
         /// copy ctor

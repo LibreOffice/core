@@ -43,7 +43,7 @@ class ChartGradientPaletteControl final : public svt::PopupWindowController
 
 public:
     explicit ChartGradientPaletteControl(
-        const css::uno::Reference<css::uno::XComponentContext>& rContext);
+        const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
 
     // XInitialization
     void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;

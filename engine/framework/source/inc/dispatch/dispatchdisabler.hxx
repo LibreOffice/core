@@ -14,7 +14,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
@@ -42,7 +42,7 @@ class DispatchDisabler final : public ::cppu::WeakImplHelper<
     css::uno::Reference< css::frame::XDispatchProvider > mxSlave;
     css::uno::Reference< css::frame::XDispatchProvider > mxMaster;
 public:
-             DispatchDisabler(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+             DispatchDisabler(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
 
     // XInitialization
     virtual void initialize( const ::cpo::uno::Sequence< ::cpo::uno::Any >& aArguments ) override;

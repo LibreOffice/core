@@ -24,7 +24,7 @@
 #include <utility>
 #include <vector>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 
 
@@ -40,7 +40,7 @@ public:
 
     // Constructors
     CalendarImpl();
-    CalendarImpl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
+    CalendarImpl(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext);
 
     /**
     * Destructor
@@ -99,7 +99,7 @@ private:
         css::uno::Reference < css::i18n::XCalendar4 > xCalendar;
     };
     std::vector<lookupTableItem>                        lookupTable;
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::i18n::XCalendar4 >       xCalendar;
 };
 

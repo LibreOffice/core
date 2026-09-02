@@ -57,7 +57,7 @@ public:
                 reference to a uno service manager, which is used internally.
      */
     ModuleAcceleratorConfiguration(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const cpo::uno::Sequence< cpo::uno::Any >& lArguments);
 
     virtual OUString getImplementationName() override
@@ -84,7 +84,7 @@ private:
 };
 
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
@@ -143,7 +143,7 @@ void ModuleAcceleratorConfiguration::fillCache()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     rtl::Reference<ModuleAcceleratorConfiguration> inst = new ModuleAcceleratorConfiguration(context, arguments);

@@ -26,7 +26,7 @@
 
 namespace filter::config{
 
-ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
  : m_xContext(rxContext)
 {
     BaseContainer::init(u"com.sun.star.comp.filter.config.ContentHandlerFactory"_ustr   ,
@@ -94,7 +94,7 @@ cpo::uno::Sequence< OUString > ContentHandlerFactory::getAvailableServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_ContentHandlerFactory_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::ContentHandlerFactory(context));
 }

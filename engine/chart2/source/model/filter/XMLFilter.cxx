@@ -65,7 +65,7 @@ constexpr OUString sXML_contentStreamName = u"content.xml"_ustr;
 
 uno::Reference< embed::XStorage > lcl_getWriteStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
-    const uno::Reference< uno::XComponentContext >& xContext,const OUString& _sMediaType)
+    const uno::Reference< cpo::uno::XComponentContext >& xContext,const OUString& _sMediaType)
 {
     uno::Reference< embed::XStorage > xStorage;
     try
@@ -122,7 +122,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
 
 uno::Reference< embed::XStorage > lcl_getReadStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
-    const uno::Reference< uno::XComponentContext >& xContext)
+    const uno::Reference< cpo::uno::XComponentContext >& xContext)
 {
     uno::Reference< embed::XStorage > xStorage;
 
@@ -180,7 +180,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
 namespace chart
 {
 
-XMLFilter::XMLFilter( Reference< uno::XComponentContext > const & xContext ) :
+XMLFilter::XMLFilter( Reference< cpo::uno::XComponentContext > const & xContext ) :
         m_xContext( xContext )
 {}
 
@@ -740,14 +740,14 @@ OUString XMLReportFilterHelper::getMediaType(bool )
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_XMLFilter_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_XMLFilter_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::XMLFilter(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_report_XMLFilter_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_report_XMLFilter_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::XMLReportFilterHelper(context));

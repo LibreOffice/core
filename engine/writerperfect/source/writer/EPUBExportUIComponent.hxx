@@ -25,10 +25,7 @@ namespace weld
 class DialogController;
 }
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerperfect
 {
@@ -40,7 +37,7 @@ class EPUBExportUIComponent
                                   css::document::XExporter>
 {
 public:
-    EPUBExportUIComponent(css::uno::Reference<css::uno::XComponentContext> xContext);
+    EPUBExportUIComponent(css::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     // XPropertyAccess
     cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getPropertyValues() override;
@@ -75,7 +72,7 @@ private:
     /// The filter data key.
     comphelper::SequenceAsHashMap maFilterData;
     /// UNO context.
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
     css::uno::Reference<css::awt::XWindow> mxDialogParent;
     std::shared_ptr<weld::DialogController> mxAsyncDialog;

@@ -37,31 +37,31 @@ excludelist:
     # Actually used
     - com/sun/star/deployment/XPackage.hpp
     - com/sun/star/deployment/XPackageManager.hpp
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/misc/lockfile.cxx:
     # Needed on WIN32
     - memory
     desktop/source/deployment/registry/executable/dp_executablebackenddb.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/registry/component/dp_compbackenddb.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/registry/script/dp_scriptbackenddb.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/registry/package/dp_extbackenddb.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/registry/configuration/dp_configurationbackenddb.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/registry/help/dp_helpbackenddb.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     desktop/source/deployment/registry/script/dp_lib_container.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     - com/sun/star/ucb/XCommandEnvironment.hpp
     desktop/source/deployment/registry/help/dp_help.cxx:
     # Actually used

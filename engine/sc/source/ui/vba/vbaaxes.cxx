@@ -64,7 +64,7 @@ public:
 }
 
 uno::Reference< excel::XAxis >
-ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno::Reference< uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup )
+ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno::Reference< cpo::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup )
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( xChart.get() );
     if ( !pChart )
@@ -89,11 +89,11 @@ class AxisIndexWrapper : public ::cppu::WeakImplHelper< container::XIndexAccess 
     // if necessary for better performance we could change this into a map and cache the
     // indices -> Axis, currently we create a new Axis object
     // on each getByIndex
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     std::vector< AxesCoordinate > mCoordinates;
     rtl::Reference< ScVbaChart > mxChart;
 public:
-    AxisIndexWrapper( uno::Reference< uno::XComponentContext > xContext, rtl::Reference< ScVbaChart > xChart ) : mxContext(std::move( xContext )), mxChart(std::move( xChart ))
+    AxisIndexWrapper( uno::Reference< cpo::uno::XComponentContext > xContext, rtl::Reference< ScVbaChart > xChart ) : mxContext(std::move( xContext )), mxChart(std::move( xChart ))
     {
         if ( !mxChart.is() )
             return;
@@ -145,7 +145,7 @@ public:
     }
 };
 
-uno::Reference< container::XIndexAccess > createIndexWrapper( const rtl::Reference< ScVbaChart >& xChart, const uno::Reference< uno::XComponentContext >& xContext )
+uno::Reference< container::XIndexAccess > createIndexWrapper( const rtl::Reference< ScVbaChart >& xChart, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     return new AxisIndexWrapper( xContext, xChart );
 }
@@ -153,7 +153,7 @@ uno::Reference< container::XIndexAccess > createIndexWrapper( const rtl::Referen
 }
 
 // #FIXME The collection semantics will never work as this object is not yet initialised correctly
-ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart ) : ScVbaAxes_BASE( xParent, xContext, createIndexWrapper( xChart, xContext )), moChartParent( xChart )
+ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart ) : ScVbaAxes_BASE( xParent, xContext, createIndexWrapper( xChart, xContext )), moChartParent( xChart )
 {
 }
 

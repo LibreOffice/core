@@ -40,7 +40,7 @@ namespace {
  */
 uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
 {
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
+    uno::Reference< cpo::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
     return frame::ModuleManager::create(xContext);
 }
 

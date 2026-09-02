@@ -34,8 +34,8 @@ namespace com::sun::star {
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class ShapeHelper;
@@ -68,7 +68,7 @@ protected:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape >  xShape, css::uno::Reference< css::drawing::XShapes > xShapes, css::uno::Reference< css::frame::XModel > xModel, sal_Int32 nType );
+    ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape >  xShape, css::uno::Reference< css::drawing::XShapes > xShapes, css::uno::Reference< css::frame::XModel > xModel, sal_Int32 nType );
     virtual ~ScVbaShape() override;
 
     /// @throws cpo::uno::RuntimeException

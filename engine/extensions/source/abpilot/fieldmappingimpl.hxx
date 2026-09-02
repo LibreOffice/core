@@ -25,13 +25,11 @@
 #include "addresssettings.hxx"
 
 namespace com::sun::star {
-    namespace uno {
-        class XComponentContext;
-    }
     namespace beans {
         class XPropertySet;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 namespace weld { class Window; }
 
 namespace abp
@@ -53,7 +51,7 @@ namespace abp
                 field mapping dialog.
         */
         bool invokeDialog(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             class weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxDataSource,
             AddressSettings& _rSettings
@@ -65,7 +63,7 @@ namespace abp
             and this function creates a mapping which uses this configuration information.</p>
         */
         void defaultMapping(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             MapString2String& /* [out] */ _rFieldAssignment
         );
 
@@ -73,7 +71,7 @@ namespace abp
         /** writes a field mapping for the template document address source
         */
         void writeTemplateAddressFieldMapping(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             MapString2String&& _rFieldAssignment
         );
 
@@ -89,7 +87,7 @@ namespace abp
             expect it.
         */
         void writeTemplateAddressSource(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const OUString& _rDataSourceName,
             const OUString& _rTableName
         );
@@ -97,7 +95,7 @@ namespace abp
         /** writes the configuration entry which states the pilot has been completed successfully
         */
         void markPilotSuccess(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
 

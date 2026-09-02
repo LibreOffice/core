@@ -1102,7 +1102,7 @@ bool PasswordContainer::authorizateWithMasterPassword( std::unique_lock<std::mut
             if ( !xTmpHandler.is() )
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-                uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+                uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
                 xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
             }
 
@@ -1151,7 +1151,7 @@ bool PasswordContainer::changeMasterPassword( const uno::Reference< task::XInter
         if ( !xTmpHandler.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+            uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
             xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
         }
 
@@ -1261,7 +1261,7 @@ bool PasswordContainer::useDefaultMasterPassword( const uno::Reference< task::XI
         if ( !xTmpHandler.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+            uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
             xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
         }
 
@@ -1393,7 +1393,7 @@ Sequence< OUString > PasswordContainer::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svl_PasswordContainer_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PasswordContainer(context));
 }

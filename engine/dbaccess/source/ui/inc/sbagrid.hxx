@@ -50,7 +50,7 @@ namespace dbaui
         StatusMultiplexerArray      m_aStatusMultiplexer;
 
     public:
-        SbaXGridControl(const css::uno::Reference< css::uno::XComponentContext >&);
+        SbaXGridControl(const css::uno::Reference< cpo::uno::XComponentContext >&);
         virtual ~SbaXGridControl() override;
 
         // UNO
@@ -89,7 +89,7 @@ namespace dbaui
             SbaURLCompare>  m_aStatusListeners;
 
     public:
-        SbaXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
+        SbaXGridPeer(const css::uno::Reference< cpo::uno::XComponentContext >&);
         virtual ~SbaXGridPeer() override;
 
         // UNO
@@ -198,7 +198,7 @@ namespace dbaui
         bool                          m_bActivatingForDrop;
 
     public:
-        SbaGridControl(css::uno::Reference< css::uno::XComponentContext > const & _rM, Window* pParent, FmXGridPeer* _pPeer, WinBits nBits);
+        SbaGridControl(css::uno::Reference< cpo::uno::XComponentContext > const & _rM, Window* pParent, FmXGridPeer* _pPeer, WinBits nBits);
         virtual ~SbaGridControl() override;
         virtual void dispose() override;
 

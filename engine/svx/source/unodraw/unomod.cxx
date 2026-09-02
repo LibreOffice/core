@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/unoevent.hxx>
@@ -178,7 +178,7 @@ css::uno::Reference<css::uno::XInterface> create(
     }
     else if (rServiceSpecifier == "com.sun.star.document.ImportGraphicStorageHandler")
     {
-        const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+        const uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
         // The one empty argument makes the helper build itself without a storage, so it resolves
         // the graphics handed to it and reads nothing from a package of its own.
         cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any() };

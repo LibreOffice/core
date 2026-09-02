@@ -20,7 +20,7 @@ using namespace com::sun::star;
 
 namespace writerperfect
 {
-EPUBExportUIComponent::EPUBExportUIComponent(uno::Reference<uno::XComponentContext> xContext)
+EPUBExportUIComponent::EPUBExportUIComponent(uno::Reference<cpo::uno::XComponentContext> xContext)
     : mxContext(std::move(xContext))
 {
 }
@@ -117,7 +117,7 @@ void SAL_CALL EPUBExportUIComponent::startExecuteModal(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new EPUBExportUIComponent(pCtx));
 }

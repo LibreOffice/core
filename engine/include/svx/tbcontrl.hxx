@@ -213,7 +213,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxColorToolBoxControl final : public 
     weld::Window* GetParentFrame() const;
 
 public:
-    explicit SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+    explicit SvxColorToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
     virtual ~SvxColorToolBoxControl() override;
 
     // XInitialization
@@ -266,7 +266,7 @@ public:
                                     std::vector<sal_uInt16>& rCurrencyList,
                                     std::vector<sfx::CurrencyID> const& rCurrencyIDs);
 
-    explicit SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
+    explicit SvxCurrencyToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
     virtual ~SvxCurrencyToolBoxControl() override;
 
     /** XToolbarController **/

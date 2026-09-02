@@ -33,7 +33,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaVariable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    SwVbaVariable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         css::uno::Reference< css::beans::XPropertyAccess > xUserDefined, OUString aName );
     virtual ~SwVbaVariable() override;
 

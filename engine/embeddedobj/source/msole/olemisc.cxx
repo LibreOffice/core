@@ -44,7 +44,7 @@
 using namespace ::com::sun::star;
 
 
-OleEmbeddedObject::OleEmbeddedObject( uno::Reference< uno::XComponentContext > xContext,
+OleEmbeddedObject::OleEmbeddedObject( uno::Reference< cpo::uno::XComponentContext > xContext,
                                       const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                       OUString aClassName )
 : m_bReadOnly( false )
@@ -77,7 +77,7 @@ OleEmbeddedObject::OleEmbeddedObject( uno::Reference< uno::XComponentContext > x
 
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
-OleEmbeddedObject::OleEmbeddedObject( uno::Reference< uno::XComponentContext > xContext, bool bLink )
+OleEmbeddedObject::OleEmbeddedObject( uno::Reference< cpo::uno::XComponentContext > xContext, bool bLink )
 : m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
@@ -105,7 +105,7 @@ OleEmbeddedObject::OleEmbeddedObject( uno::Reference< uno::XComponentContext > x
 #ifdef _WIN32
 
 // this constructor let object be initialized from clipboard
-OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext )
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 : m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )

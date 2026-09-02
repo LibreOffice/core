@@ -48,7 +48,7 @@ public:
     rtl::Reference<DAVSession>
     createDAVSession(const OUString& inUri,
                      const cpo::uno::Sequence<css::beans::NamedValue>& rFlags,
-                     const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+                     const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
 private:
     typedef std::map<OUString, DAVSession*> Map;

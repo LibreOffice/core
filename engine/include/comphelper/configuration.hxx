@@ -31,8 +31,8 @@ namespace com::sun::star {
         class XNameAccess;
         class XNameContainer;
     }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper {
 
@@ -48,8 +48,8 @@ namespace detail { class ConfigurationWrapper; }
 class COMPHELPER_DLLPUBLIC ConfigurationChanges {
 public:
     static std::shared_ptr<ConfigurationChanges> create(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>());
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>());
 
     ~ConfigurationChanges();
 
@@ -60,7 +60,7 @@ private:
     ConfigurationChanges& operator=(const ConfigurationChanges&) = delete;
 
     SAL_DLLPRIVATE ConfigurationChanges(
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
             const & context);
 
     SAL_DLLPRIVATE void setPropertyValue(
@@ -87,7 +87,7 @@ namespace detail {
 class COMPHELPER_DLLPUBLIC ConfigurationWrapper {
 public:
     static ConfigurationWrapper const & get(
-        css::uno::Reference<css::uno::XComponentContext> const & context);
+        css::uno::Reference<cpo::uno::XComponentContext> const & context);
 
     bool isReadOnly(OUString const & path) const;
 
@@ -126,14 +126,14 @@ public:
 
 private:
     SAL_DLLPRIVATE explicit ConfigurationWrapper(
-        css::uno::Reference<css::uno::XComponentContext> const & context);
+        css::uno::Reference<cpo::uno::XComponentContext> const & context);
 
     SAL_DLLPRIVATE ~ConfigurationWrapper();
 
     ConfigurationWrapper(const ConfigurationWrapper&) = delete;
     ConfigurationWrapper& operator=(const ConfigurationWrapper&) = delete;
 
-    css::uno::Reference< css::uno::XComponentContext >          context_;
+    css::uno::Reference< cpo::uno::XComponentContext >          context_;
 
     css::uno::Reference< css::configuration::XReadWriteAccess > access_;
         // should really be a css.configuration.ReadOnlyAccess (with added
@@ -203,8 +203,8 @@ template< typename T, typename U > struct ConfigurationProperty
     /// Get the read-only status of the given (non-localized) configuration
     /// property.
     static bool isReadOnly(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
@@ -213,8 +213,8 @@ template< typename T, typename U > struct ConfigurationProperty
     ///
     /// For nillable properties, U is of type std::optional<U'>.
     static U get(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         if (comphelper::IsFuzzing())
             return U();
@@ -256,8 +256,8 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     /// Get the read-only status of the given (localized) configuration
     /// property.
     static bool isReadOnly(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
@@ -268,8 +268,8 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     ///
     /// For nillable properties, U is of type std::optional<U'>.
     static U get(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
@@ -309,8 +309,8 @@ private:
 template< typename T > struct ConfigurationGroup {
     /// Get the read-only status of the given configuration group.
     static bool isReadOnly(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
@@ -318,8 +318,8 @@ template< typename T > struct ConfigurationGroup {
     /// Get read-only access to the given configuration group.
     static css::uno::Reference<
         css::container::XHierarchicalNameAccess >
-    get(css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+    get(css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).getGroupReadOnly(
             T::path());
@@ -351,8 +351,8 @@ private:
 template< typename T > struct ConfigurationSet {
     /// Get the read-only status of the given configuration set.
     static bool isReadOnly(
-        css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+        css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
@@ -360,8 +360,8 @@ template< typename T > struct ConfigurationSet {
     /// Get read-only access to the given configuration set.
     static
     css::uno::Reference< css::container::XNameAccess >
-    get(css::uno::Reference<css::uno::XComponentContext> const & context
-            = css::uno::Reference<css::uno::XComponentContext>())
+    get(css::uno::Reference<cpo::uno::XComponentContext> const & context
+            = css::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).getSetReadOnly(
             T::path());

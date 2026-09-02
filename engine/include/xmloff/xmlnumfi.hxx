@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 inline constexpr OUString XML_NUMBERSTYLES = u"NumberStyles"_ustr;

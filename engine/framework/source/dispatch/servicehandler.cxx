@@ -57,7 +57,7 @@ cpo::uno::Sequence< OUString > ServiceHandler::getSupportedServiceNames()
     @param      xFactory
                 reference to uno servicemanager for creation of new services
 */
-ServiceHandler::ServiceHandler( css::uno::Reference< css::uno::XComponentContext > xContext )
+ServiceHandler::ServiceHandler( css::uno::Reference< cpo::uno::XComponentContext > xContext )
         : m_xContext    (std::move( xContext                      ))
 {
 }
@@ -252,7 +252,7 @@ void ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ServiceHandler_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ServiceHandler(context));
 }

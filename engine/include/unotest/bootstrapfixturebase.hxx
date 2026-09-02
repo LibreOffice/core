@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
@@ -50,7 +50,7 @@ class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 {
 protected:
   Directories m_directories;
-  css::uno::Reference<css::uno::XComponentContext> m_xContext;
+  css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
   css::uno::Reference<css::lang::XMultiServiceFactory> m_xSFactory;
   css::uno::Reference<css::lang::XMultiComponentFactory> m_xFactory;
 
@@ -58,7 +58,7 @@ public:
   BootstrapFixtureBase();
   virtual ~BootstrapFixtureBase() override;
 
-  const css::uno::Reference<css::uno::XComponentContext>&
+  const css::uno::Reference<cpo::uno::XComponentContext>&
               getComponentContext() const { return m_xContext; }
   const css::uno::Reference<css::lang::XMultiServiceFactory>&
               getMultiServiceFactory() const { return m_xSFactory; }

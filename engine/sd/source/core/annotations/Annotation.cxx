@@ -40,7 +40,7 @@
 
 using namespace css;
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace sd
 {
@@ -71,7 +71,7 @@ rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage)
     return rtl::Reference<Annotation>(new Annotation(comphelper::getProcessComponentContext(), pPage));
 }
 
-Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdrPage* pPage)
+Annotation::Annotation(const uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage)
     : sdr::annotation::Annotation(context, pPage)
 {
 }

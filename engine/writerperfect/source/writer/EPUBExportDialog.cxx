@@ -74,7 +74,7 @@ namespace writerperfect
 {
 EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
                                    comphelper::SequenceAsHashMap& rFilterData,
-                                   uno::Reference<uno::XComponentContext> xContext,
+                                   uno::Reference<cpo::uno::XComponentContext> xContext,
                                    css::uno::Reference<css::lang::XComponent> xDocument)
     : GenericDialogController(pParent, u"writerperfect/ui/exportepub.ui"_ustr, u"EpubDialog"_ustr)
     , m_xContext(std::move(xContext))

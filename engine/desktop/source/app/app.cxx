@@ -1959,7 +1959,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::Type::Appear:
         if ( !GetCommandLineArgs().IsInvisible() )
         {
-            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
             // find active task - the active task is always a visible task
             Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
@@ -2088,7 +2088,7 @@ void Desktop::OpenSplashScreen()
         aSplashService = u"com.sun.star.office.PipeSplashScreen"_ustr;
 
     Sequence< Any > aSeq{ Any(true) /* bVisible */, Any(aAppName) };
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     m_rSplashScreen.set(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
         UNO_QUERY);

@@ -36,9 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <mutex>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace sfx2 {
 
@@ -122,7 +120,7 @@ private:
     rtl::Reference<WarningDialogsParent> m_xListener;
 
 public:
-    WarningDialogsParentScope(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    WarningDialogsParentScope(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
         : m_xDesktop(css::frame::Desktop::create(rContext), css::uno::UNO_QUERY_THROW)
         , m_xListener(new WarningDialogsParent)
     {
@@ -184,7 +182,7 @@ class PreventDuplicateInteraction final :
     private:
 
         /// Used to create needed uno services at runtime.
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** The outside interaction handler, which is used to handle every incoming interaction,
             if it's not blocked. */
@@ -252,7 +250,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe not necessary
         */
-        PreventDuplicateInteraction(css::uno::Reference< css::uno::XComponentContext > xContext);
+        PreventDuplicateInteraction(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
 
         /**

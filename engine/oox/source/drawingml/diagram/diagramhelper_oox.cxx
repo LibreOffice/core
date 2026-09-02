@@ -266,7 +266,7 @@ void DiagramHelper_oox::reLayout()
     //       here. XShape creation may be isolated in the future.
     SdrModel& rModel(pTarget->getSdrModelFromSdrObject());
     uno::Reference<uno::XInterface> const& rUnoModel(rModel.getUnoModel());
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     rtl::Reference<oox::shape::ShapeFilterBase> xFilter(new oox::shape::ShapeFilterBase(xContext));
 

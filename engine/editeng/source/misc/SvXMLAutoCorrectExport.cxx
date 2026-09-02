@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
-    const css::uno::Reference< css::uno::XComponentContext > & xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
     const SvxAutocorrWordList *  pNewAutocorr_List,
     const OUString &rFileName,
     css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
@@ -70,7 +70,7 @@ ErrCode SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 }
 
 SvXMLExceptionListExport::SvXMLExceptionListExport(
-    const css::uno::Reference< css::uno::XComponentContext > & xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
     const SvStringsISortDtor &rNewList,
     const OUString &rFileName,
     css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)

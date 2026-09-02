@@ -40,7 +40,7 @@
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 
 #include <svx/fmtools.hxx>
@@ -114,7 +114,7 @@ private:
 
         try
         {
-            const css::uno::Reference<css::uno::XComponentContext>& context(
+            const css::uno::Reference<cpo::uno::XComponentContext>& context(
                 comphelper::getProcessComponentContext());
             Reference< XScriptListener > const xScriptListener(
                 context->getServiceManager()->createInstanceWithContext(

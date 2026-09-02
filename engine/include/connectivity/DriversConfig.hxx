@@ -51,7 +51,7 @@ namespace connectivity
     public:
         DriversConfigImpl();
 
-        const TInstalledDrivers& getInstalledDrivers(const css::uno::Reference< css::uno::XComponentContext >& _rxORB) const;
+        const TInstalledDrivers& getInstalledDrivers(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB) const;
     };
 
     // Allows to access all driver which are located in the configuration
@@ -62,7 +62,7 @@ namespace connectivity
 
         const ::comphelper::NamedValueCollection& impl_get(std::u16string_view _sURL,sal_Int32 _nProps) const;
     public:
-        DriversConfig(css::uno::Reference< css::uno::XComponentContext > _xORB);
+        DriversConfig(css::uno::Reference< cpo::uno::XComponentContext > _xORB);
         ~DriversConfig();
 
         DriversConfig( const DriversConfig& );
@@ -75,7 +75,7 @@ namespace connectivity
         cpo::uno::Sequence< OUString > getURLs() const;
     private:
         OSharedConfigNode                                  m_aNode;
-        css::uno::Reference< css::uno::XComponentContext > m_xORB;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xORB;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX

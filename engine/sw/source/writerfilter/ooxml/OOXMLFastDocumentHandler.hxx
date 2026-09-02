@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <dmapper/resourcemodel.hxx>
@@ -35,7 +35,7 @@ class OOXMLFastDocumentHandler : public cppu::WeakImplHelper<css::xml::sax::XFas
 {
 public:
     OOXMLFastDocumentHandler(
-        css::uno::Reference< css::uno::XComponentContext > context,
+        css::uno::Reference< cpo::uno::XComponentContext > context,
         Stream* pStream,
         OOXMLDocument* pDocument,
         sal_Int32 nXNoteId );
@@ -77,7 +77,7 @@ private:
     OOXMLFastDocumentHandler(OOXMLFastDocumentHandler const &) = delete;
     void operator =(OOXMLFastDocumentHandler const &) = delete;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     Stream * mpStream;
     OOXMLDocument* mpDocument;

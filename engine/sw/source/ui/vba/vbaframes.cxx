@@ -32,14 +32,14 @@ class FramesEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     uno::Reference< container::XIndexAccess> mxIndexAccess;
     rtl::Reference< SwXTextDocument > mxModel;
     sal_Int32 mnCurrentPos;
 public:
     /// @throws uno::RuntimeException
     FramesEnumeration( uno::Reference< XHelperInterface > xParent,
-                       uno::Reference< uno::XComponentContext > xContext,
+                       uno::Reference< cpo::uno::XComponentContext > xContext,
                        uno::Reference< container::XIndexAccess > xIndexAccess,
                        rtl::Reference< SwXTextDocument >  xModel  )
     : mxParent(std::move( xParent )),
@@ -67,7 +67,7 @@ public:
 }
 
 SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent,
-                          const uno::Reference< uno::XComponentContext > & xContext,
+                          const uno::Reference< cpo::uno::XComponentContext > & xContext,
                           const uno::Reference< container::XIndexAccess >& xFrames,
                           rtl::Reference< SwXTextDocument > xModel )
 : SwVbaFrames_BASE( xParent, xContext, xFrames ),

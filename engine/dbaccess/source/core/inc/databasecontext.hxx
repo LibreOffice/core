@@ -73,7 +73,7 @@ private:
 #endif
 
     ::osl::Mutex                    m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                                     m_aContext;
 
     css::uno::Reference< css::sdb::XDatabaseRegistrations >
@@ -94,7 +94,7 @@ private:
     rtl::Reference<DatabaseDocumentLoader>         m_xDatabaseDocumentLoader;
 
 public:
-    explicit ODatabaseContext( const css::uno::Reference< css::uno::XComponentContext >& );
+    explicit ODatabaseContext( const css::uno::Reference< cpo::uno::XComponentContext >& );
     virtual ~ODatabaseContext() override;
 
     // OComponentHelper

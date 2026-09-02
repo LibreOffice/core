@@ -33,8 +33,8 @@
 
 namespace com::sun::star {
     namespace io { class XInputStream; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper { class SequenceAsHashMap; }
 
@@ -57,7 +57,7 @@ enum class OOXMLVariant {
 class FilterDetectDocHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
 {
 public:
-    explicit            FilterDetectDocHandler( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString& rFilter, OUString aFileName );
+    explicit            FilterDetectDocHandler( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, OUString& rFilter, OUString aFileName );
     virtual             ~FilterDetectDocHandler() override;
 
     // XFastDocumentHandler
@@ -92,7 +92,7 @@ private:
     ContextVector       maContextStack;
     OUString            maTargetPath;
     OOXMLVariant        maOOXMLVariant;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 
@@ -100,7 +100,7 @@ class OOX_DLLPUBLIC FilterDetect final : public ::cppu::WeakImplHelper<css::docu
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    explicit            FilterDetect( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit            FilterDetect( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual             ~FilterDetect() override;
 
     /** Tries to extract an unencrypted ZIP package from the passed media
@@ -157,7 +157,7 @@ public:
                         detect( cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 

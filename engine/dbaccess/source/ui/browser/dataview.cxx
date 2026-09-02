@@ -35,7 +35,7 @@ namespace dbaui
 
     ODataView::ODataView(   vcl::Window* pParent,
                             IController& _rController,
-                            const Reference< XComponentContext >& _rxContext,
+                            const Reference< cpo::uno::XComponentContext >& _rxContext,
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xContext(_rxContext)

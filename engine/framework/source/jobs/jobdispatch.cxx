@@ -62,7 +62,7 @@ class JobDispatch : public  ::cppu::WeakImplHelper<
 private:
 
     /** reference to the uno service manager */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** reference to the frame, inside which this dispatch is used */
     css::uno::Reference< css::frame::XFrame > m_xFrame;
@@ -74,7 +74,7 @@ private:
 
 public:
 
-    explicit JobDispatch(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    explicit JobDispatch(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
     virtual ~JobDispatch() override;
 
     void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
@@ -133,7 +133,7 @@ public:
     @param      xContext
                     reference to the uno service manager
 */
-JobDispatch::JobDispatch( /*IN*/ css::uno::Reference< css::uno::XComponentContext >  xContext )
+JobDispatch::JobDispatch( /*IN*/ css::uno::Reference< cpo::uno::XComponentContext >  xContext )
     : m_xContext    (std::move(xContext                        ))
 {
 }
@@ -465,7 +465,7 @@ void JobDispatch::removeStatusListener( /*IN*/ const css::uno::Reference< css::f
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_jobs_JobDispatch_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new JobDispatch(context));

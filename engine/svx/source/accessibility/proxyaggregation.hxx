@@ -26,9 +26,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 namespace cpo::uno { class XAggregation; }
 namespace com::sun::star::lang { class XComponent; }
 
@@ -83,16 +81,16 @@ namespace accessibility
     private:
         css::uno::Reference< cpo::uno::XAggregation >             m_xProxyAggregate;
         css::uno::Reference< css::lang::XTypeProvider >           m_xProxyTypeAccess;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
 
     protected:
-        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const
+        const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const
         {
             return m_xContext;
         }
 
     protected:
-        OProxyAggregation( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+        OProxyAggregation( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
         ~OProxyAggregation();
 
         /// to be called from within your ctor
@@ -149,7 +147,7 @@ namespace accessibility
 
     protected:
         OComponentProxyAggregationHelper(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             ::cppu::OBroadcastHelper& _rBHelper
         );
         virtual ~OComponentProxyAggregationHelper( );
@@ -182,7 +180,7 @@ namespace accessibility
     {
     protected:
         OComponentProxyAggregation(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::lang::XComponent >& _rxComponent
         );
 

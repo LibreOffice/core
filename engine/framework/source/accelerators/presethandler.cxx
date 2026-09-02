@@ -74,7 +74,7 @@ tools::DeleteOnDeinit<TSharedStorages>& SharedStorages()
 
 }
 
-PresetHandler::PresetHandler(css::uno::Reference< css::uno::XComponentContext > xContext)
+PresetHandler::PresetHandler(css::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext(std::move(xContext))
     , m_eConfigType(E_GLOBAL)
     , m_bShouldReopenRWOnStore(false)
@@ -184,7 +184,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (xRoot.is())
         return xRoot;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
@@ -243,7 +243,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (xRoot.is())
         return xRoot;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;

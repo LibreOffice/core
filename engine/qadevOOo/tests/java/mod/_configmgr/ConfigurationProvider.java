@@ -19,7 +19,7 @@
 package mod._configmgr;
 
 import com.sun.star.beans.NamedValue;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;

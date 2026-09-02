@@ -56,7 +56,7 @@ class CellCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAcc
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     uno::Reference< css::text::XTextTable > mxTextTable;
     sal_Int32 mnLeft;
     sal_Int32 mnTop;
@@ -65,7 +65,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    CellCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< css::uno::XComponentContext > xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnLeft( nLeft ), mnTop( nTop ), mnRight( nRight ), mnBottom( nBottom )
+    CellCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< cpo::uno::XComponentContext > xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnLeft( nLeft ), mnTop( nTop ), mnRight( nRight ), mnBottom( nBottom )
     {
     }
 
@@ -106,7 +106,7 @@ public:
 
 }
 
-SwVbaCells::SwVbaCells( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) : SwVbaCells_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new CellCollectionHelper( xParent, xContext, xTextTable, nLeft, nTop, nRight, nBottom ) ) ), mxTextTable( xTextTable ), mnTop( nTop ), mnBottom( nBottom )
+SwVbaCells::SwVbaCells( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) : SwVbaCells_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new CellCollectionHelper( xParent, xContext, xTextTable, nLeft, nTop, nRight, nBottom ) ) ), mxTextTable( xTextTable ), mnTop( nTop ), mnBottom( nBottom )
 {
 }
 

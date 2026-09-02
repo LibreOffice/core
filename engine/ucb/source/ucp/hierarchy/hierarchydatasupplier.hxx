@@ -38,7 +38,7 @@ private:
 
 public:
     HierarchyResultSetDataSupplier(
-                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                     const rtl::Reference< HierarchyContent >& rContent,
                     sal_Int32 nOpenMode );
     virtual ~HierarchyResultSetDataSupplier() override;
@@ -80,7 +80,7 @@ private:
     std::mutex                                      m_aMutex;
     ResultList                                      m_aResults;
     rtl::Reference< HierarchyContent >              m_xContent;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     HierarchyEntry                                  m_aFolder;
     HierarchyEntry::iterator                        m_aIterator;
     sal_Int32                                       m_nOpenMode;

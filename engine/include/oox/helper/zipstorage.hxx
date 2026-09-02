@@ -28,8 +28,8 @@ namespace com::sun::star {
     namespace embed { class XStorage; }
     namespace io { class XInputStream; }
     namespace io { class XStream; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
 
@@ -39,12 +39,12 @@ class ZipStorage final : public StorageBase
 {
 public:
     explicit            ZipStorage(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStream,
                             bool bRepairStorage );
 
     explicit            ZipStorage(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XStream >& rxStream );
 
     virtual             ~ZipStorage() override;

@@ -130,7 +130,7 @@ ScVbaControlListener::disposing( const lang::EventObject& )
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< ::uno::XInterface > xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< ::uno::XInterface > xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : ControlImpl_BASE( xParent, xContext ), m_xControl(std::move( xControl )), m_xModel(std::move( xModel ))
 {
     //add listener
@@ -596,7 +596,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
 //ScVbaControlFactory
 
 /*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createShapeControl(
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const uno::Reference< drawing::XControlShape >& xControlShape,
         const uno::Reference< frame::XModel >& xModel )
 {
@@ -640,7 +640,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
 }
 
 /*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createUserformControl(
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const uno::Reference< awt::XControl >& xControl,
         const uno::Reference< awt::XControl >& xDialog,
         const uno::Reference< frame::XModel >& xModel,
@@ -764,9 +764,9 @@ namespace {
 
 class ControlProviderImpl : public cppu::WeakImplHelper< XControlProvider, css::lang::XServiceInfo >
 {
-    uno::Reference< uno::XComponentContext > m_xCtx;
+    uno::Reference< cpo::uno::XComponentContext > m_xCtx;
 public:
-    explicit ControlProviderImpl( uno::Reference< uno::XComponentContext > xCtx ) : m_xCtx(std::move( xCtx )) {}
+    explicit ControlProviderImpl( uno::Reference< cpo::uno::XComponentContext > xCtx ) : m_xCtx(std::move( xCtx )) {}
     virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) override;
 
     //  XServiceInfo
@@ -803,7 +803,7 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ControlProviderImpl_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ControlProviderImpl(context));
 }

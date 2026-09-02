@@ -33,7 +33,7 @@ class Content;
 class DataSupplier : public ::ucbhelper::ResultSetDataSupplier
 {
 public:
-    DataSupplier( css::uno::Reference< css::uno::XComponentContext > xContext,
+    DataSupplier( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                   const rtl::Reference< Content >& rContent );
     virtual ~DataSupplier() override;
 
@@ -76,7 +76,7 @@ private:
     std::mutex                                   m_aMutex;
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::container::XEnumeration >    m_xFolderEnum;
     bool                                     m_bCountFinal;
     bool                                     m_bThrowException;

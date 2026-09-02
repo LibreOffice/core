@@ -54,7 +54,7 @@ namespace dbaccess
     using cpo::uno::Exception;
     using cpo::uno::Any;
     using cpo::uno::Sequence;
-    using css::uno::XComponentContext;
+    using cpo::uno::XComponentContext;
     using css::embed::XStorage;
     using css::sdb::application::XDatabaseDocumentUI;
     using css::beans::Pair;
@@ -187,7 +187,7 @@ namespace dbaccess
         virtual void    EndElement  ( const bool i_bIgnoreWhitespace ) override;
         virtual void    Characters( const OUString& i_rCharacters ) override;
 
-        virtual css::uno::Reference< css::uno::XComponentContext >
+        virtual css::uno::Reference< cpo::uno::XComponentContext >
                         GetComponentContext() const override;
 
     private:
@@ -233,7 +233,7 @@ namespace dbaccess
         m_rDelegator.characters( i_rCharacters );
     }
 
-    Reference< css::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
+    Reference< cpo::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
     {
         return m_rContext;
     }

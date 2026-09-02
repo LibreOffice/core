@@ -2461,7 +2461,7 @@ bool ScaDate::operator<( const ScaDate& rCmp ) const
 }
 
 
-ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext )
+ScaAnyConverter::ScaAnyConverter( const uno::Reference< cpo::uno::XComponentContext >& xContext )
     : nDefaultFormat(0)
     , bHasValidFormat(false)
 {

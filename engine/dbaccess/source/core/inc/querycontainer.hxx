@@ -95,7 +95,7 @@ namespace dbaccess
         OQueryContainer(
             const css::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             ::dbtools::WarningsContainer* _pWarnings
             );
 
@@ -105,7 +105,7 @@ namespace dbaccess
         static rtl::Reference<OQueryContainer> create(
             const css::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             ::dbtools::WarningsContainer* _pWarnings
             );
 

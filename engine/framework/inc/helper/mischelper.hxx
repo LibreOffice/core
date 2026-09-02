@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -108,10 +108,10 @@ inline void RetrieveTypeNameFromResourceURL( std::u16string_view aResourceURL, O
 class LanguageGuessingHelper
 {
     mutable css::uno::Reference< css::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
-    css::uno::Reference< css::uno::XComponentContext >                    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >                    m_xContext;
 
 public:
-    LanguageGuessingHelper(css::uno::Reference< css::uno::XComponentContext > _xContext) : m_xContext(std::move(_xContext)){}
+    LanguageGuessingHelper(css::uno::Reference< cpo::uno::XComponentContext > _xContext) : m_xContext(std::move(_xContext)){}
 
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const &  GetGuesser() const;
 };
@@ -248,12 +248,12 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
 
 css::uno::Reference<css::ui::XContextChangeEventListener>
 GetFirstListenerWith_Impl(
-    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
     css::uno::Reference<css::uno::XInterface> const& xEventFocus,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
 
 extern auto (*g_pGetMultiplexerListener)(
-    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
     css::uno::Reference<css::uno::XInterface> const&,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const&)
     -> css::uno::Reference<css::ui::XContextChangeEventListener>;

@@ -34,7 +34,7 @@ namespace logging
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::logging::XLogFormatter;
     using ::cpo::uno::Exception;

@@ -27,7 +27,7 @@ namespace svxform
 {
     using namespace ::com::sun::star::uno;
 
-    OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
+    OSQLParserClient::OSQLParserClient(const Reference< cpo::uno::XComponentContext >& rxContext)
         : m_pParser(std::make_shared<OSQLParser>(rxContext, getParseContext()))
     {
     }

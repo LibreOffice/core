@@ -36,7 +36,7 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 bool ImagesConfiguration::LoadImages(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
     const css::uno::Reference<css::io::XInputStream>& rInputStream, ImageItemDescriptorList& rItems)
 {
     Reference<XParser> xParser = Parser::create(rxContext);
@@ -73,7 +73,7 @@ bool ImagesConfiguration::LoadImages(
 }
 
 bool ImagesConfiguration::StoreImages(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
     const css::uno::Reference<css::io::XOutputStream>& rOutputStream,
     const ImageItemDescriptorList& rItems)
 {

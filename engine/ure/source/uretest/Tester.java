@@ -18,7 +18,7 @@
 
 package test.java.tester;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import test.types.CppTest;
 import test.types.JavaTest;
 import test.types.TestException;

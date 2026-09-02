@@ -66,7 +66,7 @@ namespace
 }
 
 
-OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
+OptimisticSet::OptimisticSet(const Reference<cpo::uno::XComponentContext>& _rContext,
                              const Reference< XConnection>& i_xConnection,
                              const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                              const ORowSetValueVector& _aParameterValueForCache,

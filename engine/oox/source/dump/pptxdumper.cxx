@@ -109,7 +109,7 @@ Dumper::Dumper( const FilterBase& rFilter )
     DumperBase::construct( xCfg );
 }
 
-Dumper::Dumper( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+Dumper::Dumper( const Reference< cpo::uno::XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
 {
     if( rxContext.is() && rxInStrm.is() )
     {

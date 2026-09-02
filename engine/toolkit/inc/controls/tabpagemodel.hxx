@@ -28,7 +28,7 @@ class UnoControlTabPageModel final : public ControlModelContainerBase
     cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 public:
-    UnoControlTabPageModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory);
+    UnoControlTabPageModel( css::uno::Reference< cpo::uno::XComponentContext > const & i_factory);
 
     // css::io::XPersistObject
     OUString getServiceName() override;
@@ -56,7 +56,7 @@ private:
     bool            m_bWindowListener;
 public:
 
-    UnoControlTabPage( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoControlTabPage( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UnoControlTabPage() override;
     OUString             GetComponentServiceName() const override;
 

@@ -36,7 +36,7 @@ namespace {
 class ThesaurusMenuController : public svt::PopupMenuControllerBase
 {
 public:
-    explicit ThesaurusMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ThesaurusMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XStatusListener
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -56,7 +56,7 @@ private:
 
 }
 
-ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
+ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext ) :
     svt::PopupMenuControllerBase( rxContext ),
     m_xLinguServiceManager( css::linguistic2::LinguServiceManager::create( rxContext ) ),
     m_xThesaurus( m_xLinguServiceManager->getThesaurus() )
@@ -95,7 +95,7 @@ void ThesaurusMenuController::fillPopupMenu()
     {
         try
         {
-            const css::uno::Reference<css::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+            const css::uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
             css::uno::Reference<css::graphic::XGraphicProvider> xProvider(css::graphic::GraphicProvider::create(xContext));
             xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, aSynonymsImageUrl) });
         }
@@ -177,7 +177,7 @@ cpo::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ThesaurusMenuController_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence< cpo::uno::Any > const & )
 {
     return cppu::acquire( new ThesaurusMenuController( xContext ) );

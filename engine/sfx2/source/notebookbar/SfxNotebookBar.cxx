@@ -100,7 +100,7 @@ CreateExtraPanelController(const OUString& rServiceName,
 
     try
     {
-        const css::uno::Reference<css::uno::XComponentContext>& xContext
+        const css::uno::Reference<cpo::uno::XComponentContext>& xContext
             = comphelper::getProcessComponentContext();
         return css::uno::Reference<css::lang::XComponent>(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -389,7 +389,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     if (!pViewShell)
         return false;
 
-    const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const css::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
     OUString aModuleName = xModuleManager->identify( xFrame );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
@@ -484,7 +484,7 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
 
     Reference<frame::XFrame> xFrame;
     vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::NONE;
-    const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
 
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())

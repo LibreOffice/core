@@ -31,7 +31,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
@@ -113,7 +113,7 @@ namespace chart
 
 LineChartTypeTemplate::LineChartTypeTemplate(
     uno::Reference<
-        uno::XComponentContext > const & xContext,
+        cpo::uno::XComponentContext > const & xContext,
     const OUString & rServiceName,
     StackMode eStackMode,
     bool bSymbols,

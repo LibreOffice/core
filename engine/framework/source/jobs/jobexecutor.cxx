@@ -61,7 +61,7 @@ class JobExecutor : public Base
 private:
 
     /** reference to the uno service manager */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** cached list of all registered event names of cfg for call optimization. */
     std::vector<OUString> m_lEvents;
@@ -76,7 +76,7 @@ private:
 
 public:
 
-    explicit JobExecutor(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit JobExecutor(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
     virtual ~JobExecutor() override;
 
     virtual OUString getImplementationName() override
@@ -119,7 +119,7 @@ public:
     @param      xContext
                     reference to the uno service manager
  */
-JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
+JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : m_xContext          (xContext                                                        )
     , m_aConfig           (xContext, u"/org.openoffice.Office.Jobs/Events"_ustr)
 {
@@ -373,7 +373,7 @@ void JobExecutor::disposing( const css::lang::EventObject& aEvent )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_JobExecutor_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<JobExecutor> xJobExec = new JobExecutor(context);

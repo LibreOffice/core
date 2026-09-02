@@ -61,7 +61,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
     std::unique_ptr<PropertyMap> m_pProps;
 
 public:
-    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rContext );
+    explicit ContentProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
     virtual ~ContentProvider() override;
 
     // XInterface

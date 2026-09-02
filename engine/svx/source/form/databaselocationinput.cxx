@@ -25,7 +25,7 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -42,7 +42,7 @@ namespace svx
 {
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Exception;

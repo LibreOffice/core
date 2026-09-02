@@ -35,7 +35,7 @@
 #include <cpo/uno/Any.h>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -54,7 +54,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
     lang::XServiceInfo
 >
 {
-    const uno::Reference< uno::XComponentContext >
+    const uno::Reference< cpo::uno::XComponentContext >
         mxContext;
     cpo::uno::Sequence< beans::PropertyValue >
         maMediaDescriptor;
@@ -70,7 +70,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
 
 public:
 
-    explicit SvFilterOptionsDialog( uno::Reference< uno::XComponentContext > _xORB );
+    explicit SvFilterOptionsDialog( uno::Reference< cpo::uno::XComponentContext > _xORB );
 
     // XInterface
     virtual void acquire() noexcept override;
@@ -97,7 +97,7 @@ public:
 
 };
 
-SvFilterOptionsDialog::SvFilterOptionsDialog( uno::Reference< uno::XComponentContext > xContext ) :
+SvFilterOptionsDialog::SvFilterOptionsDialog( uno::Reference< cpo::uno::XComponentContext > xContext ) :
     mxContext           (std::move( xContext )),
     meFieldUnit         ( FieldUnit::CM ),
     mbExportSelection   ( false ),
@@ -282,7 +282,7 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svtools_SvFilterOptionsDialog_get_implementation(
-    css::uno::XComponentContext * context,
+    cpo::uno::XComponentContext * context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvFilterOptionsDialog(context));

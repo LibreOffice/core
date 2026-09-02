@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/Ambiguous.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/sequence.hxx>
 #include <utility>
@@ -94,7 +94,7 @@ OUString CompIdentifiers::getName(std::vector<Reference<css::deployment::XPackag
     return extension->getDisplayName();
 }
 
-void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const & xCmdEnv, Reference< uno::XComponentContext > const & xContext)
+void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const & xCmdEnv, Reference< cpo::uno::XComponentContext > const & xContext)
 {
     //Write the lastmodified file
     try {
@@ -154,7 +154,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
 namespace dp_manager {
 
 //ToDo: bundled extension
-ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
+ExtensionManager::ExtensionManager( Reference< cpo::uno::XComponentContext > const& xContext) :
     ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager, css::lang::XServiceInfo >(m_aMutex)
     , m_xContext(xContext)
 {
@@ -1421,7 +1421,7 @@ void ExtensionManager::fireModified()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_ExtensionManager_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_manager::ExtensionManager(context));
 }

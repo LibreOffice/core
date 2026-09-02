@@ -34,7 +34,7 @@
 #include <memory>
 #include <string_view>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XLocaleData5; }
 namespace com::sun::star::i18n { struct Calendar2; }
 namespace com::sun::star::i18n { struct Currency2; }
@@ -76,7 +76,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::i18n::XLocaleData5 >     xLD;
     LanguageTag                                        maLanguageTag;
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
@@ -119,7 +119,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     SAL_DLLPRIVATE void loadDigitGrouping();
 
     LocaleDataWrapper(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         LanguageTag aLanguageTag
         );
 
@@ -146,7 +146,7 @@ public:
         lives "on the grassland". The CalendarWrapper ctor can handle that
         though. */
     const css::uno::Reference<
-        css::uno::XComponentContext > & getComponentContext()
+        cpo::uno::XComponentContext > & getComponentContext()
         const { return m_xContext; }
 
     /// get current requested Locale

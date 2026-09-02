@@ -34,12 +34,12 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace {
 
 OUString getDefaultLocale(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return LanguageTag(
         css::uno::Reference< css::lang::XLocalizable >(
@@ -62,7 +62,7 @@ OUString extendLocalizedPath(std::u16string_view path, OUString const & locale) 
 
 std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::ConfigurationChanges::create(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
+    css::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     return detail::ConfigurationWrapper::get(context).createChanges();
 }
@@ -74,7 +74,7 @@ void comphelper::ConfigurationChanges::commit() const {
 }
 
 comphelper::ConfigurationChanges::ConfigurationChanges(
-    css::uno::Reference< css::uno::XComponentContext > const & context):
+    css::uno::Reference< cpo::uno::XComponentContext > const & context):
     access_(
         css::configuration::ReadWriteAccess::create(
             context, getDefaultLocale(context)))
@@ -102,14 +102,14 @@ comphelper::ConfigurationChanges::getSet(OUString const & path) const
 
 comphelper::detail::ConfigurationWrapper const &
 comphelper::detail::ConfigurationWrapper::get(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
+    css::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     static comphelper::detail::ConfigurationWrapper WRAPPER(context);
     return WRAPPER;
 }
 
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
-    css::uno::Reference<css::uno::XComponentContext> const & context):
+    css::uno::Reference<cpo::uno::XComponentContext> const & context):
     context_(context.is() ? context : comphelper::getProcessComponentContext()),
     access_(css::configuration::ReadWriteAccess::create(context_, u"*"_ustr))
 {}

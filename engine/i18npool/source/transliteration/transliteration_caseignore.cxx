@@ -25,7 +25,7 @@
 
 #include <transliteration_caseignore.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
@@ -138,7 +138,7 @@ Transliteration_caseignore::compare(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::Transliteration_caseignore());

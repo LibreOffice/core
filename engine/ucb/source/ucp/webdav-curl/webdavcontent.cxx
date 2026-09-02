@@ -74,7 +74,7 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include "webdavcontent.hxx"
 #include "webdavprovider.hxx"
@@ -196,7 +196,7 @@ static DAVOptionsCache aStaticDAVOptionsCache;
 
 // ctr for content on an existing webdav resource
 Content::Content(
-          const uno::Reference< uno::XComponentContext >& rxContext,
+          const uno::Reference< cpo::uno::XComponentContext >& rxContext,
           ContentProvider* pProvider,
           const uno::Reference< ucb::XContentIdentifier >& Identifier,
           rtl::Reference< DAVSessionFactory > const & rSessionFactory )
@@ -228,7 +228,7 @@ Content::Content(
 
 // ctr for content on a non-existing webdav resource
 Content::Content(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             rtl::Reference< DAVSessionFactory > const & rSessionFactory,
@@ -1187,7 +1187,7 @@ OUString Content::getParentURL()
 
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext,
     const cpo::uno::Sequence< beans::Property >& rProperties,
     const ContentProperties& rData,
     const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
@@ -1310,7 +1310,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     std::unique_ptr< DAVResourceAccess > xResAccess;
     OUString aUnescapedTitle;
     bool bHasAll = false;
-    uno::Reference< uno::XComponentContext > xContext;
+    uno::Reference< cpo::uno::XComponentContext > xContext;
     uno::Reference< ucb::XContentIdentifier > xIdentifier;
     rtl::Reference< ::ucbhelper::ContentProviderImplHelper > xProvider;
 
@@ -2727,7 +2727,7 @@ void Content::transfer(
         const ucb::TransferInfo & rArgs,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
-    uno::Reference< uno::XComponentContext > xContext;
+    uno::Reference< cpo::uno::XComponentContext > xContext;
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     uno::Reference< ucb::XContentProvider >      xProvider;
     std::unique_ptr< DAVResourceAccess > xResAccess;

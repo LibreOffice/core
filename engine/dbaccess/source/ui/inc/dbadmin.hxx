@@ -50,7 +50,7 @@ public:
         after the dialog has been destroyed
     */
     ODbAdminDialog(weld::Window* pParent, SfxItemSet const * _pItems,
-                   const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+                   const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
     virtual ~ODbAdminDialog() override;
 
     /** create and return an item set for use with the dialog.
@@ -72,7 +72,7 @@ public:
     virtual SfxItemSet* getWriteOutputSet() override;
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
+    virtual css::uno::Reference< cpo::uno::XComponentContext > getORB() const override;
     virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,bool> createConnection() override;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
     virtual void clearPassword() override;

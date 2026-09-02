@@ -32,7 +32,7 @@
 
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::i18n { class XCollator; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace cpo::uno { template <typename> class Sequence; }
 
 // OUString helper functions that are not widespread or mature enough to
@@ -346,7 +346,7 @@ private:
     css::uno::Reference< css::i18n::XBreakIterator > m_xBI;
 public:
     NaturalStringSorter(
-        const css::uno::Reference< css::uno::XComponentContext > &rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > &rContext,
         css::lang::Locale aLocale);
     sal_Int32 compare(const OUString &rLHS, const OUString &rRHS) const
     {

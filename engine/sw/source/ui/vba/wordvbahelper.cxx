@@ -163,7 +163,7 @@ bool gotoSelectedObjectAnchor( const rtl::Reference<SwXTextDocument>& xModel )
     return isObjectSelected;
 }
 
-rtl::Reference< SwXTextDocument > getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
+rtl::Reference< SwXTextDocument > getCurrentWordDoc( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     try
     {
@@ -182,7 +182,7 @@ rtl::Reference< SwXTextDocument > getCurrentWordDoc( const uno::Reference< uno::
     return {};
 }
 
-rtl::Reference< SwXTextDocument > getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
+rtl::Reference< SwXTextDocument > getThisWordDoc( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     return dynamic_cast<SwXTextDocument*>(::ooo::vba::getCurrentDocCtx( u"WordDocumentContext"_ustr , xContext ).get());
 }

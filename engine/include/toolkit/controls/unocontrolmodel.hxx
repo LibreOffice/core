@@ -39,7 +39,7 @@
 #include <vector>
 #include <map>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 typedef std::map<sal_uInt16, cpo::uno::Any> ImplPropertyTable;
 
@@ -59,7 +59,7 @@ private:
     EventListenerMultiplexer                maDisposeListeners;
 
 protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
@@ -103,14 +103,14 @@ protected:
         : UnoControlModel_Base()
         , OPropertySetHelper()
         , maDisposeListeners( *this )
-        , m_xContext( css::uno::Reference< css::uno::XComponentContext >() )
+        , m_xContext( css::uno::Reference< cpo::uno::XComponentContext >() )
     {
         assert(false);
     }
 #endif
 
 public:
-                UnoControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                UnoControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                 UnoControlModel( const UnoControlModel& rModel );
 
     virtual rtl::Reference<UnoControlModel> Clone() const = 0;

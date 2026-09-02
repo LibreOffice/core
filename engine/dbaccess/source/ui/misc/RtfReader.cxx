@@ -45,7 +45,7 @@ using namespace ::com::sun::star::awt;
 ORTFReader::ORTFReader( SvStream& rIn,
                         const SharedConnection& _rxConnection,
                         const Reference< css::util::XNumberFormatter >& _rxNumberF,
-                        const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
+                        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext)
     :SvRTFParser(rIn)
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, rIn )
 {
@@ -56,7 +56,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
                        TPositions&& _rColumnPositions,
                        const Reference< css::util::XNumberFormatter >& _rxNumberF,
-                       const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                       const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                        const TColumnVector* pList,
                        const OTypeInfoMap* _pInfoMap,
                        bool _bAutoIncrementEnabled)

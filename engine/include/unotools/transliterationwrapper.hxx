@@ -28,7 +28,7 @@
 
 namespace cpo::uno { template <typename > class Sequence; }
 namespace com::sun::star::i18n { class XExtendedTransliteration; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 enum class TransliterationFlags;
 
 namespace utl
@@ -48,7 +48,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
     void setLanguageLocaleImpl( LanguageType nLang );
 
 public:
-    TransliterationWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+    TransliterationWrapper( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
                     TransliterationFlags nType );
 
     ~TransliterationWrapper();

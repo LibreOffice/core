@@ -21,7 +21,7 @@
 
 #include <unordered_map>
 #include <vector>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
@@ -170,7 +170,7 @@ class SfxLibraryContainer
     rtl_TextEncoding meVBATextEncoding;
     OUString msProjectName;
 protected:
-    css::uno::Reference< css::uno::XComponentContext >       mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >       mxContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
     css::uno::Reference< css::util::XStringSubstitution >    mxStringSubstitution;
     cpo::uno::WeakReference< css::frame::XModel >            mxOwnerDocument;
@@ -614,7 +614,7 @@ private:
     css::uno::Reference< css::deployment::XPackage >
         implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     enum IteratorState
     {

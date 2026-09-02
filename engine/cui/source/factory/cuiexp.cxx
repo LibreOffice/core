@@ -23,7 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 /// anonymous implementation namespace
 namespace
@@ -60,7 +60,7 @@ public:
 
 extern "C" {
 SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_cui_GetCreateDialogFactoryService(css::uno::XComponentContext*,
+com_sun_star_cui_GetCreateDialogFactoryService(cpo::uno::XComponentContext*,
                                                cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GetCreateDialogFactoryService);

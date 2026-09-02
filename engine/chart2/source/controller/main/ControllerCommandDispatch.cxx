@@ -483,7 +483,7 @@ bool ModelState::HasAnyTitle() const
 } // namespace impl
 
 ControllerCommandDispatch::ControllerCommandDispatch(
-    const Reference< uno::XComponentContext > & xContext,
+    const Reference< cpo::uno::XComponentContext > & xContext,
     ChartController* pController, CommandDispatchContainer* pContainer ) :
         impl::ControllerCommandDispatch_Base( xContext ),
         m_xChartController( pController ),

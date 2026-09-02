@@ -31,7 +31,7 @@ class SvxUndoRedoControl final : public svt::PopupWindowController
     OUString aDefaultTooltip;
 
 public:
-    SvxUndoRedoControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    SvxUndoRedoControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~SvxUndoRedoControl() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

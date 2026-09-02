@@ -45,7 +45,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     std::unique_ptr<SdDrawDocument> m_pDoc;
 };
 

@@ -22,13 +22,13 @@ module com {  module sun {  module star {  module lang {
  published interface XMultiComponentFactory;
 }; }; }; };
 
-module com {  module sun {  module star {  module uno {
+module cpo {  module uno {
 
 /** Component context to be passed to a component via
     com::sun::star::lang::XSingleComponentFactory.
     Arbitrary values (e.g. deployment values) can be retrieved from the context.
 */
-published interface XComponentContext : XInterface
+published interface XComponentContext : com::sun::star::uno::XInterface
 {
     /** Gets a value from the context.
 
@@ -51,6 +51,6 @@ published interface XComponentContext : XInterface
     com::sun::star::lang::XMultiComponentFactory getServiceManager();
 };
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

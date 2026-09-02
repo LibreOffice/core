@@ -31,7 +31,7 @@
 
 namespace com::sun::star::i18n { class XLocaleData5; }
 namespace com::sun::star::i18n { struct FormatElement; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class NumberFormatCodeMapper final : public cppu::WeakImplHelper
 <
@@ -41,7 +41,7 @@ class NumberFormatCodeMapper final : public cppu::WeakImplHelper
 {
 public:
     NumberFormatCodeMapper( const css::uno::Reference <
-                    css::uno::XComponentContext >& rxContext );
+                    cpo::uno::XComponentContext >& rxContext );
     virtual ~NumberFormatCodeMapper() override;
 
     virtual css::i18n::NumberFormatCode getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;

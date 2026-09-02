@@ -1978,7 +1978,7 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
 {
     try
     {
-        const css::uno::Reference< css::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
+        const css::uno::Reference< cpo::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
         css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
 
         OUString sModule = xModuleManager->identify(xFrame);
@@ -2202,7 +2202,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         case SID_WEBHTML:
         {
             css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW);
-            css::uno::Reference< uno::XComponentContext >     xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
+            css::uno::Reference< cpo::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
             css::uno::Reference< css::frame::XFrame >         xFrame( rFrame.GetFrame().GetFrameInterface() );
             css::uno::Reference< css::frame::XModel >         xModel;
 
@@ -3216,7 +3216,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     if (comphelper::COKit::isActive())
     {
         // Get the module name.
-        const css::uno::Reference< css::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
+        const css::uno::Reference< cpo::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
         css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
         OUString sModule = xModuleManager->identify(rFrame.GetFrame().GetFrameInterface());
 

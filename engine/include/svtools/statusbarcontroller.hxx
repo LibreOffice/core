@@ -32,7 +32,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::ui { class XStatusbarItem; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XURLTransformer; }
 
 namespace svt
@@ -43,7 +43,7 @@ class SVT_DLLPUBLIC StatusbarController :
                             public ::cppu::OWeakObject
 {
     public:
-        StatusbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        StatusbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                              const css::uno::Reference< css::frame::XFrame >& xFrame,
                              OUString aCommandURL,
                              unsigned short       nID );
@@ -118,7 +118,7 @@ class SVT_DLLPUBLIC StatusbarController :
         unsigned short                                            m_nID;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
         comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;

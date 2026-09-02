@@ -375,7 +375,7 @@ void SmartArtDiagram::writeDiagramReducedOOXData(css::uno::Reference<css::io::XO
     class LocalFilterBase final : public oox::core::XmlFilterBase
     {
     public:
-        explicit LocalFilterBase(css::uno::Reference<css::uno::XComponentContext> const& rxContext)
+        explicit LocalFilterBase(css::uno::Reference<cpo::uno::XComponentContext> const& rxContext)
         : XmlFilterBase(rxContext) {}
         // virtual ~LocalFilterBase() override;
 

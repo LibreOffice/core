@@ -33,7 +33,7 @@ using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
-SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nIndex ) :
+SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext,uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nIndex ) :
     SwVbaRow_BASE( rParent, rContext ), mxTextTable(std::move( xTextTable )), mnIndex( nIndex )
 {
     mxTableRows = mxTextTable->getRows();

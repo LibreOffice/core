@@ -52,7 +52,7 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(css::uno::Reference<css::uno::XComponentContext> xContext)
+        OleHandler(css::uno::Reference<cpo::uno::XComponentContext> xContext)
             : m_xContext(std::move(xContext))
             , m_tcontext(nullptr)
         {
@@ -72,7 +72,7 @@ namespace XSLT
         }
 
     private:
-        css::uno::Reference<css::uno::XComponentContext> m_xContext;
+        css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
         css::uno::Reference<css::container::XNameContainer> m_storage;
         css::uno::Reference<css::io::XStream> m_rootStream;
         xsltTransformContextPtr m_tcontext;

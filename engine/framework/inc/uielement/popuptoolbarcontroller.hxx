@@ -45,7 +45,7 @@ public:
     virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
 protected:
-    PopupMenuToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    PopupMenuToolbarController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                                OUString aPopupCommand = OUString());
     virtual void functionExecuted(const OUString& rCommand);
     virtual ToolBoxItemBits getDropDownStyle() const;
@@ -64,7 +64,7 @@ private:
 class GenericPopupToolbarController final : public PopupMenuToolbarController
 {
 public:
-    GenericPopupToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    GenericPopupToolbarController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                                   const cpo::uno::Sequence<cpo::uno::Any>& rxArgs);
 
     // XInitialization

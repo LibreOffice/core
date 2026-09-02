@@ -12,7 +12,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -111,7 +111,7 @@ sal_Int16 SAL_CALL ColorPicker::execute()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_cui_ColorPicker_get_implementation(css::uno::XComponentContext*,
+com_sun_star_cui_ColorPicker_get_implementation(cpo::uno::XComponentContext*,
                                                 const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new ColorPicker);

@@ -25,7 +25,7 @@
 
 #include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -224,7 +224,7 @@ const beans::StringPair* lcl_findPairByName(const cpo::uno::Sequence<beans::Stri
 OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< packages::XDataSinkEncrSupport >& xPackageStream,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
-                                      uno::Reference< uno::XComponentContext > xContext,
+                                      uno::Reference< cpo::uno::XComponentContext > xContext,
                                       bool bForceEncrypted,
                                       sal_Int32 nStorageType,
                                       bool bDefaultCompress,

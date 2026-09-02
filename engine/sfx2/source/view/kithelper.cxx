@@ -1042,7 +1042,7 @@ std::string_view extractKey(std::string_view privateKey)
 
 css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificate(std::string_view rCert, std::string_view rKey)
 {
-    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())
@@ -1097,7 +1097,7 @@ uno::Reference<security::XCertificate> KitHelper::addCertificate(
 
 void KitHelper::addCertificates(std::string_view rCerts)
 {
-    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())

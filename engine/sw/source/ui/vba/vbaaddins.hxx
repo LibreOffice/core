@@ -29,7 +29,7 @@ class SwVbaAddins : public SwVbaAddins_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaAddins(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                const css::uno::Reference<css::uno::XComponentContext>& xContext);
+                const css::uno::Reference<cpo::uno::XComponentContext>& xContext);
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

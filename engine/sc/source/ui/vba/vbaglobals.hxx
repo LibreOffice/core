@@ -24,7 +24,7 @@
 
 #include <vbahelper/vbaglobalbase.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace ooo::vba::excel { class XApplication; }
 
 
@@ -38,7 +38,7 @@ class ScVbaGlobals : public ScVbaGlobals_BASE
 public:
 
     ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs,
-                 css::uno::Reference< css::uno::XComponentContext >const& rxContext );
+                 css::uno::Reference< cpo::uno::XComponentContext >const& rxContext );
     virtual ~ScVbaGlobals() override;
 
     // XGlobals

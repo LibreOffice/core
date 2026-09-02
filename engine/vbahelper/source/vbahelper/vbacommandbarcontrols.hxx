@@ -44,7 +44,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef  pHelper, css::uno::Reference< css::container::XIndexAccess >  xBarSettings, const OUString& sResourceUrl );
+    ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef  pHelper, css::uno::Reference< css::container::XIndexAccess >  xBarSettings, const OUString& sResourceUrl );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
@@ -65,7 +65,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     VbaDummyCommandBarControls(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

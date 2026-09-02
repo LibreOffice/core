@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include "ZipEntry.hxx"
 #include <cppuhelper/implbase.hxx>
 
@@ -44,7 +44,7 @@ class ZipPackageEntry : public cppu::WeakImplHelper
 >
 {
 protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     OUString msName;
     bool mbIsFolder:1;
     bool mbAllowRemoveOnInsert:1;

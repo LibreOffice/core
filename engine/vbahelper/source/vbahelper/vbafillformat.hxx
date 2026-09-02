@@ -43,7 +43,7 @@ protected:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 public:
-    ScVbaFillFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
+    ScVbaFillFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws cpo::uno::RuntimeException
     void setForeColorAndInternalStyle( sal_Int32 nForeColor );

@@ -37,7 +37,7 @@ using namespace hierarchy_ucp;
 
 
 HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
-                const uno::Reference< uno::XComponentContext >& rxContext,
+                const uno::Reference< cpo::uno::XComponentContext >& rxContext,
                 const rtl::Reference< HierarchyContent >& rContent,
                 sal_Int32 nOpenMode )
 : m_xContent( rContent ), m_xContext( rxContext ),

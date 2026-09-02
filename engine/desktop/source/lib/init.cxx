@@ -836,7 +836,7 @@ static int lcl_getViewId(std::string_view payload)
 }
 
 // Wonder global state ...
-static uno::Reference<css::uno::XComponentContext> xContext;
+static uno::Reference<cpo::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
@@ -4125,11 +4125,11 @@ class FunctionBasedURPInstanceProvider
     : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
 {
 private:
-    css::uno::Reference<css::uno::XComponentContext> m_rContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_rContext;
 
 public:
     FunctionBasedURPInstanceProvider(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
     // XInstanceProvider
     virtual css::uno::Reference<css::uno::XInterface>

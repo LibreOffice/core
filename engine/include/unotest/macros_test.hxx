@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/Any.h>
 #include <utility>
 
@@ -66,7 +66,7 @@ public:
 
     static cpo::uno::Any
     queryDispatchStatus(css::uno::Reference<css::lang::XComponent> const& xComponent,
-                        css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                        css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                         OUString const& rURL);
 
     /// Opens rStreamName from rTempFile, assuming it's a ZIP storage.

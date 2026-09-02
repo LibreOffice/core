@@ -38,7 +38,7 @@ namespace dbp
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE > >
     {
     public:
-        explicit OUnoAutoPilot(const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+        explicit OUnoAutoPilot(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
                 OUString aImplementationName,
                 const cpo::uno::Sequence<OUString>& aSupportedServices)
             : OUnoAutoPilot_Base(_rxORB),

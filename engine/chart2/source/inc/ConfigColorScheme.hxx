@@ -22,13 +22,13 @@
 
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
 
 css::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
-    const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
 namespace impl
 {
@@ -38,7 +38,7 @@ class ChartConfigItem;
 class ConfigColorScheme final : public BaseColorScheme
 {
 public:
-    explicit ConfigColorScheme( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit ConfigColorScheme( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ConfigColorScheme() override;
 
     // ____ ConfigItemListener ____
@@ -55,7 +55,7 @@ private:
     void retrieveConfigColors();
 
     // member variables
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     std::unique_ptr< impl::ChartConfigItem >            m_apChartConfigItem;
     bool                                                  m_bNeedsUpdate;
 };

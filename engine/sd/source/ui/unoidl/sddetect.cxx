@@ -23,7 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -152,7 +152,7 @@ Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames()
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_draw_FormatDetector_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_draw_FormatDetector_get_implementation(cpo::uno::XComponentContext*,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SdFilterDetect());

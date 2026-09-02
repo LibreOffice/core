@@ -48,7 +48,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
     std::unordered_map<OUString, Package*> m_aPackages;
 
 public:
-    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider() override;
 
     // XInterface

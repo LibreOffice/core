@@ -51,7 +51,7 @@ protected:
 
 public:
     OEditBaseModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
         const OUString& _rUnoControlModelTypeName,
         const OUString& _rDefault,
         const bool _bSupportExternalBinding,
@@ -60,7 +60,7 @@ public:
 
     OEditBaseModel(
         const OEditBaseModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
 
     virtual ~OEditBaseModel() override;

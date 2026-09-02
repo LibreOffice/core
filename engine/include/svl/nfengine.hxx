@@ -20,7 +20,7 @@
 
 #include <svl/svldllapi.h>
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <i18nlangtag/lang.h>
 #include <svl/ondemand.hxx>
 #include <svl/zforlist.hxx>
@@ -37,12 +37,12 @@ class SvNumberFormatter;
 class SVL_DLLPUBLIC SvNFLanguageData
 {
 public:
-    SvNFLanguageData(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    SvNFLanguageData(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                      LanguageType eLang, const SvNumberFormatter& rColorCallback);
     SvNFLanguageData(const SvNFLanguageData& rOther);
     ~SvNFLanguageData();
 
-    const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const
+    const css::uno::Reference<cpo::uno::XComponentContext>& GetComponentContext() const
     {
         return xContext;
     }
@@ -133,7 +133,7 @@ private:
     friend class SvNFFormatData;
     friend class SvNumberFormatter;
 
-    css::uno::Reference<css::uno::XComponentContext> xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> xContext;
 
     const LanguageType IniLnge; // Initial language/country setting
     LanguageType ActLnge; // Current language/country setting

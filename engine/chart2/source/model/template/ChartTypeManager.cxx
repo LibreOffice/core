@@ -42,7 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -248,7 +248,7 @@ namespace chart
 
 ChartTypeManager::ChartTypeManager(
     uno::Reference<
-        uno::XComponentContext > xContext ) :
+        cpo::uno::XComponentContext > xContext ) :
     m_xContext(std::move( xContext ))
 {}
 
@@ -676,7 +676,7 @@ cpo::uno::Sequence< OUString > ChartTypeManager::getSupportedServiceNames()
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_ChartTypeManager_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_ChartTypeManager_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ChartTypeManager(context));

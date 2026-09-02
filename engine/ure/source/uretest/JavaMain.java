@@ -23,7 +23,7 @@ import com.sun.star.lang.XMain;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import test.java.tester.Tester;
 
 public final class JavaMain implements XMain {

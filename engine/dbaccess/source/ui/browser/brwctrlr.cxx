@@ -502,7 +502,7 @@ Any SbaXDataBrowserController::queryInterface(const Type& _rType)
     return aRet;
 }
 
-SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::XComponentContext >& _rM)
+SbaXDataBrowserController::SbaXDataBrowserController(const Reference< cpo::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
     ,m_aInvalidateClipboard("dbaui::SbaXDataBrowserController m_aInvalidateClipboard")

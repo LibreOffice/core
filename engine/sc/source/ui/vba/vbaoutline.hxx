@@ -22,7 +22,7 @@
 #include <utility>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::sheet { class XSheetOutline; }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XOutline > ScVbaOutline_BASE;
@@ -31,7 +31,7 @@ class ScVbaOutline :  public ScVbaOutline_BASE
 {
     css::uno::Reference< css::sheet::XSheetOutline > mxOutline;
 public:
-    ScVbaOutline( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaOutline( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
          css::uno::Reference<css::sheet::XSheetOutline>  outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(std::move(outline))
     {}
 

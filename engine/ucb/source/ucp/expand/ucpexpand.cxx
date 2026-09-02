@@ -22,7 +22,7 @@
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
@@ -42,7 +42,7 @@ typedef comphelper::WeakComponentImplHelper<
 
 class ExpandContentProviderImpl : public t_impl_helper
 {
-    uno::Reference< uno::XComponentContext > m_xComponentContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
     uno::Reference< util::XMacroExpander >   m_xMacroExpander;
     OUString expandUri(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const;
@@ -52,7 +52,7 @@ protected:
 
 public:
     explicit ExpandContentProviderImpl(
-        uno::Reference< uno::XComponentContext > const & xComponentContext )
+        uno::Reference< cpo::uno::XComponentContext > const & xComponentContext )
         : m_xComponentContext( xComponentContext ),
           m_xMacroExpander( util::theMacroExpander::get(xComponentContext) )
         {}
@@ -168,7 +168,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_expand_ExpandContentProviderImpl_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ExpandContentProviderImpl(context));
 }

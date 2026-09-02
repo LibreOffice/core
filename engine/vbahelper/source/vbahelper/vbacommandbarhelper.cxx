@@ -85,7 +85,7 @@ public:
 MSO2OOCommandbarHelper* MSO2OOCommandbarHelper::pMSO2OOCommandbarHelper = nullptr;
 
 
-VbaCommandBarHelper::VbaCommandBarHelper( css::uno::Reference< css::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel >  xModel ) : mxContext(std::move( xContext )), mxModel(std::move( xModel ))
+VbaCommandBarHelper::VbaCommandBarHelper( css::uno::Reference< cpo::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel >  xModel ) : mxContext(std::move( xContext )), mxModel(std::move( xModel ))
 {
     Init();
 }

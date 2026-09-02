@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 
@@ -92,7 +92,7 @@ namespace tdoc_ucp {
 
     public:
         OfficeDocumentsManager(
-            const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
             ContentProvider * pDocEventListener );
         virtual ~OfficeDocumentsManager() override;
 
@@ -146,7 +146,7 @@ namespace tdoc_ucp {
             const css::uno::Reference< css::frame::XModel > & xModel );
 
         std::mutex                                          m_aMtx;
-        css::uno::Reference< css::uno::XComponentContext >         m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >         m_xContext;
         css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
         css::uno::Reference< css::frame::XModuleManager2 >         m_xModuleMgr;
         DocumentList                                        m_aDocs;

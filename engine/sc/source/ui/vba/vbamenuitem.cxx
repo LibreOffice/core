@@ -13,7 +13,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< XCommandBarControl > xCommandBarControl ) : MenuItem_BASE( rParent, rContext ), m_xCommandBarControl(std::move( xCommandBarControl ))
+ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, uno::Reference< XCommandBarControl > xCommandBarControl ) : MenuItem_BASE( rParent, rContext ), m_xCommandBarControl(std::move( xCommandBarControl ))
 {
 }
 

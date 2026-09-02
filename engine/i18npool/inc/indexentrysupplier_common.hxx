@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace i18npool { class CollatorImpl; }
 
 namespace i18npool {
@@ -39,7 +39,7 @@ class IndexEntrySupplier_Common : public cppu::WeakImplHelper
 >
 {
 public:
-    IndexEntrySupplier_Common( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_Common( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Common() override;
 
     virtual cpo::uno::Sequence < css::lang::Locale > getLocaleList() override;

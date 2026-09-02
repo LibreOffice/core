@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include "iahndl.hxx"
 
@@ -32,7 +32,7 @@ class UUIInteractionRequestStringResolver:
 {
 public:
     explicit UUIInteractionRequestStringResolver(
-        css::uno::Reference< css::uno::XComponentContext > const & rxContext);
+        css::uno::Reference< cpo::uno::XComponentContext > const & rxContext);
 
 private:
     UUIInteractionHelper m_pImpl;

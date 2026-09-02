@@ -30,7 +30,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -64,7 +64,7 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
     public:
 
         //  constructor / destructor
-        PopupMenuDispatcher( css::uno::Reference< css::uno::XComponentContext > xContext );
+        PopupMenuDispatcher( css::uno::Reference< cpo::uno::XComponentContext > xContext );
 
         /* interface XServiceInfo */
         virtual OUString getImplementationName() override;
@@ -106,7 +106,7 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
         cpo::uno::WeakReference< css::frame::XFrame >           m_xWeakFrame;   /// cpo::uno::WeakReference to frame (Don't use a hard css::uno::Reference. Owner can't delete us then!)
         css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
-        css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
+        css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
         bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
         bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation
 

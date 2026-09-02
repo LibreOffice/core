@@ -33,7 +33,7 @@ excludelist:
     - com/sun/star/ucb/XCommandInfo.hpp
     ucb/source/ucp/package/pkgprovider.cxx:
     # Actually in use
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     ucb/source/ucp/package/pkgcontent.cxx:
     # Actually in use
     - com/sun/star/container/XHierarchicalNameAccess.hpp
@@ -49,5 +49,5 @@ excludelist:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     - com/sun/star/ucb/XCommandInfo.hpp

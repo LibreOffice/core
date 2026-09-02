@@ -47,7 +47,7 @@ namespace
     on the graphics passed through it rather than on a package.
  */
 uno::Reference<document::XGraphicStorageHandler> createGraphicStorageHandler(
-    const uno::Reference<uno::XComponentContext>& rContext, const OUString& rServiceName)
+    const uno::Reference<cpo::uno::XComponentContext>& rContext, const OUString& rServiceName)
 {
     cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any() };
     return uno::Reference<document::XGraphicStorageHandler>(
@@ -94,7 +94,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             xSourceModel->lockControllers();
         pModel->incImportExport();
 
-        const uno::Reference< uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         if( bDocRet )
         {
@@ -196,7 +196,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     try
     {
         // Get service factory
-        const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+        const Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
         if ( xTargetModel.is() )
             xTargetModel->lockControllers();

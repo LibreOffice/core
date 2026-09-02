@@ -28,7 +28,7 @@
 #include <global.hxx>
 
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace com::sun::star::sheet { class XDatabaseRange; }
 namespace com::sun::star::sheet { class XUnnamedDatabaseRanges; }
@@ -53,7 +53,7 @@ void implnCut( const css::uno::Reference< css::frame::XModel>& xModel );
 void implnPasteSpecial( const css::uno::Reference< css::frame::XModel>& xModel, InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bTranspose);
 SAL_RET_MAYBENULL ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
 SAL_RET_MAYBENULL ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
-SAL_RET_MAYBENULL ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+SAL_RET_MAYBENULL ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 SAL_RET_MAYBENULL SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
 
 /// @throws cpo::uno::RuntimeException

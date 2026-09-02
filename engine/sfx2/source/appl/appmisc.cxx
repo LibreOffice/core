@@ -168,7 +168,7 @@ bool SfxApplication::loadBrandSvg(std::u16string_view sName, Bitmap &rBitmap, in
 
     // UNO dance to render from drawinglayer
 
-    const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference< cpo::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
 
     try
     {

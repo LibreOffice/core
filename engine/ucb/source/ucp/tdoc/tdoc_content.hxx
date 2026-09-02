@@ -99,11 +99,11 @@ class Content : public ::ucbhelper::ContentImplHelper,
     ContentProvider*  m_pProvider;
 
 private:
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             ContentProperties aProps );
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              const css::ucb::ContentInfo& Info );
@@ -168,7 +168,7 @@ private:
                    const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     static css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    getPropertyValues( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                        const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        ContentProvider* pProvider,
@@ -206,13 +206,13 @@ private:
 public:
     // Create existing content. Fail, if not already exists.
     static rtl::Reference<Content> create(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
 
     // Create new content. Fail, if already exists.
     static rtl::Reference<Content> create(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const css::ucb::ContentInfo& Info );
@@ -265,7 +265,7 @@ public:
 
 
     static css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    getPropertyValues( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                        const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        ContentProvider* pProvider,
                        const OUString& rContentId );

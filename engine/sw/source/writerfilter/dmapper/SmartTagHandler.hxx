@@ -25,25 +25,22 @@ namespace text
 class XTextDocument;
 class XTextRange;
 }
-namespace uno
-{
-class XComponentContext;
 }
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerfilter::dmapper
 {
 /// Handler for smart tags, i.e. <w:smartTag> and below.
 class SmartTagHandler : public LoggedProperties
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::rdf::XDocumentMetadataAccess> m_xDocumentMetadataAccess;
     OUString m_aURI;
     OUString m_aElement;
     std::vector<std::pair<OUString, OUString>> m_aAttributes;
 
 public:
-    SmartTagHandler(css::uno::Reference<css::uno::XComponentContext> xComponentContext,
+    SmartTagHandler(css::uno::Reference<cpo::uno::XComponentContext> xComponentContext,
                     const rtl::Reference<SwXTextDocument>& xTextDocument);
     ~SmartTagHandler() override;
 

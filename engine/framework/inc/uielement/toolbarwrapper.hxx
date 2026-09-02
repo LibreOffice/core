@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 #include <memory>
 
@@ -44,7 +44,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
                                                                 css::ui::XContextChangeEventListener>
 {
     public:
-        ToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        ToolBarWrapper( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
         virtual ~ToolBarWrapper() override;
 
         // XComponent
@@ -77,7 +77,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual void impl_fillNewData() override;
 
         rtl::Reference< ToolBarManager >                        m_xToolBarManager;
-        css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
         css::uno::Reference< css::ui::XUIElement >              m_xSubElement;
 
         std::unique_ptr<weld::Builder>                          m_xBuilder;

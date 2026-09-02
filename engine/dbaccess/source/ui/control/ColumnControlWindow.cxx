@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 OColumnControlTopLevel::OColumnControlTopLevel(vcl::Window* pParent,
-                                               const Reference<XComponentContext>& _rxContext)
+                                               const Reference<cpo::uno::XComponentContext>& _rxContext)
     : InterimItemWindow(pParent, u"dbaccess/ui/colcontrolbox.ui"_ustr, u"ColControlBox"_ustr)
     , m_xControl(new OColumnControlWindow(m_xContainer.get(), _rxContext))
 {
@@ -55,7 +55,7 @@ void OColumnControlTopLevel::GetFocus()
 
 // OColumnControlWindow
 OColumnControlWindow::OColumnControlWindow(weld::Container* pParent,
-                                           const Reference<XComponentContext>& _rxContext)
+                                           const Reference<cpo::uno::XComponentContext>& _rxContext)
             : OFieldDescControl(pParent)
             , m_xContext(_rxContext)
             , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))

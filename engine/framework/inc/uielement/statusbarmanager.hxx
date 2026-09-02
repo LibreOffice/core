@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
@@ -44,7 +44,7 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
     friend class FrameworkStatusBar;
 
     public:
-        StatusBarManager( css::uno::Reference< css::uno::XComponentContext > xContext,
+        StatusBarManager( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                           css::uno::Reference< css::frame::XFrame > xFrame,
                           StatusBar* pStatusBar );
         virtual ~StatusBarManager() override;
@@ -94,7 +94,7 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
         StatusBarControllerMap                                                m_aControllerMap;
         std::mutex                                                            m_mutex;
         comphelper::OInterfaceContainerHelper4<XEventListener>                m_aListenerContainer;
-        css::uno::Reference< css::uno::XComponentContext >                    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >                    m_xContext;
         css::uno::Reference< css::frame::XUIControllerFactory >               m_xStatusbarControllerFactory;
 };
 

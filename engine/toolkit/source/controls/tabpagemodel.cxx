@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
@@ -156,7 +156,7 @@ void UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
 }
 
 
-UnoControlTabPage::UnoControlTabPage( const uno::Reference< uno::XComponentContext >& rxContext )
+UnoControlTabPage::UnoControlTabPage( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
     :UnoControlTabPage_Base(rxContext)
     ,m_bWindowListener(false)
 {
@@ -279,7 +279,7 @@ void UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageModel(context));
@@ -287,7 +287,7 @@ stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPage_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPage(context));

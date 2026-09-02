@@ -162,7 +162,7 @@ ScVbaApplication::RemoveSink( sal_uInt32 nNumber )
     mvSinks[nNumber-1] = uno::Reference< XSink >();
 }
 
-ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
+ScVbaApplication::ScVbaApplication( const uno::Reference<cpo::uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
     mrAppSettings( ScVbaStaticAppSettings() ),
     m_nDialogType(0)
@@ -968,7 +968,7 @@ ScVbaApplication::Calculate()
 }
 
 /// @throws uno::RuntimeException
-static uno::Reference< util::XPathSettings > const & lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext )
+static uno::Reference< util::XPathSettings > const & lcl_getPathSettingsService( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     static uno::Reference< util::XPathSettings > xPathSettings( util::PathSettings::create( xContext ) );
     return xPathSettings;
@@ -1204,7 +1204,7 @@ void lclIntersectRanges( ListOfScRange& rList, const cpo::uno::Any& rArg )
     @throws uno::RuntimeException
 */
 uno::Reference< excel::XRange > lclCreateVbaRange(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const ListOfScRange& rList )
 {
@@ -1556,7 +1556,7 @@ ScVbaApplication::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaApplication_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ScVbaApplication(context));
 }

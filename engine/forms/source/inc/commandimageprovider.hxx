@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 
 #include <vcl/image.hxx>
@@ -34,7 +34,7 @@ namespace frm
     class DocumentCommandImageProvider
     {
     public:
-        DocumentCommandImageProvider( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const css::uno::Reference< css::frame::XModel >& _rxDocument );
+        DocumentCommandImageProvider( const css::uno::Reference<cpo::uno::XComponentContext>& _rContext, const css::uno::Reference< css::frame::XModel >& _rxDocument );
 
         std::vector<Image> getCommandImages( const cpo::uno::Sequence< OUString >& _rCommandURLs, bool _bLarge ) const;
 

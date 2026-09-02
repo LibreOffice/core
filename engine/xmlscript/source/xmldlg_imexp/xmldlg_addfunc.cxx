@@ -58,7 +58,7 @@ uno::Reference< io::XInputStream > InputStreamProvider::createInputStream()
 
 uno::Reference< io::XInputStreamProvider > exportDialogModel(
     uno::Reference< container::XNameContainer > const & xDialogModel,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     uno::Reference< XModel > const & xDocument )
 {
     uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
@@ -75,7 +75,7 @@ uno::Reference< io::XInputStreamProvider > exportDialogModel(
 void importDialogModel(
     uno::Reference< io::XInputStream > const & xInput,
     uno::Reference< container::XNameContainer > const & xDialogModel,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     uno::Reference< XModel > const & xDocument )
 {
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );

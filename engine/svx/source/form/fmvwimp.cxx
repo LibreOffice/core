@@ -97,7 +97,7 @@ using namespace ::dbtools;
     using ::cpo::uno::Type;
     using ::com::sun::star::uno::Reference;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::form::FormButtonType_SUBMIT;
     using ::com::sun::star::form::binding::XValueBinding;
     using ::com::sun::star::form::binding::XBindableValue;
@@ -147,7 +147,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
-FormViewPageWindowAdapter::FormViewPageWindowAdapter( css::uno::Reference<css::uno::XComponentContext> _xContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
+FormViewPageWindowAdapter::FormViewPageWindowAdapter( css::uno::Reference<cpo::uno::XComponentContext> _xContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
     m_xContext(std::move( _xContext )),
     m_pViewImpl( _pViewImpl ),

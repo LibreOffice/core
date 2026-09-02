@@ -39,7 +39,7 @@
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
@@ -1084,7 +1084,7 @@ namespace sdr::contact {
         {
             const OUString& sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
 
-            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             _out_rControl = Reference<XControl>( xContext->getServiceManager()->createInstanceWithContext(sControlServiceName, xContext), UNO_QUERY_THROW );
 
             // tdf#150886 for calc/writer/impress make forms ignore the platform theme

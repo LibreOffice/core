@@ -14,7 +14,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -41,7 +41,7 @@ class Provider final:
 {
 public:
     explicit Provider(
-        css::uno::Reference<css::uno::XComponentContext> context):
+        css::uno::Reference<cpo::uno::XComponentContext> context):
         context_(std::move(context))
     {}
 
@@ -62,7 +62,7 @@ private:
         css::uno::Reference<css::ucb::XContentIdentifier> const & Identifier)
         override
     {
-        css::uno::Reference<css::uno::XComponentContext> context;
+        css::uno::Reference<cpo::uno::XComponentContext> context;
         {
             std::unique_lock g(m_aMutex);
             context = context_;
@@ -149,14 +149,14 @@ private:
         context_.clear();
     }
 
-    css::uno::Reference<css::uno::XComponentContext> context_;
+    css::uno::Reference<cpo::uno::XComponentContext> context_;
 };
 
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_ucb_ImageContentProvider_get_implementation(
-    css::uno::XComponentContext * context,
+    cpo::uno::XComponentContext * context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new Provider(context));

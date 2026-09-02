@@ -44,8 +44,8 @@ namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace frame { class XFrame; }
     namespace graphic { class XGraphic; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
 
@@ -61,7 +61,7 @@ class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XFrame >& rxTargetFrame,
                             StorageRef xStorage );
     virtual             ~GraphicHelper();
@@ -151,7 +151,7 @@ public:
 
 private:
 
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     css::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
     VclPtr<OutputDevice> mxDefaultOutputDevice;
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.

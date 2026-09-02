@@ -16,7 +16,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/Any.hxx>
@@ -96,7 +96,7 @@ public:
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-scriptinterop_Cool_get_implementation(css::uno::XComponentContext*,
+scriptinterop_Cool_get_implementation(cpo::uno::XComponentContext*,
                                       cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new FactoryImpl);

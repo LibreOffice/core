@@ -77,7 +77,7 @@ auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
 
 
 DataSupplier::DataSupplier(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),

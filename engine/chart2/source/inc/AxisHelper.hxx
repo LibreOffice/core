@@ -28,7 +28,7 @@ namespace chart { class ChartModel; }
 namespace chart { class ExplicitCategoriesProvider; }
 namespace chart { class ReferenceSizeProvider; }
 namespace com::sun::star::chart2 { class XScaling; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -61,7 +61,7 @@ public:
     static rtl::Reference< ::chart::Axis >
         createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< ::chart::Diagram >& xDiagram
-                , const css::uno::Reference< css::uno::XComponentContext >& xContext
+                , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static rtl::Reference< ::chart::Axis >
@@ -69,12 +69,12 @@ public:
             sal_Int32 nDimensionIndex
             , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
-            , const css::uno::Reference< css::uno::XComponentContext > & xContext
+            , const css::uno::Reference< cpo::uno::XComponentContext > & xContext
             , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< ::chart::Diagram >& xDiagram
-                , const css::uno::Reference< css::uno::XComponentContext >& xContext
+                , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
@@ -179,7 +179,7 @@ public:
     static bool changeVisibilityOfAxes( const rtl::Reference< ::chart::Diagram>& xDiagram
                         , const cpo::uno::Sequence< bool >& rOldExistenceList
                         , const cpo::uno::Sequence< bool >& rNewExistenceList
-                        , const css::uno::Reference< css::uno::XComponentContext >& xContext
+                        , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
                         , ReferenceSizeProvider * pRefSizeProvider );
 
     static bool shouldAxisBeDisplayed( const rtl::Reference< ::chart::Axis >& xAxis

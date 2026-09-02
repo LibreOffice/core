@@ -34,7 +34,7 @@ class PieChartTypeTemplate :
 {
 public:
     PieChartTypeTemplate(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         css::chart2::PieChartOffsetMode eMode,
         bool bRings,

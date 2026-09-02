@@ -21,7 +21,7 @@
 
 #include <set>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/ref.hxx>
@@ -40,7 +40,7 @@ public:
 
     enum ResourceEnum_t { UNKNOWN, STREAM, PROPERTIES, TABLE, SHAPE };
 
-    explicit OOXMLFastContextHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit OOXMLFastContextHandler(css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     explicit OOXMLFastContextHandler(OOXMLFastContextHandler * pContext);
 
@@ -246,7 +246,7 @@ private:
     // 2.10 of XML 1.0 specification
     bool IsPreserveSpace() const;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
     bool mbPreserveSpace = false;

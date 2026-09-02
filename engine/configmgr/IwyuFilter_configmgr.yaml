@@ -24,7 +24,7 @@ excludelist:
     - com/sun/star/uno/XInterface.hpp
     configmgr/source/components.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     configmgr/source/access.cxx:
     # Actually used
     - vector

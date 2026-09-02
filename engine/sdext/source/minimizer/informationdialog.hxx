@@ -21,14 +21,14 @@
 
 #include "configurationaccess.hxx"
 #include <vcl/weld.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class InformationDialog : public weld::MessageDialogController, public ConfigurationAccess
 {
 public:
 
-    InformationDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    InformationDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                        const css::uno::Reference<css::awt::XWindow>& rxDialogParent, const OUString& rSaveAsURL,
                        bool& bOpenNewDocument, sal_Int64 nSourceSize, sal_Int64 nDestSize, sal_Int64 nApproxDest );
     ~InformationDialog();

@@ -101,7 +101,7 @@ excludelist:
     - com/sun/star/document/XFilter.hpp
     - com/sun/star/frame/XDesktop2.hpp
     - com/sun/star/io/XInputStream.hpp
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     # Needed for UnoType template instantiation
     - com/sun/star/ucb/XContent.hpp
     writerperfect/qa/unit/DrawingImportTest.cxx:
@@ -197,6 +197,6 @@ excludelist:
     - libe-book/libe-book.h
     writerperfect/source/writer/EPUBExportFilter.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     writerperfect/source/writer/EPUBPackage.cxx:
     - com/sun/star/embed/XStorage.hpp

@@ -50,7 +50,7 @@ namespace framework{
                 reference to the frame, in which environment we run
                 (May be null!)
 */
-Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
+Job::Job( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
           /*IN*/ css::uno::Reference< css::frame::XFrame >               xFrame )
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
@@ -77,7 +77,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
                 reference to the model, in which environment we run
                 (May be null!)
 */
-Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
+Job::Job( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
           /*IN*/ css::uno::Reference< css::frame::XModel >               xModel )
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )

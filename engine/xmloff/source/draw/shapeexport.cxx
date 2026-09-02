@@ -262,7 +262,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 xSet->getPropertyValue(u"CustomShapeEngine"_ustr) >>= aEngine;
                 if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine")
                 {
-                    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                    const uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
                     cpo::uno::Sequence< cpo::uno::Any > aArguments {
                         cpo::uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
@@ -3534,7 +3534,7 @@ void ExportGraphicPreview(const uno::Reference<graphic::XGraphic>& xGraphic, SvX
 
     if( xGraphic.is() ) try
     {
-        uno::Reference< uno::XComponentContext > xContext = rExport.getComponentContext();
+        uno::Reference< cpo::uno::XComponentContext > xContext = rExport.getComponentContext();
 
         uno::Reference< embed::XStorage > xPictureStorage;
         uno::Reference< embed::XStorage > xStorage;

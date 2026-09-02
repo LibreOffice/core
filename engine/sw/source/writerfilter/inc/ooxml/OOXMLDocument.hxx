@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
@@ -99,7 +99,7 @@ public:
     /**
        Returns component context for this stream.
      */
-    virtual css::uno::Reference<css::uno::XComponentContext> getContext() = 0;
+    virtual css::uno::Reference<cpo::uno::XComponentContext> getContext() = 0;
 
     /**
        Returns target URL from relationships for a given id.
@@ -328,7 +328,7 @@ class OOXMLDocumentFactory
 {
 public:
     static OOXMLStream::Pointer_t
-    createStream(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+    createStream(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                  const css::uno::Reference<css::io::XInputStream>& rStream,
                  bool bRepairStorage);
 

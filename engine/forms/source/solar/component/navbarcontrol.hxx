@@ -39,10 +39,10 @@ namespace frm
                             :public UnoControl
                             ,public ONavigationBarControl_Base
     {
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     public:
         explicit ONavigationBarControl(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
     protected:
@@ -78,7 +78,7 @@ namespace frm
         /** factory method
         */
         static rtl::Reference<ONavigationBarPeer> Create(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             vcl::Window* _pParentWindow,
             const css::uno::Reference< css::awt::XControlModel >& _rxModel
         );
@@ -94,7 +94,7 @@ namespace frm
 
     private:
         explicit ONavigationBarPeer(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
         virtual ~ONavigationBarPeer() override;
 

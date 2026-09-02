@@ -139,11 +139,11 @@ chart2/source/inc/RegressionCurveHelper.hxx:121
     enum SvxChartRegress eType
     1
 chart2/source/model/template/ColumnLineChartTypeTemplate.hxx:35
-    void chart::ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode,int)
+    void chart::ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode,int)
     int nNumberOfLines
     1
 chart2/source/model/template/HistogramChartTypeTemplate.hxx:22
-    void chart::HistogramChartTypeTemplate::HistogramChartTypeTemplate(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode)
+    void chart::HistogramChartTypeTemplate::HistogramChartTypeTemplate(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode)
     enum chart::StackMode eStackMode
     0
 chart2/source/tools/InternalDataProvider.cxx:228
@@ -395,7 +395,7 @@ dbaccess/source/ui/inc/IUpdateHelper.hxx:32
     int _nPos
     1
 dbaccess/source/ui/inc/WCopyTable.hxx:310
-    void dbaui::OCopyTableWizard::OCopyTableWizard(class weld::Window *,class rtl::OUString,short,class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> &&,const class std::vector<class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const class rtl::OUString, class dbaui::OFieldDescription *> >, class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> > > &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormatter> &,class std::unique_ptr<class dbaui::OWizTypeSelect> (*)(class weld::Container *, class dbaui::OCopyTableWizard *, class SvStream &),class SvStream &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
+    void dbaui::OCopyTableWizard::OCopyTableWizard(class weld::Window *,class rtl::OUString,short,class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> &&,const class std::vector<class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const class rtl::OUString, class dbaui::OFieldDescription *> >, class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> > > &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormatter> &,class std::unique_ptr<class dbaui::OWizTypeSelect> (*)(class weld::Container *, class dbaui::OCopyTableWizard *, class SvStream &),class SvStream &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
     class weld::Window * pParent
     0
 dbaccess/source/ui/inc/WTypeSelect.hxx:121
@@ -539,7 +539,7 @@ fpicker/source/office/fileview.hxx:162
     _Bool bEnable
     1
 framework/inc/uielement/uicommanddescription.hxx:81
-    void framework::UICommandDescription::UICommandDescription(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,_Bool)
+    void framework::UICommandDescription::UICommandDescription(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,_Bool)
     _Bool 
     1
 helpcompiler/inc/HelpCompiler.hxx:57
@@ -675,11 +675,11 @@ include/basic/sbxobj.hxx:73
     enum SbxClassType 
     1
 include/comphelper/configurationhelper.hxx:211
-    class cpo::uno::Any comphelper::ConfigurationHelper::readDirectKey(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum comphelper::EConfigurationModes)
+    class cpo::uno::Any comphelper::ConfigurationHelper::readDirectKey(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum comphelper::EConfigurationModes)
     enum comphelper::EConfigurationModes eMode
     1
 include/comphelper/configurationhelper.hxx:227
-    void comphelper::ConfigurationHelper::writeDirectKey(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class cpo::uno::Any &,enum comphelper::EConfigurationModes)
+    void comphelper::ConfigurationHelper::writeDirectKey(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class cpo::uno::Any &,enum comphelper::EConfigurationModes)
     enum comphelper::EConfigurationModes eMode
     0
 include/comphelper/errcode.hxx:73
@@ -995,7 +995,7 @@ include/oox/mathml/importutils.hxx:212
     _Bool silent
     0
 include/oox/ole/olestorage.hxx:44
-    void oox::ole::OleStorage::OleStorage(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,_Bool)
+    void oox::ole::OleStorage::OleStorage(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,_Bool)
     _Bool bBaseStreamAccess
     0
 include/oox/ole/olestorage.hxx:57
@@ -1003,7 +1003,7 @@ include/oox/ole/olestorage.hxx:57
     _Bool bReadOnly
     1
 include/oox/ole/vbacontrol.hxx:189
-    void oox::ole::VbaUserForm::VbaUserForm(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class oox::GraphicHelper &,_Bool)
+    void oox::ole::VbaUserForm::VbaUserForm(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class oox::GraphicHelper &,_Bool)
     _Bool bDefaultColorBgr
     1
 include/oox/ole/vbaexport.hxx:91
@@ -1623,7 +1623,7 @@ include/unotools/charclass.hxx:129
     int nPos
     0
 include/unotools/confignode.hxx:239
-    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
+    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
     enum utl::OConfigurationTreeRoot::CREATION_MODE _eMode
     1
 include/unotools/fontdefs.hxx:55
@@ -3567,7 +3567,7 @@ svx/inc/sxmtaitm.hxx:31
     _Bool bOn
     1
 svx/inc/verttexttbxctrl.hxx:30
-    void SvxVertCTLTextTbxCtrl_Base::ImplInheritanceHelper(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,nullptr_t &&,class rtl::OUString &&)
+    void SvxVertCTLTextTbxCtrl_Base::ImplInheritanceHelper(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,nullptr_t &&,class rtl::OUString &&)
     nullptr_t && 
     0
 svx/inc/xftshtit.hxx:34
@@ -4175,7 +4175,7 @@ sw/source/writerfilter/ooxml/OOXMLPropertySet.hxx:46
     unsigned int 
     0
 sw/source/writerfilter/ooxml/OOXMLStreamImpl.hxx:62
-    void writerfilter::ooxml::OOXMLStreamImpl::OOXMLStreamImpl(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream>,enum writerfilter::ooxml::OOXMLStream::StreamType_t,_Bool)
+    void writerfilter::ooxml::OOXMLStreamImpl::OOXMLStreamImpl(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream>,enum writerfilter::ooxml::OOXMLStream::StreamType_t,_Bool)
     enum writerfilter::ooxml::OOXMLStream::StreamType_t nType
     1
 test/source/sheet/xdatapilottable2.cxx:237
@@ -4439,7 +4439,7 @@ vcl/qa/cppunit/PDFDocumentTest.cxx:179
     int nGenerationNumber
     0
 vcl/source/accessibility/vclxaccessibletoolbox.cxx:87
-    void (anonymous namespace)::OToolBoxWindowItem::OToolBoxWindowItem(int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &)
+    void (anonymous namespace)::OToolBoxWindowItem::OToolBoxWindowItem(int,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &)
     int _nIndexInParent
     0
 vcl/source/bitmap/BitmapBasicMorphologyFilter.cxx:225
@@ -4539,7 +4539,7 @@ vcl/unx/gtk3/gtkinst.cxx:22206
     _Bool bSearchMRU
     0
 xmlhelp/source/cxxhelp/provider/databases.hxx:372
-    void chelp::DataBaseIterator::DataBaseIterator(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,class chelp::Databases &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
+    void chelp::DataBaseIterator::DataBaseIterator(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class chelp::Databases &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
     _Bool bHelpText
     1
 xmlhelp/source/cxxhelp/provider/databases.hxx:377

@@ -678,7 +678,7 @@ bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
     return ChildKeyInput(rKEvt);
 }
 
-NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
+NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
  : NavElementToolBoxControl_Base( rxContext,
                            uno::Reference< frame::XFrame >(),
                            u".uno:NavElement"_ustr ),
@@ -789,7 +789,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_NavElementToolBoxController_get_implementation(
-    css::uno::XComponentContext *rxContext,
+    cpo::uno::XComponentContext *rxContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new NavElementToolBoxControl( rxContext ) );
@@ -803,7 +803,7 @@ class PrevNextScrollToolboxController : public PrevNextScrollToolboxController_B
 public:
     enum Type { PREVIOUS, NEXT };
 
-    PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
+    PrevNextScrollToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, Type eType );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -819,7 +819,7 @@ private:
 
 }
 
-PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
+PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext, Type eType )
     : PrevNextScrollToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             (eType == PREVIOUS) ? u".uno:ScrollToPrevious"_ustr: u".uno:ScrollToNext"_ustr ),
@@ -877,7 +877,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PreviousScrollToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::PREVIOUS ) );
@@ -885,7 +885,7 @@ lo_writer_PreviousScrollToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_NextScrollToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::NEXT ) );

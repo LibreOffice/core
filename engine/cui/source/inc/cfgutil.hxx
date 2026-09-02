@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 
 struct SfxStyleInfo_Impl
@@ -158,7 +158,7 @@ class CuiConfigGroupListBox
     CuiConfigFunctionListBox* m_pFunctionListBox;
     SfxGroupInfoArr_Impl aArr;
     OUString m_sModuleLongName;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
@@ -168,7 +168,7 @@ class CuiConfigGroupListBox
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
     static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
-        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
+        css::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
         std::u16string_view docName);
 
     sal_Int32 InitModule();
@@ -190,7 +190,7 @@ public:
     ~CuiConfigGroupListBox();
     void                ClearAll();
 
-    void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    void                Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                              const css::uno::Reference< css::frame::XFrame >&          xFrame,
                              const OUString&                                        sModuleLongName,
                              bool bEventMode);
@@ -201,7 +201,7 @@ public:
 
     static OUString GetImage(
         const css::uno::Reference< css::script::browse::XBrowseNode >& node,
-        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
+        css::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
         bool bIsRootNode);
 };
 

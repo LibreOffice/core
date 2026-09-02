@@ -49,7 +49,7 @@ cpo::uno::Sequence< OUString > FooterMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-FooterMenuController::FooterMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+FooterMenuController::FooterMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     HeaderMenuController( xContext,true )
 {
 }
@@ -61,7 +61,7 @@ FooterMenuController::~FooterMenuController()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_FooterMenuController_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::FooterMenuController(context));
 }

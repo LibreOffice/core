@@ -47,7 +47,7 @@ namespace pcr
         // </properties>
 
     public:
-        explicit OTabOrderDialog( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+        explicit OTabOrderDialog( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
         virtual ~OTabOrderDialog() override;
 
         // XTypeProvider

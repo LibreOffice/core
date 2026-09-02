@@ -26,7 +26,7 @@
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
@@ -37,7 +37,7 @@ namespace chart
 {
 
 NetChartTypeTemplate::NetChartTypeTemplate(
-    Reference< uno::XComponentContext > const & xContext,
+    Reference< cpo::uno::XComponentContext > const & xContext,
     const OUString & rServiceName,
     StackMode eStackMode,
     bool bSymbols,

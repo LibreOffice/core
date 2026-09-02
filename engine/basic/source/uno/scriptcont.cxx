@@ -1202,7 +1202,7 @@ void SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(cpo::uno::XComponentContext*,
                                                                  cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new basic::SfxScriptLibraryContainer());

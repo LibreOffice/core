@@ -26,7 +26,7 @@ class SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
 {
 public:
     explicit SvxLineSpacingToolBoxControl(
-        const css::uno::Reference<css::uno::XComponentContext>& rContext);
+        const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~SvxLineSpacingToolBoxControl() override;
 
     virtual void execute(sal_Int16 KeyModifier) override;

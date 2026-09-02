@@ -20,7 +20,7 @@
 #pragma once
 
 #include "contentresultsetwrapper.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XFetchProvider.hpp>
@@ -107,7 +107,7 @@ class CachedContentResultSet
 
     //members
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                             m_xContext;
 
     //different Interfaces from Origin:
@@ -176,7 +176,7 @@ private:
 
 public:
     CachedContentResultSet(
-                        const css::uno::Reference< css::uno::XComponentContext > &         rxContext,
+                        const css::uno::Reference< cpo::uno::XComponentContext > &         rxContext,
                         const css::uno::Reference< css::sdbc::XResultSet > &               xOrigin,
                         const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentIdentifierMapping );
 
@@ -360,11 +360,11 @@ class CachedContentResultSetFactory final :
                     css::lang::XServiceInfo,
                     css::ucb::XCachedContentResultSetFactory>
 {
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
 
-    CachedContentResultSetFactory( const css::uno::Reference< css::uno::XComponentContext > & rxContext);
+    CachedContentResultSetFactory( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext);
 
     virtual ~CachedContentResultSetFactory() override;
 

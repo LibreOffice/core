@@ -20,7 +20,7 @@
 class CMXImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    explicit CMXImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit CMXImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

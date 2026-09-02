@@ -29,7 +29,7 @@
 
 namespace chart { class ChartModel; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -81,7 +81,7 @@ public:
             css::chart2::LegendPosition eLegendPosition,
             const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             ChartModel& rModel
                 ) = 0;
 

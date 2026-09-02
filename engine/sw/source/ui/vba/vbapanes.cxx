@@ -32,12 +32,12 @@ class PanesIndexAccess : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxModel;
 
 public:
     PanesIndexAccess( uno::Reference< XHelperInterface > xParent,
-                      uno::Reference< uno::XComponentContext > xContext,
+                      uno::Reference< cpo::uno::XComponentContext > xContext,
                       rtl::Reference< SwXTextDocument >  xModel )
     : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel )) {}
 
@@ -83,7 +83,7 @@ public:
 
 }
 
-SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel ): SwVbaPanes_BASE( xParent, xContext, new PanesIndexAccess( xParent, xContext, xModel ) )
+SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel ): SwVbaPanes_BASE( xParent, xContext, new PanesIndexAccess( xParent, xContext, xModel ) )
 {
 }
 

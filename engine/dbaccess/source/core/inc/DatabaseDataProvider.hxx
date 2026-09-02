@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
@@ -49,7 +49,7 @@ class DatabaseDataProvider: private ::cppu::BaseMutex,
                             public ::cppu::PropertySetMixin< css::chart2::data::XDatabaseDataProvider >
 {
 public:
-    explicit DatabaseDataProvider(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit DatabaseDataProvider(css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
 private:
     // css::uno::XInterface:
@@ -231,7 +231,7 @@ private:
     ::dbtools::FilterManager    m_aFilterManager;
     std::map< OUString, cpo::uno::Any>                          m_aNumberFormats;
 
-    css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
     css::uno::Reference< css::sdbc::XConnection >                 m_xActiveConnection;
     css::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
     css::uno::Reference< css::chart2::XInternalDataProvider >     m_xInternal;

@@ -30,8 +30,8 @@
 
 namespace com::sun::star {
     namespace frame { class XFrame; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace svt {
     class AcceleratorExecute;
@@ -44,7 +44,7 @@ namespace dbaui
     class IController;
     class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) ODataView :    public vcl::Window
     {
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;  // the service factory to work with
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
     protected:
         rtl::Reference<IController> m_xController;  // the controller where we reside in
@@ -53,7 +53,7 @@ namespace dbaui
     public:
         ODataView(  vcl::Window* pParent,
                     IController& _rController,
-                    const css::uno::Reference< css::uno::XComponentContext >& ,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView() override;
         virtual void dispose() override;
@@ -63,7 +63,7 @@ namespace dbaui
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void StateChanged( StateChangedType nStateChange ) override;
 
-        const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext;}
+        const css::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
         virtual void Resize() override;

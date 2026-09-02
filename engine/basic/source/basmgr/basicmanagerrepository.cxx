@@ -49,7 +49,7 @@
 namespace basic
 {
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::Desktop;
     using ::com::sun::star::uno::XInterface;

@@ -271,7 +271,7 @@ public:
         every record as well as at the end of the search.
     */
     FmSearchEngine(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
         std::u16string_view strVisibleFields,
         const InterfaceArray& arrFields);

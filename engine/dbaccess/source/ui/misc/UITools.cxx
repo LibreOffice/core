@@ -112,7 +112,7 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 
 SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
                                      const Reference< css::container::XNameAccess >& _xDatabaseContext,
-                                    const Reference< css::uno::XComponentContext >& _rxContext,
+                                    const Reference< cpo::uno::XComponentContext >& _rxContext,
                                     Reference< css::lang::XEventListener> const & _rEvtLst,
                                     Reference< css::sdbc::XConnection>& _rOUTConnection )
 {
@@ -129,7 +129,7 @@ SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
 }
 
 SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& _xDataSource,
-                                    const Reference< css::uno::XComponentContext >& _rxContext,
+                                    const Reference< cpo::uno::XComponentContext >& _rxContext,
                                     Reference< css::lang::XEventListener> const & _rEvtLst,
                                     Reference< css::sdbc::XConnection>& _rOUTConnection )
 {
@@ -627,7 +627,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,Any(_pFieldDesc->GetAutoIncrementValue()));
 }
 
-bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< css::uno::XComponentContext >& _xContext)
+bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< cpo::uno::XComponentContext >& _xContext)
 {
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
     bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
@@ -1183,7 +1183,7 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
     return true;
 }
 
-Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< css::uno::XComponentContext >& _rxContext )
+Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< cpo::uno::XComponentContext >& _rxContext )
 {
     // create a formatter working with the connections format supplier
     Reference< XNumberFormatter > xFormatter;

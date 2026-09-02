@@ -64,7 +64,7 @@ void TestParsing::testSimpleRectangle()
     uno::Reference<io::XInputStream> xStream = parseSvg(aUrl);
     CPPUNIT_ASSERT(xStream.is());
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
     cpo::uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
@@ -97,7 +97,7 @@ void TestParsing::testPath()
     uno::Reference<io::XInputStream> xStream = parseSvg(aUrl);
     CPPUNIT_ASSERT(xStream.is());
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
     cpo::uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);

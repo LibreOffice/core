@@ -145,7 +145,7 @@ void IconTestApp::Init()
 {
     nRet = EXIT_SUCCESS;
 
-    uno::Reference<uno::XComponentContext> xContext =
+    uno::Reference<cpo::uno::XComponentContext> xContext =
         cppu::defaultBootstrap_InitialComponentContext();
     uno::Reference<lang::XMultiComponentFactory> xFactory =
         xContext->getServiceManager();

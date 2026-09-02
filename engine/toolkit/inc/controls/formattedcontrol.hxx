@@ -34,7 +34,7 @@ namespace toolkit
     class UnoControlFormattedFieldModel final : public UnoControlModel
     {
     public:
-        UnoControlFormattedFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        UnoControlFormattedFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
             : UnoControlModel(rModel)
             , m_bRevokedAsClient(false)

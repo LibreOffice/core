@@ -40,7 +40,7 @@ using namespace package_ucp;
 
 
 DynamicResultSet::DynamicResultSet(
-              const uno::Reference< uno::XComponentContext >& rxContext,
+              const uno::Reference< cpo::uno::XComponentContext >& rxContext,
               rtl::Reference< Content > xContent,
               const ucb::OpenCommandArgument2& rCommand,
               uno::Reference< ucb::XCommandEnvironment > xEnv )

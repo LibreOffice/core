@@ -178,7 +178,7 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
 
     if (SvtCJKOptions::IsCJKFontEnabled())
     {
-        const uno::Reference< uno::XComponentContext >& xContext = getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = getProcessComponentContext();
 
         m_xExtendedIndexEntrySupplier = i18n::IndexEntrySupplier::create(xContext);
 
@@ -1478,7 +1478,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
     {
         if(!m_bBibAccessInitialized)
         {
-            const uno::Reference< uno::XComponentContext >& xContext = getProcessComponentContext();
+            const uno::Reference< cpo::uno::XComponentContext >& xContext = getProcessComponentContext();
             m_xBibAccess = frame::Bibliography::create( xContext );
             uno::Reference< beans::XPropertySet >  xPropSet(m_xBibAccess, uno::UNO_QUERY);
             OUString uPropName(u"BibliographyDataFieldNames"_ustr);

@@ -32,14 +32,14 @@ class HeadersFootersIndexAccess : public ::cppu::WeakImplHelper<container::XInde
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxModel;
     uno::Reference< beans::XPropertySet > mxPageStyleProps;
     bool mbHeader;
 
 public:
     HeadersFootersIndexAccess( uno::Reference< XHelperInterface > xParent,
-                               uno::Reference< uno::XComponentContext > xContext,
+                               uno::Reference< cpo::uno::XComponentContext > xContext,
                                rtl::Reference< SwXTextDocument > xModel,
                                uno::Reference< beans::XPropertySet > xPageStyleProps,
                                bool bHeader )
@@ -93,7 +93,7 @@ public:
 }
 
 SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface >& xParent,
-                                          const uno::Reference< uno::XComponentContext > & xContext,
+                                          const uno::Reference< cpo::uno::XComponentContext > & xContext,
                                           const rtl::Reference< SwXTextDocument >& xModel,
                                           const uno::Reference< beans::XPropertySet >& xPageStyleProps,
                                           bool isHeader )

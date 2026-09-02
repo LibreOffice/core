@@ -49,7 +49,7 @@ namespace basctl::docs {
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 
     // DocumentEnumeration
-    DocumentEnumeration::DocumentEnumeration( Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
+    DocumentEnumeration::DocumentEnumeration( Reference< cpo::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
         : m_xContext( _rContext )
         , m_pFilter( _pFilter )
     {

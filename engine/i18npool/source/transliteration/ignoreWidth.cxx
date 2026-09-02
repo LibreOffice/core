@@ -22,7 +22,7 @@
 #include <transliteration_Ignore.hxx>
 #include <transliteration_OneToOne.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace com::sun::star::uno;
 using namespace cpo::uno;
@@ -56,7 +56,7 @@ ignoreWidth::transliterateChar2Char( sal_Unicode inChar)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::ignoreWidth());

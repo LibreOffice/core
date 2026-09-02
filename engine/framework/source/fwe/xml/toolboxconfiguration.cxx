@@ -35,7 +35,7 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 bool ToolBoxConfiguration::LoadToolBox(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
     const css::uno::Reference<css::io::XInputStream>& rInputStream,
     const css::uno::Reference<css::container::XIndexContainer>& rToolbarConfiguration)
 {
@@ -73,7 +73,7 @@ bool ToolBoxConfiguration::LoadToolBox(
 }
 
 bool ToolBoxConfiguration::StoreToolBox(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
     const css::uno::Reference<css::io::XOutputStream>& rOutputStream,
     const css::uno::Reference<css::container::XIndexAccess>& rToolbarConfiguration)
 {

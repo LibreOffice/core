@@ -36,7 +36,7 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace XPath
 {
@@ -55,12 +55,12 @@ namespace XPath
     private:
         std::mutex m_Mutex;
         nsmap_t m_nsmap;
-        const css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        const css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         extensions_t m_extensions;
 
     public:
         // ctor
-        explicit CXPathAPI( const css::uno::Reference< css::uno::XComponentContext >& );
+        explicit CXPathAPI( const css::uno::Reference< cpo::uno::XComponentContext >& );
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

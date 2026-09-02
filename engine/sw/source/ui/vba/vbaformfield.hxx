@@ -29,7 +29,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaFormField(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                   const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                   const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                    const rtl::Reference<SwXTextDocument>& xTextDocument,
                    sw::mark::Fieldmark& rFormField);
     ~SwVbaFormField() override;

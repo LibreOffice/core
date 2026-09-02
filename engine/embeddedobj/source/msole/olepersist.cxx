@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-bool KillFile_Impl( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
+bool KillFile_Impl( const OUString& aURL, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     if ( !xContext.is() )
         return false;
@@ -85,7 +85,7 @@ bool KillFile_Impl( const OUString& aURL, const uno::Reference< uno::XComponentC
 }
 
 
-OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >& xContext )
+OUString GetNewTempFileURL_Impl( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     SAL_WARN_IF( !xContext.is(), "embeddedobj.ole", "No factory is provided!" );
 
@@ -111,7 +111,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< uno::XComponentContext >&
 
 
 OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream,
-                                      const uno::Reference< uno::XComponentContext >& xContext )
+                                      const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     OSL_ENSURE( xInStream.is() && xContext.is(), "Wrong parameters are provided!" );
 
@@ -158,7 +158,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
 #ifdef _WIN32
 /// @throws io::IOException
 /// @throws uno::RuntimeException
-static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const OUString& aEntryName, const uno::Reference< uno::XComponentContext >& xContext )
+static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const OUString& aEntryName, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     OUString aResult;
 

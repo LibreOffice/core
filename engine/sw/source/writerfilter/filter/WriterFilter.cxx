@@ -96,13 +96,13 @@ class WriterFilter
     : public cppu::WeakImplHelper<document::XFilter, document::XImporter, document::XExporter,
                                   lang::XInitialization, lang::XServiceInfo>
 {
-    uno::Reference<uno::XComponentContext> m_xContext;
+    uno::Reference<cpo::uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xSrcDoc;
     rtl::Reference<SwXTextDocument> m_xDstDoc;
     cpo::uno::Sequence<cpo::uno::Any> m_xInitializationArguments;
 
 public:
-    explicit WriterFilter(uno::Reference<uno::XComponentContext> xContext)
+    explicit WriterFilter(uno::Reference<cpo::uno::XComponentContext> xContext)
         : m_xContext(std::move(xContext))
     {
     }
@@ -374,7 +374,7 @@ cpo::uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_WriterFilter_get_implementation(
-    uno::XComponentContext* component, cpo::uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
+    cpo::uno::XComponentContext* component, cpo::uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new WriterFilter(component));
 }

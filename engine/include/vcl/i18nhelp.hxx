@@ -28,9 +28,7 @@
 #include <vcl/dllapi.h>
 #include <memory>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 namespace utl {
     class TransliterationWrapper;
 }
@@ -43,7 +41,7 @@ class VCL_DLLPUBLIC I18nHelper
 {
     mutable std::mutex              maMutex;
     LanguageTag                     maLanguageTag;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     const LocaleDataWrapper*              mpLocaleDataWrapper { nullptr };
     std::unique_ptr<utl::TransliterationWrapper>    mpTransliterationWrapper;
@@ -57,7 +55,7 @@ class VCL_DLLPUBLIC I18nHelper
 
 public:
 
-                I18nHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext, LanguageTag aLanguageTag );
+                I18nHelper( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, LanguageTag aLanguageTag );
                 ~I18nHelper();
 
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;

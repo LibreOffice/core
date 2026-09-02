@@ -28,7 +28,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
 
 inline constexpr sal_Int32 nCharClassAlphaType =
@@ -72,7 +72,7 @@ class UNOTOOLS_DLLPUBLIC CharClass
 public:
     /// Preferred ctor with service manager specified
     CharClass(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         LanguageTag aLanguageTag );
 
     /// Deprecated ctor, tries to get a process service manager or to load the

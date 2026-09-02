@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XSelectionFunction.hpp>
 
 #include <comphelper/kit.hxx>

@@ -109,7 +109,7 @@ namespace uui {
 
 
 PasswordContainerHelper::PasswordContainerHelper(
-    uno::Reference< uno::XComponentContext > const & xContext ):
+    uno::Reference< cpo::uno::XComponentContext > const & xContext ):
     m_xPasswordContainer(task::PasswordContainer::create(xContext))
 {}
 
@@ -271,7 +271,7 @@ bool PasswordContainerHelper::addRecord(
 
 
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
-    const uno::Reference< uno::XComponentContext >& xContext )
+    const uno::Reference< cpo::uno::XComponentContext >& xContext )
 : m_aPwContainerHelper( xContext )
 {
 }
@@ -380,7 +380,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_uui_PasswordContainerInteractionHandler_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new uui::PasswordContainerInteractionHandler(context));
 }

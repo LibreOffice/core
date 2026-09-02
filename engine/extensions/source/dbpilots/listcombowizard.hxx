@@ -52,7 +52,7 @@ namespace dbp
         OListComboWizard(
             weld::Window* pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         OListComboSettings& getSettings() { return m_aSettings; }

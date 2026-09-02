@@ -33,7 +33,7 @@ protected:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    explicit UnoTreeModel(const css::uno::Reference<css::uno::XComponentContext>& i_factory);
+    explicit UnoTreeModel(const css::uno::Reference<cpo::uno::XComponentContext>& i_factory);
     UnoTreeModel(const UnoTreeModel& rOther)
         : UnoControlModel(rOther)
     {

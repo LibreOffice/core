@@ -100,12 +100,12 @@ public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaHyperlinks(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaHyperlinks(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const ScVbaHyperlinksRef& rxSheetHlinks, const ScRangeList& rScRanges );
 
     virtual ~ScVbaHyperlinks() override;

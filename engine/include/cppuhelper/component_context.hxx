@@ -26,7 +26,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace cpo::uno { class XComponentContext; }
 
 namespace cppu
 {
@@ -81,11 +81,11 @@ struct SAL_WARN_UNUSED ContextEntry_Init
     @param xDelegate delegation to further context, if value was not found
     @return new context object
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XComponentContext >
 createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-    css::uno::Reference< css::uno::XComponentContext > const & xDelegate =
-    css::uno::Reference< css::uno::XComponentContext >() );
+    css::uno::Reference< cpo::uno::XComponentContext > const & xDelegate =
+    css::uno::Reference< cpo::uno::XComponentContext >() );
 
 }
 

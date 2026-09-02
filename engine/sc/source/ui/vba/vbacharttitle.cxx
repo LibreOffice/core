@@ -22,7 +22,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xParent,  const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& _xTitleShape ) :  ChartTitleBase( xParent, xContext, _xTitleShape )
+ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xParent,  const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& _xTitleShape ) :  ChartTitleBase( xParent, xContext, _xTitleShape )
 {
 }
 

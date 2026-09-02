@@ -23,7 +23,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppu/unotype.hxx>
@@ -41,7 +41,7 @@ namespace
 
 uno::Reference<document::XFilter> createTableFilter(const OUString& rServiceName)
 {
-    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     return uno::Reference<document::XFilter>(
         xContext->getServiceManager()->createInstanceWithContext(rServiceName, xContext),
         uno::UNO_QUERY);

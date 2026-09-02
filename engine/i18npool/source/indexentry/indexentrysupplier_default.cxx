@@ -33,7 +33,7 @@ using namespace ::cpo::uno;
 namespace i18npool {
 
 IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
-    const css::uno::Reference < css::uno::XComponentContext >& rxContext ) :
+    const css::uno::Reference < cpo::uno::XComponentContext >& rxContext ) :
     IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Unicode";
@@ -111,7 +111,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey const *keys
     }
 }
 
-Index::Index(const css::uno::Reference < css::uno::XComponentContext >& rxContext)
+Index::Index(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext)
     : table_count(0)
     , key_count(0)
     , mkey_count(0)

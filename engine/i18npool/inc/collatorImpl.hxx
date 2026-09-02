@@ -29,7 +29,7 @@
 #include <optional>
 
 namespace com::sun::star::i18n { class XLocaleData5; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -45,7 +45,7 @@ class CollatorImpl : public cppu::WeakImplHelper
 public:
 
     // Constructors
-    CollatorImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    CollatorImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     // Destructor
     virtual ~CollatorImpl() override;
 
@@ -93,7 +93,7 @@ private:
     std::optional<lookupTableItem>     cachedItem;
 
     // Service Factory
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     // lang::Locale Data
     css::uno::Reference < css::i18n::XLocaleData5 >     mxLocaleData;
 

@@ -29,8 +29,8 @@
 
 namespace com::sun::star {
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XDialogBase;
@@ -43,7 +43,7 @@ class VBAHELPER_DLLPUBLIC VbaDialogBase : public VbaDialogBase_BASE
 {
     sal_Int32 mnIndex;
 public:
-    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ) {}
+    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ) {}
 
     // Methods
     virtual void SAL_CALL Show() override;

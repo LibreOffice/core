@@ -9,7 +9,7 @@ excludelist:
     - o3tl/char16_t2wchar_t.hxx
     shell/source/cmdmail/cmdmailsuppl.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     shell/source/unix/exec/shellexec.cxx:
     # Needed on MAC
     - osl/file.hxx

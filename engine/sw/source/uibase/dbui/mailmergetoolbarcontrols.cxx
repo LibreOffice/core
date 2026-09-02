@@ -106,7 +106,7 @@ class MMCurrentEntryController : public MMCurrentEntryController_Base
     DECL_LINK(CurrentEditUpdatedHdl, weld::Entry&, bool);
 
 public:
-    explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
+    explicit MMCurrentEntryController(const uno::Reference<cpo::uno::XComponentContext>& rContext)
         : MMCurrentEntryController_Base(rContext, uno::Reference<frame::XFrame>(), u".uno:MailMergeCurrentEntry"_ustr)
         , m_xCurrentEdit(nullptr)
     {
@@ -199,7 +199,7 @@ class MMExcludeEntryController : public MMExcludeEntryController_Base
     DECL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::Toggleable&, void);
 
 public:
-    explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
+    explicit MMExcludeEntryController(const uno::Reference<cpo::uno::XComponentContext>& rContext)
         : MMExcludeEntryController_Base(rContext, uno::Reference<frame::XFrame>(), u".uno:MailMergeExcludeEntry"_ustr)
         , m_xExcludeCheckbox(nullptr)
     {
@@ -356,7 +356,7 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *
 lo_writer_MMCurrentEntryController_get_implementation(
-    uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MMCurrentEntryController(context));
@@ -364,7 +364,7 @@ lo_writer_MMCurrentEntryController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *
 lo_writer_MMExcludeEntryController_get_implementation(
-    uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MMExcludeEntryController(context));

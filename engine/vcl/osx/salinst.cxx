@@ -66,7 +66,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <premac.h>
 #include <Foundation/Foundation.h>
@@ -944,7 +944,7 @@ void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 // to UTF-8 before encoding non ascii characters, which is not what other apps expect.
 static OUString translateToExternalUrl(const OUString& internalUrl)
 {
-    uno::Reference< uno::XComponentContext > context(
+    uno::Reference< cpo::uno::XComponentContext > context(
         comphelper::getProcessComponentContext());
     return uri::ExternalUriReferenceTranslator::create(context)->translateToExternal(internalUrl);
 }

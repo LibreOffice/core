@@ -48,7 +48,7 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext
 {
 }
 
-css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName)
+css::uno::Reference<css::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName)
 {
     rtl::Reference<OFormattedFieldWrapper> pRef = new OFormattedFieldWrapper(_rxFactory,
                                                                              implementationName);
@@ -316,7 +316,7 @@ void OFormattedFieldWrapper::ensureAggregate()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_form_OFormattedFieldWrapper_get_implementation(css::uno::XComponentContext* component,
+com_sun_star_form_OFormattedFieldWrapper_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     css::uno::Reference<css::uno::XInterface> inst(
@@ -327,7 +327,7 @@ com_sun_star_form_OFormattedFieldWrapper_get_implementation(css::uno::XComponent
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation(css::uno::XComponentContext* component,
+com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     css::uno::Reference<css::uno::XInterface> inst(

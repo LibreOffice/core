@@ -27,7 +27,7 @@ namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::container { class XNameReplace; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XChangesBatch; }
 
 namespace utl
@@ -188,7 +188,7 @@ namespace utl
         /** creates a configuration tree for the given path in the given mode
         */
         OConfigurationTreeRoot(
-            const css::uno::Reference<css::uno::XComponentContext> & i_rContext,
+            const css::uno::Reference<cpo::uno::XComponentContext> & i_rContext,
             const OUString& i_rNodePath,
             const bool i_bUpdatable
         );
@@ -224,7 +224,7 @@ namespace utl
             @param      _rPath          path to the node the object should represent
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
-        static OConfigurationTreeRoot createWithComponentContext(const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        static OConfigurationTreeRoot createWithComponentContext(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const OUString& _rPath, CREATION_MODE _eMode = CM_UPDATABLE);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
@@ -233,7 +233,7 @@ namespace utl
             the configuration could be initialized, errors in the creation of the specific node (e.g. because the
             given node path does not exist) are still asserted.</p>
         */
-        static OConfigurationTreeRoot tryCreateWithComponentContext( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        static OConfigurationTreeRoot tryCreateWithComponentContext( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const OUString& _rPath, CREATION_MODE _eMode = CM_UPDATABLE );
 
         /** commit all changes made on the subtree the object is the root for<p/>

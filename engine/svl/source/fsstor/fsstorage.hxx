@@ -26,7 +26,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -43,13 +43,13 @@ class FSStorage final : public css::lang::XTypeProvider
     ::ucbhelper::Content m_aContent;
     sal_Int32 m_nMode;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
 
     FSStorage(  const ::ucbhelper::Content& aContent,
                 sal_Int32 nMode,
-                css::uno::Reference< css::uno::XComponentContext > const & xContext );
+                css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
     virtual ~FSStorage() override;
 

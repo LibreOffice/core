@@ -55,4 +55,4 @@ excludelist:
     - cpo/uno/TypeClass.hpp
     cppuhelper/source/servicemanager.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp

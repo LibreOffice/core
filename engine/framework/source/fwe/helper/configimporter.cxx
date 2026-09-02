@@ -30,7 +30,7 @@ namespace framework
 bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
     const uno::Reference< ui::XUIConfigurationManager2 >& rContainerFactory,
     std::vector< uno::Reference< container::XIndexContainer > >& rSeqContainer,
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext,
     const uno::Reference< embed::XStorage >& rToolbarStorage )
 {
     bool bResult ( false );

@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-RtfExportFilter::RtfExportFilter(uno::Reference<uno::XComponentContext> xCtx)
+RtfExportFilter::RtfExportFilter(uno::Reference<cpo::uno::XComponentContext> xCtx)
     : m_xCtx(std::move(xCtx))
 {
 }
@@ -116,7 +116,7 @@ cpo::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_RtfExport_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new RtfExportFilter(pCtx));
 }

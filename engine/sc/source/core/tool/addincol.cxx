@@ -289,7 +289,7 @@ void ScUnoAddInCollection::Initialize()
                         // passing the context to the component
 
                         uno::Reference<uno::XInterface> xInterface;
-                        uno::Reference<uno::XComponentContext> xCtx(
+                        uno::Reference<cpo::uno::XComponentContext> xCtx(
                             comphelper::getComponentContext(xManager));
                         uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
                         if (xCFac.is())
@@ -798,7 +798,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
     //TODO: pass XIntrospection to ReadFromAddIn
 
-    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
     uno::Reference<beans::XIntrospection> xIntro = beans::theIntrospection::get( xContext );
     cpo::uno::Any aObject;
@@ -1080,7 +1080,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
 
     // only get the function information from Introspection
 
-    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
     uno::Reference<beans::XIntrospection> xIntro = beans::theIntrospection::get(xContext);
     cpo::uno::Any aObject;

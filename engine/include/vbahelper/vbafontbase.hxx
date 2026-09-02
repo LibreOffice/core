@@ -29,8 +29,8 @@
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace container { class XIndexAccess; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -76,7 +76,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     VbaFontBase(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::container::XIndexAccess >& xPalette,
         const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
         Component eWhich,

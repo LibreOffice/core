@@ -19,7 +19,7 @@
 #include <comphelper/configurationhelper.hxx>
 
 namespace com::sun::star::beans { class XPropertyChangeListener; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper {
 
@@ -68,7 +68,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationListener final : public ConfigurationLis
 public:
     /// Public health warning, you -must- dispose this if you use it.
     ConfigurationListener(const OUString &rPath,
-                          css::uno::Reference< css::uno::XComponentContext >
+                          css::uno::Reference< cpo::uno::XComponentContext >
                           const & xContext = comphelper::getProcessComponentContext())
         : mxConfig( ConfigurationHelper::openConfig( xContext, rPath, EConfigurationModes::ReadOnly ),
                     css::uno::UNO_QUERY_THROW )

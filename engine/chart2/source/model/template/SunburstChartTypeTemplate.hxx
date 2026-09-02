@@ -18,7 +18,7 @@ namespace chart
 class SunburstChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    SunburstChartTypeTemplate(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    SunburstChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                               const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~SunburstChartTypeTemplate() override;
 

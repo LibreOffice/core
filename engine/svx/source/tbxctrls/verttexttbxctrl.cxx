@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 
 SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(
-    const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
     addStatusListener(u".uno:CTLFontState"_ustr);
@@ -38,14 +38,14 @@ OUString SvxCTLTextTbxCtrl::getImplementationName()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(css::uno::XComponentContext* rContext,
+com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(cpo::uno::XComponentContext* rContext,
                                                            cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxCTLTextTbxCtrl(rContext));
 }
 
 SvxVertTextTbxCtrl::SvxVertTextTbxCtrl(
-    const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
     addStatusListener(u".uno:VerticalTextState"_ustr);
@@ -58,13 +58,13 @@ OUString SvxVertTextTbxCtrl::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxVertTextTbxCtrl(rContext));
 }
 
 SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(
-    const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl_Base(rContext, nullptr, OUString())
     , m_bVisible(false)
 {

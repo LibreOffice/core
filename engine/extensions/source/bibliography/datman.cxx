@@ -1360,7 +1360,7 @@ uno::Reference< form::runtime::XFormController > const & BibDataManager::GetForm
 {
     if(!m_xFormCtrl.is())
     {
-        const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+        const Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         m_xFormCtrl = form::runtime::FormController::create(xContext);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         m_xFormDispatch.set( m_xFormCtrl, UNO_QUERY);

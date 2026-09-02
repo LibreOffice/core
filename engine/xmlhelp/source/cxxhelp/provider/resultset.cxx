@@ -32,7 +32,7 @@ using namespace chelp;
 // DynamicResultSet Implementation.
 
 DynamicResultSet::DynamicResultSet(
-    const Reference< XComponentContext >& rxContext,
+    const Reference< cpo::uno::XComponentContext >& rxContext,
     const OpenCommandArgument2& rCommand,
     std::unique_ptr<ResultSetFactory> pFactory )
     : ResultSetImplHelper( rxContext, rCommand ),

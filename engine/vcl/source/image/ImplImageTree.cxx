@@ -671,9 +671,9 @@ namespace {
 class FolderFileAccess : public ::cppu::WeakImplHelper<css::container::XNameAccess>
 {
 public:
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     OUString maURL;
-    FolderFileAccess(uno::Reference< uno::XComponentContext > context, OUString url)
+    FolderFileAccess(uno::Reference< cpo::uno::XComponentContext > context, OUString url)
         : mxContext(std::move(context)), maURL(std::move(url)) {}
     // XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }

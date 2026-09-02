@@ -38,7 +38,7 @@ private:
 public:
     // XMLMetaImportComponent() throw();
     explicit XMLMetaImportComponent(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext
         );
 
 protected:
@@ -56,14 +56,14 @@ protected:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLMetaImportComponent_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new XMLMetaImportComponent(context));
 }
 
 XMLMetaImportComponent::XMLMetaImportComponent(
-    const uno::Reference< uno::XComponentContext >& xContext)
+    const uno::Reference< cpo::uno::XComponentContext >& xContext)
     :   SvXMLImport(xContext, u"XMLMetaImportComponent"_ustr)
 {
 }

@@ -26,7 +26,7 @@ namespace sdbtools
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
 
     // DataSourceMetaData
     DataSourceMetaData::DataSourceMetaData( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )

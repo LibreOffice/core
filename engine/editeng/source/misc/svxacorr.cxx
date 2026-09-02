@@ -2361,7 +2361,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
             }
             else
             {
-                const uno::Reference< uno::XComponentContext >& xContext =
+                const uno::Reference< cpo::uno::XComponentContext >& xContext =
                     comphelper::getProcessComponentContext();
 
                 xml::sax::InputSource aParserInput;
@@ -2434,7 +2434,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
             xStrm->SetProperty( u"MediaType"_ustr, Any(u"text/xml"_ustr) );
 
 
-            const uno::Reference< uno::XComponentContext >& xContext =
+            const uno::Reference< cpo::uno::XComponentContext >& xContext =
                 comphelper::getProcessComponentContext();
 
             uno::Reference < xml::sax::XWriter > xWriter  = xml::sax::Writer::create(xContext);
@@ -2475,7 +2475,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
         uno::Reference < io::XStream > xStrm = xStg->openStreamElement( pXMLImplAutocorr_ListStr, embed::ElementModes::READ );
-        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = pXMLImplAutocorr_ListStr;
@@ -2774,7 +2774,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             refList->SetBufferSize( 8192 );
             refList->SetProperty( u"MediaType"_ustr, Any(u"text/xml"_ustr) );
 
-            const uno::Reference< uno::XComponentContext >& xContext =
+            const uno::Reference< cpo::uno::XComponentContext >& xContext =
                 comphelper::getProcessComponentContext();
 
             uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);

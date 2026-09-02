@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -39,7 +39,7 @@ typedef comphelper::WeakComponentImplHelper< css::lang::XServiceInfo,
 class UICommandDescription : public UICommandDescription_BASE
 {
     public:
-        UICommandDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        UICommandDescription( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         virtual ~UICommandDescription() override;
 
         virtual OUString getImplementationName() override
@@ -78,12 +78,12 @@ public:
                                     css::uno::Reference< css::container::XNameAccess > > UICommandsHashMap;
 
     protected:
-        UICommandDescription( const css::uno::Reference< css::uno::XComponentContext>& rxContext, bool  );
+        UICommandDescription( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, bool  );
         void impl_fillElements(const char* _pName);
         void ensureGenericUICommandsForLanguage(const LanguageTag& rLanguage);
 
         OUString                                                  m_aPrivateResourceURL;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                    m_aModuleToCommandFileMap;
         std::map<LanguageTag, UICommandsHashMap>                  m_aUICommandsHashMap;
         std::map<LanguageTag, css::uno::Reference< css::container::XNameAccess > > m_xGenericUICommands;

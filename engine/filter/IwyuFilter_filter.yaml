@@ -21,19 +21,19 @@ excludelist:
     - com/sun/star/io/IOException.hpp
     filter/source/xmlfilterdetect/filterdetect.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     filter/source/xsltdialog/typedetectionimport.cxx:
     # Actually used
     - com/sun/star/xml/sax/XAttributeList.hpp
     filter/source/xsltdialog/xmlfilterjar.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     filter/source/xsltdialog/xmlfiltertabdialog.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     filter/source/xsltdialog/xmlfiltersettingsdialog.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     filter/source/xsltfilter/LibXSLTTransformer.cxx:
     # Actually used
     - com/sun/star/io/XInputStream.hpp

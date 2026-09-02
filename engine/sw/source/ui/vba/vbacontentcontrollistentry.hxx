@@ -27,7 +27,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaContentControlListEntry(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                                 const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                                 const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                                  std::shared_ptr<SwContentControl> pCC, size_t nZIndex);
     ~SwVbaContentControlListEntry() override;
 

@@ -32,7 +32,7 @@ private:
         const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& xAttrList) override;
 
 public:
-    SchXMLImport(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    SchXMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                  OUString const& implementationName, SvXMLImportFlags nImportFlags);
 
     virtual ~SchXMLImport() noexcept override;

@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -49,7 +49,7 @@ typedef comphelper::WeakComponentImplHelper<
 class WindowContentFactoryManager : public WindowContentFactoryManager_BASE
 {
 public:
-    explicit WindowContentFactoryManager( css::uno::Reference< css::uno::XComponentContext> xContext );
+    explicit WindowContentFactoryManager( css::uno::Reference< cpo::uno::XComponentContext> xContext );
 
     virtual OUString getImplementationName() override
     {
@@ -67,18 +67,18 @@ public:
     }
 
     // XSingleComponentFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
 
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     bool                                               m_bConfigRead;
     rtl::Reference<ConfigurationAccess_FactoryManager> m_pConfigAccess;
 };
 
-WindowContentFactoryManager::WindowContentFactoryManager( uno::Reference< uno::XComponentContext > xContext ) :
+WindowContentFactoryManager::WindowContentFactoryManager( uno::Reference< cpo::uno::XComponentContext > xContext ) :
     m_xContext(std::move( xContext )),
     m_bConfigRead( false ),
     m_pConfigAccess(
@@ -94,14 +94,14 @@ void WindowContentFactoryManager::disposing(std::unique_lock<std::mutex>&)
 
 // XSingleComponentFactory
 uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWithContext(
-    const uno::Reference< uno::XComponentContext >& /*xContext*/ )
+    const uno::Reference< cpo::uno::XComponentContext >& /*xContext*/ )
 {
     uno::Reference< uno::XInterface > xWindow;
     return xWindow;
 }
 
 uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
-    const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const uno::Reference< uno::XComponentContext >& Context )
+    const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const uno::Reference< cpo::uno::XComponentContext >& Context )
 {
     uno::Reference< uno::XInterface > xWindow;
     uno::Reference< frame::XFrame >   xFrame;
@@ -195,7 +195,7 @@ uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWit
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new WindowContentFactoryManager(context));

@@ -1817,7 +1817,7 @@ SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const & xSto
         // either this throws due to wrong password or IO error, or returns stream
         assert(xDecryptedInnerPackage.is());
         // need a seekable stream => copy
-        Reference<uno::XComponentContext> const& xContext(::comphelper::getProcessComponentContext());
+        Reference<cpo::uno::XComponentContext> const& xContext(::comphelper::getProcessComponentContext());
         rtl::Reference< comphelper::UNOMemoryStream > xDecryptedInnerPackageStream = new comphelper::UNOMemoryStream();
         comphelper::OStorageHelper::CopyInputToOutput(xDecryptedInnerPackage->getInputStream(), xDecryptedInnerPackageStream->getOutputStream());
         xDecryptedInnerPackageStream->getOutputStream()->closeOutput();
@@ -3318,7 +3318,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
         return pImpl->xInteraction;
 
     // create default handler and cache it!
-    const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     pImpl->xInteraction.set(
         task::InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
     return pImpl->xInteraction;

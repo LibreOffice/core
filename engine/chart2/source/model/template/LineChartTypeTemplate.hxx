@@ -32,7 +32,7 @@ class LineChartTypeTemplate :
 {
 public:
     explicit LineChartTypeTemplate(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         StackMode eStackMode,
         bool bSymbols,

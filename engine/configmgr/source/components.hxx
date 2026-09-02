@@ -36,9 +36,9 @@ namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace uno {
         class Any;
-        class XComponentContext;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace configmgr {
 
@@ -50,7 +50,7 @@ class RootAccess;
 class Components {
 public:
     static Components & getSingleton(
-        css::uno::Reference< css::uno::XComponentContext > const & context);
+        css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     static bool allLocales(std::u16string_view locale);
 
@@ -115,7 +115,7 @@ private:
         Additions *);
 public:
     explicit Components(
-        css::uno::Reference< css::uno::XComponentContext > const & context);
+        css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     ~Components();
 private:
@@ -156,7 +156,7 @@ private:
 
     enum class ModificationTarget { None, File, Dconf };
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
         context_;
     Data data_;
     o3tl::sorted_vector< RootAccess * > roots_;

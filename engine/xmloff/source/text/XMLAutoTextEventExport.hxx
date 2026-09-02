@@ -41,7 +41,7 @@ class XMLAutoTextEventExport : public SvXMLExport
 public:
 
     XMLAutoTextEventExport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext, OUString const & implementationName, SvXMLExportFlags nFlags
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext, OUString const & implementationName, SvXMLExportFlags nFlags
         );
 
     virtual ~XMLAutoTextEventExport() override;

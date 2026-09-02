@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <framework/addonsoptions.hxx>
@@ -108,11 +108,11 @@ typedef ::cppu::WeakImplHelper<
 class ToolBarManager final : public ToolbarManager_Base
 {
     public:
-        ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ToolBarManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::frame::XFrame >& rFrame,
                         OUString aResourceName,
                         ToolBox* pToolBar );
-        ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ToolBarManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::frame::XFrame >& rFrame,
                         OUString aResourceName,
                         weld::Toolbar* pToolBar,
@@ -234,7 +234,7 @@ class ToolBarManager final : public ToolbarManager_Base
         ToolBarControllerMap                                         m_aControllerMap;
         std::mutex                                                   m_mutex;
         comphelper::OInterfaceContainerHelper4<XEventListener>       m_aListenerContainer;
-        css::uno::Reference< css::uno::XComponentContext >           m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >           m_xContext;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
         css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
         css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;

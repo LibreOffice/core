@@ -26,7 +26,7 @@ typedef TitleImpl< cppu::WeakImplHelper< ov::excel::XChartTitle > > ChartTitleBa
 class ScVbaChartTitle : public ChartTitleBase
 {
 public:
-    ScVbaChartTitle( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
+    ScVbaChartTitle( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

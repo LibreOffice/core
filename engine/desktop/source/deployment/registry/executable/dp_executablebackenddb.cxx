@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include "dp_executablebackenddb.hxx"
 
 
@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 namespace dp_registry::backend::executable {
 
 ExecutableBackendDb::ExecutableBackendDb(
-    Reference<XComponentContext> const &  xContext,
+    Reference<cpo::uno::XComponentContext> const &  xContext,
     OUString const & url):RegisteredDb(xContext, url)
 {
 

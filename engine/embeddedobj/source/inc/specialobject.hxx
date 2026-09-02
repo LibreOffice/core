@@ -29,7 +29,7 @@ private:
     css::awt::Size         maSize;
 public:
     OSpecialEmbeddedObject(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // XInterface

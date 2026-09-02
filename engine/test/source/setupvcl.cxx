@@ -35,7 +35,7 @@ struct Hook { // LINK only works as a member of a class...
 // context is disposed (redundantly again in unobootstrapprotector) from within
 // DeInitVCL (cf. Desktop::DeInit, desktop/source/app/app.cxx):
 IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
-    css::uno::Reference<css::uno::XComponentContext> context;
+    css::uno::Reference<cpo::uno::XComponentContext> context;
     try {
         context = comphelper::getProcessComponentContext();
     } catch (cpo::uno::RuntimeException &) {}

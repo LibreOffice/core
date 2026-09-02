@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace lang { class XMultiSe
 namespace com { namespace sun { namespace star { namespace lang { class XSingleComponentFactory; } } } }
 namespace com { namespace sun { namespace star { namespace lang { class XSingleServiceFactory; } } } }
 namespace com { namespace sun { namespace star { namespace registry { class XRegistryKey; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace cpo::uno { class XComponentContext; }
 namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 namespace cpo::uno { template <class E> class Sequence; }
 
@@ -121,7 +121,7 @@ namespace cppu
 */
 typedef css::uno::Reference< css::uno::XInterface >(
     * ComponentFactoryFunc)(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
 /** Creates a single component factory supporting the XSingleComponentFactory interface.
 

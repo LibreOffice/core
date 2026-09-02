@@ -132,14 +132,14 @@ void FillLangItems( std::set< OUString > &rLangItems,
 }
 
 auto (*g_pGetMultiplexerListener)(
-    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
     uno::Reference<uno::XInterface> const&,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const&)
     -> uno::Reference<ui::XContextChangeEventListener> = nullptr;
 
 uno::Reference<ui::XContextChangeEventListener>
 GetFirstListenerWith_Impl(
-    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
     uno::Reference<uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {

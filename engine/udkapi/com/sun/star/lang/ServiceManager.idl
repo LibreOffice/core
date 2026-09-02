@@ -58,11 +58,11 @@ module com {  module sun {  module star {  module lang {
     <code>uri</code> elements.  For <code>insert</code>, there can additionally
     be an optional element with a <code>Name</code> of
     <code>component-context</code> and a value that is a non-null reference of
-    type com::sun::star::uno::XComponentContext that shall
+    type cpo::uno::XComponentContext that shall
     be used instead of this service manager's default component context when
     loading the corresponding implementations.
 
-    @see com::sun::star::uno::XComponentContext
+    @see cpo::uno::XComponentContext
 */
 published service ServiceManager
 {
@@ -99,7 +99,7 @@ published service ServiceManager
     /** specifies the default component context to be used, if instantiating services
         via XMultiServiceFactory
     */
-    [optional, property] com::sun::star::uno::XComponentContext DefaultContext;
+    [optional, property] cpo::uno::XComponentContext DefaultContext;
 };
 
 

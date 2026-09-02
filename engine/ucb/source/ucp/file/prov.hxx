@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
@@ -52,7 +52,7 @@ namespace fileaccess {
         friend class BaseContent;
     public:
 
-        explicit FileProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit FileProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         virtual ~FileProvider() override;
 
         // XServiceInfo
@@ -140,7 +140,7 @@ namespace fileaccess {
         void init();
 
         // Members
-        css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
 
         void initProperties(std::unique_lock<std::mutex>& rGuard);
         std::mutex   m_aMutex;

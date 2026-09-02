@@ -30,10 +30,7 @@
 #include <condition_variable>
 #include <mutex>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace framework
 {
@@ -53,7 +50,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
 
     /** global uno service manager.
             Can be used to create own needed services. */
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
     /** used to wait for asynchronous listener callbacks. */
     std::condition_variable m_aBlock;
@@ -68,7 +65,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
 public:
     // ctor/dtor
 
-    DispatchHelper(css::uno::Reference<css::uno::XComponentContext> xContext);
+    DispatchHelper(css::uno::Reference<cpo::uno::XComponentContext> xContext);
     virtual ~DispatchHelper() override;
 
     // XServiceInfo

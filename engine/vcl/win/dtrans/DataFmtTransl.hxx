@@ -21,7 +21,7 @@
 
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -38,7 +38,7 @@ class CFormatEtc;
 class CDataFormatTranslator
 {
 public:
-    explicit CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit CDataFormatTranslator( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     CFormatEtc getFormatEtcFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) const;
     css::datatransfer::DataFlavor getDataFlavorFromFormatEtc(

@@ -82,7 +82,7 @@ std::shared_ptr<Xmlsec>& XmlsecLibrary::get()
 }
 
 DocumentSignatureManager::DocumentSignatureManager(
-    const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
+    const uno::Reference<cpo::uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
     : mxContext(xContext)
     , maSignatureHelper(xContext)
     , meSignatureMode(eMode)

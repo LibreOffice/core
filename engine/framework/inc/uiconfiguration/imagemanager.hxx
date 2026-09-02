@@ -23,7 +23,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -35,7 +35,7 @@ namespace framework
     class ImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
-            ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext, bool bForModule );
+            ImageManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, bool bForModule );
             virtual ~ImageManager() override;
 
             virtual OUString getImplementationName() override

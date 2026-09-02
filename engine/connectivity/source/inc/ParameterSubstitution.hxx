@@ -22,7 +22,7 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -35,13 +35,13 @@ namespace connectivity
     class ParameterSubstitution final : public ParameterSubstitution_BASE
     {
         ::osl::Mutex                                          m_aMutex;
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         cpo::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
 
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
-        ParameterSubstitution(css::uno::Reference< css::uno::XComponentContext > _rContext );
+        ParameterSubstitution(css::uno::Reference< cpo::uno::XComponentContext > _rContext );
     private:
 
         // XServiceInfo

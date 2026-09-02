@@ -31,7 +31,7 @@ class ODataSourcePropertyDialog final
 {
 public:
 
-    explicit ODataSourcePropertyDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    explicit ODataSourcePropertyDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
     // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;

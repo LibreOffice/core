@@ -12,7 +12,7 @@
 #include <utility>
 #include <vcl/weld.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -46,7 +46,7 @@ struct MenuContent final
 class MenuContentHandler final
 {
 private:
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharacterClassification;
     css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;

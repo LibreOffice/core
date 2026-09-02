@@ -45,7 +45,7 @@ namespace framework
 {
 
 ButtonToolbarController::ButtonToolbarController(
-    uno::Reference< uno::XComponentContext >  xContext,
+    uno::Reference< cpo::uno::XComponentContext >  xContext,
     ToolBox*                                            pToolBar,
     OUString                                 aCommand ) :
     m_bInitialized( false ),

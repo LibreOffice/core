@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -418,7 +418,7 @@ std::vector< Reference< drawing::XCustomShapeHandle > > EnhancedCustomShapeEngin
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const & args)
 {
     return cppu::acquire(new EnhancedCustomShapeEngine(args));

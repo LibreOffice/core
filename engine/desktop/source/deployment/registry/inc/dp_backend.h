@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <unordered_map>
 #include <strings.hrc>
 #include <utility>
@@ -208,7 +208,7 @@ class PackageRegistryBackend
 
 protected:
     OUString m_cachePath;
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
 
     OUString m_context;
     // currently only for library containers:
@@ -232,7 +232,7 @@ protected:
     virtual ~PackageRegistryBackend() override;
     PackageRegistryBackend(
         cpo::uno::Sequence<cpo::uno::Any> const & args,
-        css::uno::Reference<css::uno::XComponentContext> const & xContext );
+        css::uno::Reference<cpo::uno::XComponentContext> const & xContext );
 
     /* creates a folder with a unique name.
        If url is empty then it is created in the backend folder, otherwise
@@ -257,7 +257,7 @@ public:
     static OUString StrRegisteringPackage() { return DpResId(RID_STR_REGISTERING_PACKAGE); }
     static OUString StrRevokingPackage() { return DpResId(RID_STR_REVOKING_PACKAGE); }
 
-    css::uno::Reference<css::uno::XComponentContext> const &
+    css::uno::Reference<cpo::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
 
     OUString const & getCachePath() const { return m_cachePath; }

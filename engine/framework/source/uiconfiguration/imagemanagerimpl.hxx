@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <cppuhelper/weak.hxx>
@@ -45,7 +45,7 @@ namespace framework
     class CmdImageList
     {
         public:
-            CmdImageList(css::uno::Reference< css::uno::XComponentContext > xContext, OUString aModuleIdentifier);
+            CmdImageList(css::uno::Reference< cpo::uno::XComponentContext > xContext, OUString aModuleIdentifier);
             virtual ~CmdImageList();
 
             virtual Image getImageFromCommandURL(vcl::ImageType nImageType,
@@ -63,13 +63,13 @@ namespace framework
             vcl::CommandImageResolver m_aResolver;
 
             OUString m_aModuleIdentifier;
-            css::uno::Reference<css::uno::XComponentContext> m_xContext;
+            css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     };
 
     class GlobalImageList : public CmdImageList, public salhelper::SimpleReferenceObject
     {
         public:
-            explicit GlobalImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+            explicit GlobalImageList(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
             virtual ~GlobalImageList() override;
 
             virtual Image getImageFromCommandURL(vcl::ImageType nImageType,
@@ -83,7 +83,7 @@ namespace framework
     class ImageManagerImpl
     {
         public:
-            ImageManagerImpl(css::uno::Reference< css::uno::XComponentContext > xContext
+            ImageManagerImpl(css::uno::Reference< cpo::uno::XComponentContext > xContext
                 ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();
@@ -167,7 +167,7 @@ namespace framework
             css::uno::Reference< css::embed::XStorage >               m_xUserImageStorage;
             css::uno::Reference< css::embed::XStorage >               m_xUserBitmapsStorage;
             css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
-            css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+            css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
             ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             std::unique_ptr<CmdImageList>                                                   m_pDefaultImageList;

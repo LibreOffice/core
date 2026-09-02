@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::io { class XInputStream; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class SvStream;
 
@@ -54,14 +54,14 @@ UNLESS_MERGELIBS(SVT_DLLPUBLIC) bool isSupportedURL(std::u16string_view rURL);
     when you know that the image is small enough.
 */
 UNLESS_MERGELIBS(SVT_DLLPUBLIC) std::unique_ptr<SvStream> getImageStream(
-            css::uno::Reference<css::uno::XComponentContext> const & rxContext,
+            css::uno::Reference<cpo::uno::XComponentContext> const & rxContext,
             OUString const & rImageResourceURL);
 
 /** for a given URL of an image within a resource, this method retrieves
     a css::io::XInputStream for this image.
 */
 UNLESS_MERGELIBS(SVT_DLLPUBLIC) css::uno::Reference<css::io::XInputStream> getImageXStream(
-            css::uno::Reference<css::uno::XComponentContext> const & rxContext,
+            css::uno::Reference<cpo::uno::XComponentContext> const & rxContext,
             OUString const & rImageResourceURL);
 
 } // namespace svt::GraphicAccess

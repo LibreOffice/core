@@ -323,7 +323,7 @@ cpo::uno::Sequence< OUString > OOoEmbeddedObjectFactory::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOoEmbeddedObjectFactory(context));
 }
@@ -369,7 +369,7 @@ cpo::uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::getSupportedServ
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOoSpecialEmbeddedObjectFactory(context));
 }

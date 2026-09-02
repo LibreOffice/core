@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <ImportFilter.hxx>
 
@@ -21,7 +21,7 @@
 class MSWorksImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit MSWorksImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit MSWorksImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

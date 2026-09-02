@@ -84,7 +84,7 @@ private:
 
     /** reference to the uno service manager, which created this service.
         It can be used to create own needed helper services. */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     css::uno::Reference< css::frame::XSessionManagerClient > m_rSessionManager;
 
@@ -103,7 +103,7 @@ private:
     void QuitSessionQuietly();
 
 public:
-    explicit SessionListener(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    explicit SessionListener(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     virtual ~SessionListener() override;
 
@@ -140,7 +140,7 @@ public:
     virtual void statusChanged(const css::frame::FeatureStateEvent& event) override;
 };
 
-SessionListener::SessionListener(css::uno::Reference< css::uno::XComponentContext >  rxContext )
+SessionListener::SessionListener(css::uno::Reference< cpo::uno::XComponentContext >  rxContext )
         : m_xContext(std::move( rxContext ))
         , m_bRestored( false )
         , m_bSessionStoreRequested( false )
@@ -404,7 +404,7 @@ void SessionListener::doQuit()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_frame_SessionListener_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SAL_INFO("fwk.session", "com_sun_star_comp_frame_SessionListener_get_implementation");

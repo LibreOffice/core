@@ -39,7 +39,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 
 
-TypeDetectionExporter::TypeDetectionExporter( Reference< XComponentContext > const & xContext )
+TypeDetectionExporter::TypeDetectionExporter( Reference< cpo::uno::XComponentContext > const & xContext )
 : mxContext( xContext )
 {
 }

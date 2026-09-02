@@ -25,9 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 class FilterDetect final : public cppu::WeakImplHelper <
     css::document::XExtendedFilterDetection,
@@ -36,10 +34,10 @@ class FilterDetect final : public cppu::WeakImplHelper <
 >
 {
 
-    css::uno::Reference< css::uno::XComponentContext > mxCtx;
+    css::uno::Reference< cpo::uno::XComponentContext > mxCtx;
 
 public:
-    explicit FilterDetect( css::uno::Reference< css::uno::XComponentContext > xCtx)
+    explicit FilterDetect( css::uno::Reference< cpo::uno::XComponentContext > xCtx)
         : mxCtx(std::move( xCtx )) {}
 
     //XExtendedFilterDetection

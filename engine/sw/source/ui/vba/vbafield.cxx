@@ -36,7 +36,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const  uno::Reference< css::text::XTextField >& xTextField) : SwVbaField_BASE( rParent, rContext )
+SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, const  uno::Reference< css::text::XTextField >& xTextField) : SwVbaField_BASE( rParent, rContext )
 {
     mxTextField.set( xTextField, uno::UNO_SET_THROW );
 }
@@ -220,7 +220,7 @@ sal_Int32 SwVbaReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 // SwVbaFields
 
 static cpo::uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent,
-                                 const uno::Reference< uno::XComponentContext >& xContext,
+                                 const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                  const cpo::uno::Any& aSource )
 {
     uno::Reference< text::XTextField > xTextField( aSource, uno::UNO_QUERY_THROW );
@@ -233,12 +233,12 @@ namespace {
 class FieldEnumeration : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxModel;
     uno::Reference< container::XEnumeration > mxEnumeration;
 public:
     FieldEnumeration( uno::Reference< XHelperInterface >  xParent,
-                      uno::Reference< uno::XComponentContext > xContext,
+                      uno::Reference< cpo::uno::XComponentContext > xContext,
                       rtl::Reference< SwXTextDocument > xModel,
                       uno::Reference< container::XEnumeration > xEnumeration )
     : mxParent(std::move( xParent )),
@@ -263,13 +263,13 @@ class FieldCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAc
                                                              container::XEnumerationAccess >
 {
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxModel;
     rtl::Reference< SwXTextFieldTypes > mxEnumerationAccess;
 public:
     /// @throws cpo::uno::RuntimeException
     FieldCollectionHelper( uno::Reference< XHelperInterface > xParent,
-                           uno::Reference< uno::XComponentContext > xContext,
+                           uno::Reference< cpo::uno::XComponentContext > xContext,
                            const rtl::Reference< SwXTextDocument >& xModel )
     : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel( xModel )
     {
@@ -318,7 +318,7 @@ public:
 }
 
 SwVbaFields::SwVbaFields( const uno::Reference< XHelperInterface >& xParent,
-                          const uno::Reference< uno::XComponentContext > & xContext,
+                          const uno::Reference< cpo::uno::XComponentContext > & xContext,
                           const rtl::Reference< SwXTextDocument >& xModel )
 : SwVbaFields_BASE( xParent, xContext , uno::Reference< container::XIndexAccess >( new FieldCollectionHelper( xParent, xContext, xModel ) ) ),
   mxModel( xModel )

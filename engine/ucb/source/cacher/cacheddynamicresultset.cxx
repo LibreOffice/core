@@ -176,7 +176,7 @@ cpo::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetFactory::getSuppor
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedDynamicResultSetFactory_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedDynamicResultSetFactory(context));
 }

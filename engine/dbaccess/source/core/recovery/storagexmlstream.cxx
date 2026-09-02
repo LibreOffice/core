@@ -32,7 +32,7 @@ namespace dbaccess
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::xml::sax::XDocumentHandler;
     using ::com::sun::star::xml::sax::XWriter;

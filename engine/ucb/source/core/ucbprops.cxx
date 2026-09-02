@@ -33,7 +33,7 @@
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -215,7 +215,7 @@ cpo::uno::Sequence< OUString > SAL_CALL UcbPropertiesManager::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbPropertiesManager_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UcbPropertiesManager());
 }

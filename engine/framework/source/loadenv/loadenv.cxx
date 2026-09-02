@@ -132,7 +132,7 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
 
 }
 
-LoadEnv::LoadEnv(css::uno::Reference< css::uno::XComponentContext >  xContext)
+LoadEnv::LoadEnv(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext(std::move(xContext))
     , m_nSearchFlags(0)
     , m_eFeature(LoadEnvFeatures::NONE)
@@ -150,7 +150,7 @@ LoadEnv::~LoadEnv()
 }
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                           const css::uno::Reference< css::uno::XComponentContext >&     xContext  ,
+                                                                           const css::uno::Reference< cpo::uno::XComponentContext >&     xContext  ,
                                                                            const OUString&                                        sURL   ,
                                                                            const OUString&                                        sTarget,
                                                                                  sal_Int32                                               nSearchFlags ,
@@ -306,7 +306,7 @@ void LoadEnv::startLoading(const OUString& sURL, const cpo::uno::Sequence<beans:
     start();
 }
 
-void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
+void LoadEnv::initializeUIDefaults( const css::uno::Reference< cpo::uno::XComponentContext >& i_rxContext,
                                     comphelper::SequenceAsHashMap& io_lMediaDescriptor, const bool i_bUIMode,
                                     rtl::Reference<QuietInteraction>* o_ppQuietInteraction )
 {
@@ -612,7 +612,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     }
 
     // following operations can work on an internal type name only :-(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::document::XTypeDetection > xDetect(
          xContext->getServiceManager()->createInstanceWithContext(
              u"com.sun.star.document.TypeDetection"_ustr, xContext),
@@ -742,7 +742,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // we can't use as an in/out parameter here. Copy it before and don't forget to
     // update structure afterwards again!
     cpo::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
-    css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     xContext = m_xContext;
 
     aReadLock.clear();
     // <- SAFE
@@ -919,7 +919,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
     osl::ResettableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
     aReadLock.clear();
     // <- SAFE
 
@@ -1258,7 +1258,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
 
     // SAFE ->
     osl::ClearableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
     aReadLock.clear();
     // <- SAFE
 
@@ -1768,7 +1768,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (sFilter.isEmpty())
         return;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
 
     aReadLock.clear();
     // <- SAFE

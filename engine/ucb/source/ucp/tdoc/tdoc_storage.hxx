@@ -26,7 +26,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace tdoc_ucp {
 
@@ -44,7 +44,7 @@ namespace tdoc_ucp {
     {
     public:
         StorageElementFactory(
-            css::uno::Reference< css::uno::XComponentContext > xContext,
+            css::uno::Reference< cpo::uno::XComponentContext > xContext,
             rtl::Reference< OfficeDocumentsManager > xDocsMgr );
         virtual ~StorageElementFactory() override;
 
@@ -154,7 +154,7 @@ namespace tdoc_ucp {
         StorageMap m_aMap;
         osl::Mutex m_aMutex;
         rtl::Reference< OfficeDocumentsManager > m_xDocsMgr;
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     };
 
 } // namespace tdoc_ucp

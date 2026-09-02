@@ -14,7 +14,7 @@ using namespace ::com::sun::star;
 
 SwVbaFormFieldDropDownListEntry::SwVbaFormFieldDropDownListEntry(
     const uno::Reference<ooo::vba::XHelperInterface>& rParent,
-    const uno::Reference<uno::XComponentContext>& rContext, sw::mark::DropDownFieldmark& rFormField,
+    const uno::Reference<cpo::uno::XComponentContext>& rContext, sw::mark::DropDownFieldmark& rFormField,
     sal_Int32 nZIndex)
     : SwVbaFormFieldDropDownListEntry_BASE(rParent, rContext)
     , m_rDropDown(rFormField)

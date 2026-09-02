@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module inspection {
     <p>Since property handlers might have the need to raise UI, they will be created with a context
     value named "DialogParentWindow", which contains an XWindow which should be used as parent of
     any windows to raise.<br>
-    If the com::sun::star::uno::XComponentContext in which the ObjectInspector
+    If the cpo::uno::XComponentContext in which the ObjectInspector
     was created already contains such a value, it is not overwritten. Only if it doesn't, the inspector
     will add an own value - which contains the inspector's main window - to the context when creating
     handlers.</p>
@@ -57,7 +57,7 @@ module com {  module sun {  module star {  module inspection {
     @see LineDescriptor
     @see PropertyControlType
     @see ObjectInspectorModel
-    @see com::sun::star::uno::XComponentContext
+    @see cpo::uno::XComponentContext
     @see com::sun::star::lang::XMultiComponentFactory
 */
 service ObjectInspector : XObjectInspector

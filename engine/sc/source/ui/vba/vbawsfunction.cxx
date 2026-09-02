@@ -58,7 +58,7 @@ void lclConvertBooleanToDouble( cpo::uno::Any& rAny )
 
 } // namespace
 
-ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     ScVbaWSFunction_BASE( xParent, xContext )
 {
 }

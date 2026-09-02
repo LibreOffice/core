@@ -31,7 +31,7 @@ typedef CollTestImplHelper< ov::XDocumentProperties > SwVbaDocumentproperties_BA
 class SwVbaBuiltinDocumentProperties : public SwVbaDocumentproperties_BASE
 {
 public:
-    SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
+    SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
 
     // XDocumentProperties
     virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, bool LinkToContent, ::sal_Int8 Type, const cpo::uno::Any& Value, const cpo::uno::Any& LinkSource ) override;
@@ -49,7 +49,7 @@ public:
 class SwVbaCustomDocumentProperties : public SwVbaBuiltinDocumentProperties
 {
 public:
-    SwVbaCustomDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
+    SwVbaCustomDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
 // XDocumentProperties
     virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, bool LinkToContent, ::sal_Int8 Type, const cpo::uno::Any& Value, const cpo::uno::Any& LinkSource ) override;
     // XHelperInterface

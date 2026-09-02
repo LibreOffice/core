@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 typedef comphelper::WeakComponentImplHelper<css::lang::XServiceInfo,
@@ -36,10 +36,10 @@ private:
     /** @short  the global uno service manager.
         @descr  Must be used to create own needed services.
      */
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
 public:
-    explicit TaskCreatorService(css::uno::Reference<css::uno::XComponentContext> xContext);
+    explicit TaskCreatorService(css::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     virtual OUString getImplementationName() override
     {

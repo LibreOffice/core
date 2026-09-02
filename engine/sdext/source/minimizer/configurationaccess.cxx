@@ -143,7 +143,7 @@ bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSettings 
         && ( rOptimizerSettings.mbDeleteNotesPages == mbDeleteNotesPages );
 }
 
-ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext ) :
+ConfigurationAccess::ConfigurationAccess( const Reference< cpo::uno::XComponentContext >& rxContext ) :
     mxContext( rxContext )
 {
     maSettings.emplace_back( );

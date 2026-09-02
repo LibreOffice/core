@@ -27,7 +27,7 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -121,7 +121,7 @@ namespace {
 
     uno::Reference< xml::crypto::XSecurityEnvironment > Test::initUno()
     {
-        uno::Reference< uno::XComponentContext > context(connection_.getComponentContext(), uno::UNO_QUERY_THROW);
+        uno::Reference< cpo::uno::XComponentContext > context(connection_.getComponentContext(), uno::UNO_QUERY_THROW);
         uno::Reference< lang::XMultiServiceFactory > factory(context->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< xml::crypto::XSEInitializer > xSEInitializer = xml::crypto::SEInitializer::create(context);
         uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(

@@ -27,7 +27,7 @@ using ::cpo::uno::Sequence;
 namespace chart
 {
 
-FeatureCommandDispatchBase::FeatureCommandDispatchBase( const Reference< uno::XComponentContext >& rxContext )
+FeatureCommandDispatchBase::FeatureCommandDispatchBase( const Reference< cpo::uno::XComponentContext >& rxContext )
     :CommandDispatch( rxContext )
     ,m_nFeatureId( ChartCommandID::NONE )
 {

@@ -44,7 +44,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
  */
 ZipOutputEntryBase::ZipOutputEntryBase(
         css::uno::Reference< css::io::XOutputStream > xOutput,
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt,
@@ -177,7 +177,7 @@ void ZipOutputEntryBase::processInput( const cpo::uno::Sequence< sal_Int8 >& rBu
 
 ZipOutputEntry::ZipOutputEntry(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt,
@@ -190,7 +190,7 @@ ZipOutputEntry::ZipOutputEntry(
 
 ZipOutputEntry::ZipOutputEntry(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)
@@ -244,7 +244,7 @@ bool ZipOutputEntry::isDeflaterFinished() const
 
 
 ZipOutputEntryInThread::ZipOutputEntryInThread(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         std::unique_ptr<ZipEntry>&& pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)
@@ -347,7 +347,7 @@ void ZipOutputEntry::writeStream(const uno::Reference< io::XInputStream >& xInSt
 
 ZipOutputEntryParallel::ZipOutputEntryParallel(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)

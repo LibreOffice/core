@@ -40,7 +40,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -92,7 +92,7 @@ OUString Databases::expandURL( std::unique_lock<std::mutex>& /*rGuard*/, const O
     return aRetURL;
 }
 
-OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComponentContext >& xContext )
+OUString Databases::expandURL( const OUString& aURL, const Reference< cpo::uno::XComponentContext >& xContext )
 {
     static Reference< util::XMacroExpander > xMacroExpander;
     static Reference< uri::XUriReferenceFactory > xFac;
@@ -129,7 +129,7 @@ Databases::Databases( bool showBasic,
                       const OUString& productName,
                       const OUString& productVersion,
                       const OUString& styleSheet,
-                      Reference< uno::XComponentContext > const & xContext )
+                      Reference< cpo::uno::XComponentContext > const & xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
       m_aCSS(styleSheet.toAsciiLowerCase())

@@ -32,7 +32,7 @@ class ScVbaControls : public ControlsImpl_BASE
 public:
     ScVbaControls(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xDialog,
         css::uno::Reference< css::frame::XModel > xModel,
         double fOffsetX, double fOffsetY );

@@ -24,9 +24,7 @@
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com::sun::star {
-    namespace uno { class XComponentContext; }
-}
+namespace cpo::uno { class XComponentContext; }
 
 class ManifestReader: public ::cppu::WeakImplHelper
 <
@@ -35,9 +33,9 @@ class ManifestReader: public ::cppu::WeakImplHelper
 >
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 public:
-    ManifestReader( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    ManifestReader( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ManifestReader() override;
 
     // XManifestReader

@@ -22,12 +22,12 @@ import com.sun.star.lang.XSingleComponentFactory;
 
 public class PropertyHandlerFactroy implements XSingleComponentFactory{
 
-    public Object createInstanceWithArgumentsAndContext(Object[] obj, com.sun.star.uno.XComponentContext xComponentContext)
+    public Object createInstanceWithArgumentsAndContext(Object[] obj, cpo.uno.XComponentContext xComponentContext)
             throws cpo.uno.Exception {
         return new PropertyHandlerImpl();
     }
 
-    public Object createInstanceWithContext(com.sun.star.uno.XComponentContext xComponentContext)
+    public Object createInstanceWithContext(cpo.uno.XComponentContext xComponentContext)
             throws cpo.uno.Exception {
         return new PropertyHandlerImpl();
     }

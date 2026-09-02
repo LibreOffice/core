@@ -21,7 +21,7 @@
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -39,7 +39,7 @@ namespace unocontrols {
 
 //  construct/destruct
 
-StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >& rxContext )
+StatusIndicator::StatusIndicator( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : StatusIndicator_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
@@ -359,7 +359,7 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_StatusIndicator_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::StatusIndicator(context));
 }

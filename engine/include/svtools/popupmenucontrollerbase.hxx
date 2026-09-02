@@ -35,7 +35,7 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XURLTransformer; }
 class VCLXPopupMenu;
 
@@ -54,7 +54,7 @@ namespace svt
     class UNLESS_MERGELIBS(SVT_DLLPUBLIC) PopupMenuControllerBase : public PopupMenuControllerBaseType
     {
         public:
-            PopupMenuControllerBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            PopupMenuControllerBase( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~PopupMenuControllerBase() override;
 
             // XServiceInfo

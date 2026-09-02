@@ -24,7 +24,7 @@
 #include <string_view>
 
 #include <com/sun/star/logging/XLogFormatter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/logging/LogRecord.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
@@ -45,7 +45,7 @@ namespace logging
                                     m_xFormatter;
         // <//attributes>
 
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                     m_xContext;
         ::osl::Mutex&               m_rMutex;
         ::cppu::OBroadcastHelper&   m_rBHelper;
@@ -53,7 +53,7 @@ namespace logging
 
     public:
         LogHandlerHelper(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             ::osl::Mutex& _rMutex,
             ::cppu::OBroadcastHelper& _rBHelper
         );

@@ -47,7 +47,7 @@ public:
             straight vertical line, and the close-value on the right hand side.
      */
     explicit StockChartTypeTemplate(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         StockVariant eVariant,
         bool bJapaneseStyle );

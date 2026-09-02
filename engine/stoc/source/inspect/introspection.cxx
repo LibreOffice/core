@@ -1489,7 +1489,7 @@ typedef
 class Implementation: private cppu::BaseMutex, public Implementation_Base {
 public:
     explicit Implementation(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
+        css::uno::Reference<cpo::uno::XComponentContext> const & context):
         Implementation_Base(m_aMutex),
         reflection_(css::reflection::theCoreReflection::get(context))
     {}
@@ -2373,7 +2373,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_Introspection_get_implementation(
-    css::uno::XComponentContext * context,
+    cpo::uno::XComponentContext * context,
     cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     SAL_WARN_IF(

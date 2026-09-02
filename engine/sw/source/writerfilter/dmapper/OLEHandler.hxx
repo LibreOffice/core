@@ -36,10 +36,8 @@ namespace com::sun::star{
         class XTextContent;
         class XTextDocument;
     }
-    namespace uno {
-        class XComponentContext;
-    }
 }
+namespace cpo::uno { class XComponentContext; }
 namespace writerfilter::dmapper
 {
 class DomainMapper;
@@ -74,7 +72,7 @@ public:
     bool isOLEObject() const { return m_xInputStream.is(); }
 
     /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
-    void importStream(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext,
+    void importStream(const css::uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
                       const css::uno::Reference<css::text::XTextDocument>& xTextDocument,
                       const css::uno::Reference<css::text::XTextContent>& xOLE);
 

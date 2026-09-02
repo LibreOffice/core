@@ -69,7 +69,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 
 #include <svtools/templatefoldercache.hxx>
@@ -172,7 +172,7 @@ public:
 class SfxDocTplService : public ::cppu::WeakImplHelper< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
 {
 public:
-    explicit SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
+    explicit SfxDocTplService( const css::uno::Reference < cpo::uno::XComponentContext >& xContext );
     virtual ~SfxDocTplService() override;
 
     virtual OUString getImplementationName() override
@@ -394,7 +394,7 @@ public:
 
 void SfxDocTplService::init_Impl()
 {
-    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference < task::XInteractionHandler > xInteractionHandler(
         task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
     maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
@@ -1041,7 +1041,7 @@ bool SfxDocTplService::getProperty(Content& rContent, const OUString& rPropName,
     return bGotProperty;
 }
 
-SfxDocTplService::SfxDocTplService( const uno::Reference< XComponentContext > & xContext )
+SfxDocTplService::SfxDocTplService( const uno::Reference< cpo::uno::XComponentContext > & xContext )
     : mxContext(xContext), mbIsInitialized(false), mbLocaleSet(false), maRelocator(xContext)
 {
 }
@@ -1706,7 +1706,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 
     try
     {
-        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
         // get document service name
         uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
@@ -2610,7 +2610,7 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( OUString & rURL )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocTplService(context));

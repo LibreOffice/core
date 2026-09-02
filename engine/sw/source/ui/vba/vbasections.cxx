@@ -60,14 +60,14 @@ class SectionCollectionHelper : public ::cppu::WeakImplHelper< container::XIndex
 {
 private:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     rtl::Reference< SwXTextDocument > mxModel;
     XSectionVec mxSections;
 
 public:
     /// @throws uno::RuntimeException
     SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent,
-                             uno::Reference< uno::XComponentContext > xContext,
+                             uno::Reference< cpo::uno::XComponentContext > xContext,
                              rtl::Reference< SwXTextDocument >  xModel )
     : mxParent(std::move( xParent )),
       mxContext(std::move( xContext )),
@@ -90,7 +90,7 @@ public:
 
     /// @throws uno::RuntimeException
     SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent,
-                             uno::Reference< uno::XComponentContext > xContext,
+                             uno::Reference< cpo::uno::XComponentContext > xContext,
                              rtl::Reference< SwXTextDocument >  xModel,
                              const uno::Reference< text::XTextRange >& xTextRange )
         : mxParent(std::move( xParent )),
@@ -137,7 +137,7 @@ class SectionsEnumWrapper : public EnumerationHelperImpl
 public:
     /// @throws uno::RuntimeException
     SectionsEnumWrapper( const uno::Reference< XHelperInterface >& xParent,
-                         const uno::Reference< uno::XComponentContext >& xContext,
+                         const uno::Reference< cpo::uno::XComponentContext >& xContext,
                          const uno::Reference< container::XEnumeration >& xEnumeration,
                          rtl::Reference< SwXTextDocument > xModel  )
     : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
@@ -153,7 +153,7 @@ public:
 }
 
 SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent,
-                              const uno::Reference< uno::XComponentContext > & xContext,
+                              const uno::Reference< cpo::uno::XComponentContext > & xContext,
                               const rtl::Reference< SwXTextDocument >& xModel )
   : SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel ) ) ),
     mxModel( xModel )
@@ -161,7 +161,7 @@ SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent,
 }
 
 SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent,
-                              const uno::Reference< uno::XComponentContext > & xContext,
+                              const uno::Reference< cpo::uno::XComponentContext > & xContext,
                               const rtl::Reference< SwXTextDocument >& xModel,
                               const uno::Reference< text::XTextRange >& xTextRange )
   : SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel, xTextRange ) ) ),

@@ -87,7 +87,7 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 }
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
-                     css::uno::Reference<css::uno::XComponentContext> xContext)
+                     css::uno::Reference<cpo::uno::XComponentContext> xContext)
     : m_rDM_Impl(rDM_Impl)
     , m_xComponentContext(std::move(xContext))
     , m_aControlType(SdtControlType::unknown)

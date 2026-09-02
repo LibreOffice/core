@@ -21,7 +21,7 @@
 
 #include <vcl/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <strings.hrc>
 #include <componentmodule.hxx>
 
@@ -43,7 +43,7 @@ namespace abp
         // helper
         OAddressBookSourcePilot* getDialog();
         const OAddressBookSourcePilot* getDialog() const;
-        const css::uno::Reference< css::uno::XComponentContext > &
+        const css::uno::Reference< cpo::uno::XComponentContext > &
                                 getORB() const;
         AddressSettings&        getSettings();
         const AddressSettings&  getSettings() const;

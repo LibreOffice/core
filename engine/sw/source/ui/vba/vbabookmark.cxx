@@ -29,7 +29,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
+SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext,
     rtl::Reference< SwXTextDocument > xModel, OUString aBookmarkName ) :
     SwVbaBookmark_BASE( rParent, rContext ), mxModel(std::move( xModel )), maBookmarkName(std::move( aBookmarkName )), mbValid( true )
 {

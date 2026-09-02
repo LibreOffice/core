@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -71,7 +71,7 @@ namespace comphelper
     using ::cpo::uno::TypeClass_DOUBLE;
     using ::cpo::uno::TypeClass_INTERFACE;
     using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::uno::TypeDescription;
     using ::com::sun::star::lang::DisposedException;
@@ -703,7 +703,7 @@ namespace comphelper
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_comphelper_EnumerableMap(
-    css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new comphelper::EnumerableMap());
 }

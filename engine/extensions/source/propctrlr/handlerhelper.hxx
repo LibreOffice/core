@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -57,7 +57,7 @@ namespace pcr
         /** helper for implementing XPropertyHandler::convertToPropertyValue
         */
         static cpo::uno::Any convertToPropertyValue(
-                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
                 const css::beans::Property& _rProperty,
                 const cpo::uno::Any& _rControlValue
@@ -65,7 +65,7 @@ namespace pcr
 
         /// helper for implementing XPropertyHandler::convertToControlValue
         static cpo::uno::Any convertToControlValue(
-                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
                 const cpo::uno::Any& _rPropertyValue,
                 const cpo::uno::Type& _rControlValueType
@@ -181,13 +181,13 @@ namespace pcr
                 the component context which was used to create the component calling this method
         */
         static void setContextDocumentModified(
-                const css::uno::Reference< css::uno::XComponentContext > & _rContext
+                const css::uno::Reference< cpo::uno::XComponentContext > & _rContext
             );
 
-        static css::uno::Reference< css::uno::XInterface > getContextDocument( const css::uno::Reference<css::uno::XComponentContext> & _rContext );
+        static css::uno::Reference< css::uno::XInterface > getContextDocument( const css::uno::Reference<cpo::uno::XComponentContext> & _rContext );
 
         /// @throws cpo::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > getContextDocument_throw( const css::uno::Reference<css::uno::XComponentContext> & _rContext );
+        static css::uno::Reference< css::uno::XInterface > getContextDocument_throw( const css::uno::Reference<cpo::uno::XComponentContext> & _rContext );
 
         /** gets the window of the ObjectInspector in which a property handler lives
 
@@ -198,7 +198,7 @@ namespace pcr
             @param  _rContext
                 the component context which was used to create the component calling this method
         */
-        static weld::Window* getDialogParentFrame( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
+        static weld::Window* getDialogParentFrame( const css::uno::Reference< cpo::uno::XComponentContext > & _rContext );
 
 
         /** determines whether given PropertyAttributes require a to-be-created
@@ -213,11 +213,11 @@ namespace pcr
             return ( _nPropertyAttributes & css::beans::PropertyAttribute::READONLY ) != 0;
         }
 
-        static std::unique_ptr<weld::Builder> makeBuilder(const OUString& rUIFile, const css::uno::Reference<css::uno::XComponentContext>& rContext);
+        static std::unique_ptr<weld::Builder> makeBuilder(const OUString& rUIFile, const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
 
-        static void setBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent);
+        static void setBuilderParent(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Widget* pParent);
 
-        static void clearBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+        static void clearBuilderParent(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
 
     private:
         PropertyHandlerHelper( const PropertyHandlerHelper& ) = delete;

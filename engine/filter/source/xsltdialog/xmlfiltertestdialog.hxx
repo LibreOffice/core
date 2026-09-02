@@ -20,7 +20,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/weakref.hxx>
 #include <vcl/weld.hxx>
@@ -32,7 +32,7 @@ class XMLFilterTestDialog : public weld::GenericDialogController
 {
 public:
     XMLFilterTestDialog(weld::Window* pParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog() override;
 
     void test( const filter_info_impl& rFilterInfo );
@@ -53,7 +53,7 @@ private:
     void doExport( const css::uno::Reference< css::lang::XComponent >& xComp );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >              mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >              mxContext;
     css::uno::Reference< css::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
     rtl::Reference< GlobalEventListenerImpl >                       mxGlobalEventListener;
     cpo::uno::WeakReference< css::lang::XComponent >                mxLastFocusModel;

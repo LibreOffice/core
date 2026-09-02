@@ -17,7 +17,7 @@
  */
 package com.sun.star.lib.uno.helper;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;

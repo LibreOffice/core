@@ -22,14 +22,14 @@
 
 #include <vbahelper/vbaeventshelperbase.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; };
+namespace cpo::uno { class XComponentContext; };
 
 class SwVbaEventsHelper : public VbaEventsHelperBase
 {
 public:
     SwVbaEventsHelper(
         const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~SwVbaEventsHelper() override;
 
     // XServiceInfo

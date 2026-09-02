@@ -21,7 +21,7 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
@@ -47,7 +47,7 @@ namespace
 namespace chart
 {
 CorrelationCircleChartTypeTemplate::CorrelationCircleChartTypeTemplate(
-    Reference<uno::XComponentContext> const& xContext, const OUString& rServiceName)
+    Reference<cpo::uno::XComponentContext> const& xContext, const OUString& rServiceName)
     : ChartTypeTemplate(xContext, rServiceName)
 {
 }

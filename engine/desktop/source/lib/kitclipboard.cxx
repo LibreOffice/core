@@ -21,7 +21,7 @@
 #include <COKit/COKit.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <desktop/kitclipboard.hxx>
 
 using namespace css;
@@ -569,7 +569,7 @@ KitProviderTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& r
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-desktop_KitClipboard_get_implementation(css::uno::XComponentContext*,
+desktop_KitClipboard_get_implementation(cpo::uno::XComponentContext*,
                                         cpo::uno::Sequence<cpo::uno::Any> const& /*args*/)
 {
     SolarMutexGuard aGuard;

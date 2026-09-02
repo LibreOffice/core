@@ -151,7 +151,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
 namespace embeddedobj
 {
 
-DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContext,
+DocumentHolder::DocumentHolder( uno::Reference< cpo::uno::XComponentContext > xContext,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_pEmbedObj( pEmbObj ),
   m_xContext(std::move( xContext )),

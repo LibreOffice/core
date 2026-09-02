@@ -30,8 +30,8 @@ namespace com::sun::star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
     class BinaryInputStream;
@@ -55,7 +55,7 @@ class VbaModule
 {
 public:
     explicit            VbaModule(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             OUString aName,
                             rtl_TextEncoding eTextEnc,
@@ -97,7 +97,7 @@ private:
                             const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
     css::uno::Reference< css::frame::XModel >
                         mxDocModel;         ///< Document model used to import/export the VBA project.

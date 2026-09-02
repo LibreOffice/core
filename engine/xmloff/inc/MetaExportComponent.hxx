@@ -29,7 +29,7 @@ class XMLMetaExportComponent final : public SvXMLExport
 
 public:
     XMLMetaExportComponent(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString const & implementationName, SvXMLExportFlags nFlags
         );
 

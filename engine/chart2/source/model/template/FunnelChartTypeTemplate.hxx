@@ -18,7 +18,7 @@ namespace chart
 class FunnelChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    FunnelChartTypeTemplate(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    FunnelChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                             const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~FunnelChartTypeTemplate() override;
 

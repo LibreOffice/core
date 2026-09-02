@@ -37,7 +37,7 @@ namespace ucb::ucp::ext
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::ucb::IllegalIdentifierException;
     using ::com::sun::star::ucb::XContent;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
 
 
     //= ContentProvider
@@ -161,7 +161,7 @@ namespace ucb::ucp::ext
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_ext_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ucb::ucp::ext::ContentProvider(context));
 }

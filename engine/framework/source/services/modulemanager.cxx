@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -52,7 +52,7 @@ private:
     /** the global uno service manager.
         Must be used to create own needed services.
      */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** points to the underlying configuration.
         This ModuleManager does not cache - it calls directly the
@@ -62,7 +62,7 @@ private:
 
 public:
 
-    explicit ModuleManager(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    explicit ModuleManager(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     ModuleManager(const ModuleManager&) = delete;
     ModuleManager& operator=(const ModuleManager&) = delete;
@@ -125,7 +125,7 @@ private:
     OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
 };
 
-ModuleManager::ModuleManager(css::uno::Reference< css::uno::XComponentContext >  xContext)
+ModuleManager::ModuleManager(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext(std::move(xContext))
 {
     if (!comphelper::IsFuzzing())
@@ -346,7 +346,7 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleManager_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ModuleManager(context));

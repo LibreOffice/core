@@ -76,7 +76,7 @@ class Storage : public StorageUNOBase, public ParentStorageHolder
 {
 public:
     Storage(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         rtl::Reference< StorageElementFactory > xFactory,
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage > & xParentStorage,
@@ -192,7 +192,7 @@ class OutputStream : public OutputStreamUNOBase, public ParentStorageHolder
 {
 public:
     OutputStream(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
         const css::uno::Reference< css::io::XOutputStream > & xStreamToWrap );
@@ -250,7 +250,7 @@ class Stream : public StreamUNOBase, public ParentStorageHolder
 {
 public:
     Stream(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         rtl::Reference<OfficeDocumentsManager> const & docsMgr,
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage >  & xParentStorage,

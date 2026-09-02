@@ -25,7 +25,7 @@ namespace dbaccess
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::io::TextOutputStream;
 

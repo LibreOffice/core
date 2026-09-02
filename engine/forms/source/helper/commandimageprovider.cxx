@@ -38,7 +38,7 @@ namespace frm
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::ui::XUIConfigurationManagerSupplier;
     using ::com::sun::star::ui::XUIConfigurationManager;

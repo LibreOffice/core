@@ -159,7 +159,7 @@ struct CreateShapeParam2D
 
 
 ChartView::ChartView(
-        uno::Reference<uno::XComponentContext> xContext,
+        uno::Reference<cpo::uno::XComponentContext> xContext,
         ChartModel& rModel)
     : m_xCC(std::move(xContext))
     , mrChartModel(rModel)
@@ -1193,7 +1193,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
 
 bool lcl_createLegend( const rtl::Reference< Legend > & xLegend
                    , const rtl::Reference<SvxShapeGroupAnyD>& xPageShapes
-                   , const uno::Reference< uno::XComponentContext > & xContext
+                   , const uno::Reference< cpo::uno::XComponentContext > & xContext
                    , awt::Rectangle & rRemainingSpace
                    , const awt::Size & rPageSize
                    , ChartModel& rModel
@@ -2235,7 +2235,7 @@ awt::Rectangle ChartView::AddSubtractAxisTitleSizes(
 } //namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_ChartView_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_ChartView_get_implementation(cpo::uno::XComponentContext *context,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<::chart::ChartModel> pChartModel = new ::chart::ChartModel(context);

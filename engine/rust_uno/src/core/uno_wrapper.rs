@@ -14,7 +14,7 @@
 //! in the `generated` module directly.
 
 use crate::ffi::uno_bridge;
-use crate::generated::com::sun::star::uno::XComponentContext::XComponentContext;
+use crate::generated::cpo::uno::XComponentContext::XComponentContext;
 use std::ffi::NulError;
 
 /// Error types for UNO operations

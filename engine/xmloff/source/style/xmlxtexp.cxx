@@ -142,7 +142,7 @@ public:
 }
 
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
-    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicStorageHandler> const & xGraphicStorageHandler)
@@ -212,7 +212,7 @@ bool SvxXMLXTableExportComponent::save(
 
     try
     {
-        const uno::Reference< uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 

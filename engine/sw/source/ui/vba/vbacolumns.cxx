@@ -33,13 +33,13 @@ namespace {
 class ColumnsEnumWrapper : public EnumerationHelper_BASE
 {
     unotools::WeakReference< SwVbaColumns > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     uno::Reference< text::XTextTable > mxTextTable;
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     sal_Int32 mnIndex;
 
 public:
-    ColumnsEnumWrapper( const rtl::Reference< SwVbaColumns >& xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnIndex( 0 )
+    ColumnsEnumWrapper( const rtl::Reference< SwVbaColumns >& xParent, uno::Reference< cpo::uno::XComponentContext > xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnIndex( 0 )
     {
         mxIndexAccess = mxTextTable->getColumns();
     }
@@ -60,14 +60,14 @@ public:
 
 }
 
-SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableColumns >& xTableColumns ) : SwVbaColumns_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableColumns, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable ))
+SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableColumns >& xTableColumns ) : SwVbaColumns_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableColumns, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable ))
 {
     mnStartColumnIndex = 0;
     SwVbaTableHelper aTableHelper( mxTextTable );
     mnEndColumnIndex = aTableHelper.getTabColumnsMaxCount( ) - 1;
 }
 
-SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol ) : SwVbaColumns_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableColumns, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mnStartColumnIndex( nStartCol ), mnEndColumnIndex( nEndCol )
+SwVbaColumns::SwVbaColumns( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol ) : SwVbaColumns_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableColumns, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mnStartColumnIndex( nStartCol ), mnEndColumnIndex( nEndCol )
 {
     if( mnEndColumnIndex < mnStartColumnIndex )
         throw cpo::uno::RuntimeException();

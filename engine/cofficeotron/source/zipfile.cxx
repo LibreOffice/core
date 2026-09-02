@@ -18,7 +18,7 @@
 #include <map>
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/seqstream.hxx>
 #include <rtl/ref.hxx>
@@ -88,7 +88,7 @@ bool ZipArchive::open(const std::string& path, std::string& error)
     try
     {
         impl->zip = std::make_unique<ZipFile>(
-            impl->mutexHolder, impl->stream, css::uno::Reference<css::uno::XComponentContext>(),
+            impl->mutexHolder, impl->stream, css::uno::Reference<cpo::uno::XComponentContext>(),
             true /* initialise */, false /* force recovery */, ZipFile::Checks::Default);
     }
     catch (const cpo::uno::Exception& exception)

@@ -162,7 +162,7 @@ public:
 
     virtual void    Characters( const OUString& i_rCharacters ) override;
 
-    virtual css::uno::Reference< css::uno::XComponentContext >
+    virtual css::uno::Reference< cpo::uno::XComponentContext >
                     GetComponentContext() const override;
 private:
     SvXMLExport&                    m_rExport;
@@ -420,7 +420,7 @@ void SvXMLExport::DetermineModelType_()
 }
 
 SvXMLExport::SvXMLExport(
-    const uno::Reference< uno::XComponentContext >& xContext,
+    const uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString implementationName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const enum XMLTokenEnum eClass, SvXMLExportFlags nExportFlags )
@@ -442,7 +442,7 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString implementationName,
     OUString fileName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
@@ -472,7 +472,7 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString implementationName,
     OUString fileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,

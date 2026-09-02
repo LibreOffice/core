@@ -37,7 +37,7 @@ lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions 
 }
 
 ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterface >& xParent,
-                                            const uno::Reference< uno::XComponentContext > & xContext,
+                                            const uno::Reference< cpo::uno::XComponentContext > & xContext,
                                             const uno::Reference< sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
                                             uno::Reference< excel::XStyle >  _xStyle,
                                             uno::Reference< excel::XFormatConditions >  _xFormatConditions,

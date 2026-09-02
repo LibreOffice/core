@@ -27,7 +27,7 @@ typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::excel::XDialog > ScVbaDi
 class ScVbaDialog : public ScVbaDialog_BASE
 {
 public:
-    ScVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):ScVbaDialog_BASE( xParent, xContext, nIndex ), m_xModel(xModel) {}
+    ScVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):ScVbaDialog_BASE( xParent, xContext, nIndex ), m_xModel(xModel) {}
 
     // Methods
     virtual OUString mapIndexToName( sal_Int32 nIndex ) override;

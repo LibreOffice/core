@@ -29,7 +29,7 @@
 
 namespace framework{
 
-DispatchInformationProvider::DispatchInformationProvider(css::uno::Reference< css::uno::XComponentContext >  xContext ,
+DispatchInformationProvider::DispatchInformationProvider(css::uno::Reference< cpo::uno::XComponentContext >  xContext ,
                                                          const css::uno::Reference< css::frame::XFrame >&          xFrame)
     : m_xContext    (std::move(xContext                     ))
     , m_xFrame      (xFrame                       )

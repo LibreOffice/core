@@ -27,7 +27,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaShape, ov::msforms::XOval > OvalShapeI
 class ScVbaOvalShape : public OvalShapeImpl_BASE
 {
 public:
-    ScVbaOvalShape( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaOvalShape( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
 
 };
 

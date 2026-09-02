@@ -327,7 +327,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Traditional;
     //get dictionaries
     {
-        css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        css::uno::Reference<cpo::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
         if (xContext.is())
         {
             Reference< linguistic2::XConversionDictionaryList > xDictionaryList = linguistic2::ConversionDictionaryList::create(xContext);

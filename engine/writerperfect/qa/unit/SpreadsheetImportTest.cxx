@@ -11,7 +11,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -30,7 +30,7 @@ namespace uno = css::uno;
 class SpreadsheetImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    explicit SpreadsheetImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+    explicit SpreadsheetImportFilter(const uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext)
     {
     }

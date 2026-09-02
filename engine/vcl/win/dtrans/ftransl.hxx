@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include "WinClip.hxx"
 
 #include <vector>
@@ -36,7 +36,7 @@ class CDataFormatTranslatorUNO : public
 {
 
 public:
-    explicit CDataFormatTranslatorUNO( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit CDataFormatTranslatorUNO( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XDataFormatTranslator
 
@@ -53,7 +53,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-    const css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+    const css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

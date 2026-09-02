@@ -42,13 +42,13 @@ constexpr OUString g_sUINameAttr(u"groupuinames:default-ui-name"_ustr);
 
 }
 
-std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& xContext )
+std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     return ReadLocalizationSequence_Impl( xInStream, u"groupuinames.xml"_ustr, xContext );
 }
 
 
-void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext >& xContext )
+void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     if ( !xOutStream.is() )
         throw cpo::uno::RuntimeException();
@@ -86,7 +86,7 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
 }
 
 
-std::vector< beans::StringPair > DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext >& xContext )
+std::vector< beans::StringPair > DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     if ( !xContext.is() || !xInStream.is() )
         throw cpo::uno::RuntimeException();

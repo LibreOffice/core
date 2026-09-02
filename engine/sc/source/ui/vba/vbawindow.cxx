@@ -67,13 +67,13 @@ namespace {
 class SelectedSheetsEnum : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     Sheets m_sheets;
     uno::Reference< frame::XModel > m_xModel;
     Sheets::const_iterator m_it;
 
     /// @throws uno::RuntimeException
-    SelectedSheetsEnum( uno::Reference< uno::XComponentContext > xContext, Sheets&& sheets, uno::Reference< frame::XModel > xModel )
+    SelectedSheetsEnum( uno::Reference< cpo::uno::XComponentContext > xContext, Sheets&& sheets, uno::Reference< frame::XModel > xModel )
         :  m_xContext(std::move( xContext )), m_sheets( std::move(sheets) ), m_xModel(std::move( xModel ))
     {
         m_it = m_sheets.begin();
@@ -97,12 +97,12 @@ public:
 
 class SelectedSheetsEnumAccess : public SelectedSheets_BASE
 {
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     NameIndexHash namesToIndices;
     Sheets sheets;
     rtl::Reference< ScModelObj > m_xModel;
 public:
-    SelectedSheetsEnumAccess( uno::Reference< uno::XComponentContext > xContext, const uno::Reference< frame::XModel > & xModel ):m_xContext(std::move( xContext ))
+    SelectedSheetsEnumAccess( uno::Reference< cpo::uno::XComponentContext > xContext, const uno::Reference< frame::XModel > & xModel ):m_xContext(std::move( xContext ))
     {
         ScModelObj* pModel = static_cast< ScModelObj* >( xModel.get() );
         if ( !pModel )
@@ -189,7 +189,7 @@ public:
 
 ScVbaWindow::ScVbaWindow(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const rtl::Reference< ScModelObj >& xModel,
         const uno::Reference< frame::XController >& xController ) :
     WindowImpl_BASE( xParent, xContext, xController ),
@@ -200,7 +200,7 @@ ScVbaWindow::ScVbaWindow(
 
 ScVbaWindow::ScVbaWindow(
         const cpo::uno::Sequence< cpo::uno::Any >& args,
-        const uno::Reference< uno::XComponentContext >& xContext ) :
+        const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     WindowImpl_BASE( args, xContext ),
     m_xModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1, false ).get()))
 {
@@ -867,7 +867,7 @@ ScVbaWindow::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWindow_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWindow(args, context));
 }

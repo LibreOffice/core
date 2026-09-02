@@ -80,7 +80,7 @@ using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 
 SwXMLExport::SwXMLExport(
-    const uno::Reference< uno::XComponentContext >& rContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
 :   SvXMLExport( rContext, implementationName, util::MeasureUnit::INCH, XML_TEXT,
         nExportFlags ),
@@ -582,7 +582,7 @@ const SwDoc* SwXMLExport::getDoc() const
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLExporter"_ustr,
@@ -590,7 +590,7 @@ com_sun_star_comp_Writer_XMLExporter_get_implementation(css::uno::XComponentCont
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLStylesExporter"_ustr,
@@ -599,7 +599,7 @@ com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(css::uno::XCompone
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLContentExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLContentExporter"_ustr,
@@ -608,7 +608,7 @@ com_sun_star_comp_Writer_XMLContentExporter_get_implementation(css::uno::XCompon
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLMetaExporter"_ustr,
@@ -616,7 +616,7 @@ com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(css::uno::XComponent
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLSettingsExporter"_ustr,
@@ -624,7 +624,7 @@ com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(css::uno::XCompo
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLOasisExporter"_ustr,
@@ -632,7 +632,7 @@ com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(css::uno::XComponen
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLOasisStylesExporter"_ustr,
@@ -641,7 +641,7 @@ com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(css::uno::XCo
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLOasisContentExporter"_ustr,
@@ -650,7 +650,7 @@ com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(css::uno::XC
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLOasisMetaExporter"_ustr,
@@ -658,7 +658,7 @@ com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(css::uno::XComp
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, u"com.sun.star.comp.Writer.XMLOasisSettingsExporter"_ustr,

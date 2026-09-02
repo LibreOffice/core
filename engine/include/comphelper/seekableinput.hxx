@@ -27,7 +27,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <mutex>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper
 {
@@ -42,7 +42,7 @@ class COMPHELPER_DLLPUBLIC OSeekableInputWrapper final
 {
     std::mutex    m_aMutex;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     css::uno::Reference< css::io::XInputStream > m_xOriginalStream;
 
@@ -56,13 +56,13 @@ private:
 public:
     OSeekableInputWrapper(
                 css::uno::Reference< css::io::XInputStream > xInStream,
-                css::uno::Reference< css::uno::XComponentContext > xContext );
+                css::uno::Reference< cpo::uno::XComponentContext > xContext );
 
     virtual ~OSeekableInputWrapper() override;
 
     static css::uno::Reference< css::io::XInputStream > CheckSeekableCanWrap(
                         const css::uno::Reference< css::io::XInputStream >& xInStream,
-                        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
 // XInputStream
     virtual sal_Int32 readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;

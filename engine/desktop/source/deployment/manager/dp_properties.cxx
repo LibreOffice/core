@@ -41,7 +41,7 @@ namespace dp_manager {
 ExtensionProperties::ExtensionProperties(
     std::u16string_view urlExtension,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
-    Reference<uno::XComponentContext> const & xContext) :
+    Reference<cpo::uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
     m_propFileUrl = OUString::Concat(urlExtension) + "properties";
@@ -65,7 +65,7 @@ ExtensionProperties::ExtensionProperties(
     std::u16string_view urlExtension,
     cpo::uno::Sequence<css::beans::NamedValue> const & properties,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
-    Reference<uno::XComponentContext> const & xContext) :
+    Reference<cpo::uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
     m_propFileUrl = OUString::Concat(urlExtension) + "properties";

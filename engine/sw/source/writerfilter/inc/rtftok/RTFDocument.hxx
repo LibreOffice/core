@@ -9,7 +9,7 @@
 #pragma once
 
 #include <dmapper/resourcemodel.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -37,7 +37,7 @@ class RTFDocumentFactory
 {
 public:
     static RTFDocument::Pointer_t
-    createDocument(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    createDocument(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                    css::uno::Reference<css::io::XInputStream> const& xInputStream,
                    rtl::Reference<SwXTextDocument> const& xDstDoc,
                    css::uno::Reference<css::frame::XFrame> const& xFrame,

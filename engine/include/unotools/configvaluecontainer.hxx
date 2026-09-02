@@ -27,7 +27,7 @@
 
 
 namespace com::sun::star::uno { template <typename > class Reference; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace utl
 {
@@ -79,7 +79,7 @@ namespace utl
                 See the CVC_xxx constants for what you can use here.
         */
         OConfigurationValueContainer(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             std::mutex& _rAccessSafety,
             const OUString& _rConfigLocation
         );

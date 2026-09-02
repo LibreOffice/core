@@ -70,7 +70,7 @@ class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper< css::lang::XServiceI
     bool m_disposed;
 
 public:
-    explicit SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
+    explicit SfxGlobalEvents_Impl(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext);
 
     virtual OUString getImplementationName() override
     {
@@ -144,7 +144,7 @@ private:
     TModelList::iterator impl_searchDoc(const css::uno::Reference< css::frame::XModel >& xModel);
 };
 
-SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XComponentContext >& rxContext)
+SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < cpo::uno::XComponentContext >& rxContext)
     : m_xJobExecutorListener( task::theJobExecutor::get( rxContext ), uno::UNO_QUERY_THROW )
     , m_disposed(false)
 {
@@ -506,7 +506,7 @@ TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const uno::Reference< 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxGlobalEvents_Impl(context));

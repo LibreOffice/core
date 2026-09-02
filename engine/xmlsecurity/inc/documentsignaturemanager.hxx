@@ -64,7 +64,7 @@ class Xmlsec;
 class XMLSECURITY_DLLPUBLIC DocumentSignatureManager
 {
 private:
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     css::uno::Reference<css::embed::XStorage> mxStore;
     XMLSignatureHelper maSignatureHelper;
     std::unique_ptr<PDFSignatureHelper> mpPDFSignatureHelper;
@@ -82,7 +82,7 @@ private:
     std::shared_ptr<Xmlsec> mpXmlsecLibrary;
 
 public:
-    DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    DocumentSignatureManager(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                              DocumentSignatureMode eMode);
     ~DocumentSignatureManager();
 

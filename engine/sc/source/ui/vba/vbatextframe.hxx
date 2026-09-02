@@ -29,7 +29,7 @@ class ScVbaTextFrame : public ScVbaTextFrame_BASE
 public:
     /// @throws css::lang::IllegalArgumentException
     ScVbaTextFrame(cpo::uno::Sequence<cpo::uno::Any> const& aArgs,
-                   css::uno::Reference<css::uno::XComponentContext> const& xContext);
+                   css::uno::Reference<cpo::uno::XComponentContext> const& xContext);
     // Methods
     virtual cpo::uno::Any SAL_CALL Characters() override;
     // XHelperInterface

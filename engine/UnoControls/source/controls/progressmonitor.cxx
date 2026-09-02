@@ -22,7 +22,7 @@
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -47,7 +47,7 @@ constexpr OUString DEFAULT_BUTTONLABEL = u"Abbrechen"_ustr;
 
 namespace unocontrols {
 
-ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )
+ProgressMonitor::ProgressMonitor( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : ProgressMonitor_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
@@ -743,7 +743,7 @@ bool ProgressMonitor::impl_debug_checkParameter ( std::u16string_view rTopic )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_ProgressMonitor_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::ProgressMonitor(context));
 }

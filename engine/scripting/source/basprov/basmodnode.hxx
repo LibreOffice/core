@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class SbModule;
@@ -39,13 +39,13 @@ namespace basprov
     class BasicModuleNodeImpl : public BasicModuleNodeImpl_BASE
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         OUString m_sScriptingContext;
         SbModule* m_pModule;
         bool m_bIsAppScript;
 
     public:
-        BasicModuleNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        BasicModuleNodeImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             OUString sScriptingContext,
             SbModule* pModule, bool isAppScript );
         virtual ~BasicModuleNodeImpl() override;

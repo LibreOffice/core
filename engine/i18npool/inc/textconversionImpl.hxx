@@ -23,7 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -36,7 +36,7 @@ class TextConversionImpl final : public cppu::WeakImplHelper
 >
 {
 public:
-    TextConversionImpl( css::uno::Reference < css::uno::XComponentContext > xContext ) : m_xContext(std::move(xContext)) {};
+    TextConversionImpl( css::uno::Reference < cpo::uno::XComponentContext > xContext ) : m_xContext(std::move(xContext)) {};
 
         // Methods
         css::i18n::TextConversionResult
@@ -65,7 +65,7 @@ public:
 private:
     css::lang::Locale aLocale;
     css::uno::Reference < css::i18n::XExtendedTextConversion > xTC;
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// @throws css::lang::NoSupportException
     void getLocaleSpecificTextConversion( const css::lang::Locale& rLocale );

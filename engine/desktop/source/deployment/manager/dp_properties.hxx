@@ -21,7 +21,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <optional>
 #include <string_view>
 
@@ -31,7 +31,7 @@ class ExtensionProperties final
 {
     OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
-    const css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    const css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     ::std::optional<OUString> m_prop_suppress_license;
     ::std::optional<OUString> m_prop_extension_update;
 
@@ -40,12 +40,12 @@ class ExtensionProperties final
 public:
     ExtensionProperties(std::u16string_view urlExtension,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
-                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
+                        css::uno::Reference<cpo::uno::XComponentContext> const& xContext);
 
     ExtensionProperties(std::u16string_view urlExtension,
                         cpo::uno::Sequence<css::beans::NamedValue> const& properties,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
-                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
+                        css::uno::Reference<cpo::uno::XComponentContext> const& xContext);
 
     void write();
 

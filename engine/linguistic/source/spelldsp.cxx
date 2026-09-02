@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>

@@ -26,7 +26,7 @@
 #include <unotools/weakref.hxx>
 #include <connectivity/CommonTools.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace connectivity::ado
 {
@@ -44,19 +44,19 @@ namespace connectivity::ado
                                                 m_xConnections; //  vector containing a list
                                                     //  of all the Connection objects
                                                     //  for this Driver
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         // to put back all the inits with COINIT_MULTITHREADED if needed
         int mnNbCallCoInitializeExForReinit;
 
     public:
-        ODriver(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        ODriver(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
         ~ODriver() override;
 
         // OComponentHelper
         virtual void disposing() override;
 
-        css::uno::Reference< css::uno::XComponentContext > getContext() const { return m_xContext; }
+        css::uno::Reference< cpo::uno::XComponentContext > getContext() const { return m_xContext; }
 
     private:
         void impl_checkURL_throw(const OUString& _sUrl);

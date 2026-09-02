@@ -45,7 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <comphelper/processfactory.hxx>
@@ -410,7 +410,7 @@ bool SdPdfFilter::Export() { return false; }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
 {
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XModel2> xModel(
         xContext->getServiceManager()->createInstanceWithContext(

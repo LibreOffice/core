@@ -28,7 +28,7 @@
 #include <unicode/normlzr.h>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
@@ -156,7 +156,7 @@ Sequence< OUString > OrdinalSuffixService::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_OrdinalSuffix_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::OrdinalSuffixService());

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
 #include <comphelper/attributelist.hxx>
@@ -187,7 +187,7 @@ class OReadMenuPopupHandler final : public ReadMenuDocumentHandlerBase
         bool                                                       m_bMenuMode;
         css::uno::Reference< css::container::XIndexContainer >     m_xMenuContainer;
         css::uno::Reference< css::lang::XSingleComponentFactory >  m_xContainerFactory;
-        css::uno::Reference< css::uno::XComponentContext >         m_xComponentContext;
+        css::uno::Reference< cpo::uno::XComponentContext >         m_xComponentContext;
         NextElementClose                                           m_nNextElementExpected;
 }; // OReadMenuPopupHandler
 

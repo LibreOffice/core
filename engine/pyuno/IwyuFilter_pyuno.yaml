@@ -15,7 +15,7 @@ excludelist:
     - cppuhelper/weakref.hxx
     pyuno/source/loader/pyuno_loader.cxx:
     # Needed for direct member access
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
     pyuno/source/module/pyuno_module.cxx:

@@ -28,7 +28,7 @@
 #include <comphelper/errcode.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::xml::sax { class XWriter; }
 namespace com::sun::star::lang { class XMultiComponentFactory; }
 
@@ -52,7 +52,7 @@ class XMLFilter : public
         css::lang::XServiceInfo >
 {
 public:
-    explicit XMLFilter( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit XMLFilter( css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
     virtual ~XMLFilter() override;
 
     /// XServiceInfo declarations
@@ -113,7 +113,7 @@ private:
         const cpo::uno::Sequence< cpo::uno::Any > & rFilterProperties );
 
     // members
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XComponent >       m_xTargetDoc;
     css::uno::Reference< css::lang::XComponent >       m_xSourceDoc;
 
@@ -128,7 +128,7 @@ class XMLReportFilterHelper final : public XMLFilter
     virtual void isOasisFormat(const cpo::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
                                bool & _rOutOASIS ) override;
 public:
-    explicit XMLReportFilterHelper( css::uno::Reference< css::uno::XComponentContext > const & _xContext )
+    explicit XMLReportFilterHelper( css::uno::Reference< cpo::uno::XComponentContext > const & _xContext )
                             :XMLFilter(_xContext)
     {}
 protected:

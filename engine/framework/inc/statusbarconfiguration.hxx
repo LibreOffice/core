@@ -24,7 +24,7 @@ namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::container { class XIndexContainer; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace framework
@@ -34,12 +34,12 @@ class StatusBarConfiguration
 {
     public:
         static bool LoadStatusBar(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::io::XInputStream >& xInputStream,
             const css::uno::Reference< css::container::XIndexContainer >& rStatusbarConfiguration );
 
         static bool StoreStatusBar(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
             const css::uno::Reference< css::container::XIndexAccess >& rStatusbarConfiguration );
 };

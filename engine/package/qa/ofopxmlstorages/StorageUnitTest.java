@@ -26,7 +26,7 @@ import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import cpo.uno.XNamingService;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 import com.sun.star.container.*;
 import com.sun.star.beans.*;

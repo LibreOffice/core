@@ -71,7 +71,7 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
 
 bool TitleDialogData::writeDifferenceToModel(
                           const rtl::Reference<::chart::ChartModel>& xChartModel
-                        , const uno::Reference< uno::XComponentContext >& xContext
+                        , const uno::Reference< cpo::uno::XComponentContext >& xContext
                         , const TitleDialogData* pOldState )
 {
     bool bChanged = false;

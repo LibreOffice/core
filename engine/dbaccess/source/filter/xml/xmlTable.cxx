@@ -28,7 +28,7 @@
 #include <strings.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

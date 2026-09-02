@@ -52,7 +52,7 @@ class SAL_DLLPUBLIC_TEMPLATE PopupWindowController_Base
 class SVT_DLLPUBLIC PopupWindowController : public PopupWindowController_Base
 {
 public:
-    PopupWindowController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    PopupWindowController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                           const css::uno::Reference<css::frame::XFrame>& xFrame,
                           const OUString& aCommandURL);
 

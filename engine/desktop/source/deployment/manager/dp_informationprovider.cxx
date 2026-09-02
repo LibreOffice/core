@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -54,7 +54,7 @@ class PackageInformationProvider :
 
 {
     public:
-    explicit PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
+    explicit PackageInformationProvider( uno::Reference< cpo::uno::XComponentContext >const& xContext);
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -67,7 +67,7 @@ class PackageInformationProvider :
 
 private:
 
-    uno::Reference< uno::XComponentContext> mxContext;
+    uno::Reference<cpo::uno::XComponentContext> mxContext;
 
     OUString getPackageLocation( const OUString& repository,
                                       std::u16string_view _sExtensionId );
@@ -75,7 +75,7 @@ private:
 
 }
 
-PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
+PackageInformationProvider::PackageInformationProvider( uno::Reference< cpo::uno::XComponentContext > const& xContext) :
     mxContext( xContext )
 {
 }
@@ -207,7 +207,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< OUString > > PackageInformationProvider:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_PackageInformationProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_info::PackageInformationProvider(context));
 }

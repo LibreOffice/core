@@ -46,7 +46,7 @@ private:
     PrivateProfileStringListener maPrivateProfileStringListener;
 
 public:
-    explicit SwVbaSystem( css::uno::Reference< css::uno::XComponentContext > const & m_xContext );
+    explicit SwVbaSystem( css::uno::Reference< cpo::uno::XComponentContext > const & m_xContext );
     virtual ~SwVbaSystem() override;
 
     // XSystem

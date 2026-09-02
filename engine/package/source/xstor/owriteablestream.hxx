@@ -52,9 +52,7 @@
 
 #include "ocompinstream.hxx"
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace package {
     // all data in aHash1 is contained in aHash2
@@ -85,7 +83,7 @@ struct OWriteStream_Impl
 
     css::uno::Reference< css::packages::XDataSinkEncrSupport > m_xPackageStream;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     OStorage_Impl* m_pParent;
 
@@ -137,7 +135,7 @@ public:
                 OStorage_Impl* pParent,
                 const css::uno::Reference< css::packages::XDataSinkEncrSupport >& xPackageStream,
                 const css::uno::Reference< css::lang::XSingleServiceFactory >& xPackage,
-                css::uno::Reference< css::uno::XComponentContext > xContext,
+                css::uno::Reference< cpo::uno::XComponentContext > xContext,
                 bool bForceEncrypted,
                 sal_Int32 nStorageType,
                 bool bDefaultCompress,

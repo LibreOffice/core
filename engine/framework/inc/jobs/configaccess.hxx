@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
 #include <mutex>
 
@@ -56,7 +56,7 @@ class ConfigAccess final
             reference to the uno service manager
             It's necessary to instantiate own needed services.
          */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** hold an opened configuration alive */
         css::uno::Reference< css::uno::XInterface > m_xConfig;
@@ -72,7 +72,7 @@ class ConfigAccess final
         void      closeImpl();
     public:
 
-                 ConfigAccess( css::uno::Reference< css::uno::XComponentContext > xContext,
+                 ConfigAccess( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                                OUString                                     sRoot );
                  ~ConfigAccess();
 

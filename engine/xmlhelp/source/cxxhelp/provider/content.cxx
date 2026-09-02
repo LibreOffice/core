@@ -50,7 +50,7 @@ using namespace chelp;
 
 // Content Implementation.
 
-Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
+Content::Content( const uno::Reference< cpo::uno::XComponentContext >& rxContext,
                   ::ucbhelper::ContentProviderImplHelper* pProvider,
                   const uno::Reference< ucb::XContentIdentifier >&
                       Identifier,
@@ -131,7 +131,7 @@ class ResultSetForRootFactory
 {
 private:
 
-    uno::Reference< uno::XComponentContext >     m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     cpo::uno::Sequence< beans::Property >             m_seq;
     URLParameter                                 m_aURLParameter;
@@ -140,7 +140,7 @@ private:
 public:
 
     ResultSetForRootFactory(
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         uno::Reference< ucb::XContentProvider > xProvider,
         const cpo::uno::Sequence< beans::Property >& seq,
         const URLParameter& rURLParameter,
@@ -168,7 +168,7 @@ class ResultSetForQueryFactory
 {
 private:
 
-    uno::Reference< uno::XComponentContext >     m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
     cpo::uno::Sequence< beans::Property >             m_seq;
     URLParameter                                 m_aURLParameter;
@@ -177,7 +177,7 @@ private:
 public:
 
     ResultSetForQueryFactory(
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         uno::Reference< ucb::XContentProvider > xProvider,
         const cpo::uno::Sequence< beans::Property >& seq,
         const URLParameter& rURLParameter,

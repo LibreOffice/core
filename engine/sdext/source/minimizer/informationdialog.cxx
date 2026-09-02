@@ -115,7 +115,7 @@ void InformationDialog::InitDialog()
     mxCheckBox->set_active(mrbOpenNewDocument);
 }
 
-InformationDialog::InformationDialog(const Reference< XComponentContext > &rxContext, const Reference<XWindow>& rxDialogParent,
+InformationDialog::InformationDialog(const Reference< cpo::uno::XComponentContext > &rxContext, const Reference<XWindow>& rxDialogParent,
                                      const OUString& rSaveAsURL, bool& rbOpenNewDocument,
                                      sal_Int64 rSourceSize, sal_Int64 rDestSize, sal_Int64 rApproxSize)
     : MessageDialogController(Application::GetFrameWeld(rxDialogParent), u"modules/simpress/ui/pminfodialog.ui"_ustr, u"PMInfoDialog"_ustr, u"ask"_ustr)

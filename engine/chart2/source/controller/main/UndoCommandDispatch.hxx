@@ -35,7 +35,7 @@ class UndoCommandDispatch : public CommandDispatch
 {
 public:
     explicit UndoCommandDispatch(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
         rtl::Reference<::chart::ChartModel> xModel );
     virtual ~UndoCommandDispatch() override;
 

@@ -42,7 +42,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 using namespace cppu;
 
-ZipPackageFolder::ZipPackageFolder( const css::uno::Reference < css::uno::XComponentContext >& xContext,
+ZipPackageFolder::ZipPackageFolder( const css::uno::Reference < cpo::uno::XComponentContext >& xContext,
                                     sal_Int32 nFormat,
                                     bool bAllowRemoveOnInsert )
 {

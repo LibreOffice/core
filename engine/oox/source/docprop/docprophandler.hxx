@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_SOURCE_DOCPROP_DOCPROPHANDLER_HXX
 #define INCLUDED_OOX_SOURCE_DOCPROP_DOCPROPHANDLER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
@@ -51,7 +51,7 @@ class OOXMLDocPropHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastD
     OUString m_aCustomPropertyName;
 
 public:
-    explicit            OOXMLDocPropHandler( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::document::XDocumentProperties >& rDocProp );
+    explicit            OOXMLDocPropHandler( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::document::XDocumentProperties >& rDocProp );
 
     virtual             ~OOXMLDocPropHandler() override;
 

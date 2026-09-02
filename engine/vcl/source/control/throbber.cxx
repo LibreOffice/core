@@ -65,7 +65,7 @@ namespace
     {
         ::std::vector< Image > aImages;
 
-        const Reference< css::uno::XComponentContext >& aContext( ::comphelper::getProcessComponentContext() );
+        const Reference< cpo::uno::XComponentContext >& aContext( ::comphelper::getProcessComponentContext() );
         const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(aContext) );
 
         ::std::vector< OUString > aImageURLs( Throbber::getDefaultImageURLs( i_imageSet ) );

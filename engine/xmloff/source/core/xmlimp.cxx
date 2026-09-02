@@ -367,7 +367,7 @@ public:
     bool mbShapePositionInHoriL2R;
     bool mbTextDocInOOoFileFormat;
 
-    const uno::Reference< uno::XComponentContext > mxComponentContext;
+    const uno::Reference< cpo::uno::XComponentContext > mxComponentContext;
     OUString implementationName;
     cpo::uno::Sequence< OUString > maSupportedServiceNames;
 
@@ -377,7 +377,7 @@ public:
 
     std::optional< DocumentInfo > moDocumentInfo;
 
-    SvXMLImport_Impl( uno::Reference< uno::XComponentContext > xContext,
+    SvXMLImport_Impl( uno::Reference< cpo::uno::XComponentContext > xContext,
                       OUString theImplementationName,
                       const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {})
         : hBatsFontConv( nullptr )
@@ -639,7 +639,7 @@ namespace {
 }
 
 SvXMLImport::SvXMLImport(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     SvXMLImportFlags nImportFlags,
     const cpo::uno::Sequence< OUString > & sSupportedServiceNames )
@@ -2040,7 +2040,7 @@ void SvXMLImport::DisposingModel()
     return mpImpl->maInterfaceToIdentifierMapper;
 }
 
-uno::Reference< uno::XComponentContext > const &
+uno::Reference< cpo::uno::XComponentContext > const &
 SvXMLImport::GetComponentContext() const
 {
     return mpImpl->mxComponentContext;

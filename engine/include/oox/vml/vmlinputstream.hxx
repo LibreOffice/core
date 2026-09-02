@@ -29,8 +29,8 @@
 
 namespace com::sun::star {
     namespace io { class XTextInputStream2; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::vml {
 
@@ -56,7 +56,7 @@ class InputStream final : public ::cppu::WeakImplHelper< css::io::XInputStream >
 {
 public:
     explicit            InputStream(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm );
     virtual             ~InputStream() override;
 

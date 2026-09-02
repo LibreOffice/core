@@ -22,7 +22,7 @@
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace weld { class Builder; }
 namespace weld { class CheckButton; }
 namespace weld { class RadioButton; }
@@ -40,7 +40,7 @@ public:
     LegendPositionResources(weld::Builder& rBuilder);
     //constructor inclusive Display checkbox
     LegendPositionResources(weld::Builder& rBuilder, css::uno::Reference<
-                       css::uno::XComponentContext> xCC );
+                       cpo::uno::XComponentContext> xCC );
     ~LegendPositionResources();
 
     void writeToResources( const rtl::Reference<::chart::ChartModel>& xChartModel );
@@ -59,7 +59,7 @@ private:
     void PositionEnable();
 
 private:
-    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext>    m_xCC;
     Link<LinkParamNone*,void> m_aChangeLink;
 
     std::unique_ptr<weld::CheckButton> m_xCbxShow;

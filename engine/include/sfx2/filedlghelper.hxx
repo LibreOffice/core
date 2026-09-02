@@ -43,7 +43,7 @@ namespace com::sun::star::ui::dialogs
 }
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::uno { template <typename > class Reference; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace weld { class Window; }
 
 enum class SignatureState;
@@ -292,7 +292,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const cpo::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog );
 
-css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
+css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 
 ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent);
 ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet,

@@ -25,15 +25,15 @@
 
 namespace com::sun::star {
     namespace uno {
-        class XComponentContext;
         class XInterface;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace configmgr::configuration_provider {
 
 css::uno::Reference< css::uno::XInterface > createDefault(
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
         const & context);
 
 }

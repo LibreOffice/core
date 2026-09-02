@@ -60,7 +60,7 @@ class LangSelectionStatusbarController:
     public svt::StatusbarController
 {
 public:
-    explicit LangSelectionStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit LangSelectionStatusbarController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     LangSelectionStatusbarController(const LangSelectionStatusbarController&) = delete;
     LangSelectionStatusbarController& operator=(const LangSelectionStatusbarController&) = delete;
 
@@ -91,7 +91,7 @@ private:
     void LangMenu( const css::awt::Point& aPos );
 };
 
-LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< uno::XComponentContext >& xContext ) :
+LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::StatusbarController( xContext, uno::Reference< frame::XFrame >(), OUString(), 0 ),
     m_bShowMenu( true ),
     m_nScriptType( SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX ),
@@ -352,7 +352,7 @@ void LangSelectionStatusbarController::statusChanged( const FeatureStateEvent& E
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new LangSelectionStatusbarController(context));

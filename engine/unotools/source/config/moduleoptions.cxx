@@ -884,7 +884,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(std::u
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString&                                 sURL            ,
                                                                   const cpo::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     css::uno::Reference< css::container::XNameAccess > xFilterCfg;
     css::uno::Reference< css::container::XNameAccess > xTypeCfg;

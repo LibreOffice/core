@@ -40,7 +40,7 @@
 #include <cppuhelper/implbase8.hxx>
 #include <unordered_map>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace frm
 {
@@ -90,7 +90,7 @@ protected:
 
     const cpo::uno::Type                    m_aElementType;
 
-    css::uno::Reference< css::uno::XComponentContext>     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
 
 
     // EventManager
@@ -98,7 +98,7 @@ protected:
 
 public:
     OInterfaceContainer(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
         ::osl::Mutex& _rMutex,
         const cpo::uno::Type& _rElementType);
 
@@ -272,7 +272,7 @@ protected:
     css::uno::Reference<css::uno::XInterface>  m_xParent;
 
 public:
-    OFormComponents(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    OFormComponents(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     OFormComponents( const OFormComponents& _cloneSource );
     virtual ~OFormComponents() override;
 

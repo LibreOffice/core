@@ -23,7 +23,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
@@ -59,7 +59,7 @@ typedef std::unordered_map< OUString, OUString >    StringHashMap;
 class UUIInteractionHelper
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
     css::uno::Reference< css::awt::XWindow >                m_xWindowParam;
     OUString                                                m_aContextParam;
     StringHashMap                                           m_aTypedCustomHandlers;
@@ -68,7 +68,7 @@ private:
 
 public:
     explicit UUIInteractionHelper(
-        css::uno::Reference< css::uno::XComponentContext > xContext);
+        css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
     const css::uno::Reference<css::awt::XWindow> & GetParentWindow() const { return m_xWindowParam; }
     void SetParentWindow(const css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }

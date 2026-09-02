@@ -25,7 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <osl/thread.h>
 #include <com/sun/star/awt/MouseEvent.hpp>
 

@@ -39,7 +39,7 @@ namespace svxform
             Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
     private:
-        OAddConditionDialog( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
+        OAddConditionDialog( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         // XTypeProvider
         virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;

@@ -39,7 +39,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <tools/link.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -92,12 +92,12 @@ class FormViewPageWindowAdapter final : public FormViewPageWindowAdapter_Base
 
     ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >   m_aControllerList;
     css::uno::Reference< css::awt::XControlContainer >                            m_xControlContainer;
-    css::uno::Reference<css::uno::XComponentContext>                              m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext>                              m_xContext;
     FmXFormView*                m_pViewImpl;
     VclPtr<vcl::Window>         m_pWindow;
 
 public:
-    FormViewPageWindowAdapter(  css::uno::Reference<css::uno::XComponentContext> _xContext,
+    FormViewPageWindowAdapter(  css::uno::Reference<cpo::uno::XComponentContext> _xContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
 

@@ -38,7 +38,7 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 /**
  * This class represents a connection to the local office application.
@@ -140,7 +140,7 @@ public class LocalOfficeConnection
          * This C'Tor is only used in complex tests at the moment.
          * @param xContext
          */
-        protected LocalOfficeConnection(com.sun.star.uno.XComponentContext xContext)
+        protected LocalOfficeConnection(cpo.uno.XComponentContext xContext)
         {
             this.mContext = xContext;
         }

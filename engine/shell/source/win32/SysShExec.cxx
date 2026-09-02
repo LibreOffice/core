@@ -146,7 +146,7 @@ namespace
     #define E_UNKNOWN_EXEC_ERROR -1
 }
 
-CSysShExec::CSysShExec( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+CSysShExec::CSysShExec( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     WeakComponentImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >( m_aMutex ),
     m_xContext(xContext),
     mnNbCallCoInitializeExForReinit(0)
@@ -415,7 +415,7 @@ cpo::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CSysShExec_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CSysShExec(context));
 }

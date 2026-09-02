@@ -329,7 +329,7 @@ OUString getCheckerURL()
     return {};
 }
 
-void lclShowCURLErrorInteraction(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+void lclShowCURLErrorInteraction(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                                  CURLcode eCURLCode, const OUString& rServer)
 {
     if (!xContext.is())
@@ -360,7 +360,7 @@ void lclShowCURLErrorInteraction(const css::uno::Reference<css::uno::XComponentC
 }
 
 LanguageToolGrammarChecker::LanguageToolGrammarChecker(
-    const css::uno::Reference<css::uno::XComponentContext>& xContext)
+    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : mCachedResults(10)
     , mxContext(xContext)
 {
@@ -582,7 +582,7 @@ void SAL_CALL LanguageToolGrammarChecker::initialize(const cpo::uno::Sequence<cp
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(
-    css::uno::XComponentContext* pContext, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* pContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LanguageToolGrammarChecker(pContext));
 }

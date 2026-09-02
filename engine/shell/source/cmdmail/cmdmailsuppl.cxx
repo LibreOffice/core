@@ -31,7 +31,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -280,7 +280,7 @@ Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CmdMailSuppl_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CmdMailSuppl(context));
 }

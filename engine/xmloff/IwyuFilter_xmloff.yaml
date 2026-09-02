@@ -20,7 +20,7 @@ excludelist:
     - SchXMLImport.hxx
     xmloff/source/chart/SchXMLImport.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     xmloff/source/chart/SchXMLPlotAreaContext.cxx:
     # Complete type is needed
     - SchXMLImport.hxx
@@ -115,7 +115,7 @@ excludelist:
     - com/sun/star/frame/XModel.hpp
     xmloff/source/text/XMLAutoTextEventExport.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     xmloff/source/text/XMLChangedRegionImportContext.cxx:
     # Actually used
     - com/sun/star/text/XTextCursor.hpp

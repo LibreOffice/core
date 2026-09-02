@@ -42,7 +42,7 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 
-MenuConfiguration::MenuConfiguration( css::uno::Reference< css::uno::XComponentContext > xContext )
+MenuConfiguration::MenuConfiguration( css::uno::Reference< cpo::uno::XComponentContext > xContext )
 :   m_xContext(std::move( xContext ))
 {
 }

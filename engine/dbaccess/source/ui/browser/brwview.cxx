@@ -63,7 +63,7 @@ namespace
 
 UnoDataBrowserView::UnoDataBrowserView( vcl::Window* pParent,
                                         IController& _rController,
-                                        const Reference< css::uno::XComponentContext >& _rxContext)
+                                        const Reference< cpo::uno::XComponentContext >& _rxContext)
     :ODataView(pParent,_rController,_rxContext)
     ,m_pTreeView(nullptr)
     ,m_pSplitter(nullptr)

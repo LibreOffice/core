@@ -21,7 +21,7 @@
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/propcontainerimplhelper.hxx>
 
@@ -39,7 +39,7 @@ namespace basprov
               BasicMethodNodeImpl>
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         OUString m_sScriptingContext;
         SbMethod* m_pMethod;
         bool m_bIsAppScript;
@@ -53,7 +53,7 @@ namespace basprov
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
 
     public:
-        BasicMethodNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        BasicMethodNodeImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             OUString sScriptingContext,
             SbMethod* pMethod, bool isAppScript );
         virtual ~BasicMethodNodeImpl() override;

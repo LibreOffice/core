@@ -27,14 +27,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star {
-    namespace uno {
-        class XComponentContext;
-    }
     namespace ucb{
         class XCommandEnvironment;
     }
 }
 namespace cpo::uno { class Any; }
+namespace cpo::uno { class XComponentContext; }
 namespace ucbhelper { class Content; }
 
 namespace utl::UCBContentHelper {
@@ -61,7 +59,7 @@ UNOTOOLS_DLLPUBLIC bool MakeFolder(
 
 /// like mkdir -p
 UNOTOOLS_DLLPUBLIC bool ensureFolder(
-    const css::uno::Reference< css::uno::XComponentContext >& xCtx,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xCtx,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
     std::u16string_view rFolder, ucbhelper::Content & result) noexcept;
 

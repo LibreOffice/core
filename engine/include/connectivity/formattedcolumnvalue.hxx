@@ -27,7 +27,7 @@
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::sdbc { class XRowSet; }
 namespace com::sun::star::sdb { class XColumn; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
@@ -55,7 +55,7 @@ namespace dbtools
             examining its <code>ActiveConnection</code>.
         */
         FormattedColumnValue(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
             const css::uno::Reference< css::beans::XPropertySet >& _rxColumn
         );

@@ -22,7 +22,7 @@ import lib.MultiPropertyTest;
 
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 public class _ServiceManager extends MultiPropertyTest {
 

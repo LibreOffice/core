@@ -46,7 +46,7 @@ class ResultSetDataSupplier final : public ::ucbhelper::ResultSetDataSupplier
     std::mutex                                   m_aMutex;
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     std::optional<cpo::uno::Sequence< OUString > >    m_xNamesOfChildren;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
@@ -57,7 +57,7 @@ private:
 
 public:
     ResultSetDataSupplier(
-        css::uno::Reference< css::uno::XComponentContext > xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > xContext,
         rtl::Reference< Content > xContent );
     virtual ~ResultSetDataSupplier() override;
 

@@ -94,7 +94,7 @@ static std::mutex& getGlobalImageListMutex()
     return mutex;
 }
 
-static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext )
+static GlobalImageList* getGlobalImageList( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
 {
     std::unique_lock guard( getGlobalImageListMutex() );
 
@@ -104,7 +104,7 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponen
     return pGlobalImageList;
 }
 
-CmdImageList::CmdImageList( uno::Reference< uno::XComponentContext >  rxContext, OUString aModuleIdentifier ) :
+CmdImageList::CmdImageList( uno::Reference< cpo::uno::XComponentContext >  rxContext, OUString aModuleIdentifier ) :
     m_bInitialized(false),
     m_aModuleIdentifier(std::move( aModuleIdentifier )),
     m_xContext(std::move( rxContext ))
@@ -181,7 +181,7 @@ std::vector<OUString>& CmdImageList::getImageCommandNames()
     return m_aResolver.getCommandNames();
 }
 
-GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext ) :
+GlobalImageList::GlobalImageList( const uno::Reference< cpo::uno::XComponentContext >& rxContext ) :
     CmdImageList( rxContext, OUString() )
 {
 }
@@ -505,7 +505,7 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     return m_pDefaultImageList.get();
 }
 
-ImageManagerImpl::ImageManagerImpl( uno::Reference< uno::XComponentContext > xContext, ::cppu::OWeakObject* pOwner, bool _bUseGlobal ) :
+ImageManagerImpl::ImageManagerImpl( uno::Reference< cpo::uno::XComponentContext > xContext, ::cppu::OWeakObject* pOwner, bool _bUseGlobal ) :
     m_xContext(std::move( xContext ))
     , m_pOwner(pOwner)
     , m_aResourceString( u"private:resource/images/moduleimages"_ustr )

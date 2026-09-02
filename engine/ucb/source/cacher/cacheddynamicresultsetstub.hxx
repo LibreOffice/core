@@ -40,7 +40,7 @@ protected:
 
 public:
     CachedDynamicResultSetStub( css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
-        , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+        , const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
 
     virtual ~CachedDynamicResultSetStub() override;
 
@@ -69,12 +69,12 @@ class CachedDynamicResultSetStubFactory final :
                     css::lang::XServiceInfo,
                     css::ucb::XCachedDynamicResultSetStubFactory>
 {
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetStubFactory(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext);
 
     virtual ~CachedDynamicResultSetStubFactory() override;
 

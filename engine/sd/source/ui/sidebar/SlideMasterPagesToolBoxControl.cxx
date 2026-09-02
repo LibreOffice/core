@@ -82,7 +82,7 @@ bool SAL_CALL SlideMasterPagesToolBoxControl::supportsService(const OUString& rS
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_SlideMasterPagesToolBoxControl_get_implementation(
-    css::uno::XComponentContext* /*rxContext*/, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* /*rxContext*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SlideMasterPagesToolBoxControl());
 }

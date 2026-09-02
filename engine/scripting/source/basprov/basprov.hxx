@@ -25,7 +25,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
@@ -52,7 +52,7 @@ namespace basprov
         BasicManager*   m_pDocBasicManager;
         css::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerApp;
         css::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerDoc;
-        css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >                m_xContext;
         css::uno::Reference< css::document::XScriptInvocationContext >    m_xInvocationContext;
         OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
@@ -64,7 +64,7 @@ namespace basprov
 
     public:
         explicit BasicProviderImpl(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
         virtual ~BasicProviderImpl() override;
 
         // XServiceInfo

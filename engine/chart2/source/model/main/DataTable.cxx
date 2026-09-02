@@ -17,7 +17,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <algorithm>
@@ -195,7 +195,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(DataTable, DataTable_Base, ::property::OPropert
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_chart2_DataTable_get_implementation(
-    css::uno::XComponentContext* /*pComponentContext*/,
+    cpo::uno::XComponentContext* /*pComponentContext*/,
     cpo::uno::Sequence<cpo::uno::Any> const& /*rAny*/)
 {
     return cppu::acquire(new ::chart::DataTable);

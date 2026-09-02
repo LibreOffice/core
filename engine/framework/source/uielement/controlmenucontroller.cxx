@@ -124,7 +124,7 @@ class ControlMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    explicit ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
+    explicit ControlMenuController( const uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override
@@ -175,7 +175,7 @@ private:
     UrlToDispatchMap    m_aURLToDispatchMap;
 };
 
-ControlMenuController::ControlMenuController(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+ControlMenuController::ControlMenuController(const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : svt::PopupMenuControllerBase(xContext)
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -320,7 +320,7 @@ void ControlMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuard
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ControlMenuController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ControlMenuController(context));

@@ -78,7 +78,7 @@ OUString getInternalFromMediaType(std::u16string_view aMediaType)
 
 }
 
-StorageFilterDetect::StorageFilterDetect(uno::Reference<uno::XComponentContext> xCxt) :
+StorageFilterDetect::StorageFilterDetect(uno::Reference<cpo::uno::XComponentContext> xCxt) :
     mxCxt(std::move(xCxt)) {}
 
 StorageFilterDetect::~StorageFilterDetect() {}
@@ -193,7 +193,7 @@ cpo::uno::Sequence<OUString> StorageFilterDetect::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_StorageFilterDetect_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StorageFilterDetect(context));
 }

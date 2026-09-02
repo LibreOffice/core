@@ -16,7 +16,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <oox/ole/olestorage.hxx>
 #include <oox/helper/binaryinputstream.hxx>
@@ -52,7 +52,7 @@ namespace oox::crypto
 {
 using namespace css;
 
-DocumentDecryption::DocumentDecryption(css::uno::Reference<css::uno::XComponentContext> xContext,
+DocumentDecryption::DocumentDecryption(css::uno::Reference<cpo::uno::XComponentContext> xContext,
                                        oox::ole::OleStorage& rOleStorage)
     : mxContext(std::move(xContext))
     , mrOleStorage(rOleStorage)

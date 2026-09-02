@@ -181,7 +181,7 @@ OUString RegressionCurveCalculator::getFormattedRepresentation(
     // create and prepare a number formatter
     if( !xNumFmtSupplier.is())
         return getRepresentation();
-    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
+    Reference< cpo::uno::XComponentContext > xContext( comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
     Reference< util::XNumberFormatter > xNumFormatter( util::NumberFormatter::create(xContext), uno::UNO_QUERY_THROW );
     xNumFormatter->attachNumberFormatsSupplier( xNumFmtSupplier );
 

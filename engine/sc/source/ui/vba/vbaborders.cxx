@@ -159,7 +159,7 @@ protected:
         return aServiceNames;
     }
 public:
-    ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, const ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
+    ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< cpo::uno::XComponentContext >& xContext, sal_Int32 lineType, const ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
 
     // XBorder
     cpo::uno::Any SAL_CALL getColor() override
@@ -309,7 +309,7 @@ class RangeBorders : public RangeBorders_Base
 {
 private:
     uno::Reference< table::XCellRange > m_xRange;
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     ScVbaPalette m_Palette;
     sal_Int32 getTableIndex( sal_Int32 nConst )
     {
@@ -325,7 +325,7 @@ private:
         return getCount(); // error condition
     }
 public:
-    RangeBorders(  uno::Reference< table::XCellRange > xRange,  uno::Reference< uno::XComponentContext > xContext, const ScVbaPalette& rPalette ) : m_xRange(std::move( xRange )), m_xContext(std::move( xContext )), m_Palette( rPalette )
+    RangeBorders(  uno::Reference< table::XCellRange > xRange,  uno::Reference< cpo::uno::XComponentContext > xContext, const ScVbaPalette& rPalette ) : m_xRange(std::move( xRange )), m_xContext(std::move( xContext )), m_Palette( rPalette )
     {
     }
     // XIndexAccess
@@ -357,7 +357,7 @@ public:
 }
 
 static uno::Reference< container::XIndexAccess >
-rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, const ScVbaPalette& rPalette )
+rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< cpo::uno::XComponentContext > & xContext, const ScVbaPalette& rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
 }
@@ -386,7 +386,7 @@ public:
 }
 
 ScVbaBorders::ScVbaBorders( const uno::Reference< XHelperInterface >& xParent,
-                            const uno::Reference< uno::XComponentContext > & xContext,
+                            const uno::Reference< cpo::uno::XComponentContext > & xContext,
                             const uno::Reference< table::XCellRange >& xRange,
                             const ScVbaPalette& rPalette  )
     :  ScVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) ), bRangeIsSingleCell( false )

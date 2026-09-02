@@ -31,7 +31,7 @@ class Index;
 
 class IndexEntrySupplier_Unicode final : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_Unicode( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_Unicode( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Unicode() override;
 
     virtual bool loadAlgorithm(
@@ -78,7 +78,7 @@ public:
 class Index
 {
 public:
-    Index(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
+    Index(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext);
     ~Index();
 
     /// @throws cpo::uno::RuntimeException

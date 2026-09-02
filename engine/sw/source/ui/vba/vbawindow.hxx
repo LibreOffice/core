@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XWindow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbawindowbase.hxx>
@@ -37,7 +37,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     SwVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const rtl::Reference< SwXTextDocument >& xModel,
         const css::uno::Reference< css::frame::XController >& xController );
 

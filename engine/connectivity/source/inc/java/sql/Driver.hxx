@@ -29,14 +29,14 @@ namespace connectivity
 {
     class java_sql_Driver : public ::cppu::WeakImplHelper< css::sdbc::XDriver,css::lang::XServiceInfo>
     {
-        css::uno::Reference<css::uno::XComponentContext> m_aContext;
+        css::uno::Reference<cpo::uno::XComponentContext> m_aContext;
         ::comphelper::EventLogger m_aLogger;
 
     protected:
         virtual ~java_sql_Driver() override;
 
     public:
-        java_sql_Driver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        java_sql_Driver(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
         // XServiceInfo
         virtual OUString getImplementationName(  ) override;
@@ -50,7 +50,7 @@ namespace connectivity
         virtual sal_Int32 getMajorVersion(  ) override ;
         virtual sal_Int32 getMinorVersion(  ) override;
 
-        const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
+        const css::uno::Reference<cpo::uno::XComponentContext>& getContext() const { return m_aContext; }
         const ::comphelper::EventLogger&   getLogger() const { return m_aLogger; }
     };
 

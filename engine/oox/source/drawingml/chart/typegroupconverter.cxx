@@ -293,7 +293,7 @@ bool TypeGroupConverter::isSingleSeriesTitle() const
 Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 {
     // create the coordinate system object
-    Reference< css::uno::XComponentContext > xContext = getComponentContext();
+    Reference< cpo::uno::XComponentContext > xContext = getComponentContext();
     Reference< XCoordinateSystem > xCoordSystem;
     if( maTypeInfo.mbPolarCoordSystem )
     {

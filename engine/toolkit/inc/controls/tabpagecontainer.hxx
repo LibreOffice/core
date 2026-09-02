@@ -46,7 +46,7 @@ private:
     css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 public:
-    UnoControlTabPageContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+    UnoControlTabPageContainerModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
     UnoControlTabPageContainerModel( const UnoControlTabPageContainerModel& rModel ) : UnoControlTabPageContainerModel_Base( rModel ),maContainerListeners( *this ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlTabPageContainerModel( *this ); }
@@ -90,7 +90,7 @@ typedef ::cppu::AggImplInheritanceHelper1   <   ControlContainerBase
 class UnoControlTabPageContainer final : public UnoControlTabPageContainer_Base
 {
 public:
-    UnoControlTabPageContainer( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoControlTabPageContainer( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     OUString             GetComponentServiceName() const override;
 
     // css::lang::XComponent

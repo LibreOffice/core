@@ -87,11 +87,11 @@ class OGridControlModel final :public OControlModel
 
 public:
     OGridControlModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OGridControlModel(
         const OGridControlModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OGridControlModel() override;
 

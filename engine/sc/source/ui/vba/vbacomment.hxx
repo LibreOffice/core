@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 
@@ -48,7 +48,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaComment(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::table::XCellRange >& xRange );
 

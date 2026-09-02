@@ -71,7 +71,7 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/ScriptHintType.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -112,7 +112,7 @@ struct
 } CT_PageSz;
 
 
-DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
+DomainMapper::DomainMapper( const uno::Reference< cpo::uno::XComponentContext >& xContext,
                             uno::Reference<io::XInputStream> const& xInputStream,
                             rtl::Reference<SwXTextDocument> const& xModel,
                             bool bRepairStorage,

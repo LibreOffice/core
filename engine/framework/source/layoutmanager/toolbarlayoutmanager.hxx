@@ -58,7 +58,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
             PREVIEWFRAME_YES
         };
 
-        ToolbarLayoutManager( css::uno::Reference< css::uno::XComponentContext > xContext,
+        ToolbarLayoutManager( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                               css::uno::Reference< css::ui::XUIElementFactory >  xUIElementFactory,
                               LayoutManager* pParentLayouter );
         virtual ~ToolbarLayoutManager() override;
@@ -254,7 +254,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         // members
 
-        css::uno::Reference< css::uno::XComponentContext >                   m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >                   m_xContext;
         css::uno::Reference< css::frame::XFrame >                            m_xFrame;
         css::uno::Reference< css::awt::XWindow2 >                            m_xContainerWindow;
         css::uno::Reference< css::awt::XWindow >                             m_xDockAreaWindows[DOCKINGAREAS_COUNT];

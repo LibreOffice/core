@@ -37,13 +37,13 @@ class DispatchInformationProvider final : public  ::cppu::WeakImplHelper< css::f
     // member
     private:
 
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
     // interface
     public:
 
-        DispatchInformationProvider(css::uno::Reference< css::uno::XComponentContext >  xContext ,
+        DispatchInformationProvider(css::uno::Reference< cpo::uno::XComponentContext >  xContext ,
                                     const css::uno::Reference< css::frame::XFrame >&    xFrame);
 
         virtual ~DispatchInformationProvider() override;

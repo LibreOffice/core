@@ -43,8 +43,8 @@
 
 namespace com::sun::star {
     namespace container { class XContainer; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 namespace jvmaccess {
     class UnoVirtualMachine;
     class VirtualMachine;
@@ -61,7 +61,7 @@ class JavaVirtualMachine:
 public:
     explicit JavaVirtualMachine(
         css::uno::Reference<
-            css::uno::XComponentContext > xContext);
+            cpo::uno::XComponentContext > xContext);
 
     // XInitialization
     virtual void SAL_CALL
@@ -121,7 +121,7 @@ private:
 
     void handleJniException(JNIEnv * environment);
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
         m_xContext;
 
     // the following are controlled by BaseMutex::m_aMutex:

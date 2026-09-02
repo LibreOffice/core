@@ -48,7 +48,7 @@ namespace pcr
         FontList maFontList;
 
     public:
-        explicit OControlFontDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        explicit OControlFontDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         virtual ~OControlFontDialog() override;
 
         // XTypeProvider

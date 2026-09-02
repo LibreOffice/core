@@ -32,7 +32,7 @@ const sal_Int32 ISFORMULA = 98765432;
 
 template <typename... Ifc>
 ScVbaCondition<Ifc...>::ScVbaCondition(const uno::Reference<XHelperInterface>& xParent,
-                                       const uno::Reference<uno::XComponentContext>& xContext,
+                                       const uno::Reference<cpo::uno::XComponentContext>& xContext,
                                        uno::Reference<sheet::XSheetCondition> _xSheetCondition)
     : ScVbaCondition_BASE(xParent, xContext)
     , mxSheetCondition(std::move(_xSheetCondition))

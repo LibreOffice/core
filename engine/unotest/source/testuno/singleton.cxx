@@ -13,10 +13,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace
 {
@@ -44,7 +41,7 @@ public:
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_testuno_Singleton_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_testuno_Singleton_get_implementation(cpo::uno::XComponentContext*,
                                                        cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SingletonTest);

@@ -127,7 +127,7 @@ IMPL_LINK(CheckButtonItemWindow, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     return ChildKeyInput(rKeyEvent);
 }
 
-void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+void impl_executeSearch( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                          const css::uno::Reference< css::frame::XFrame >& xFrame,
                          const ToolBox* pToolBox,
                          const bool aSearchBackwards,
@@ -215,7 +215,7 @@ OUString FindTextFieldControl::m_sRememberedSearchString;
 
 FindTextFieldControl::FindTextFieldControl(ToolBox* pParent,
     css::uno::Reference< css::frame::XFrame > xFrame,
-    css::uno::Reference< css::uno::XComponentContext > xContext) :
+    css::uno::Reference< cpo::uno::XComponentContext > xContext) :
     InterimItemWindow(pParent, u"svx/ui/findbox.ui"_ustr, u"FindBox"_ustr),
     m_nAsyncGetFocusId(nullptr),
     m_xWidget(m_xBuilder->weld_combo_box(u"find"_ustr)),
@@ -639,7 +639,7 @@ class FindTextToolbarController : public FindTextToolbarController_Base
 {
 public:
 
-    FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    FindTextToolbarController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -673,7 +673,7 @@ private:
 
 };
 
-FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : FindTextToolbarController_Base(rxContext, css::uno::Reference< css::frame::XFrame >(), COMMAND_FINDTEXT)
     , m_pFindTextFieldControl(nullptr)
     , m_nDownSearchId(0)
@@ -794,7 +794,7 @@ class UpDownSearchToolboxController : public UpDownSearchToolboxController_Base
 public:
     enum Type { UP, DOWN };
 
-    UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
+    UpDownSearchToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, Type eType );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -818,7 +818,7 @@ private:
     Type meType;
 };
 
-UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
+UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext, Type eType )
     : UpDownSearchToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             (eType == UP) ? COMMAND_UPSEARCH:  COMMAND_DOWNSEARCH ),
@@ -889,7 +889,7 @@ typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServi
 class MatchCaseToolboxController : public MatchCaseToolboxController_Base
 {
 public:
-    MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    MatchCaseToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -915,7 +915,7 @@ private:
     VclPtr<CheckButtonItemWindow> m_xMatchCaseControl;
 };
 
-MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : MatchCaseToolboxController_Base( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         COMMAND_MATCHCASE )
@@ -993,7 +993,7 @@ typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServi
 class MatchDiacriticsToolboxController : public MatchDiacriticsToolboxController_Base
 {
 public:
-    MatchDiacriticsToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    MatchDiacriticsToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -1019,7 +1019,7 @@ private:
     VclPtr<CheckButtonItemWindow> m_xMatchDiacriticsControl;
 };
 
-MatchDiacriticsToolboxController::MatchDiacriticsToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+MatchDiacriticsToolboxController::MatchDiacriticsToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : MatchDiacriticsToolboxController_Base( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         COMMAND_MATCHDIACRITICS )
@@ -1097,7 +1097,7 @@ typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServi
 class SearchFormattedToolboxController : public SearchFormattedToolboxController_Base
 {
 public:
-    SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    SearchFormattedToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -1121,7 +1121,7 @@ private:
     VclPtr<CheckButtonItemWindow> m_xSearchFormattedControl;
 };
 
-SearchFormattedToolboxController::SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+SearchFormattedToolboxController::SearchFormattedToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : SearchFormattedToolboxController_Base( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         COMMAND_SEARCHFORMATTED )
@@ -1190,7 +1190,7 @@ typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServi
 class FindAllToolboxController : public FindAllToolboxController_Base
 {
 public:
-    FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    FindAllToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -1211,7 +1211,7 @@ public:
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
-FindAllToolboxController::FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
+FindAllToolboxController::FindAllToolboxController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext )
     : FindAllToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             u".uno:FindAll"_ustr )
@@ -1274,7 +1274,7 @@ typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServi
 class ExitSearchToolboxController : public ExitSearchToolboxController_Base
 {
 public:
-    ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    ExitSearchToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -1295,7 +1295,7 @@ public:
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
-ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
+ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext )
     : ExitSearchToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             u".uno:ExitSearch"_ustr )
@@ -1369,7 +1369,7 @@ typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServi
 class SearchLabelToolboxController : public SearchLabelToolboxController_Base
 {
 public:
-    SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    SearchLabelToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -1393,7 +1393,7 @@ private:
     VclPtr<LabelItemWindow> m_xSL;
 };
 
-SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
+SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext )
     : SearchLabelToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             u".uno:SearchLabel"_ustr )
@@ -1652,7 +1652,7 @@ void FindbarDispatcher::removeStatusListener( const css::uno::Reference< css::fr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FindTextToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FindTextToolbarController(context));
@@ -1660,7 +1660,7 @@ com_sun_star_svx_FindTextToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExitSearchToolboxController(context));
@@ -1668,7 +1668,7 @@ com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_UpSearchToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::UP));
@@ -1676,7 +1676,7 @@ com_sun_star_svx_UpSearchToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_DownSearchToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::DOWN));
@@ -1684,7 +1684,7 @@ com_sun_star_svx_DownSearchToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_MatchCaseToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MatchCaseToolboxController(context));
@@ -1692,7 +1692,7 @@ com_sun_star_svx_MatchCaseToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_MatchDiacriticsToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MatchDiacriticsToolboxController(context));
@@ -1700,7 +1700,7 @@ com_sun_star_svx_MatchDiacriticsToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_SearchFormattedToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SearchFormattedToolboxController(context));
@@ -1708,7 +1708,7 @@ com_sun_star_svx_SearchFormattedToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FindAllToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FindAllToolboxController(context));
@@ -1716,7 +1716,7 @@ com_sun_star_svx_FindAllToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_SearchLabelToolboxController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SearchLabelToolboxController(context));
@@ -1724,7 +1724,7 @@ com_sun_star_svx_SearchLabelToolboxController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_Impl_FindbarDispatcher_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    SAL_UNUSED_PARAMETER cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FindbarDispatcher);

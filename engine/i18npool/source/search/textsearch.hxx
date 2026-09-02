@@ -34,7 +34,7 @@
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XExtendedTransliteration; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 
 class WLevDistance;
@@ -47,7 +47,7 @@ class TextSearch: public cppu::WeakImplHelper
 >
 {
     std::mutex m_aMutex;
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     css::util::SearchOptions2 aSrchPara;
     OUString sSrchStr;
@@ -131,7 +131,7 @@ class TextSearch: public cppu::WeakImplHelper
 
 public:
     explicit TextSearch(
-        const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
     virtual ~TextSearch() override;
 

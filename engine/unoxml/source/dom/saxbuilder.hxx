@@ -33,7 +33,7 @@
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace DOM
 {
@@ -43,7 +43,7 @@ namespace DOM
 
     private:
         std::mutex m_Mutex;
-        const css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        const css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 
         css::xml::dom::SAXDocumentBuilderState m_aState;
         std::stack< css::uno::Reference< css::xml::dom::XNode > > m_aNodeStack;
@@ -53,7 +53,7 @@ namespace DOM
 
 
     public:
-        explicit CSAXDocumentBuilder(const css::uno::Reference< css::uno::XComponentContext >& );
+        explicit CSAXDocumentBuilder(const css::uno::Reference< cpo::uno::XComponentContext >& );
         static void setElementFastAttributes(const css::uno::Reference< css::xml::dom::XElement >& aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs);
 
 

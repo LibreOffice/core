@@ -43,7 +43,7 @@ import com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 import java.util.ArrayList;
 

@@ -43,7 +43,7 @@
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 using namespace ::com::sun::star;
 
 namespace avmedia::priv {
@@ -198,7 +198,7 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
     const OUString& rURL, const OUString& rManagerServName)
 {
     uno::Reference< media::XPlayer > xPlayer;
-    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     try
     {
         uno::Reference< media::XManager > xManager (

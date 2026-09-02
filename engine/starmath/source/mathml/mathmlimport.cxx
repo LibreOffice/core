@@ -97,7 +97,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 {
     ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
 
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
 
     OSL_ENSURE(m_xModel.is(), "XMLReader::Read: got no model");
@@ -228,7 +228,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 /// read a component (file + filter version)
 ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStream>& xInputStream,
                                                  const Reference<XComponent>& xModelComponent,
-                                                 Reference<uno::XComponentContext> const& rxContext,
+                                                 Reference<cpo::uno::XComponentContext> const& rxContext,
                                                  Reference<beans::XPropertySet> const& rPropSet,
                                                  const char* pFilterName, bool bEncrypted,
                                                  bool bUseHTMLMLEntities)
@@ -339,7 +339,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
 ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XStorage>& xStorage,
                                                  const Reference<XComponent>& xModelComponent,
                                                  const char* pStreamName,
-                                                 Reference<uno::XComponentContext> const& rxContext,
+                                                 Reference<cpo::uno::XComponentContext> const& rxContext,
                                                  Reference<beans::XPropertySet> const& rPropSet,
                                                  const char* pFilterName, bool bUseHTMLMLEntities)
 {
@@ -387,7 +387,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSt
     return ERRCODE_SFX_DOLOADFAILED;
 }
 
-SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+SmXMLImport::SmXMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                          OUString const& implementationName, SvXMLImportFlags nImportFlags)
     : SvXMLImport(rContext, implementationName, nImportFlags)
     , bSuccess(false)
@@ -397,7 +397,7 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
+Math_XMLImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                     cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
@@ -405,7 +405,7 @@ Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
+Math_XMLOasisMetaImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                              cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmXMLImport(pCtx, u"com.sun.star.comp.Math.XMLOasisMetaImporter"_ustr,
@@ -413,7 +413,7 @@ Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
+Math_XMLOasisSettingsImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                  cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmXMLImport(
@@ -2630,7 +2630,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream& rStream)
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<beans::XPropertySet> xInfoSet;
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
 

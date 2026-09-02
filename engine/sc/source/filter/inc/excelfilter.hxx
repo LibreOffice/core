@@ -30,7 +30,7 @@ class ExcelFilter final : public ::oox::core::XmlFilterBase
 public:
     /// @throws cpo::uno::RuntimeException
     explicit            ExcelFilter(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual             ~ExcelFilter() override;
 
     void                registerWorkbookGlobals( WorkbookGlobals& rBookGlob );

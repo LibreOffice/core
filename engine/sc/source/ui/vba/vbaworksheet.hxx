@@ -26,7 +26,7 @@
 
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::sheet { class XSpreadsheet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace ooo::vba::excel { class XRange; }
 
 namespace ooo::vba::excel {
@@ -60,12 +60,12 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         css::uno::Reference< css::sheet::XSpreadsheet > xSheet,
         css::uno::Reference< css::frame::XModel > xModel )  ;
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     virtual ~ScVbaWorksheet() override;
 

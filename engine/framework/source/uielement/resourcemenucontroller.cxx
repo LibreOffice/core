@@ -41,7 +41,7 @@ namespace {
 class ResourceMenuController : public cppu::ImplInheritanceHelper< svt::PopupMenuControllerBase, css::ui::XUIConfigurationListener >
 {
 public:
-    ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    ResourceMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer );
 
     // XPopupMenuController
@@ -80,10 +80,10 @@ private:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
 protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
-ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+ResourceMenuController::ResourceMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                 const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer ) :
     ImplInheritanceHelper( rxContext ),
     m_bContextMenu( false ),
@@ -367,7 +367,7 @@ cpo::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames(
 class SaveAsMenuController : public ResourceMenuController
 {
 public:
-    SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    SaveAsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                           const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
 
     // XServiceInfo
@@ -377,7 +377,7 @@ private:
     virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
 };
 
-SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                                             const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
     : ResourceMenuController( rContext, rArgs, false )
 {
@@ -411,7 +411,7 @@ OUString SaveAsMenuController::getImplementationName()
 class WindowListMenuController : public ResourceMenuController
 {
 public:
-    WindowListMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    WindowListMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                               const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
         : ResourceMenuController(rxContext, rxArgs, false) {}
 
@@ -549,7 +549,7 @@ OUString WindowListMenuController::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ResourceMenuController_get_implementation(
-    css::uno::XComponentContext* context,
+    cpo::uno::XComponentContext* context,
     cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, false ) );
@@ -557,7 +557,7 @@ com_sun_star_comp_framework_ResourceMenuController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
-    css::uno::XComponentContext* context,
+    cpo::uno::XComponentContext* context,
     cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, true ) );
@@ -565,7 +565,7 @@ com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_WindowListMenuController_get_implementation(
-    css::uno::XComponentContext* context,
+    cpo::uno::XComponentContext* context,
     cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new WindowListMenuController( context, args ) );
@@ -573,7 +573,7 @@ com_sun_star_comp_framework_WindowListMenuController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SaveAsMenuController_get_implementation(
-    css::uno::XComponentContext* context,
+    cpo::uno::XComponentContext* context,
     cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new SaveAsMenuController( context, args ) );

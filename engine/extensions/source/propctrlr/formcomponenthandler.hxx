@@ -85,7 +85,7 @@ namespace pcr
 
     public:
         explicit FormComponentPropertyHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         DECLARE_XINTERFACE( )

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/logging/XLogger.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 
 namespace logging
@@ -39,7 +39,7 @@ namespace logging
         run, be moved to the logger implementation - not sure if it's the best place.
     */
     void    initializeLoggerFromConfiguration(
-                const css::uno::Reference<css::uno::XComponentContext>& _rContext,
+                const css::uno::Reference<cpo::uno::XComponentContext>& _rContext,
                 const css::uno::Reference< css::logging::XLogger >& _rxLogger
             );
 

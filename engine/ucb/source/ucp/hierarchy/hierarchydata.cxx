@@ -93,7 +93,7 @@ constexpr OUString CFGPROPERTY_NODEPATH = u"nodepath"_ustr;
 
 
 HierarchyEntry::HierarchyEntry(
-                uno::Reference< uno::XComponentContext > xContext,
+                uno::Reference< cpo::uno::XComponentContext > xContext,
                 HierarchyContentProvider* pProvider,
                 const OUString& rURL )
 : m_xContext(std::move( xContext )),

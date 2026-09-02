@@ -3,7 +3,7 @@ assumeFilename: javaunohelper/source/vm.cxx
 excludelist:
     javaunohelper/source/bootstrap.cxx:
     # Needed for direct member access
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     - jvmaccess/unovirtualmachine.hxx
     # Needed to avoid loplugin:unreffun error
     - juhx-export-functions.hxx

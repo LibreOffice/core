@@ -57,7 +57,7 @@ namespace com::sun::star::document { class XGraphicStorageHandler; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::task { class XStatusIndicator; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
@@ -295,7 +295,7 @@ public:
      * @param sSupportedServiceNames if this is empty we default to our normal supported service names
      */
     SvXMLImport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL,
         const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {});
@@ -486,7 +486,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    css::uno::Reference< css::uno::XComponentContext > const &
+    css::uno::Reference< cpo::uno::XComponentContext > const &
     GetComponentContext() const;
 
     // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)

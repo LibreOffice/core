@@ -23,7 +23,7 @@
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -36,7 +36,7 @@ namespace pcr
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Sequence;
@@ -174,7 +174,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_DefaultHelpProvider_get_implementation(
-    css::uno::XComponentContext*  , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext*  , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::DefaultHelpProvider());
 }

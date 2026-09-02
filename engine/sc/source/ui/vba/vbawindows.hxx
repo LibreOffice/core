@@ -22,14 +22,14 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 
 class ScVbaWindows : public ScVbaWindows_BASE
 {
 public:
-    ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

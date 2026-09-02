@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include "ZipPackageEntry.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -84,7 +84,7 @@ private:
 
 public:
 
-    ZipPackageFolder( const css::uno::Reference < css::uno::XComponentContext >& xContext,
+    ZipPackageFolder( const css::uno::Reference < cpo::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder() override;

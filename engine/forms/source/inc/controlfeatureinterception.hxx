@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <memory>
 
@@ -55,7 +55,7 @@ namespace frm
         const UrlTransformer& getTransformer() const { return *m_pUrlTransformer; }
 
     public:
-        ControlFeatureInterception( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
+        ControlFeatureInterception( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         // XDispatchProviderInterception
         /// @throws cpo::uno::RuntimeException

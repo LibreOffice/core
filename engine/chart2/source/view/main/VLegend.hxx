@@ -28,7 +28,7 @@
 namespace chart { class ChartModel; }
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::awt { struct Size; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -39,7 +39,7 @@ class VLegend
 {
 public:
     VLegend( rtl::Reference< ::chart::Legend > xLegend,
-             const css::uno::Reference< css::uno::XComponentContext > & xContext,
+             const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
              std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
              rtl::Reference<SvxShapeGroupAnyD> xTargetPage,
              ChartModel& rModel  );
@@ -74,7 +74,7 @@ private:
 
     ChartModel& mrModel;
 
-    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
 
     std::vector< LegendEntryProvider* >         m_aLegendEntryProviderList;
 

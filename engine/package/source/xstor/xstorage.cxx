@@ -132,7 +132,7 @@ SotElement_Impl::SotElement_Impl(OUString aName, bool bStor, bool bNew)
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInputStream,
                                 sal_Int32 nMode,
                                 const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
-                                uno::Reference< uno::XComponentContext > const & xContext,
+                                uno::Reference< cpo::uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
@@ -172,7 +172,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInpu
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
                                 sal_Int32 nMode,
                                 const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
-                                uno::Reference< uno::XComponentContext > const & xContext,
+                                uno::Reference< cpo::uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
@@ -214,7 +214,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 sal_Int32 nMode,
                                 uno::Reference< container::XNameContainer > const & xPackageFolder,
                                 uno::Reference< lang::XSingleServiceFactory > xPackage,
-                                uno::Reference< uno::XComponentContext > const & xContext,
+                                uno::Reference< cpo::uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
@@ -1731,7 +1731,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
                     sal_Int32 nMode,
                     const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
-                    uno::Reference< uno::XComponentContext > const & xContext,
+                    uno::Reference< cpo::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 , m_xSharedMutex( m_pImpl->m_xMutex )
@@ -1745,7 +1745,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
 OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
                     sal_Int32 nMode,
                     const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
-                    uno::Reference< uno::XComponentContext > const & xContext,
+                    uno::Reference< cpo::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 , m_xSharedMutex( m_pImpl->m_xMutex )

@@ -23,7 +23,7 @@
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <memory>
 
@@ -37,7 +37,7 @@ namespace pcr
     class FormLinkDialog : public weld::GenericDialogController
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                         m_xContext;
         css::uno::Reference< css::beans::XPropertySet >
                                         m_xDetailForm;
@@ -65,7 +65,7 @@ namespace pcr
             weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxDetailForm,
             const css::uno::Reference< css::beans::XPropertySet >& _rxMasterForm,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const OUString& _sExplanation = OUString(),
             OUString _sDetailLabel = OUString(),
             OUString _sMasterLabel = OUString()

@@ -42,7 +42,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppu/unotype.hxx>
@@ -65,7 +65,7 @@ class Service:
         css::util::XFlushable >
 {
 public:
-    explicit Service(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit Service(css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
 private:
     Service(const Service&) = delete;
@@ -210,7 +210,7 @@ private:
 };
 
 Service::Service(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
     : readOnly_(false)
 {
     assert(context.is());
@@ -630,7 +630,7 @@ OUString RegistryKey::getResolvedName(OUString const & aKeyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Service(context));
 }

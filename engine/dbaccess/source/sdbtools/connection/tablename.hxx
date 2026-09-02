@@ -50,7 +50,7 @@ namespace sdbtools
                 if _rxConnection is <NULL/>
         */
         TableName(
-            const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 

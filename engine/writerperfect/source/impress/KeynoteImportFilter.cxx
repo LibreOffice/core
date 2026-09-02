@@ -240,7 +240,7 @@ cpo::uno::Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Impress_KeynoteImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
+    cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new KeynoteImportFilter(context));
 }

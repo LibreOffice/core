@@ -94,7 +94,7 @@ namespace XSLT
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
-        css::uno::Reference<css::uno::XComponentContext> m_xContext;
+        css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
         css::uno::Reference<css::io::XInputStream> m_rInputStream;
 
@@ -123,7 +123,7 @@ namespace XSLT
     public:
 
         // ctor...
-        LibXSLTTransformer(css::uno::Reference<css::uno::XComponentContext> x);
+        LibXSLTTransformer(css::uno::Reference<cpo::uno::XComponentContext> x);
 
         //  XServiceInfo
         virtual bool supportsService(const OUString& sServiceName) override;
@@ -166,7 +166,7 @@ namespace XSLT
         const ::std::map<const char*, OString>&
         getParameters() const { return m_parameters; }
 
-        const css::uno::Reference<css::uno::XComponentContext>&
+        const css::uno::Reference<cpo::uno::XComponentContext>&
         getComponentContext() const {
             return m_xContext;
         }

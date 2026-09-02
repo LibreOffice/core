@@ -15,10 +15,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno
 {
 template <typename> class Reference;
@@ -34,7 +31,7 @@ namespace comphelper
    is returned unchanged.
 */
 COMPHELPER_DLLPUBLIC OUString getExpandedUri(
-    css::uno::Reference<css::uno::XComponentContext> const& context, OUString const& uri);
+    css::uno::Reference<cpo::uno::XComponentContext> const& context, OUString const& uri);
 }
 
 #endif

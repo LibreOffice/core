@@ -31,7 +31,7 @@ private:
     css::uno::Reference< css::beans::XPropertyAccess > mxUserDefined;
 
 public:
-    SwVbaVariables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined );
+    SwVbaVariables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

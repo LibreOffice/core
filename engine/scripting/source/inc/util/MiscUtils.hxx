@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -39,7 +39,7 @@ class MiscUtils
 {
 public:
 
-static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
+static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< cpo::uno::XComponentContext >& xCtx)
 {
     cpo::uno::Sequence< OUString > result;
     try
@@ -58,7 +58,7 @@ static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Referenc
 }
 
 static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
-                                 const css::uno::Reference< css::uno::XComponentContext >& xContext )
+                                 const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > xMCF(
         xContext->getServiceManager() );

@@ -29,7 +29,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaContentControl(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                        const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                        const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                         const rtl::Reference<SwXTextDocument>& xTextDocument,
                         std::shared_ptr<SwContentControl> pContentControl);
     ~SwVbaContentControl() override;

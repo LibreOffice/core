@@ -119,7 +119,7 @@ void Annotation::fromData(const AnnotationData& rData)
     m_SizeExplicit = rData.m_SizeExplicit;
 }
 
-Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+Annotation::Annotation(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                        SdrPage* pPage)
     : cppu::PropertySetMixin<office::XAnnotation>(rxContext, IMPLEMENTS_PROPERTY_SET,
                                                   cpo::uno::Sequence<OUString>())

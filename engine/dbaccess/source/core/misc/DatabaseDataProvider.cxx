@@ -46,7 +46,7 @@ namespace dbaccess
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContext > const & context) :
+DatabaseDataProvider::DatabaseDataProvider(uno::Reference< cpo::uno::XComponentContext > const & context) :
     TDatabaseDataProvider(m_aMutex),
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >(
         context, IMPLEMENTS_PROPERTY_SET, cpo::uno::Sequence< OUString >()),
@@ -1053,7 +1053,7 @@ void DatabaseDataProvider::impl_invalidateParameter_nothrow()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_DatabaseDataProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dbaccess::DatabaseDataProvider(context));
 }

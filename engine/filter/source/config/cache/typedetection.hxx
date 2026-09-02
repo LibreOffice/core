@@ -38,7 +38,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
 // native interface
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     rtl::Reference<TerminateDetection> m_xTerminateListener;
     bool m_bCancel;
 
@@ -53,7 +53,7 @@ public:
         @param  rxContext
                 reference to the uno service manager, which created this service instance.
      */
-    explicit TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+    explicit TypeDetection(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
 
     void cancel()
     {

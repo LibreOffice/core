@@ -534,7 +534,7 @@ private:
     */
     static void
             impl_import_nolck_throw(
-                const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
                 const css::uno::Reference< css::uno::XInterface >& _rxTargetComponent,
                 const ::comphelper::NamedValueCollection& _rResource
             );

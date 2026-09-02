@@ -1362,7 +1362,7 @@ SwXMetaField::removeVetoableChangeListener(
 static uno::Reference<rdf::XURI> const&
 lcl_getURI(const sal_Int16 eKnown)
 {
-    static uno::Reference< uno::XComponentContext > xContext(
+    static uno::Reference< cpo::uno::XComponentContext > xContext(
         ::comphelper::getProcessComponentContext());
     static uno::Reference< rdf::XURI > xOdfPrefix(
         rdf::URI::createKnown(xContext, rdf::URIs::ODF_PREFIX),

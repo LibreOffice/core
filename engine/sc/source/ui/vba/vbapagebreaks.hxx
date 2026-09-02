@@ -26,10 +26,7 @@ namespace com::sun::star::sheet
 {
 class XSheetPageBreak;
 }
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 typedef CollTestImplHelper<ov::excel::XHPageBreaks> ScVbaHPageBreaks_BASE;
 
@@ -38,7 +35,7 @@ class ScVbaHPageBreaks : public ScVbaHPageBreaks_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaHPageBreaks(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                     const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                     const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                      const css::uno::Reference<css::sheet::XSheetPageBreak>& xSheetPageBreak);
 
     // XHPageBreaks
@@ -62,7 +59,7 @@ class ScVbaVPageBreaks : public ScVbaVPageBreaks_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaVPageBreaks(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                     const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                     const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                      const css::uno::Reference<css::sheet::XSheetPageBreak>& xSheetPageBreak);
 
     virtual ~ScVbaVPageBreaks() override;

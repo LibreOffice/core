@@ -951,7 +951,7 @@ void NetProducer::produceService(
             file.beginLine()
                 .append("public static ")
                 .append(returnType)
-                .append(" create(com.sun.star.uno.XComponentContext ctx)")
+                .append(" create(cpo.uno.XComponentContext ctx)")
                 .endLine()
                 .beginBlock();
 
@@ -1017,7 +1017,7 @@ void NetProducer::produceService(
                 .append(returnType)
                 .append(" ")
                 .append(getSafeIdentifier(ctor.name))
-                .append("(com.sun.star.uno.XComponentContext ctx");
+                .append("(cpo.uno.XComponentContext ctx");
             if (!ctor.parameters.empty())
                 file.append(", ");
             separatedForeach(ctor.parameters, [&file]() { file.append(", "); },
@@ -1139,7 +1139,7 @@ void NetProducer::produceSingleton(
     file.beginLine()
         .append("public static ")
         .append(getNetName(entity->getBase()))
-        .append(" get(com.sun.star.uno.XComponentContext ctx)")
+        .append(" get(cpo.uno.XComponentContext ctx)")
         .endLine()
         .beginBlock();
 

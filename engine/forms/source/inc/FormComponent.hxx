@@ -44,7 +44,7 @@
 #include <com/sun/star/sdb/XRowSetChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <cpo/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -172,7 +172,7 @@ public:
             the <type>OControl</type> itself.
     */
     OControl(
-        const css::uno::Reference< css::uno::XComponentContext >& _rFactory,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rFactory,
         const OUString& _rAggregateService,
         const bool _bSetDelegator = true
     );
@@ -248,7 +248,7 @@ class OBoundControl :public OControl
 
 public:
     OBoundControl(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         const OUString& _rAggregateService,
         const bool _bSetDelegator = true
     );
@@ -302,7 +302,7 @@ class OControlModel :public ::cppu::OComponentHelper
 {
 
 protected:
-    css::uno::Reference<css::uno::XComponentContext>  m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
 
     ::osl::Mutex                    m_aMutex;
     oslInterlockedCount             m_lockCount;
@@ -310,7 +310,7 @@ protected:
     css::uno::Reference<css::uno::XInterface>                    m_xParent;                  // ParentComponent
     PropertyBagHelper               m_aPropertyBagHelper;
 
-    const css::uno::Reference<css::uno::XComponentContext>&
+    const css::uno::Reference<cpo::uno::XComponentContext>&
         getContext() const { return m_xContext; }
 
 // <properties>
@@ -329,14 +329,14 @@ protected:
 
 protected:
     OControlModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const OUString& rDefault = OUString(),                    // service name of the default control
         const bool _bSetDelegator = true                                // set to false if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
-        const css::uno::Reference< css::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const bool _bCloneAggregate = true,                             // should the aggregate of the original be cloned, too?
         const bool _bSetDelegator = true                                // set to false if you want to call setDelegator later (after returning from this ctor)
     );
@@ -595,7 +595,7 @@ protected:
 protected:
 
     OBoundControlModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
                                                             // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const OUString& _rDefault,                   // service name of the default control
@@ -605,7 +605,7 @@ protected:
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext
                                                             // factory to create the aggregate with
     );
     virtual ~OBoundControlModel() override;

@@ -51,11 +51,11 @@ class OFormattedModel final
         css::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
 
         OFormattedModel(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         OFormattedModel(
             const OFormattedModel* _pOriginal,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~OFormattedModel() override;
 
@@ -147,7 +147,7 @@ class OFormattedModel final
         ImplSVEvent * m_nKeyEvent;
 
     public:
-        explicit OFormattedControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+        explicit OFormattedControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
         virtual ~OFormattedControl() override;
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)

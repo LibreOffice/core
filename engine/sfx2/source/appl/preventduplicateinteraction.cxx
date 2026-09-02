@@ -28,7 +28,7 @@
 
 namespace sfx2 {
 
-PreventDuplicateInteraction::PreventDuplicateInteraction(css::uno::Reference< css::uno::XComponentContext > xContext)
+PreventDuplicateInteraction::PreventDuplicateInteraction(css::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext(std::move(xContext))
 {
 }

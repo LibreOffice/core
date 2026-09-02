@@ -47,7 +47,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::util { struct Date; }
 template <typename EnumT> struct SvXMLEnumMapEntry;
@@ -93,7 +93,7 @@ public:
         default unit for numerical measures, the XML measure unit is
         the default unit for textual measures */
     SvXMLUnitConverter(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         sal_Int16 eCoreMeasureUnit /*css::util::MeasureUnit*/,
         sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/,
         SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion);

@@ -638,7 +638,7 @@ interface XBridgeTest2 : XBridgeTest
                        [out] sequence< sequence < sequence < long > > > aSeqDim3);
 
     void testConstructorsService(
-        [in] com::sun::star::uno::XComponentContext context)
+        [in] cpo::uno::XComponentContext context)
         raises (BadConstructorArguments);
 
     XCurrentContextChecker getCurrentContextChecker();

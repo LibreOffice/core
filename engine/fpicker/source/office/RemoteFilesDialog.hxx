@@ -92,7 +92,7 @@ public:
     virtual OUString getCurFilter( ) const override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::task::XPasswordContainer2 > m_xMasterPasswd;
 
     SvtRemoteDlgMode m_eMode;

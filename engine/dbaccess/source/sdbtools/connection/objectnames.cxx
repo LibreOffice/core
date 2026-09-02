@@ -51,7 +51,7 @@ namespace sdbtools
     using ::com::sun::star::sdb::XQueriesSupplier;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
     namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;

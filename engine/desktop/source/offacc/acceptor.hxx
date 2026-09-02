@@ -35,7 +35,7 @@
 
 #include <mutex>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace desktop {
 
@@ -50,7 +50,7 @@ private:
 
     ::osl::Condition m_cEnable;
 
-    css::uno::Reference< css::uno::XComponentContext >     m_rContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_rContext;
     css::uno::Reference< css::connection::XAcceptor >      m_rAcceptor;
     css::uno::Reference< css::bridge::XBridgeFactory2 >    m_rBridgeFactory;
 
@@ -62,7 +62,7 @@ private:
     bool m_bDying;
 
 public:
-    explicit Acceptor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit Acceptor( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~Acceptor() override;
 
     void run();
@@ -79,10 +79,10 @@ public:
 class AccInstanceProvider : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
 {
 private:
-    css::uno::Reference<css::uno::XComponentContext> m_rContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_rContext;
 
 public:
-    AccInstanceProvider(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+    AccInstanceProvider(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
     virtual ~AccInstanceProvider() override;
 
     // XInstanceProvider

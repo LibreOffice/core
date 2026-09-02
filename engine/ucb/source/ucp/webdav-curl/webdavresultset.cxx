@@ -35,7 +35,7 @@ using namespace http_dav_ucp;
 
 
 DynamicResultSet::DynamicResultSet(
-                const uno::Reference< uno::XComponentContext >& rxContext,
+                const uno::Reference< cpo::uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rxContent,
                 const ucb::OpenCommandArgument2& rCommand,
                 const uno::Reference< ucb::XCommandEnvironment >& rxEnv )

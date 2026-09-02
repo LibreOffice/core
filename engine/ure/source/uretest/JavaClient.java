@@ -25,7 +25,7 @@ import com.sun.star.connection.Connector;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import test.types.Data;
 import test.types.XServer;
 

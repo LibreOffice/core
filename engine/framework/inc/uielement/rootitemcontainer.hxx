@@ -87,8 +87,8 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual bool hasElements() override;
 
         // XSingleComponentFactory
-        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
 
     private:
         //  OPropertySetHelper

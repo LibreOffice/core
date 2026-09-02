@@ -36,7 +36,7 @@ class SwVbaField : public SwVbaField_BASE
     css::uno::Reference< css::text::XTextField > mxTextField;
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextField >& xTextField);
+    SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextField >& xTextField);
 
     virtual bool SAL_CALL Update() override;
     // XHelperInterface
@@ -58,7 +58,7 @@ private:
 
 public:
     SwVbaFields( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel );
     // XFields
     virtual css::uno::Reference< ::ooo::vba::word::XField > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& Type, const cpo::uno::Any& Text, const cpo::uno::Any& PreserveFormatting ) override;

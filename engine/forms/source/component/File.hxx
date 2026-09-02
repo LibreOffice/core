@@ -38,11 +38,11 @@ protected:
 
 public:
     OFileControlModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OFileControlModel(
         const OFileControlModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OFileControlModel() override;
 

@@ -820,21 +820,21 @@ excludelist:
     - com/sun/star/drawing/XShape.hpp
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/lang/XMultiServiceFactory.hpp
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     sw/source/writerfilter/dmapper/NumberingManager.cxx:
     # Actually used
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/container/XNameContainer.hpp
     sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     sw/source/writerfilter/dmapper/OLEHandler.cxx:
     # Actually used
     - com/sun/star/drawing/XShape.hpp
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/text/XTextDocument.hpp
     - com/sun/star/text/WrapTextMode.hpp
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     sw/source/writerfilter/dmapper/TDefTableHandler.cxx:
     # Needed for method parameter type
     - tools/color.hxx

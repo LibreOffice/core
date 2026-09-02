@@ -1588,14 +1588,14 @@ void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 }
 
 Reference< ui::dialogs::XFilePicker2 >
-Application::createFilePicker( const Reference< uno::XComponentContext >& xSM )
+Application::createFilePicker( const Reference< cpo::uno::XComponentContext >& xSM )
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->createFilePicker( xSM );
 }
 
 Reference< ui::dialogs::XFolderPicker2 >
-Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM )
+Application::createFolderPicker( const Reference< cpo::uno::XComponentContext >& xSM )
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->createFolderPicker( xSM );

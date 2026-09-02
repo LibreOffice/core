@@ -39,7 +39,7 @@ using namespace hierarchy_ucp;
 
 
 DynamicResultSet::DynamicResultSet(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             rtl::Reference< HierarchyContent > xContent,
             const ucb::OpenCommandArgument2& rCommand )
 : ResultSetImplHelper( rxContext, rCommand ),

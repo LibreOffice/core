@@ -21,7 +21,7 @@
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <shellio.hxx>
 
@@ -65,7 +65,7 @@ private:
         const css::uno::Reference<css::lang::XComponent> & xComponent,
         const char* pStreamName,        // the stream name
         // service factory for pServiceName
-        const css::uno::Reference<css::uno::XComponentContext> & rFactory,
+        const css::uno::Reference<cpo::uno::XComponentContext> & rFactory,
         const char* pServiceName,       // service name of the component
         // the argument (XInitialization)
         const cpo::uno::Sequence<cpo::uno::Any> & rArguments,
@@ -77,7 +77,7 @@ private:
     bool WriteThroughComponent(
         const css::uno::Reference<css::io::XOutputStream> & xOutputStream,
         const css::uno::Reference<css::lang::XComponent> & xComponent,
-        const css::uno::Reference<css::uno::XComponentContext> & rFactory,
+        const css::uno::Reference<cpo::uno::XComponentContext> & rFactory,
         const char* pServiceName,
         const cpo::uno::Sequence<cpo::uno::Any> & rArguments,
         const cpo::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );

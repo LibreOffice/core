@@ -27,7 +27,7 @@ namespace cpo::uno { class Any; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::i18n { class XLocaleData4; }
 namespace com::sun::star::sdbc { class XConnection; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
 
@@ -56,7 +56,7 @@ namespace dbtools
 
     public:
         OPredicateInputController(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const ::connectivity::IParseContext* _pParseContext = nullptr
         );

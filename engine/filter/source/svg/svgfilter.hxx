@@ -62,7 +62,7 @@ class SVGExport : public SvXMLExport
 
 public:
 
-    SVGExport( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    SVGExport( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                 const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rFilterData );
 
@@ -175,7 +175,7 @@ private:
 
     /// Generally use members
 
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     SvXMLElementExport*                 mpSVGDoc;
     rtl::Reference<SVGExport>           mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;
@@ -296,7 +296,7 @@ protected:
 
 public:
 
-    explicit SVGFilter( const css::uno::Reference< css::uno::XComponentContext >& rxCtx );
+    explicit SVGFilter( const css::uno::Reference< cpo::uno::XComponentContext >& rxCtx );
     virtual    ~SVGFilter() override;
 
     //  XServiceInfo

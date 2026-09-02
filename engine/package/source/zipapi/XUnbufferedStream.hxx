@@ -33,9 +33,7 @@
 #include <ZipEntry.hxx>
 #include <CRC32.hxx>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 #define UNBUFF_STREAM_DATA          0
 #define UNBUFF_STREAM_RAW           1
@@ -64,7 +62,7 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
 
 public:
     XUnbufferedStream(
-                 const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                 const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                  rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
                  ZipEntry const & rEntry,
                  css::uno::Reference < css::io::XInputStream > const & xNewZipStream,

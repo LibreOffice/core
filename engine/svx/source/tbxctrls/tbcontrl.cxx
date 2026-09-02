@@ -503,7 +503,7 @@ public:
 class SvxFrameToolBoxControl : public svt::PopupWindowController
 {
 public:
-    explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
+    explicit SvxFrameToolBoxControl( const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
@@ -3363,7 +3363,7 @@ cpo::uno::Sequence< OUString > SvxStyleToolBoxControl::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_StyleToolBoxControl_get_implementation(
-    css::uno::XComponentContext*,
+    cpo::uno::XComponentContext*,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxStyleToolBoxControl() );
@@ -3716,13 +3716,13 @@ cpo::uno::Sequence< OUString > SvxFontNameToolBoxControl::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
-    css::uno::XComponentContext*,
+    cpo::uno::XComponentContext*,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxFontNameToolBoxControl() );
 }
 
-SvxColorToolBoxControl::SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
+SvxColorToolBoxControl::SvxColorToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext ) :
     ImplInheritanceHelper( rContext, nullptr, OUString() ),
     m_bSplitButton(true),
     m_nSlotId(0),
@@ -3994,13 +3994,13 @@ cpo::uno::Sequence<OUString> SvxColorToolBoxControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxColorToolBoxControl( rContext ) );
 }
 
-SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext )
+SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< cpo::uno::XComponentContext >& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
 }
@@ -4078,13 +4078,13 @@ cpo::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_FrameToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxFrameToolBoxControl( rContext ) );
 }
 
-SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
+SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext ) :
     PopupWindowController( rContext, nullptr, OUString() ),
     m_eLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() ),
     m_nFormatKey( NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -4302,7 +4302,7 @@ cpo::uno::Sequence<OUString> SvxCurrencyToolBoxControl::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_CurrencyToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxCurrencyToolBoxControl( rContext ) );

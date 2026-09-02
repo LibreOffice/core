@@ -27,7 +27,7 @@
 #include <map>
 
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace i18npool {
     class TransliterationImpl;
     class NativeNumberSupplierService;
@@ -46,7 +46,7 @@ class DefaultNumberingProvider final : public cppu::WeakImplHelper
 {
 public:
     DefaultNumberingProvider(
-        const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~DefaultNumberingProvider() override;
 
     //XDefaultNumberingProvider
@@ -75,7 +75,7 @@ public:
     virtual bool supportsService(const OUString& ServiceName) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 private:
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     rtl::Reference<TransliterationImpl> translit;
     rtl::Reference<NativeNumberSupplierService> mxNatNum;

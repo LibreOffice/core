@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
  */
 class PrivateLocalOfficeConnection extends com.sun.star.comp.beans.LocalOfficeConnection
 {
-    public PrivateLocalOfficeConnection(com.sun.star.uno.XComponentContext xContext)
+    public PrivateLocalOfficeConnection(cpo.uno.XComponentContext xContext)
     {
         super(xContext);
     }

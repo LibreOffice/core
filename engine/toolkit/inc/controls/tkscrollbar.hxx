@@ -36,7 +36,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     public:
-                            UnoControlScrollBarModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+                            UnoControlScrollBarModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
                             UnoControlScrollBarModel( const UnoControlScrollBarModel& rModel ) : UnoControlModel( rModel ) {}
 
         rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlScrollBarModel( *this ); }

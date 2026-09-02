@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ooo/vba/excel/XWorksheetFunction.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 
@@ -28,7 +28,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheetFunction > ScVbaW
 class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 {
 public:
-    ScVbaWSFunction( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    ScVbaWSFunction( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
     virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;

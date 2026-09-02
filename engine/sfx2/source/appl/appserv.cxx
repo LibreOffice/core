@@ -802,7 +802,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             OUString aNewName(pModeName->GetValue());
-            const uno::Reference< uno::XComponentContext >& xContext =
+            const uno::Reference< cpo::uno::XComponentContext >& xContext =
                     ::comphelper::getProcessComponentContext();
 
             // Get information about current frame and module
@@ -1121,7 +1121,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
             {
                 Reference<XFrame> xCurrentFrame;
-                const uno::Reference<uno::XComponentContext>& xContext
+                const uno::Reference<cpo::uno::XComponentContext>& xContext
                     = ::comphelper::getProcessComponentContext();
                 xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
                 const Reference<frame::XModuleManager> xModuleManager
@@ -1759,7 +1759,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
             OUString aCmd = GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName();
@@ -1779,7 +1779,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case FN_BUSINESS_CARD :
         case FN_XFORMS_INIT :
         {
-            const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = text::ModuleDispatcher::create( xContext );
 
             OUString aCmd = GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName();
@@ -1799,7 +1799,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             try
             {
-                const Reference< uno::XComponentContext >& xORB = ::comphelper::getProcessComponentContext();
+                const Reference< cpo::uno::XComponentContext >& xORB = ::comphelper::getProcessComponentContext();
                 Reference< ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, nullptr);
                 xDialog->execute();
             }

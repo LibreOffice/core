@@ -32,9 +32,9 @@ using namespace ::ooo::vba;
 
 // ScVbaGlobals
 
-//ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
+//ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< cpo::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
 
-ScVbaGlobals::ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"ExcelDocumentContext"_ustr )
+ScVbaGlobals::ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"ExcelDocumentContext"_ustr )
 {
     cpo::uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
     auto pInitArgs = aInitArgs.getArray();
@@ -257,7 +257,7 @@ ScVbaGlobals::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 ScVbaGlobals_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ScVbaGlobals(arguments, context));

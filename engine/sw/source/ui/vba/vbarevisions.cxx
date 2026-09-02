@@ -107,7 +107,7 @@ class RevisionsEnumeration : public EnumerationHelperImpl
 public:
     /// @throws uno::RuntimeException
     RevisionsEnumeration( const uno::Reference< XHelperInterface >& xParent,
-                          const uno::Reference< uno::XComponentContext >& xContext,
+                          const uno::Reference< cpo::uno::XComponentContext >& xContext,
                           const uno::Reference< container::XEnumeration >& xEnumeration,
                           rtl::Reference< SwXTextDocument > xModel  )
     : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
@@ -124,7 +124,7 @@ public:
 }
 
 SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent,
-                                const uno::Reference< uno::XComponentContext > & xContext,
+                                const uno::Reference< cpo::uno::XComponentContext > & xContext,
                                 const rtl::Reference< SwXTextDocument >& xModel,
                                 const uno::Reference< text::XTextRange >& xTextRange )
 : SwVbaRevisions_BASE( xParent, xContext, new RevisionCollectionHelper( xModel, xTextRange ) ),
@@ -133,7 +133,7 @@ SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParen
 }
 
 SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent,
-                                const uno::Reference< uno::XComponentContext > & xContext,
+                                const uno::Reference< cpo::uno::XComponentContext > & xContext,
                                 rtl::Reference< SwXTextDocument > xModel,
                                 const uno::Reference< container::XIndexAccess >& xIndexAccess )
 : SwVbaRevisions_BASE( xParent, xContext, xIndexAccess ),

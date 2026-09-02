@@ -34,8 +34,8 @@ private:
     rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel );
-    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
+    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel );
+    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

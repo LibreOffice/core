@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-static cpo::uno::Any DataPilotToPivotTable( const cpo::uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext )
+static cpo::uno::Any DataPilotToPivotTable( const cpo::uno::Any& aSource, const uno::Reference< cpo::uno::XComponentContext > & xContext )
 {
     uno::Reference< sheet::XDataPilotTable > xTable( aSource, uno::UNO_QUERY_THROW );
     return cpo::uno::Any( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );
@@ -36,7 +36,7 @@ class PivotTableEnumeration : public EnumerationHelperImpl
 {
 public:
     /// @throws uno::RuntimeException
-    PivotTableEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
+    PivotTableEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
     virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
@@ -47,7 +47,7 @@ public:
 
 }
 
-ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
+ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
 {
 }
 

@@ -34,7 +34,7 @@ namespace chart
 {
 
 CommandDispatch::CommandDispatch(
-    const Reference< uno::XComponentContext > & xContext ) :
+    const Reference< cpo::uno::XComponentContext > & xContext ) :
         m_xContext( xContext )
 {
 }

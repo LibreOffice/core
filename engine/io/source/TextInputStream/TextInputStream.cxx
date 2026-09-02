@@ -36,7 +36,7 @@
 #include <optional>
 #include <vector>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -378,7 +378,7 @@ Sequence< OUString > OTextInputStream::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 io_OTextInputStream_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OTextInputStream);
 }

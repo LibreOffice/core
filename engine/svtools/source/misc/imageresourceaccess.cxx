@@ -118,7 +118,7 @@ bool isSupportedURL(std::u16string_view rURL)
         || o3tl::starts_with(rURL, u"vnd.sun.star.extension://");
 }
 
-std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
+std::unique_ptr<SvStream> getImageStream(uno::Reference<cpo::uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
 {
     std::unique_ptr<SvMemoryStream> pMemBuffer;
 
@@ -157,7 +157,7 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
     return pMemBuffer;
 }
 
-uno::Reference<io::XInputStream> getImageXStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
+uno::Reference<io::XInputStream> getImageXStream(uno::Reference<cpo::uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
 {
     return new OSeekableInputStreamWrapper(getImageStream(rxContext, rImageResourceURL).release(), true);   // take ownership
 }

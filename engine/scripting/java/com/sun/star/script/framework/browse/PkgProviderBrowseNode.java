@@ -22,7 +22,7 @@ import com.sun.star.script.framework.container.ParcelContainer;
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptProvider;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 public class PkgProviderBrowseNode extends ProviderBrowseNode {
 

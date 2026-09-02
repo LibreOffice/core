@@ -1647,7 +1647,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     if (m_xLanguageLB->get_active_id() != eSysLang)
         m_xLanguageLB->set_active(0);
 
-    const css::uno::Reference < css::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
+    const css::uno::Reference < cpo::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
     m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
     m_xLanguageLB->connect_changed( LINK( this, SvxEditModulesDlg, LangSelectListBoxHdl_Impl ));

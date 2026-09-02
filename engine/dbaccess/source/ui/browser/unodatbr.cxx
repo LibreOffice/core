@@ -123,7 +123,7 @@ using namespace ::svx;
 // SbaTableQueryBrowser
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODatasourceBrowser_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     SolarMutexGuard aGuard;
     return cppu::acquire(new ::dbaui::SbaTableQueryBrowser(context));

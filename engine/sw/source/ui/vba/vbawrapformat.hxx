@@ -42,7 +42,7 @@ private:
     void setDistance( const OUString& sName, float _distance );
 
 public:
-    SwVbaWrapFormat(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    SwVbaWrapFormat(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     virtual ::sal_Int32 SAL_CALL getType() override;
     virtual void SAL_CALL setType( ::sal_Int32 _type ) override;

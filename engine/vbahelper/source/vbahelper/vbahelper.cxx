@@ -28,7 +28,7 @@
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
@@ -106,7 +106,7 @@ getIntrospectionAccess( const cpo::uno::Any& aObject )
 }
 
 uno::Reference< script::XTypeConverter > const &
-getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext )
+getTypeConverter( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );
     return xTypeConv;
@@ -143,7 +143,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
     uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
     try
     {
-        const uno::Reference<uno::XComponentContext >& xContext(
+        const uno::Reference<cpo::uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
         uno::Reference<util::XURLTransformer> xParser( util::URLTransformer::create(xContext) );
         xParser->parseStrict (url);
@@ -223,7 +223,7 @@ getCurrentDoc( const OUString& sKey )
 
 /// @throws uno::RuntimeException
 uno::Reference< frame::XModel >
-getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext )
+getCurrentDocCtx( const OUString& ctxName, const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
     // try fallback to calling doc
@@ -233,13 +233,13 @@ getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponent
 }
 
 uno::Reference< frame::XModel >
-getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
+getThisExcelDoc( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     return getCurrentDocCtx( u"ExcelDocumentContext"_ustr , xContext );
 }
 
  uno::Reference< frame::XModel >
-getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
+getCurrentExcelDoc( const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
     try

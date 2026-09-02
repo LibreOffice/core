@@ -71,7 +71,7 @@ private:
 public:
     /// @throws css::ucb::ContentCreationException
     RepoContent( const css::uno::Reference<
-        css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
+        cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         std::vector< libcmis::RepositoryPtr > && aRepos = std::vector< libcmis::RepositoryPtr > ( ) );
 

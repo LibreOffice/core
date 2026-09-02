@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <ImportFilter.hxx>
 
@@ -20,7 +20,7 @@
 class EBookImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit EBookImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit EBookImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

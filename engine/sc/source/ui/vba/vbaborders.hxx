@@ -23,7 +23,7 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::table { class XCellRange; }
 
 typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
@@ -36,7 +36,7 @@ class ScVbaBorders : public ScVbaBorders_BASE
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
     ScVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                  const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                  const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                   const css::uno::Reference< css::table::XCellRange >& xRange,
                   const ScVbaPalette& rPalette );
 

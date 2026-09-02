@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/factory.hxx>
@@ -66,7 +66,7 @@ public:
     const Provider& operator=(const Provider&) = delete;
 
     static css::uno::Reference< css::uno::XInterface > static_create(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
 
     static rtl::OUString static_getImplementationName();
@@ -76,7 +76,7 @@ public:
 
 private:
     explicit Provider(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         context_(context) { assert(context.is()); }
 
     virtual ~Provider() {}
@@ -98,7 +98,7 @@ private:
     queryDispatches(
         cpo::uno::Sequence< css::frame::DispatchDescriptor > const & Requests) override;
 
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 rtl::OUString Provider::static_getImplementationName() {
@@ -154,7 +154,7 @@ public:
     const Dispatch& operator=(const Dispatch&) = delete;
 
     static css::uno::Reference< css::uno::XInterface > static_create(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }
 
     static rtl::OUString static_getImplementationName();
@@ -165,7 +165,7 @@ public:
 
 private:
     explicit Dispatch(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         context_(context) { assert(context.is()); }
 
     virtual ~Dispatch() {}
@@ -194,7 +194,7 @@ private:
         css::util::URL const &) override
     {}
 
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 rtl::OUString Dispatch::static_getImplementationName() {

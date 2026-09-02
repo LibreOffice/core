@@ -33,11 +33,11 @@ private:
 
 public:
     ONumericModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     ONumericModel(
         const ONumericModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~ONumericModel() override;
 
@@ -72,7 +72,7 @@ protected:
 class ONumericControl: public OBoundControl
 {
 public:
-    explicit ONumericControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ONumericControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override

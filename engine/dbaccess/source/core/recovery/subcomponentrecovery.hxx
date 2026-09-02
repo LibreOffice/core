@@ -23,7 +23,7 @@
 
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <utility>
 
 namespace dbaccess
@@ -34,7 +34,7 @@ namespace dbaccess
     {
     public:
         SubComponentRecovery(
-                const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
                 const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
                 css::uno::Reference< css::lang::XComponent > i_xComponent )
             :m_rContext( i_rContext )
@@ -47,7 +47,7 @@ namespace dbaccess
         }
 
         SubComponentRecovery(
-                const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
                 const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
                 const SubComponentType i_eType )
             :m_rContext( i_rContext )
@@ -100,7 +100,7 @@ namespace dbaccess
         void    impl_identifyComponent_throw();
 
     private:
-        const css::uno::Reference< css::uno::XComponentContext >&
+        const css::uno::Reference< cpo::uno::XComponentContext >&
                                                 m_rContext;
         css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                                                 m_xDocumentUI;

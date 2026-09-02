@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphens)
     const OUString sTestStr = u"textline text-moretext"_ustr;
     const auto nTextWidth = device->GetTextWidth(u"textline text-moretex"_ustr);
 
-    css::uno::Reference<css::uno::XComponentContext> xContext(
+    css::uno::Reference<cpo::uno::XComponentContext> xContext(
         comphelper::getProcessComponentContext());
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
         = css::linguistic2::LinguServiceManager::create(xContext);
@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphen_word_under_two_cha
     const OUString sTestStr = u"textline text-moretext"_ustr;
     const auto nTextWidth = device->GetTextWidth(u"te-moretex"_ustr);
 
-    css::uno::Reference<css::uno::XComponentContext> xContext(
+    css::uno::Reference<cpo::uno::XComponentContext> xContext(
         comphelper::getProcessComponentContext());
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
         = css::linguistic2::LinguServiceManager::create(xContext);

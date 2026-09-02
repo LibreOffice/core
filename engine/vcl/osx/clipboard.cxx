@@ -73,7 +73,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
     : WeakComponentImplHelper<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex)
     , mIsSystemPasteboard(bUseSystemPasteboard)
 {
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     mrXMimeCntFactory = datatransfer::MimeContentTypeFactory::create(xContext);
 

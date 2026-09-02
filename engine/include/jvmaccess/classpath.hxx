@@ -35,10 +35,7 @@
 
 #include <string_view>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace com::sun::star::uno
 {
@@ -78,7 +75,7 @@ namespace ClassPath
    @throws cpo::uno::RuntimeException
  */
 JVMACCESS_DLLPUBLIC jobjectArray
-translateToUrls(css::uno::Reference<css::uno::XComponentContext> const& context,
+translateToUrls(css::uno::Reference<cpo::uno::XComponentContext> const& context,
                 JNIEnv* environment, std::u16string_view classPath);
 }
 }

@@ -77,7 +77,7 @@ using namespace i18npool;
 #define IMPL_UNO_CONSTRUCTOR( ImplName ) \
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
-    css::uno::XComponentContext *, \
+    cpo::uno::XComponentContext *, \
     cpo::uno::Sequence<cpo::uno::Any> const &) \
 { \
     return cppu::acquire(new ImplName()); \
@@ -86,7 +86,7 @@ i18npool_##ImplName##_get_implementation( \
 #define IMPL_UNO_CONSTRUCTOR_CTX( ImplName ) \
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
-    css::uno::XComponentContext * context, \
+    cpo::uno::XComponentContext * context, \
     cpo::uno::Sequence<cpo::uno::Any> const &) \
 { \
     return cppu::acquire(new ImplName(context)); \

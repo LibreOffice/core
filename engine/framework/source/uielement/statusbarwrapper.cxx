@@ -42,7 +42,7 @@ namespace framework
 {
 
 StatusBarWrapper::StatusBarWrapper(
-    css::uno::Reference< css::uno::XComponentContext > xContext
+    css::uno::Reference< cpo::uno::XComponentContext > xContext
     )
  :  UIConfigElementWrapperBase( UIElementType::STATUSBAR ),
     m_xContext(std::move( xContext ))

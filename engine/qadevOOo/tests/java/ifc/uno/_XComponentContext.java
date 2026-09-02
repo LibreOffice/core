@@ -22,7 +22,7 @@ import util.ValueComparer;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 
 public class _XComponentContext extends MultiMethodTest {

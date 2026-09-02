@@ -1053,7 +1053,7 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
 }
 
 FmGridControl::FmGridControl(
-                const Reference< css::uno::XComponentContext >& _rxContext,
+                const Reference< cpo::uno::XComponentContext >& _rxContext,
                 vcl::Window* pParent,
                 FmXGridPeer* _pPeer,
                 WinBits nBits)

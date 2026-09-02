@@ -36,7 +36,7 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::lang { class XInitialization; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 namespace com::sun::star::xml::crypto { class XXMLSignature; }
 namespace com::sun::star::xml::crypto:: sax { class XReferenceResolvedListener; }
@@ -111,7 +111,7 @@ class XSecController final : public cppu::WeakImplHelper
     friend class OOXMLSecParser;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext> mxCtx;
+    css::uno::Reference< cpo::uno::XComponentContext> mxCtx;
 
     /*
      * used to buffer SAX events
@@ -290,7 +290,7 @@ private:
         sal_Int32 nSecurityId );
 
 public:
-    explicit XSecController(css::uno::Reference<css::uno::XComponentContext> xCtx);
+    explicit XSecController(css::uno::Reference<cpo::uno::XComponentContext> xCtx);
     virtual ~XSecController() override;
 
     sal_Int32 getNewSecurityId(  );

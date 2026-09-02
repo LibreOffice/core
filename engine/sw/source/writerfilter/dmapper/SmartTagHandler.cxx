@@ -38,7 +38,7 @@ namespace writerfilter::dmapper
 {
 using namespace ::com::sun::star;
 
-SmartTagHandler::SmartTagHandler(uno::Reference<uno::XComponentContext> xComponentContext,
+SmartTagHandler::SmartTagHandler(uno::Reference<cpo::uno::XComponentContext> xComponentContext,
                                  const rtl::Reference<SwXTextDocument>& xTextDocument)
     : LoggedProperties("SmartTagHandler")
     , m_xComponentContext(std::move(xComponentContext))

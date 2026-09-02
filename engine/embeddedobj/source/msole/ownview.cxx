@@ -65,7 +65,7 @@ void DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest 
 // Object viewer
 
 
-OwnView_Impl::OwnView_Impl( const uno::Reference< uno::XComponentContext >& xContext,
+OwnView_Impl::OwnView_Impl( const uno::Reference< cpo::uno::XComponentContext >& xContext,
                             const uno::Reference< io::XInputStream >& xInputStream )
 : m_xContext( xContext )
 , m_bBusy( false )
@@ -171,7 +171,7 @@ bool OwnView_Impl::CreateModel( bool bUseNative )
 
 
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
-                                                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                                                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                                                     std::u16string_view aNameWithExtention,
                                                     const uno::Reference< io::XInputStream >& xInputStream )
 {

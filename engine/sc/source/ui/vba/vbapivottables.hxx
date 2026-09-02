@@ -22,7 +22,7 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 typedef CollTestImplHelper< ov::excel::XPivotTables > ScVbaPivotTables_BASE;
 
@@ -31,7 +31,7 @@ class ScVbaPivotTables : public ScVbaPivotTables_BASE
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 public:
-    ScVbaPivotTables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaPivotTables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

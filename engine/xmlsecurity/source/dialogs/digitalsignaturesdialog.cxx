@@ -192,7 +192,7 @@ bool IsThereCertificateMgr()
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     weld::Window* pParent,
-    const uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
+    const uno::Reference< cpo::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature,
     SfxViewShell* pViewShell)
     : GenericDialogController(pParent, u"xmlsec/ui/digitalsignaturesdialog.ui"_ustr, u"DigitalSignaturesDialog"_ustr)
@@ -338,7 +338,7 @@ void DigitalSignaturesDialog::SetScriptingSignatureStream( const css::uno::Refer
         return;
     }
 
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     moScriptSignatureManager.emplace(xContext, DocumentSignatureMode::Macros);
     if (!moScriptSignatureManager->init())
     {
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 
     if (!sExecutable.isEmpty())
     {
-        const uno::Reference<uno::XComponentContext>& xContext
+        const uno::Reference<cpo::uno::XComponentContext>& xContext
             = ::comphelper::getProcessComponentContext();
         uno::Reference<css::system::XSystemShellExecute> xSystemShell(
             css::system::SystemShellExecute::create(xContext));

@@ -37,7 +37,7 @@ namespace dbaui
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::Property;
@@ -259,7 +259,7 @@ namespace dbaui
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_OTextConnectionSettingsDialog_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(static_cast<dbaui::ODatabaseAdministrationDialog*>(new ::dbaui::OTextConnectionSettingsDialog(context)));
 }

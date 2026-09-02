@@ -24,7 +24,7 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
 namespace frm
@@ -43,7 +43,7 @@ typedef ::cppu::WeakAggImplHelper3  <   css::io::XPersistObject
 
 class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
 {
-    css::uno::Reference< css::uno::XComponentContext> m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
     OUString m_implementationName;
 
     rtl::Reference< OEditBaseModel >      m_xAggregate; // either OEditModel or OFormattedModel
@@ -52,7 +52,7 @@ class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
     // if we act as formatted this is used to write the EditModel part
     rtl::Reference< OEditBaseModel >     m_xFormattedPart;
 
-    OFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+    OFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
                            OUString const & implementationName);
 
     virtual ~OFormattedFieldWrapper() override;
@@ -62,7 +62,7 @@ public:
     // to read and write the FormattedModel part
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
-    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
+    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject)

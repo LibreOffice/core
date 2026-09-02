@@ -24,7 +24,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTableOfContents::SwVbaTableOfContents( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xDoc, uno::Reference< text::XDocumentIndex >  xDocumentIndex ) :
+SwVbaTableOfContents::SwVbaTableOfContents( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xDoc, uno::Reference< text::XDocumentIndex >  xDocumentIndex ) :
     SwVbaTableOfContents_BASE( rParent, rContext ), mxTextDocument(std::move( xDoc )), mxDocumentIndex(std::move( xDocumentIndex ))
 {
     mxTocProps.set( mxDocumentIndex, uno::UNO_QUERY_THROW );

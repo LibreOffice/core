@@ -19,7 +19,7 @@
 
 #include <boost/property_tree/json_parser/error.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <osl/diagnose.h>
@@ -834,7 +834,7 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
     }
 
     // Go via filter detection so non-ODF templates work, too.
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     cpo::uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
         comphelper::makePropertyValue(u"Hidden"_ustr, true),

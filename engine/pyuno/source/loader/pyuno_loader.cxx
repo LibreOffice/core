@@ -35,7 +35,7 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
@@ -68,7 +68,7 @@ using pyuno::PyThreadAttach;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using cpo::uno::Sequence;
-using com::sun::star::uno::XComponentContext;
+using cpo::uno::XComponentContext;
 using cpo::uno::RuntimeException;
 
 namespace pyuno_loader
@@ -278,7 +278,7 @@ void pythonInit() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 pyuno_Loader_get_implementation(
-    css::uno::XComponentContext* ctx , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* ctx , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     if (officecfg::Office::Common::Security::Scripting::DisablePythonRuntime::get(ctx))
         return nullptr;

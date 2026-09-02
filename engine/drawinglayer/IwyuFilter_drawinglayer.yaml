@@ -12,7 +12,7 @@ excludelist:
     - drawinglayer/attribute/sdrlightattribute3d.hxx
     drawinglayer/source/primitive2d/textlayoutdevice.cxx:
     # Needed for template
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx

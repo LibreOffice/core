@@ -76,7 +76,7 @@ private:
 class ExtrusionDirectionControl : public svt::PopupWindowController
 {
 public:
-    explicit ExtrusionDirectionControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ExtrusionDirectionControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -124,7 +124,7 @@ public:
 class ExtrusionDepthController : public svt::PopupWindowController
 {
 public:
-    explicit ExtrusionDepthController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ExtrusionDepthController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -167,7 +167,7 @@ public:
 class ExtrusionLightingControl : public svt::PopupWindowController
 {
 public:
-    explicit ExtrusionLightingControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ExtrusionLightingControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -205,7 +205,7 @@ public:
 class ExtrusionSurfaceControl : public svt::PopupWindowController
 {
 public:
-    explicit ExtrusionSurfaceControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ExtrusionSurfaceControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;

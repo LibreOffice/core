@@ -31,7 +31,7 @@
 #include "SlideBackground.hxx"
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -142,7 +142,7 @@ cpo::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(css::uno::XComponentContext* /*context*/,
+org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(cpo::uno::XComponentContext* /*context*/,
                                                                    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::sidebar::PanelFactory);

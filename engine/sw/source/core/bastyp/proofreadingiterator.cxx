@@ -13,7 +13,7 @@
 #include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/svapp.hxx>
 
 #include <proofreadingiterator.hxx>
@@ -35,7 +35,7 @@ void doDispose(css::uno::Reference<css::linguistic2::XProofreadingIterator> cons
 }
 
 css::uno::Reference<css::linguistic2::XProofreadingIterator>
-sw::proofreadingiterator::get(css::uno::Reference<css::uno::XComponentContext> const& context)
+sw::proofreadingiterator::get(css::uno::Reference<cpo::uno::XComponentContext> const& context)
 {
     css::uno::Reference<css::linguistic2::XProofreadingIterator> inst(
         css::linguistic2::ProofreadingIterator::create(context));

@@ -1310,7 +1310,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             if (xRet.is())
             {
                 const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();
-                static uno::Reference< uno::XComponentContext > xContext(
+                static uno::Reference< cpo::uno::XComponentContext > xContext(
                     ::comphelper::getProcessComponentContext());
 
                 static uno::Reference< rdf::XURI > xODF_SHADING(

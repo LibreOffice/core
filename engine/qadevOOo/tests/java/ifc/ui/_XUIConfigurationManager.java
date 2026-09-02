@@ -25,7 +25,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.ui.UIElementType;
 import com.sun.star.ui.XImageManager;
 import com.sun.star.ui.XUIConfigurationManager;

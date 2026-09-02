@@ -20,7 +20,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -74,7 +74,7 @@ void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 
 namespace chart
 {
-FunnelChartTypeTemplate::FunnelChartTypeTemplate(Reference<uno::XComponentContext> const& xContext,
+FunnelChartTypeTemplate::FunnelChartTypeTemplate(Reference<cpo::uno::XComponentContext> const& xContext,
                                                  const OUString& rServiceName,
                                                  sal_Int32 nDim /* = 2 */)
     : ChartTypeTemplate(xContext, rServiceName)

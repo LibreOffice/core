@@ -14,7 +14,7 @@
 #include "QXPImportFilter.hxx"
 
 using cpo::uno::Sequence;
-using com::sun::star::uno::XComponentContext;
+using cpo::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
 bool QXPImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
@@ -53,7 +53,7 @@ Sequence<OUString> SAL_CALL QXPImportFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Draw_QXPImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
+    cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new QXPImportFilter(context));
 }

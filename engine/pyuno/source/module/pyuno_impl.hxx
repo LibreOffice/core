@@ -220,7 +220,7 @@ struct RuntimeCargo
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > xInvocation;
     css::uno::Reference< css::script::XTypeConverter> xTypeConverter;
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     css::uno::Reference< css::reflection::XIdlReflection > xCoreReflection;
     css::uno::Reference< css::container::XHierarchicalNameAccess > xTdMgr;
     css::uno::Reference< css::script::XInvocationAdapterFactory2 > xAdapterFactory;
@@ -247,7 +247,7 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     static PyRef create(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
 };
 
 

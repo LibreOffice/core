@@ -26,7 +26,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
 #include <ooo/vba/office/MsoAutoShapeType.hpp>
@@ -49,7 +49,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< drawing::XShape > xShape, uno::Reference< drawing::XShapes > xShapes, uno::Reference< frame::XModel > xModel, sal_Int32 nType )
+ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< drawing::XShape > xShape, uno::Reference< drawing::XShapes > xShapes, uno::Reference< frame::XModel > xModel, sal_Int32 nType )
     : ScVbaShape_BASE( xParent, xContext )
     , m_aShapeHelper( xShape )
     , m_xShape(std::move( xShape ))
@@ -393,7 +393,7 @@ ScVbaShape::TextFrame()
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
     {
-        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         uno::Reference< uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.excel.TextFrame"_ustr , { cpo::uno::Any(getParent()), cpo::uno::Any(m_xShape) }, xContext );
         return cpo::uno::Any( xTextFrame );
     }
@@ -727,7 +727,7 @@ ScVbaShape::WrapFormat()
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ))
     {
-        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.word.WrapFormat"_ustr ,{ cpo::uno::Any(getParent()), cpo::uno::Any(m_xShape) }, xContext );
         return cpo::uno::Any( xWrapFormat );
     }

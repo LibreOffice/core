@@ -11,7 +11,7 @@
 #include <string_view>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -64,7 +64,7 @@ int pdfVerify(int nArgc, char** pArgv)
     }
 
     // Initialize nss / mscrypto.
-    uno::Reference<uno::XComponentContext> xComponentContext;
+    uno::Reference<cpo::uno::XComponentContext> xComponentContext;
     try
     {
         xComponentContext = cppu::defaultBootstrap_InitialComponentContext();

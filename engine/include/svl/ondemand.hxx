@@ -135,7 +135,7 @@ public:
  */
 class OnDemandCalendarWrapper
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     css::lang::Locale aEnglishLocale;
     css::lang::Locale aLocale;
     mutable css::lang::Locale aLastAnyLocale;
@@ -150,7 +150,7 @@ public:
         aLastAnyLocale = aEnglishLocale;
     }
 
-    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    void init(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
               const css::lang::Locale& rLocale)
     {
         m_xContext = rxContext;
@@ -199,7 +199,7 @@ public:
  */
 class OnDemandTransliterationWrapper
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     LanguageType eLanguage;
     TransliterationFlags nType;
     mutable std::optional<::utl::TransliterationWrapper> moTransliterate;
@@ -217,7 +217,7 @@ public:
 
     bool isInitialized() const { return bInitialized; }
 
-    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext, LanguageType eLang)
+    void init(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext, LanguageType eLang)
     {
         m_xContext = rxContext;
         nType = TransliterationFlags::IGNORE_CASE;
@@ -252,11 +252,11 @@ public:
  */
 class OnDemandNativeNumberWrapper
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     mutable std::optional<NativeNumberWrapper> moNativeNumber;
 
 public:
-    OnDemandNativeNumberWrapper(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    OnDemandNativeNumberWrapper(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
         : m_xContext(rContext)
     {
     }
@@ -292,7 +292,7 @@ public:
     {
     }
 
-    void changeLocale(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    void changeLocale(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                       const LanguageTag& rLanguageTag)
     {
         // check for existing match

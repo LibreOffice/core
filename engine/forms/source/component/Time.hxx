@@ -39,11 +39,11 @@ protected:
 
 public:
     OTimeModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OTimeModel(
         const OTimeModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OTimeModel() override;
 
@@ -98,7 +98,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OTimeControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OTimeControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(OTimeControl, OBoundControl)
 
     // css::lang::XServiceInfo

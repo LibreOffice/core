@@ -66,7 +66,7 @@ constexpr auto aPatternMap = frozen::make_map<sal_Int32, sal_Int32>({
     { xlPatternVertical, 6 }
 });
 
-ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< beans::XPropertySet >   xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(std::move(xProps)), m_pScDoc( pScDoc )
+ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< beans::XPropertySet >   xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(std::move(xProps)), m_pScDoc( pScDoc )
 {
     // auto color
     m_aPattColor = Color(0);

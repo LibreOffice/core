@@ -2193,7 +2193,7 @@ OUString ODatabaseDocument::getUntitledPrefix()
 }   // namespace dbaccess
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
+com_sun_star_comp_dba_ODatabaseDocument(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     Reference<XInterface> xDBContextTunnel(DatabaseContext::create(context), UNO_QUERY_THROW);

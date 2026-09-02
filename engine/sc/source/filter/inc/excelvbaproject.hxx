@@ -32,7 +32,7 @@ class ExcelVbaProject final : public ::oox::ole::VbaProject
 {
 public:
     explicit            ExcelVbaProject(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::sheet::XSpreadsheetDocument >& rxDocument );
 
 private:

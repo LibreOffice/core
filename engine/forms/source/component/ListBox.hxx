@@ -121,11 +121,11 @@ private:
 
 public:
     OListBoxModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OListBoxModel(
         const OListBoxModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OListBoxModel() override;
 
@@ -261,7 +261,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
 
 public:
-    explicit OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OListBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     virtual ~OListBoxControl() override;
 
     // UNO binding

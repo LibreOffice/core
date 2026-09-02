@@ -150,7 +150,7 @@ void ScriptContainersListBox::ClearAll()
     m_xTreeView->clear();
 }
 
-void ScriptContainersListBox::Init(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+void ScriptContainersListBox::Init(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                                    const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
     m_xContext = xContext;

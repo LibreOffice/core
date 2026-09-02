@@ -24,7 +24,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
 #include <vector>
@@ -51,7 +51,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
     public:
 
         // constructor
-        SalGtkFilePicker( const css::uno::Reference< css::uno::XComponentContext >& xServiceMgr );
+        SalGtkFilePicker( const css::uno::Reference< cpo::uno::XComponentContext >& xServiceMgr );
 
         // XFilePickerNotifier
 

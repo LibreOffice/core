@@ -40,7 +40,7 @@ private:
     void removeBookmarkByName( const OUString& rName );
 
 public:
-    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, rtl::Reference< SwXTextDocument > xModel );
+    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, rtl::Reference< SwXTextDocument > xModel );
 
     /// @throws cpo::uno::RuntimeException
     static void addBookmarkByName( const rtl::Reference< SwXTextDocument >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );

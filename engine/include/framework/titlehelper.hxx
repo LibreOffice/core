@@ -38,7 +38,7 @@ namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XModel3; }
 namespace com::sun::star::frame { class XUntitledNumbers; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
 
 
@@ -74,7 +74,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
             @param  xNumbers
                     provides the right string and number for  an untitled component.
          */
-        TitleHelper(css::uno::Reference< css::uno::XComponentContext > xContext,
+        TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xContext,
             const css::uno::Reference< css::uno::XInterface >& xOwner,
             const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
 
@@ -145,7 +145,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
     private:
 
         /** points to the global uno service manager. */
-        css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 
         /** reference to the outside UNO class using this helper. */
         cpo::uno::WeakReference< css::uno::XInterface > m_xOwner;

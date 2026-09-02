@@ -51,7 +51,7 @@
 #include <memory>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class DbGridColumn;
 enum class DbGridControlNavigationBarState;
@@ -197,10 +197,10 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXGridControl  :publi
 protected:
     bool        m_bInDraw;
 
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
-    FmXGridControl(const css::uno::Reference< css::uno::XComponentContext >&);
+    FmXGridControl(const css::uno::Reference< cpo::uno::XComponentContext >&);
     virtual ~FmXGridControl() override;
 
     // UNO binding
@@ -320,7 +320,7 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXGridPeer:
         css::view::XSelectionSupplier>
 {
 protected:
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     std::mutex                                            m_aMutex;
 
 private:
@@ -351,7 +351,7 @@ private:
     std::unique_ptr<GridListenerDelegator>  m_pGridListener;
 
 public:
-    FmXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
+    FmXGridPeer(const css::uno::Reference< cpo::uno::XComponentContext >&);
     virtual ~FmXGridPeer() override;
 
     // late constructor, to always be called after the real constructor!

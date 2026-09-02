@@ -175,7 +175,7 @@ ErrCodeMsg ReadThroughComponent(
     const Reference<io::XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
     const OUString& rStreamName,
-    Reference<uno::XComponentContext> const & rxContext,
+    Reference<cpo::uno::XComponentContext> const & rxContext,
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
@@ -314,7 +314,7 @@ ErrCodeMsg ReadThroughComponent(
     const uno::Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const char* pStreamName,
-    Reference<uno::XComponentContext> const & rxContext,
+    Reference<cpo::uno::XComponentContext> const & rxContext,
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
@@ -450,7 +450,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     ErrCodeMsg nRet = ERRCODE_NONE;
 
     // Get service factory
-    const Reference< uno::XComponentContext >& rxContext =
+    const Reference< cpo::uno::XComponentContext >& rxContext =
             comphelper::getProcessComponentContext();
 
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
@@ -782,7 +782,7 @@ bool SdXMLFilter::Export()
             return false;
         }
 
-        const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference<cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 

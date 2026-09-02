@@ -34,7 +34,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 static cpo::uno::Any
-getDocument( uno::Reference< uno::XComponentContext > const & xContext, const rtl::Reference< SwXTextDocument > &xDoc, const cpo::uno::Any& aApplication )
+getDocument( uno::Reference< cpo::uno::XComponentContext > const & xContext, const rtl::Reference< SwXTextDocument > &xDoc, const cpo::uno::Any& aApplication )
 {
     // FIXME: fine as long as SwVbaDocument is stateless ...
     if( !xDoc.is() )
@@ -51,7 +51,7 @@ class DocumentEnumImpl : public EnumerationHelperImpl
     cpo::uno::Any m_aApplication;
 public:
     /// @throws uno::RuntimeException
-    DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, cpo::uno::Any  aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication(std::move( aApplication )) {}
+    DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, cpo::uno::Any  aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication(std::move( aApplication )) {}
 
     virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
@@ -62,7 +62,7 @@ public:
 
 }
 
-SwVbaDocuments::SwVbaDocuments( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SwVbaDocuments_BASE( xParent, xContext, VbaDocumentsBase::WORD_DOCUMENT )
+SwVbaDocuments::SwVbaDocuments( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext ) : SwVbaDocuments_BASE( xParent, xContext, VbaDocumentsBase::WORD_DOCUMENT )
 {
 }
 // XEnumerationAccess

@@ -638,7 +638,7 @@ using namespace cpo::uno;
 }   // namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_form_ORichTextControl_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_form_ORichTextControl_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ORichTextControl());

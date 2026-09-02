@@ -492,7 +492,7 @@ PatternFormatter::~PatternFormatter()
 WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)
     : mWidget(widget)
 {
-    const css::uno::Reference<css::uno::XComponentContext>& xContext
+    const css::uno::Reference<cpo::uno::XComponentContext>& xContext
         = ::comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
 

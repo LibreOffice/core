@@ -43,7 +43,7 @@ using namespace cpo::uno;
     using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
 
     // ConnectionTools
     ConnectionTools::ConnectionTools( const Reference<XComponentContext>& _rContext )
@@ -127,7 +127,7 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_ConnectionTools_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new sdbtools::ConnectionTools(context));
 }

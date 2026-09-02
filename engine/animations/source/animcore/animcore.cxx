@@ -59,7 +59,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::beans { struct NamedValue; }
 
 using ::comphelper::OInterfaceContainerHelper4;
@@ -2064,84 +2064,84 @@ void AnimationNode::fireChangeListener(std::unique_lock<std::mutex>& l)
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_ParallelTimeContainer_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_ParallelTimeContainer_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(PAR));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_SequenceTimeContainer_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_SequenceTimeContainer_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(SEQ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_IterateContainer_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_IterateContainer_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ITERATE));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_Animate_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_Animate_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ANIMATE));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_AnimateSet_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_AnimateSet_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(SET));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_AnimateColor_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_AnimateColor_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ANIMATECOLOR));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_AnimateMotion_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_AnimateMotion_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ANIMATEMOTION));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_AnimatePhysics_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_AnimatePhysics_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ANIMATEPHYSICS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_AnimateTransform_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_AnimateTransform_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(ANIMATETRANSFORM));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_TransitionFilter_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_TransitionFilter_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(TRANSITIONFILTER));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_Audio_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_Audio_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(AUDIO));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_animations_Command_get_implementation(css::uno::XComponentContext*,
+com_sun_star_animations_Command_get_implementation(cpo::uno::XComponentContext*,
                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new animcore::AnimationNode(COMMAND));

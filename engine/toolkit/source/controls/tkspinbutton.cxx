@@ -20,7 +20,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/XSpinValue.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -45,7 +45,7 @@ protected:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    explicit UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+    explicit UnoSpinButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
     UnoSpinButtonModel(const UnoSpinButtonModel & rOther) : UnoControlModel(rOther) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoSpinButtonModel( *this ); }
@@ -116,7 +116,7 @@ public:
     //= UnoSpinButtonModel
 
 
-    UnoSpinButtonModel::UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
+    UnoSpinButtonModel::UnoSpinButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -406,7 +406,7 @@ public:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoSpinButtonModel(context));
@@ -414,7 +414,7 @@ stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoSpinButtonControl_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoSpinButtonControl());

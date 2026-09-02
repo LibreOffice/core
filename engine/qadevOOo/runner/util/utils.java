@@ -44,7 +44,7 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
 
 import java.text.DecimalFormat;

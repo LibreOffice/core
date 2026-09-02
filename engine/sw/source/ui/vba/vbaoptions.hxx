@@ -31,7 +31,7 @@ class SwVbaOptions : public SwVbaOptions_BASE,
 private:
     OUString msDefaultFilePath;
 public:
-    explicit SwVbaOptions( css::uno::Reference< css::uno::XComponentContext > const & m_xContext );
+    explicit SwVbaOptions( css::uno::Reference< cpo::uno::XComponentContext > const & m_xContext );
     virtual ~SwVbaOptions() override;
 
     // Attributes

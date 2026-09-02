@@ -207,9 +207,9 @@ public:
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 
     virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
+        createFilePicker( const css::uno::Reference< cpo::uno::XComponentContext >& ) override;
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
-        createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
+        createFolderPicker( const css::uno::Reference< cpo::uno::XComponentContext >& ) override;
 
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments) override;

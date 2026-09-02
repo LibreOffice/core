@@ -104,7 +104,7 @@ std::unique_ptr<AcceleratorExecute> AcceleratorExecute::createAcceleratorHelper(
 }
 
 
-void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+void AcceleratorExecute::init(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                               const css::uno::Reference< css::frame::XFrame >&              xEnv )
 {
     // SAFE -> ----------------------------------
@@ -381,7 +381,7 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 }
 
 
-css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     css::uno::Reference< css::frame::XModuleManager2 > xModuleDetection(
@@ -411,7 +411,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
-css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::kit_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& sModule)
+css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::kit_createNewAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const OUString& sModule)
 {
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(css::ui::theModuleUIConfigurationManagerSupplier::get(rxContext));
 
@@ -455,7 +455,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 
     if (m_xURLParser.is())
         return m_xURLParser;
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
 
     aLock.unlock();
     // <- SAFE ----------------------------------

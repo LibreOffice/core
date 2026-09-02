@@ -149,7 +149,7 @@ public:
     /** constructs the container.
     */
     ODefinitionContainer(
-          const css::uno::Reference< css::uno::XComponentContext >& _xORB
+          const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
         , const css::uno::Reference< css::uno::XInterface >&  _xParentContainer
         , const TContentPtr& _pImpl
         , bool _bCheckSlash = true

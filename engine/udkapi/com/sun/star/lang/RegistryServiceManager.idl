@@ -42,7 +42,7 @@ published service RegistryServiceManager
         (com::sun::star::registry::XSimpleRegistry),
         i.e. the registry to be read from</li>
         <li>a component context
-        (com::sun::star::uno::XComponentContext)
+        (cpo::uno::XComponentContext)
         to be installed as "DefaultContext" property of the
         ServiceManager which is the context to be used
         using the XMultiServiceFactory interface.</li>

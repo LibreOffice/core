@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <strings.hrc>
@@ -70,7 +70,7 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  TPositions&&_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const Reference< css::uno::XComponentContext >& _rxContext,
+                                 const Reference< cpo::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  bool _bAutoIncrementEnabled,
@@ -123,7 +123,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 
 ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const Reference< css::uno::XComponentContext >& _rxContext,
+                                 const Reference< cpo::uno::XComponentContext >& _rxContext,
                                  SvStream& _rInputStream)
     :m_aDestColumns(comphelper::UStringMixLess(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()))
     ,m_xConnection(_rxConnection)

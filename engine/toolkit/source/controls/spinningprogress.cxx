@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <controls/animatedimages.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/toolkit/throbber.hxx>
@@ -32,7 +32,7 @@ typedef toolkit::AnimatedImagesControlModel SpinningProgressControlModel_Base;
 class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 {
 public:
-    explicit SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
+    explicit SpinningProgressControlModel( css::uno::Reference< cpo::uno::XComponentContext > const & i_factory );
     SpinningProgressControlModel(const SpinningProgressControlModel& rOther) : SpinningProgressControlModel_Base(rOther) {}
 
     virtual rtl::Reference<UnoControlModel> Clone() const override;
@@ -120,7 +120,7 @@ protected:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_SpinningProgressControlModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SpinningProgressControlModel(context));

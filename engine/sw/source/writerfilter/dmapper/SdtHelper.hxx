@@ -21,18 +21,12 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/ref.hxx>
 
-namespace com::sun::star
-{
-namespace uno
-{
-class XComponentContext;
-}
-namespace awt
+namespace com::sun::star::awt
 {
 struct Size;
 class XControlModel;
 }
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerfilter::dmapper
 {
@@ -60,7 +54,7 @@ enum class SdtControlType
 class SdtHelper final : public virtual SvRefBase
 {
     DomainMapper_Impl& m_rDM_Impl;
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
 
     /// Items of the drop-down control: <w:listItem w:value="...">.
     std::vector<OUString> m_aDropDownItems;
@@ -151,7 +145,7 @@ class SdtHelper final : public virtual SvRefBase
 
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
-                       css::uno::Reference<css::uno::XComponentContext> xContext);
+                       css::uno::Reference<cpo::uno::XComponentContext> xContext);
     ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }

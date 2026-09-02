@@ -56,7 +56,7 @@ namespace framework{
     @param      xFrame
                     reference to our owner frame.
 */
-DispatchProvider::DispatchProvider( css::uno::Reference< css::uno::XComponentContext >  xContext  ,
+DispatchProvider::DispatchProvider( css::uno::Reference< cpo::uno::XComponentContext >  xContext  ,
                                     const css::uno::Reference< css::frame::XFrame >&    xFrame    )
         : m_xContext    (std::move( xContext                     ))
         , m_xFrame      ( xFrame                        )

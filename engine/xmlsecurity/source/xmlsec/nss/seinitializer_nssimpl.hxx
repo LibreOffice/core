@@ -32,7 +32,7 @@ class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper
 >
 {
 public:
-    explicit SEInitializer_NssImpl(const css::uno::Reference<css::uno::XComponentContext > &rxContext);
+    explicit SEInitializer_NssImpl(const css::uno::Reference<cpo::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_NssImpl() override;
 
     /* XSEInitializer */

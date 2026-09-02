@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <formulaparser.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::xls {
 
@@ -165,7 +165,7 @@ OUString SAL_CALL OOXMLFormulaParser::printFormula(
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_oox_xls_FormulaParser_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_oox_xls_FormulaParser_get_implementation(cpo::uno::XComponentContext*,
                                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new oox::xls::OOXMLFormulaParser());

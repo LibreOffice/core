@@ -50,7 +50,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <comphelper/json.hxx>
@@ -1226,8 +1226,8 @@ JSValue createService(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
             JS_ThrowSyntaxError(ctx, "TODO: BAD NUMBER OF ARGUMENTS");
             throw JsException();
         }
-        css::uno::Reference<css::uno::XComponentContext> context(
-            fromJs(ctx, cppu::UnoType<css::uno::XComponentContext>::get(), argv[0]),
+        css::uno::Reference<cpo::uno::XComponentContext> context(
+            fromJs(ctx, cppu::UnoType<cpo::uno::XComponentContext>::get(), argv[0]),
             css::uno::UNO_QUERY_THROW);
         cpo::uno::Sequence<cpo::uno::Any> args(argc - 1);
         for (sal_Int32 i = 0; i != params.getLength(); ++i)
@@ -1279,8 +1279,8 @@ JSValue getSingleton(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JS
     return callFromJs(ctx, [ctx, argv, func_data] {
         auto const s = static_cast<rtl_uString*>(
             JS_GetOpaque(func_data[0], getRuntimeData(ctx)->singletonClassId));
-        css::uno::Reference<css::uno::XComponentContext> context(
-            fromJs(ctx, cppu::UnoType<css::uno::XComponentContext>::get(), argv[0]),
+        css::uno::Reference<cpo::uno::XComponentContext> context(
+            fromJs(ctx, cppu::UnoType<cpo::uno::XComponentContext>::get(), argv[0]),
             css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::uno::XInterface> ifc(
             context->getValueByName("/singletons/" + OUString::unacquired(&s)),

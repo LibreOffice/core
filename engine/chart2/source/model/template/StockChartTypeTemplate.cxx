@@ -27,7 +27,7 @@
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <servicenames_charttypes.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -122,7 +122,7 @@ namespace chart
 
 StockChartTypeTemplate::StockChartTypeTemplate(
     uno::Reference<
-        uno::XComponentContext > const & xContext,
+        cpo::uno::XComponentContext > const & xContext,
     const OUString & rServiceName,
     StockVariant eVariant,
     bool bJapaneseStyle ) :

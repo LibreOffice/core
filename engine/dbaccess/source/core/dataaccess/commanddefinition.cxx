@@ -142,7 +142,7 @@ void OCommandDefinition::rename( const OUString& newName )
 }   // namespace dbaccess
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_dba_OCommandDefinition(css::uno::XComponentContext* context,
+com_sun_star_comp_dba_OCommandDefinition(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new dbaccess::OCommandDefinition(

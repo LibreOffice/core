@@ -64,7 +64,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -352,7 +352,7 @@ void PropertySetMixinImpl::BoundListeners::notify() const {
 class PropertySetMixinImpl::Impl: public Data {
 public:
     Impl(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         Implements theImplements,
         cpo::uno::Sequence< OUString > const & absentOptional,
         cpo::uno::Type const & type);
@@ -398,13 +398,13 @@ private:
         bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted,
         bool isDefaulted, bool wrapOptional);
 
-    css::uno::Reference< css::uno::XComponentContext > const & m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > const & m_context;
     cpo::uno::Type m_type;
     css::uno::Reference< css::reflection::XIdlClass > m_idlClass;
 };
 
 PropertySetMixinImpl::Impl::Impl(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     Implements theImplements,
     cpo::uno::Sequence< OUString > const & absentOptional,
     cpo::uno::Type const & type):
@@ -825,7 +825,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
 }
 
 PropertySetMixinImpl::PropertySetMixinImpl(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     Implements implements,
     cpo::uno::Sequence< OUString > const & absentOptional,
     cpo::uno::Type const & type)

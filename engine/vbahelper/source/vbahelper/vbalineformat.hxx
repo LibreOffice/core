@@ -39,7 +39,7 @@ private:
     /// @throws cpo::uno::RuntimeException
     static OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle );
 public:
-    ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
+    ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     // Attributes
     virtual sal_Int32 SAL_CALL getBeginArrowheadStyle() override;

@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -310,7 +310,7 @@ void ResourceId::ParseResourceURL()
     if ( ! xURLTransformer.is())
     {
         // Create the URL transformer.
-        const Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+        const Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
         xURLTransformer.set(util::URLTransformer::create(xContext));
         mxURLTransformerWeak = xURLTransformer;
         SdGlobalResourceContainer::Instance().AddResource(

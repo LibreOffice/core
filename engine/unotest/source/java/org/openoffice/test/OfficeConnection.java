@@ -26,7 +26,7 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

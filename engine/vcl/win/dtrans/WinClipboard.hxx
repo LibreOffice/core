@@ -31,7 +31,7 @@
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <osl/conditn.hxx>
 #include <systools/win32/comtools.hxx>
 
@@ -54,7 +54,7 @@ class CWinClipboard final
 {
     friend CXNotifyingDataObject::~CXNotifyingDataObject();
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     const OUString m_itsName;
     CMtaOleClipboard m_MtaOleClipboard;
     CXNotifyingDataObject* m_pNewOwnClipContent = nullptr; // until onClipboardContentChanged
@@ -76,7 +76,7 @@ class CWinClipboard final
     css::uno::Reference<css::datatransfer::XTransferable> getContents_noLock();
 
 public:
-    CWinClipboard(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    CWinClipboard(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                   const OUString& aClipboardName);
     virtual ~CWinClipboard() override;
 

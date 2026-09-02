@@ -270,7 +270,7 @@ OUString getSessionId(const cmis::URL& url)
 
 namespace cmis
 {
-    Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
+    Content::Content( const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr pObject )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
@@ -288,7 +288,7 @@ namespace cmis
         m_sObjectId = m_aURL.getObjectId( );
     }
 
-    Content::Content( const uno::Reference< uno::XComponentContext >& rxContext, ContentProvider *pProvider,
+    Content::Content( const uno::Reference< cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         bool bIsFolder )
         : ContentImplHelper( rxContext, pProvider, Identifier ),

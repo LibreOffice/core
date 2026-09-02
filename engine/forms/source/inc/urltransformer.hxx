@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 
@@ -30,14 +30,14 @@ namespace frm
     class UrlTransformer
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                         m_xORB;
         mutable css::uno::Reference< css::util::XURLTransformer >
                         m_xTransformer;
         mutable bool    m_bTriedToCreateTransformer;
 
     public:
-        UrlTransformer( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
+        UrlTransformer( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         /** returns a URL object for the given URL string
         */

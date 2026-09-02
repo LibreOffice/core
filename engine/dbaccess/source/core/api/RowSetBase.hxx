@@ -82,7 +82,7 @@ namespace dbaccess
         css::uno::Reference< css::util::XNumberFormatTypes>   m_xNumberFormatTypes;
         std::unique_ptr<OEmptyCollection>       m_pEmptyCollection;
 
-        css::uno::Reference< css::uno::XComponentContext>   m_aContext;
+        css::uno::Reference< cpo::uno::XComponentContext>   m_aContext;
         ::connectivity::SQLError                m_aErrors;
 
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
@@ -97,7 +97,7 @@ namespace dbaccess
 
     protected:
         ORowSetBase(
-            const css::uno::Reference<css::uno::XComponentContext>& _rContext,
+            const css::uno::Reference<cpo::uno::XComponentContext>& _rContext,
             ::cppu::OBroadcastHelper& _rBHelper,
             ::osl::Mutex* _pMutex
         );

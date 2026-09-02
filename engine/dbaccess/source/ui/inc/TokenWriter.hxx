@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -61,7 +61,7 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xResultSetMetaData;
         css::uno::Reference< css::container::XIndexAccess >   m_xRowSetColumns;
         css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
         OUString            m_sName;
 
@@ -78,13 +78,13 @@ namespace dbaui
 
         // export data
         ODatabaseImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
-                                const css::uno::Reference< css::uno::XComponentContext >& _rM,
+                                const css::uno::Reference< cpo::uno::XComponentContext >& _rM,
                                 const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF);
 
         // import data
         ODatabaseImportExport(  SharedConnection _xConnection,
                                 const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                                const css::uno::Reference< css::uno::XComponentContext >& _rM);
+                                const css::uno::Reference< cpo::uno::XComponentContext >& _rM);
 
         virtual ~ODatabaseImportExport() override;
 
@@ -117,14 +117,14 @@ namespace dbaui
     public:
         // export data
         ORTFImportExport(   const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rM,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& _rM,
                             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF)
                             : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF) {};
 
         // import data
         ORTFImportExport(   const SharedConnection& _rxConnection,
                             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rM)
+                            const css::uno::Reference< cpo::uno::XComponentContext >& _rM)
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
@@ -156,12 +156,12 @@ namespace dbaui
     public:
         // export data
         OHTMLImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rM,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& _rM,
                             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF);
         // import data
         OHTMLImportExport(  const SharedConnection& _rxConnection,
                             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rM)
+                            const css::uno::Reference< cpo::uno::XComponentContext >& _rM)
             : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
             , m_nIndent(0)
         {}
@@ -191,7 +191,7 @@ namespace dbaui
         ORowSetImportExport(weld::Window* pParent,
                             const css::uno::Reference< css::sdbc::XResultSetUpdate >& xResultSetUpdate,
                             const svx::ODataAccessDescriptor& aDataDescriptor,
-                            const css::uno::Reference< css::uno::XComponentContext >& rM);
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rM);
 
         virtual bool Write() override;
         virtual bool Read() override;

@@ -44,7 +44,7 @@ protected:
 public:
     CachedDynamicResultSet( css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
         , const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentMapping
-        , const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        , const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     virtual ~CachedDynamicResultSet() override;
 
@@ -78,12 +78,12 @@ class CachedDynamicResultSetFactory final :
                     css::lang::XServiceInfo,
                     css::ucb::XCachedDynamicResultSetFactory>
 {
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetFactory(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext);
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext);
 
     virtual ~CachedDynamicResultSetFactory() override;
 

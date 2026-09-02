@@ -47,7 +47,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "cpo/uno/RuntimeException.hpp"
 #include "cpo/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include "cpo/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
@@ -79,7 +79,7 @@ namespace {
 class Service: public ::cppu::WeakImplHelper1< css::lang::XMain > {
 public:
     explicit Service(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         context_(context) {}
 
     virtual ::sal_Int32 SAL_CALL run(
@@ -95,7 +95,7 @@ private:
         css::uno::Reference< test::types::XTest > const & test,
         ::rtl::OUString const & name);
 
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 ::sal_Int32 Service::run(cpo::uno::Sequence< ::rtl::OUString > const &) {
@@ -202,7 +202,7 @@ void Service::test(
 namespace CppMain {
 
 css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return static_cast< ::cppu::OWeakObject * >(new Service(context));
 }

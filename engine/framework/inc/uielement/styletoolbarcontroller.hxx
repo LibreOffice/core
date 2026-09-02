@@ -61,7 +61,7 @@ private:
 class StyleToolbarController final : public svt::ToolboxController
 {
 public:
-    StyleToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    StyleToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                             const css::uno::Reference< css::frame::XFrame >& rFrame,
                             const OUString& rCommand );
 

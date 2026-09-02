@@ -23,7 +23,7 @@
 class PageMarginPopup final : public svt::PopupWindowController
 {
 public:
-    PageMarginPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    PageMarginPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~PageMarginPopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

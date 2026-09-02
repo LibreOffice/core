@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ucbhelper {
 
@@ -57,7 +57,7 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
 protected:
     std::mutex                                                 m_aMutex;
     css::ucb::OpenCommandArgument2                             m_aCommand;
-    css::uno::Reference< css::uno::XComponentContext >         m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >         m_xContext;
     // Resultset #1
     css::uno::Reference< css::sdbc::XResultSet >               m_xResultSet1;
     // Resultset #2
@@ -114,7 +114,7 @@ public:
       */
     ResultSetImplHelper(
             css::uno::Reference<
-                css::uno::XComponentContext > xContext,
+                cpo::uno::XComponentContext > xContext,
             css::ucb::OpenCommandArgument2 aCommand );
 
     /**

@@ -49,7 +49,7 @@ UNOTYPES =	com.sun.star.test.XSimpleTest \
         com.sun.star.lang.XSingleServiceFactory	\
         com.sun.star.lang.XSingleComponentFactory	\
         com.sun.star.lang.XMultiComponentFactory	\
-        com.sun.star.uno.XComponentContext	\
+        cpo.uno.XComponentContext	\
         com.sun.star.lang.XTypeProvider	\
         com.sun.star.registry.XImplementationRegistration	\
         com.sun.star.registry.XRegistryKey	\

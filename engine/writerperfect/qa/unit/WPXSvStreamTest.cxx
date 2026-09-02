@@ -85,7 +85,7 @@ shared_ptr<RVNGInputStream> lcl_createStreamForURL(const OUString& rURL)
     using uno::Reference;
     using uno::UNO_QUERY_THROW;
 
-    const Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+    const Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                      css::uno::UNO_SET_THROW);
     const Reference<ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(

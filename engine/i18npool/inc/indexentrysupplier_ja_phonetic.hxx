@@ -28,7 +28,7 @@ namespace i18npool {
 
 class IndexEntrySupplier_ja_phonetic : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_ja_phonetic( const css::uno::Reference < css::uno::XComponentContext >& rxContext ) : IndexEntrySupplier_Common(rxContext) {
+    IndexEntrySupplier_ja_phonetic( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext ) : IndexEntrySupplier_Common(rxContext) {
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic";
     };
     virtual OUString getIndexCharacter( const OUString& rIndexEntry,
@@ -44,7 +44,7 @@ public:
 #define INDEXENTRYSUPPLIER_JA_PHONETIC( algorithm, algo_descr ) \
 class IndexEntrySupplier_##algorithm final : public IndexEntrySupplier_ja_phonetic {\
 public:\
-    IndexEntrySupplier_##algorithm (const css::uno::Reference < css::uno::XComponentContext >& rxContext) : IndexEntrySupplier_ja_phonetic (rxContext) {\
+    IndexEntrySupplier_##algorithm (const css::uno::Reference < cpo::uno::XComponentContext >& rxContext) : IndexEntrySupplier_ja_phonetic (rxContext) {\
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic" algo_descr;\
     };\
     virtual bool loadAlgorithm(\

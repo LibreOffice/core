@@ -445,7 +445,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const cpo::uno::S
     {
         try
         {
-            const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
             // create the dialog object
             uno::Reference< ui::dialogs::XExecutableDialog > xDialog = sdb::FilterDialog::createWithQuery(xContext, m_xDatMan->getParser(),

@@ -27,7 +27,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 
 class GDIMetaFile;
@@ -38,7 +38,7 @@ class PDFExport
 private:
 
     css::uno::Reference< css::lang::XComponent > mxSrcDoc;
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
     css::uno::Reference< css::task::XInteractionHandler > mxIH;
 
@@ -72,7 +72,7 @@ public:
                         PDFExport(  const css::uno::Reference< css::lang::XComponent >& rxSrcDoc,
                                     const css::uno::Reference< css::task::XStatusIndicator >& xStatusIndicator,
                                     const css::uno::Reference< css::task::XInteractionHandler >& xIH,
-                                    const css::uno::Reference< css::uno::XComponentContext >& xFact );
+                                    const css::uno::Reference< cpo::uno::XComponentContext >& xFact );
                         ~PDFExport();
 
     bool                ExportSelection( vcl::pdf::PDFWriter& rPDFWriter,

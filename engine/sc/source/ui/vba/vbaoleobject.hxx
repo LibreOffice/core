@@ -32,7 +32,7 @@ class ScVbaOLEObject final : public OLEObjectImpl_BASE
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     css::uno::Reference< ov::msforms::XControl> m_xControl;
 public:
-    ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > const & xControlShape );
 
     // XOLEObject Attributes

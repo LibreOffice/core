@@ -57,7 +57,7 @@ cpo::uno::Sequence< OUString > HelpOnStartup::getSupportedServiceNames()
     return { SERVICENAME_JOB };
 }
 
-HelpOnStartup::HelpOnStartup(css::uno::Reference< css::uno::XComponentContext > xContext)
+HelpOnStartup::HelpOnStartup(css::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext    (std::move(xContext))
 {
     // create some needed uno services and cache it
@@ -322,7 +322,7 @@ OUString HelpOnStartup::ist_createHelpURL(std::u16string_view sBaseURL,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_HelpOnStartup_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::HelpOnStartup(context));
 }

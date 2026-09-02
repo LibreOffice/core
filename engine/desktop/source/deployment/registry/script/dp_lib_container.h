@@ -22,13 +22,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star {
-    namespace uno {
-        class XComponentContext;
-    }
     namespace ucb {
         class XCommandEnvironment;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 
 namespace dp_registry::backend::script {
@@ -40,7 +38,7 @@ public:
     static OUString get_libname(
         OUString const & url,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        css::uno::Reference<css::uno::XComponentContext> const & xContext );
+        css::uno::Reference<cpo::uno::XComponentContext> const & xContext );
 };
 
 }

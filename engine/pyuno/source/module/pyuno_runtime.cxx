@@ -57,7 +57,7 @@ using cpo::uno::Type;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::Exception;
 using cpo::uno::RuntimeException;
-using com::sun::star::uno::XComponentContext;
+using cpo::uno::XComponentContext;
 using com::sun::star::lang::WrappedTargetRuntimeException;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XUnoTunnel;

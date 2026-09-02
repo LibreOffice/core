@@ -104,13 +104,13 @@ class Content : public ::ucbhelper::ContentImplHelper,
     sal_uInt32              m_nModifiedProps;
 
 private:
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              css::uno::Reference< css::container::XHierarchicalNameAccess > Package,
              PackageUri aUri,
              ContentProperties  aProps );
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              css::uno::Reference< css::container::XHierarchicalNameAccess > Package,
@@ -124,7 +124,7 @@ private:
     virtual OUString getParentURL() override;
 
     static css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    getPropertyValues( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                        const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
@@ -200,13 +200,13 @@ private:
 public:
     // Create existing content. Fail, if not already exists.
     static rtl::Reference<Content> create(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
 
     // Create new content. Fail, if already exists.
     static rtl::Reference<Content> create(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const css::ucb::ContentInfo& Info );
@@ -258,7 +258,7 @@ public:
 
     // Called from resultset data supplier.
     static css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    getPropertyValues( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                        const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        ContentProvider* pProvider,
                        const OUString& rContentId );

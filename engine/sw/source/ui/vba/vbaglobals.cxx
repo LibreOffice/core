@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
 using namespace ::ooo::vba;
 
-SwVbaGlobals::SwVbaGlobals(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"WordDocumentContext"_ustr )
+SwVbaGlobals::SwVbaGlobals(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"WordDocumentContext"_ustr )
 {
     SAL_INFO("sw.vba", "SwVbaGlobals::SwVbaGlobals()");
     cpo::uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
@@ -217,7 +217,7 @@ SwVbaGlobals::getAvailableServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaGlobals_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaGlobals(args, context));
 }

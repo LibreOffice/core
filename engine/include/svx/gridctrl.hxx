@@ -35,7 +35,7 @@ namespace comphelper { class OPropertyChangeMultiplexer; }
 namespace com::sun::star::beans { struct PropertyChangeEvent; }
 namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::sdbc { class XRowSet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
 class CursorWrapper;
@@ -238,7 +238,7 @@ private:
     Link<DbGridControlNavigationBarState,bool>   m_aMasterSlotExecutor;
 
     css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
     std::vector< std::unique_ptr<DbGridColumn> > m_aColumns;         // Column description
     VclPtr<NavigationBar>   m_aBar;
@@ -378,7 +378,7 @@ protected:
 
 public:
     DbGridControl(
-        css::uno::Reference< css::uno::XComponentContext > const & _rxContext,
+        css::uno::Reference< cpo::uno::XComponentContext > const & _rxContext,
         vcl::Window* pParent,
         WinBits nBits);
 
@@ -508,7 +508,7 @@ public:
     */
     void        ForceHideScrollbars();
 
-    const css::uno::Reference< css::uno::XComponentContext >&
+    const css::uno::Reference< cpo::uno::XComponentContext >&
         getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard

@@ -27,7 +27,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
@@ -1457,7 +1457,7 @@ void SAXWriter::unknown(const OUString& sString)
 } // namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_extensions_xml_sax_Writer_get_implementation(css::uno::XComponentContext*,
+com_sun_star_extensions_xml_sax_Writer_get_implementation(cpo::uno::XComponentContext*,
                                                           cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SAXWriter);

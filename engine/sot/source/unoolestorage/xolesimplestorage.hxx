@@ -35,7 +35,7 @@ namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XStream; }
 namespace com::sun::star::lang { class XEventListener; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class BaseStorage;
 class SvStream;
@@ -52,7 +52,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
     std::unique_ptr<BaseStorage> m_pStorage;
 
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
     bool m_bNoTemporaryCopy;
 
@@ -66,7 +66,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 
 public:
 
-    OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> xContext,
+    OLESimpleStorage(css::uno::Reference<cpo::uno::XComponentContext> xContext,
             cpo::uno::Sequence<cpo::uno::Any> const &arguments);
 
     virtual ~OLESimpleStorage() override;

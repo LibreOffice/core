@@ -39,7 +39,7 @@ namespace com::sun::star::lang {
 }
 namespace cppu { struct ContextEntry_Init; }
 namespace com::sun::star::lang { class XSingleServiceFactory; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class RegistryKey;
 
@@ -48,11 +48,11 @@ namespace cppuhelper {
 extern "C" {
 
 typedef css::uno::XInterface * ImplementationConstructorFn(
-    css::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const &);
+    cpo::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const &);
 
 }
 
-typedef std::function<css::uno::XInterface * (css::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const&)> WrapperConstructorFn;
+typedef std::function<css::uno::XInterface * (cpo::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const&)> WrapperConstructorFn;
 
 typedef WeakComponentImplHelper2<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
@@ -77,7 +77,7 @@ public:
                 OUString theConstructorName,
                 OUString thePrefix,
                 bool theIsSingleInstance,
-                css::uno::Reference< css::uno::XComponentContext > theAlienContext,
+                css::uno::Reference< cpo::uno::XComponentContext > theAlienContext,
                 OUString theRdbFile):
                 name(std::move(theName)), loader(std::move(theLoader)), uri(std::move(theUri)), environment(std::move(theEnvironment)),
                 constructorName(std::move(theConstructorName)), prefix(std::move(thePrefix)),
@@ -102,13 +102,13 @@ public:
             const Implementation& operator=(const Implementation&) = delete;
 
             css::uno::Reference<css::uno::XInterface> createInstance(
-                css::uno::Reference<css::uno::XComponentContext> const &
+                css::uno::Reference<cpo::uno::XComponentContext> const &
                     context,
                 bool singletonRequest);
 
             css::uno::Reference<css::uno::XInterface>
             createInstanceWithArguments(
-                css::uno::Reference<css::uno::XComponentContext> const &
+                css::uno::Reference<cpo::uno::XComponentContext> const &
                     context,
                 bool singletonRequest,
                 cpo::uno::Sequence<cpo::uno::Any> const & arguments);
@@ -135,7 +135,7 @@ public:
             OUString constructorName;
             OUString prefix;
             bool isSingleInstance;
-            css::uno::Reference< css::uno::XComponentContext > alienContext;
+            css::uno::Reference< cpo::uno::XComponentContext > alienContext;
             OUString rdbFile;
             std::vector< OUString > services;
             std::vector< OUString > singletons;
@@ -152,10 +152,10 @@ public:
 
         private:
             css::uno::Reference<css::uno::XInterface> doCreateInstance(
-                css::uno::Reference<css::uno::XComponentContext> const & context);
+                css::uno::Reference<cpo::uno::XComponentContext> const & context);
 
             css::uno::Reference<css::uno::XInterface> doCreateInstanceWithArguments(
-                css::uno::Reference<css::uno::XComponentContext> const & context,
+                css::uno::Reference<cpo::uno::XComponentContext> const & context,
                 cpo::uno::Sequence<cpo::uno::Any> const & arguments);
 
             void updateDisposeInstance(
@@ -195,7 +195,7 @@ public:
     void init(std::u16string_view rdbUris);
 
     void setContext(
-        css::uno::Reference< css::uno::XComponentContext > const & context)
+        css::uno::Reference< cpo::uno::XComponentContext > const & context)
     {
         assert(context.is());
         assert(!context_.is());
@@ -205,7 +205,7 @@ public:
     void addSingletonContextEntries(
         std::vector< cppu::ContextEntry_Init > * entries);
 
-    css::uno::Reference< css::uno::XComponentContext > const & getContext()
+    css::uno::Reference< cpo::uno::XComponentContext > const & getContext()
         const
     {
         assert(context_.is());
@@ -213,7 +213,7 @@ public:
     }
 
     void loadImplementation(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         std::shared_ptr< Data::Implementation > const & implementation);
 
 private:
@@ -242,13 +242,13 @@ private:
     virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithContext(
         OUString const & aServiceSpecifier,
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
     virtual cpo::uno::Type getElementType() override;
 
@@ -327,7 +327,7 @@ private:
 
     void insertRdbFiles(
         std::vector< OUString > const & uris,
-        css::uno::Reference< css::uno::XComponentContext > const &
+        css::uno::Reference< cpo::uno::XComponentContext > const &
             alientContext);
 
     void insertLegacyFactory(
@@ -344,12 +344,12 @@ private:
     void removeImplementation(const OUString & name);
 
     std::shared_ptr< Data::Implementation > findServiceImplementation(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         OUString const & specifier);
 
     void preloadImplementations();
 
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
     Data data_;
 };
 

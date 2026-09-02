@@ -20,7 +20,7 @@
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 
@@ -47,7 +47,7 @@ cpo::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupport
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation(
-    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLElementWrapper_XmlSecImpl(nullptr));
 }

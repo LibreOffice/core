@@ -83,7 +83,7 @@ class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
 {
 public:
     ModuleUIConfigurationManager(
-            const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xServiceManager,
             const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString getImplementationName() override
@@ -211,7 +211,7 @@ private:
     OUString                                                  m_aPropUIName;
     OUString                                                  m_aModuleIdentifier;
     css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
-    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
     std::mutex                                                m_mutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener> m_aConfigListeners;
@@ -1644,7 +1644,7 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::Con
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ModuleUIConfigurationManager(context, arguments));

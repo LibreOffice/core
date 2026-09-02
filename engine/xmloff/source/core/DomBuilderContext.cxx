@@ -37,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 
 
-using com::sun::star::uno::XComponentContext;
+using cpo::uno::XComponentContext;
 using com::sun::star::uno::Reference;
 using cpo::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;

@@ -42,7 +42,7 @@ namespace chart::wrapper
 {
 
 Chart2ModelContact::Chart2ModelContact(
-    const Reference< uno::XComponentContext > & xContext ) :
+    const Reference< cpo::uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
         m_xChartModel( nullptr )
 {

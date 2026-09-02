@@ -56,18 +56,18 @@ namespace {
 
 class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     Documents m_documents;
     Documents::const_iterator m_it;
 
 public:
     /// @throws uno::RuntimeException
-    DocumentsEnumImpl( uno::Reference< uno::XComponentContext > xContext, Documents&& docs ) :  m_xContext(std::move( xContext )), m_documents( std::move(docs) )
+    DocumentsEnumImpl( uno::Reference< cpo::uno::XComponentContext > xContext, Documents&& docs ) :  m_xContext(std::move( xContext )), m_documents( std::move(docs) )
     {
         m_it = m_documents.begin();
     }
     /// @throws uno::RuntimeException
-    explicit DocumentsEnumImpl( uno::Reference< uno::XComponentContext > xContext ) :  m_xContext(std::move( xContext ))
+    explicit DocumentsEnumImpl( uno::Reference< cpo::uno::XComponentContext > xContext ) :  m_xContext(std::move( xContext ))
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
@@ -112,12 +112,12 @@ namespace {
 
 class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
 {
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     Documents m_documents;
     NameIndexHash namesToIndices;
 public:
     /// @throws uno::RuntimeException
-    DocumentsAccessImpl( uno::Reference< uno::XComponentContext > xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext(std::move( xContext ))
+    DocumentsAccessImpl( uno::Reference< cpo::uno::XComponentContext > xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext(std::move( xContext ))
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );
         sal_Int32 nIndex=0;
@@ -191,7 +191,7 @@ public:
 
 }
 
-VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) : VbaDocumentsBase_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new DocumentsAccessImpl( xContext, eDocType ) ) ), meDocType( eDocType )
+VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) : VbaDocumentsBase_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new DocumentsAccessImpl( xContext, eDocType ) ) ), meDocType( eDocType )
 {
 }
 

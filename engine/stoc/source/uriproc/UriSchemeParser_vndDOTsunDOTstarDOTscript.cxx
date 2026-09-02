@@ -38,7 +38,7 @@
 
 #include <string_view>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uri { class XUriReference; }
 
@@ -369,7 +369,7 @@ Parser::parse(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     //TODO: single instance

@@ -46,7 +46,7 @@ using namespace ::com::sun::star::lang;
 
 #include "streamhelper.hxx"
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace io_stm{
 
@@ -350,7 +350,7 @@ Sequence< OUString > OPipeImpl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 io_OPipeImpl_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new io_stm::OPipeImpl());
 }

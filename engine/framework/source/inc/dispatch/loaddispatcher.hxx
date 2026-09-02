@@ -77,7 +77,7 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
             @param  nSearchFlags
                     used in case sTargetFrame isn't a special one.
          */
-        LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        LoadDispatcher(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                        const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                        OUString                                                  sTargetName ,
                              sal_Int32                                           nSearchFlags);

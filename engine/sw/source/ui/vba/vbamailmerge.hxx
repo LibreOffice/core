@@ -22,14 +22,14 @@ class SwVbaMailMerge : public SwVbaMailMerge_BASE
     sal_Int32 m_nMainDocType;
 
     SwVbaMailMerge(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
-                   const css::uno::Reference<css::uno::XComponentContext>& xContext);
+                   const css::uno::Reference<cpo::uno::XComponentContext>& xContext);
 
 public:
     virtual ~SwVbaMailMerge() override;
 
     static rtl::Reference<SwVbaMailMerge> const&
     get(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
-        const css::uno::Reference<css::uno::XComponentContext>& xContext);
+        const css::uno::Reference<cpo::uno::XComponentContext>& xContext);
 
     // XMailMerge
     virtual sal_Int32 SAL_CALL getMainDocumentType() override;

@@ -622,7 +622,7 @@ void DialogWindow::SaveDialog()
 
     OUString aSelectedFileURL = xFP->getSelectedFiles()[0];
 
-    const Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+    const Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
 
     Reference< XOutputStream > xOutput;
@@ -788,7 +788,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
 {
     bool bDone = false;
 
-    const Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+    const Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, pWin);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicImportDialog);

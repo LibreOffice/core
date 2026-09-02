@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -666,7 +666,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     if (comphelper::IsFuzzing())
         return;
 
-    const Reference<css::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+    const Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     Reference<css::document::XImporter> xImporter(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.Draw.XMLOasisStylesImporter"_ustr,
         { Any(comphelper::makePropertyValue(u"OrganizerMode"_ustr, true)) }, xContext), UNO_QUERY);

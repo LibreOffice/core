@@ -69,7 +69,7 @@ private:
 
 public:
     explicit                    AnalysisAddIn(
-                                    const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     OUString AnalysisResId(TranslateId aId);
 

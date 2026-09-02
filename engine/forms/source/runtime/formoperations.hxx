@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -59,7 +59,7 @@ namespace frm
         class MethodGuard;
 
     private:
-        css::uno::Reference<css::uno::XComponentContext>                      m_xContext;
+        css::uno::Reference<cpo::uno::XComponentContext>                      m_xContext;
         css::uno::Reference< css::form::runtime::XFormController >            m_xController;
         css::uno::Reference< css::sdbc::XRowSet >                             m_xCursor;
         css::uno::Reference< css::sdbc::XResultSetUpdate >                    m_xUpdateCursor;
@@ -77,7 +77,7 @@ namespace frm
     #endif
 
     public:
-        explicit FormOperations( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+        explicit FormOperations( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
 
         struct MethodAccess { friend class MethodGuard; private: MethodAccess() { } };
 

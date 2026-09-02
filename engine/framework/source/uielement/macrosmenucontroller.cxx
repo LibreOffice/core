@@ -20,7 +20,7 @@
 #include <uielement/macrosmenucontroller.hxx>
 #include <services.h>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
@@ -56,7 +56,7 @@ cpo::uno::Sequence< OUString > MacrosMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-MacrosMenuController::MacrosMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+MacrosMenuController::MacrosMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext)
 {
@@ -159,7 +159,7 @@ void MacrosMenuController::addScriptItems(const Reference<css::awt::XPopupMenu>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_MacrosMenuController_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::MacrosMenuController(context));
 }

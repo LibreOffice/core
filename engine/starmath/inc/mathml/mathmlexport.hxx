@@ -67,14 +67,14 @@ public:
 
     bool WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
                                const css::uno::Reference<css::lang::XComponent>& xComponent,
-                               css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                               css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                                css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                const char* pComponentName);
 
     bool WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
                                const css::uno::Reference<css::lang::XComponent>& xComponent,
                                const char* pStreamName,
-                               css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                               css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
                                css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                const char* pComponentName);
 };
@@ -106,7 +106,7 @@ class SmXMLExport final : public SvXMLExport
     void ExportBlank(const SmNode* pNode);
 
 public:
-    SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+    SmXMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                 OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
     void ExportAutoStyles_() override {}

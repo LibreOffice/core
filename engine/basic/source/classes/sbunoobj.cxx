@@ -43,7 +43,7 @@
 #include <com/sun/star/script/NativeObjectWrapper.hpp>
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

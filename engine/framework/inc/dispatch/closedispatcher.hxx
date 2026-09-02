@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <memory>
 #include <cppuhelper/implbase.hxx>
@@ -73,7 +73,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
         /** @short reference to a uno service manager,
                    which can be used to create own needed
                    uno resources. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** @short  reference to the target frame, which should be
                     closed by this dispatch. */
@@ -115,7 +115,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
             @param  sTarget
                     help us to find the right target for this close operation.
          */
-        CloseDispatcher(css::uno::Reference< css::uno::XComponentContext >        xContext  ,
+        CloseDispatcher(css::uno::Reference< cpo::uno::XComponentContext >        xContext  ,
                         const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                         std::u16string_view                                       sTarget);
 

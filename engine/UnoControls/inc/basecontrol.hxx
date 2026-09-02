@@ -29,7 +29,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::awt { struct WindowEvent; }
 namespace unocontrols { class OMRCListenerMultiplexerHelper; }
 
@@ -44,7 +44,7 @@ class BaseControl : public cppu::BaseMutex,
                                                          css::awt::XControl>
 {
 public:
-    BaseControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    BaseControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~BaseControl() override;
 
@@ -200,7 +200,7 @@ public:
 protected:
     using WeakComponentImplHelperBase::disposing;
 
-    const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
+    const css::uno::Reference< cpo::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
 
     const css::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() const { return m_xPeerWindow;}
 
@@ -223,7 +223,7 @@ protected:
 private:
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
-    css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
+    css::uno::Reference< cpo::uno::XComponentContext >        m_xComponentContext;
     rtl::Reference<OMRCListenerMultiplexerHelper>             m_xMultiplexer;   // multiplex events
     css::uno::Reference< css::uno::XInterface >               m_xContext;
     css::uno::Reference< css::awt::XWindowPeer >              m_xPeer;

@@ -47,7 +47,7 @@ namespace ucb::ucp::ext
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::sdbc::XRow;

@@ -27,7 +27,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
+ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > const & xControlShape )
 : OLEObjectImpl_BASE( xParent, xContext )
 {

@@ -86,7 +86,7 @@ DriversConfigImpl::DriversConfigImpl()
 {
 }
 
-const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Reference< uno::XComponentContext >& _rxORB) const
+const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Reference< cpo::uno::XComponentContext >& _rxORB) const
 {
     if ( m_aDrivers.empty() )
     {
@@ -110,7 +110,7 @@ const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Refer
     return m_aDrivers;
 }
 
-DriversConfig::DriversConfig(uno::Reference< uno::XComponentContext > _xORB)
+DriversConfig::DriversConfig(uno::Reference< cpo::uno::XComponentContext > _xORB)
 :m_xORB(std::move(_xORB))
 {
 }

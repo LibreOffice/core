@@ -35,7 +35,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 #if HAVE_FEATURE_JAVA
 namespace jvmaccess { class VirtualMachine; }
@@ -129,7 +129,7 @@ namespace connectivity
         @return
             The JavaVM.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     /** return <TRUE/> if the java class exists, otherwise <FALSE/>.
         @param  _pJVM

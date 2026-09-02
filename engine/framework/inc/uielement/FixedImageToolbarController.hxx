@@ -33,7 +33,7 @@ class FixedImageControl;
 class FixedImageToolbarController final : public ComplexToolbarController
 {
 public:
-    FixedImageToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    FixedImageToolbarController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                                 const css::uno::Reference<css::frame::XFrame>& rFrame,
                                 ToolBox* pToolBar, ToolBoxItemId nID, const OUString& aCommand);
 

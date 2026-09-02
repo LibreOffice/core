@@ -48,10 +48,7 @@
 #include <uno/mapping.hxx>
 #include <vcl/svapp.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace
 {
@@ -1494,7 +1491,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 class BridgeTest : public cppu::WeakImplHelper<css::task::XJob>
 {
 public:
-    explicit BridgeTest(css::uno::Reference<css::uno::XComponentContext> const& context)
+    explicit BridgeTest(css::uno::Reference<cpo::uno::XComponentContext> const& context)
         : context_(context)
     {
     }
@@ -1551,19 +1548,19 @@ private:
         return cpo::uno::Any(true);
     }
 
-    css::uno::Reference<css::uno::XComponentContext> context_;
+    css::uno::Reference<cpo::uno::XComponentContext> context_;
 };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_testuno_BridgeTest_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_testuno_BridgeTest_get_implementation(cpo::uno::XComponentContext* context,
                                                         cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new BridgeTest(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_testuno_Test_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_testuno_Test_get_implementation(cpo::uno::XComponentContext*,
                                                   cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Test);

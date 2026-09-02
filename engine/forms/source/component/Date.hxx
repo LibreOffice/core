@@ -38,11 +38,11 @@ protected:
 
 public:
     ODateModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     ODateModel(
         const ODateModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~ODateModel() override;
 
@@ -100,7 +100,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit ODateControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ODateControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(ODateControl, OBoundControl)
 
 // css::lang::XServiceInfo

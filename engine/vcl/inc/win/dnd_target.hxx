@@ -31,10 +31,7 @@
 
 #include <oleidl.h>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 // The client
 // has to call XComponent::dispose. The thread that calls initialize
@@ -73,7 +70,7 @@ private:
     // this class.
     IDropTarget* m_pDropTarget;
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     // If m_bActive == true then events are fired to XDropTargetListener s,
     // none otherwise. The default value is true.
     bool m_bActive;
@@ -96,7 +93,7 @@ private:
     css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> m_currentDropContext;
 
 public:
-    explicit DropTarget(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit DropTarget(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     virtual ~DropTarget() override;
     DropTarget(DropTarget const&) = delete;
     DropTarget& operator=(DropTarget const&) = delete;

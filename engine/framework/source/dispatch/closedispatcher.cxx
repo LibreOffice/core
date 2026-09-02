@@ -56,7 +56,7 @@ constexpr OUString URL_CLOSEDOC = u".uno:CloseDoc"_ustr;
 constexpr OUString URL_CLOSEWIN = u".uno:CloseWin"_ustr;
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
-CloseDispatcher::CloseDispatcher(css::uno::Reference< css::uno::XComponentContext >        xContext ,
+CloseDispatcher::CloseDispatcher(css::uno::Reference< cpo::uno::XComponentContext >        xContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                                  std::u16string_view                                       sTarget)
     : m_xContext(std::move(xContext))
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
     bool bCloseAllViewsToo;
     EOperation                                                  eOperation;
-    css::uno::Reference< css::uno::XComponentContext >          xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >          xContext;
     css::uno::Reference< css::frame::XFrame >                   xCloseFrame;
     css::uno::Reference< css::frame::XDispatchResultListener >  xListener;
     {
@@ -446,7 +446,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
     // will show the "save/discard/cancel" dialog for the last view only!
     if (bCloseAllOtherViewsToo)
     {
-        css::uno::Reference< css::uno::XComponentContext > xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > xContext;
         {
             SolarMutexGuard g;
             xContext = m_xContext;
@@ -509,7 +509,7 @@ bool CloseDispatcher::implts_closeFrame()
 
 bool CloseDispatcher::implts_establishBackingMode()
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     css::uno::Reference< css::frame::XFrame >          xFrame;
     {
         SolarMutexGuard g;
@@ -540,7 +540,7 @@ bool CloseDispatcher::implts_establishBackingMode()
 
 bool CloseDispatcher::implts_terminateApplication()
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;

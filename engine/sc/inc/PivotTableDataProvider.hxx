@@ -26,7 +26,7 @@
 
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class ScDocument;
 
@@ -175,7 +175,7 @@ private:
 
     bool m_bNeedsUpdate;
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };

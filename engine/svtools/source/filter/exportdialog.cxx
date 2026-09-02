@@ -551,7 +551,7 @@ bool ExportDialog::IsTempExportAvailable() const
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
-    css::uno::Reference< css::uno::XComponentContext > xContext,
+    css::uno::Reference< cpo::uno::XComponentContext > xContext,
     const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
     bool bExportSelection, bool bIsPixelFormat, bool bGraphicsSource,
     const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)

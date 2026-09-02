@@ -26,7 +26,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace pyuno
 {
@@ -131,7 +131,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
     {
         Runtime runtime;
         cpo::uno::Any contextAny = runtime.pyObject2Any(PyTuple_GetItem(args, 0));
-        css::uno::Reference<css::uno::XComponentContext> xContext;
+        css::uno::Reference<cpo::uno::XComponentContext> xContext;
 
         if (!(contextAny >>= xContext) || !xContext.is())
         {

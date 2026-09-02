@@ -33,7 +33,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                      const uno::Reference< uno::XComponentContext >& rContext,
+                      const uno::Reference< cpo::uno::XComponentContext >& rContext,
                       rtl::Reference< SwXTextDocument > xModel ) :
     SwVbaFind_BASE( rParent, rContext ),
     mxModel( std::move(xModel) ),
@@ -51,7 +51,7 @@ SwVbaFind::~SwVbaFind()
 }
 
 uno::Reference< word::XFind > SwVbaFind::GetOrCreateFind(const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                                                         const uno::Reference< uno::XComponentContext >& rContext,
+                                                         const uno::Reference< cpo::uno::XComponentContext >& rContext,
                                                          const rtl::Reference< SwXTextDocument >& xModel,
                                                          const uno::Reference< text::XTextRange >& xTextRange)
 {

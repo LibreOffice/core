@@ -120,7 +120,7 @@ public:
         dp_registry::backend::bundle::NoDescriptionException.
      */
     ExtensionDescription(
-        const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
         std::u16string_view installDir,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
@@ -162,7 +162,7 @@ public:
 };
 
 ExtensionDescription::ExtensionDescription(
-    const Reference<css::uno::XComponentContext>& xContext,
+    const Reference<cpo::uno::XComponentContext>& xContext,
     std::u16string_view installDir,
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
 {
@@ -295,7 +295,7 @@ namespace dp_misc {
 DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL)
 {
     Reference< css::xml::dom::XNode > root;
-    const Reference<css::uno::XComponentContext>& context(
+    const Reference<cpo::uno::XComponentContext>& context(
         comphelper::getProcessComponentContext());
     try {
         root =
@@ -314,7 +314,7 @@ DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL
 }
 
 DescriptionInfoset::DescriptionInfoset(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     css::uno::Reference< css::xml::dom::XNode > const & element):
     m_context(context),
     m_element(element)

@@ -31,7 +31,7 @@ namespace writerfilter::ooxml
 using namespace com::sun::star;
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(uno::Reference<uno::XComponentContext> const & xContext,
+(uno::Reference<cpo::uno::XComponentContext> const & xContext,
  uno::Reference<io::XInputStream> xStorageStream,
  StreamType_t nType, bool bRepairStorage)
 : mxContext(xContext), mxStorageStream(std::move(xStorageStream)), mnStreamType(nType)
@@ -354,7 +354,7 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
     return xResult;
 }
 
-uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
+uno::Reference<cpo::uno::XComponentContext> OOXMLStreamImpl::getContext()
 {
     return mxContext;
 }
@@ -369,7 +369,7 @@ uno::Reference <xml::sax::XFastTokenHandler> OOXMLStreamImpl::getFastTokenHandle
 
 OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
-(const uno::Reference<uno::XComponentContext>& xContext,
+(const uno::Reference<cpo::uno::XComponentContext>& xContext,
  const uno::Reference<io::XInputStream>& rStream,
  bool bRepairStorage)
 {

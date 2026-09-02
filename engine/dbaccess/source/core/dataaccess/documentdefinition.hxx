@@ -80,7 +80,7 @@ public:
 
     ODocumentDefinition(
             const css::uno::Reference< css::uno::XInterface >& _rxContainer,
-            const css::uno::Reference< css::uno::XComponentContext >&,
+            const css::uno::Reference< cpo::uno::XComponentContext >&,
             const TContentPtr& _pImpl,
             bool _bForm
         );
@@ -148,7 +148,7 @@ public:
     bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     static void fillReportData(
-                    const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
                     const css::uno::Reference< css::util::XCloseable >& _rxComponent,
                     const css::uno::Reference< css::sdbc::XConnection >& _rxActiveConnection
                 );
@@ -168,13 +168,13 @@ public:
 
     static OUString GetDocumentServiceFromMediaType(
         const OUString& _rMediaType,
-        const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
         cpo::uno::Sequence< sal_Int8 >& _rClassId
     );
     static OUString GetDocumentServiceFromMediaType(
         const css::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
         const OUString& _rEntityName,
-        const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
         cpo::uno::Sequence< sal_Int8 >& _rClassId
     );
 
@@ -207,7 +207,7 @@ private:
         @throws cpo::uno::RuntimeException
     */
     static void impl_removeFrameFromDesktop_throw(
-                    const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
                     const css::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
 

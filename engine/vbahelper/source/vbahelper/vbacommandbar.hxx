@@ -35,7 +35,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl, bool bIsMenu );
+    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl, bool bIsMenu );
 
     // Attributes
     virtual OUString SAL_CALL getName() override;
@@ -63,7 +63,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     VbaDummyCommandBar(
             const css::uno::Reference< ov::XHelperInterface >& xParent,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             OUString aName );
 
     // Attributes

@@ -136,7 +136,7 @@ ErrCodeMsg ReadThroughComponent(
     uno::Reference<io::XInputStream> const & xInputStream,
     uno::Reference<XComponent> const & xModelComponent,
     const OUString& rStreamName,
-    uno::Reference<uno::XComponentContext> const & rxContext,
+    uno::Reference<cpo::uno::XComponentContext> const & rxContext,
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
@@ -272,7 +272,7 @@ ErrCodeMsg ReadThroughComponent(
     uno::Reference<embed::XStorage> const & xStorage,
     uno::Reference<XComponent> const & xModelComponent,
     const char* pStreamName,
-    uno::Reference<uno::XComponentContext> const & rxContext,
+    uno::Reference<cpo::uno::XComponentContext> const & rxContext,
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
@@ -472,7 +472,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     SAL_INFO_IF(rBaseURL.isEmpty(), "sw.filter", "sw::XMLReader: no base URL");
 
     // Get service factory
-    const uno::Reference< uno::XComponentContext >& xContext =
+    const uno::Reference< cpo::uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
@@ -983,7 +983,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
 size_t XMLReader::GetSectionList( SfxMedium& rMedium,
                                   std::vector<OUString>& rStrings) const
 {
-    const uno::Reference< uno::XComponentContext >& xContext =
+    const uno::Reference< cpo::uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
     uno::Reference < embed::XStorage > xStg2;
     if( ( xStg2 = rMedium.GetStorage() ).is() )

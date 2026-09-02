@@ -55,6 +55,7 @@ module cpo {
     };
     published interface XAdapter;
     published interface XAggregation;
+    published interface XComponentContext;
    };
 };
 module com {
@@ -990,14 +991,11 @@ module com {
      string Variant;
     };
    };
-   module uno {
-    published interface XComponentContext;
-   };
    module lang {
     published interface XMultiComponentFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
      sequence< string > getAvailableServiceNames();
     };
     published service MultiServiceFactory {
@@ -1016,7 +1014,7 @@ module com {
      interface ::com::sun::star::container::XSet;
      interface ::com::sun::star::container::XContentEnumerationAccess;
      [optional] interface ::com::sun::star::beans::XPropertySet;
-     [property, optional] ::com::sun::star::uno::XComponentContext DefaultContext;
+     [property, optional] ::cpo::uno::XComponentContext DefaultContext;
     };
    };
    module registry {
@@ -1085,8 +1083,8 @@ module com {
     };
     published interface XSingleComponentFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
     };
     published interface XSingleServiceFactory {
      interface ::com::sun::star::uno::XInterface;
@@ -1626,13 +1624,6 @@ module com {
      interface ::com::sun::star::task::XInteractionContinuation;
     };
    };
-   module uno {
-    published interface XComponentContext {
-     interface ::com::sun::star::uno::XInterface;
-     any getValueByName([in] string Name);
-     ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
-    };
-   };
    module uri {
     published interface XExternalUriReferenceTranslator {
      interface ::com::sun::star::uno::XInterface;
@@ -1746,6 +1737,11 @@ module cpo {
      interface ::com::sun::star::uno::XInterface;
      void setDelegator([in] ::com::sun::star::uno::XInterface pDelegator);
      any queryAggregation([in] type aType);
+    };
+    published interface XComponentContext {
+     interface ::com::sun::star::uno::XInterface;
+     any getValueByName([in] string Name);
+     ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
     };
     published interface XCurrentContext {
      interface ::com::sun::star::uno::XInterface;

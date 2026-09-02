@@ -25,7 +25,7 @@
 #include <optional>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -37,7 +37,7 @@ class CharacterClassificationImpl final : public cppu::WeakImplHelper
 {
 public:
 
-    CharacterClassificationImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    CharacterClassificationImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~CharacterClassificationImpl() override;
 
     virtual OUString toUpper( const OUString& Text,
@@ -84,7 +84,7 @@ private:
     std::vector<lookupTableItem> lookupTable;
     std::optional<lookupTableItem> cachedItem;
 
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference < XCharacterClassification > xUCI;
 
     /// @throws cpo::uno::RuntimeException

@@ -47,7 +47,7 @@ namespace framework
 {
 
 MenuBarWrapper::MenuBarWrapper(
-    css::uno::Reference< css::uno::XComponentContext > xContext
+    css::uno::Reference< cpo::uno::XComponentContext > xContext
     )
 :    MenuBarWrapper_Base( UIElementType::MENUBAR ),
      m_bRefreshPopupControllerCache( true ),

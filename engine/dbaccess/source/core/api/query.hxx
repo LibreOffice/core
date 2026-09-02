@@ -89,7 +89,7 @@ public:
     OQuery(
             const css::uno::Reference< css::beans::XPropertySet >& _rxCommandDefinition,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< css::uno::XComponentContext >& _xORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
         );
 
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;

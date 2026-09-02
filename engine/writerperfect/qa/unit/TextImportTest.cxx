@@ -11,7 +11,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -30,7 +30,7 @@ namespace uno = css::uno;
 class TextImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit TextImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+    explicit TextImportFilter(const uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

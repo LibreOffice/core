@@ -29,7 +29,7 @@ namespace i18npool {
 
 class IndexEntrySupplier_asian final : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_asian( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_asian( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_asian() override;
 
     OUString getIndexCharacter( const OUString& rIndexEntry,

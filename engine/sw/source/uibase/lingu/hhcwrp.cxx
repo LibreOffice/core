@@ -78,7 +78,7 @@ public:
 
 SwHHCWrapper::SwHHCWrapper(
         SwView& rSwView,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage,
         LanguageType nTargetLanguage,
         const vcl::Font *pTargetFont,

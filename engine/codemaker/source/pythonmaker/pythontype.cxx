@@ -1080,7 +1080,7 @@ void PythonStubGenerator::generateService(const unoidl::SingleInterfaceBasedServ
     {
         // All factory methods will require an XComponentContext, so we resolve its Python type hint once.
         OString contextTypeHint
-            = mapUnoTypeToPythonHint(u"com.sun.star.uno.XComponentContext", *m_typeManager,
+            = mapUnoTypeToPythonHint(u"cpo.uno.XComponentContext", *m_typeManager,
                                      m_moduleName, m_pyClassName, m_imports, m_dependentTypes);
 
         // Iterate through each constructor defined in the IDL. Each constructor
@@ -1183,7 +1183,7 @@ void PythonStubGenerator::generateSingleton(const unoidl::InterfaceBasedSingleto
 
     // It takes the component context as a parameter.
     OString contextTypeHint
-        = mapUnoTypeToPythonHint(u"com.sun.star.uno.XComponentContext", *m_typeManager,
+        = mapUnoTypeToPythonHint(u"cpo.uno.XComponentContext", *m_typeManager,
                                  m_moduleName, m_pyClassName, m_imports, m_dependentTypes);
     m_buffer.append("ctx: ");
     m_buffer.append(contextTypeHint);

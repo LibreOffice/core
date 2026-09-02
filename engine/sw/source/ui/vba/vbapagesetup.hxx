@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XPageSetup.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbapagesetupbase.hxx>
@@ -42,7 +42,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     const rtl::Reference< SwXTextDocument >& xModel,
                     const css::uno::Reference< css::beans::XPropertySet >& xProps );
 

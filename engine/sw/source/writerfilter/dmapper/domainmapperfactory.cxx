@@ -15,7 +15,7 @@
 namespace writerfilter::dmapper
 {
 Stream::Pointer_t
-DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+DomainMapperFactory::createMapper(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                   css::uno::Reference<css::io::XInputStream> const& xInputStream,
                                   rtl::Reference<SwXTextDocument> const& xModel,
                                   bool bRepairStorage, SourceDocumentType eDocumentType,

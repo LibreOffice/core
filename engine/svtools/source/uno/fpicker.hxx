@@ -24,19 +24,19 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace com::sun::star {
     namespace uno { class XInterface; }
 }
 
 css::uno::Reference<css::uno::XInterface> FilePicker_CreateInstance(
-        css::uno::Reference< css::uno::XComponentContext > const & context);
+        css::uno::Reference< cpo::uno::XComponentContext > const & context);
 cpo::uno::Sequence<OUString> FilePicker_getSupportedServiceNames();
 OUString FilePicker_getImplementationName();
 
 css::uno::Reference<css::uno::XInterface> FolderPicker_CreateInstance(
-        css::uno::Reference< css::uno::XComponentContext > const & context);
+        css::uno::Reference< cpo::uno::XComponentContext > const & context);
 cpo::uno::Sequence<OUString> FolderPicker_getSupportedServiceNames();
 OUString FolderPicker_getImplementationName();
 

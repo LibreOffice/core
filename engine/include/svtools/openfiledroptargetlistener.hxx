@@ -31,9 +31,7 @@
 
 namespace com::sun::star::frame { class XFrame; }
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */
@@ -41,7 +39,7 @@ class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datat
 {
     private:
         /// uno service manager to create necessary services
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
         cpo::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
@@ -50,7 +48,7 @@ class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datat
         DataFlavorExVector m_aFormats;
 
     public:
-        UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener( css::uno::Reference< css::uno::XComponentContext > xContext,
+        UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                                     const css::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~OpenFileDropTargetListener() override;
 

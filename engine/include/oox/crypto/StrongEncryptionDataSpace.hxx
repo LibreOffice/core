@@ -21,17 +21,14 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <oox/crypto/CryptoEngine.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::crypto
 {
 class StrongEncryptionDataSpace final
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::packages::XPackageEncryption>
 {
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     std::unique_ptr<CryptoEngine> mCryptoEngine;
 
     css::uno::Reference<css::io::XInputStream>
@@ -39,7 +36,7 @@ class StrongEncryptionDataSpace final
               std::u16string_view sStreamName);
 
 public:
-    StrongEncryptionDataSpace(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    StrongEncryptionDataSpace(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
     // Decryption
 

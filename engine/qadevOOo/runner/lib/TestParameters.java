@@ -24,7 +24,7 @@ import util.PropertyName;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 /**
  * TestParameters describes a parameters (in a form of pairs: name, value) to

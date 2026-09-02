@@ -136,7 +136,7 @@ class SfxDocumentMetaData:
 {
 public:
     explicit SfxDocumentMetaData(
-        css::uno::Reference< css::uno::XComponentContext > const & context);
+        css::uno::Reference< cpo::uno::XComponentContext > const & context);
     SfxDocumentMetaData(const SfxDocumentMetaData&) = delete;
     SfxDocumentMetaData& operator=(const SfxDocumentMetaData&) = delete;
 
@@ -252,8 +252,8 @@ public:
 
 protected:
     virtual ~SfxDocumentMetaData() override {}
-    virtual rtl::Reference<SfxDocumentMetaData> createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
-    const css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    virtual rtl::Reference<SfxDocumentMetaData> createMe( css::uno::Reference< cpo::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
+    const css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /// for notification
     ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> m_NotifyListeners;
@@ -329,9 +329,9 @@ class CompatWriterDocPropsImpl : public CompatWriterDocPropsImpl_BASE
     OUString msCategory;
     OUString msCompany;
 protected:
-    virtual rtl::Reference<SfxDocumentMetaData> createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) override { return new CompatWriterDocPropsImpl( context ); };
+    virtual rtl::Reference<SfxDocumentMetaData> createMe( css::uno::Reference< cpo::uno::XComponentContext > const & context ) override { return new CompatWriterDocPropsImpl( context ); };
 public:
-    explicit CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
+    explicit CompatWriterDocPropsImpl( css::uno::Reference< cpo::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
 
 // XCompatWriterDocPropsImpl
     virtual OUString getManager() override { return msManager; }
@@ -1329,7 +1329,7 @@ void SfxDocumentMetaData::init(
 
 
 SfxDocumentMetaData::SfxDocumentMetaData(
-        css::uno::Reference< css::uno::XComponentContext > const & context)
+        css::uno::Reference< cpo::uno::XComponentContext > const & context)
     : m_xContext(context)
     , m_isInitialized(false)
     , m_isModified(false)
@@ -2323,7 +2323,7 @@ void SfxDocumentMetaData::createUserDefined(std::unique_lock<std::mutex>& g)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 CompatWriterDocPropsImpl_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new CompatWriterDocPropsImpl(context));
@@ -2331,7 +2331,7 @@ CompatWriterDocPropsImpl_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 SfxDocumentMetaData_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocumentMetaData(context));

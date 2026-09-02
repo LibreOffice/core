@@ -46,7 +46,7 @@ namespace dbaccess
         virtual void makeNewStatement( ) override;
         virtual ~OptimisticSet() override;
     public:
-        OptimisticSet(const css::uno::Reference< css::uno::XComponentContext>& _rContext,
+        OptimisticSet(const css::uno::Reference< cpo::uno::XComponentContext>& _rContext,
                       const css::uno::Reference< css::sdbc::XConnection>& i_xConnection,
                       const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                       const ORowSetValueVector& _aParameterValueForCache,

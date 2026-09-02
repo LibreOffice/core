@@ -60,7 +60,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xModel );
+    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xModel );
     virtual ~SwVbaSelection() override;
 
     // Attribute

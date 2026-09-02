@@ -54,7 +54,7 @@ namespace framework
 {
 
 ToolbarLayoutManager::ToolbarLayoutManager(
-    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< cpo::uno::XComponentContext > xContext,
     uno::Reference< ui::XUIElementFactory > xUIElementFactory,
     LayoutManager* pParentLayouter ):
     m_xContext(std::move( xContext)),

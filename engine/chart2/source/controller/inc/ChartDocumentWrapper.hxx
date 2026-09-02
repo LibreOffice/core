@@ -30,7 +30,7 @@
 #include <svx/unopage.hxx>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XRefreshable; }
 namespace chart { class ChartView; }
 
@@ -56,7 +56,7 @@ class ChartDocumentWrapper final : public ChartDocumentWrapper_Base
                            , public ::utl::OEventListenerAdapter
 {
 public:
-    explicit ChartDocumentWrapper( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit ChartDocumentWrapper( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ChartDocumentWrapper() override;
 
     /// XServiceInfo declarations

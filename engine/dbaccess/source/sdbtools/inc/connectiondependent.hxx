@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
@@ -37,7 +37,7 @@ namespace sdbtools
         mutable ::osl::Mutex    m_aMutex;
         cpo::uno::WeakReference< css::sdbc::XConnection >
                                 m_aConnection;
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                 m_aContext;
 
         /** a hard reference to the connection we're working for
@@ -52,14 +52,14 @@ namespace sdbtools
     protected:
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
 
-        const css::uno::Reference< css::uno::XComponentContext >&
+        const css::uno::Reference< cpo::uno::XComponentContext >&
                         getContext() const { return m_aContext; }
 
     protected:
         class EntryGuard;
 
     protected:
-        explicit ConnectionDependentComponent( css::uno::Reference< css::uno::XComponentContext > _xContext )
+        explicit ConnectionDependentComponent( css::uno::Reference< cpo::uno::XComponentContext > _xContext )
             :m_aContext(std::move( _xContext ))
         {
         }

@@ -26,7 +26,7 @@ namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace framework
 {
@@ -77,7 +77,7 @@ class MenuConfiguration final
 public:
         MenuConfiguration(
             // use const when giving a UNO reference by reference
-            css::uno::Reference< css::uno::XComponentContext >  rxContext );
+            css::uno::Reference< cpo::uno::XComponentContext >  rxContext );
 
         ~MenuConfiguration();
 
@@ -94,7 +94,7 @@ public:
                       bool bIsMenuBar );
 
 private:
-        css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 };
 
 }

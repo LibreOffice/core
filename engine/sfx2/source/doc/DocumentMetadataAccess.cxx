@@ -118,7 +118,7 @@ static bool isReservedFile(std::u16string_view i_rPath)
 
 
 uno::Reference<rdf::XURI> createBaseURI(
-    uno::Reference<uno::XComponentContext> const & i_xContext,
+    uno::Reference<cpo::uno::XComponentContext> const & i_xContext,
     uno::Reference<frame::XModel> const & i_xModel,
     OUString const & i_rPkgURI, std::u16string_view i_rSubDocument)
 {
@@ -215,13 +215,13 @@ uno::Reference<rdf::XURI> createBaseURI(
 struct DocumentMetadataAccess_Impl
 {
     // note: these are all initialized in constructor, and loadFromStorage
-    const uno::Reference<uno::XComponentContext> m_xContext;
+    const uno::Reference<cpo::uno::XComponentContext> m_xContext;
     const SfxObjectShell & m_rXmlIdRegistrySupplier;
     uno::Reference<rdf::XURI> m_xBaseURI;
     uno::Reference<rdf::XRepository> m_xRepository;
     uno::Reference<rdf::XNamedGraph> m_xManifest;
     DocumentMetadataAccess_Impl(
-            uno::Reference<uno::XComponentContext> i_xContext,
+            uno::Reference<cpo::uno::XComponentContext> i_xContext,
             SfxObjectShell const & i_rRegistrySupplier)
       : m_xContext(std::move(i_xContext))
       , m_rXmlIdRegistrySupplier(i_rRegistrySupplier)
@@ -233,7 +233,7 @@ struct DocumentMetadataAccess_Impl
 // this is... a hack.
 template<sal_Int16 Constant>
 static uno::Reference<rdf::XURI> const &
-getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
+getURI(uno::Reference< cpo::uno::XComponentContext > const & i_xContext)
 {
     static uno::Reference< rdf::XURI > xURI(
         rdf::URI::createKnown(i_xContext, Constant), uno::UNO_SET_THROW);
@@ -815,7 +815,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
 
 
 DocumentMetadataAccess::DocumentMetadataAccess(
-        uno::Reference< uno::XComponentContext > const & i_xContext,
+        uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
         const SfxObjectShell & i_rRegistrySupplier)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {
@@ -823,7 +823,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
 }
 
 DocumentMetadataAccess::DocumentMetadataAccess(
-        uno::Reference< uno::XComponentContext > const & i_xContext,
+        uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
         const SfxObjectShell & i_rRegistrySupplier,
         OUString const & i_rURI)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))

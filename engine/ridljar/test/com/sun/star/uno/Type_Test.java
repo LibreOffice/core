@@ -50,7 +50,7 @@ public final class Type_Test {
         assertSame(
             "sequence of sequence of XComponentContext",
             XComponentContext[][].class,
-            new Type("[][]com.sun.star.uno.XComponentContext", TypeClass.SEQUENCE).getZClass());
+            new Type("[][]cpo.uno.XComponentContext", TypeClass.SEQUENCE).getZClass());
         assertSame(
             "enum TypeClass", TypeClass.class,
             new Type("cpo.uno.TypeClass", TypeClass.ENUM).getZClass());
@@ -69,7 +69,7 @@ public final class Type_Test {
             new Type("com.sun.star.uno.XInterface", TypeClass.INTERFACE).getZClass());
         assertSame(
             "interface XComponentContext", XComponentContext.class,
-            new Type("com.sun.star.uno.XComponentContext", TypeClass.INTERFACE). getZClass());
+            new Type("cpo.uno.XComponentContext", TypeClass.INTERFACE). getZClass());
 
         assertSame(boolean.class, new Type(boolean.class).getZClass());
         assertSame(boolean.class, new Type(Boolean.class).getZClass());
@@ -83,7 +83,7 @@ public final class Type_Test {
 
     @Test public void testIsSupertypeOf() {
         Type ifc = new Type(com.sun.star.uno.XInterface.class);
-        Type ctx = new Type(com.sun.star.uno.XComponentContext.class);
+        Type ctx = new Type(cpo.uno.XComponentContext.class);
         Type exc = new Type(cpo.uno.RuntimeException.class);
         assertTrue("LONG :> LONG", Type.LONG.isSupertypeOf(Type.LONG));
         assertFalse("not ANY :> XInterface", Type.ANY.isSupertypeOf(ifc));

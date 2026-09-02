@@ -48,7 +48,7 @@ class AddonsToolBarFactory :  public ::cppu::WeakImplHelper< css::lang::XService
                                                               css::ui::XUIElementFactory >
 {
 public:
-    explicit AddonsToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit AddonsToolBarFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     virtual OUString getImplementationName() override
     {
@@ -72,12 +72,12 @@ public:
                                   const css::uno::Reference< css::frame::XFrame >& rFrame );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
 };
 
 AddonsToolBarFactory::AddonsToolBarFactory(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     m_xContext( xContext )
     , m_xModuleManager( ModuleManager::create( xContext ) )
 {
@@ -197,7 +197,7 @@ Reference< XUIElement > AddonsToolBarFactory::createUIElement(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AddonsToolBarFactory(context));

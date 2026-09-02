@@ -43,7 +43,7 @@ const sal_Int32 nBytesCount = 32000;
 
 
 OLESimpleStorage::OLESimpleStorage(
-        css::uno::Reference<css::uno::XComponentContext> xContext,
+        css::uno::Reference<cpo::uno::XComponentContext> xContext,
         cpo::uno::Sequence<cpo::uno::Any> const &aArguments)
 : m_bDisposed( false )
 , m_xContext(std::move( xContext ))
@@ -683,7 +683,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_OLESimpleStorage(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new OLESimpleStorage(context, arguments));

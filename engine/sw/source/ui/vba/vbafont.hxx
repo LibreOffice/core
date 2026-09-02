@@ -28,7 +28,7 @@ class SwVbaFont : public SwVbaFont_BASE
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaFont( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPalette, css::uno::Reference< css::beans::XPropertySet > const & xPropertySet );
+    SwVbaFont( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPalette, css::uno::Reference< css::beans::XPropertySet > const & xPropertySet );
 
     // Attributes
     virtual cpo::uno::Any SAL_CALL getColorIndex() override;

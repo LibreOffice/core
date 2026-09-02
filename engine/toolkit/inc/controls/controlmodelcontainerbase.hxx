@@ -42,7 +42,7 @@
 #include <vector>
 
 namespace com::sun::star::resource { class XStringResourceResolver; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 class StdTabController;
 
 typedef UnoControlModel     ControlModel_Base;
@@ -102,7 +102,7 @@ protected:
     /// @throws cpo::uno::RuntimeException
     void updateUserFormChildren(  const css::uno::Reference< css::container::XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation,  const css::uno::Reference< css::awt::XControlModel >& xTarget );
 public:
-                        ControlModelContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                        ControlModelContainerBase( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );
                         virtual ~ControlModelContainerBase() override;
 
@@ -219,7 +219,7 @@ typedef ::cppu::AggImplInheritanceHelper3   < UnoControlContainer
 class ControlContainerBase : public ControlContainer_IBase
 {
 protected:
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;
     rtl::Reference< StdTabController >                mxTabController;
@@ -237,7 +237,7 @@ protected:
 #endif
 
 public:
-    ControlContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    ControlContainerBase( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~ControlContainerBase() override;
 
     DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, u"toolkit.ControlContainerBase"_ustr )

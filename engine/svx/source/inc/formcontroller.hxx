@@ -128,7 +128,7 @@ namespace svxform
         css::uno::Reference< css::container::XIndexAccess>        m_xModelAsIndex;
         css::uno::Reference< css::script::XEventAttacherManager>  m_xModelAsManager;
         css::uno::Reference< css::uno::XInterface>                m_xParent;
-        css::uno::Reference< css::uno::XComponentContext>         m_xComponentContext;
+        css::uno::Reference< cpo::uno::XComponentContext>         m_xComponentContext;
         // Composer used for checking filter conditions
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >       m_xComposer;
         css::uno::Reference< css::task::XInteractionHandler >             m_xInteractionHandler;
@@ -199,7 +199,7 @@ namespace svxform
         std::vector<rtl::Reference<DispatchInterceptionMultiplexer>>  m_aControlDispatchInterceptors;
 
     public:
-        FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );
+        FormController( const css::uno::Reference< cpo::uno::XComponentContext > & _rxORB );
 
         // returns the window which should be used as parent window for dialogs
         static css::uno::Reference<css::awt::XWindow> getDialogParentWindow(const css::uno::Reference<css::form::runtime::XFormController> & xFormController);

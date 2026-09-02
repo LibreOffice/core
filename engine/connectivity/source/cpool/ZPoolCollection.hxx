@@ -30,7 +30,7 @@
 #include <com/sun/star/sdbc/XConnectionPool.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
@@ -65,7 +65,7 @@ namespace connectivity
         MapDriver2DriverRef                                       m_aDriverProxies;
         ::osl::Mutex                                              m_aMutex;
         OConnectionPools                                          m_aPools;          // the driver pools
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::sdbc::XDriverManager2 >         m_xManager;
         css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
         css::uno::Reference< css::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
@@ -76,7 +76,7 @@ namespace connectivity
         int operator= (const OPoolCollection&) = delete;
 
         explicit OPoolCollection(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     private:
         // some configuration helper methods

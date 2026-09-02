@@ -27,7 +27,7 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -48,7 +48,7 @@ protected:
     rtl::Reference<DynamicResultSetWrapperListener>
                             m_xMyListenerImpl;
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                             m_xContext;
 
     std::mutex              m_aMutex;
@@ -93,7 +93,7 @@ public:
 
     DynamicResultSetWrapper(
         css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
-        , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+        , const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
 
     virtual ~DynamicResultSetWrapper() override;
 

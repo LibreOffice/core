@@ -43,7 +43,7 @@ class Service:
 {
 public:
     explicit Service(
-        css::uno::Reference< css::uno::XComponentContext > context):
+        css::uno::Reference< cpo::uno::XComponentContext > context):
         context_(std::move(context)) {}
 
 private:
@@ -74,7 +74,7 @@ private:
 
     rtl::Reference< RootAccess > getRoot();
 
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
 
     std::mutex mutex_;
     rtl::Reference< RootAccess > root_;
@@ -113,7 +113,7 @@ rtl::Reference< RootAccess > Service::getRoot() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ReadOnlyAccess_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new configmgr::read_only_access::Service(context));
 }

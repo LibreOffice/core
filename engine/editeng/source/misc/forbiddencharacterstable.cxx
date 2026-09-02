@@ -23,14 +23,14 @@
 #include <utility>
 
 SvxForbiddenCharactersTable::SvxForbiddenCharactersTable(
-    css::uno::Reference<css::uno::XComponentContext> xContext)
+    css::uno::Reference<cpo::uno::XComponentContext> xContext)
     : m_xContext(std::move(xContext))
 {
 }
 
 std::shared_ptr<SvxForbiddenCharactersTable>
 SvxForbiddenCharactersTable::makeForbiddenCharactersTable(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
 {
     return std::shared_ptr<SvxForbiddenCharactersTable>(new SvxForbiddenCharactersTable(rxContext));
 }

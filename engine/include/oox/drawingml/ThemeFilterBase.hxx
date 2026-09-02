@@ -21,7 +21,7 @@ class OOX_DLLPUBLIC ThemeFilterBase final : public core::XmlFilterBase
 public:
     typedef rtl::Reference<ThemeFilterBase> Pointer_t;
 
-    explicit ThemeFilterBase(css::uno::Reference<css::uno::XComponentContext> const& rxContext);
+    explicit ThemeFilterBase(css::uno::Reference<cpo::uno::XComponentContext> const& rxContext);
 
     virtual ~ThemeFilterBase() override;
 

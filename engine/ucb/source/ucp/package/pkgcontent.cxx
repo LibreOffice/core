@@ -146,7 +146,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 
 // static ( "virtual" ctor )
 rtl::Reference<Content> Content::create(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
@@ -198,7 +198,7 @@ rtl::Reference<Content> Content::create(
 
 // static ( "virtual" ctor )
 rtl::Reference<Content> Content::create(
-            const uno::Reference< uno::XComponentContext >& rxContext,
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             const ucb::ContentInfo& Info )
@@ -235,7 +235,7 @@ OUString Content::getContentType(
 
 
 Content::Content(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         uno::Reference< container::XHierarchicalNameAccess > Package,
@@ -253,7 +253,7 @@ Content::Content(
 
 
 Content::Content(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         uno::Reference< container::XHierarchicalNameAccess > Package,
@@ -685,7 +685,7 @@ OUString Content::getParentURL()
 
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-                const uno::Reference< uno::XComponentContext >& rxContext,
+                const uno::Reference< cpo::uno::XComponentContext >& rxContext,
                 const cpo::uno::Sequence< beans::Property >& rProperties,
                 ContentProvider* pProvider,
                 const OUString& rContentId )
@@ -717,7 +717,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const cpo::uno::Sequence< beans::Property >& rProperties,
         const ContentProperties& rData,
         const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >&

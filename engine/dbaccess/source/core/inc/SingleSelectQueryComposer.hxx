@@ -92,7 +92,7 @@ namespace dbaccess
         css::uno::Reference< css::container::XNameAccess>         m_xConnectionTables;
         css::uno::Reference< css::container::XNameAccess>         m_xConnectionQueries;
         css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-        css::uno::Reference< css::uno::XComponentContext>         m_aContext;
+        css::uno::Reference< cpo::uno::XComponentContext>         m_aContext;
         css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
 
         std::vector<std::unique_ptr<OPrivateColumns>>         m_aCurrentColumns;
@@ -205,7 +205,7 @@ namespace dbaccess
 
         OSingleSelectQueryComposer( const css::uno::Reference< css::container::XNameAccess>& _xTableSupplier,
                         const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                        const css::uno::Reference< css::uno::XComponentContext>& _rContext);
+                        const css::uno::Reference< cpo::uno::XComponentContext>& _rContext);
 
 
         void disposing() override;

@@ -25,7 +25,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -69,7 +69,7 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
     /* member */
     private:
         /// reference to global service manager to create new services
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
         cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
@@ -80,7 +80,7 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
     /* interface */
     public:
 
-        DispatchProvider( css::uno::Reference< css::uno::XComponentContext >      xContext ,
+        DispatchProvider( css::uno::Reference< cpo::uno::XComponentContext >      xContext ,
                           const css::uno::Reference< css::frame::XFrame >&        xFrame   );
 
         virtual css::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL             ,

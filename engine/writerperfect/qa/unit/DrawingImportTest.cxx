@@ -13,7 +13,7 @@
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -32,7 +32,7 @@ namespace uno = css::uno;
 class DrawingImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    explicit DrawingImportFilter(const uno::Reference<uno::XComponentContext>& rxContext)
+    explicit DrawingImportFilter(const uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

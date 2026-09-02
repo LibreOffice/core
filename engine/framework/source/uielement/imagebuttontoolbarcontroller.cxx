@@ -21,7 +21,7 @@
 
 #include <framework/addonsoptions.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>

@@ -1398,7 +1398,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf69500)
     static constexpr OUString sToolBarName = u"private:resource/toolbar/custom_toolbar_1"_ustr;
 
     auto getUIConfigManager = [this]() {
-        css::uno::Reference<css::uno::XComponentContext> xContext
+        css::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xModel.is());
@@ -1442,7 +1442,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_images)
     createSwDoc();
 
     auto getUIConfigManager = [this]() {
-        css::uno::Reference<css::uno::XComponentContext> xContext
+        css::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xModel.is());
@@ -1491,7 +1491,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_accelerators)
     createSwDoc();
 
     auto getUIConfigManager = [this]() {
-        css::uno::Reference<css::uno::XComponentContext> xContext
+        css::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xModel.is());

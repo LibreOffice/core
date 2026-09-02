@@ -41,7 +41,7 @@
 
 using namespace framework;
 
-TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponentContext >  xContext)
+TaskCreatorService::TaskCreatorService(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext         (std::move(xContext                     ))
 {
 }
@@ -286,7 +286,7 @@ OUString TaskCreatorService::impl_filterNames( const OUString& sName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_TaskCreator_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new TaskCreatorService(context));

@@ -28,7 +28,7 @@ class TOOLKIT_DLLPUBLIC UnoControlContainerModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper&                                      getInfoHelper() override;
 
 public:
-                        UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+                        UnoControlContainerModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
                         UnoControlContainerModel( const UnoControlContainerModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlContainerModel( *this ); }

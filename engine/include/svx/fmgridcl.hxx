@@ -101,7 +101,7 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmGridControl : public
 
 public:
     FmGridControl(
-        const css::uno::Reference< css::uno::XComponentContext >&,
+        const css::uno::Reference< cpo::uno::XComponentContext >&,
         vcl::Window* pParent,
         FmXGridPeer* _pPeer,
         WinBits nBits);

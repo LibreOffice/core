@@ -40,7 +40,7 @@
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
-DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext >& xContext )
+DocxExportFilter::DocxExportFilter( const uno::Reference< cpo::uno::XComponentContext >& xContext )
     : oox::core::XmlFilterBase( xContext )
 {
 }
@@ -154,7 +154,7 @@ OUString DocxExportFilter::getImplementationName()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Writer_DocxExport_get_implementation(uno::XComponentContext* pCtx,
+com_sun_star_comp_Writer_DocxExport_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new DocxExportFilter(pCtx));

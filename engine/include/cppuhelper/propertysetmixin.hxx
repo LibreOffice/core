@@ -37,11 +37,9 @@ namespace com { namespace sun { namespace star {
         class XVetoableChangeListener;
         struct PropertyValue;
     }
-    namespace uno {
-        class XComponentContext;
-    }
 } } }
 namespace cpo::uno { class Type; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace cppu {
 
@@ -313,7 +311,7 @@ private:
     void operator=( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
 
     PropertySetMixinImpl(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         Implements implements,
         cpo::uno::Sequence< rtl::OUString > const & absentOptional,
         cpo::uno::Type const & type);
@@ -382,7 +380,7 @@ protected:
        empty.
     */
     PropertySetMixin(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         Implements implements,
         cpo::uno::Sequence< rtl::OUString > const & absentOptional):
         PropertySetMixinImpl(

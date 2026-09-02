@@ -40,7 +40,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                     rtl::Reference< SwXTextDocument > xDocument,
                     css::uno::Reference< css::text::XTextRange > xTextRange );
     virtual ~SwVbaParagraph() override;
@@ -66,7 +66,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaParagraphs( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                     const rtl::Reference< SwXTextDocument >& xDocument );
 
     // XEnumerationAccess

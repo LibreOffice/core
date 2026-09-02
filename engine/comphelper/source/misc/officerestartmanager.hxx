@@ -22,7 +22,7 @@
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <mutex>
 #include <cppuhelper/implbase.hxx>
@@ -36,13 +36,13 @@ class OOfficeRestartManager : public ::cppu::WeakImplHelper< css::task::XRestart
                                                            , css::lang::XServiceInfo >
 {
     std::mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     bool m_bOfficeInitialized;
     bool m_bRestartRequested;
 
 public:
-    explicit OOfficeRestartManager( css::uno::Reference< css::uno::XComponentContext > xContext )
+    explicit OOfficeRestartManager( css::uno::Reference< cpo::uno::XComponentContext > xContext )
     : m_xContext(std::move( xContext ))
     , m_bOfficeInitialized( false )
     , m_bRestartRequested( false )

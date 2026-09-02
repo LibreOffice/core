@@ -25,7 +25,7 @@
 
 #include <map>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XURLTransformer; }
 
 namespace chart
@@ -44,7 +44,7 @@ typedef ::comphelper::WeakComponentImplHelper<
 class CommandDispatch : public impl::CommandDispatch_Base
 {
 public:
-    explicit CommandDispatch( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit CommandDispatch( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~CommandDispatch() override;
 
     // late initialisation, especially for adding as listener
@@ -114,7 +114,7 @@ protected:
         const css::lang::EventObject& Source ) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
     typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener> >

@@ -25,7 +25,7 @@
 
 #include <basic/basmgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
@@ -157,7 +157,7 @@ bool SfxBasicManagerHolder::ImgVersion12PsswdBinaryLimitExceeded( std::vector< O
 // Service for application library container
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
@@ -169,7 +169,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
 // Service for application library container
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();

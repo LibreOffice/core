@@ -898,7 +898,7 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
 
 bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
 {
-    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(xContext);
     cpo::uno::Sequence<OUString> aInternalTemplateDirs;
     cpo::uno::Any aAny = xPathSettings->getPropertyValue(u"Template_internal"_ustr);

@@ -1135,7 +1135,7 @@ Reference < i18n::XBreakIterator > const & EnhancedCustomShapeFontWork::GetBreak
 {
     if ( !mxBreakIterator.is() )
     {
-        const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         mxBreakIterator = i18n::BreakIterator::create(xContext);
     }
     return mxBreakIterator;

@@ -26,7 +26,7 @@
 
 namespace filter::config{
 
-FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
 {
     BaseContainer::init(u"com.sun.star.comp.filter.config.FrameLoaderFactory"_ustr  ,
@@ -93,7 +93,7 @@ cpo::uno::Sequence< OUString > FrameLoaderFactory::getAvailableServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_FrameLoaderFactory_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::FrameLoaderFactory(context));
 }

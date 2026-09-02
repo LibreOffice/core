@@ -23,7 +23,7 @@ public:
     }
 
     ScVbaFileDialogSelectedItems( const css::uno::Reference< ov::XHelperInterface >& xParent,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             std::vector<OUString>&& sItems);
 
     // XEnumerationAccess

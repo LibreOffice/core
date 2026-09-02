@@ -32,7 +32,7 @@
 #include <vcl/weld.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 
 namespace svt
@@ -67,10 +67,10 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
         css::uno::Reference<css::awt::XWindow>           m_xParent;  /// parent window
         // </properties>
 
-        css::uno::Reference<css::uno::XComponentContext> m_aContext;
+        css::uno::Reference<cpo::uno::XComponentContext> m_aContext;
 
     protected:
-        OGenericUnoDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        OGenericUnoDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         virtual ~OGenericUnoDialog() override;
 
     public:

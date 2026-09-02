@@ -24,7 +24,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/securityoptions.hxx>
@@ -3813,7 +3813,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
 
             if (sCryptoType.getLength())
             {
-                const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+                const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
                 cpo::uno::Sequence<cpo::uno::Any> aArguments{
                     cpo::uno::Any(beans::NamedValue(u"Binary"_ustr, cpo::uno::Any(true))) };
                 xPackageEncryption.set(

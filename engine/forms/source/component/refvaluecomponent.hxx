@@ -48,13 +48,13 @@ namespace frm
 
     protected:
         OReferenceValueComponent(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault
         );
         OReferenceValueComponent(
             const OReferenceValueComponent* _pOriginal,
-            const   css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const   css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
 
         virtual ~OReferenceValueComponent() override;

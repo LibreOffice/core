@@ -70,7 +70,7 @@ protected:
     virtual ~ODBFilter()  noexcept override;
 public:
 
-    explicit ODBFilter( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+    explicit ODBFilter( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
 
     // XFilter
     virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;

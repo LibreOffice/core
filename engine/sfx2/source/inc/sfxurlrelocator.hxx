@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_SFXURLRELOCATOR_HXX
 #define INCLUDED_SFX2_SOURCE_INC_SFXURLRELOCATOR_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
@@ -30,7 +30,7 @@
 class SfxURLRelocator_Impl
 {
     std::mutex maMutex;
-    css::uno::Reference< css::uno::XComponentContext >               mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >               mxContext;
     css::uno::Reference< css::util::XOfficeInstallationDirectories > mxOfficeInstDirs;
     css::uno::Reference< css::util::XMacroExpander >                 mxMacroExpander;
 
@@ -40,7 +40,7 @@ public:
     void                        makeRelocatableURL( OUString & rURL );
     void                        makeAbsoluteURL( OUString & rURL );
 
-    SfxURLRelocator_Impl( css::uno::Reference< css::uno::XComponentContext > xContext );
+    SfxURLRelocator_Impl( css::uno::Reference< cpo::uno::XComponentContext > xContext );
     ~SfxURLRelocator_Impl();
 
 private:

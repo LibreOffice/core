@@ -21,7 +21,7 @@
 #include "gridcontrol.hxx"
 #include "grideventforwarder.hxx"
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
@@ -70,7 +70,7 @@ namespace
 }
 
 
-UnoGridModel::UnoGridModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+UnoGridModel::UnoGridModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -446,7 +446,7 @@ void UnoGridControl::removeSelectionListener(const css::uno::Reference< css::awt
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_GridControl_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoGridControl());
@@ -454,7 +454,7 @@ stardiv_Toolkit_GridControl_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_GridControlModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoGridModel(context));

@@ -53,7 +53,7 @@
 using namespace ::com::sun::star;
 
 
-OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< uno::XComponentContext > xContext,
+OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< cpo::uno::XComponentContext > xContext,
                                                 const cpo::uno::Sequence< beans::NamedValue >& aObjProps )
 : m_bReadOnly( false )
 , m_bDisposed( false )
@@ -81,7 +81,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< uno::XComponentCon
 
 
 OCommonEmbeddedObject::OCommonEmbeddedObject(
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         const cpo::uno::Sequence< beans::NamedValue >& aObjProps,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const cpo::uno::Sequence< beans::PropertyValue >& aObjectDescr )

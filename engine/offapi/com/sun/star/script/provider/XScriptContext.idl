@@ -69,9 +69,9 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
         other uno components
 
         @returns
-          com::sun::star::uno::XComponentContext interface
+          cpo::uno::XComponentContext interface
     */
-    ::com::sun::star::uno::XComponentContext getComponentContext();
+    ::cpo::uno::XComponentContext getComponentContext();
 
 
 };

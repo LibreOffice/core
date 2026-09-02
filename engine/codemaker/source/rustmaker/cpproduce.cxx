@@ -2569,7 +2569,7 @@ void CppProducer::generateServiceHeader(
     std::string includePath(u2b(interfaceType));
     std::replace(includePath.begin(), includePath.end(), '.', '/');
     file.beginLine().append("#include <").append(includePath).append(".hpp>").endLine();
-    file.beginLine().append("#include <com/sun/star/uno/XComponentContext.hpp>").endLine();
+    file.beginLine().append("#include <cpo/uno/XComponentContext.hpp>").endLine();
     file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
     file.endLine();
 
@@ -2641,8 +2641,8 @@ void CppProducer::generateServiceSource(
         .endLine()
         .beginBlock()
         .beginLine()
-        .append("Reference<com::sun::star::uno::XComponentContext>* ctx = "
-                "static_cast<Reference<com::sun::star::uno::XComponentContext>*>(context_handle);")
+        .append("Reference<cpo::uno::XComponentContext>* ctx = "
+                "static_cast<Reference<cpo::uno::XComponentContext>*>(context_handle);")
         .endLine()
         .beginLine()
         .append("if (!ctx || !ctx->is()) return nullptr;")

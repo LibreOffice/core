@@ -39,10 +39,10 @@
 
 #include <jni.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 jobjectArray jvmaccess::ClassPath::translateToUrls(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     JNIEnv * environment, std::u16string_view classPath)
 {
     assert(context.is());

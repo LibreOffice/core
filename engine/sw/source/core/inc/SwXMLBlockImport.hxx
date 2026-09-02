@@ -38,7 +38,7 @@ private:
 
 public:
     SwXMLBlockListImport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks );
 
     SwXMLTextBlocks& getBlockList()
@@ -60,7 +60,7 @@ public:
     bool m_bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString &rNewText, bool bNewTextOnly );
 
     virtual ~SwXMLTextBlockImport()

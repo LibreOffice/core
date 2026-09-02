@@ -40,7 +40,7 @@ typedef InheritedHelperInterfaceImpl< Ifc... > BaseClass;
     ScVbaPalette m_Palette;
 public:
     TitleImpl(  const css::uno::Reference< ov::XHelperInterface >& xParent,
-                const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                 css::uno::Reference< css::drawing::XShape >  _xTitleShape )
         : BaseClass( xParent, xContext ),
         xTitleShape(std::move( _xTitleShape )),

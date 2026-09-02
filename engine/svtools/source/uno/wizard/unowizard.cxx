@@ -25,7 +25,7 @@
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
@@ -53,7 +53,7 @@ namespace {
     using cpo::uno::Sequence;
     using css::ui::dialogs::XWizard;
     using css::beans::XPropertySetInfo;
-    using css::uno::XComponentContext;
+    using cpo::uno::XComponentContext;
     using css::beans::Property;
     using css::lang::IllegalArgumentException;
     using css::ucb::AlreadyInitializedException;
@@ -89,7 +89,7 @@ namespace {
                     , public Wizard_PBase
     {
     public:
-        explicit Wizard( const css::uno::Reference< css::uno::XComponentContext >& i_rContext );
+        explicit Wizard( const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext );
 
         // lang::XServiceInfo
         virtual OUString getImplementationName() override;
@@ -441,7 +441,7 @@ namespace {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svtools_uno_Wizard_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new Wizard(context));

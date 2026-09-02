@@ -33,7 +33,7 @@ namespace pcr
                                     ,public MasterDetailLinkDialog_PBase
     {
     public:
-        explicit MasterDetailLinkDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        explicit MasterDetailLinkDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     private:
         // XTypeProvider

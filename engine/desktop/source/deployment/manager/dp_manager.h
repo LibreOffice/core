@@ -39,7 +39,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
 class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     OUString m_context;
     OUString m_registrationData;
     OUString m_registrationData_expanded;
@@ -118,7 +118,7 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 
     virtual ~PackageManagerImpl() override;
     PackageManagerImpl(
-        css::uno::Reference<css::uno::XComponentContext> xComponentContext, OUString context )
+        css::uno::Reference<cpo::uno::XComponentContext> xComponentContext, OUString context )
         : t_pm_helper( m_aMutex ),
           m_xComponentContext(std::move( xComponentContext )),
           m_context(std::move( context )),
@@ -127,7 +127,7 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 
 public:
     static css::uno::Reference<css::deployment::XPackageManager> create(
-        css::uno::Reference<css::uno::XComponentContext>
+        css::uno::Reference<cpo::uno::XComponentContext>
         const & xComponentContext, OUString const & context );
 
     // XComponent

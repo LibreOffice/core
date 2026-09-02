@@ -157,7 +157,7 @@ struct VbaApplicationBase_Impl final
     VbaApplicationBase_Impl() : mbVisible( true ) {}
 };
 
-VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentContext >& xContext )
+VbaApplicationBase::VbaApplicationBase( const uno::Reference< cpo::uno::XComponentContext >& xContext )
                     : ApplicationBase_BASE( uno::Reference< XHelperInterface >(), xContext )
                     , m_pImpl( new VbaApplicationBase_Impl )
 {

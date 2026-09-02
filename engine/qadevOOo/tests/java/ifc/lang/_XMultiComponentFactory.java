@@ -21,7 +21,7 @@ package ifc.lang;
 import lib.MultiMethodTest;
 
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 
 /**

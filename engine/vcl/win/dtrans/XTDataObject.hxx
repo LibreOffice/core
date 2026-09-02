@@ -58,7 +58,7 @@ class CStgTransferHelper;
 class CXTDataObject : public IDataObject
 {
 public:
-    CXTDataObject( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    CXTDataObject( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                    const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable );
     virtual ~CXTDataObject();
 
@@ -99,7 +99,7 @@ private:
 private:
     LONG m_nRefCnt;
     css::uno::Reference< css::datatransfer::XTransferable >      m_XTransferable;
-    css::uno::Reference< css::uno::XComponentContext>            m_XComponentContext;
+    css::uno::Reference< cpo::uno::XComponentContext>            m_XComponentContext;
     CFormatEtcContainer                                          m_FormatEtcContainer;
     bool                                                         m_bFormatEtcContainerInitialized;
     CDataFormatTranslator                                        m_DataFormatTranslator;

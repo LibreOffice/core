@@ -23,7 +23,7 @@
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace framework{
 
@@ -43,7 +43,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
     private:
 
         /** @short  reference to a uno service manager. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     // native interface
     public:
@@ -54,7 +54,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
                     reference to the uno service manager, which created this instance.
                     Can be used later to create own needed uno resources on demand.
          */
-        ShellJob(css::uno::Reference< css::uno::XComponentContext > xContext);
+        ShellJob(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         /** @short  does nothing real ...
 

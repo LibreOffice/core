@@ -27,7 +27,7 @@
 class TypeDetectionExporter
 {
 public:
-    explicit TypeDetectionExporter( css::uno::Reference< css::uno::XComponentContext > const & mxContext );
+    explicit TypeDetectionExporter( css::uno::Reference< cpo::uno::XComponentContext > const & mxContext );
 
     void doExport(const css::uno::Reference < css::io::XOutputStream >& xOS,  const std::vector<filter_info_impl*>& rFilters );
 
@@ -35,7 +35,7 @@ private:
     static void addProperty( const css::uno::Reference< css::xml::sax::XWriter >& xWriter, const OUString& rName, const OUString& rValue );
     static void addLocaleProperty( const css::uno::Reference< css::xml::sax::XWriter >& xWriter, const OUString& rName, const OUString& rValue );
 
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

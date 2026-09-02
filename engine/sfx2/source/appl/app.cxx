@@ -409,7 +409,7 @@ bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 #if !HAVE_FEATURE_SCRIPTING
     (void) rScriptURL;
 #else
-    const css::uno::Reference< css::uno::XComponentContext >& xContext =
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext =
             ::comphelper::getProcessComponentContext();
 
     css::uno::Reference< css::uri::XUriReferenceFactory >

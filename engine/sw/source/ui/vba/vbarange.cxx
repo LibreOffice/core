@@ -46,7 +46,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                        const uno::Reference< uno::XComponentContext >& rContext,
+                        const uno::Reference< cpo::uno::XComponentContext >& rContext,
                         rtl::Reference< SwXTextDocument > xTextDocument,
                         const uno::Reference< text::XTextRange >& rStart )
 : SwVbaRange_BASE( rParent, rContext ),
@@ -57,7 +57,7 @@ SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rPar
 }
 
 SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                        const uno::Reference< uno::XComponentContext >& rContext,
+                        const uno::Reference< cpo::uno::XComponentContext >& rContext,
                         rtl::Reference< SwXTextDocument > xTextDocument,
                         const uno::Reference< text::XTextRange >& rStart,
                         const uno::Reference< text::XTextRange >& rEnd )
@@ -68,7 +68,7 @@ SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rPar
 }
 
 SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                        const uno::Reference< uno::XComponentContext >& rContext,
+                        const uno::Reference< cpo::uno::XComponentContext >& rContext,
                         rtl::Reference< SwXTextDocument > xTextDocument,
                         const uno::Reference< text::XTextRange >& rStart,
                         const uno::Reference< text::XTextRange >& rEnd,

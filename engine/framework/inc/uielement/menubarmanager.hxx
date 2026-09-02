@@ -66,7 +66,7 @@ class MenuBarManager final :
 {
     public:
         MenuBarManager(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::frame::XFrame >& rFrame,
             const css::uno::Reference< css::util::XURLTransformer >& _xURLTransformer,
             const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
@@ -184,7 +184,7 @@ class MenuBarManager final :
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
-        css::uno::Reference< css::uno::XComponentContext >           m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >           m_xContext;
         css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
         css::uno::Reference< css::container::XIndexAccess >          m_xDeferredItemContainer;
         OUString                                                     m_sIconTheme;

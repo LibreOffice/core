@@ -43,7 +43,7 @@ constexpr OUString USER_URI =
 
 
 ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
-    const uno::Reference< uno::XComponentContext >& xContext)
+    const uno::Reference< cpo::uno::XComponentContext >& xContext)
 {
     try
     {
@@ -242,7 +242,7 @@ ScriptingFrameworkURIHelper::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_ScriptingFrameworkURIHelper_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScriptingFrameworkURIHelper(context));
 }

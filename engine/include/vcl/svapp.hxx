@@ -73,9 +73,7 @@ struct ImplSVEvent;
 struct ConvertData;
 namespace basegfx { class SystemDependentDataManager; }
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::ui::dialogs {
     class XFilePicker2;
     class XFolderPicker2;
@@ -1260,7 +1258,7 @@ public:
      @returns File picker if available, otherwise an empty reference.
     */
     static css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+        createFilePicker( const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     /** Create a platform specific folder picker, if one is available, otherwise return an
      empty reference
@@ -1270,7 +1268,7 @@ public:
      @returns Folder picker if available, otherwise an empty reference.
     */
     static css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
-        createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+        createFolderPicker( const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     /** Returns true, if the VCL plugin should run on the system event loop.
      *

@@ -36,8 +36,8 @@ namespace com::sun::star {
     namespace awt { class XWindow; }
     namespace frame { class XController; }
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -51,12 +51,12 @@ public:
     /// @throws cpo::uno::RuntimeException
     VbaWindowBase(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws cpo::uno::RuntimeException
     VbaWindowBase(
         cpo::uno::Sequence< cpo::uno::Any > const& aArgs,
-        css::uno::Reference< css::uno::XComponentContext > const& xContext );
+        css::uno::Reference< cpo::uno::XComponentContext > const& xContext );
 
     // XWindowBase
     virtual sal_Int32 SAL_CALL getHeight() override ;

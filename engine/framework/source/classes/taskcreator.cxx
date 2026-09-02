@@ -41,7 +41,7 @@ namespace framework{
     @param      xContext
                     points to the valid uno service manager
 *//*-*****************************************************************************************************/
-TaskCreator::TaskCreator( css::uno::Reference< css::uno::XComponentContext > xContext )
+TaskCreator::TaskCreator( css::uno::Reference< cpo::uno::XComponentContext > xContext )
     : m_xContext    (std::move( xContext ))
 {
 }

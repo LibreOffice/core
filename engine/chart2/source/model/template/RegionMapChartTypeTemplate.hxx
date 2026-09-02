@@ -18,7 +18,7 @@ namespace chart
 class RegionMapChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    RegionMapChartTypeTemplate(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    RegionMapChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~RegionMapChartTypeTemplate() override;
 

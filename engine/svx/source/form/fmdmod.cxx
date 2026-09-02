@@ -26,7 +26,7 @@
 #include <svx/unoshape.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::svxform;
 
@@ -37,7 +37,7 @@ using namespace ::svxform;
 
     if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {
-        const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+        const css::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         xRet = xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, xContext);
     }
     else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )

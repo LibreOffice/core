@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -134,7 +134,7 @@ cpo::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
 } // end of unnamed namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_libreoffice_comp_Math_sidebar_SmPanelFactory(css::uno::XComponentContext*,
+org_libreoffice_comp_Math_sidebar_SmPanelFactory(cpo::uno::XComponentContext*,
                                                  cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmPanelFactory);

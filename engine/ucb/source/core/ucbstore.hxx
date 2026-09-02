@@ -26,7 +26,7 @@
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySetInfoChangeNotifier.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -47,12 +47,12 @@ using UcbStore_Base = comphelper::WeakComponentImplHelper <
 
 class UcbStore : public UcbStore_Base
 {
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     cpo::uno::Sequence< cpo::uno::Any >                   m_aInitArgs;
     rtl::Reference< PropertySetRegistry >                 m_xTheRegistry;
 
 public:
-    explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit UcbStore( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~UcbStore() override;
 
     // XServiceInfo
@@ -82,7 +82,7 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
 {
     friend class PersistentPropertySet;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     const cpo::uno::Sequence< cpo::uno::Any >             m_aInitArgs;
     PropertySetMap_Impl               m_aPropSets;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
@@ -104,7 +104,7 @@ private:
 
 public:
     PropertySetRegistry(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const cpo::uno::Sequence< cpo::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry() override;
 

@@ -92,7 +92,7 @@ class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
     SvxXMLXTextImportComponent(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         uno::Reference< XText > xText );
 
     virtual SvXMLImportContext* CreateFastContext(sal_Int32 nElement,
@@ -119,7 +119,7 @@ SvXMLImportContext *SvxXMLXTextImportComponent::CreateFastContext(
 }
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     uno::Reference< XText > xText )
 :   SvXMLImport(xContext, u""_ustr),
     mxText(std::move( xText ))
@@ -163,7 +163,7 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
     {
         do
         {
-            const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference<cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = new utl::OInputStreamWrapper(rStream);

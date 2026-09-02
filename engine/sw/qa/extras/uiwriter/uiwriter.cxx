@@ -1350,7 +1350,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionBlank)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwView* pView = getSwDocShell()->GetView();
-    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
@@ -1374,7 +1374,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionNonChineseText)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwView* pView = getSwDocShell()->GetView();
-    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, NON_CHINESE_CONTENT);
@@ -1399,7 +1399,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionTraditionalToSimplifie
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwView* pView = getSwDocShell()->GetView();
-    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(CHINESE_TRADITIONAL_CONTENT));
@@ -1424,7 +1424,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionSimplifiedToTraditiona
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     SwView* pView = getSwDocShell()->GetView();
-    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(CHINESE_SIMPLIFIED_CONTENT));

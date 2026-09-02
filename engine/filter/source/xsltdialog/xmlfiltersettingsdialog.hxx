@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 #include <vcl/locktoplevels.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -30,7 +30,7 @@ class XMLFilterSettingsDialog : public weld::GenericDialogController
 {
 public:
     XMLFilterSettingsDialog(weld::Window* pParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterSettingsDialog() override;
 
     DECL_LINK(ClickHdl_Impl, weld::Button&, void );
@@ -70,7 +70,7 @@ private:
     static OUString getEntryString( const filter_info_impl* pInfo );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >    mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::container::XNameContainer > mxFilterContainer;
     css::uno::Reference< css::container::XNameContainer > mxTypeDetection;
     css::uno::Reference< css::container::XNameContainer > mxExtendedTypeDetection;

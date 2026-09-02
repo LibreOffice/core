@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weak.hxx>
@@ -45,7 +45,7 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
                                 public ::cppu::OWeakObject
 {
     public:
-        ButtonToolbarController( css::uno::Reference< css::uno::XComponentContext > xContext,
+        ButtonToolbarController( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                                  ToolBox* pToolBar,
                                  OUString aCommand );
         virtual ~ButtonToolbarController() override;
@@ -84,7 +84,7 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
                                                                m_bDisposed : 1;
         OUString                                               m_aCommandURL;
         css::uno::Reference< css::frame::XFrame >              m_xFrame;
-        css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
         css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
         VclPtr<ToolBox>                                        m_pToolbar;
 };

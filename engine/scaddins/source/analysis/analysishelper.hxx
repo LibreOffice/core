@@ -29,7 +29,7 @@
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter2; }
 
 namespace sca::analysis {
@@ -822,7 +822,7 @@ private:
 
 public:
     explicit                    ScaAnyConverter(
-                                    const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
                                 ~ScaAnyConverter();
 
                                 /// Initializing with the current locale

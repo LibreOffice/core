@@ -1893,7 +1893,7 @@ void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*Proper
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_ZipPackage_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ZipPackage(context));
 }

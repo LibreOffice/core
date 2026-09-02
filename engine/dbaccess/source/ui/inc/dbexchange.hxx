@@ -25,9 +25,7 @@
 
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace dbaui
 {
@@ -48,7 +46,7 @@ namespace dbaui
             const css::uno::Reference< css::beans::XPropertySet >& i_rAliveForm,
             const cpo::uno::Sequence< cpo::uno::Any >& i_rSelectedRows,
             const bool i_bBookmarkSelection,
-            const css::uno::Reference< css::uno::XComponentContext >& i_rORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& i_rORB
         );
 
         void Update(
@@ -57,7 +55,7 @@ namespace dbaui
             const OUString&  _rCommand,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
         void Update(
@@ -65,7 +63,7 @@ namespace dbaui
             const sal_Int32         _nCommandType,
             const OUString&  _rCommand,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
         // XEventListener

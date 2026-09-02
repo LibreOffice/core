@@ -79,7 +79,7 @@ getFirstParagraphProperties(uno::Reference<text::XText> const& xText)
 DataTableView::DataTableView(
     rtl::Reference<::chart::ChartModel> const& xChartModel,
     rtl::Reference<DataTable> const& rDataTableModel,
-    css::uno::Reference<css::uno::XComponentContext> const& rComponentContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext,
     bool bAlignAxisValuesWithColumns)
     : m_xChartModel(xChartModel)
     , m_xDataTableModel(rDataTableModel)

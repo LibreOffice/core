@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <string_view>
@@ -41,7 +41,7 @@ namespace svxform
     class FormControlFactory
     {
     public:
-        FormControlFactory( const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+        FormControlFactory( const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
         FormControlFactory();
         ~FormControlFactory();
 
@@ -91,7 +91,7 @@ namespace svxform
                 );
 
     private:
-        css::uno::Reference<css::uno::XComponentContext>  m_xContext;
+        css::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
     };
 
 

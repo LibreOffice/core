@@ -27,7 +27,7 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
 
@@ -68,7 +68,7 @@ class PresetHandler
     private:
 
         /** @short  can be used to create on needed uno resources. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** @short  knows the type of provided configuration.
 
@@ -126,7 +126,7 @@ class PresetHandler
                     points to a uno service manager, which is used internally
                     to create own needed uno resources.
          */
-        PresetHandler(css::uno::Reference< css::uno::XComponentContext >  xContext);
+        PresetHandler(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
         /** @short  copy ctor */
         PresetHandler(const PresetHandler& rCopy);

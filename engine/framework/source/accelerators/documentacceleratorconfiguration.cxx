@@ -57,7 +57,7 @@ public:
                 reference to a uno service manager, which is used internally.
      */
     DocumentAcceleratorConfiguration(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const cpo::uno::Sequence< cpo::uno::Any >& lArguments);
 
     virtual ~DocumentAcceleratorConfiguration() override;
@@ -87,7 +87,7 @@ public:
 };
 
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
 {
@@ -180,7 +180,7 @@ void DocumentAcceleratorConfiguration::fillCache()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     rtl::Reference<DocumentAcceleratorConfiguration> inst = new DocumentAcceleratorConfiguration(context, arguments);

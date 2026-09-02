@@ -26,9 +26,6 @@
 #include <vector>
 
 namespace com::sun::star {
-        namespace uno {
-            class XComponentContext;
-        }
         namespace xml::dom {
             class XDocument;
             class XNode;
@@ -37,6 +34,7 @@ namespace com::sun::star {
             class XXPathAPI;
         }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dp_registry::backend {
 
@@ -51,7 +49,7 @@ private:
     BackendDb &  operator = (BackendDb const &) = delete;
 
 protected:
-    const css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    const css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     OUString m_urlDb;
 
 protected:
@@ -130,7 +128,7 @@ protected:
     virtual OUString getKeyElementName()=0;
 
 public:
-    BackendDb(css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    BackendDb(css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
               OUString const & url);
     virtual ~BackendDb() {};
 
@@ -153,7 +151,7 @@ class RegisteredDb: public BackendDb
 {
 
 public:
-    RegisteredDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
+    RegisteredDb( css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
                   OUString const & url);
 
 

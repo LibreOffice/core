@@ -35,7 +35,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XAutoTextEntry > xEntry );
+    SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XAutoTextEntry > xEntry );
     virtual ~SwVbaAutoTextEntry() override;
 
     // XAutoTextEntry
@@ -52,7 +52,7 @@ class SwVbaAutoTextEntries : public SwVbaAutoTextEntries_BASE
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaAutoTextEntries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    SwVbaAutoTextEntries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

@@ -381,7 +381,7 @@ css::uno::Reference<css::lang::XComponent> SdrGrafObj::GetReplacementGraphicMode
         return nullptr;
 
     // Create an empty Draw component.
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<cpo::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XModel> xModel(xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.drawing.DrawingDocument"_ustr, xContext),
         uno::UNO_QUERY);
     if (!xModel)

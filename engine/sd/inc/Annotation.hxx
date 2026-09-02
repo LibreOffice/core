@@ -48,7 +48,7 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference
 class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) Annotation final : public sdr::annotation::Annotation
 {
 public:
-    explicit Annotation(const css::uno::Reference<css::uno::XComponentContext>& context, SdrPage* pPage);
+    explicit Annotation(const css::uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage);
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 

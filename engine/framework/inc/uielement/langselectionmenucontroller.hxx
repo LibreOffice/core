@@ -33,7 +33,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            LanguageSelectionMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            LanguageSelectionMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~LanguageSelectionMenuController() override;
 
             /* interface XServiceInfo */

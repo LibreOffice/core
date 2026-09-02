@@ -30,7 +30,7 @@
 namespace com::sun::star::beans { struct StringPair; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace cpo::uno { template <class E> class Sequence; }
 
@@ -45,7 +45,7 @@ namespace comphelper::OFOPXMLHelper {
     ReadRelationsInfoSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         std::u16string_view aStreamName,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
 
     // returns sequence containing two entries of type sequence<StringPair>
     // the first sequence describes "Default" elements, where each element is described
@@ -57,7 +57,7 @@ namespace comphelper::OFOPXMLHelper {
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >
     ReadContentTypeSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
 
     // returns the ContentType for the given name, or empty when not found.
     // rContentTypes is a sequence containing two entries of type sequence<StringPair>
@@ -79,7 +79,7 @@ namespace comphelper::OFOPXMLHelper {
     void WriteRelationsInfoSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
         const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aSequence,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
 
     // writes two entries of type sequence<StringPair>
     // the first sequence describes "Default" elements, where each element is described
@@ -92,7 +92,7 @@ namespace comphelper::OFOPXMLHelper {
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
         const cpo::uno::Sequence< css::beans::StringPair >& aDefaultsSequence,
         const cpo::uno::Sequence< css::beans::StringPair >& aOverridesSequence,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
 
 } // namespace comphelper::OFOPXMLHelper
 

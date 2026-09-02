@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppunit/TestAssert.h>
 #include <osl/process.h>
@@ -90,7 +90,7 @@ void OfficeConnection::setUp() {
     for (;;) {
         try {
             context_ =
-                css::uno::Reference< css::uno::XComponentContext >(
+                css::uno::Reference< cpo::uno::XComponentContext >(
                     resolver->resolve(
                         "uno:" + desc + ";urp;StarOffice.ComponentContext"),
                     css::uno::UNO_QUERY_THROW);

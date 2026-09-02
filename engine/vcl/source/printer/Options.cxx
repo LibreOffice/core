@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace vcl::printer
@@ -42,7 +42,7 @@ void Options::ReadFromConfig(bool i_bFile)
     try
     {
         // get service provider
-        const css::uno::Reference<css::uno::XComponentContext>& xContext(
+        const css::uno::Reference<cpo::uno::XComponentContext>& xContext(
             comphelper::getProcessComponentContext());
         // create configuration hierarchical access name
         try

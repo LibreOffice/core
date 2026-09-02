@@ -30,7 +30,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            HeaderMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext, bool _bFooter = false );
+            HeaderMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, bool _bFooter = false );
             virtual ~HeaderMenuController() override;
 
             /* interface XServiceInfo */

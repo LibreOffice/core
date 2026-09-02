@@ -39,7 +39,7 @@ using namespace com::sun::star;
 namespace pdfi
 {
 
-PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
+PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     m_xContext( xContext )
 {
 }
@@ -203,7 +203,7 @@ cpo::uno::Sequence<OUString> PDFIHybridAdaptor::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFIHybridAdaptor_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pdfi::PDFIHybridAdaptor( context ));
 }

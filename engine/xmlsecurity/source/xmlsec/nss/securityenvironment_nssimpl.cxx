@@ -100,7 +100,7 @@ struct UsageDescription
 
 static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
-    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
         task::InteractionHandler::createWithParent(xContext, nullptr) );
 
@@ -884,7 +884,7 @@ uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::addDERCertif
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SecurityEnvironment_get_implementation(
-    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
 #ifdef MACOSX
     // The macOS environment extends the NSS one with Keychain support.

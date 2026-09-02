@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/logging/XLogFormatter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -33,7 +33,7 @@
 
 namespace logging
 {
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
@@ -141,7 +141,7 @@ namespace logging
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_PlainTextFormatter(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new logging::PlainTextFormatter());

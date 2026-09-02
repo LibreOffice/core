@@ -41,7 +41,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <svx/xmleohlp.hxx>
 #include <unotxdoc.hxx>
 
@@ -199,7 +199,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
     }
 }
 
-void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xComponentContext, const uno::Reference<text::XTextDocument>& xTextDocument, const uno::Reference<text::XTextContent>& xOLE)
+void OLEHandler::importStream(const uno::Reference<cpo::uno::XComponentContext>& xComponentContext, const uno::Reference<text::XTextDocument>& xTextDocument, const uno::Reference<text::XTextContent>& xOLE)
 {
     OUString aFilterService;
     if (m_sProgId == "Word.Document.12")

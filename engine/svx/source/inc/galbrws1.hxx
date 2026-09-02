@@ -30,7 +30,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 class Gallery;
 class GalleryThemeEntry;
@@ -126,7 +126,7 @@ private:
     GalleryThemeEntries maAllThemeEntries;
     GalleryThemeEntries maFoundThemeEntries;
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::util::XURLTransformer> m_xTransformer;
 
     CharClass m_aCharacterClassficator;

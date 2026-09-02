@@ -13,7 +13,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <utility>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace unotools::misc {
 
@@ -21,7 +21,7 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
     css::script::XServiceDocumenter, css::lang::XServiceInfo>
 {
     public:
-        ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> xContext)
+        ServiceDocumenter(css::uno::Reference< cpo::uno::XComponentContext> xContext)
             : m_xContext(std::move(xContext))
             , m_sCoreBaseUrl(u"http://example.com"_ustr)
             , m_sServiceBaseUrl(u"https://api.libreoffice.org/docs/idl/ref"_ustr)
@@ -48,7 +48,7 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
         virtual ~ServiceDocumenter() override
             {};
     private:
-        css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
         OUString m_sCoreBaseUrl;
         OUString m_sServiceBaseUrl;
 };

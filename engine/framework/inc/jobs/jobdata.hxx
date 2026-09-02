@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <rtl/ustring.hxx>
@@ -103,7 +103,7 @@ class JobData final
             We need it for creating of own uno services ... e.g. for
             opening the configuration.
          */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /**
             An instance of this class can be used in two different modes:
@@ -165,7 +165,7 @@ class JobData final
 
     public:
 
-                 JobData( css::uno::Reference< css::uno::XComponentContext > xContext );
+                 JobData( css::uno::Reference< cpo::uno::XComponentContext > xContext );
                  JobData( const JobData&                                                rCopy );
                  ~JobData(                                                                     );
 
@@ -190,10 +190,10 @@ class JobData final
         void                                         setJobConfig   ( std::vector< css::beans::NamedValue >&& lArguments   );
         void                                         disableJob     (                                                                  );
 
-        static std::vector< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        static std::vector< OUString > getEnabledJobsForEvent( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                 std::u16string_view                                sEvent );
 
-        static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
+        static void appendEnabledJobsForEvent( const css::uno::Reference< cpo::uno::XComponentContext >&              rxContext,
                                                const OUString&                                                 sEvent ,
                                                      ::std::vector< JobData::TJob2DocEventBinding >& lJobs  );
 

@@ -37,7 +37,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-ODBCDriver::ODBCDriver(css::uno::Reference< css::uno::XComponentContext > _xContext)
+ODBCDriver::ODBCDriver(css::uno::Reference< cpo::uno::XComponentContext > _xContext)
     :ODriver_BASE(m_aMutex)
     ,m_xContext(std::move(_xContext))
 {
@@ -325,7 +325,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 class ORealOdbcDriver : public connectivity::odbc::ODBCDriver, public connectivity::odbc::Functions
 {
 public:
-    explicit ORealOdbcDriver(const css::uno::Reference<css::uno::XComponentContext>& _rxContext)
+    explicit ORealOdbcDriver(const css::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
         : ODBCDriver(_rxContext)
     {
     }
@@ -904,7 +904,7 @@ SQLHANDLE ORealOdbcDriver::EnvironmentHandle()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-connectivity_odbc_ORealOdbcDriver_get_implementation(css::uno::XComponentContext* context,
+connectivity_odbc_ORealOdbcDriver_get_implementation(cpo::uno::XComponentContext* context,
                                                      cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ORealOdbcDriver(context));

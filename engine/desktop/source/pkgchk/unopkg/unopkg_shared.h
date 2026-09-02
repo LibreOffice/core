@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <rtl/ustring.hxx>
@@ -92,7 +92,7 @@ OUString makeAbsoluteFileUrl(
 
 
 css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & xContext,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppressLicense);
@@ -107,9 +107,9 @@ void printf_packages(
 
 
 
-css::uno::Reference<css::uno::XComponentContext> getUNO(
+css::uno::Reference<cpo::uno::XComponentContext> getUNO(
     bool verbose, bool bGui, const OUString& sTempDir,
-    css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);
+    css::uno::Reference<cpo::uno::XComponentContext> & out_LocalComponentContext);
 
 }
 

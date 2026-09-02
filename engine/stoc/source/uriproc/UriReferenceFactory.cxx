@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uri/RelativeUriExcessParentSegments.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -284,7 +284,7 @@ class Factory:
 {
 public:
     explicit Factory(
-        css::uno::Reference< css::uno::XComponentContext > context):
+        css::uno::Reference< cpo::uno::XComponentContext > context):
         m_context(std::move(context)) {}
 
     Factory(const Factory&) = delete;
@@ -322,7 +322,7 @@ private:
         css::uno::Reference< css::uri::XUriReference > const & uriReference)
     { return parse(uriReference->getUriReference()); }
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 OUString Factory::getImplementationName()
@@ -692,7 +692,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_uri_UriReferenceFactory_get_implementation(css::uno::XComponentContext* rxContext,
+com_sun_star_comp_uri_UriReferenceFactory_get_implementation(cpo::uno::XComponentContext* rxContext,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return ::cppu::acquire(new Factory(rxContext));

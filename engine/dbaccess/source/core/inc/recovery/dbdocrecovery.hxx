@@ -21,7 +21,7 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <vector>
 
@@ -33,7 +33,7 @@ namespace dbaccess
     {
     public:
         DatabaseDocumentRecovery(
-            const css::uno::Reference< css::uno::XComponentContext >& i_rContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext
         );
         ~DatabaseDocumentRecovery();
 
@@ -61,7 +61,7 @@ namespace dbaccess
             );
 
     private:
-        css::uno::Reference<css::uno::XComponentContext> mxContext;
+        css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     };
 
 } // namespace dbaccess

@@ -98,7 +98,7 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScSpreadsheetSettings_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -352,7 +352,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScRecentFunctionsObj_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
+ScRecentFunctionsObj_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -409,7 +409,7 @@ ScFunctionListObj::~ScFunctionListObj()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScFunctionListObj_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
+ScFunctionListObj_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();

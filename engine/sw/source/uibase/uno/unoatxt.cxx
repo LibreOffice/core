@@ -980,7 +980,7 @@ void SwAutoTextEventDescriptor::getByName(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-SwXAutoTextContainer_get_implementation(css::uno::XComponentContext*,
+SwXAutoTextContainer_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     //the module may not be loaded

@@ -32,7 +32,7 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -113,7 +113,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         }
 
         // bootstrap uno
-        Reference< XComponentContext > xContext;
+        Reference< cpo::uno::XComponentContext > xContext;
         if (nullptr == juno_rc)
         {
             xContext = ::cppu::defaultBootstrap_InitialComponentContext();

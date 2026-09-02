@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
@@ -50,11 +50,11 @@ namespace dlgprov
 
 
 
-    css::uno::Reference< css::container::XNameContainer > lcl_createControlModel(const css::uno::Reference< css::uno::XComponentContext >& i_xContext);
-    css::uno::Reference< css::resource::XStringResourceManager > lcl_getStringResourceManager(const css::uno::Reference< css::uno::XComponentContext >& i_xContext, std::u16string_view i_sURL);
+    css::uno::Reference< css::container::XNameContainer > lcl_createControlModel(const css::uno::Reference< cpo::uno::XComponentContext >& i_xContext);
+    css::uno::Reference< css::resource::XStringResourceManager > lcl_getStringResourceManager(const css::uno::Reference< cpo::uno::XComponentContext >& i_xContext, std::u16string_view i_sURL);
     /// @throws cpo::uno::Exception
     css::uno::Reference< css::container::XNameContainer > lcl_createDialogModel(
-                const css::uno::Reference< css::uno::XComponentContext >& i_xContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& i_xContext,
                 const css::uno::Reference< css::io::XInputStream >& xInput,
                 const css::uno::Reference< css::frame::XModel >& xModel,
                 const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
@@ -76,7 +76,7 @@ namespace dlgprov
              css::uno::Reference< css::script::XScriptListener >   mxBasicRTLListener;
         };
         std::unique_ptr< BasicRTLParams > m_BasicInfo;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::frame::XModel >                 m_xModel;
 
     OUString msDialogLibName;
@@ -112,7 +112,7 @@ namespace dlgprov
 
     public:
         explicit DialogProviderImpl(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         virtual ~DialogProviderImpl() override;
 
         // XServiceInfo

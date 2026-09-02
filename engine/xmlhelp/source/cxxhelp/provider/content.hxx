@@ -39,7 +39,7 @@ namespace chelp
     {
     public:
 
-        Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                  ::ucbhelper::ContentProviderImplHelper* pProvider,
                  const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
                  Databases* pDatabases );

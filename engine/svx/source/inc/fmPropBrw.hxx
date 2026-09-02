@@ -21,7 +21,7 @@
 
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -47,9 +47,9 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
     OUString        m_sLastActivePage;
     std::unique_ptr<weld::Box> m_xDialogBox;
     std::unique_ptr<weld::Container> m_xContainer;
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                     m_xInspectorContext;
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                     m_xORB;
     css::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
@@ -73,7 +73,7 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
 
 public:
     FmPropBrw(
-        const css::uno::Reference< css::uno::XComponentContext >& _xORB,
+        const css::uno::Reference< cpo::uno::XComponentContext >& _xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
         weld::Window* pParent,

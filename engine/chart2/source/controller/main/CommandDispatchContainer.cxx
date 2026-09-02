@@ -42,7 +42,7 @@ namespace chart
 {
 
 CommandDispatchContainer::CommandDispatchContainer(
-    const Reference< uno::XComponentContext > & xContext )
+    const Reference< cpo::uno::XComponentContext > & xContext )
         :m_xContext( xContext )
         ,m_pDrawCommandDispatch( nullptr )
         ,m_pShapeController( nullptr )

@@ -3025,7 +3025,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
             // passing the context to the component (see ScUnoAddInCollection::Initialize)
 
             uno::Reference<uno::XInterface> xInterface;
-            uno::Reference<uno::XComponentContext> xCtx(
+            uno::Reference<cpo::uno::XComponentContext> xCtx(
                 comphelper::getComponentContext(xManager));
             uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
             if (xCFac.is())

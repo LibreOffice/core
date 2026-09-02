@@ -45,7 +45,7 @@ public:
     static const sal_uInt16 INPUTSTRING_PRECISION;
 
     /// ctor with service manager and language/country enum
-    SvNumberFormatter(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    SvNumberFormatter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                       LanguageType eLang);
 
     ~SvNumberFormatter();
@@ -537,7 +537,7 @@ public:
 
 private:
     mutable ::osl::Mutex m_aMutex;
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     const LanguageType IniLnge; // Initialized setting language/country
     SvNFFormatData m_aFormatData;
     SvNFEngine::Accessor m_aRWPolicy;

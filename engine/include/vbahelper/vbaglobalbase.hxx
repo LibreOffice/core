@@ -30,9 +30,9 @@
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }
-    namespace uno { class XComponentContext; }
     namespace uno { class XInterface; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -47,7 +47,7 @@ protected:
     void init(  const cpo::uno::Sequence< css::beans::PropertyValue >& aInitArgs );
 
 public:
-    VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString& sDocCtxName );
+    VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const OUString& sDocCtxName );
     virtual ~VbaGlobalsBase() override;
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;

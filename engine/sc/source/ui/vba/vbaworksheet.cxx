@@ -128,7 +128,7 @@ openNewDoc(const OUString& aSheetName )
     uno::Reference<frame::XModel> xModel;
     try
     {
-        const uno::Reference< uno::XComponentContext >& xContext(
+        const uno::Reference< cpo::uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
 
         uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);
@@ -147,14 +147,14 @@ openNewDoc(const OUString& aSheetName )
     return xModel;
 }
 
-ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
+ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext,
         uno::Reference< sheet::XSpreadsheet > xSheet,
         uno::Reference< frame::XModel > xModel ) : WorksheetImpl_BASE( xParent, xContext ), mxSheet(std::move( xSheet )), mxModel(std::move(xModel)), mbVeryHidden( false )
 {
 }
 
 ScVbaWorksheet::ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
+    uno::Reference< cpo::uno::XComponentContext> const & xContext ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
 {
     if ( args.getLength() < 3 )
         throw lang::IllegalArgumentException();
@@ -1064,7 +1064,7 @@ ScVbaWorksheet::getSomething(const cpo::uno::Sequence<sal_Int8 > & rId)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWorksheet_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWorksheet(args, context));
 }

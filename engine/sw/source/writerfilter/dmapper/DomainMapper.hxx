@@ -75,7 +75,7 @@ class DomainMapper : public LoggedProperties, public LoggedTable,
     std::unique_ptr<DomainMapper_Impl, o3tl::default_delete<DomainMapper_Impl>> m_pImpl;
 
 public:
-    DomainMapper(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    DomainMapper(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                  css::uno::Reference<css::io::XInputStream> const& xInputStream,
                  rtl::Reference<SwXTextDocument> const& xModel,
                  bool bRepairStorage,

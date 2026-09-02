@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
 
-XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentContext >& rxCtx)
+XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< cpo::uno::XComponentContext >& rxCtx)
     : mxCtx(rxCtx), mbODFPre1_2(false)
 {
     mpXSecController = new XSecController(rxCtx);

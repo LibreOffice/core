@@ -23,7 +23,7 @@
 #include <svl/numuno.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <memory>
 
 /**
@@ -39,12 +39,12 @@ class SvNumberFormatsSupplierServiceObject final
             ,public css::lang::XServiceInfo
 {
     std::unique_ptr<SvNumberFormatter>                  m_pOwnFormatter;
-    css::uno::Reference< css::uno::XComponentContext >  m_xORB;
+    css::uno::Reference< cpo::uno::XComponentContext >  m_xORB;
 
     void implEnsureFormatter();
 
 public:
-    explicit SvNumberFormatsSupplierServiceObject(css::uno::Reference< css::uno::XComponentContext > _xORB);
+    explicit SvNumberFormatsSupplierServiceObject(css::uno::Reference< cpo::uno::XComponentContext > _xORB);
     virtual ~SvNumberFormatsSupplierServiceObject() override;
 
     // XInterface

@@ -26,7 +26,7 @@ using namespace ::com::sun::star::i18n;
 
 SwCheckIt::SwCheckIt()
 {
-    const Reference<XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+    const Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     xCheck = InputSequenceChecker::create(xContext);
 }
 

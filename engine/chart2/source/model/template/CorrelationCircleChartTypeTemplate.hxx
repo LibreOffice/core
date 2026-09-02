@@ -20,7 +20,7 @@ class CorrelationCircleChartTypeTemplate : public ChartTypeTemplate, public ::pr
 {
 public:
     explicit CorrelationCircleChartTypeTemplate(
-        css::uno::Reference<css::uno::XComponentContext> const& xContext,
+        css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
         const OUString& rServiceName);
     virtual ~CorrelationCircleChartTypeTemplate() override;
 

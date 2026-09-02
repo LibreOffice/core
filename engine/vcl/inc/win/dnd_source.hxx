@@ -31,7 +31,7 @@
 
 #include <systools/win32/comtools.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class SourceContext;
 // RIGHT MOUSE BUTTON drag and drop not supported currently.
@@ -44,7 +44,7 @@ class DragSource:
       public IDropSource
 
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     HWND m_hAppWindow;
 
     // The mouse button that set off the drag and drop operation
@@ -76,7 +76,7 @@ public:
     sal_Int8 m_sourceActions;
 
 public:
-    explicit DragSource(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit DragSource(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     virtual ~DragSource() override;
     DragSource(const DragSource&) = delete;
     DragSource &operator= ( const DragSource&) = delete;

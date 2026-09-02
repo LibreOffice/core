@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< sheet::XDataPilotTable > xTable ) : PivotTableImpl_BASE( uno::Reference< XHelperInterface >(),  xContext), m_xTable(std::move( xTable ))
+ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< sheet::XDataPilotTable > xTable ) : PivotTableImpl_BASE( uno::Reference< XHelperInterface >(),  xContext), m_xTable(std::move( xTable ))
 {
 }
 

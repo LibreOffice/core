@@ -22,7 +22,7 @@
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -32,7 +32,7 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
 {
     public:
         StatusBarWrapper(
-            css::uno::Reference< css::uno::XComponentContext > xContext );
+            css::uno::Reference< cpo::uno::XComponentContext > xContext );
         virtual ~StatusBarWrapper() override;
 
         // XComponent
@@ -49,7 +49,7 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
 
     private:
         rtl::Reference< StatusBarManager >                       m_xStatusBarManager;
-        css::uno::Reference< css::uno::XComponentContext >       m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
 };
 
 } // namespace framework

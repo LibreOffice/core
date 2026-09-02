@@ -69,7 +69,7 @@ namespace frm
 
     using ::dbtools::SQLExceptionInfo;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Exception;
@@ -1757,7 +1757,7 @@ namespace frm
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_forms_FormOperations_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_forms_FormOperations_get_implementation(cpo::uno::XComponentContext* context,
                                                           cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::FormOperations(context));

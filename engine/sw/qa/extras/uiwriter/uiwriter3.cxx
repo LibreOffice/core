@@ -2609,7 +2609,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     // between paragraphs. Let’s remove the accelerator so that the
     // table handling code can see the key which will make it try to
     // change the row size instead.
-    const uno::Reference<uno::XComponentContext>& xContext
+    const uno::Reference<cpo::uno::XComponentContext>& xContext
         = comphelper::getProcessComponentContext();
     css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> confSupplier
         = ui::theModuleUIConfigurationManagerSupplier::get(xContext);

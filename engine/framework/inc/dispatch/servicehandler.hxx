@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -55,13 +55,13 @@ class ServiceHandler final : public  ::cppu::WeakImplHelper<
     private:
 
         /// reference to global uno service manager which had created us
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /* interface */
     public:
 
         // ctor/dtor
-                 ServiceHandler( css::uno::Reference< css::uno::XComponentContext > );
+                 ServiceHandler( css::uno::Reference< cpo::uno::XComponentContext > );
         virtual ~ServiceHandler(                                                                        ) override;
 
         /* interface XServiceInfo */

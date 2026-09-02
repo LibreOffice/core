@@ -45,7 +45,7 @@ static OUString lcl_CheckGroupName( std::u16string_view aGroupName )
     return sRet.makeStringAndClear();
 }
 
-SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, OUString aFullUrl )
+SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, OUString aFullUrl )
     : SwVbaTemplate_BASE( rParent, rContext ), msFullUrl(std::move( aFullUrl ))
 {
 }
@@ -83,7 +83,7 @@ SwVbaTemplate::getPath()
 cpo::uno::Any SAL_CALL
 SwVbaTemplate::AutoTextEntries( const cpo::uno::Any& index )
 {
-    const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
     // the default template is "Normal.dot" in Word.

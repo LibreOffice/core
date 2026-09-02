@@ -36,7 +36,7 @@ import com.sun.star.graphic.XGraphic;
 import com.sun.star.graphic.XGraphicProvider;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 public class SwXTextGraphicObjects extends TestCase {
 

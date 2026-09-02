@@ -35,7 +35,7 @@ using namespace cpo::uno;
 
 // constructor
 
-SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentContext >& xContext ) :
+SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext )
 {
     m_pDialog = gtk_file_chooser_dialog_new(
@@ -173,7 +173,7 @@ void SAL_CALL SalGtkFolderPicker::cancel()
 }
 
 uno::Reference< ui::dialogs::XFolderPicker2 >
-GtkInstance::createFolderPicker( const uno::Reference< uno::XComponentContext > &xMSF )
+GtkInstance::createFolderPicker( const uno::Reference< cpo::uno::XComponentContext > &xMSF )
 {
     return uno::Reference< ui::dialogs::XFolderPicker2 >(
                 new SalGtkFolderPicker( xMSF ) );

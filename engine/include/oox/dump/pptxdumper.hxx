@@ -27,8 +27,8 @@
 
 namespace com::sun::star {
     namespace io { class XInputStream; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::core { class FilterBase; }
 
@@ -55,7 +55,7 @@ public:
     explicit            Dumper( const ::oox::core::FilterBase& rFilter );
 
     explicit            Dumper(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const OUString& rSysFileName );
 

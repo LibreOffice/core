@@ -20,7 +20,7 @@
 #define INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARHELPER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -49,7 +49,7 @@ typedef std::shared_ptr< VbaCommandBarHelper > VbaCommandBarHelperRef;
 class VbaCommandBarHelper
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xDocCfgMgr; // current document
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
@@ -62,7 +62,7 @@ private:
     bool hasToolbar( const OUString& sResourceUrl, std::u16string_view sName );
 public:
     /// @throws cpo::uno::RuntimeException
-    VbaCommandBarHelper( css::uno::Reference< css::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel > xModel );
+    VbaCommandBarHelper( css::uno::Reference< cpo::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel > xModel );
 
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
 

@@ -23,7 +23,7 @@
 class PageOrientationPopup final : public svt::PopupWindowController
 {
 public:
-    PageOrientationPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);
+    PageOrientationPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~PageOrientationPopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

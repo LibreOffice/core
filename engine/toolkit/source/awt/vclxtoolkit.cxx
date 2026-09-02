@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -839,7 +839,7 @@ static void ToolkitWorkerFunction( void* pArgs )
     }
     if (!xServiceManager.is())
     {
-        css::uno::Reference<css::uno::XComponentContext> xContext =
+        css::uno::Reference<cpo::uno::XComponentContext> xContext =
             ::cppu::defaultBootstrap_InitialComponentContext();
 
         xServiceManager.set( xContext->getServiceManager(), css::uno::UNO_QUERY_THROW );
@@ -2551,7 +2551,7 @@ void VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXToolkit_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXToolkit());

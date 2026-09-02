@@ -83,7 +83,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
 
 
 OfficeDocumentsManager::OfficeDocumentsManager(
-            const uno::Reference< uno::XComponentContext > & rxContext,
+            const uno::Reference< cpo::uno::XComponentContext > & rxContext,
             ContentProvider * pDocEventListener )
 : m_xContext( rxContext ),
   m_xDocEvtNotifier( frame::theGlobalEventBroadcaster::get( rxContext ) ),

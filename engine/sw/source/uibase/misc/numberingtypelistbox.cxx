@@ -38,7 +38,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox(std::unique_ptr<weld::ComboBox> p
     : m_xWidget(std::move(pWidget))
     , m_xImpl(new SwNumberingTypeListBox_Impl)
 {
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         ::comphelper::getProcessComponentContext());
     uno::Reference<text::XDefaultNumberingProvider> xDefNum
         = text::DefaultNumberingProvider::create(xContext);

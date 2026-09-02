@@ -26,14 +26,14 @@
 
 namespace com::sun::star {
     namespace deployment { class XPackageRegistry; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dp_registry {
 
 css::uno::Reference<css::deployment::XPackageRegistry> create(
     OUString const & context, OUString const & cachePath,
-    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext);
+    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext);
 
 }
 

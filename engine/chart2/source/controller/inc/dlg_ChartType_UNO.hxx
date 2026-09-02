@@ -31,7 +31,7 @@ class ChartTypeUnoDlg final : public ChartTypeUnoDlg_BASE
                         ,public ::comphelper::OPropertyArrayUsageHelper< ChartTypeUnoDlg >
 {
 public:
-    ChartTypeUnoDlg( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    ChartTypeUnoDlg( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
 private:
     virtual ~ChartTypeUnoDlg() override;

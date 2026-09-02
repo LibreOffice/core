@@ -35,9 +35,7 @@
 #include <unordered_set>
 
 class MemoryByteGrabber;
-namespace com::sun::star {
-    namespace uno { class XComponentContext; }
-}
+namespace cpo::uno { class XComponentContext; }
 
 /*
  * We impose arbitrary but reasonable limit on ZIP files.
@@ -63,7 +61,7 @@ private:
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
     css::uno::Reference < css::io::XInputStream > xStream;
-    const css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    const css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     bool bRecoveryMode;
 
@@ -107,7 +105,7 @@ public:
 
     ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
              css::uno::Reference < css::io::XInputStream > const &xInput,
-             css::uno::Reference < css::uno::XComponentContext > xContext,
+             css::uno::Reference < cpo::uno::XComponentContext > xContext,
              bool bInitialise,
              bool bForceRecover,
              Checks checks);
@@ -125,11 +123,11 @@ public:
             const bool bUseBufferedStream = true );
 
     static css::uno::Reference< css::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
-            const css::uno::Reference< css::uno::XComponentContext >& xArgContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData );
 
     static css::uno::Reference< css::xml::crypto::XCipherContext > StaticGetCipher(
-            const css::uno::Reference< css::uno::XComponentContext >& xArgContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData,
             bool bEncrypt );
 
@@ -149,12 +147,12 @@ public:
 
     static css::uno::Reference< css::io::XInputStream > StaticGetDataFromRawStream(
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData );
 
     static bool StaticHasValidPassword (
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
 

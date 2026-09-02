@@ -36,7 +36,7 @@ published interface XSingleComponentFactory : com::sun::star::uno::XInterface
                 component instance
     */
     com::sun::star::uno::XInterface createInstanceWithContext(
-        [in] com::sun::star::uno::XComponentContext Context )
+        [in] cpo::uno::XComponentContext Context )
         raises (cpo::uno::Exception);
 
     /** Creates an instance of a component and initializes the new instance
@@ -51,7 +51,7 @@ published interface XSingleComponentFactory : com::sun::star::uno::XInterface
     */
     com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext(
         [in] sequence<any> Arguments,
-        [in] com::sun::star::uno::XComponentContext Context )
+        [in] cpo::uno::XComponentContext Context )
         raises( cpo::uno::Exception );
 };
 

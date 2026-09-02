@@ -53,7 +53,7 @@ namespace framework
 
 
 PopupMenuToolbarController::PopupMenuToolbarController(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString aPopupCommand )
     : ToolBarBase( xContext, css::uno::Reference< css::frame::XFrame >(), /*aCommandURL*/OUString() )
     , m_bHasController( false )
@@ -243,7 +243,7 @@ void PopupMenuToolbarController::createPopupMenuController()
 
 
 GenericPopupToolbarController::GenericPopupToolbarController(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
     : PopupMenuToolbarController( xContext )
     , m_bReplaceWithLast( false )
@@ -355,7 +355,7 @@ class SaveToolbarController : public cppu::ImplInheritanceHelper< PopupMenuToolb
                                                                   css::util::XModifyListener >
 {
 public:
-    explicit SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit SaveToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -393,7 +393,7 @@ private:
 
 } // namespace
 
-SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+SaveToolbarController::SaveToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, u".uno:SaveAsMenu"_ustr )
     , m_bReadOnly( false )
     , m_bModified( false )
@@ -556,7 +556,7 @@ namespace {
 class NewToolbarController : public cppu::ImplInheritanceHelper<PopupMenuToolbarController, css::frame::XSubToolbarController>
 {
 public:
-    explicit NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit NewToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     OUString getImplementationName() override;
@@ -586,7 +586,7 @@ private:
 } // namespace
 
 NewToolbarController::NewToolbarController(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext )
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : ImplInheritanceHelper( xContext )
     , m_nMenuId( 0 )
 {
@@ -728,7 +728,7 @@ void NewToolbarController::updateImage()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &args)
 {
     return cppu::acquire(new GenericPopupToolbarController(context, args));
@@ -736,7 +736,7 @@ com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SaveToolbarController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SaveToolbarController(context));
@@ -744,7 +744,7 @@ com_sun_star_comp_framework_SaveToolbarController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_apache_openoffice_comp_framework_NewToolbarController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NewToolbarController(context));

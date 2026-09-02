@@ -59,11 +59,11 @@ class OImageControlModel final
 
 public:
     OImageControlModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OImageControlModel(
         const OImageControlModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OImageControlModel() override;
 
@@ -152,7 +152,7 @@ private:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OImageControlControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OImageControlControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )

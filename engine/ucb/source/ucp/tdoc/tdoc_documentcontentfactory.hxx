@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -33,7 +33,7 @@ class DocumentContentFactory :
             css::lang::XServiceInfo >
 {
 public:
-    explicit DocumentContentFactory( css::uno::Reference< css::uno::XComponentContext > );
+    explicit DocumentContentFactory( css::uno::Reference< cpo::uno::XComponentContext > );
     virtual ~DocumentContentFactory() override;
 
     // XServiceInfo
@@ -50,7 +50,7 @@ public:
     createDocumentContent( const css::uno::Reference< css::frame::XModel >& Model ) override;
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
 } // namespace tdoc_ucp

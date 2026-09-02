@@ -42,7 +42,7 @@ using namespace ::cpo::uno;
 using com::sun::star::packages::zip::ZipIOException;
 
 XUnbufferedStream::XUnbufferedStream(
-                      const uno::Reference< uno::XComponentContext >& xContext,
+                      const uno::Reference< cpo::uno::XComponentContext >& xContext,
                       rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
                       ZipEntry const & rEntry,
                       Reference < XInputStream > const & xNewZipStream,

@@ -190,7 +190,7 @@ constexpr OUString aAccessSrvc = u"com.sun.star.configuration.ConfigurationUpdat
 
 // Check dependencies of all packages
 
-static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext > &xContext )
+static bool impl_checkDependencies( const uno::Reference< cpo::uno::XComponentContext > &xContext )
 {
     cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
     uno::Reference< deployment::XExtensionManager > xExtensionManager = deployment::ExtensionManager::get( xContext );
@@ -316,7 +316,7 @@ bool Desktop::CheckExtensionDependencies()
         return false;
     }
 
-    const uno::Reference< uno::XComponentContext >& xContext(
+    const uno::Reference< cpo::uno::XComponentContext >& xContext(
         comphelper::getProcessComponentContext());
 
     impl_checkDependencies( xContext );
@@ -326,7 +326,7 @@ bool Desktop::CheckExtensionDependencies()
 
 void Desktop::SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desktop* pDesktop)
 {
-    const uno::Reference< uno::XComponentContext >& context(
+    const uno::Reference< cpo::uno::XComponentContext >& context(
         comphelper::getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(
         new SilentCommandEnv(pDesktop));

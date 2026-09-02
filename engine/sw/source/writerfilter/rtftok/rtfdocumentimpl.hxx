@@ -698,7 +698,7 @@ class RTFDocumentImpl : public RTFDocument, public RTFListener
 {
 public:
     using Pointer_t = tools::SvRef<RTFDocumentImpl>;
-    RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    RTFDocumentImpl(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
                     rtl::Reference<SwXTextDocument> const& xDstDoc,
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
@@ -833,7 +833,7 @@ private:
     /// Turns the destination text into an input stream of the current OLE attributes.
     RTFError handleEmbeddedObject();
 
-    css::uno::Reference<css::uno::XComponentContext> const& m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> const& m_xContext;
     css::uno::Reference<css::io::XInputStream> const& m_xInputStream;
     rtl::Reference<SwXTextDocument> const& m_xDstDoc;
     css::uno::Reference<css::frame::XFrame> const& m_xFrame;

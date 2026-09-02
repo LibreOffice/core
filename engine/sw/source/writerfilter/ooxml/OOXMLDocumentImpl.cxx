@@ -102,7 +102,7 @@ void OOXMLDocument::resolveFastSubStream(Stream & rStreamHandler,
 
     if (xParser.is())
     {
-        uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
+        uno::Reference<cpo::uno::XComponentContext> xContext(mpStream->getContext());
         rtl::Reference<OOXMLFastDocumentHandler> pDocHandler =
                         new OOXMLFastDocumentHandler(xContext, &rStreamHandler, this, mnXNoteId);
 
@@ -154,7 +154,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocument::importSubStream(OOXMLStream::
     {
         try
         {
-            uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
+            uno::Reference<cpo::uno::XComponentContext> xContext(mpStream->getContext());
             uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
             xRet = xDomBuilder->parse(xInputStream);
         }
@@ -204,7 +204,7 @@ void OOXMLDocument::importSubStreamRelations(const OOXMLStream::Pointer_t& pStre
     {
         try
         {
-             uno::Reference<uno::XComponentContext> xcpContext(pStream->getContext());
+             uno::Reference<cpo::uno::XComponentContext> xcpContext(pStream->getContext());
              uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xcpContext));
              xRelation = xDomBuilder->parse(xcpInputStream);
         }
@@ -519,7 +519,7 @@ void OOXMLDocument::resolve(Stream & rStream)
     if (!xParser.is())
         return;
 
-    uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
+    uno::Reference<cpo::uno::XComponentContext> xContext(mpStream->getContext());
 
     rStream.setDocumentReference(this);
 

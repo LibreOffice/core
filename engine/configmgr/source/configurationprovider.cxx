@@ -82,7 +82,7 @@ class Service : public ServiceBase
 {
 public:
     explicit Service(
-        const css::uno::Reference< css::uno::XComponentContext >& context):
+        const css::uno::Reference< cpo::uno::XComponentContext >& context):
         context_(context), default_(true),
         lock_( lock() )
     {
@@ -90,7 +90,7 @@ public:
     }
 
     Service(
-        const css::uno::Reference< css::uno::XComponentContext >& context,
+        const css::uno::Reference< cpo::uno::XComponentContext >& context,
         OUString locale):
         context_(context), locale_(std::move(locale)),
         default_(false),
@@ -158,7 +158,7 @@ private:
 
     void flushModifications() const;
 
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
     OUString locale_;
     bool default_;
     std::shared_ptr<osl::Mutex> lock_;
@@ -346,7 +346,7 @@ void Service::flushModifications() const {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
-    css::uno::XComponentContext* Context, cpo::uno::Sequence<cpo::uno::Any> const& Arguments)
+    cpo::uno::XComponentContext* Context, cpo::uno::Sequence<cpo::uno::Any> const& Arguments)
 {
     if (!Arguments.hasElements()) {
         auto p = css::configuration::theDefaultProvider::get(Context);
@@ -397,7 +397,7 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
 }
 
 css::uno::Reference< css::uno::XInterface > createDefault(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return getXWeak(new Service(context));
 }

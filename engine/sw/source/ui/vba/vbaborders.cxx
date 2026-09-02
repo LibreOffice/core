@@ -147,7 +147,7 @@ protected:
         return aServiceNames;
     }
 public:
-    SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType ) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ) {}
+    SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< cpo::uno::XComponentContext >& xContext, sal_Int32 lineType ) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ) {}
 
     cpo::uno::Any SAL_CALL getLineStyle() override
     {
@@ -229,7 +229,7 @@ class RangeBorders : public RangeBorders_Base
 {
 private:
     uno::Reference< table::XCellRange > m_xRange;
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     VbaPalette m_Palette;
     sal_Int32 getTableIndex( sal_Int32 nConst )
     {
@@ -245,7 +245,7 @@ private:
         return getCount(); // error condition
     }
 public:
-    RangeBorders(  uno::Reference< table::XCellRange > xRange,  uno::Reference< uno::XComponentContext > xContext, VbaPalette aPalette ) : m_xRange(std::move( xRange )), m_xContext(std::move( xContext )), m_Palette(std::move( aPalette ))
+    RangeBorders(  uno::Reference< table::XCellRange > xRange,  uno::Reference< cpo::uno::XComponentContext > xContext, VbaPalette aPalette ) : m_xRange(std::move( xRange )), m_xContext(std::move( xContext )), m_Palette(std::move( aPalette ))
     {
     }
     // XIndexAccess
@@ -277,7 +277,7 @@ public:
 }
 
 static uno::Reference< container::XIndexAccess >
-rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette const & rPalette )
+rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< cpo::uno::XComponentContext > & xContext, VbaPalette const & rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
 }
@@ -306,7 +306,7 @@ public:
 }
 
 // for Table borders
-SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, VbaPalette const & rPalette  ):  SwVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) )
+SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, VbaPalette const & rPalette  ):  SwVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) )
 {
     m_xProps.set( xRange, uno::UNO_QUERY_THROW );
 }

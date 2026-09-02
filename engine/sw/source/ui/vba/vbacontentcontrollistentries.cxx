@@ -47,13 +47,13 @@ class ContentControlListEntryCollectionHelper
 {
 private:
     uno::Reference<XHelperInterface> mxParent;
-    uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<cpo::uno::XComponentContext> mxContext;
     std::shared_ptr<SwContentControl> m_pCC;
 
 public:
     /// @throws cpo::uno::RuntimeException
     ContentControlListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
-                                            uno::Reference<uno::XComponentContext> xContext,
+                                            uno::Reference<cpo::uno::XComponentContext> xContext,
                                             std::shared_ptr<SwContentControl> pCC)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
@@ -93,7 +93,7 @@ public:
  */
 SwVbaContentControlListEntries::SwVbaContentControlListEntries(
     const uno::Reference<XHelperInterface>& xParent,
-    const uno::Reference<uno::XComponentContext>& xContext, std::shared_ptr<SwContentControl> pCC)
+    const uno::Reference<cpo::uno::XComponentContext>& xContext, std::shared_ptr<SwContentControl> pCC)
     : SwVbaContentControlListEntries_BASE(
           xParent, xContext,
           uno::Reference<container::XIndexAccess>(

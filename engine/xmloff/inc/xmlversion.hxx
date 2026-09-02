@@ -35,7 +35,7 @@ private:
     const cpo::uno::Sequence < css::util::RevisionTag >& maVersions;
 public:
     XMLVersionListExport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         const cpo::uno::Sequence < css::util::RevisionTag >& rVersions,
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler );
@@ -57,7 +57,7 @@ private:
 public:
 
     XMLVersionListImport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         cpo::uno::Sequence < css::util::RevisionTag >& rVersions );
     virtual ~XMLVersionListImport() noexcept override;
 

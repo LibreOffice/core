@@ -40,7 +40,7 @@ class BookmarksEnumeration : public EnumerationHelperImpl
 public:
     /// @throws uno::RuntimeException
     BookmarksEnumeration( const uno::Reference< XHelperInterface >& xParent,
-                          const uno::Reference< uno::XComponentContext >& xContext,
+                          const uno::Reference< cpo::uno::XComponentContext >& xContext,
                           const uno::Reference< container::XEnumeration >& xEnumeration,
                           rtl::Reference< SwXTextDocument > xModel  )
         : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
@@ -118,7 +118,7 @@ public:
 }
 
 SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParent,
-                                const uno::Reference< css::uno::XComponentContext > & xContext,
+                                const uno::Reference< cpo::uno::XComponentContext > & xContext,
                                 const uno::Reference< container::XIndexAccess >& xBookmarks,
                                 rtl::Reference< SwXTextDocument > xModel )
   : SwVbaBookmarks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new BookmarkCollectionHelper( xBookmarks ) ) ),

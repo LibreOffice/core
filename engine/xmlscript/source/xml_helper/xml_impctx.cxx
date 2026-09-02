@@ -26,7 +26,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/xml/input/XAttributes.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/log.hxx>
 #include <rtl/ref.hxx>
@@ -711,7 +711,7 @@ Reference< xml::sax::XDocumentHandler > createDocumentHandler(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new xmlscript::DocumentHandlerImpl({}, false /* mt use */));
 }

@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const sal_Int32 nType )
+ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const sal_Int32 nType )
     : ScVbaFileDialog_BASE( xParent, xContext)
     , m_nType(nType)
     , m_sTitle(u"FileDialog"_ustr)

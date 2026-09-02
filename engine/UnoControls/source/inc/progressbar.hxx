@@ -49,7 +49,7 @@ class ProgressBar final : public ProgressBar_BASE
 {
 public:
 
-    ProgressBar( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    ProgressBar( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressBar() override;
 

@@ -74,7 +74,7 @@ class Job final : public  ::cppu::WeakImplHelper<
         /**
             We need it to create own services on demand.
          */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /**
             Hold the (may asynchronous) job alive.
@@ -157,9 +157,9 @@ class Job final : public  ::cppu::WeakImplHelper<
 
     public:
 
-                 Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
+                 Job( const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
                       css::uno::Reference< css::frame::XFrame >               xFrame );
-                 Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
+                 Job( const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
                       css::uno::Reference< css::frame::XModel >               xModel );
         virtual ~Job(                                                                      ) override;
 

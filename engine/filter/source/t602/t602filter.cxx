@@ -128,7 +128,7 @@ namespace T602ImportFilter {
 
 static inistruct ini;
 
-T602ImportFilter::T602ImportFilter(css::uno::Reference<css::uno::XComponentContext > x )
+T602ImportFilter::T602ImportFilter(css::uno::Reference<cpo::uno::XComponentContext > x )
     : mxContext(std::move(x))
     , node(tnode::START)
 {
@@ -1082,14 +1082,14 @@ Sequence< OUString > T602ImportFilterDialog::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_T602ImportFilterDialog_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new T602ImportFilter::T602ImportFilterDialog());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_T602ImportFilter_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new T602ImportFilter::T602ImportFilter(context));
 }

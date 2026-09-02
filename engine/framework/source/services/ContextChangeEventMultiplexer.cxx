@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -317,7 +317,7 @@ namespace framework {
 
 // right now we assume there's one matching listener
 static uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_ImplImpl(
-    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
     uno::Reference<uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {
@@ -361,7 +361,7 @@ Hook g_hook;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ContextChangeEventMultiplexer());

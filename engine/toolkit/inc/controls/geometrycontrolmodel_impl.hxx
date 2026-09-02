@@ -23,7 +23,7 @@
 
 template <class CONTROLMODEL>
 OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(
-    const css::uno::Reference<css::uno::XComponentContext>& i_factory)
+    const css::uno::Reference<cpo::uno::XComponentContext>& i_factory)
     : OGeometryControlModel_Base(new CONTROLMODEL(i_factory))
 {
 }

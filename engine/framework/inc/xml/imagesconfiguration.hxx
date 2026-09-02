@@ -21,7 +21,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <vector>
 
@@ -48,12 +48,12 @@ class ImagesConfiguration
 {
     public:
         static bool LoadImages(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XInputStream >& rInputStream,
             ImageItemDescriptorList& rItems );
 
         static bool StoreImages(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
             const ImageItemDescriptorList& rItems );
 };

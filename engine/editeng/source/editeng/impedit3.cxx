@@ -4906,7 +4906,7 @@ Reference < i18n::XBreakIterator > const & ImpEditEngine::ImplGetBreakIterator()
 {
     if (!mxBI.is())
     {
-        const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+        const uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
         mxBI = i18n::BreakIterator::create(xContext);
     }
     return mxBI;
@@ -4916,7 +4916,7 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
 {
     if (!mxISC.is())
     {
-        const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+        const uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
         mxISC = i18n::InputSequenceChecker::create(xContext);
     }
     return mxISC;

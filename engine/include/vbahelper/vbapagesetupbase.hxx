@@ -29,8 +29,8 @@
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -47,7 +47,7 @@ protected:
 
     /// @throws cpo::uno::RuntimeException
     VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 public:
 
     // Attribute

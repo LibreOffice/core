@@ -24,7 +24,7 @@
 #include <DataSeriesHelper.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <PropertyHelper.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
@@ -57,7 +57,7 @@ namespace chart
 
 BubbleChartTypeTemplate::BubbleChartTypeTemplate(
     Reference<
-        uno::XComponentContext > const & xContext,
+        cpo::uno::XComponentContext > const & xContext,
     const OUString & rServiceName ) :
         ChartTypeTemplate( xContext, rServiceName )
 {

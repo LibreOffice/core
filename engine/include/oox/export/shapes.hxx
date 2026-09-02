@@ -49,11 +49,8 @@ namespace embed {
 namespace io {
     class XInputStream;
 }
-namespace uno {
-    class XComponentContext;
-    class XInterface;
 }
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox::core {
     class XmlFilterBase;

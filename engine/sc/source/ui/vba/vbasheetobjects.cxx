@@ -81,7 +81,7 @@ public:
     /// @throws uno::RuntimeException
     explicit ScVbaObjectContainer(
         uno::Reference< XHelperInterface > xParent,
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const cpo::uno::Type& rVbaType );
@@ -89,7 +89,7 @@ public:
     /** Returns the VBA helper interface of the VBA collection object. */
     const uno::Reference< XHelperInterface >& getParent() const { return mxParent; }
     /** Returns the component context of the VBA collection object. */
-    const uno::Reference< uno::XComponentContext >& getContext() const { return mxContext; }
+    const uno::Reference< cpo::uno::XComponentContext >& getContext() const { return mxContext; }
     /** Returns the VBA type information of the objects in this container. */
     const cpo::uno::Type& getVbaType() const { return maVbaType; }
 
@@ -157,7 +157,7 @@ protected:
 
 protected:
     uno::Reference< XHelperInterface > mxParent;
-    uno::Reference< uno::XComponentContext > mxContext;
+    uno::Reference< cpo::uno::XComponentContext > mxContext;
     uno::Reference< frame::XModel > mxModel;
     uno::Reference< lang::XMultiServiceFactory > mxFactory;
     uno::Reference< drawing::XShapes > mxShapes;
@@ -170,7 +170,7 @@ private:
 
 ScVbaObjectContainer::ScVbaObjectContainer(
         uno::Reference< XHelperInterface > xParent,
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const cpo::uno::Type& rVbaType ) :
@@ -378,7 +378,7 @@ public:
     /// @throws uno::RuntimeException
     explicit ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const cpo::uno::Type& rVbaType,
@@ -405,7 +405,7 @@ protected:
 
 ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const cpo::uno::Type& rVbaType,
@@ -496,7 +496,7 @@ public:
     /// @throws uno::RuntimeException
     explicit ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         bool bOptionButtons);
@@ -510,7 +510,7 @@ protected:
 
 ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         bool bOptionButtons ) :
@@ -545,7 +545,7 @@ bool ScVbaButtonContainer::implCheckProperties( const uno::Reference< beans::XPr
 
 ScVbaButtons::ScVbaButtons(
         const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         bool bOptionButtons) :

@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
@@ -96,7 +96,7 @@ namespace dbaccess
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
         css::uno::Reference< css::uno::XInterface >
                                                 m_xParentContainer;
-        const css::uno::Reference< css::uno::XComponentContext >
+        const css::uno::Reference< cpo::uno::XComponentContext >
                                                 m_aContext;
         const ::connectivity::SQLError          m_aErrorHelper;
         TContentPtr                             m_pImpl;
@@ -118,7 +118,7 @@ namespace dbaccess
 
     public:
 
-        OContentHelper( const css::uno::Reference< css::uno::XComponentContext >& _xORB
+        OContentHelper( const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
                         ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
                         ,TContentPtr _pImpl
                     );
@@ -164,7 +164,7 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XRow >
             getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
 
-        const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_aContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const { return m_aContext; }
 
         const TContentPtr& getImpl() const { return m_pImpl; }
 

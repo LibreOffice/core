@@ -21,7 +21,7 @@
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
@@ -31,11 +31,11 @@ class OleEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
                                                 css::embed::XEmbeddedObjectCreator,
                                                 css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
     explicit OleEmbeddedObjectFactory(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext )
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     {
         OSL_ENSURE( xContext.is(), "No service manager is provided!" );

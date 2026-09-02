@@ -21,7 +21,7 @@
 
 #include "storagestream.hxx"
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace com::sun::star::io { class XTextOutputStream2; }
 
@@ -33,7 +33,7 @@ namespace dbaccess
     {
     public:
         StorageTextOutputStream(
-            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );

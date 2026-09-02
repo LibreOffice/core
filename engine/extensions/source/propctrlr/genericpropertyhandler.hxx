@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
@@ -60,7 +60,7 @@ namespace pcr
         mutable ::osl::Mutex    m_aMutex;
 
         /// the service factory for creating services
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         /// need this to keep alive as long as m_xComponent lives
         css::uno::Reference< css::beans::XIntrospectionAccess >   m_xComponentIntrospectionAccess;
         /// the properties of the object we're handling
@@ -81,7 +81,7 @@ namespace pcr
 
     public:
         explicit GenericPropertyHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         virtual ~GenericPropertyHandler() override;

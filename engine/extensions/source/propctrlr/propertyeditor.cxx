@@ -32,7 +32,7 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
 
-    OPropertyEditor::OPropertyEditor(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder)
+    OPropertyEditor::OPropertyEditor(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder)
         : m_xContainer(rBuilder.weld_container(u"box"_ustr))
         , m_xTabControl(rBuilder.weld_notebook(u"tabcontrol"_ustr))
         , m_xControlHoldingParent(rBuilder.weld_container(u"controlparent"_ustr)) // controls initially have this parent before they are moved

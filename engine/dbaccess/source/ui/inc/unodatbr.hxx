@@ -106,7 +106,7 @@ namespace dbaui
         virtual OUString getPrivateTitle( ) const override;
     // attribute access
     public:
-        SbaTableQueryBrowser(const css::uno::Reference< css::uno::XComponentContext >& _rM);
+        SbaTableQueryBrowser(const css::uno::Reference< cpo::uno::XComponentContext >& _rM);
         virtual ~SbaTableQueryBrowser() override;
 
         enum EntryType

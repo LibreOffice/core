@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::sdbc { class XConnection; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace dbtools

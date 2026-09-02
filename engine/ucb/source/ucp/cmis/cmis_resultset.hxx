@@ -29,7 +29,7 @@ namespace cmis
         public:
 
             DynamicResultSet(
-                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                     ChildrenProvider* pChildrenProvider,
                     const css::ucb::OpenCommandArgument2& rCommand,
                     const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );

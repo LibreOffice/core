@@ -63,7 +63,7 @@ namespace svxform
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::form::XFormComponent;
     using ::com::sun::star::container::XIndexAccess;

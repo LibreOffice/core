@@ -34,7 +34,7 @@ private:
     sal_Int32       m_nPointsTop;
     sal_Int32       m_nAnimation;
 public:
-    ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext );
+    ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext );
     virtual ~ScVbaAssistant() override;
     // XAssistant
     virtual bool SAL_CALL getOn() override;

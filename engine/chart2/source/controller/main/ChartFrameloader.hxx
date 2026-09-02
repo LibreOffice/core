@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -34,7 +34,7 @@ class ChartFrameLoader : public ::cppu::WeakImplHelper<
         >
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext>        m_xCC;
+    css::uno::Reference< cpo::uno::XComponentContext>        m_xCC;
     bool            m_bCancelRequired;
     ::osl::Condition    m_oCancelFinished;
 
@@ -44,7 +44,7 @@ private:
 public:
     ChartFrameLoader() = delete;
 
-    explicit ChartFrameLoader(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    explicit ChartFrameLoader(css::uno::Reference< cpo::uno::XComponentContext > const & xContext);
     virtual ~ChartFrameLoader() override;
 
     // css::lang::XServiceInfo

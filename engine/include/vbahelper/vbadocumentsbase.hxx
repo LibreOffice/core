@@ -32,8 +32,8 @@
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace container { class XEnumeration; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XDocumentsBase;
@@ -56,7 +56,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType );
+    VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override = 0;

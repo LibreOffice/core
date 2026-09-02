@@ -45,7 +45,7 @@ namespace pcr
 
     public:
         explicit EFormsPropertyHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
     protected:

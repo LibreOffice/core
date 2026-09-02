@@ -107,7 +107,7 @@ protected:
 
 public:
     SwXMLImport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags);
 
     virtual ~SwXMLImport() noexcept override;

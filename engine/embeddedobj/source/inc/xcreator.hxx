@@ -30,12 +30,12 @@ class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper<
                                                 css::embed::XEmbeddedObjectCreator,
                                                 css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 public:
     UNOEmbeddedObjectCreator(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : m_xContext( rxContext )
     , m_aConfigHelper( rxContext )
     {

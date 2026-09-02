@@ -30,7 +30,7 @@ class XMLAutoTextEventImport : public SvXMLImport
 
 public:
     explicit XMLAutoTextEventImport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
     virtual ~XMLAutoTextEventImport() noexcept override;
 

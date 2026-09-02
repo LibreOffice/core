@@ -23,7 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <com/sun/star/system/XSimpleMailClient.hpp>
 
@@ -42,7 +42,7 @@ class CmdMailSuppl :
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigurationProvider;
 
 public:
-    explicit CmdMailSuppl( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit CmdMailSuppl( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
 
     // XSimpleMailClientSupplier

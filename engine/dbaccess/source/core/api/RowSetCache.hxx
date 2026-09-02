@@ -47,7 +47,7 @@ namespace dbaccess
         //the set can be static, bookmarkable or keyset
         cpo::uno::WeakReference< css::sdbc::XResultSet>       m_xSet;
         css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
-        css::uno::Reference< css::uno::XComponentContext>     m_aContext;
+        css::uno::Reference< cpo::uno::XComponentContext>     m_aContext;
 
         rtl::Reference<OCacheSet>                             m_xCacheSet; // is a bookmarkable, keyset or static resultset
 
@@ -113,7 +113,7 @@ namespace dbaccess
     public:
         ORowSetCache(const css::uno::Reference< css::sdbc::XResultSet >& _xRs,
                      const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                     const css::uno::Reference< css::uno::XComponentContext >& _rContext,
+                     const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
                      const OUString& _rUpdateTableName,
                      bool&  _bModified,
                      bool&  _bNew,

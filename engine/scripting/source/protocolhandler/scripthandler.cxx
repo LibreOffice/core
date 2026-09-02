@@ -389,7 +389,7 @@ void ScriptProtocolHandler::createScriptProvider()
     }
 }
 
-ScriptProtocolHandler::ScriptProtocolHandler( const Reference< css::uno::XComponentContext > & xContext )
+ScriptProtocolHandler::ScriptProtocolHandler( const Reference< cpo::uno::XComponentContext > & xContext )
   : m_bInitialised( false ), m_xContext( xContext )
 {
 }
@@ -418,7 +418,7 @@ Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_ScriptProtocolHandler_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScriptProtocolHandler(context));
 }

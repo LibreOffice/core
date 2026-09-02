@@ -26,7 +26,7 @@
 
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace sd {
 class DrawController;

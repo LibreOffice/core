@@ -20,7 +20,7 @@
 #include "PageSizeControl.hxx"
 #include <vcl/toolbox.hxx>
 
-PageSizePopup::PageSizePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+PageSizePopup::PageSizePopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }
@@ -66,7 +66,7 @@ cpo::uno::Sequence<OUString> PageSizePopup::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PageSizeToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext,
+    cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new PageSizePopup(rContext));

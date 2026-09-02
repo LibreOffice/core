@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace
 {
@@ -144,14 +144,14 @@ cpo::uno::Sequence< OUString > CartesianCoordinateSystem3d::getSupportedServiceN
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation(css::uno::XComponentContext *,
+com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CartesianCoordinateSystem2d);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation(css::uno::XComponentContext *,
+com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CartesianCoordinateSystem3d);

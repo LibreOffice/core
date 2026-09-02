@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 
@@ -38,7 +38,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocum
     std::vector< css::beans::StringPair > const & GetParsingResult() const;
 
     /// @throws cpo::uno::Exception
-    static std::vector< css::beans::StringPair > ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    static std::vector< css::beans::StringPair > ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
 public:
     virtual ~DocTemplLocaleHelper() override;
@@ -49,7 +49,7 @@ public:
     std::vector< css::beans::StringPair >
     ReadGroupLocalizationSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // writes sequence of elements ( GroupName, GroupUIName )
     /// @throws cpo::uno::Exception
@@ -57,7 +57,7 @@ public:
     void WriteGroupLocalizationSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
         const std::vector< css::beans::StringPair >& aSequence,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     static OUString GetStandardGroupString();
     static std::vector<OUString> GetBuiltInGroupNames();

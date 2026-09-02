@@ -36,7 +36,7 @@ using namespace ::ooo::vba;
 
 SwVbaWindow::SwVbaWindow(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const rtl::Reference< SwXTextDocument >& xModel,
         const uno::Reference< frame::XController >& xController ) :
     WindowImpl_BASE( xParent, xContext, xController ),

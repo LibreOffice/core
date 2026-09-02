@@ -58,7 +58,7 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
 {
     public:
         explicit FontHeightToolBoxControl(
-            const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
         // XServiceInfo
         virtual OUString getImplementationName() override;
@@ -348,7 +348,7 @@ IMPL_LINK(SvxFontSizeBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonW
     rJsonWriter.put("command", ".uno:FontHeight");
 }
 
-FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
+FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
  : FontHeightToolBoxControl_Base( rxContext,
                            uno::Reference< frame::XFrame >(),
                            u".uno:FontHeight"_ustr ),
@@ -506,7 +506,7 @@ void FontHeightToolBoxControl::dispatchCommand(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FontHeightToolBoxController_get_implementation(
-    css::uno::XComponentContext *rxContext,
+    cpo::uno::XComponentContext *rxContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FontHeightToolBoxControl(rxContext));

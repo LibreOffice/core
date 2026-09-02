@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 SwBreakIt* g_pBreakIt = nullptr;
 
-void SwBreakIt::Create_( const uno::Reference<uno::XComponentContext> & rxContext )
+void SwBreakIt::Create_( const uno::Reference<cpo::uno::XComponentContext> & rxContext )
 {
     delete g_pBreakIt;
     g_pBreakIt = new SwBreakIt( rxContext );
@@ -50,7 +50,7 @@ SwBreakIt * SwBreakIt::Get()
     return g_pBreakIt;
 }
 
-SwBreakIt::SwBreakIt( uno::Reference<uno::XComponentContext> xContext )
+SwBreakIt::SwBreakIt( uno::Reference<cpo::uno::XComponentContext> xContext )
     : m_xContext(std::move(xContext))
     , m_xBreak(dynamic_cast<i18npool::BreakIterator*>(i18n::BreakIterator::create(m_xContext).get()))
     , m_aForbiddenLang(LANGUAGE_DONTKNOW)

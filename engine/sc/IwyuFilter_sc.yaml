@@ -614,7 +614,7 @@ excludelist:
     - ooo/vba/excel/XRange.hpp
     sc/source/ui/vba/vbarange.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     sc/source/ui/vba/vbasheetobjects.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XGraphicObjects.hpp
@@ -633,7 +633,7 @@ excludelist:
     - ooo/vba/excel/XWindows.hpp
     sc/source/ui/vba/vbaworkbooks.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     sc/source/ui/vba/vbaworksheet.hxx:
     # base class has to be a complete type
     - ooo/vba/excel/XWorksheet.hpp
@@ -1031,7 +1031,7 @@ excludelist:
     - com/sun/star/sheet/XNamedRanges.hpp
     sc/source/ui/vba/vbapagebreaks.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     sc/source/ui/vba/vbawsfunction.cxx:
     # Actually used
     - com/sun/star/beans/XIntrospectionAccess.hpp

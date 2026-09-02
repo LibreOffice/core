@@ -43,9 +43,9 @@ namespace com::sun::star {
         class XStream;
     }
     namespace lang { class XSingleServiceFactory; }
-    namespace uno { class XComponentContext; }
 }
 namespace cpo::uno { template <typename> class Sequence; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper {
 
@@ -71,20 +71,20 @@ public:
     /// @throws cpo::uno::Exception
     static css::uno::Reference< css::lang::XSingleServiceFactory >
         GetStorageFactory(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static css::uno::Reference< css::lang::XSingleServiceFactory >
         GetFileSystemStorageFactory(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static css::uno::Reference< css::embed::XStorage >
         GetTemporaryStorage(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// this one will only return Storage
     ///
@@ -93,8 +93,8 @@ public:
         GetStorageFromURL(
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// this one will return either Storage or FileSystemStorage
     ///
@@ -103,23 +103,23 @@ public:
         GetStorageFromURL2(
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static css::uno::Reference< css::embed::XStorage >
         GetStorageFromInputStream(
             const css::uno::Reference < css::io::XInputStream >& xStream,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static css::uno::Reference< css::embed::XStorage >
         GetStorageFromStream(
             const css::uno::Reference < css::io::XStream >& xStream,
             sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static void CopyInputToOutput(
@@ -130,7 +130,7 @@ public:
     static css::uno::Reference< css::io::XInputStream >
         GetInputStreamFromURL(
             const OUString& aURL,
-            const css::uno::Reference< css::uno::XComponentContext >& context );
+            const css::uno::Reference< cpo::uno::XComponentContext >& context );
 
     /// @throws cpo::uno::Exception
     static void SetCommonStorageEncryptionData(
@@ -148,16 +148,16 @@ public:
             const OUString& aFormat,
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >() );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static css::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromInputStream(
             const OUString& aFormat,
             const css::uno::Reference < css::io::XInputStream >& xStream,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >(),
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >(),
             bool bRepairStorage = false );
 
     /// @throws cpo::uno::Exception
@@ -166,8 +166,8 @@ public:
             const OUString& aFormat,
             const css::uno::Reference < css::io::XStream >& xStream,
             sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< css::uno::XComponentContext >(),
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = css::uno::Reference< cpo::uno::XComponentContext >(),
             bool bRepairStorage = false );
 
     static cpo::uno::Sequence< css::beans::NamedValue >

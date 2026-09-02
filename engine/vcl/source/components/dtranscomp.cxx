@@ -189,7 +189,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 vcl_SystemClipboard_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard( args );

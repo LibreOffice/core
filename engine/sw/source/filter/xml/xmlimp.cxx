@@ -321,7 +321,7 @@ SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
 }
 
 SwXMLImport::SwXMLImport(
-    const uno::Reference< uno::XComponentContext >& rContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( rContext, implementationName, nImportFlags ),
     m_nStyleFamilyMask( SfxStyleFamily::All ),
@@ -1737,7 +1737,7 @@ const SwDoc* SwXMLImport::getDoc() const
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisImporter"_ustr,
@@ -1746,7 +1746,7 @@ com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponen
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisStylesImporter"_ustr,
@@ -1756,7 +1756,7 @@ com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XCo
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisContentImporter"_ustr,
@@ -1765,7 +1765,7 @@ com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XC
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisMetaImporter"_ustr,
@@ -1774,7 +1774,7 @@ com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComp
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, u"com.sun.star.comp.Writer.XMLOasisSettingsImporter"_ustr,
@@ -1872,7 +1872,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame(u"_blank"_ustr, 0);
 
-    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XModel2> xModel(xContext->getServiceManager()->createInstanceWithContext(
                 u"com.sun.star.text.TextDocument"_ustr, xContext), uno::UNO_QUERY_THROW);
 

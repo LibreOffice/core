@@ -30,9 +30,7 @@ namespace com::sun::star::media {
     class XPlayerWindow;
 }
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace avmedia
 {

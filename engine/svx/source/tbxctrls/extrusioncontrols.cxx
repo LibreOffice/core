@@ -298,7 +298,7 @@ Sequence< OUString > ExtrusionDirectionControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionDirectionControl_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionDirectionControl(xContext));
@@ -578,7 +578,7 @@ Sequence< OUString > ExtrusionDepthController::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionDepthController_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionDepthController(xContext));
@@ -811,7 +811,7 @@ Sequence< OUString > ExtrusionLightingControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionLightingControl(xContext));
@@ -957,7 +957,7 @@ Sequence< OUString > ExtrusionSurfaceControl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ExtrusionSurfaceControl_get_implementation(
-    css::uno::XComponentContext* xContext,
+    cpo::uno::XComponentContext* xContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ExtrusionSurfaceControl(xContext));

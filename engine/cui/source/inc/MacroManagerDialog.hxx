@@ -19,7 +19,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 struct ScriptContainerInfo
 {
@@ -126,7 +126,7 @@ class ScriptContainersListBox
 
     ScriptsListBox* m_pScriptsListBox;
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
     std::unique_ptr<weld::TreeView> m_xTreeView;
@@ -154,7 +154,7 @@ public:
     weld::TreeView& get_widget() { return *m_xTreeView; }
     void ClearAll();
 
-    void Init(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    void Init(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
               const css::uno::Reference<css::frame::XFrame>& xFrame);
     void SetScriptsListBox(ScriptsListBox* pBox) { m_pScriptsListBox = pBox; }
     void ScriptContainerSelected();

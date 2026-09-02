@@ -32,11 +32,11 @@ namespace frm
 
     public:
         OScrollBarModel(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         OScrollBarModel(
             const OScrollBarModel* _pOriginal,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~OScrollBarModel() override;
 

@@ -54,8 +54,8 @@ namespace com::sun::star {
         class XNumberFormatter;
     }
     namespace ucb { class XContent; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace svt
 {
@@ -84,7 +84,7 @@ namespace dbaui
     ::dbtools::SQLExceptionInfo createConnection(
                                     const OUString& _rsDataSourceName,
                                     const css::uno::Reference< css::container::XNameAccess >& _xDatabaseContext,
-                                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                                     css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
                                     css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
     /** creates a new connection and appends the eventlistener
@@ -96,7 +96,7 @@ namespace dbaui
     */
     ::dbtools::SQLExceptionInfo createConnection(
                                     const css::uno::Reference< css::beans::XPropertySet >& _xDataSource,
-                                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                                     css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
                                     css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
 
@@ -122,7 +122,7 @@ namespace dbaui
     /** checks if the given name exists in the database context
     */
     bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
-                                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+                                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     /** maps SvxCellHorJustify to css::awt::TextAlign
         @param SvxCellHorJustify& _eAlignment
@@ -150,7 +150,7 @@ namespace dbaui
         getDataSourceByName(
                 const OUString& _rDataSourceName,
                 weld::Window* _pErrorMessageParent,
-                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
 
@@ -192,7 +192,7 @@ namespace dbaui
     */
     bool appendToFilter(const css::uno::Reference< css::sdbc::XConnection>& xConnection,
                         const OUString& rName,
-                        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                         weld::Window* pParent);
 
     /** check if SQL92 name checking is enabled
@@ -288,7 +288,7 @@ namespace dbaui
     */
     bool insertHierarchyElement(
                 weld::Window* pParent,
-                const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::container::XHierarchicalNameContainer>& _xNames,
                 bool _bForm
             );
@@ -299,7 +299,7 @@ namespace dbaui
         @param  _rxContext
             The multi service factory
     */
-    css::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+    css::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
 
 }
 

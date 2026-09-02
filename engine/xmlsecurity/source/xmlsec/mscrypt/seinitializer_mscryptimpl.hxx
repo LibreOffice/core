@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
@@ -43,10 +43,10 @@ class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
  ******************************************************************************/
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 
 public:
-    explicit SEInitializer_MSCryptImpl(const css::uno::Reference< css::uno::XComponentContext > &rxContext);
+    explicit SEInitializer_MSCryptImpl(const css::uno::Reference< cpo::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_MSCryptImpl() override;
 
     /* XSEInitializer */

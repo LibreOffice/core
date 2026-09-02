@@ -129,13 +129,13 @@ protected:
     SfxItemSet* getCurrentDataSet();
 public:
     /// @throws css::lang::IllegalArgumentException
-    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, bool bIsRows = false, bool bIsColumns = false );
+    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, bool bIsRows = false, bool bIsColumns = false );
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false );
+    ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false );
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaRange( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaRange( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     /// @throws cpo::uno::RuntimeException
     ScDocument& getScDocument();
@@ -161,7 +161,7 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const OUString& sRangeName, ScDocShell* pDocSh,
         formula::FormulaGrammar::AddressConvention eConv  );
 
@@ -169,7 +169,7 @@ public:
     static css::uno::Reference< ov::excel::XRange > CellsHelper(
         const ScDocument& rDoc,
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::table::XCellRange >& xRange,
         const cpo::uno::Any &nRowIndex, const cpo::uno::Any &nColumnIndex );
 
@@ -314,7 +314,7 @@ public:
 //     * object should be a lightweight as possible
 //     * we shouldn't need hacks like this below
     /// @throws cpo::uno::RuntimeException
-    static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< css::uno::XComponentContext >& xContext, const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2 );
+    static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Any &Cell1, const cpo::uno::Any &Cell2 );
     static bool getCellRangesForAddress(ScRefFlags &rResFlags, std::u16string_view sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention eConv, char cDelimiter );
     virtual bool SAL_CALL GoalSeek( const cpo::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL SpecialCells( const cpo::uno::Any& _oType, const cpo::uno::Any& _oValue) override;

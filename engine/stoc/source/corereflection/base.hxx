@@ -45,7 +45,7 @@
 
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::reflection { class XIdlClass; }
 namespace com::sun::star::reflection { class XIdlField; }
 namespace com::sun::star::reflection { class XIdlMethod; }
@@ -98,7 +98,7 @@ public:
     uno_Interface * mapToUno( const cpo::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo );
 
     // ctor/ dtor
-    explicit IdlReflectionServiceImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit IdlReflectionServiceImpl( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~IdlReflectionServiceImpl() override;
 
     // WeakComponentImplHelper

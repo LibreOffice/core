@@ -90,7 +90,7 @@ namespace basctl
     using ::com::sun::star::uri::UriReferenceFactory;
     using ::com::sun::star::uri::XUriReferenceFactory;
     using ::com::sun::star::uri::XUriReference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::util::XMacroExpander;
     using ::com::sun::star::util::theMacroExpander;
     using ::com::sun::star::io::XInputStreamProvider;

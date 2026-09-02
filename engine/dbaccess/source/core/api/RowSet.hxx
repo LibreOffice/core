@@ -247,7 +247,7 @@ namespace dbaccess
         virtual ~ORowSet() override;
 
     public:
-        explicit ORowSet(const css::uno::Reference<css::uno::XComponentContext>&);
+        explicit ORowSet(const css::uno::Reference<cpo::uno::XComponentContext>&);
 
         // css::lang::XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
@@ -466,7 +466,7 @@ namespace dbaccess
 
         virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
     public:
-        ORowSetClone( const css::uno::Reference<css::uno::XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
+        ORowSetClone( const css::uno::Reference<cpo::uno::XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
         virtual ~ORowSetClone() override;
 
     // css::lang::XTypeProvider

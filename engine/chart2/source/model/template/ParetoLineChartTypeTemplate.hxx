@@ -18,7 +18,7 @@ namespace chart
 class ParetoLineChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    ParetoLineChartTypeTemplate(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    ParetoLineChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                 const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~ParetoLineChartTypeTemplate() override;
 

@@ -30,11 +30,11 @@ class OGroupBoxModel
 {
 public:
     OGroupBoxModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OGroupBoxModel(
         const OGroupBoxModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OGroupBoxModel() override;
 
@@ -66,7 +66,7 @@ protected:
 class OGroupBoxControl : public OControl
 {
 public:
-    explicit OGroupBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OGroupBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString getImplementationName() override

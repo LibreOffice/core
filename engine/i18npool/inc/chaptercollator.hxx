@@ -31,7 +31,7 @@ class ChapterCollator final : public CollatorImpl
 {
 public:
     // Constructors
-    ChapterCollator( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    ChapterCollator( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     // Destructor
     virtual ~ChapterCollator() override;
 

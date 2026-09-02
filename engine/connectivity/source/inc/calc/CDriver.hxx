@@ -33,7 +33,7 @@ namespace connectivity::calc
     {
     public:
         ODriver(const css::uno::Reference<
-                            css::uno::XComponentContext >& _rxContext) :
+                            cpo::uno::XComponentContext >& _rxContext) :
             file::OFileDriver(_rxContext) {}
 
         OUString getImplementationName(  ) override;

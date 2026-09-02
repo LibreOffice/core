@@ -113,7 +113,7 @@ public:
 private:
     css::uno::Reference<css::uno::XInterface> createInstanceWithArgumentsEveryTime(
         cpo::uno::Sequence<cpo::uno::Any> const & rArguments,
-        css::uno::Reference<css::uno::XComponentContext> const & xContext);
+        css::uno::Reference<cpo::uno::XComponentContext> const & xContext);
 
     Reference<XInterface >  m_xTheInstance;
     bool                m_bOneInstance;
@@ -251,7 +251,7 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndC
 css::uno::Reference<css::uno::XInterface>
 OFactoryComponentHelper::createInstanceWithArgumentsEveryTime(
     cpo::uno::Sequence<cpo::uno::Any> const & rArguments,
-    css::uno::Reference<css::uno::XComponentContext> const & xContext)
+    css::uno::Reference<cpo::uno::XComponentContext> const & xContext)
 {
     Reference< XInterface > xRet( createInstanceEveryTime( xContext ) );
 

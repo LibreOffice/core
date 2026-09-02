@@ -55,7 +55,7 @@ namespace ucb::ucp::ext
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::ucb::Command;

@@ -179,7 +179,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_PackageManagerFactory_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_manager::factory::PackageManagerFactoryImpl(context));
 }

@@ -72,7 +72,7 @@ struct HitItem
 
 }
 
-ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentContext >& rxContext,
+ResultSetForQuery::ResultSetForQuery( const uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                       const uno::Reference< XContentProvider >&  xProvider,
                                       const cpo::uno::Sequence< beans::Property >& seq,
                                       const URLParameter& aURLParameter,

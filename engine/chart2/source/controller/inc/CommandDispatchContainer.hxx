@@ -29,7 +29,7 @@
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { struct DispatchDescriptor; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { struct URL; }
 
 namespace chart
@@ -71,7 +71,7 @@ public:
     // handled by other dispatchers.  (Chart is currently the controller
     // itself)
     explicit CommandDispatchContainer(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
     ~CommandDispatchContainer();
 
     void setModel(
@@ -123,7 +123,7 @@ private:
     mutable tDispatchMap m_aCachedDispatches;
     mutable tDisposeVector m_aToBeDisposedDispatches;
 
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     unotools::WeakReference< ::chart::ChartModel >         m_xModel;
 
     rtl::Reference<ControllerCommandDispatch> m_xChartDispatcher;

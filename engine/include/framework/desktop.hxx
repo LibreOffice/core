@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -105,7 +105,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
     public:
 
         //  constructor / destructor
-                 Desktop( css::uno::Reference< css::uno::XComponentContext >  xContext );
+                 Desktop( css::uno::Reference< cpo::uno::XComponentContext >  xContext );
         virtual ~Desktop(                                                                    ) override;
 
         void constructorInit();
@@ -384,7 +384,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
           */
         bool m_bSession;
 
-        css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
+        css::uno::Reference< cpo::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
         FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;     /// container for ALL Listener
         rtl::Reference< OFrames >                                       m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
@@ -439,7 +439,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 };      //  class Desktop
 
 FWK_DLLPUBLIC const rtl::Reference<Desktop> & getDesktop(
-    css::uno::Reference<css::uno::XComponentContext> const & context);
+    css::uno::Reference<cpo::uno::XComponentContext> const & context);
 
 }       //  namespace framework
 

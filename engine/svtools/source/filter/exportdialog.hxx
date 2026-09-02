@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <memory>
 
@@ -44,7 +44,7 @@ private:
 
     FltCallDialogParameter&    mrFltCallPara;
 
-    const css::uno::Reference< css::uno::XComponentContext >
+    const css::uno::Reference< cpo::uno::XComponentContext >
                                mxContext;
     const css::uno::Reference< css::lang::XComponent >&
                                mxSourceDocument;
@@ -174,7 +174,7 @@ private:
 
 public:
     ExportDialog( FltCallDialogParameter& rPara,
-        css::uno::Reference< css::uno::XComponentContext > xContext,
+        css::uno::Reference< cpo::uno::XComponentContext > xContext,
         const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
         bool bExportSelection, bool bIsExportVectorFormat, bool bGraphicsSource,
         const css::uno::Reference< css::graphic::XGraphic >& rxGraphic);

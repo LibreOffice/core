@@ -61,7 +61,7 @@ namespace logging
     using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 

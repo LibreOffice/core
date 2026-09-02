@@ -209,7 +209,7 @@ bool SwMacroField::isScriptURL( const OUString& str )
 {
     try
     {
-        const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
         uno::Reference<uri::XUriReferenceFactory> xFactory = uri::UriReferenceFactory::create(xContext);
         uno::Reference<uri::XVndSunStarScriptUrl> xUrl(xFactory->parse(str), uno::UNO_QUERY);
         return xUrl.is();

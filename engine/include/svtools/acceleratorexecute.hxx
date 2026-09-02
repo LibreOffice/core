@@ -31,7 +31,7 @@ namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::ui { class XAcceleratorConfiguration; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XURLTransformer; }
 
 
@@ -69,7 +69,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final
         std::mutex m_aLock;
 
         /** TODO document me */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** TODO document me */
         css::uno::Reference< css::util::XURLTransformer > m_xURLParser;
@@ -138,7 +138,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final
                     is used only. Further the global Desktop instance is
                     used for dispatch.
          */
-        void init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        void init(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                           const css::uno::Reference< css::frame::XFrame >&              xEnv );
 
 
@@ -173,10 +173,10 @@ class SVT_DLLPUBLIC AcceleratorExecute final
 
 
         /** TODO document me */
-        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
+        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext ,
                                                                                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
-        static css::uno::Reference<css::ui::XAcceleratorConfiguration> kit_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& sModule);
+        static css::uno::Reference<css::ui::XAcceleratorConfiguration> kit_createNewAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const OUString& sModule);
         void kit_setModuleConfig(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig);
 
         /** TODO document me */

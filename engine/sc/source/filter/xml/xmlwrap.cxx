@@ -102,7 +102,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
     return xStatusIndicator;
 }
 
-ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XComponentContext>& xContext,
+ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<cpo::uno::XComponentContext>& xContext,
     const uno::Reference<frame::XModel>& xModel,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
@@ -281,7 +281,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
 
 bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
 {
-    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
     xml::sax::InputSource aParserInput;
     if (pMedium)
@@ -595,7 +595,7 @@ static bool lcl_HasValidStream(const ScDocument& rDoc)
     return false;
 }
 
-bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentContext>& xContext,
+bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<cpo::uno::XComponentContext>& xContext,
     const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XWriter>& xWriter,
     const cpo::uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
@@ -726,7 +726,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     if (pDrawLayer)
         pDrawLayer->setLock(bOldLock);
 
-    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
 
     uno::Reference<xml::sax::XWriter> xWriter = xml::sax::Writer::create(xContext);
 

@@ -38,7 +38,7 @@ namespace dbaui
 {
     namespace DataSourceInfoConverter
     {
-        void convert(const css::uno::Reference< css::uno::XComponentContext> & xContext,
+        void convert(const css::uno::Reference< cpo::uno::XComponentContext> & xContext,
                      const ::dbaccess::ODsnTypeCollection* _pCollection,
                      std::u16string_view _sOldURLPrefix,
                      std::u16string_view _sNewURLPrefix,
@@ -52,7 +52,7 @@ namespace dbaui
         typedef std::map<sal_Int32, OUString> MapInt2String;
 
     private:
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                 m_xContext;                 /// service factory
         css::uno::Reference< css::sdb::XDatabaseContext >
                                 m_xDatabaseContext;     /// database context we're working in
@@ -67,7 +67,7 @@ namespace dbaui
         IItemSetHelper*         m_pItemSetHelper;
     public:
 
-        ODbDataSourceAdministrationHelper(const css::uno::Reference< css::uno::XComponentContext >& _xORB,
+        ODbDataSourceAdministrationHelper(const css::uno::Reference< cpo::uno::XComponentContext >& _xORB,
                                           weld::Window* pParent, weld::Window* pTopParent,
                                           IItemSetHelper* _pItemSetHelper);
 
@@ -84,7 +84,7 @@ namespace dbaui
         /// clear the password in the current data source's item set
         void        clearPassword();
 
-        const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext; }
+        const css::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */

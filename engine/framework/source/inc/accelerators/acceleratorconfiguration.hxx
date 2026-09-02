@@ -63,7 +63,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         /** the global uno service manager.
         Must be used to create own needed services. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** used to:
         i  ) copy configuration files from the share to the user layer
@@ -82,7 +82,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
     public:
 
-        XMLBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        XMLBasedAcceleratorConfiguration( const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
         virtual ~XMLBasedAcceleratorConfiguration(                                                                    ) override;
 
         // uno interface!
@@ -205,7 +205,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         /** the global uno service manager.
         Must be used to create own needed services. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         css::uno::Reference< css::container::XNameAccess > m_xCfg;
         AcceleratorCache m_aPrimaryReadCache;
@@ -220,7 +220,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
     public:
 
-        XCUBasedAcceleratorConfiguration( css::uno::Reference< css::uno::XComponentContext >  xContext );
+        XCUBasedAcceleratorConfiguration( css::uno::Reference< cpo::uno::XComponentContext >  xContext );
         virtual ~XCUBasedAcceleratorConfiguration(                                                           ) override;
 
         // uno interface!

@@ -32,7 +32,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <ucbhelper/content.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
@@ -230,7 +230,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     try
     {
         // get the TypeDetection service to access all registered types
-        const css::uno::Reference < css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const css::uno::Reference < cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         css::uno::Reference < css::document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
             css::uno::UNO_QUERY );

@@ -75,7 +75,7 @@ namespace dbaui
         OParameterDialog(weld::Window* _pParent,
             const css::uno::Reference< css::container::XIndexAccess > & _rParamContainer,
             const css::uno::Reference< css::sdbc::XConnection > & _rxConnection,
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog() override;
 
         const cpo::uno::Sequence< css::beans::PropertyValue >&

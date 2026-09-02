@@ -45,7 +45,7 @@ sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for 
 
 constexpr OUString PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar"_ustr;
 
-StatusIndicatorFactory::StatusIndicatorFactory(css::uno::Reference< css::uno::XComponentContext >  xContext)
+StatusIndicatorFactory::StatusIndicatorFactory(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext          (std::move(xContext ))
     , m_bAllowReschedule  (false)
     , m_bAllowParentShow  (false)
@@ -302,7 +302,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
     css::uno::Reference< css::awt::XWindow >  xPluggWindow;
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -583,7 +583,7 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::StatusIndicatorFactory(context));

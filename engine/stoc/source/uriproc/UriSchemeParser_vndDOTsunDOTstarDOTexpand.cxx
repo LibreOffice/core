@@ -37,7 +37,7 @@
 
 #include "UriReference.hxx"
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uri { class XUriReference; }
 
@@ -188,7 +188,7 @@ css::uno::Reference< css::uri::XUriReference > Parser::parse(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     //TODO: single instance

@@ -53,7 +53,7 @@ namespace dbtools
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;

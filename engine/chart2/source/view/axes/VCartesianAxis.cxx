@@ -2017,7 +2017,7 @@ void VCartesianAxis::createShapes()
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                                          Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
                                          rtl::Reference<::chart::ChartModel> const& xChartDoc,
-                                         css::uno::Reference<css::uno::XComponentContext> const& rComponentContext)
+                                         css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext)
 {
     if (!m_aAxisProperties.m_bDisplayDataTable)
         return;

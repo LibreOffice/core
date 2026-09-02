@@ -25,7 +25,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -36,11 +36,11 @@ using UcbContentProviderProxyFactory_Base = comphelper::WeakComponentImplHelper 
                                                 css::ucb::XContentProviderFactory >;
 class UcbContentProviderProxyFactory : public UcbContentProviderProxyFactory_Base
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
     explicit UcbContentProviderProxyFactory(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UcbContentProviderProxyFactory() override;
 
     // XServiceInfo
@@ -67,7 +67,7 @@ class UcbContentProviderProxy : public UcbContentProviderProxy_BASE
     bool        m_bReplace;
     bool        m_bRegister;
 
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
                                 m_xContext;
     css::uno::Reference< css::ucb::XContentProvider >
                                 m_xProvider;
@@ -76,7 +76,7 @@ class UcbContentProviderProxy : public UcbContentProviderProxy_BASE
 
 public:
     UcbContentProviderProxy(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             OUString Service );
     virtual ~UcbContentProviderProxy() override;
 

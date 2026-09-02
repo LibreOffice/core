@@ -70,7 +70,7 @@ class DocumentDigitalSignatures
       public sfx2::DigitalSignatures
 {
 private:
-    css::uno::Reference<css::uno::XComponentContext> mxCtx;
+    css::uno::Reference<cpo::uno::XComponentContext> mxCtx;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     uno::Reference<io::XStream> mxScriptingSignStream;
 
@@ -112,7 +112,7 @@ private:
 
 public:
     explicit DocumentDigitalSignatures(
-        const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
+        const css::uno::Reference<cpo::uno::XComponentContext>& rxCtx);
 
     //XInitialization
     void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
@@ -215,7 +215,7 @@ public:
 
 }
 
-DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
+DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< cpo::uno::XComponentContext >& rxCtx ):
     mxCtx(rxCtx),
     m_sODFVersion(ODFVER_014_TEXT),
     m_nArgumentsCount(0),
@@ -873,10 +873,10 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_security_DocumentDigitalSignatures_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
-        new DocumentDigitalSignatures(uno::Reference<uno::XComponentContext>(pCtx)));
+        new DocumentDigitalSignatures(uno::Reference<cpo::uno::XComponentContext>(pCtx)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

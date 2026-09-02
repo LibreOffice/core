@@ -33,7 +33,7 @@ protected:
 
 public:
     ScVbaOLEObjects(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                    const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                    const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                     const css::uno::Reference<css::container::XIndexAccess>& xIndexAccess);
 
     // XEnumerationAccess

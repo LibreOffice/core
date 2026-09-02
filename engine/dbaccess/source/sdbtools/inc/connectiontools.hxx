@@ -24,7 +24,7 @@
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -47,7 +47,7 @@ namespace sdbtools
             @param _rxContext
                 the context of the component
         */
-        explicit ConnectionTools( const css::uno::Reference< css::uno::XComponentContext >& _rContext );
+        explicit ConnectionTools( const css::uno::Reference< cpo::uno::XComponentContext >& _rContext );
 
         // XConnectionTools
         virtual css::uno::Reference< css::sdb::tools::XTableName > createTableName() override;

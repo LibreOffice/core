@@ -328,7 +328,7 @@ void VCoordinateSystem::createVAxisList(
             const awt::Rectangle& /* rMaximumSpaceForLabels */,
             bool /* bLimitSpaceForLabels */,
             std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
-            uno::Reference<uno::XComponentContext> const& /*rComponentContext*/)
+            uno::Reference<cpo::uno::XComponentContext> const& /*rComponentContext*/)
 {
 }
 

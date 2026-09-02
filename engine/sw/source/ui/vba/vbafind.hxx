@@ -61,12 +61,12 @@ private:
 
     /// @throws cpo::uno::RuntimeException
     SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-               const css::uno::Reference< css::uno::XComponentContext >& rContext,
+               const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                rtl::Reference< SwXTextDocument > xModel );
 public:
     static css::uno::Reference< ooo::vba::word::XFind > GetOrCreateFind(
                 const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                 const rtl::Reference< SwXTextDocument >& xModel,
                 const css::uno::Reference< css::text::XTextRange >& xTextRange);
     virtual ~SwVbaFind() override;

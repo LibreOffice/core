@@ -174,7 +174,7 @@ excludelist:
     - com/sun/star/chart2/RelativePosition.hpp
     - com/sun/star/chart2/RelativeSize.hpp
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/inc/FormattedString.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XDataPointCustomLabelField.hpp
@@ -202,43 +202,43 @@ excludelist:
     - com/sun/star/util/XCloneable.hpp
     chart2/source/model/template/AreaChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/BubbleChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/BarChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/ChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/ChartTypeManager.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/ColumnLineChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/NetChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/LineChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/ScatterChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/StockChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/PieChartTypeTemplate.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/model/template/XYDataInterpreter.cxx:
     # Used after #ifdef
     - sal/log.hxx
     chart2/source/tools/AxisHelper.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/tools/BaseGFXHelper.cxx:
     # Actually used
     - com/sun/star/drawing/PolyPolygonShape3D.hpp
@@ -267,7 +267,7 @@ excludelist:
     - BaseCoordinateSystem.hxx
     chart2/source/tools/LegendHelper.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/tools/LinePropertiesHelper.cxx:
     # Needed for template
     - com/sun/star/drawing/LineDash.hpp
@@ -502,7 +502,7 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     chart2/source/controller/main/ChartFrameloader.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     chart2/source/controller/main/ElementSelector.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

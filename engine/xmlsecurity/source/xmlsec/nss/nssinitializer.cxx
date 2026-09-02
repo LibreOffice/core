@@ -100,7 +100,7 @@ comphelper::SingletonRef<InitNSSPrivate>* getInitNSSPrivate()
     return &aInitNSSPrivate;
 }
 
-bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init );
+bool nsscrypto_initialize( const css::uno::Reference< cpo::uno::XComponentContext > &rxContext, bool & out_nss_init );
 
 #ifdef XMLSEC_CRYPTO_NSS
 
@@ -171,7 +171,7 @@ bool lcl_pathExists(const OUString& sPath)
 
 } // namespace
 
-const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool bSetActive)
+const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Reference< cpo::uno::XComponentContext > &rxContext, bool bSetActive)
 {
     if (m_bIsNSSinitialized)
          return m_sNSSPath;
@@ -308,7 +308,7 @@ bool SAL_CALL ONSSInitializer::getIsNSSinitialized()
     return m_bIsNSSinitialized;
 }
 
-ONSSInitializer::ONSSInitializer(css::uno::Reference< css::uno::XComponentContext > xContext)
+ONSSInitializer::ONSSInitializer(css::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext(std::move(xContext))
 {
 }
@@ -341,7 +341,7 @@ namespace
 //return true - whole initialization was successful
 //param out_nss_init = true: at least the NSS initialization (NSS_InitReadWrite
 //was successful and therefore NSS_Shutdown should be called when terminating.
-bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const & rxContext, bool & out_nss_init)
+bool nsscrypto_initialize(css::uno::Reference<cpo::uno::XComponentContext> const & rxContext, bool & out_nss_init)
 {
     // this method must be called only once, no need for additional lock
     OString sCertDir;
@@ -527,7 +527,7 @@ ONSSInitializer::~ONSSInitializer()
 {
 }
 
-bool ONSSInitializer::initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
+bool ONSSInitializer::initNSS( const css::uno::Reference< cpo::uno::XComponentContext > &rxContext )
 {
     static bool gbInitialized = [&rxContext]()
         {
@@ -637,7 +637,7 @@ Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
 #ifndef XMLSEC_CRYPTO_NSS
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new ONSSInitializer(pCtx));
 }

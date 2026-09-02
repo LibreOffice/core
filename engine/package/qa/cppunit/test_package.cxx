@@ -58,7 +58,7 @@ namespace
         cpo::uno::Sequence<beans::NamedValue> aNVs{ { u"URL"_ustr, cpo::uno::Any(aURL) } };
         cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(aNVs) };
 
-        uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
+        uno::Reference<cpo::uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
 
         uno::Reference<packages::zip::XZipFileAccess2> xZip(
@@ -211,7 +211,7 @@ namespace
         cpo::uno::Sequence<beans::NamedValue> aNVs2{ { u"URL"_ustr, cpo::uno::Any(aURL2) } };
         cpo::uno::Sequence<cpo::uno::Any> aArgs2{ cpo::uno::Any(aNVs2) };
 
-        uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
+        uno::Reference<cpo::uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
 
         // Without Zip64 support, it would crash here

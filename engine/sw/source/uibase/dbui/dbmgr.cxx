@@ -245,7 +245,7 @@ public:
 SwDataSourceRemovedListener::SwDataSourceRemovedListener(SwDBManager& rDBManager)
     : m_pDBManager(&rDBManager)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     m_xDatabaseContext = sdb::DatabaseContext::create(xComponentContext);
     m_xDatabaseContext->addDatabaseRegistrationsListener(this);
 }
@@ -326,7 +326,7 @@ struct SwDBManager::SwDBManager_Impl
 
 static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDataSource> const & xSource)
 {
-    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     rParam.xFormatter = util::NumberFormatter::create(xContext);
     uno::Reference<beans::XPropertySet> xSourceProps(
         (xSource.is()
@@ -1891,7 +1891,7 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
                                                               uno::Reference<sdbc::XDataSource>& rxSource, const SwView *pView)
 {
     uno::Reference< sdbc::XConnection> xConnection;
-    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     try
     {
         uno::Reference<sdb::XCompletedConnection> xComplConnection(dbtools::getDataSource(rDataSource, xContext), uno::UNO_QUERY);
@@ -2545,7 +2545,7 @@ const SwDBData& SwDBManager::GetAddressDBName()
 
 cpo::uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
 {
-    const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference<cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
     return xDBContext->getElementNames();
 }
@@ -2704,7 +2704,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
 
     try
     {
-        const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+        const uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
         uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
 
         OUString sNewName = rURL.getName(
@@ -2833,7 +2833,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
 
         if( DBConnURIType::FLAT == type )
         {
-            const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference<cpo::uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference < sdb::XTextConnectionSettings > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
             if( xSettingsDlg->execute() )
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
@@ -3053,7 +3053,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
         OSL_FAIL("PropertyValues missing or unset");
         return;
     }
-    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdbc::XDataSource> xSource;
     uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
     if(xChild.is())

@@ -99,7 +99,7 @@ private:
 
 public:
     DigitalSignaturesDialog(weld::Window* pParent, const css::uno::Reference<
-        css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
+        cpo::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature,
         SfxViewShell* pViewShell);
     virtual ~DigitalSignaturesDialog() override;

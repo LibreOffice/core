@@ -30,7 +30,7 @@
 using namespace chelp;
 using namespace com::sun::star;
 
-ResultSetBase::ResultSetBase( uno::Reference< uno::XComponentContext >  xContext,
+ResultSetBase::ResultSetBase( uno::Reference< cpo::uno::XComponentContext >  xContext,
                               uno::Reference< ucb::XContentProvider >  xProvider,
                               const cpo::uno::Sequence< beans::Property >& seq )
     : m_xContext(std::move( xContext )),

@@ -32,7 +32,7 @@ namespace ucb::ucp::ext
     class ContentProvider : public ContentProvider_Base
     {
     public:
-        explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit ContentProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         virtual ~ContentProvider() override;
 
         // XServiceInfo

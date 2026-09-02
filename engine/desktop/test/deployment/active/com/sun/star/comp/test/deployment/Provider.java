@@ -24,7 +24,7 @@ import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.util.URL;
 
 public final class Provider extends WeakBase

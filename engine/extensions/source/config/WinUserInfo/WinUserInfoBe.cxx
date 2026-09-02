@@ -422,7 +422,7 @@ cpo::uno::Sequence<OUString> WinUserInfoBe::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-extensions_WinUserInfoBe_get_implementation(css::uno::XComponentContext*,
+extensions_WinUserInfoBe_get_implementation(cpo::uno::XComponentContext*,
                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new extensions::config::WinUserInfo::WinUserInfoBe());

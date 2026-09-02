@@ -30,7 +30,7 @@ using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    ParameterSubstitution::ParameterSubstitution(css::uno::Reference< css::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
+    ParameterSubstitution::ParameterSubstitution(css::uno::Reference< cpo::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
     {
     }
     void ParameterSubstitution::initialize( const cpo::uno::Sequence< cpo::uno::Any >& _aArguments )
@@ -99,7 +99,7 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_dbtools_ParameterSubstitution_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new connectivity::ParameterSubstitution(context));
 }

@@ -712,7 +712,7 @@ static curl_socket_t opensocket_callback(void* /*clientp*/, curlsocktype purpose
 
 #endif
 
-CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
+CurlSession::CurlSession(uno::Reference<cpo::uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          cpo::uno::Sequence<beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider)
@@ -2687,7 +2687,7 @@ public:
 } // anonymous namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ucb_webdav_manager_get_implementation(css::uno::XComponentContext*,
+ucb_webdav_manager_get_implementation(cpo::uno::XComponentContext*,
                                       cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new WebDAVManager());

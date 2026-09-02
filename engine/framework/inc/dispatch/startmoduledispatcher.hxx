@@ -24,7 +24,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -45,7 +45,7 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
         /** @short reference to a uno service manager,
                    which can be used to create own needed
                    uno resources. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     // native interface
 
@@ -62,7 +62,7 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
             @param  xFrame
                     the frame where the corresponding dispatch was started.
          */
-        StartModuleDispatcher(css::uno::Reference< css::uno::XComponentContext > xContext);
+        StartModuleDispatcher(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         /** @short  does nothing real. */
         virtual ~StartModuleDispatcher() override;

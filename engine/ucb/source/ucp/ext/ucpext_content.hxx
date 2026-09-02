@@ -50,14 +50,14 @@ namespace ucb::ucp::ext
     {
     public:
         Content(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ::ucbhelper::ContentProviderImplHelper* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier
         );
 
         static css::uno::Reference< css::sdbc::XRow >
             getArtificialNodePropertyValues(
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                 const cpo::uno::Sequence< css::beans::Property >& rProperties,
                 const OUString& rTitle
             );

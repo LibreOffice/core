@@ -31,7 +31,7 @@ class ScVbaAxes : public ScVbaAxes_BASE
 {
     rtl::Reference< ScVbaChart > moChartParent; // not the true parent I guess
 public:
-    ScVbaAxes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart );
+    ScVbaAxes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart );
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
@@ -43,7 +43,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< css::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup );
+    static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

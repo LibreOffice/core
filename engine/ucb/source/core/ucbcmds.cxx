@@ -77,14 +77,14 @@ beans::Property makeProperty(const OUString& n, sal_Int32 h, cpo::uno::Type t = 
 
 struct TransferCommandContext
 {
-    uno::Reference< uno::XComponentContext >     m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     uno::Reference< ucb::XCommandProcessor >     xProcessor;
     uno::Reference< ucb::XCommandEnvironment >   xEnv;
     uno::Reference< ucb::XCommandEnvironment >   xOrigEnv;
     ucb::GlobalTransferCommandArgument2          aArg;
 
     TransferCommandContext(
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         uno::Reference< ucb::XCommandProcessor > _xProcessor,
         uno::Reference< ucb::XCommandEnvironment > _xEnv,
         uno::Reference< ucb::XCommandEnvironment > _xOrigEnv,

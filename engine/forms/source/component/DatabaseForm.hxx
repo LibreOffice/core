@@ -208,7 +208,7 @@ class ODatabaseForm :public OFormComponents
     bool                 m_bSharingConnection : 1;       // true if the connection we're using is shared with our parent
 
 public:
-    explicit ODatabaseForm(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ODatabaseForm(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     ODatabaseForm( const ODatabaseForm& _cloneSource );
     virtual ~ODatabaseForm() override;
 

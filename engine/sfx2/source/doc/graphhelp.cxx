@@ -200,7 +200,7 @@ bool GraphicHelper::getThumbnailReplacement_Impl(std::u16string_view rResID, con
     bool bResult = false;
     if (!rResID.empty() && xStream.is())
     {
-        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         try
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));

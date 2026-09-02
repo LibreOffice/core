@@ -110,7 +110,7 @@ public:
     class TypeIterator;
     friend class ODsnTypeCollection::TypeIterator;
 
-    ODsnTypeCollection(const css::uno::Reference< css::uno::XComponentContext >& _xContext);
+    ODsnTypeCollection(const css::uno::Reference< cpo::uno::XComponentContext >& _xContext);
     ~ODsnTypeCollection();
 
     /// get the datasource type display name from a DSN string

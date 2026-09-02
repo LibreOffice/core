@@ -89,7 +89,7 @@ using namespace ::cppu;
 using namespace ::osl;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_dba_ORowSet_get_implementation(cpo::uno::XComponentContext* context,
                                                  cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ORowSet(context));
@@ -97,7 +97,7 @@ com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* co
 
 namespace dbaccess
 {
-ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
+ORowSet::ORowSet( const Reference< cpo::uno::XComponentContext >& _rxContext )
     :ORowSet_BASE1(m_aMutex)
     ,ORowSetBase( _rxContext, ORowSet_BASE1::rBHelper, &m_aMutex )
     ,m_aPrematureParamValues(new ORowSetValueVector)

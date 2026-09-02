@@ -161,7 +161,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
     xChartModel.set( SwTableFUNC( &rWrtShell ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrameFormat ));
 
     //open wizard
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    uno::Reference< cpo::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
     if( !(xContext.is() && xChartModel.is() && xDataProvider.is()))
         return;
 

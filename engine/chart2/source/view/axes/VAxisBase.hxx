@@ -23,7 +23,7 @@
 #include "Tickmarks.hxx"
 
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -67,7 +67,7 @@ public:
     virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                                      css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
                                      rtl::Reference<::chart::ChartModel> const& xChartDoc,
-                                     css::uno::Reference<css::uno::XComponentContext> const& rComponentContext);
+                                     css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext);
 
     const std::shared_ptr<DataTableView> & getDataTableView() { return m_pDataTableView; }
 

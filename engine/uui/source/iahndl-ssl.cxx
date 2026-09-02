@@ -103,7 +103,7 @@ isDomainMatch(
 
 OUString
 getLocalizedDatTimeStr(
-    uno::Reference< uno::XComponentContext> const & xContext,
+    uno::Reference< cpo::uno::XComponentContext> const & xContext,
     util::DateTime const & rDateTime )
 {
     OUString aDateTimeStr;
@@ -135,7 +135,7 @@ getLocalizedDatTimeStr(
 bool
 executeUnknownAuthDialog(
     weld::Window * pParent,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert)
 {
     SolarMutexGuard aGuard;
@@ -164,7 +164,7 @@ enum class SslWarnType {
 bool
 executeSSLWarnDialog(
     weld::Window * pParent,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
     SslWarnType failure,
     const OUString & hostName )
@@ -223,7 +223,7 @@ executeSSLWarnDialog(
 void
 handleCertificateValidationRequest_(
     weld::Window * pParent,
-    uno::Reference< uno::XComponentContext > const & xContext,
+    uno::Reference< cpo::uno::XComponentContext > const & xContext,
     ucb::CertificateValidationRequest const & rRequest,
     cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)

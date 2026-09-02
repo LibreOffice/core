@@ -32,7 +32,7 @@
 
 #include <vector>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -74,7 +74,7 @@ class Diagram
     , public ::property::OPropertySet
 {
 public:
-    Diagram( css::uno::Reference< css::uno::XComponentContext > xContext );
+    Diagram( css::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~Diagram() override;
 
     /// XServiceInfo declarations
@@ -253,7 +253,7 @@ public:
 
     bool attachSeriesToAxis( bool bMainAxis,
         const rtl::Reference< DataSeries >& xSeries,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
     /** Replaces all occurrences of xCooSysToReplace in the tree with
@@ -357,7 +357,7 @@ private:
 
     void fireModifyEvent();
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     tCoordinateSystemContainerType m_aCoordSystems;
 
     rtl::Reference<Wall> m_xWall;

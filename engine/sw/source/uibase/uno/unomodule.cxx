@@ -35,7 +35,7 @@
 using namespace css;
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Writer_WriterModule_get_implementation(uno::XComponentContext* /*pCtx*/,
+com_sun_star_comp_Writer_WriterModule_get_implementation(cpo::uno::XComponentContext* /*pCtx*/,
                                                          cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     SolarMutexGuard aGuard;

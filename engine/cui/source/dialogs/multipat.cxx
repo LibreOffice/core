@@ -49,7 +49,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 {
-    const Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const Reference < cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     if ( xFolderPicker->execute() != ExecutableDialogResults::OK )

@@ -25,13 +25,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 class PDFFilter : public cppu::WeakImplHelper < css::document::XFilter, css::document::XExporter, css::lang::XInitialization, css::lang::XServiceInfo >
 {
 private:
 
-    css::uno::Reference< css::uno::XComponentContext >  mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >  mxContext;
     css::uno::Reference< css::lang::XComponent >         mxSrcDoc;
 
     bool                            implExport( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    explicit    PDFFilter( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit    PDFFilter( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual     ~PDFFilter() override;
 };
 

@@ -40,7 +40,7 @@ namespace framework{
     @param  eMode
                 force opening of the configuration access in readonly or in read/write mode
  */
-ConfigAccess::ConfigAccess( /*IN*/ css::uno::Reference< css::uno::XComponentContext > xContext,
+ConfigAccess::ConfigAccess( /*IN*/ css::uno::Reference< cpo::uno::XComponentContext > xContext,
                             /*IN*/ OUString                                     sRoot )
     : m_xContext    (std::move( xContext))
     , m_sRoot       (std::move( sRoot    ))

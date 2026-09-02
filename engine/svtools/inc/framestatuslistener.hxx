@@ -28,7 +28,7 @@
 
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace svt
 {
@@ -39,7 +39,7 @@ class FrameStatusListener : public css::frame::XStatusListener,
                             public ::cppu::OWeakObject
 {
     public:
-        FrameStatusListener( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        FrameStatusListener( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                              const css::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~FrameStatusListener() override;
 
@@ -81,7 +81,7 @@ class FrameStatusListener : public css::frame::XStatusListener,
 
         bool                                                      m_bDisposed : 1;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
-        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         URLToDispatchMap                                          m_aListenerMap;
 };
 

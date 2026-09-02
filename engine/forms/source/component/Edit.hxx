@@ -44,11 +44,11 @@ class OEditModel final : public OEditBaseModel
 
 public:
     OEditModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OEditModel(
         const OEditModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OEditModel() override;
 
@@ -134,7 +134,7 @@ class OEditControl : public OBoundControl
     ImplSVEvent *    m_nKeyEvent;
 
 public:
-    explicit OEditControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OEditControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
     virtual ~OEditControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)

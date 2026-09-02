@@ -25,7 +25,7 @@
 
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
@@ -94,7 +94,7 @@ OUString getSignatureURI(svl::crypto::SignatureMethodAlgorithm eAlgorithm, sal_I
 }
 }
 
-XSecController::XSecController( css::uno::Reference<css::uno::XComponentContext> xCtx )
+XSecController::XSecController( css::uno::Reference<cpo::uno::XComponentContext> xCtx )
     : mxCtx(std::move(xCtx))
     , m_nNextSecurityId(1)
     , m_bIsPreviousNodeInitializable(false)

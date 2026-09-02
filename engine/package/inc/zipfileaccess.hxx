@@ -41,7 +41,7 @@ class OZipFileAccess final : public ::cppu::WeakImplHelper<
                         css::lang::XServiceInfo >
 {
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::io::XInputStream > m_xContentStream;
     std::optional<ZipFile> m_pZipFile;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pListenersContainer;
@@ -49,7 +49,7 @@ class OZipFileAccess final : public ::cppu::WeakImplHelper<
     bool m_bOwnContent;
 
 public:
-    OZipFileAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    OZipFileAccess( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~OZipFileAccess() override;
 

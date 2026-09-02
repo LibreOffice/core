@@ -135,7 +135,7 @@ namespace ucbhelper
 
 struct ResultSet_Impl
 {
-    uno::Reference< uno::XComponentContext >        m_xContext;
+    uno::Reference< cpo::uno::XComponentContext >   m_xContext;
     uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
     rtl::Reference< PropertySetInfo >               m_xPropSetInfo;
     rtl::Reference< ResultSetMetaData >             m_xMetaData;
@@ -149,14 +149,14 @@ struct ResultSet_Impl
     bool                            m_bAfterLast;
 
     inline ResultSet_Impl(
-        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< cpo::uno::XComponentContext > xContext,
         const cpo::uno::Sequence< beans::Property >& rProperties,
         rtl::Reference< ResultSetDataSupplier > xDataSupplier,
         uno::Reference< css::ucb::XCommandEnvironment > xEnv );
 };
 
 inline ResultSet_Impl::ResultSet_Impl(
-    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< cpo::uno::XComponentContext > xContext,
     const cpo::uno::Sequence< beans::Property >& rProperties,
     rtl::Reference< ResultSetDataSupplier > xDataSupplier,
     uno::Reference< css::ucb::XCommandEnvironment > xEnv )
@@ -175,7 +175,7 @@ inline ResultSet_Impl::ResultSet_Impl(
 
 
 ResultSet::ResultSet(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext,
     const cpo::uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier )
 : m_pImpl( new ResultSet_Impl(
@@ -189,7 +189,7 @@ ResultSet::ResultSet(
 
 
 ResultSet::ResultSet(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext,
     const cpo::uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
     const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv )

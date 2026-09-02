@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 namespace com {
     namespace sun {
@@ -43,7 +43,7 @@ class PasswordContainerHelper
 {
 public:
     explicit PasswordContainerHelper(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+        css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
 
     /** This member function tries to handle an authentication interaction
@@ -126,7 +126,7 @@ class PasswordContainerInteractionHandler :
 {
 public:
     explicit PasswordContainerInteractionHandler(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~PasswordContainerInteractionHandler() override;
 
     // XServiceInfo

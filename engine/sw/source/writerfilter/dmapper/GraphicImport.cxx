@@ -39,7 +39,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 
 #include <svx/svditer.hxx>
@@ -314,7 +314,7 @@ comphelper::SequenceAsHashMap const & GraphicImport::getInteropGrabBag()
     return m_aInteropGrabBag;
 }
 
-GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentContext,
+GraphicImport::GraphicImport(uno::Reference<cpo::uno::XComponentContext> xComponentContext,
                              rtl::Reference<SwXTextDocument> xTextDoc,
                              DomainMapper& rDMapper,
                              GraphicImportType & rImportType,

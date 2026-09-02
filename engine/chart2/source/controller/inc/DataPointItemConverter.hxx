@@ -28,7 +28,7 @@
 #include <optional>
 #include <vector>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace chart { class ChartModel; }
 namespace chart { class DataSeries; }
 class SdrModel;
@@ -40,7 +40,7 @@ class DataPointItemConverter final : public ItemConverter
 public:
     DataPointItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel,
-        const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const rtl::Reference<::chart::DataSeries>& xSeries,
         SfxItemPool& rItemPool,

@@ -185,7 +185,7 @@ using namespace hcp_impl;
 
 
 HierarchyDataSource::HierarchyDataSource(
-        uno::Reference< uno::XComponentContext > xContext )
+        uno::Reference< cpo::uno::XComponentContext > xContext )
 : m_xContext(std::move( xContext ))
 {
 }
@@ -212,7 +212,7 @@ cpo::uno::Sequence< OUString > HierarchyDataSource::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyDataSource_get_implementation(
-    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new HierarchyDataSource(context));
 }

@@ -29,7 +29,7 @@ using namespace ::ooo::vba;
 
 VbaWindowBase::VbaWindowBase(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const uno::Reference< frame::XController >& xController ) :
     WindowBaseImpl_BASE( xParent, xContext )
 {
@@ -37,7 +37,7 @@ VbaWindowBase::VbaWindowBase(
 }
 
 VbaWindowBase::VbaWindowBase( cpo::uno::Sequence< cpo::uno::Any > const & args,
-        uno::Reference< uno::XComponentContext > const & xContext ) :
+        uno::Reference< cpo::uno::XComponentContext > const & xContext ) :
     WindowBaseImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0, false ), xContext )
 {
     construct( getXSomethingFromArgs< frame::XController >( args, 2 ) );

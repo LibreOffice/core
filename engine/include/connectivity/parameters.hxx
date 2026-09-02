@@ -43,7 +43,7 @@ namespace com::sun::star::sdbc { class XParameters; }
 namespace com::sun::star::sdbc { class XRef; }
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace cpo::uno { class XAggregation; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dbtools
 {
@@ -101,7 +101,7 @@ namespace dbtools
         ::osl::Mutex&                       m_rMutex;
         ::comphelper::OInterfaceContainerHelper3<css::form::XDatabaseParameterListener> m_aParameterListeners;
 
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                             m_xContext;
 
         cpo::uno::WeakReference< css::beans::XPropertySet >
@@ -138,7 +138,7 @@ namespace dbtools
         */
         explicit ParameterManager(
             ::osl::Mutex& _rMutex,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         /// late ctor

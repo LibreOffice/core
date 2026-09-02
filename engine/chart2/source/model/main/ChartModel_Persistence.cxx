@@ -44,7 +44,7 @@
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
@@ -100,7 +100,7 @@ void lcl_addStorageToMediaDescriptor(
 
 Reference< embed::XStorage > lcl_createStorage(
     const OUString & rURL,
-    const Reference< uno::XComponentContext > & xContext,
+    const Reference< cpo::uno::XComponentContext > & xContext,
     const Sequence< beans::PropertyValue > & rMediaDescriptor )
 {
     // create new storage

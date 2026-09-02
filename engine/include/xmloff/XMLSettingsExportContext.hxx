@@ -22,7 +22,7 @@
 
 #include <xmloff/xmltoken.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 
 namespace xmloff
@@ -44,7 +44,7 @@ namespace xmloff
 
         virtual void    Characters( const OUString& i_rCharacters ) = 0;
 
-        virtual css::uno::Reference< css::uno::XComponentContext >
+        virtual css::uno::Reference< cpo::uno::XComponentContext >
                         GetComponentContext() const = 0;
 
     protected:

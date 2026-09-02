@@ -76,7 +76,7 @@ SmMlElement* SmMLImportWrapper::getElementTree()
 ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 {
     // Fetch context
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     if (!xContext.is())
     {
@@ -286,7 +286,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 {
     // Fetch context
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     if (!xContext.is())
     {
@@ -348,7 +348,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 // read a component from input stream
 ErrCode SmMLImportWrapper::ReadThroughComponentIS(
     const Reference<io::XInputStream>& xInputStream, const Reference<XComponent>& xModelComponent,
-    Reference<uno::XComponentContext> const& rxContext,
+    Reference<cpo::uno::XComponentContext> const& rxContext,
     Reference<beans::XPropertySet> const& rPropSet, const char16_t* pFilterName, bool bEncrypted,
     int_fast16_t nSyntaxVersion)
 {
@@ -488,7 +488,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
 ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XStorage>& xStorage,
                                                  const Reference<XComponent>& xModelComponent,
                                                  const char16_t* pStreamName,
-                                                 Reference<uno::XComponentContext> const& rxContext,
+                                                 Reference<cpo::uno::XComponentContext> const& rxContext,
                                                  Reference<beans::XPropertySet> const& rPropSet,
                                                  const char16_t* pFilterName,
                                                  int_fast16_t nSyntaxVersion)
@@ -541,7 +541,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XSt
 // read a component from text
 ErrCode SmMLImportWrapper::ReadThroughComponentMS(
     std::u16string_view aText, const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-    css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+    css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
     css::uno::Reference<css::beans::XPropertySet> const& rPropSet)
 {
     // Needs a storage but checked by caller
@@ -584,7 +584,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentMS(
 /*************************************************************************************************/
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-Math_MLImporter_get_implementation(uno::XComponentContext* pCtx,
+Math_MLImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                    cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
@@ -592,7 +592,7 @@ Math_MLImporter_get_implementation(uno::XComponentContext* pCtx,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-Math_MLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
+Math_MLOasisMetaImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                             cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmMLImport(pCtx, u"com.sun.star.comp.Math.XMLOasisMetaImporter"_ustr,
@@ -600,7 +600,7 @@ Math_MLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-Math_MLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
+Math_MLOasisSettingsImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                 cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmMLImport(
@@ -1375,7 +1375,7 @@ void SmMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfPr
     }
 }
 
-SmMLImport::SmMLImport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+SmMLImport::SmMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                        OUString const& implementationName, SvXMLImportFlags nImportFlags)
     : SvXMLImport(rContext, implementationName, nImportFlags)
     , m_pElementTree(nullptr)

@@ -14,7 +14,7 @@ using namespace css;
 
 namespace oox::drawingml
 {
-ThemeFilterBase::ThemeFilterBase(const uno::Reference<uno::XComponentContext>& rxContext)
+ThemeFilterBase::ThemeFilterBase(const uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : XmlFilterBase(rxContext)
 {
 }

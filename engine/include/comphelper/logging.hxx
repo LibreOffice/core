@@ -27,7 +27,7 @@
 #include <memory>
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::logging { class XLogger; }
 
 namespace comphelper
@@ -103,7 +103,7 @@ namespace comphelper
                 the ASCII name of the logger to create.
         */
         EventLogger(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const char* _pAsciiLoggerName
         );
 

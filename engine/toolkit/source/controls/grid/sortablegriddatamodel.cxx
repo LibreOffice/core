@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/XSortableMutableGridDataModel.hpp>
 
@@ -61,7 +61,7 @@ typedef ::comphelper::WeakComponentImplHelper    <   css::awt::grid::XSortableMu
 class SortableGridDataModel :public SortableGridDataModel_Base
 {
 public:
-    explicit SortableGridDataModel( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit SortableGridDataModel( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
     SortableGridDataModel( SortableGridDataModel const & i_copySource );
 
     bool    isInitialized() const { return m_isInitialized; }
@@ -182,7 +182,7 @@ private:
     }
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
     bool                                                          m_isInitialized;
     css::uno::Reference< css::awt::grid::XMutableGridDataModel >  m_delegator;
     css::uno::Reference< css::i18n::XCollator >                   m_collator;
@@ -898,7 +898,7 @@ void lcl_clear( STLCONTAINER& i_container )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_SortableGridDataModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SortableGridDataModel(context));

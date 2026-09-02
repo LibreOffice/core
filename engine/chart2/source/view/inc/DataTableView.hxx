@@ -12,7 +12,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/unodraw/SvxTableShape.hxx>
 #include <com/sun/star/table/XTable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <ChartModel.hxx>
 #include <DataTable.hxx>
 #include "VLineProperties.hxx"
@@ -36,7 +36,7 @@ private:
     rtl::Reference<SvxTableShape> m_xTableShape;
     // the data table model
     rtl::Reference<DataTable> m_xDataTableModel;
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::table::XTable> m_xTable;
     VLineProperties m_aLineProperties;
     std::vector<VSeriesPlotter*> m_pSeriesPlotterList;
@@ -64,7 +64,7 @@ private:
 public:
     DataTableView(rtl::Reference<::chart::ChartModel> const& xChartDoc,
                   rtl::Reference<DataTable> const& rDataTableModel,
-                  css::uno::Reference<css::uno::XComponentContext> const& rComponentContext,
+                  css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext,
                   bool bAlignAxisValuesWithColumns);
 
     /** Initializes and prepares the target and data table shape */

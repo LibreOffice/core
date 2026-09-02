@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <strings.hrc>
@@ -45,7 +45,7 @@ namespace {
 OUString LibraryContainer::get_libname(
     OUString const & url,
     Reference<XCommandEnvironment> const & xCmdEnv,
-    Reference<XComponentContext> const & xContext )
+    Reference<cpo::uno::XComponentContext> const & xContext )
 {
     ::xmlscript::LibDescriptor import;
     ::ucbhelper::Content ucb_content( url, xCmdEnv, xContext );

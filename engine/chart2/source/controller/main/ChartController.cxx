@@ -115,7 +115,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 
-ChartController::ChartController(uno::Reference<uno::XComponentContext> xContext) :
+ChartController::ChartController(uno::Reference<cpo::uno::XComponentContext> xContext) :
     m_aLifeTimeManager( nullptr ),
     m_bSuspended( false ),
     m_xCC(std::move(xContext)),

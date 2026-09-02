@@ -45,8 +45,8 @@ namespace com::sun::star {
     namespace frame { class XModel; }
     namespace script { class XTypeConverter; }
     namespace uno { class Exception; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 class SfxObjectShell;
 class SfxViewFrame;
@@ -77,17 +77,17 @@ namespace ooo::vba
         /// @throws cpo::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
         /// @throws uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDocCtx( const OUString& ctxName, const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDocCtx( const OUString& ctxName, const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
         /// @throws cpo::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const cpo::uno::Any& aObject );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const OUString& aUrl );
         VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& sProps );

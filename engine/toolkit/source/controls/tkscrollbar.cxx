@@ -19,7 +19,7 @@
 
 #include <controls/tkscrollbar.hxx>
 #include <helper/property.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
@@ -37,7 +37,7 @@ namespace toolkit
     //= UnoControlScrollBarModel
 
 
-    UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< uno::XComponentContext >& i_factory )
+    UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< cpo::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES<VCLXScrollBar>();
@@ -307,7 +307,7 @@ namespace toolkit
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlScrollBarModel(context));
@@ -315,7 +315,7 @@ stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoScrollBarControl_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoScrollBarControl());

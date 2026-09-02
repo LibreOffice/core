@@ -37,7 +37,7 @@ namespace framework{
     #error "Who uses \"fpf\" as define. It will overwrite my namespace alias ..."
 #endif
 
-StartModuleDispatcher::StartModuleDispatcher(css::uno::Reference< css::uno::XComponentContext > xContext)
+StartModuleDispatcher::StartModuleDispatcher(css::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext         (std::move(xContext                         ))
 {
 }

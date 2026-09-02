@@ -27,7 +27,7 @@
 #include <map>
 #include <memory>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable
 {
@@ -35,11 +35,11 @@ public:
     typedef std::map<LanguageType, css::i18n::ForbiddenCharacters> Map;
 private:
     Map                                                maMap;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    SvxForbiddenCharactersTable(css::uno::Reference< css::uno::XComponentContext > xContext);
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    SvxForbiddenCharactersTable(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
 public:
-    static std::shared_ptr<SvxForbiddenCharactersTable> makeForbiddenCharactersTable(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    static std::shared_ptr<SvxForbiddenCharactersTable> makeForbiddenCharactersTable(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
     Map&    GetMap() { return maMap; }
     const css::i18n::ForbiddenCharacters* GetForbiddenCharacters( LanguageType nLanguage, bool bGetDefault );

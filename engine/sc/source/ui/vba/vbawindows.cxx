@@ -41,12 +41,12 @@ using namespace ::ooo::vba;
 typedef  std::unordered_map< OUString,
 sal_Int32 > NameIndexHash;
 
-static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const rtl::Reference< ScModelObj >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const cpo::uno::Any& aApplication )
+static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const rtl::Reference< ScModelObj >& xModel, const uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Any& aApplication )
 {
     return new ScVbaWorkbook( uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext,  xModel );
 }
 
-static cpo::uno::Any ComponentToWindow( const cpo::uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const cpo::uno::Any& aApplication )
+static cpo::uno::Any ComponentToWindow( const cpo::uno::Any& aSource, const uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = dynamic_cast<ScModelObj*>(xModel.get());
@@ -64,20 +64,20 @@ namespace {
 class WindowComponentEnumImpl : public EnumerationHelper_BASE
 {
 protected:
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     Components m_components;
     Components::const_iterator m_it;
 
 public:
     /// @throws uno::RuntimeException
-    WindowComponentEnumImpl( uno::Reference< uno::XComponentContext > xContext, Components&& components )
+    WindowComponentEnumImpl( uno::Reference< cpo::uno::XComponentContext > xContext, Components&& components )
         :  m_xContext(std::move( xContext )), m_components( std::move(components) )
     {
         m_it = m_components.begin();
     }
 
     /// @throws uno::RuntimeException
-    explicit WindowComponentEnumImpl( uno::Reference< uno::XComponentContext > xContext ) :  m_xContext(std::move( xContext ))
+    explicit WindowComponentEnumImpl( uno::Reference< cpo::uno::XComponentContext > xContext ) :  m_xContext(std::move( xContext ))
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
         uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
@@ -109,7 +109,7 @@ class WindowEnumImpl : public  WindowComponentEnumImpl
 {
     cpo::uno::Any m_aApplication;
 public:
-    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  cpo::uno::Any  aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication(std::move( aApplication )) {}
+    WindowEnumImpl( const uno::Reference< cpo::uno::XComponentContext >& xContext,  cpo::uno::Any  aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication(std::move( aApplication )) {}
     virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
         return ComponentToWindow( WindowComponentEnumImpl::nextElement(), m_xContext, m_aApplication );
@@ -127,11 +127,11 @@ namespace {
 
 class WindowsAccessImpl : public WindowsAccessImpl_BASE
 {
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
     Components m_windows;
     NameIndexHash namesToIndices;
 public:
-    explicit WindowsAccessImpl( uno::Reference< uno::XComponentContext > xContext ):m_xContext(std::move( xContext ))
+    explicit WindowsAccessImpl( uno::Reference< cpo::uno::XComponentContext > xContext ):m_xContext(std::move( xContext ))
     {
         css::uno::Reference<css::container::XNameAccess> xNameAccess(m_xContext,
                                                                      css::uno::UNO_QUERY_THROW);
@@ -230,7 +230,7 @@ public:
 
 }
 
-ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
+ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
 {
 }
 uno::Reference< container::XEnumeration >

@@ -2092,12 +2092,12 @@ void addConstructor(
     assert(dependencies != nullptr);
     assert(classFile != nullptr);
     MethodDescriptor desc(manager, dependencies, returnType, nullptr, nullptr);
-    desc.addParameter(u"com.sun.star.uno.XComponentContext", false, false, nullptr);
+    desc.addParameter(u"cpo.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(classFile->newCode());
     code->loadLocalReference(0);
     // stack: context
     code->instrInvokeinterface(
-        "com/sun/star/uno/XComponentContext"_ostr, "getServiceManager"_ostr,
+        "cpo/uno/XComponentContext"_ostr, "getServiceManager"_ostr,
         "()Lcom/sun/star/lang/XMultiComponentFactory;"_ostr, 1);
     // stack: factory
     code->loadStringConstant(unoName);
@@ -2117,7 +2117,7 @@ void addConstructor(
         code->instrInvokeinterface(
             "com/sun/star/lang/XMultiComponentFactory"_ostr,
             "createInstanceWithContext"_ostr,
-            ("(Ljava/lang/String;Lcom/sun/star/uno/XComponentContext;)"
+            ("(Ljava/lang/String;Lcpo/uno/XComponentContext;)"
              "Ljava/lang/Object;"_ostr),
             3);
         tryEnd = code->getPosition();
@@ -2166,7 +2166,7 @@ void addConstructor(
             "com/sun/star/lang/XMultiComponentFactory"_ostr,
             "createInstanceWithArgumentsAndContext"_ostr,
             ("(Ljava/lang/String;[Ljava/lang/Object;"
-             "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;"_ostr),
+             "Lcpo/uno/XComponentContext;)Ljava/lang/Object;"_ostr),
             4);
         tryEnd = code->getPosition();
         // stack: instance
@@ -2177,7 +2177,7 @@ void addConstructor(
     // stack: instance context
     code->instrInvokestatic(
         className, "$castInstance"_ostr,
-        ("(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
+        ("(Ljava/lang/Object;Lcpo/uno/XComponentContext;)"
          "Ljava/lang/Object;"_ostr));
     // stack: instance
     code->instrCheckcast(
@@ -2256,7 +2256,7 @@ void handleService(
         dependencies->insert(u"com.sun.star.lang.XMultiComponentFactory"_ustr);
         dependencies->insert(u"cpo.uno.DeploymentException"_ustr);
         dependencies->insert(u"cpo.uno.TypeClass"_ustr);
-        dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
+        dependencies->insert(u"cpo.uno.XComponentContext"_ustr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons :
                  entity->getConstructors())
         {
@@ -2317,7 +2317,7 @@ void handleService(
                     ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
                     | ClassFile::ACC_SYNTHETIC),
                 "$castInstance"_ostr,
-                ("(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
+                ("(Ljava/lang/Object;Lcpo/uno/XComponentContext;)"
                  "Ljava/lang/Object;"_ostr),
                 code.get(), std::vector< OString >(), ""_ostr);
         }
@@ -2341,7 +2341,7 @@ void handleSingleton(
         translateUnoidlEntityNameToJavaFullyQualifiedName(name, "singleton"));
     dependencies->insert(u"cpo.uno.DeploymentException"_ustr);
     dependencies->insert(u"cpo.uno.TypeClass"_ustr);
-    dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
+    dependencies->insert(u"cpo.uno.XComponentContext"_ustr);
     std::unique_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -2349,14 +2349,14 @@ void handleSingleton(
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object"_ostr, ""_ostr));
     MethodDescriptor desc(manager, dependencies, entity->getBase(), nullptr, nullptr);
-    desc.addParameter(u"com.sun.star.uno.XComponentContext", false, false, nullptr);
+    desc.addParameter(u"cpo.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     // stack: context
     code->loadStringConstant("/singletons/" + unoName);
     // stack: context "..."
     code->instrInvokeinterface(
-        "com/sun/star/uno/XComponentContext"_ostr, "getValueByName"_ostr,
+        "cpo/uno/XComponentContext"_ostr, "getValueByName"_ostr,
         "(Ljava/lang/String;)Ljava/lang/Object;"_ostr, 2);
     // stack: value
     code->instrDup();

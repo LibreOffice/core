@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/system/windows/JumpListItem.hpp>
 #include <com/sun/star/system/windows/XJumpList.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
 
 #include <prewin.h>

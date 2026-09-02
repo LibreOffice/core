@@ -37,7 +37,7 @@
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <config_dconf.h>
@@ -222,7 +222,7 @@ void Components::WriteThread::execute() {
 }
 
 Components & Components::getSingleton(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     assert(context.is());
     static Components singleton(context);
@@ -490,7 +490,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
 }
 
 Components::Components(
-    css::uno::Reference< css::uno::XComponentContext > const & context):
+    css::uno::Reference< cpo::uno::XComponentContext > const & context):
     context_(context), sharedExtensionLayer_(-1), userExtensionLayer_(-1),
     modificationTarget_(ModificationTarget::None)
 {

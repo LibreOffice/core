@@ -18,7 +18,7 @@
 
 package integration.extensions;
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.lang.XSingleComponentFactory;
 import java.lang.reflect.Constructor;
 

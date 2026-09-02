@@ -52,13 +52,13 @@ class ListEntryCollectionHelper
 {
 private:
     uno::Reference<XHelperInterface> mxParent;
-    uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<cpo::uno::XComponentContext> mxContext;
     sw::mark::DropDownFieldmark& m_rDropDown;
 
 public:
     /// @throws cpo::uno::RuntimeException
     ListEntryCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
-                              uno::Reference<uno::XComponentContext> xContext,
+                              uno::Reference<cpo::uno::XComponentContext> xContext,
                               sw::mark::DropDownFieldmark& rFormField)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
@@ -94,7 +94,7 @@ public:
 
 SwVbaFormFieldDropDownListEntries::SwVbaFormFieldDropDownListEntries(
     const uno::Reference<XHelperInterface>& xParent,
-    const uno::Reference<uno::XComponentContext>& xContext, sw::mark::DropDownFieldmark& rFormField)
+    const uno::Reference<cpo::uno::XComponentContext>& xContext, sw::mark::DropDownFieldmark& rFormField)
     : SwVbaFormFieldDropDownListEntries_BASE(
           xParent, xContext,
           uno::Reference<container::XIndexAccess>(

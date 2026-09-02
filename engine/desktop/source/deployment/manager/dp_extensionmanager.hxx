@@ -27,7 +27,7 @@
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <com/sun/star/deployment/XPackageManagerFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <mutex>
 #include <vector>
 #include <unordered_map>
@@ -42,7 +42,7 @@ class ExtensionManager : private cppu::BaseMutex,
         public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager, css::lang::XServiceInfo >
 {
 public:
-    explicit ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
+    explicit ExtensionManager( css::uno::Reference< cpo::uno::XComponentContext >const& xContext);
     virtual     ~ExtensionManager() override;
 
     void check();
@@ -142,7 +142,7 @@ private:
 
     static OUString StrSyncRepository() { return DpResId(RID_STR_SYNCHRONIZING_REPOSITORY); }
 
-    css::uno::Reference< css::uno::XComponentContext> m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
 
     //only to be used within addExtension

@@ -95,7 +95,7 @@ struct MatchTempDir
 
 OUString getExtensionFolder(OUString const &  parentFolder,
                             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
-                            Reference<uno::XComponentContext> const & xContext)
+                            Reference<cpo::uno::XComponentContext> const & xContext)
 {
     ::ucbhelper::Content tempFolder( parentFolder, xCmdEnv, xContext );
     Reference<sdbc::XResultSet> xResultSet(

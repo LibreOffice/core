@@ -41,7 +41,7 @@ TypeDetectionImporter::~TypeDetectionImporter()
 {
 }
 
-void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& xIS,
+void TypeDetectionImporter::doImport( const Reference< cpo::uno::XComponentContext >& rxContext, const Reference< XInputStream >& xIS,
                                       std::vector< std::unique_ptr<filter_info_impl> >& rFilters )
 {
     try

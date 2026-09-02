@@ -47,7 +47,7 @@ using namespace css::frame;
 
 namespace framework{
 
-TitleHelper::TitleHelper(css::uno::Reference< css::uno::XComponentContext > xContext,
+TitleHelper::TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xContext,
                         const css::uno::Reference< css::uno::XInterface >& xOwner,
                         const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
     :
@@ -552,7 +552,7 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 {
     css::uno::Reference< css::uno::XInterface >        xOwner;
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);

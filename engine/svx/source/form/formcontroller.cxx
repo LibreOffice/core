@@ -520,7 +520,7 @@ IMPL_LINK_NOARG( FormController, OnInvalidateFeatures, Timer*, void )
     }
 }
 
-FormController::FormController(const Reference< css::uno::XComponentContext > & _rxORB )
+FormController::FormController(const Reference< cpo::uno::XComponentContext > & _rxORB )
                   :FormController_BASE( m_aMutex )
                   ,OPropertySetHelper( FormController_BASE::rBHelper )
                   ,OSQLParserClient( _rxORB )

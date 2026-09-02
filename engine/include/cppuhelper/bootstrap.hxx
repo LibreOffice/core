@@ -28,8 +28,8 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XHierarchicalNameAccess; }
-    namespace uno { class XComponentContext; }
 } } }
+namespace cpo::uno { class XComponentContext; }
 
 namespace cppu
 {
@@ -55,7 +55,7 @@ CPPUHELPER_DLLPUBLIC bool installTypeDescriptionManager(
 
     @return component context
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XComponentContext >
 defaultBootstrap_InitialComponentContext();
 
 
@@ -73,7 +73,7 @@ defaultBootstrap_InitialComponentContext();
     @param iniFile ini filename to get bootstrap variables
     @return component context
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XComponentContext >
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
 /**
@@ -130,7 +130,7 @@ private:
  * Thrown in case bootstrap() signals an exception due to a
  * bootstrap error.
  */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XComponentContext >
 bootstrap();
 
 /// @cond INTERNAL

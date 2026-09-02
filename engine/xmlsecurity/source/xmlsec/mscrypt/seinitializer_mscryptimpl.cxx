@@ -35,7 +35,7 @@ namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 
 SEInitializer_MSCryptImpl::SEInitializer_MSCryptImpl(
-    const uno::Reference< uno::XComponentContext > &rxContext)
+    const uno::Reference< cpo::uno::XComponentContext > &rxContext)
     :mxContext( rxContext )
 {
 }
@@ -163,7 +163,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedS
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SEInitializer_get_implementation(
-    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SEInitializer_MSCryptImpl(pCtx));
 }

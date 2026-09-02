@@ -60,7 +60,7 @@ Bitmap convertPrimitive2DSequenceToBitmap(
         // create XPrimitive2DRenderer
         try
         {
-            const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
+            const uno::Reference< cpo::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
             const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
             cpo::uno::Sequence< beans::PropertyValue > aViewParameters = {
@@ -173,7 +173,7 @@ void VectorGraphicData::ensureSequenceAndRange()
     maRange.reset();
 
     // create Vector Graphic Data interpreter
-    const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
 
     switch (getType())
     {

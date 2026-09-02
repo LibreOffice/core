@@ -23,7 +23,7 @@
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -38,7 +38,7 @@ class PPPOptimizerDialog : public   ::cppu::WeakImplHelper<
                                     css::frame::XDispatchProvider,
                                     css::frame::XDispatch >
 {
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     css::uno::Reference< css::frame::XFrame > mxFrame;
     css::uno::Reference< css::frame::XController > mxController;
 
@@ -46,7 +46,7 @@ class PPPOptimizerDialog : public   ::cppu::WeakImplHelper<
 
 public:
 
-    explicit PPPOptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit PPPOptimizerDialog( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~PPPOptimizerDialog() override;
 
     // XInitialization

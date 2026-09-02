@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <map>
 #include <vector>
 #include <comphelper/stl_types.hxx>
@@ -74,7 +74,7 @@ namespace dbaui
 
         std::shared_ptr<IUpdateHelper>                    m_pUpdateHelper;
         css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
-        css::uno::Reference< css::uno::XComponentContext>     m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
         css::util::Date                                       m_aNullDate;
 
         SvNumberFormatter*  m_pFormatter;
@@ -130,7 +130,7 @@ namespace dbaui
         ODatabaseExport(
             const SharedConnection& _rxConnection,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             SvStream& _rInputStream
         );
 
@@ -139,7 +139,7 @@ namespace dbaui
             sal_Int32 nRows,
             TPositions&& _rColumnPositions,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
             bool _bAutoIncrementEnabled,

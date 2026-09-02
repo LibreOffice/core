@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_GRAPHICCOLLECTOR_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_GRAPHICCOLLECTOR_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -77,15 +77,15 @@ class GraphicCollector
             : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( false ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
     };
 
-    static const css::awt::DeviceInfo& GetDeviceInfo( const css::uno::Reference< css::uno::XComponentContext >& rxFact );
-    static css::awt::Size GetOriginalSize( const css::uno::Reference< css::uno::XComponentContext >& rxMSF,
+    static const css::awt::DeviceInfo& GetDeviceInfo( const css::uno::Reference< cpo::uno::XComponentContext >& rxFact );
+    static css::awt::Size GetOriginalSize( const css::uno::Reference< cpo::uno::XComponentContext >& rxMSF,
                 const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
 
     // collecting graphic instances, the downside of this method is that every graphic is swapped in
-    static void CollectGraphics( const css::uno::Reference< css::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
+    static void CollectGraphics( const css::uno::Reference< cpo::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, std::vector< GraphicEntity >& io_rGraphicList );
     // counting graphics without swapping in graphics
-    static void CountGraphics( const css::uno::Reference< css::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
+    static void CountGraphics( const css::uno::Reference< cpo::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, sal_Int32& rGraphics );
 };
 

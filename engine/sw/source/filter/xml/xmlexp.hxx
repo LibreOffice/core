@@ -117,7 +117,7 @@ protected:
 
 public:
     SwXMLExport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLExportFlags nExportFlags);
 
     virtual ~SwXMLExport() override;

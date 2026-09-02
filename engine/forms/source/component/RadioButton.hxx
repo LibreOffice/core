@@ -29,11 +29,11 @@ class ORadioButtonModel final : public OReferenceValueComponent
 {
 public:
     ORadioButtonModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     ORadioButtonModel(
         const ORadioButtonModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~ORadioButtonModel() override;
 
@@ -77,7 +77,7 @@ private:
 class ORadioButtonControl: public OBoundControl
 {
 public:
-    explicit ORadioButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit ORadioButtonControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString getImplementationName() override

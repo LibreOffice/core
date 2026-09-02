@@ -200,7 +200,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
 
 DataPointItemConverter::DataPointItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartModel,
-    const uno::Reference< uno::XComponentContext > & xContext,
+    const uno::Reference< cpo::uno::XComponentContext > & xContext,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     const rtl::Reference< DataSeries > & xSeries,
     SfxItemPool& rItemPool,

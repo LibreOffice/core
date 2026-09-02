@@ -121,7 +121,7 @@ public:
 } /* namespace */
 
 UUIInteractionHelper::UUIInteractionHelper(
-    uno::Reference< uno::XComponentContext > xContext)
+    uno::Reference< cpo::uno::XComponentContext > xContext)
     :  m_xContext(std::move(xContext))
 {
 }

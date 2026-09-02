@@ -313,7 +313,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
     }
 }
 
-NewMenuController::NewMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+NewMenuController::NewMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bShowImages( true ),
     m_bNewMenu( false ),
@@ -501,7 +501,7 @@ void NewMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuard, co
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_NewMenuController_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::NewMenuController(context));
 }

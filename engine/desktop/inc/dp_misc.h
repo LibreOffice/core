@@ -24,7 +24,7 @@
 #include <string_view>
 
 #include <osl/process.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <dp_misc_api.hxx>
@@ -86,7 +86,7 @@ class AbortChannel;
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 css::uno::Reference< css::uno::XInterface> resolveUnoURL(
     OUString const & connectString,
-    css::uno::Reference< css::uno::XComponentContext> const & xLocalContext,
+    css::uno::Reference< cpo::uno::XComponentContext> const & xLocalContext,
     AbortChannel const * abortChannel = nullptr );
 
 // Check if office is running on this system (not necessarily in this process!)
@@ -135,7 +135,7 @@ void syncRepositories(
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void disposeBridges(
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
         const & ctx);
 
 }

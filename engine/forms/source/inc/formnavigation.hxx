@@ -21,7 +21,7 @@
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "featuredispatcher.hxx"
 #include "controlfeatureinterception.hxx"
@@ -60,7 +60,7 @@ namespace frm
         typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
 
     private:
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                             m_xORB;
         ControlFeatureInterception
                             m_aFeatureInterception;
@@ -71,7 +71,7 @@ namespace frm
         sal_Int32           m_nConnectedFeatures;
 
     protected:
-        OFormNavigationHelper( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
+        OFormNavigationHelper( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
         virtual ~OFormNavigationHelper();
 
         // XComponent
@@ -176,7 +176,7 @@ namespace frm
 
     public:
         OFormNavigationMapper(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
         ~OFormNavigationMapper( );
 

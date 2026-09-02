@@ -26,10 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <shellio.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 /// Dummy Writer implementation to be able to use the string format methods of the base class
 class RtfWriter : public Writer
@@ -43,12 +40,12 @@ class RtfExportFilter final
     : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter,
                                   css::lang::XServiceInfo>
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xCtx;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xCtx;
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
     RtfWriter m_aWriter;
 
 public:
-    explicit RtfExportFilter(css::uno::Reference<css::uno::XComponentContext> xCtx);
+    explicit RtfExportFilter(css::uno::Reference<cpo::uno::XComponentContext> xCtx);
     ~RtfExportFilter() override;
 
     // XFilter

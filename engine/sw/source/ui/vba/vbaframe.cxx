@@ -26,7 +26,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaFrame::SwVbaFrame( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                        const uno::Reference< uno::XComponentContext >& rContext,
+                        const uno::Reference< cpo::uno::XComponentContext >& rContext,
                         rtl::Reference< SwXTextDocument > xModel,
                         css::uno::Reference< text::XTextFrame >  xTextFrame ) :
     SwVbaFrame_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxTextFrame(std::move( xTextFrame ))

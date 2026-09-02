@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 
 ScVbaComment::ScVbaComment(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< cpo::uno::XComponentContext >& xContext,
         const uno::Reference< frame::XModel >& xModel,
         const uno::Reference< table::XCellRange >& xRange ) :
     ScVbaComment_BASE( xParent, xContext ),

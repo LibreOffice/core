@@ -33,7 +33,7 @@ class SwVbaTables : public SwVbaTables_BASE
     rtl::Reference< SwXTextDocument > mxDocument;
 public:
     SwVbaTables( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xDocument );
     // XTables
     virtual css::uno::Reference< ov::word::XTable > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& NumRows, const cpo::uno::Any& NumColumns, const cpo::uno::Any& DefaultTableBehavior, const cpo::uno::Any& AutoFitBehavior ) override;

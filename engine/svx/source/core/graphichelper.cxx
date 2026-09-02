@@ -395,7 +395,7 @@ void GraphicHelper::SaveShapeAsGraphicToPath(
     const uno::Reference<drawing::XShape>& xShape, const OUString& aExportMimeType,
     const OUString& sPath)
 {
-    const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
     uno::Reference<io::XInputStream> xGraphStream;
 
     if (xGraphStream.is())

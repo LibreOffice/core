@@ -31,11 +31,7 @@
 
 namespace com::sun::star::resource { class XStringResourceResolver; }
 
-namespace com::sun::star {
-    namespace uno {
-        class XComponentContext;
-    }
-}
+namespace cpo::uno { class XComponentContext; }
 namespace toolkit { class ScriptEventContainer; }
 
 // namespace toolkit
@@ -176,7 +172,7 @@ namespace toolkit { class ScriptEventContainer; }
         ,public ::comphelper::OAggregationArrayUsageHelper< OTemplateInstanceDisambiguation< CONTROLMODEL > >
     {
     public:
-        OGeometryControlModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+        OGeometryControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
 
     private:
         OGeometryControlModel(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);

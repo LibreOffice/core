@@ -128,7 +128,7 @@ namespace dbaui
         void    setLoadingCancelled()   { m_bLoadCanceled = true; }
 
     public:
-        SbaXDataBrowserController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
+        SbaXDataBrowserController(const css::uno::Reference< cpo::uno::XComponentContext >& _rM);
 
         UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction

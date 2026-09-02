@@ -27,7 +27,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static cpo::uno::Any AnnotationToComment( const cpo::uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
+static cpo::uno::Any AnnotationToComment( const cpo::uno::Any& aSource, const uno::Reference< cpo::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< sheet::XSheetAnnotation > xAnno( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< container::XChild > xChild( xAnno, uno::UNO_QUERY_THROW );
@@ -47,7 +47,7 @@ public:
     /// @throws uno::RuntimeException
     CommentEnumeration(
             const uno::Reference< XHelperInterface >& xParent,
-            const uno::Reference< uno::XComponentContext >& xContext,
+            const uno::Reference< cpo::uno::XComponentContext >& xContext,
             const uno::Reference< container::XEnumeration >& xEnumeration,
             const uno::Reference< frame::XModel >& xModel ) :
         EnumerationHelperImpl( xParent, xContext, xEnumeration ),
@@ -65,7 +65,7 @@ public:
 
 ScVbaComments::ScVbaComments(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext > & xContext,
+        const uno::Reference< cpo::uno::XComponentContext > & xContext,
         const uno::Reference< frame::XModel >& xModel,
         const uno::Reference< container::XIndexAccess >& xIndexAccess  ) :
     ScVbaComments_BASE( xParent, xContext, xIndexAccess ),

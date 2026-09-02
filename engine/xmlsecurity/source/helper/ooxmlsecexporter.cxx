@@ -37,14 +37,14 @@ using namespace css::xml::sax;
 struct OOXMLSecExporter::Impl
 {
 private:
-    const uno::Reference<uno::XComponentContext>& m_xComponentContext;
+    const uno::Reference<cpo::uno::XComponentContext>& m_xComponentContext;
     const uno::Reference<embed::XStorage>& m_xRootStorage;
     const uno::Reference<xml::sax::XDocumentHandler>& m_xDocumentHandler;
     const SignatureInformation& m_rInformation;
     OUString m_aSignatureTimeValue;
 
 public:
-    Impl(const uno::Reference<uno::XComponentContext>& xComponentContext,
+    Impl(const uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
          const uno::Reference<embed::XStorage>& xRootStorage,
          const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
          const SignatureInformation& rInformation)
@@ -560,7 +560,7 @@ void OOXMLSecExporter::Impl::writeSignature()
 }
 
 OOXMLSecExporter::OOXMLSecExporter(
-    const uno::Reference<uno::XComponentContext>& xComponentContext,
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
     const uno::Reference<embed::XStorage>& xRootStorage,
     const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
     const SignatureInformation& rInformation)

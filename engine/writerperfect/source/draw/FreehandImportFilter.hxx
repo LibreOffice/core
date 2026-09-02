@@ -17,7 +17,7 @@
 class FreehandImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
-    explicit FreehandImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit FreehandImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

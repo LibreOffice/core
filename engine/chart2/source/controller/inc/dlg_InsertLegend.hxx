@@ -25,7 +25,7 @@
 
 #include "res_LegendPosition.hxx"
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -37,7 +37,7 @@ private:
     std::unique_ptr<LegendPositionResources> m_xLegendPositionResources;
 
 public:
-    SchLegendDlg(weld::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC);
+    SchLegendDlg(weld::Window* pParent, const css::uno::Reference< cpo::uno::XComponentContext>& xCC);
 
     void init( const rtl::Reference<::chart::ChartModel>& xChartModel );
     void writeToModel( const rtl::Reference<::chart::ChartModel>& xChartModel ) const;

@@ -31,7 +31,7 @@
 #include <mutex>
 #include <unotools/tempfile.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class SvStream;
 
@@ -59,7 +59,7 @@ protected:
     void checkConnected ();
 
 public:
-    explicit OTempFileService (css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit OTempFileService (css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     //Methods
     //  XTypeProvider

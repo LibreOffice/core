@@ -49,7 +49,7 @@ import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import java.util.ArrayList;
 import java.util.HashMap;

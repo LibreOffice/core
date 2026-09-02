@@ -106,14 +106,14 @@ class FormFieldCollectionHelper
 {
 private:
     uno::Reference<XHelperInterface> mxParent;
-    uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<cpo::uno::XComponentContext> mxContext;
     rtl::Reference<SwXTextDocument> mxTextDocument;
     sw::mark::Fieldmark* m_pCache;
 
 public:
     /// @throws cpo::uno::RuntimeException
     FormFieldCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
-                              uno::Reference<uno::XComponentContext> xContext,
+                              uno::Reference<cpo::uno::XComponentContext> xContext,
                               rtl::Reference<SwXTextDocument> xTextDocument)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
@@ -182,7 +182,7 @@ public:
 }
 
 SwVbaFormFields::SwVbaFormFields(const uno::Reference<XHelperInterface>& xParent,
-                                 const uno::Reference<uno::XComponentContext>& xContext,
+                                 const uno::Reference<cpo::uno::XComponentContext>& xContext,
                                  const rtl::Reference<SwXTextDocument>& xTextDocument)
     : SwVbaFormFields_BASE(xParent, xContext,
                            uno::Reference<container::XIndexAccess>(

@@ -37,7 +37,7 @@ private:
     virtual void initDynamic() override;
 
 public:
-    DynamicResultSet( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    DynamicResultSet( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                       const rtl::Reference< Content >& rxContent,
                       const css::ucb::OpenCommandArgument2& rCommand,
                       const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );

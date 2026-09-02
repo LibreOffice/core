@@ -58,7 +58,7 @@ namespace drivermanager
     {
         friend class ODriverEnumeration;
 
-        css::uno::Reference<css::uno::XComponentContext>  m_xContext;
+        css::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
         ::comphelper::EventLogger       m_aEventLogger;
 
         typedef std::vector<DriverAccess> DriverAccessArray;
@@ -75,7 +75,7 @@ namespace drivermanager
     public:
 
         explicit OSDBCDriverManager(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager() override;
 
     // XDriverManager

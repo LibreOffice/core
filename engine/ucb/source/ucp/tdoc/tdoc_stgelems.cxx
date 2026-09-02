@@ -59,7 +59,7 @@ ParentStorageHolder::ParentStorageHolder(
 // Storage Implementation.
 
 
-Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
+Storage::Storage( const uno::Reference< cpo::uno::XComponentContext > & rxContext,
                   rtl::Reference< StorageElementFactory > xFactory,
                   const OUString & rUri,
                   const uno::Reference< embed::XStorage > & xParentStorage,
@@ -453,7 +453,7 @@ void SAL_CALL Storage::revert()
 
 
 OutputStream::OutputStream(
-            const uno::Reference< uno::XComponentContext > & rxContext,
+            const uno::Reference< cpo::uno::XComponentContext > & rxContext,
             const OUString & rUri,
             const uno::Reference< embed::XStorage >  & xParentStorage,
             const uno::Reference< io::XOutputStream > & xStreamToWrap )
@@ -615,7 +615,7 @@ OutputStream::removeEventListener(
 
 
 Stream::Stream(
-            const uno::Reference< uno::XComponentContext > & rxContext,
+            const uno::Reference< cpo::uno::XComponentContext > & rxContext,
             rtl::Reference<OfficeDocumentsManager> const & docsMgr,
             const OUString & rUri,
             const uno::Reference< embed::XStorage >  & xParentStorage,

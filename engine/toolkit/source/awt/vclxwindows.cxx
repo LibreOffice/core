@@ -2018,7 +2018,7 @@ namespace
 
         try
         {
-             const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+             const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
              Reference< XGraphicProvider > xProvider(graphic::GraphicProvider::create(xContext));
              ::comphelper::NamedValueCollection aMediaProperties;
              aMediaProperties.put( u"URL"_ustr, i_rImageURL );

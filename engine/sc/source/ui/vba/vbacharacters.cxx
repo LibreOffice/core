@@ -27,7 +27,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xParent,
-                                  const uno::Reference< uno::XComponentContext >& xContext,
+                                  const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                   const ScVbaPalette& dPalette,
                                   uno::Reference< text::XSimpleText> xRange,
                                   const cpo::uno::Any& Start,

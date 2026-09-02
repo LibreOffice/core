@@ -45,7 +45,7 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #if ENABLE_YRS
 #include <com/sun/star/io/SequenceInputStream.hpp>
@@ -100,10 +100,10 @@ namespace {
 
 class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper< css::frame::XSynchronousFrameLoader, css::lang::XServiceInfo >
 {
-    css::uno::Reference < css::uno::XComponentContext >  m_aContext;
+    css::uno::Reference < cpo::uno::XComponentContext >  m_aContext;
 
 public:
-    explicit SfxFrameLoader_Impl( const css::uno::Reference < css::uno::XComponentContext >& _rxContext );
+    explicit SfxFrameLoader_Impl( const css::uno::Reference < cpo::uno::XComponentContext >& _rxContext );
 
     virtual OUString getImplementationName() override;
 
@@ -186,7 +186,7 @@ private:
                         );
 };
 
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< css::uno::XComponentContext >& _rxContext )
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< cpo::uno::XComponentContext >& _rxContext )
     :m_aContext( _rxContext )
 {
 }
@@ -881,7 +881,7 @@ Sequence< OUString > SfxFrameLoader_Impl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_office_FrameLoader_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxFrameLoader_Impl(context));

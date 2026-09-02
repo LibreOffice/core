@@ -121,7 +121,7 @@ static cpo::uno::Sequence< beans::PropertyValue > addAsTemplate( const cpo::uno:
 
 static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
                                                             const uno::Reference< embed::XStorage >& xStorage,
-                                                            const uno::Reference< uno::XComponentContext >& xContext )
+                                                            const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     SAL_WARN_IF( !xStorage.is(), "embeddedobj.common", "The storage can not be empty!" );
 
@@ -188,7 +188,7 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
 }
 
 
-static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< uno::XComponentContext >& _rxContext,
+static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< cpo::uno::XComponentContext >& _rxContext,
     const OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
     ::comphelper::NamedValueCollection aArguments;

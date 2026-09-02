@@ -164,7 +164,7 @@ CPPUMAKERFLAGS = -L
 .ENDIF
 
 FACTORYTYPES:= 	-T com.sun.star.lang.XSingleComponentFactory \
-        -T com.sun.star.uno.XComponentContext \
+        -T cpo.uno.XComponentContext \
         -T cpo.uno.XWeak \
         -T com.sun.star.container.XEnumeration \
         -T com.sun.star.lang.XComponent \

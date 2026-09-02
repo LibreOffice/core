@@ -40,7 +40,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -68,16 +68,16 @@ public:
     static cpo::uno::Sequence< OUString > getSupportedServiceNames();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
-        css::uno::Reference< css::uno::XComponentContext > const & context)
+        css::uno::Reference< cpo::uno::XComponentContext > const & context)
         throw (cpo::uno::Exception);
 
 private:
     explicit Service(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
+        css::uno::Reference< cpo::uno::XComponentContext > const & context):
         m_context(context)
     {}
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 }
@@ -148,7 +148,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     assertEqual< bool >(
         false,
         provider->hasByHierarchicalName(
-            OUString( "com.sun.star.uno.XComponentContext::getValueByName")));
+            OUString( "cpo.uno.XComponentContext::getValueByName")));
 
     css::uno::Reference< css::reflection::XCompoundTypeDescription > exception;
     exception.set(
@@ -738,7 +738,7 @@ cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
 }
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & context)
     throw (cpo::uno::Exception)
 {
     return cppu::getXWeak(new Service(context));

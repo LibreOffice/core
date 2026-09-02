@@ -596,7 +596,7 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
 {
     basctl::EnsureIde();
 
-    const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pDialog);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicInsertLib);
@@ -1058,7 +1058,7 @@ void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLib
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportPackage);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
-    const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
     Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
 
@@ -1158,7 +1158,7 @@ void ExportAsBasic(const ScriptDocument& rScriptDocument, const OUString& aLibNa
 {
     EnsureIde();
     // Folder picker
-    const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference<XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(xContext, pDialog);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 

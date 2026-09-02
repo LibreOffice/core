@@ -270,7 +270,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     if (rMainURL.isEmpty())
         return ERRCODE_NONE;
 
-    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get XInputStream stream
     uno::Reference< io::XInputStream > xStream;
@@ -404,7 +404,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         return ERRCODE_NONE;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
-    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get XOutputStream stream
     uno::Reference<io::XStream> xStream;

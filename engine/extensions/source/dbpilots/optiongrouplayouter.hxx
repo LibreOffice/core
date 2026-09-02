@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 
 namespace dbp
@@ -32,12 +32,12 @@ namespace dbp
 
     class OOptionGroupLayouter final
     {
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                     mxContext;
 
     public:
         explicit OOptionGroupLayouter(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
             );
 
         void    doLayout(

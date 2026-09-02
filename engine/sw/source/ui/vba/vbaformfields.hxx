@@ -21,7 +21,7 @@ class SwVbaFormFields : public SwVbaFormFields_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaFormFields(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                    const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                    const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
                     const rtl::Reference<SwXTextDocument>& xTextDocument);
 
     // XFormFields

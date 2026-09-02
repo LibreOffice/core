@@ -45,7 +45,7 @@ protected:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    explicit UnoGridModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+    explicit UnoGridModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
     rtl::Reference<UnoControlModel> Clone() const override;

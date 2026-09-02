@@ -12,7 +12,7 @@
 #include <vector>
 
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
@@ -89,7 +89,7 @@ MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFrame.is());
 
-    const uno::Reference<uno::XComponentContext>& xContext
+    const uno::Reference<cpo::uno::XComponentContext>& xContext
         = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
     CPPUNIT_ASSERT(xDispatchHelper.is());
@@ -130,7 +130,7 @@ public:
 
 cpo::uno::Any
 MacrosTest::queryDispatchStatus(uno::Reference<lang::XComponent> const& xComponent,
-                                uno::Reference<uno::XComponentContext> const& xContext,
+                                uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                 OUString const& rURL)
 {
     cpo::uno::Any ret;
@@ -160,7 +160,7 @@ MacrosTest::queryDispatchStatus(uno::Reference<lang::XComponent> const& xCompone
 std::unique_ptr<SvStream> MacrosTest::parseExportStream(const OUString& url,
                                                         const OUString& rStreamName)
 {
-    const uno::Reference<uno::XComponentContext>& xComponentContext
+    const uno::Reference<cpo::uno::XComponentContext>& xComponentContext
         = comphelper::getProcessComponentContext();
     uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
         packages::zip::ZipFileAccess::createWithURL(xComponentContext, url));

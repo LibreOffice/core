@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <o3tl/safeint.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
@@ -142,7 +142,7 @@ cpo::uno::Sequence< OUString > SAL_CALL XMLSecurityContext_NssImpl::getSupported
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_XMLSecurityContext_get_implementation(
-    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    cpo::uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLSecurityContext_NssImpl);
 }

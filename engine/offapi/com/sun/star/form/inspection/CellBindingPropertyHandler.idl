@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module form { module inspection {
     which is able to provide properties to bind a form component to a spreadsheet cell.
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.
-    That is, the com::sun::star::uno::XComponentContext used for creating the
+    That is, the cpo::uno::XComponentContext used for creating the
     CellBindingPropertyHandler is examined for a value with this name. If the object in this
     value denotes a spreadsheet document (indicated by supporting the com::sun::star::sheet::XSpreadsheetDocument
     interface), this document is used to create the com::sun::star::form::binding::ValueBindings
@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module form { module inspection {
     @see com::sun::star::form::binding::ValueBinding
     @see com::sun::star::table::CellValueBinding
     @see com::sun::star::table::ListPositionCellBinding
-    @see com::sun::star::uno::XComponentContext::getValueByName
+    @see cpo::uno::XComponentContext::getValueByName
 */
 service CellBindingPropertyHandler
 {

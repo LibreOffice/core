@@ -16,7 +16,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
@@ -63,7 +63,7 @@ void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
 namespace chart
 {
 WaterfallChartTypeTemplate::WaterfallChartTypeTemplate(
-    Reference<uno::XComponentContext> const& xContext, const OUString& rServiceName,
+    Reference<cpo::uno::XComponentContext> const& xContext, const OUString& rServiceName,
     sal_Int32 nDim /* = 2 */)
     : ChartTypeTemplate(xContext, rServiceName)
     , m_nDim(nDim)

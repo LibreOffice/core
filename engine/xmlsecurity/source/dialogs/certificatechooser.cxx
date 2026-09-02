@@ -313,7 +313,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_X509_KEYCHAIN));
 #else
         // Should be the last one for optimal formatting, because of the appended path.
-        const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         OUString nssPath = xml::crypto::NSSInitializer::create(xContext)->getNSSPath();
         seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_X509_NSS_NEWLINE) + nssPath);
 #endif

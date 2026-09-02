@@ -44,7 +44,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include "cppunit/TestAssert.h"
@@ -195,7 +195,7 @@ private:
         css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
         const & supplier) const;
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 void Test::setUp() {

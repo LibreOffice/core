@@ -51,7 +51,7 @@ class SubToolBarController : public ToolBarBase
     css::uno::Reference< css::ui::XUIElement > m_xUIElement;
     void disposeUIElement();
 public:
-    explicit SubToolBarController( const rtl::Reference< css::uno::XComponentContext >& rxContext,
+    explicit SubToolBarController( const rtl::Reference< cpo::uno::XComponentContext >& rxContext,
                                    const cpo::uno::Sequence< cpo::uno::Any >& rxArgs );
     virtual ~SubToolBarController() override;
 
@@ -100,7 +100,7 @@ public:
 }
 
 SubToolBarController::SubToolBarController(
-    const rtl::Reference< css::uno::XComponentContext >& rxContext,
+    const rtl::Reference< cpo::uno::XComponentContext >& rxContext,
     const cpo::uno::Sequence< cpo::uno::Any >& rxArgs
 )   : ToolBarBase(
         rxContext,
@@ -535,7 +535,7 @@ cpo::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SubToolBarController_get_implementation(
-    css::uno::XComponentContext* rxContext,
+    cpo::uno::XComponentContext* rxContext,
     cpo::uno::Sequence<cpo::uno::Any> const & rxArgs )
 {
     return cppu::acquire( new SubToolBarController( rxContext, rxArgs ) );

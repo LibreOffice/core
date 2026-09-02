@@ -2157,7 +2157,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf90883TableBoxGetCoordinates)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
 {
     // Initially no data source.
-    uno::Reference<uno::XComponentContext> xComponentContext(
+    uno::Reference<cpo::uno::XComponentContext> xComponentContext(
         comphelper::getProcessComponentContext());
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext
         = sdb::DatabaseContext::create(xComponentContext);

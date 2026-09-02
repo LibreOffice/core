@@ -33,7 +33,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
 
 {
     public:
-        MenuBarWrapper( css::uno::Reference< css::uno::XComponentContext > xContext );
+        MenuBarWrapper( css::uno::Reference< cpo::uno::XComponentContext > xContext );
         virtual ~MenuBarWrapper() override;
 
         MenuBarManager* GetMenuBarManager() const { return m_xMenuBarManager.get(); }
@@ -66,7 +66,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         bool                                                            m_bRefreshPopupControllerCache : 1;
         rtl::Reference< MenuBarManager >                                m_xMenuBarManager;
         PopupControllerCache                                            m_aPopupControllerCache;
-        css::uno::Reference< css::uno::XComponentContext >              m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >              m_xContext;
 };
 
 } // namespace framework

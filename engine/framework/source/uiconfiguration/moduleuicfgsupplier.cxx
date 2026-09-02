@@ -54,7 +54,7 @@ typedef comphelper::WeakComponentImplHelper<
 class ModuleUIConfigurationManagerSupplier : public ModuleUIConfigurationManagerSupplier_BASE
 {
 public:
-    explicit ModuleUIConfigurationManagerSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit ModuleUIConfigurationManagerSupplier( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~ModuleUIConfigurationManagerSupplier() override;
 
     virtual OUString getImplementationName() override
@@ -84,7 +84,7 @@ private:
 
     ModuleToModuleCfgMgr                                                                m_aModuleToModuleUICfgMgrMap;
     css::uno::Reference< css::frame::XModuleManager2 >          m_xModuleMgr;
-    css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
 };
 
 ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XComponentContext >& xContext ) :
@@ -169,7 +169,7 @@ Reference< XUIConfigurationManager > ModuleUIConfigurationManagerSupplier::getUI
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ModuleUIConfigurationManagerSupplier(context));

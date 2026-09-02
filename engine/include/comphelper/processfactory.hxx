@@ -25,7 +25,7 @@
 namespace com::sun::star::lang {
     class XMultiServiceFactory;
 }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper
@@ -51,7 +51,7 @@ COMPHELPER_DLLPUBLIC css::uno::Reference< css::lang::XMultiServiceFactory > getP
     @return may be null
  */
 COMPHELPER_DLLPUBLIC
-css::uno::Reference< css::uno::XComponentContext >
+css::uno::Reference< cpo::uno::XComponentContext >
 getComponentContext(
     css::uno::Reference< css::lang::XMultiServiceFactory >
         const & factory);
@@ -62,7 +62,7 @@ getComponentContext(
  * Throws a RuntimeException if no component context can be obtained.
  */
 COMPHELPER_DLLPUBLIC
-const css::uno::Reference< css::uno::XComponentContext > &
+const css::uno::Reference< cpo::uno::XComponentContext > &
 getProcessComponentContext();
 
 }

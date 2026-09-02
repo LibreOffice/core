@@ -25,14 +25,14 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 
 class ImpOptimizer : public OptimizationStats
 {
 private:
 
-    css::uno::Reference< css::uno::XComponentContext >    mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::frame::XModel >             mxModel;
     css::uno::Reference< css::frame::XDispatch >          mxStatusDispatcher;
     css::uno::Reference<css::frame::XFrame>               mxDocumentFrame;
@@ -57,7 +57,7 @@ private:
 
 public:
 
-        ImpOptimizer( const css::uno::Reference< css::uno::XComponentContext >& rXFactory,
+        ImpOptimizer( const css::uno::Reference< cpo::uno::XComponentContext >& rXFactory,
             const css::uno::Reference< css::frame::XModel >& rxModel );
         ~ImpOptimizer();
 

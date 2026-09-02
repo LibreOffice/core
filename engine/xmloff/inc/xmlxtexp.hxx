@@ -33,7 +33,7 @@ class SvxXMLXTableExportComponent final : public SvXMLExport
 {
 public:
     SvxXMLXTableExportComponent(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler,
         const css::uno::Reference< css::container::XNameContainer > & xTable,
         css::uno::Reference<css::document::XGraphicStorageHandler> const & xGraphicStorageHandler);

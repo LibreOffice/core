@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace jvmaccess { class UnoVirtualMachine; }
 
 namespace javaunohelper {
@@ -42,9 +42,9 @@ namespace javaunohelper {
 ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > create_vm_access(
     JNIEnv * jni_env, jobject loader );
 
-css::uno::Reference< css::uno::XComponentContext >
+css::uno::Reference< cpo::uno::XComponentContext >
 install_vm_singleton(
-    css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< cpo::uno::XComponentContext >
     const & xContext,
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access );
 

@@ -36,7 +36,7 @@ constexpr tools::Long SIZE = ChartColorPaletteLayout::ItemSize;
 constexpr tools::Long constElementNumber = ChartColorPaletteSize;
 
 ChartColorPaletteControl::ChartColorPaletteControl(
-    const uno::Reference<uno::XComponentContext>& rContext)
+    const uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
     , meColorPaletteType(ChartColorPaletteType::Unknown)
     , mnColorPaletteIndex(0)
@@ -234,7 +234,7 @@ cpo::uno::Sequence<OUString> ChartColorPaletteControl::getSupportedServiceNames(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_chart2_ChartColorPaletteControl_get_implementation(
-    uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ChartColorPaletteControl(rContext));
 }

@@ -296,14 +296,14 @@ using namespace cpo::uno;
         return Application::CreateBuilder(rTunnel.getWidget(), rUIFile);
     }
 
-    void PropertyHandlerHelper::setBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)
+    void PropertyHandlerHelper::setBuilderParent(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Widget* pParent)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
         Reference<XWindow> xWindow(new weld::TransportAsXWindow(pParent));
         xName->insertByName(u"BuilderParent"_ustr, Any(xWindow));
     }
 
-    void PropertyHandlerHelper::clearBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext)
+    void PropertyHandlerHelper::clearBuilderParent(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
         xName->removeByName(u"BuilderParent"_ustr);

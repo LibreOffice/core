@@ -24,7 +24,7 @@
 #include <framework/factories/BasicToolBarFactory.hxx>
 #include <DrawController.hxx>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <tools/ConfigurationAccess.hxx>

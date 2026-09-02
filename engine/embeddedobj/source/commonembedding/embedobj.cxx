@@ -74,7 +74,7 @@ namespace {
 // sLinkURL, or null. Hidden frames are skipped (caller routes them to the
 // warn path). Comparison mirrors LoadEnv::impl_searchAlreadyLoaded.
 css::uno::Reference< css::frame::XFrame > findLinkSourceFrame(
-    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     const OUString& sLinkURL )
 {
     if ( sLinkURL.isEmpty() || INetURLObject( sLinkURL ).IsExoticProtocol() )

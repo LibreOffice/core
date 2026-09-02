@@ -25,7 +25,7 @@
 
 namespace chart { class ChartModel; }
 namespace chart { class ReferenceSizeProvider; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -62,13 +62,13 @@ public:
         createTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const rtl::Reference< ::chart::ChartModel >& xModel
-                    , const css::uno::Reference< css::uno::XComponentContext > & xContext
+                    , const css::uno::Reference< cpo::uno::XComponentContext > & xContext
                     , ReferenceSizeProvider * pRefSizeProvider = nullptr );
     static rtl::Reference< ::chart::Title >
           createOrShowTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const rtl::Reference< ::chart::ChartModel >& xModel
-                    , const css::uno::Reference< css::uno::XComponentContext > & xContex );
+                    , const css::uno::Reference< cpo::uno::XComponentContext > & xContex );
 
     static void removeTitle( eTitleType nTitleIndex
                     , const rtl::Reference< ::chart::ChartModel >& xModel );
@@ -79,7 +79,7 @@ public:
         const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle );
     static void setCompleteString( const OUString& rNewText
         , const rtl::Reference< ::chart::Title >& xTitle
-        , const css::uno::Reference< css::uno::XComponentContext > & xContext
+        , const css::uno::Reference< cpo::uno::XComponentContext > & xContext
         , const float * pDefaultCharHeight = nullptr
         , bool bDialogTitle = false );
 

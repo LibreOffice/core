@@ -23,7 +23,7 @@
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/attributelist.hxx>
 #include <rtl/ref.hxx>
@@ -36,7 +36,7 @@ namespace dbaccess
     {
     public:
         StorageXMLOutputStream(
-            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
@@ -66,7 +66,7 @@ namespace dbaccess
     {
     public:
         StorageXMLInputStream(
-            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );

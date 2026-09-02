@@ -32,7 +32,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include "pkgprovider.hxx"
 #include "pkgcontent.hxx"
 #include "pkguri.hxx"
@@ -89,7 +89,7 @@ using namespace package_ucp;
 
 // ContentProvider Implementation.
 ContentProvider::ContentProvider(
-            const uno::Reference< uno::XComponentContext >& rxContext )
+            const uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
@@ -245,7 +245,7 @@ void ContentProvider::removePackage( const OUString & rName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_package_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

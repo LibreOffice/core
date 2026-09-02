@@ -58,7 +58,7 @@
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 
 #include <jvmaccess/unovirtualmachine.hxx>
@@ -549,7 +549,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaComponentLoader_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     try {
         return cppu::acquire(new JavaComponentLoader(context));

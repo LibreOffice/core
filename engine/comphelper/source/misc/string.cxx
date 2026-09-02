@@ -491,7 +491,7 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
 }
 
 NaturalStringSorter::NaturalStringSorter(
-    const uno::Reference< uno::XComponentContext > &rContext,
+    const uno::Reference< cpo::uno::XComponentContext > &rContext,
     lang::Locale aLocale) : m_aLocale(std::move(aLocale))
 {
     m_xCollator = i18n::Collator::create( rContext );

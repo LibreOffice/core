@@ -307,14 +307,14 @@ Sequence< Type > ODateModel::getSupportedBindingTypes()
 }   // namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_form_ODateModel_get_implementation(css::uno::XComponentContext* component,
+com_sun_star_form_ODateModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ODateModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_form_ODateControl_get_implementation(css::uno::XComponentContext* component,
+com_sun_star_form_ODateControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ODateControl(component));

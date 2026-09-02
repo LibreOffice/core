@@ -53,7 +53,7 @@ void AnalysisAddIn::InitData()
     pDefLocales.reset();
 }
 
-AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
+AnalysisAddIn::AnalysisAddIn( const uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     AnalysisAddIn_Base(m_aMutex),
     aAnyConv( xContext )
 {
@@ -1050,7 +1050,7 @@ OUString AnalysisAddIn::AnalysisResId(TranslateId aResId)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_AnalysisAddIn_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new AnalysisAddIn(context));
 }

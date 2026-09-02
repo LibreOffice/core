@@ -33,7 +33,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/embed/XHatchWindowController.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -59,7 +59,7 @@ private:
     rtl::Reference<Interceptor>        m_xInterceptor;
     css::uno::Reference< css::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     css::uno::Reference< css::util::XCloseable > m_xComponent;
 
@@ -115,7 +115,7 @@ public:
         const css::uno::Reference< css::frame::XDispatchProvider >& xOwnDisp );
 
 
-    DocumentHolder( css::uno::Reference< css::uno::XComponentContext > xContext,
+    DocumentHolder( css::uno::Reference< cpo::uno::XComponentContext > xContext,
                     OCommonEmbeddedObject* pEmbObj );
     virtual ~DocumentHolder() override;
 

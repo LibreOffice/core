@@ -19,7 +19,7 @@
 
 #include <comphelper/base64.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -1885,7 +1885,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 xmloff_Oasis2OOoTransformer_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
     return cppu::acquire(new Oasis2OOoTransformer);

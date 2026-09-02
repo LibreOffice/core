@@ -23,9 +23,7 @@
 #include "extension.hxx"
 #include "xpathlib.hxx"
 
-namespace com::sun::star::uno {
-    class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 using namespace com::sun::star::uno;
 using namespace cpo::uno;
@@ -66,7 +64,7 @@ void CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequence)
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_xml_xpath_XFormsExtension_get_implementation(css::uno::XComponentContext*,
+com_sun_star_comp_xml_xpath_XFormsExtension_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new CLibxml2XFormsExtension());

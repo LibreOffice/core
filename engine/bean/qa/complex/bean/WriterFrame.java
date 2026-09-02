@@ -18,7 +18,7 @@
 package complex.bean;
 
 
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import java.awt.Rectangle;
 import java.awt.Insets;
 import java.awt.BorderLayout;

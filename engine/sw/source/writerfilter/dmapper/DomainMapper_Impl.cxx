@@ -28,7 +28,7 @@
 #include "SdtHelper.hxx"
 #include "DomainMapperTableHandler.hxx"
 #include "TagLogger.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -352,7 +352,7 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
 
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
-            uno::Reference<uno::XComponentContext> xContext,
+            uno::Reference<cpo::uno::XComponentContext> xContext,
             rtl::Reference<SwXTextDocument> const& xModel,
             SourceDocumentType eDocumentType,
             comphelper::SequenceAsHashMap const & rMediaDesc) :

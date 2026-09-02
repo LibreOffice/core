@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 
 #include <comphelper/oslfile2streamwrap.hxx>

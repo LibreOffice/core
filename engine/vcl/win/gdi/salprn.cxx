@@ -1489,7 +1489,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCase( "FILE:" ) && (!pFileName || pFileName->isEmpty()) )
     {
 
-        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference< cpo::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< XFilePicker3 > xFilePicker = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_SIMPLE);
 
         if( xFilePicker->execute() == ExecutableDialogResults::OK )

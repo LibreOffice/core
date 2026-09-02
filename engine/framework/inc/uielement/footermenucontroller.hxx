@@ -26,7 +26,7 @@ namespace framework
     class FooterMenuController final : public HeaderMenuController
     {
         public:
-            FooterMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            FooterMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~FooterMenuController() override;
 
             /* interface XServiceInfo */

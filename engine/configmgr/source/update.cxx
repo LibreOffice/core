@@ -48,7 +48,7 @@ class Service:
     public cppu::WeakImplHelper< css::configuration::XUpdate, css::lang::XServiceInfo >
 {
 public:
-    explicit Service(const css::uno::Reference< css::uno::XComponentContext >& context):
+    explicit Service(const css::uno::Reference< cpo::uno::XComponentContext >& context):
         context_(context)
     {
         assert(context.is());
@@ -89,7 +89,7 @@ private:
     }
 
     std::shared_ptr<osl::Mutex> lock_;
-    css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 void Service::insertExtensionXcsFile(
@@ -159,7 +159,7 @@ void Service::writeModifications(OUString const & fileUri)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_Update_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new configmgr::update::Service(context));
 }

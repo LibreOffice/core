@@ -45,7 +45,7 @@ using StatusIndicator_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
 class StatusIndicator final : public StatusIndicator_BASE
 {
 public:
-    StatusIndicator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    StatusIndicator( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~StatusIndicator() override;
 

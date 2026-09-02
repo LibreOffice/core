@@ -210,12 +210,12 @@ private:
                          const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 public:
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory );
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory,
@@ -279,7 +279,7 @@ public:
 
     // Called from resultset data supplier.
     static css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+    getPropertyValues( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                        const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,

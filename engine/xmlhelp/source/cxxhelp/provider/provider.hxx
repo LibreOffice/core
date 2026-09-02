@@ -44,7 +44,7 @@ inline constexpr OUString MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhel
     {
     public:
         explicit ContentProvider(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
         virtual ~ContentProvider() override;
 

@@ -62,7 +62,7 @@ void ScVbaStyle::initialise()
 }
 
 ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
-                        const uno::Reference< uno::XComponentContext > & xContext,
+                        const uno::Reference< cpo::uno::XComponentContext > & xContext,
                         const OUString& sStyleName, const rtl::Reference<ScModelObj>& _xModel )
     :  ScVbaStyle_BASE( xParent, xContext, lcl_getStyleProps( sStyleName, _xModel ), _xModel, false )
 {
@@ -77,7 +77,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
 }
 
 ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
-                        const uno::Reference< uno::XComponentContext > & xContext,
+                        const uno::Reference< cpo::uno::XComponentContext > & xContext,
                         const uno::Reference< beans::XPropertySet >& _xPropertySet,
                         const rtl::Reference<ScModelObj>& _xModel )
     : ScVbaStyle_BASE( xParent, xContext, _xPropertySet, _xModel, false )

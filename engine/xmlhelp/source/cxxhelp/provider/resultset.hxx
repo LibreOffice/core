@@ -36,7 +36,7 @@ namespace chelp {
 
     public:
         DynamicResultSet(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::ucb::OpenCommandArgument2& rCommand,
             std::unique_ptr<ResultSetFactory> pFactory );
 

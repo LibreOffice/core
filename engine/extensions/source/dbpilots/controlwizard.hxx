@@ -23,7 +23,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 #include <vcl/wizardmachine.hxx>
 #include "dbptypes.hxx"
@@ -87,14 +87,14 @@ namespace dbp
     {
     private:
         OControlWizardContext   m_aContext;
-        css::uno::Reference< css::uno::XComponentContext >
+        css::uno::Reference< cpo::uno::XComponentContext >
                                 m_xContext;
 
     public:
         OControlWizard(
             weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
         virtual ~OControlWizard() override;
 
@@ -102,7 +102,7 @@ namespace dbp
         using OControlWizard_Base::travelNext;
 
     public:
-        const css::uno::Reference< css::uno::XComponentContext >&
+        const css::uno::Reference< cpo::uno::XComponentContext >&
             getComponentContext() const { return m_xContext; }
 
         const OControlWizardContext&    getContext() const { return m_aContext; }

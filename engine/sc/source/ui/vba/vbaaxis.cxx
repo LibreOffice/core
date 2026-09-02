@@ -53,7 +53,7 @@ ScVbaAxis::isValueAxis()
 }
 
 ScVbaAxis::ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent,
-                      const uno::Reference< uno::XComponentContext > & xContext,
+                      const uno::Reference< cpo::uno::XComponentContext > & xContext,
                       uno::Reference< beans::XPropertySet >  _xPropertySet,
                       sal_Int32 _nType, sal_Int32 _nGroup )
   : ScVbaAxis_BASE( xParent, xContext ),

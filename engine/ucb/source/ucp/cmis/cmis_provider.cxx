@@ -74,7 +74,7 @@ void ContentProvider::registerSession( const OUString& sBindingUrl, const OUStri
 }
 
 ContentProvider::ContentProvider(
-    const uno::Reference< uno::XComponentContext >& rxContext )
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
@@ -128,7 +128,7 @@ cpo::uno::Sequence< OUString > ContentProvider::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_cmis_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new cmis::ContentProvider(context));
 }

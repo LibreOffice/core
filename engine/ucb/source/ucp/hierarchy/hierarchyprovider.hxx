@@ -69,7 +69,7 @@ class HierarchyContentProvider : public HierarchyContentProvider_Base
 
 public:
     explicit HierarchyContentProvider(
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~HierarchyContentProvider() override;
 
     // XServiceInfo

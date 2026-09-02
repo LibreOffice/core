@@ -71,7 +71,7 @@ void VPolarCoordinateSystem::createVAxisList(
             const awt::Rectangle& rMaximumSpaceForLabels,
             bool /*bLimitSpaceForLabels*/,
             std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
-            css::uno::Reference<css::uno::XComponentContext> const& /*rComponentContext*/)
+            css::uno::Reference<cpo::uno::XComponentContext> const& /*rComponentContext*/)
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VPolarAxis due to cyclic reference

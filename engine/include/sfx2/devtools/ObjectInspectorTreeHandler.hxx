@@ -16,7 +16,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>
 
@@ -39,7 +39,7 @@ private:
     std::deque<cpo::uno::Any> maInspectionStack;
 
     // just the current context
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
 
     // treeview sort and compare
     comphelper::string::NaturalStringSorter mxSorter;

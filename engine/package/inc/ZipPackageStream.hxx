@@ -22,7 +22,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include "ZipPackageEntry.hxx"
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -132,7 +132,7 @@ public:
     void setSize (const sal_Int64 nNewSize);
 
     ZipPackageStream( ZipPackage & rNewPackage,
-                      const css::uno::Reference < css::uno::XComponentContext >& xContext,
+                      const css::uno::Reference < cpo::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageStream() override;

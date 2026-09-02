@@ -572,7 +572,7 @@ private:
     OUString m_aBaseUrl;
     rtl::Reference<SwXTextDocument> m_xTextDocument;
     rtl::Reference<SwXDocumentSettings> m_xDocumentSettings;
-    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     rtl::Reference<SwXStyleFamily> m_xPageStyles;
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedPageStyleNo;
@@ -731,7 +731,7 @@ private:
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
-            css::uno::Reference < css::uno::XComponentContext > xContext,
+            css::uno::Reference < cpo::uno::XComponentContext > xContext,
             rtl::Reference< SwXTextDocument > const& xModel,
             SourceDocumentType eDocumentType,
             comphelper::SequenceAsHashMap const & rMediaDesc);

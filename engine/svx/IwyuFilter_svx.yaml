@@ -59,7 +59,7 @@ excludelist:
     - com/sun/star/form/validation/XValidatableFormComponent.hpp
     svx/source/form/databaselocationinput.cxx:
     # Actually used
-    - com/sun/star/uno/XComponentContext.hpp
+    - cpo/uno/XComponentContext.hpp
     svx/source/form/tabwin.cxx:
     # Needed for UnoType instantiation
     - com/sun/star/sdbc/XConnection.hpp

@@ -58,11 +58,11 @@ namespace frm
 
     public:
         ONavigationBarModel(
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         ONavigationBarModel(
             const ONavigationBarModel* _pOriginal,
-            const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~ONavigationBarModel() override;
 

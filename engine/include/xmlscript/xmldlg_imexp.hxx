@@ -26,7 +26,7 @@ namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XInputStreamProvider; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
 namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
 
@@ -41,7 +41,7 @@ void exportDialogModel(
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::xml::sax::XDocumentHandler >
 importDialogModel(
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< css::uno::XComponentContext > const & xContext,
+    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
     css::uno::Reference< css::frame::XModel > const & xDocument );
 
 // additional functions for convenience
@@ -49,13 +49,13 @@ importDialogModel(
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStreamProvider >
 exportDialogModel(
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< css::uno::XComponentContext > const & xContext,
+    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
     css::uno::Reference< css::frame::XModel > const & xDocument );
 
 XMLSCRIPT_DLLPUBLIC void importDialogModel(
     css::uno::Reference< css::io::XInputStream > const & xInput,
     css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< css::uno::XComponentContext > const & xContext,
+    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
     css::uno::Reference< css::frame::XModel > const & xDocument );
 
 }

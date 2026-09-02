@@ -26,7 +26,7 @@
 class VclWindowEvent;
 
 namespace vcl { class Window; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace sd { class DrawDocShell; }
 
 namespace sd::framework {

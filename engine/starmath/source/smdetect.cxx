@@ -21,7 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sot/storage.hxx>
@@ -140,7 +140,7 @@ Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-math_FormatDetector_get_implementation(uno::XComponentContext* /*pCtx*/,
+math_FormatDetector_get_implementation(cpo::uno::XComponentContext* /*pCtx*/,
                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmFilterDetect);

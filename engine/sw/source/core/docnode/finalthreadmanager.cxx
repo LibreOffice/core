@@ -147,7 +147,7 @@ class TerminateOfficeThread : public osl::Thread
 {
     public:
         TerminateOfficeThread( CancelJobsThread const & rCancelJobsThread,
-                               css::uno::Reference< css::uno::XComponentContext >  xContext )
+                               css::uno::Reference< cpo::uno::XComponentContext >  xContext )
             : mrCancelJobsThread( rCancelJobsThread ),
               mbStopOfficeTermination( false ),
               mxContext(std::move( xContext ))
@@ -167,7 +167,7 @@ class TerminateOfficeThread : public osl::Thread
         const CancelJobsThread& mrCancelJobsThread;
         bool mbStopOfficeTermination;
 
-        css::uno::Reference< css::uno::XComponentContext > mxContext;
+        css::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 void TerminateOfficeThread::StopOfficeTermination()
@@ -224,7 +224,7 @@ void SAL_CALL TerminateOfficeThread::onTerminated()
         delete this;
 }
 
-FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > context)
+FinalThreadManager::FinalThreadManager(css::uno::Reference< cpo::uno::XComponentContext > context)
     : m_xContext(std::move(context)),
       mpTerminateOfficeThread( nullptr ),
       mbRegisteredAtDesktop( false )
@@ -417,7 +417,7 @@ void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& )
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_util_comp_FinalThreadManager_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_util_comp_FinalThreadManager_get_implementation(cpo::uno::XComponentContext* context,
                                 cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FinalThreadManager(context));

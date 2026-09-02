@@ -26,7 +26,7 @@
 #include <vector>
 #include <optional>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -39,7 +39,7 @@ class InputSequenceCheckerImpl : public cppu::WeakImplHelper
 >
 {
 public:
-    InputSequenceCheckerImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    InputSequenceCheckerImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     InputSequenceCheckerImpl(const char *pServiceName);
     virtual ~InputSequenceCheckerImpl() override;
 
@@ -66,7 +66,7 @@ private:
     std::vector<lookupTableItem> lookupTable;
     std::optional<lookupTableItem> cachedItem;
 
-    css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// @throws cpo::uno::RuntimeException
     css::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& getInputSequenceChecker(char const * rLanguage);

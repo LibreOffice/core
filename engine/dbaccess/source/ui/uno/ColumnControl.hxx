@@ -21,16 +21,16 @@
 #include <connectivity/CommonTools.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace dbaui
 {
     class OColumnControl :  public UnoControl
     {
     private:
-        css::uno::Reference< css::uno::XComponentContext> m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
     public:
-        explicit OColumnControl(const css::uno::Reference< css::uno::XComponentContext>& rxContext);
+        explicit OColumnControl(const css::uno::Reference< cpo::uno::XComponentContext>& rxContext);
 
         // UnoControl
         virtual OUString GetComponentServiceName() const override;

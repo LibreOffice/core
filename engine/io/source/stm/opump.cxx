@@ -27,7 +27,7 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
@@ -450,7 +450,7 @@ Sequence< OUString > Pump::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 io_Pump_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new io_stm::Pump());
 }

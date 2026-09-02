@@ -37,7 +37,7 @@ namespace com::sun::star::beans {
     class XPropertySet;
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 enum class PropsSet;
 namespace ucbhelper_impl { struct PropertyValue; }
@@ -59,7 +59,7 @@ class SAL_DLLPUBLIC_RTTI PropertyValueSet final :
                     css::sdbc::XRow,
                     css::sdbc::XColumnLocate>
 {
-    css::uno::Reference< css::uno::XComponentContext >   m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >   m_xContext;
     css::uno::Reference< css::script::XTypeConverter >   m_xTypeConverter;
     std::mutex      m_aMutex;
     std::unique_ptr<PropertyValues>                      m_pValues;
@@ -80,7 +80,7 @@ private:
 
 public:
     UCBHELPER_DLLPUBLIC PropertyValueSet(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~PropertyValueSet() override;
 
     // XRow

@@ -56,7 +56,7 @@ public:
 
 }
 
-ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, uno::Reference< drawing::XDrawPage >  xDrawPage, uno::Reference< frame::XModel > xModel  ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage(std::move( xDrawPage )), m_xModel(std::move( xModel ))
+ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, uno::Reference< drawing::XDrawPage >  xDrawPage, uno::Reference< frame::XModel > xModel  ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage(std::move( xDrawPage )), m_xModel(std::move( xModel ))
 {
 }
 

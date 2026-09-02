@@ -70,9 +70,9 @@ struct SvXMLUnitConverter::Impl
     util::Date m_aNullDate;
     mutable uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
     mutable uno::Reference< i18n::XCharacterClassification > m_xCharClass;
-    uno::Reference< uno::XComponentContext > m_xContext;
+    uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
-    Impl(uno::Reference<uno::XComponentContext> xContext,
+    Impl(uno::Reference<cpo::uno::XComponentContext> xContext,
             sal_Int16 const eCoreMeasureUnit,
             sal_Int16 const eXMLMeasureUnit,
             SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
@@ -131,7 +131,7 @@ SvtSaveOptions::ODFSaneDefaultVersion SvXMLUnitConverter::getSaneDefaultVersion(
 */
 
 SvXMLUnitConverter::SvXMLUnitConverter(
-    const uno::Reference<uno::XComponentContext>& xContext,
+    const uno::Reference<cpo::uno::XComponentContext>& xContext,
     sal_Int16 const eCoreMeasureUnit,
     sal_Int16 const eXMLMeasureUnit,
     SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)

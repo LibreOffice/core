@@ -37,7 +37,7 @@ namespace connectivity
                                 public java_lang_Object,
                                 public OAutoRetrievingBase
     {
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         const java_sql_Driver*  m_pDriver;
         jobject                 m_pDriverobject;
         jdbc::GlobalRef< jobject >

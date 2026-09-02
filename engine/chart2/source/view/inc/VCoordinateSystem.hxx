@@ -33,7 +33,7 @@
 
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::awt { struct Size; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -116,7 +116,7 @@ public:
             const css::awt::Rectangle& rMaximumSpaceForLabels,
             bool bLimitSpaceForLabels,
             std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-            css::uno::Reference<css::uno::XComponentContext> const& rComponentContext);
+            css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext);
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();

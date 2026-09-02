@@ -32,7 +32,7 @@
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <cpo/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -103,7 +103,7 @@ class Parser {
 public:
     Parser(
         OUString const & uri,
-        css::uno::Reference< css::uno::XComponentContext > alienContext,
+        css::uno::Reference< cpo::uno::XComponentContext > alienContext,
         cppuhelper::ServiceManager::Data * data);
 
     Parser(const Parser&) = delete;
@@ -121,7 +121,7 @@ private:
     OUString getNameAttribute();
 
     xmlreader::XmlReader reader_;
-    css::uno::Reference< css::uno::XComponentContext > alienContext_;
+    css::uno::Reference< cpo::uno::XComponentContext > alienContext_;
     cppuhelper::ServiceManager::Data * data_;
     OUString attrLoader_;
     OUString attrUri_;
@@ -133,7 +133,7 @@ private:
 
 Parser::Parser(
     OUString const & uri,
-    css::uno::Reference< css::uno::XComponentContext > alienContext,
+    css::uno::Reference< cpo::uno::XComponentContext > alienContext,
     cppuhelper::ServiceManager::Data * data):
     reader_(uri), alienContext_(std::move(alienContext)), data_(data)
 {
@@ -487,7 +487,7 @@ cpo::uno::Any ContentEnumeration::nextElement()
 css::beans::Property getDefaultContextProperty() {
     return css::beans::Property(
         u"DefaultContext"_ustr, -1,
-        cppu::UnoType< css::uno::XComponentContext >::get(),
+        cppu::UnoType< cpo::uno::XComponentContext >::get(),
         css::beans::PropertyAttribute::READONLY);
 }
 
@@ -511,12 +511,12 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
@@ -525,7 +525,7 @@ private:
 
 css::uno::Reference< css::uno::XInterface >
 SingletonFactory::createInstanceWithContext(
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     manager_->loadImplementation(Context, implementation_);
     return implementation_->createInstance(Context, true);
@@ -534,7 +534,7 @@ SingletonFactory::createInstanceWithContext(
 css::uno::Reference< css::uno::XInterface >
 SingletonFactory::createInstanceWithArgumentsAndContext(
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     manager_->loadImplementation(Context, implementation_);
     return implementation_->createInstanceWithArguments(
@@ -563,12 +563,12 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
-        css::uno::Reference< css::uno::XComponentContext > const & Context) override;
+        css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface >
     createInstance() override;
@@ -591,7 +591,7 @@ private:
 
 css::uno::Reference< css::uno::XInterface >
 ImplementationWrapper::createInstanceWithContext(
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
@@ -602,7 +602,7 @@ ImplementationWrapper::createInstanceWithContext(
 css::uno::Reference< css::uno::XInterface >
 ImplementationWrapper::createInstanceWithArgumentsAndContext(
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
@@ -657,7 +657,7 @@ ImplementationWrapper::getSupportedServiceNames()
 
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::createInstance(
-    css::uno::Reference<css::uno::XComponentContext> const & context,
+    css::uno::Reference<cpo::uno::XComponentContext> const & context,
     bool singletonRequest)
 {
     css::uno::Reference<css::uno::XInterface> inst;
@@ -676,7 +676,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
 
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
-    css::uno::Reference<css::uno::XComponentContext> const & context,
+    css::uno::Reference<cpo::uno::XComponentContext> const & context,
     bool singletonRequest, cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     css::uno::Reference<css::uno::XInterface> inst;
@@ -695,7 +695,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
 
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
+    css::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     if (constructorFn) {
         return css::uno::Reference<css::uno::XInterface>(
@@ -711,7 +711,7 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
 
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::doCreateInstanceWithArguments(
-    css::uno::Reference<css::uno::XComponentContext> const & context,
+    css::uno::Reference<cpo::uno::XComponentContext> const & context,
     cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     if (constructorFn) {
@@ -786,7 +786,7 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
 }
 
 void cppuhelper::ServiceManager::loadImplementation(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< cpo::uno::XComponentContext > const & context,
         std::shared_ptr< Data::Implementation > const & implementation)
 {
     assert(implementation);
@@ -833,7 +833,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             !implementation->prefix.isEmpty(), "cppuhelper",
             "Loader " << implementation->loader
                 << " and non-empty prefix " << implementation->prefix);
-        css::uno::Reference< css::uno::XComponentContext > ctxt;
+        css::uno::Reference< cpo::uno::XComponentContext > ctxt;
         css::uno::Reference< css::lang::XMultiComponentFactory > smgr;
         if (implementation->alienContext.is()) {
             ctxt = implementation->alienContext;
@@ -995,7 +995,7 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithContext(
     OUString const & aServiceSpecifier,
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, aServiceSpecifier));
@@ -1007,7 +1007,7 @@ css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, ServiceSpecifier));
@@ -1048,7 +1048,7 @@ void cppuhelper::ServiceManager::insert(cpo::uno::Any const & aElement)
     cpo::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
         std::vector< OUString > uris;
-        css::uno::Reference< css::uno::XComponentContext > alienContext;
+        css::uno::Reference< cpo::uno::XComponentContext > alienContext;
         for (const auto & arg : args) {
             if (arg.Name == "uri") {
                 OUString uri;
@@ -1352,7 +1352,7 @@ void cppuhelper::ServiceManager::readRdbFile(
 {
     try {
         Parser(
-            uri, css::uno::Reference< css::uno::XComponentContext >(), &data_);
+            uri, css::uno::Reference< cpo::uno::XComponentContext >(), &data_);
     } catch (css::container::NoSuchElementException &) {
         if (!optional) {
             throw cpo::uno::DeploymentException(
@@ -1428,7 +1428,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
             std::make_shared<Data::Implementation>(
                 name, readLegacyRdbString(uri, implKey, u"UNO/ACTIVATOR"_ustr),
                 readLegacyRdbString(uri, implKey, u"UNO/LOCATION"_ustr), "", "", "", false,
-                css::uno::Reference< css::uno::XComponentContext >(), uri);
+                css::uno::Reference< cpo::uno::XComponentContext >(), uri);
         if (!data_.namedImplementations.emplace(name, impl).second)
         {
             throw css::registry::InvalidRegistryException(
@@ -1516,7 +1516,7 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
 
 void cppuhelper::ServiceManager::insertRdbFiles(
     std::vector< OUString > const & uris,
-    css::uno::Reference< css::uno::XComponentContext > const & alienContext)
+    css::uno::Reference< cpo::uno::XComponentContext > const & alienContext)
 {
     Data extra;
     for (const auto& rUri : uris)
@@ -1749,7 +1749,7 @@ void cppuhelper::ServiceManager::removeImplementation(const OUString & name) {
 
 std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
 cppuhelper::ServiceManager::findServiceImplementation(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
+    css::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & specifier)
 {
     std::shared_ptr< Data::Implementation > impl;

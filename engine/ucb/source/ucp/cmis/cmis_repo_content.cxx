@@ -45,7 +45,7 @@ using namespace com::sun::star;
 
 namespace cmis
 {
-    RepoContent::RepoContent( const uno::Reference< uno::XComponentContext >& rxContext,
+    RepoContent::RepoContent( const uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
         std::vector< libcmis::RepositoryPtr > && aRepos )
         : ContentImplHelper( rxContext, pProvider, Identifier ),

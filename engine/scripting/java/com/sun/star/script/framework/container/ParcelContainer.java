@@ -37,7 +37,7 @@ import com.sun.star.ucb.XSimpleFileAccess2;
 
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 import com.sun.star.uri.XUriReference;
 import com.sun.star.uri.XUriReferenceFactory;

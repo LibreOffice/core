@@ -24,7 +24,7 @@
 
 namespace com::sun::star::linguistic2 { class XConversionDictionary; }
 namespace com::sun::star::linguistic2 { class XConversionDictionaryList; }
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
 
@@ -79,7 +79,7 @@ typedef struct {
 class TextConversion_ko final : public TextConversionService
 {
 public:
-    TextConversion_ko( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    TextConversion_ko( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
         // Methods
         css::i18n::TextConversionResult
@@ -116,7 +116,7 @@ private:
 class TextConversion_zh final : public TextConversionService
 {
 public:
-    TextConversion_zh( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    TextConversion_zh( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
         // Methods
         css::i18n::TextConversionResult

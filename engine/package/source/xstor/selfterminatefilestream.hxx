@@ -23,7 +23,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/streamwrap.hxx>
@@ -39,7 +39,7 @@ class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XIn
     rtl::Reference< utl::OSeekableInputStreamWrapper > m_xStreamWrapper;
 
 public:
-    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile );
+    OSelfTerminateFileStream( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile );
 
     virtual ~OSelfTerminateFileStream() override;
 

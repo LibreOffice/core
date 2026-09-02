@@ -29,7 +29,7 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -235,7 +235,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     return xInt;
 }
 
-Reference< XComponentContext > const & ConverterRoot::getComponentContext() const
+Reference< cpo::uno::XComponentContext > const & ConverterRoot::getComponentContext() const
 {
     return mxData->mrFilter.getComponentContext();
 }

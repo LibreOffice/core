@@ -535,7 +535,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     }
 
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
-    uno::Reference<uno::XComponentContext> const xContext(
+    uno::Reference<cpo::uno::XComponentContext> const xContext(
         GetFilter().getComponentContext());
 
     OUString sMediaType;

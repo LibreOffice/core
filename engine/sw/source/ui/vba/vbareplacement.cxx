@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaReplacement::SwVbaReplacement( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< util::XPropertyReplace >  xPropertyReplace ) :
+SwVbaReplacement::SwVbaReplacement( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, uno::Reference< util::XPropertyReplace >  xPropertyReplace ) :
     SwVbaReplacement_BASE( rParent, rContext ), mxPropertyReplace(std::move( xPropertyReplace ))
 {
 }

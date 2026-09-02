@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
 #include <tools/urlobj.hxx>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 const sal_Int16 CUSTOM_CHAR = 5;
 
 static cpo::uno::Any
-getWorkbook( const uno::Reference< uno::XComponentContext >& xContext,
+getWorkbook( const uno::Reference< cpo::uno::XComponentContext >& xContext,
              const rtl::Reference< ScModelObj > &xModel,
              const uno::Reference< XHelperInterface >& xParent )
 {
@@ -65,7 +65,7 @@ class WorkBookEnumImpl : public EnumerationHelperImpl
 {
 public:
     /// @throws uno::RuntimeException
-    WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
+    WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
     virtual cpo::uno::Any SAL_CALL nextElement(  ) override
     {
@@ -77,7 +77,7 @@ public:
 
 }
 
-ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xParent, xContext, VbaDocumentsBase::EXCEL_DOCUMENT )
+ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xParent, xContext, VbaDocumentsBase::EXCEL_DOCUMENT )
 {
 }
 // XEnumerationAccess

@@ -42,7 +42,7 @@ namespace framework{
 const ::sal_Int32 INVALID_ICON_ID = -1;
 const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
-TitleBarUpdate::TitleBarUpdate(css::uno::Reference< css::uno::XComponentContext >  xContext)
+TitleBarUpdate::TitleBarUpdate(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext              (std::move(xContext                     ))
 {
 }

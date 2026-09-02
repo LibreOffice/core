@@ -265,7 +265,7 @@ getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel )
 }
 
 ScTabViewShell*
-getCurrentBestViewShell(  const uno::Reference< uno::XComponentContext >& xContext )
+getCurrentBestViewShell(  const uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel = getCurrentExcelDoc( xContext );
     return getBestViewShell( xModel );

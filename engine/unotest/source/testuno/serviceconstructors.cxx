@@ -13,10 +13,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace
 {
@@ -54,7 +51,7 @@ private:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_testuno_Constructors_get_implementation(
-    css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ConstructorsTest(args));
 }

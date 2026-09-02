@@ -55,7 +55,7 @@ cpo::uno::Sequence< OUString > MailToDispatcher::getSupportedServiceNames()
     @param      rxContext
                     reference to uno servicemanager for creation of new services
 */
-MailToDispatcher::MailToDispatcher( css::uno::Reference< css::uno::XComponentContext > xContext )
+MailToDispatcher::MailToDispatcher( css::uno::Reference< cpo::uno::XComponentContext > xContext )
         : m_xContext    (std::move( xContext                     ))
 {
 }
@@ -225,7 +225,7 @@ void MailToDispatcher::removeStatusListener( const css::uno::Reference< css::fra
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_MailToDispatcher_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::MailToDispatcher(context));
 }

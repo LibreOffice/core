@@ -14,7 +14,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 
@@ -26,14 +26,14 @@ class WordPerfectImportFilter
                                   css::document::XExtendedFilterDetection,
                                   css::lang::XInitialization, css::lang::XServiceInfo>
 {
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxDoc;
 
     /// @throws cpo::uno::RuntimeException
     bool importImpl(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
 
 public:
-    explicit WordPerfectImportFilter(css::uno::Reference<css::uno::XComponentContext> xContext)
+    explicit WordPerfectImportFilter(css::uno::Reference<cpo::uno::XComponentContext> xContext)
         : mxContext(std::move(xContext))
     {
     }

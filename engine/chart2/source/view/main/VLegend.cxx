@@ -882,7 +882,7 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
 
 VLegend::VLegend(
     rtl::Reference< Legend > xLegend,
-    const Reference< uno::XComponentContext > & xContext,
+    const Reference< cpo::uno::XComponentContext > & xContext,
     std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
     rtl::Reference<SvxShapeGroupAnyD> xTargetPage,
     ChartModel& rModel )

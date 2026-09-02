@@ -57,14 +57,14 @@ protected:
     virtual ~OCommandDefinition() override;
 
 public:
-    OCommandDefinition(const css::uno::Reference< css::uno::XComponentContext >& ,
+    OCommandDefinition(const css::uno::Reference< cpo::uno::XComponentContext >& ,
         const css::uno::Reference< css::uno::XInterface >& _xParentContainer,
         const TContentPtr& _pImpl);
 
     OCommandDefinition(
              const css::uno::Reference< css::uno::XInterface >& _rxContainer
             ,const OUString& _rElementName
-            ,const css::uno::Reference< css::uno::XComponentContext >&
+            ,const css::uno::Reference< cpo::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
         );
 

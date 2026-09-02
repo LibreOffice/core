@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <helper/property.hxx>
@@ -45,7 +45,7 @@ namespace toolkit
 {
 
 
-UnoTreeModel::UnoTreeModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
+UnoTreeModel::UnoTreeModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -508,7 +508,7 @@ void TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNode >& Node
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_TreeControlModel_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoTreeModel(context));
@@ -516,7 +516,7 @@ stardiv_Toolkit_TreeControlModel_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_TreeControl_get_implementation(
-    css::uno::XComponentContext *,
+    cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoTreeControl());

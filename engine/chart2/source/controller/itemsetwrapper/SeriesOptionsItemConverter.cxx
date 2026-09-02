@@ -44,7 +44,7 @@ namespace chart::wrapper
 
 SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel
-        , uno::Reference< uno::XComponentContext > xContext
+        , uno::Reference< cpo::uno::XComponentContext > xContext
         , const rtl::Reference< ::chart::DataSeries >& xDataSeries
         , SfxItemPool& rItemPool )
         : ItemConverter( xDataSeries, rItemPool )

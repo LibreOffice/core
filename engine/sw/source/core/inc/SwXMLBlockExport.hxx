@@ -30,7 +30,7 @@ private:
 
 public:
     SwXMLBlockListExport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         SwXMLTextBlocks & rBlocks,
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
@@ -48,7 +48,7 @@ private:
 
 public:
     SwXMLTextBlockExport(
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
         SwXMLTextBlocks & rBlocks,
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);

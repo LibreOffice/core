@@ -35,7 +35,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -133,7 +133,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
         IndicatorStack m_aStack;
 
         /** uno service manager to create own needed uno resources. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** most active indicator child, which could work with our shared indicator window only. */
         css::uno::Reference< css::task::XStatusIndicator > m_xActiveChild;
@@ -172,7 +172,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
     // interface
 
     public:
-        StatusIndicatorFactory(css::uno::Reference< css::uno::XComponentContext > xContext);
+        StatusIndicatorFactory(css::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         virtual OUString getImplementationName() override
         {

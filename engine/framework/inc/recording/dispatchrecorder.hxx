@@ -32,7 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace framework{
@@ -51,7 +51,7 @@ class DispatchRecorder final
 
     // public interface
     public:
-        DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xSMGR );
+        DispatchRecorder( const css::uno::Reference< cpo::uno::XComponentContext >& xSMGR );
         virtual ~DispatchRecorder() override;
 
         /* interface XServiceInfo */

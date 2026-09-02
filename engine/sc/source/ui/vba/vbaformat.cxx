@@ -59,7 +59,7 @@ constexpr OUString LOCALE = u"Locale"_ustr;
 
 template< typename... Ifc >
 ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent,
-                                    const uno::Reference< uno::XComponentContext > & xContext,
+                                    const uno::Reference< cpo::uno::XComponentContext > & xContext,
                                     uno::Reference< beans::XPropertySet >  _xPropertySet,
                                     const rtl::Reference< ScModelObj >& xModel,
                                     bool bCheckAmbiguoity )

@@ -170,7 +170,7 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     std::optional<sal_Int32> m_oEffectExtentBottom;
     std::optional<css::text::GraphicCrop> m_oCrop;
 
-    css::uno::Reference<css::uno::XComponentContext>     m_xComponentContext;
+    css::uno::Reference<cpo::uno::XComponentContext>     m_xComponentContext;
     rtl::Reference<SwXTextDocument> m_xTextDoc;
     rtl::Reference<SwXTextGraphicObject> m_xGraphicObject;
     css::uno::Reference<css::drawing::XShape> m_xShape;
@@ -184,7 +184,7 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     void putPropertyToFrameGrabBag( const OUString& sPropertyName, const cpo::uno::Any& aPropertyValue );
 
 public:
-    explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext>  xComponentContext,
+    explicit GraphicImport( css::uno::Reference<cpo::uno::XComponentContext>  xComponentContext,
                             rtl::Reference<SwXTextDocument> xTextDoc,
                             DomainMapper& rDomainMapper,
                             GraphicImportType & rGraphicImportType,

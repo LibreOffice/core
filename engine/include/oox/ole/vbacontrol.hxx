@@ -34,8 +34,8 @@ namespace com::sun::star {
     namespace awt { class XControlModel; }
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
     class BinaryInputStream;
@@ -187,7 +187,7 @@ class VbaUserForm final : public VbaFormControl
 {
 public:
     explicit            VbaUserForm(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr );
@@ -201,7 +201,7 @@ public:
                            rtl_TextEncoding eTextEnc );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
     css::uno::Reference< css::frame::XModel >          mxDocModel;
     ControlConverter                                   maConverter;
 };

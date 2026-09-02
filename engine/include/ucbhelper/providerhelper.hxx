@@ -35,7 +35,7 @@ namespace com::sun::star::ucb {
     class XPersistentPropertySet;
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ucbhelper_impl { struct ContentProviderImplHelper_Impl; }
 
@@ -71,7 +71,7 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper :
 
 protected:
     osl::Mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
 private:
     UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
@@ -130,7 +130,7 @@ public:
 
 
     ContentProviderImplHelper(
-                css::uno::Reference< css::uno::XComponentContext > xContext );
+                css::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~ContentProviderImplHelper() override;
 
 

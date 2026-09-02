@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 
 namespace oox::docprop {
 
-OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentContext >& xContext,
+OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                           const uno::Reference< document::XDocumentProperties >& rDocProp )
     : m_xDocProp( rDocProp )
     , m_nState( 0 )

@@ -44,13 +44,13 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& xParent,
-                                  const uno::Reference< uno::XComponentContext >& xContext )
+                                  const uno::Reference< cpo::uno::XComponentContext >& xContext )
 : VbaDocumentBase_BASE( xParent, xContext )
 {
 }
 
 VbaDocumentBase::VbaDocumentBase( cpo::uno::Sequence< cpo::uno::Any> const & args,
-                                  uno::Reference< uno::XComponentContext> const & xContext )
+                                  uno::Reference< cpo::uno::XComponentContext> const & xContext )
 : VbaDocumentBase_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext )
 {
 }

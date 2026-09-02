@@ -50,9 +50,9 @@ namespace ooo::vba::word
         /// @throws cpo::uno::RuntimeException
         bool gotoSelectedObjectAnchor( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws cpo::uno::RuntimeException
-        rtl::Reference< SwXTextDocument > getCurrentWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        rtl::Reference< SwXTextDocument > getCurrentWordDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
         /// @throws cpo::uno::RuntimeException
-        rtl::Reference< SwXTextDocument > getThisWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        rtl::Reference< SwXTextDocument > getThisWordDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     enum E_DIRECTION
     {

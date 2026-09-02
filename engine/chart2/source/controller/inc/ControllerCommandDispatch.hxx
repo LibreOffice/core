@@ -57,7 +57,7 @@ class ControllerCommandDispatch final : public impl::ControllerCommandDispatch_B
 {
 public:
     explicit ControllerCommandDispatch(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
         ChartController* pController, CommandDispatchContainer* pContainer );
     virtual ~ControllerCommandDispatch() override;
 

@@ -178,7 +178,7 @@ extern "C" void getInstance(va_list * args) {
     void ** instance = va_arg(*args, void **);
     assert(instance);
     assert(*instance == nullptr);
-    *instance = (*fn)(static_cast<css::uno::XComponentContext*>(ctxt),
+    *instance = (*fn)(static_cast<cpo::uno::XComponentContext*>(ctxt),
             *static_cast<cpo::uno::Sequence<cpo::uno::Any> const*>(argseq));
 }
 
@@ -205,11 +205,11 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
             css::uno::Reference<css::uno::XInterface>());
     }
     return [mapFrom=std::move(mapFrom), mapTo=std::move(mapTo), target, constructorFunction]
-        (css::uno::XComponentContext *const context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+        (cpo::uno::XComponentContext *const context, cpo::uno::Sequence<cpo::uno::Any> const& args)
         {
             void *const ctxt = mapTo.mapInterface(
                 context,
-                cppu::UnoType<css::uno::XComponentContext>::get());
+                cppu::UnoType<cpo::uno::XComponentContext>::get());
             if (args.hasElements()) {
                 std::abort(); // TODO map args
             }

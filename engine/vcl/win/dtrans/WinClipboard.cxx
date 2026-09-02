@@ -27,7 +27,7 @@
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <svdata.hxx>
@@ -76,7 +76,7 @@ void releaseAsync(css::uno::Reference<css::datatransfer::XTransferable>& ref)
 }
 
 /*XEventListener,*/
-CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxContext,
+CWinClipboard::CWinClipboard(const uno::Reference<cpo::uno::XComponentContext>& rxContext,
                              const OUString& aClipboardName)
     : m_xContext(rxContext)
     , m_itsName(aClipboardName)

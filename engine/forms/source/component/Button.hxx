@@ -46,11 +46,11 @@ class OButtonModel  :public OClickableImageBaseModel
 {
 public:
     OButtonModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OButtonModel(
         const OButtonModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OButtonModel() override;
 
@@ -133,7 +133,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
+    explicit OButtonControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     virtual ~OButtonControl() override;
 
     // XServiceInfo

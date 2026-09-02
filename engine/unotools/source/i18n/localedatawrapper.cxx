@@ -83,7 +83,7 @@ const LocaleDataWrapper* LocaleDataWrapper::get(const LanguageTag& aLanguageTag)
 
 
 LocaleDataWrapper::LocaleDataWrapper(
-            const Reference< uno::XComponentContext > & rxContext,
+            const Reference< cpo::uno::XComponentContext > & rxContext,
             LanguageTag aLanguageTag
             )
         :

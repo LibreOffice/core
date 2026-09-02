@@ -28,7 +28,7 @@ using namespace com::sun::star::uno;
 using namespace gio;
 
 DynamicResultSet::DynamicResultSet(
-    const Reference< XComponentContext >& rxContext,
+    const Reference< cpo::uno::XComponentContext >& rxContext,
     rtl::Reference< Content > xContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv )

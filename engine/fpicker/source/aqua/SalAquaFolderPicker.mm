@@ -171,7 +171,7 @@ void SalAquaFolderPicker::disposing( const lang::EventObject& )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SalAquaFolderPicker_get_implementation(
-    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SalAquaFolderPicker());
 }

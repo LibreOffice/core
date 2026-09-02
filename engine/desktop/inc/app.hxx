@@ -32,7 +32,7 @@
 #include <string_view>
 #include <thread>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 namespace desktop
 {

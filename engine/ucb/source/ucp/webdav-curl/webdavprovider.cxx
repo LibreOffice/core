@@ -37,7 +37,7 @@ using namespace http_dav_ucp;
 
 
 ContentProvider::ContentProvider(
-                const uno::Reference< uno::XComponentContext >& rContext )
+                const uno::Reference< cpo::uno::XComponentContext >& rContext )
 : ::ucbhelper::ContentProviderImplHelper( rContext ),
   m_xDAVSessionFactory( new DAVSessionFactory )
 {
@@ -166,7 +166,7 @@ ContentProvider::queryContent(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_webdav_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

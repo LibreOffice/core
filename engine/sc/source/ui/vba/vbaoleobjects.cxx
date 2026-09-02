@@ -78,12 +78,12 @@ class EnumWrapper : public EnumerationHelper_BASE
 {
 
         uno::Reference<XHelperInterface > m_xParent;
-        uno::Reference<uno::XComponentContext > m_xContext;
+        uno::Reference<cpo::uno::XComponentContext > m_xContext;
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
         EnumWrapper( uno::Reference< XHelperInterface > xParent,
-                     uno::Reference< uno::XComponentContext > xContext,
+                     uno::Reference< cpo::uno::XComponentContext > xContext,
                      uno::Reference< container::XIndexAccess > xIndexAccess )
             :  m_xParent(std::move( xParent )), m_xContext(std::move( xContext)), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
 
@@ -110,7 +110,7 @@ uno::Reference< container::XIndexAccess > oleObjectIndexWrapper( const uno::Refe
 
 }
 
-ScVbaOLEObjects::ScVbaOLEObjects( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
+ScVbaOLEObjects::ScVbaOLEObjects( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext,
                 const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
             : OLEObjectsImpl_BASE( xParent, xContext, oleObjectIndexWrapper( xIndexAccess  ) )
 {

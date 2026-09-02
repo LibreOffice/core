@@ -21,7 +21,7 @@
 
 #include "pcrcommon.hxx"
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -71,7 +71,7 @@ namespace pcr
 
     protected:
         /// the context in which the instance was created
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         /// the component we're inspecting
         css::uno::Reference< css::beans::XPropertySet >       m_xComponent;
         /// info about our component's properties
@@ -83,7 +83,7 @@ namespace pcr
 
     protected:
         explicit PropertyHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
         virtual ~PropertyHandler() override;
 
@@ -341,7 +341,7 @@ namespace pcr
     {
     protected:
         explicit PropertyHandlerComponent(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
+            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         DECLARE_XINTERFACE()

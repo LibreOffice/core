@@ -76,12 +76,12 @@ namespace OFOPXMLHelper {
 static cpo::uno::Sequence<cpo::uno::Sequence< beans::StringPair>> ReadSequence_Impl(
     const uno::Reference<io::XInputStream>& xInStream,
     const OUString& aStringID, sal_uInt16 nFormat,
-    const uno::Reference<uno::XComponentContext>& xContext);
+    const uno::Reference<cpo::uno::XComponentContext>& xContext);
 
 cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         std::u16string_view aStreamName,
-        const uno::Reference< uno::XComponentContext >& rContext )
+        const uno::Reference< cpo::uno::XComponentContext >& rContext )
 {
     OUString aStringID = OUString::Concat("_rels/") + aStreamName;
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, rContext );
@@ -90,7 +90,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadRelationsInfoS
 
 cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
         const uno::Reference< io::XInputStream >& xInStream,
-        const uno::Reference< uno::XComponentContext >& rContext )
+        const uno::Reference< cpo::uno::XComponentContext >& rContext )
 {
     return ReadSequence_Impl( xInStream, u"[Content_Types].xml"_ustr, CONTENTTYPE_FORMAT, rContext );
 }
@@ -131,7 +131,7 @@ OUString GetContentTypeByName(
 void WriteRelationsInfoSequence(
         const uno::Reference< io::XOutputStream >& xOutStream,
         const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >& aSequence,
-        const uno::Reference< uno::XComponentContext >& rContext )
+        const uno::Reference< cpo::uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
         throw cpo::uno::RuntimeException(u"Invalid output stream"_ustr);
@@ -184,7 +184,7 @@ void WriteContentSequence(
         const uno::Reference< io::XOutputStream >& xOutStream,
         const cpo::uno::Sequence< beans::StringPair >& aDefaultsSequence,
         const cpo::uno::Sequence< beans::StringPair >& aOverridesSequence,
-        const uno::Reference< uno::XComponentContext >& rContext )
+        const uno::Reference< cpo::uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
         throw cpo::uno::RuntimeException(u"Invalid output stream"_ustr);
@@ -239,7 +239,7 @@ void WriteContentSequence(
 cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadSequence_Impl(
         const uno::Reference< io::XInputStream >& xInStream,
         const OUString& aStringID, sal_uInt16 nFormat,
-        const uno::Reference< uno::XComponentContext >& rContext )
+        const uno::Reference< cpo::uno::XComponentContext >& rContext )
 {
     if ( !rContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
         throw cpo::uno::RuntimeException(u"Invalid input stream or context"_ustr);

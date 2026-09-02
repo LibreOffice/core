@@ -587,7 +587,7 @@ void ToolBarMerger::RemoveItems(
      false.
 */
 rtl::Reference<::cppu::OWeakObject> ToolBarMerger::CreateController(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    const uno::Reference< cpo::uno::XComponentContext >& rxContext,
     const uno::Reference< frame::XFrame > & xFrame,
     ToolBox*               pToolbar,
     const OUString& rCommandURL,

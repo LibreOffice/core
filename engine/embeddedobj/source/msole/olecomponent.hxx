@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
 namespace comphelper {
@@ -59,7 +59,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
     cpo::uno::Sequence< css::embed::VerbDescriptor > m_aVerbList;
     cpo::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavors;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     bool m_bOleInitialized;
 
@@ -76,7 +76,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
 
 
 public:
-    OleComponent( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    OleComponent( const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
                   OleEmbeddedObject* pOleObj );
 
     virtual ~OleComponent() override;

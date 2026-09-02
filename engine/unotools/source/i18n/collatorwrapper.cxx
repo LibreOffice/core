@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-CollatorWrapper::CollatorWrapper ( const uno::Reference< uno::XComponentContext > &rxContext )
+CollatorWrapper::CollatorWrapper ( const uno::Reference< cpo::uno::XComponentContext > &rxContext )
 {
     mxInternationalCollator = i18n::Collator::create( rxContext );
 }

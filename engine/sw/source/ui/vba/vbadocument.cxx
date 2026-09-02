@@ -93,7 +93,7 @@ public:
 }
 
 SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent,
-                              const uno::Reference< uno::XComponentContext >& xContext,
+                              const uno::Reference< cpo::uno::XComponentContext >& xContext,
                               rtl::Reference< SwXTextDocument > const & xModel )
     : SwVbaDocument_BASE( xParent, xContext ),
     mxTextDocument(xModel)
@@ -101,7 +101,7 @@ SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent,
     Initialize();
 }
 
-SwVbaDocument::SwVbaDocument( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+SwVbaDocument::SwVbaDocument( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& xContext )
     : SwVbaDocument_BASE( aArgs, xContext ),
     mxTextDocument(dynamic_cast<SwXTextDocument*>(getXSomethingFromArgs< frame::XModel >( aArgs, 1 ).get()))
 {
@@ -787,7 +787,7 @@ SwVbaDocument::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaDocument_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaDocument(args, context));
 }

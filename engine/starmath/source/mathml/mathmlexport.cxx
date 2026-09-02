@@ -93,7 +93,7 @@ sal_uInt32 ConvertMathToMathML(std::u16string_view rText, sal_Int32 nIndex = 0)
 bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 {
     bool bRet = true;
-    const uno::Reference<uno::XComponentContext>& xContext(
+    const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
 
     //Get model
@@ -223,7 +223,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 /// export through an XML exporter component (output stream version)
 bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream>& xOutputStream,
                                                const Reference<XComponent>& xComponent,
-                                               Reference<uno::XComponentContext> const& rxContext,
+                                               Reference<cpo::uno::XComponentContext> const& rxContext,
                                                Reference<beans::XPropertySet> const& rPropSet,
                                                const char* pComponentName)
 {
@@ -267,7 +267,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
 bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>& xStorage,
                                                const Reference<XComponent>& xComponent,
                                                const char* pStreamName,
-                                               Reference<uno::XComponentContext> const& rxContext,
+                                               Reference<cpo::uno::XComponentContext> const& rxContext,
                                                Reference<beans::XPropertySet> const& rPropSet,
                                                const char* pComponentName)
 {
@@ -307,7 +307,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
     return bRet;
 }
 
-SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+SmXMLExport::SmXMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
                          OUString const& implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , pTree(nullptr)
@@ -316,7 +316,7 @@ SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>&
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLExporter_get_implementation(css::uno::XComponentContext* context,
+Math_XMLExporter_get_implementation(cpo::uno::XComponentContext* context,
                                     cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLExporter"_ustr,
@@ -324,7 +324,7 @@ Math_XMLExporter_get_implementation(css::uno::XComponentContext* context,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
+Math_XMLMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
                                         cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLMetaExporter"_ustr,
@@ -332,7 +332,7 @@ Math_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
+Math_XMLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
                                              cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context,
@@ -341,7 +341,7 @@ Math_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* contex
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+Math_XMLSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(
@@ -349,7 +349,7 @@ Math_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+Math_XMLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
                                                  cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context,
@@ -358,7 +358,7 @@ Math_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* co
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
+Math_XMLContentExporter_get_implementation(cpo::uno::XComponentContext* context,
                                            cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmXMLExport(context, u"com.sun.star.comp.Math.XMLContentExporter"_ustr,

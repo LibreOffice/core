@@ -55,11 +55,11 @@ class OComboBoxModel final
 
 public:
     OComboBoxModel(
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OComboBoxModel(
         const OComboBoxModel* _pOriginal,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxFactory
+        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OComboBoxModel() override;
 
@@ -129,7 +129,7 @@ private:
 class OComboBoxControl : public OBoundControl
 {
 public:
-    explicit OComboBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+    explicit OComboBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     OUString getImplementationName() override

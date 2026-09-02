@@ -62,7 +62,7 @@ class RecentFilesMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
+    RecentFilesMenuController( const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                const cpo::uno::Sequence< cpo::uno::Any >& args );
 
     // XServiceInfo
@@ -108,7 +108,7 @@ private:
     bool                      m_bShowToolbarEntries;
 };
 
-RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
+RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< cpo::uno::XComponentContext >& xContext,
                                                       const cpo::uno::Sequence< cpo::uno::Any >& args ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bDisabled( false ),
@@ -525,7 +525,7 @@ void RecentFilesMenuController::dispatch(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_RecentFilesMenuController_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &args)
 {
     return cppu::acquire(new RecentFilesMenuController(context, args));

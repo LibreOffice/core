@@ -81,7 +81,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
 
 #include <editeng/outliner.hxx>
@@ -1696,7 +1696,7 @@ void SdDrawDocument::InitLayoutVector()
     if (comphelper::IsFuzzing())
         return;
 
-    const Reference<css::uno::XComponentContext>& xContext(
+    const Reference<cpo::uno::XComponentContext>& xContext(
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration
@@ -1734,7 +1734,7 @@ void SdDrawDocument::InitObjectVector()
     if (comphelper::IsFuzzing())
         return;
 
-    const Reference<css::uno::XComponentContext>& xContext(
+    const Reference<cpo::uno::XComponentContext>& xContext(
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration

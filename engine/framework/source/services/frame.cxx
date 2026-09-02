@@ -114,7 +114,7 @@ class XFrameImpl:
 {
 public:
 
-    explicit XFrameImpl(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    explicit XFrameImpl(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     /// Initialization function after having acquire()'d.
     void initListeners();
@@ -368,7 +368,7 @@ private:
 //  -threadsafe by SolarMutex
 
     /// reference to factory, which has created this instance
-    css::uno::Reference< css::uno::XComponentContext >                      m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext >                      m_xContext;
     /// reference to factory helper to create status indicator objects
     css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper;
     /// points to an external set progress, which should be used instead of the internal one.
@@ -450,7 +450,7 @@ private:
                     The value must be different from NULL!
     @onerror    ASSERT in debug version or nothing in release version.
 *//*-*****************************************************************************************************/
-XFrameImpl::XFrameImpl( css::uno::Reference< css::uno::XComponentContext >  xContext )
+XFrameImpl::XFrameImpl( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
         : PartialWeakComponentImplHelper(m_aMutex)
         //  init member
         , m_xContext                  (std::move( xContext ))
@@ -3310,7 +3310,7 @@ void XFrameImpl::impl_checkMenuCloser()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Frame_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<XFrameImpl> inst = new XFrameImpl(context);

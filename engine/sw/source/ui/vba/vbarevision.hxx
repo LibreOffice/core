@@ -40,7 +40,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                   const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                   const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
                    rtl::Reference< SwXTextDocument > xModel,
                    css::uno::Reference< css::beans::XPropertySet >  xRedlineProps );
     virtual ~SwVbaRevision() override;

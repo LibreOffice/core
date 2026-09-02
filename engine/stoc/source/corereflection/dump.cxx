@@ -24,7 +24,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <config_typesizes.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -102,7 +102,7 @@ dumpBitset(cpo::uno::Sequence<css::uno::Reference<css::reflection::XConstantType
 class Dump : public cppu::BaseMutex, public cppu::WeakComponentImplHelper<css::reflection::XDump>
 {
 public:
-    explicit Dump(css::uno::Reference<css::uno::XComponentContext> const& context)
+    explicit Dump(css::uno::Reference<cpo::uno::XComponentContext> const& context)
         : WeakComponentImplHelper(m_aMutex)
         , manager_(context->getValueByName(
                        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
@@ -348,7 +348,7 @@ private:
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_stoc_Dump_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_stoc_Dump_get_implementation(cpo::uno::XComponentContext* context,
                                                cpo::uno::Sequence<cpo::uno::Any> const& arguments)
 {
     SAL_WARN_IF(arguments.hasElements(), "stoc", "unexpected singleton arguments");

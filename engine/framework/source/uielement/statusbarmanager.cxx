@@ -122,7 +122,7 @@ StatusBarItemBits impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 }
 
 StatusBarManager::StatusBarManager(
-    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< cpo::uno::XComponentContext > xContext,
     uno::Reference< frame::XFrame >  rFrame,
     StatusBar* pStatusBar ) :
     m_bDisposed( false ),

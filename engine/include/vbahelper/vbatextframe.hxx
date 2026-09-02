@@ -30,8 +30,8 @@
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace drawing { class XShape; }
-    namespace uno { class XComponentContext; }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -51,7 +51,7 @@ protected:
     sal_Int32 getMargin( const OUString& sMarginType );
     void setMargin( const OUString& sMarginType, float fMargin );
 public:
-    VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
+    VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     // Attributes
     virtual bool SAL_CALL getAutoSize() override;
     virtual void SAL_CALL setAutoSize( bool _autosize ) override;

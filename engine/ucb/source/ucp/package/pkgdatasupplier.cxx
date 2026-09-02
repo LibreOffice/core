@@ -44,7 +44,7 @@ using namespace package_ucp;
 
 
 DataSupplier::DataSupplier(
-                uno::Reference< uno::XComponentContext > xContext,
+                uno::Reference< cpo::uno::XComponentContext > xContext,
                 const rtl::Reference< Content >& rContent )
 : m_xContent( rContent ), m_xContext(std::move( xContext )),
   m_xFolderEnum( rContent->getIterator() ),

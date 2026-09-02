@@ -2195,7 +2195,7 @@ protected:
 
         try
         {
-            uno::Reference<uno::XComponentContext> xComponentContext
+            uno::Reference<cpo::uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
             uno::Reference<lang::XMultiServiceFactory> xMSF;
             xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);

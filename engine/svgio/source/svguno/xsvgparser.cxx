@@ -48,12 +48,12 @@ namespace svgio::svgreader
         private:
             std::shared_ptr<SvgDrawVisitor> mpVisitor;
 
-            uno::Reference< uno::XComponentContext > context_;
+            uno::Reference< cpo::uno::XComponentContext > context_;
             bool parseSvgXML(uno::Reference<io::XInputStream> const & xSVGStream,
                              uno::Reference<xml::sax::XDocumentHandler> const & xSvgDocHdl);
         public:
             explicit XSvgParser(
-                uno::Reference< uno::XComponentContext > context);
+                uno::Reference< cpo::uno::XComponentContext > context);
             XSvgParser(const XSvgParser&) = delete;
             XSvgParser& operator=(const XSvgParser&) = delete;
 
@@ -75,7 +75,7 @@ namespace svgio::svgreader
         }
 
         XSvgParser::XSvgParser(
-            uno::Reference< uno::XComponentContext > context):
+            uno::Reference< cpo::uno::XComponentContext > context):
             context_(std::move(context))
         {
         }
@@ -194,7 +194,7 @@ namespace svgio::svgreader
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svgio_XSvgParser_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
+    cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new svgio::svgreader::XSvgParser(context));
 }

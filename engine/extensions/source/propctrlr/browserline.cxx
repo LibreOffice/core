@@ -19,7 +19,7 @@
 
 #include "browserline.hxx"
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -40,7 +40,7 @@ namespace pcr
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
+    using ::cpo::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::inspection::XPropertyControlContext;
     using ::cpo::uno::Exception;

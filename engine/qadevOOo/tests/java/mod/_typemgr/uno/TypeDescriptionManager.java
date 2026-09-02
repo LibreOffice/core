@@ -21,7 +21,7 @@ package mod._typemgr.uno;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
 import lib.TestCase;

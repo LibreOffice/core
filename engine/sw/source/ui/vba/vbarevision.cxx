@@ -33,7 +33,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                              const uno::Reference< uno::XComponentContext >& rContext,
+                              const uno::Reference< cpo::uno::XComponentContext >& rContext,
                               rtl::Reference< SwXTextDocument > xModel,
                               uno::Reference< beans::XPropertySet >  xRedlineProps )
 : SwVbaRevision_BASE( rParent, rContext ),

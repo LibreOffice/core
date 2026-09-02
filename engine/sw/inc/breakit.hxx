@@ -29,11 +29,11 @@
 #include "swdllapi.h"
 
 enum class SvtScriptType : sal_uInt8;
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 
 class SW_DLLPUBLIC SwBreakIt
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     rtl::Reference<i18npool::BreakIterator> m_xBreak;
 
     std::unique_ptr<LanguageTag> m_xLanguageTag;   ///< language tag of the current locale
@@ -49,12 +49,12 @@ class SW_DLLPUBLIC SwBreakIt
     SwBreakIt& operator=(SwBreakIt const&) = delete;
 
     // private (see @ Create_, Delete_).
-    explicit SwBreakIt(css::uno::Reference<css::uno::XComponentContext> xContext);
+    explicit SwBreakIt(css::uno::Reference<cpo::uno::XComponentContext> xContext);
 
 public:
     // private (see @ source/core/bastyp/init.cxx).
     static void Create_(
-        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
+        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext);
     static void Delete_();
 
 public:

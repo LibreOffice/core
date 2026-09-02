@@ -140,7 +140,7 @@ namespace connectivity
                                     m_xFormatter;   // current number formatter
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
         sal_Int32                   m_nDateFormatKey;
-        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         css::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
         static tools::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>>& getLocaleData();
 
@@ -159,7 +159,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(css::uno::Reference< css::uno::XComponentContext > xContext,
+        OSQLParser(css::uno::Reference< cpo::uno::XComponentContext > xContext,
                    const IParseContext* _pContext = nullptr,
                    const IParseContext* _pNeutral = nullptr);
         ~OSQLParser();

@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
@@ -37,14 +37,14 @@ class BrowseNodeFactoryImpl :
         css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
 
 protected:
     virtual ~BrowseNodeFactoryImpl() override;
 
 public:
     explicit BrowseNodeFactoryImpl(
-        css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
+        css::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

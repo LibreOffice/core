@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <ImportFilter.hxx>
 #include <DocumentHandlerForOdp.hxx>
@@ -18,7 +18,7 @@
 class KeynoteImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
-    explicit KeynoteImportFilter(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    explicit KeynoteImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdpGenerator>(rxContext)
     {
     }

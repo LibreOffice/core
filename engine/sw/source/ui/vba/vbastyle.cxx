@@ -33,7 +33,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaStyle::SwVbaStyle( const uno::Reference< XHelperInterface >& xParent,
-                        const uno::Reference< uno::XComponentContext > & xContext,
+                        const uno::Reference< cpo::uno::XComponentContext > & xContext,
                         rtl::Reference< SwXTextDocument>  xModel,
                         const uno::Reference< beans::XPropertySet >& _xPropertySet )
 : SwVbaStyle_BASE( xParent, xContext ),

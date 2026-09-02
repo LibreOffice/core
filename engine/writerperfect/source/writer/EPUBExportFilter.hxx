@@ -18,10 +18,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-namespace com::sun::star::uno
-{
-class XComponentContext;
-}
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerperfect
 {
@@ -35,12 +32,12 @@ class EPUBExportFilter
     : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter,
                                   css::lang::XServiceInfo>
 {
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
 public:
-    EPUBExportFilter(css::uno::Reference<css::uno::XComponentContext> xContext);
+    EPUBExportFilter(css::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     // XFilter
     bool SAL_CALL filter(const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override;

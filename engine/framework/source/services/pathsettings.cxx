@@ -147,7 +147,7 @@ class PathSettings : public PathSettings_BASE
 private:
 
     /** reference to factory, which has create this instance. */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** list of all path variables and her corresponding values. */
     PathSettings::PathHash m_lPaths;
@@ -173,7 +173,7 @@ private:
 
 public:
 
-    explicit PathSettings(css::uno::Reference< css::uno::XComponentContext >  xContext);
+    explicit PathSettings(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     /** free all used resources ... if it was not already done. */
     virtual ~PathSettings() override;
@@ -418,7 +418,7 @@ private:
     css::uno::Reference< css::container::XNameAccess >    fa_getCfgNew(std::unique_lock<std::mutex>& g);
 };
 
-PathSettings::PathSettings( css::uno::Reference< css::uno::XComponentContext >  xContext )
+PathSettings::PathSettings( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
     : m_xContext(std::move(xContext))
 {
 }
@@ -1454,7 +1454,7 @@ void PathSettings::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArgume
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_PathSettings_get_implementation(
-    css::uno::XComponentContext *context,
+    cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<PathSettings> xPathSettings = new PathSettings(context);

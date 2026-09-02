@@ -81,7 +81,7 @@ namespace framework
         return sKeyBuffer.makeStringAndClear();
     }
 
-XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : m_xContext      (xContext                     )
     , m_aPresetHandler(xContext                     )
 {
@@ -362,7 +362,7 @@ void XMLBasedAcceleratorConfiguration::changesOccurred()
 
 void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream)
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
@@ -397,7 +397,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
 {
     bool bChanged;
     AcceleratorCache aCache;
-    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         bChanged = (m_pWriteCache != nullptr);
@@ -470,7 +470,7 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale()
 *
 *******************************************************************************/
 
-XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(css::uno::Reference< css::uno::XComponentContext > xContext)
+XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(css::uno::Reference< cpo::uno::XComponentContext > xContext)
                                 : m_xContext      (std::move(xContext                     ))
 {
     m_xCfg.set(

@@ -33,7 +33,7 @@ class ScVbaStyles: public ScVbaStyles_BASE
     css::uno::Reference< css::container::XNameContainer > mxNameContainerCellStyles;
 public:
     /// @throws css::script::BasicErrorException
-    ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, ScModelObj* pModel );
+    ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, ScModelObj* pModel );
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getStyleNames();
     /// @throws css::script::BasicErrorException

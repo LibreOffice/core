@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -38,7 +38,7 @@ constexpr OUString gsApplication( u"Application"_ustr );
 
 VbaGlobalsBase::VbaGlobalsBase(
 const uno::Reference< ov::XHelperInterface >& xParent,
-const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCtxName )
+const uno::Reference< cpo::uno::XComponentContext >& xContext, const OUString& sDocCtxName )
     : Globals_BASE( xParent, xContext )
     , msDocCtxName( sDocCtxName )
 {

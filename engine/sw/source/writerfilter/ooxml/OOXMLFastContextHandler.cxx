@@ -67,7 +67,7 @@ using namespace ::com::sun::star::xml::sax;
  */
 
 OOXMLFastContextHandler::OOXMLFastContextHandler
-(uno::Reference< uno::XComponentContext > const & context)
+(uno::Reference< cpo::uno::XComponentContext > const & context)
 : mpParent(nullptr),
   mId(0),
   mnDefine(0),

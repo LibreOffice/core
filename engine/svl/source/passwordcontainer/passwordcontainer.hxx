@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <unotools/configitem.hxx>
@@ -303,7 +303,7 @@ private:
     static OUString EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, std::u16string_view aMasterPassword );
 
 public:
-    PasswordContainer( const css::uno::Reference< css::uno::XComponentContext >& );
+    PasswordContainer( const css::uno::Reference< cpo::uno::XComponentContext >& );
     virtual ~PasswordContainer() override;
 
     virtual void add( const OUString& aUrl,

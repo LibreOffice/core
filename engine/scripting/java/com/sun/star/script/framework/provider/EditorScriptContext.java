@@ -25,7 +25,7 @@ import com.sun.star.frame.XModel;
 import com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import cpo.uno.XComponentContext;
 
 public class EditorScriptContext implements XScriptContext {
 

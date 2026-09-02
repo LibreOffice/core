@@ -126,7 +126,7 @@ int DAVAuthListener_Impl::authenticate(
 constexpr size_t g_nRedirectLimit = 5;
 
 DAVResourceAccess::DAVResourceAccess(
-    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< cpo::uno::XComponentContext > xContext,
     rtl::Reference< DAVSessionFactory > xSessionFactory,
     OUString aURL )
 : m_aURL(std::move( aURL )),

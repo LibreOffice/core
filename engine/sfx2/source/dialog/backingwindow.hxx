@@ -30,7 +30,7 @@
 #include <svtools/acceleratorexecute.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -40,7 +40,7 @@ class BrandImage;
 
 class BackingWindow : public InterimItemWindow
 {
-    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
     css::uno::Reference<css::frame::XDispatchProvider> mxDesktopDispatchProvider;
     css::uno::Reference<css::frame::XFrame> mxFrame;
 

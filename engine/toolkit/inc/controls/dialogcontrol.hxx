@@ -38,7 +38,7 @@ private:
 
 public:
 
-                                UnoDialogControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                                UnoDialogControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                                 virtual ~UnoDialogControl() override;
     OUString             GetComponentServiceName() const override;
 
@@ -157,7 +157,7 @@ private:
 class UnoMultiPageModel final : public ControlModelContainerBase
 {
 public:
-    UnoMultiPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoMultiPageModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     UnoMultiPageModel(const UnoMultiPageModel& rOther) : ControlModelContainerBase(rOther) {}
     virtual ~UnoMultiPageModel() override;
 
@@ -185,7 +185,7 @@ class UnoMultiPageControl final : public ControlContainerBase
     TabListenerMultiplexer maTabListeners;
     void bindPage( const css::uno::Reference< css::awt::XControl >& _rxControl );
 public:
-    UnoMultiPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoMultiPageControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UnoMultiPageControl() override;
     OUString     GetComponentServiceName() const override;
 
@@ -232,7 +232,7 @@ private:
 class UnoPageModel final : public ControlModelContainerBase
 {
 public:
-    UnoPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoPageModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     UnoPageModel(const UnoPageModel& rOther) : ControlModelContainerBase(rOther) {}
     virtual ~UnoPageModel() override;
 
@@ -254,7 +254,7 @@ private:
 class UnoPageControl final : public ControlContainerBase
 {
 public:
-    UnoPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoPageControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UnoPageControl() override;
     OUString     GetComponentServiceName() const override;
 
@@ -266,7 +266,7 @@ public:
 class UnoFrameModel final : public ControlModelContainerBase
 {
 public:
-    UnoFrameModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoFrameModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     UnoFrameModel(const UnoFrameModel& rOther) : ControlModelContainerBase(rOther) {}
     virtual ~UnoFrameModel() override;
 
@@ -286,7 +286,7 @@ class UnoFrameControl final : public ControlContainerBase
 {
     virtual void        ImplSetPosSize( css::uno::Reference< css::awt::XControl >& rxCtrl ) override;
 public:
-    UnoFrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoFrameControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UnoFrameControl() override;
     OUString     GetComponentServiceName() const override;
 

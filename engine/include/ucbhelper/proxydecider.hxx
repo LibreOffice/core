@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com::sun::star::uno { class XComponentContext; }
+namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace ucbhelper
@@ -74,7 +74,7 @@ public:
       *
       * @param rxSMgr is a Service Manager.
       */
-    InternetProxyDecider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    InternetProxyDecider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     /**
       * Destructor.

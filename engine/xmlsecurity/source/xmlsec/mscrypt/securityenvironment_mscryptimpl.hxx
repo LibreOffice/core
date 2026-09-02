@@ -76,7 +76,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public:
-        explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) ;
+        explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) ;
         virtual ~SecurityEnvironment_MSCryptImpl() override;
 
         //Methods from XSecurityEnvironment
