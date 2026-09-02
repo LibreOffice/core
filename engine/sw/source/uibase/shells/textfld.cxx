@@ -42,6 +42,7 @@
 #include <svx/svxdlg.hxx>
 #include <osl/diagnose.h>
 #include <charatr.hxx>
+#include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtinfmt.hxx>
@@ -132,6 +133,77 @@ static bool lcl_canUserModifyAnnotation(const SwView& rView,
 static bool lcl_canUserModifyAnnotation(const SwView& rView, sal_uInt32 nPostItId)
 {
     return lcl_canUserModifyAnnotation(rView, rView.GetPostItMgr()->GetAnnotationWin(nPostItId));
+}
+
+/// The start node of a page style's header or footer text, or null when there is no such text.
+static const SwStartNode* lcl_GetHeaderOrFooterStartNode(const SwFrameFormat& rPageFormat,
+                                                         bool bHeader)
+{
+    const SwFrameFormat* pHeaderOrFooter = bHeader ? rPageFormat.GetHeader().GetHeaderFormat()
+                                                   : rPageFormat.GetFooter().GetFooterFormat();
+    if (!pHeaderOrFooter)
+        return nullptr;
+
+    const SwNodeIndex* pContentIndex = pHeaderOrFooter->GetContent().GetContentIdx();
+    return pContentIndex ? pContentIndex->GetNode().GetStartNode() : nullptr;
+}
+
+/// Removes the page numbers that a previous run of the page number wizard put in the header or
+/// footer text starting at pInText, or in every text when pInText is null. rWizardMarkPrefix is
+/// the bookmark name the wizard builds from the page style, without the page number it appends.
+/// Returns whether any page number was there to remove.
+static bool lcl_DeletePageNumberWizardMarks(SwDoc& rDoc, const OUString& rWizardMarkPrefix,
+                                            const SwStartNode* pInText)
+{
+    IDocumentMarkAccess& rIDMA = *rDoc.getIDocumentMarkAccess();
+
+    std::vector<SwMarkName> aWizardMarks;
+    for (auto it = rIDMA.getAllMarksBegin(); it != rIDMA.getAllMarksEnd(); ++it)
+    {
+        const OUString& rName = (*it)->GetName().toString();
+        if (!rName.startsWith(rWizardMarkPrefix))
+            continue;
+
+        // What follows the prefix is the page the number went on.
+        const std::u16string_view aPageNumber(rName.subView(rWizardMarkPrefix.getLength()));
+        if (aPageNumber.empty()
+            || !std::all_of(aPageNumber.begin(), aPageNumber.end(),
+                            [](sal_Unicode c) { return rtl::isAsciiDigit(c); }))
+        {
+            continue;
+        }
+
+        const SwNode& rMarkNode = (*it)->GetMarkStart().GetNode();
+        if (pInText && pInText != rMarkNode.FindStartNodeByType(pInText->GetStartNodeType()))
+            continue;
+
+        aWizardMarks.push_back((*it)->GetName());
+    }
+
+    // Removing one page number invalidates the mark iterators, so look each mark up by name.
+    for (const SwMarkName& rWizardMark : aWizardMarks)
+    {
+        auto ppMark = rIDMA.findMark(rWizardMark);
+        if (ppMark == rIDMA.getAllMarksEnd() || !*ppMark)
+            continue;
+
+        SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
+        rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
+    }
+
+    return !aWizardMarks.empty();
+}
+
+/// Removes the page number that a previous run of the page number wizard put in the header or
+/// footer text the cursor points into.
+static void lcl_DeletePageNumberWizardMarkAtCursor(SwWrtShell& rSh,
+                                                   const OUString& rWizardMarkPrefix, bool bHeader)
+{
+    const SwNode& rCursorNode = rSh.GetCursor()->GetPoint()->GetNode();
+    const SwStartNode* pInText
+        = rCursorNode.FindStartNodeByType(bHeader ? SwHeaderStartNode : SwFooterStartNode);
+    if (pInText)
+        lcl_DeletePageNumberWizardMarks(*rSh.GetDoc(), rWizardMarkPrefix, pInText);
 }
 
 void SwTextShell::ExecField(SfxRequest &rReq)
@@ -1182,12 +1254,10 @@ FIELD_INSERT:
 
                 // Allow wizard to be re-run: delete previously wizard-inserted page number.
                 // Try before creating non-shared header: avoid copying ODD bookmark onto EVEN page.
-                SwMarkName sBookmarkOddPage(sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
-                auto ppMark = rIDMA.findMark(sBookmarkOddPage);
-                if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
+                if (const SwStartNode* pMasterText
+                    = lcl_GetHeaderOrFooterStartNode(rDesc.GetMaster(), bHeader))
                 {
-                    SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                    rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
+                    lcl_DeletePageNumberWizardMarks(rDoc, sBookmarkName, pMasterText);
                 }
 
                 SwPageDesc aNewDesc(rDesc);
@@ -1319,37 +1389,7 @@ FIELD_INSERT:
                     // Only a split that this wizard made is taken back, which its own bookmarks
                     // identify, so a header/footer the user split stays split. Both page numbers
                     // are removed, because the two texts merge into one that takes a single one.
-                    std::vector<SwMarkName> aWizardMarks;
-                    for (auto it = rIDMA.getAllMarksBegin(); it != rIDMA.getAllMarksEnd(); ++it)
-                    {
-                        const OUString& rName = (*it)->GetName().toString();
-                        if (!rName.startsWith(sBookmarkName))
-                            continue;
-
-                        // What follows the prefix is the page the number went on.
-                        const std::u16string_view aPageNumber(
-                            rName.subView(sBookmarkName.getLength()));
-                        if (!aPageNumber.empty()
-                            && std::all_of(aPageNumber.begin(), aPageNumber.end(),
-                                           [](sal_Unicode c) { return rtl::isAsciiDigit(c); }))
-                        {
-                            aWizardMarks.push_back((*it)->GetName());
-                        }
-                    }
-
-                    // Removing one page number invalidates the mark iterators, so look each mark
-                    // up by name.
-                    for (const SwMarkName& rWizardMark : aWizardMarks)
-                    {
-                        ppMark = rIDMA.findMark(rWizardMark);
-                        if (ppMark == rIDMA.getAllMarksEnd() || !*ppMark)
-                            continue;
-
-                        SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                        rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
-                    }
-
-                    if (!aWizardMarks.empty())
+                    if (lcl_DeletePageNumberWizardMarks(rDoc, sBookmarkName, /*pInText=*/nullptr))
                     {
                         bChangePageDesc = true;
 
@@ -1426,16 +1466,12 @@ FIELD_INSERT:
                     assert(bInHF && "shouldn't have a problem going to text when no mirroring");
                 }
 
-                // Allow wizard to be re-run: delete previously wizard-inserted page number.
-                // Now that the cursor may have moved to a different page, try delete again.
-                sBookmarkOddPage
-                    = SwMarkName(sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
-                ppMark = rIDMA.findMark(sBookmarkOddPage);
-                if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
-                {
-                    SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                    rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
-                }
+                // Allow wizard to be re-run: the number is looked for in this text, so it is
+                // found whatever page the earlier run was started from.
+                lcl_DeletePageNumberWizardMarkAtCursor(rSh, sBookmarkName, bHeader);
+
+                const SwMarkName sBookmarkOddPage(sBookmarkName
+                                                  + OUString::number(rSh.GetVirtPageNum()));
 
                 SwTextNode* pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
 
@@ -1507,14 +1543,10 @@ FIELD_INSERT:
                     && rSh.SetCursorInHdFt(nPageDescIndex, bHeader, /*Even=*/true))
                 {
                     assert(nEvenPage && "what? no even page and yet we got here?");
-                    SwMarkName sBookmarkEvenPage(
+                    lcl_DeletePageNumberWizardMarkAtCursor(rSh, sBookmarkName, bHeader);
+
+                    const SwMarkName sBookmarkEvenPage(
                         sBookmarkName + OUString::number(rSh.GetVirtPageNum()));
-                    ppMark = rIDMA.findMark(sBookmarkEvenPage);
-                    if (ppMark != rIDMA.getAllMarksEnd() && *ppMark)
-                    {
-                        SwPaM aDeleteOldPageNum((*ppMark)->GetMarkStart(), (*ppMark)->GetMarkEnd());
-                        rDoc.getIDocumentContentOperations().DeleteAndJoin(aDeleteOldPageNum);
-                    }
 
                     pTextNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode();
 

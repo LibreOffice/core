@@ -128,4 +128,28 @@ class PageNumberWizard(UITestCase):
             self.assertEqual(1, len(xFooterParagraphs))
             self.assertEqual(PARA_ADJUST_RIGHT, xFooterParagraphs[0].ParaAdjust)
 
+    def test_rerun_from_another_page(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+
+            self.make_pages(3)
+
+            # Centered page numbers are never mirrored, so all three pages share one footer.
+            xViewCursor = document.CurrentController.ViewCursor
+            xViewCursor.jumpToPage(1)
+            with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
+                select_by_text(xDialog.getChild("alignmentCombo"), "Center")
+
+            # Run the wizard again from another page, asking for the page total this time.
+            xViewCursor.jumpToPage(3)
+            with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
+                select_by_text(xDialog.getChild("alignmentCombo"), "Center")
+                xDialog.getChild("pagetotalCheckbox").executeAction("CLICK", tuple())
+
+            # The second run replaces the page number of the first instead of adding another one.
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 1 != 2
+            xFooterParagraphs = [p for p in document.StyleFamilies.PageStyles.Standard.FooterText]
+            self.assertEqual(1, len(xFooterParagraphs))
+            self.assertEqual("1 / 3", xFooterParagraphs[0].String)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
