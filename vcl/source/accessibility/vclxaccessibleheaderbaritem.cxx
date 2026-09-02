@@ -81,23 +81,6 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds()
     return aBounds;
 }
 
-
-// XServiceInfo
-OUString VCLXAccessibleHeaderBarItem::getImplementationName()
-{
-    return u"com.sun.star.comp.svtools.AccessibleHeaderBarItem"_ustr;
-}
-
-sal_Bool VCLXAccessibleHeaderBarItem::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService( this, rServiceName );
-}
-
-Sequence< OUString > VCLXAccessibleHeaderBarItem::getSupportedServiceNames()
-{
-    return { u"com.sun.star.awt.AccessibleHeaderBarItem"_ustr };
-}
-
 // XAccessibleContext
 
 

@@ -19,7 +19,6 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -32,8 +31,7 @@ class HeaderBar;
 //    class VCLXAccessibleHeaderBarItem
 //    ----------------------------------------------------
 
-class VCLXAccessibleHeaderBarItem final
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessible, css::lang::XServiceInfo>
+class VCLXAccessibleHeaderBarItem final : public comphelper::OAccessible
 {
 private:
     VclPtr<HeaderBar>        m_pHeadBar;
@@ -47,11 +45,6 @@ private:
 public:
     VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent );
     virtual ~VCLXAccessibleHeaderBarItem() override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
