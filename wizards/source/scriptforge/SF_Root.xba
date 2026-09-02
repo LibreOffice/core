@@ -599,7 +599,7 @@ Try:
 					)
 	&apos;	SF_FileSystem.Copy+Move+Delete/File+Folder
 			.AddText(	Context := &quot;NOFILEMATCH&quot; _
-						, MsgId := &quot;When « %1 » contains wildcards. at least one file or folder must match the given filter. Otherwise the operation is rejected.\n\n&quot; _
+						, MsgId := &quot;When « %1 » contains wildcards, at least one file or folder must match the given filter. Otherwise the operation is rejected.\n\n&quot; _
 									&amp; &quot;« %1 » = %2&quot; _
 						, Comment :=	&quot;SF_FileSystem copy/move/delete error message\n&quot; _
 									&amp;	&quot;%1: An identifier\n&quot; _
@@ -634,7 +634,7 @@ Try:
 					)
 	&apos;	SF_Services.CreateScriptService
 			.AddText(	Context := &quot;SERVICESNOTLOADED&quot; _
-						, MsgId := &quot;The library &apos;%3&apos; and its services could not been loaded.\n&quot; _
+						, MsgId := &quot;The library &apos;%3&apos; and its services could not be loaded.\n&quot; _
 									&amp; &quot;The reason is unknown.\n&quot; _
 									&amp; &quot;However, checking the &apos;%3.SF_Services.RegisterScriptServices()&apos; function and its return value can be a good starting point.\n\n&quot; _
 									&amp; &quot;« %1 » = %2&quot; _
@@ -1127,14 +1127,14 @@ Try:
 						, MsgId := &quot;The requested library could not be located.\n&quot; _
 									&amp; &quot;The UnitTest service has not been initialized.\n\n&quot; _
 									&amp; &quot;Library name : « %1 »&quot; _
-						, Comment :=	&quot;SFUnitTest could not locate the library gven as argument\n&quot; _
+						, Comment :=	&quot;SFUnitTest could not locate the library given as argument\n&quot; _
 									&amp;	&quot;%1: The name of the library&quot; _
 					)
 	&apos;	SFUnitTests.SF_UnitTest
 			.AddText(	Context := &quot;UNITTESTMETHOD&quot; _
 						, MsgId := &quot;The method &apos;%1&apos; is unexpected in the current context.\n&quot; _
 									&amp; &quot;The UnitTest service cannot proceed further with the on-going test.&quot; _
-						, Comment :=	&quot;SFUnitTest finds a RunTest() call in a inappropriate location\n&quot; _
+						, Comment :=	&quot;SFUnitTest finds a RunTest() call in an inappropriate location\n&quot; _
 									&amp;	&quot;%1: The name of a method&quot; _
 					)
 		End With

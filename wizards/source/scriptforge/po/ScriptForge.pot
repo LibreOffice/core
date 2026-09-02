@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2026-08-24 11:54:48\n"
+"POT-Creation-Date: 2026-09-02 15:50:39\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -593,7 +593,7 @@ msgstr ""
 #, kde-format
 msgctxt "NOFILEMATCH"
 msgid  ""
-"When « %1 » contains wildcards. at least one file or folder must "
+"When « %1 » contains wildcards, at least one file or folder must "
 "match the given filter. Otherwise the operation is rejected.\n"
 "\n"
 "« %1 » = %2"
@@ -774,7 +774,7 @@ msgstr ""
 #, kde-format
 msgctxt "SERVICESNOTLOADED"
 msgid  ""
-"The library '%3' and its services could not been loaded.\n"
+"The library '%3' and its services could not be loaded.\n"
 "The reason is unknown.\n"
 "However, checking the '%3.SF_Services.RegisterScriptServices()' "
 "function and its return value can be a good starting point.\n"
@@ -855,7 +855,7 @@ msgid  ""
 "The requested method could not be executed."
 msgstr ""
 
-#. SFUnitTest could not locate the library gven as argument
+#. SFUnitTest could not locate the library given as argument
 #. %1: The name of the library
 #, kde-format
 msgctxt "UNITTESTLIBRARY"
@@ -866,7 +866,7 @@ msgid  ""
 "Library name : « %1 »"
 msgstr ""
 
-#. SFUnitTest finds a RunTest() call in a inappropriate location
+#. SFUnitTest finds a RunTest() call in an inappropriate location
 #. %1: The name of a method
 #, kde-format
 msgctxt "UNITTESTMETHOD"

@@ -53,7 +53,7 @@ Global Const	V_BASICOBJECT	= 104	&apos;													User Basic object
 Type _ObjectDescriptor					&apos; Returned by the _VarTypeObj() method
 	iVarType		As Integer			&apos; One of the V_NOTHING, V_xxxOBJECT constants
 	sObjectType		As String			&apos; Either &quot;&quot; or &quot;com.sun.star...&quot; or a ScriptForge object type (ex. &quot;SF_SESSION&quot; or &quot;DICTIONARY&quot;)
-	sServiceName	As String			&apos; Either &quot;&quot; or the service name of a ScriptForge object type (ex. &quot;ScriptForge.Exception&quot;-
+	sServiceName	As String			&apos; Either &quot;&quot; or the service name of a ScriptForge object type (ex. &quot;ScriptForge.Exception&quot;)
 End Type
 
 REM ================================================================== EXCEPTIONS
@@ -63,7 +63,7 @@ Const ARGUMENTERROR				=	&quot;ARGUMENTERROR&quot;		&apos;	An argument does not 
 Const ARRAYERROR				=	&quot;ARRAYERROR&quot;		&apos;	An argument does not pass the _ValidateArray() validation
 Const FILEERROR					=	&quot;FILEERROR&quot;			&apos;	An argument does not pass the _ValidateFile() validation
 
-REM =========================================pvA==================== PRIVATE METHODS
+REM ============================================================= PRIVATE METHODS
 
 REM -----------------------------------------------------------------------------
 Public Function _CDateToIso(pvDate As Variant) As Variant
@@ -223,13 +223,13 @@ Public Sub _ExitFunction(ByVal psSub As String)
 			If .DebugMode Then ._AddToConsole(&quot;&lt;== &quot; &amp; psSub &amp; &quot;(&quot; &amp; .StackLevel &amp; &quot;)&quot;)
 			If .StackLevel &gt; 0 Then .StackLevel = .StackLevel - 1
 		End With
-	
+
 End Sub			&apos;	ScriptForge.SF_Utils._ExitFunction
 
 REM -----------------------------------------------------------------------------
 Public Sub _ExportScriptForgePOTFile(ByVal FileName As String)
 &apos;&apos;&apos;	Export the ScriptForge POT file related to its own user interface
-&apos;&apos;&apos;	Should be called only before issuing new ScriptForge releases only
+&apos;&apos;&apos;	Should be called before issuing new ScriptForge releases only
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: the resulting file. If it exists, is overwritten without warning
 

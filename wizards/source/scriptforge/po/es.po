@@ -76,7 +76,6 @@ msgid ""
 "    « %1 » = %3"
 msgstr ""
 "La matriz y el vector a insertar tienen dimensiones incompatibles.\n"
-".\n"
 "\n"
 "    « Array_2D » = %2\n"
 "    « %1 » = %3"
@@ -93,7 +92,7 @@ msgid ""
 "    « UpTo » = %2\n"
 "    « ByStep » = %3"
 msgstr ""
-"Los valores respectivos de 'From',UpTo' y 'ByStep' son incoherentes.\n"
+"Los valores respectivos de 'From', 'UpTo' y 'ByStep' son incoherentes.\n"
 "\n"
 "    « From » = %1\n"
 "    « UpTo » = %2\n"
@@ -305,7 +304,7 @@ msgid ""
 "The '%1' method must not be executed in this context."
 msgstr ""
 "La base de datos se ha abierto en modo de solo lectura.\n"
-"No se debe ejecutar el comando SQL '%1'en este contexto."
+"No se debe ejecutar el comando SQL '%1' en este contexto."
 
 #. SF_Dialog._IsStillAlive error message
 #. %1: An identifier
@@ -628,7 +627,7 @@ msgid ""
 "File name = '%1'"
 msgstr ""
 "No se puede ejecutar la operación indicada con el archivo porque el archivo "
-"se ha cerrado previamente, .\n"
+"se ha cerrado previamente.\n"
 "\n"
 "Nombre del archivo = '%1'"
 
@@ -644,7 +643,7 @@ msgid ""
 "File name = '%1'\n"
 "Open mode = %2"
 msgstr ""
-"No se ha puede ejecutar la operación indicada con el archivo porque es "
+"No se puede ejecutar la operación indicada con el archivo porque es "
 "incompatible con el modo en que se ha abierto.\n"
 "\n"
 "Nombre del archivo = '%1'\n"
@@ -893,7 +892,7 @@ msgid ""
 " %5 : « %6 »"
 msgstr ""
 "No se pudo configurar el Administrador de páginas debido a argumentos "
-"inconsistentes..\n"
+"inconsistentes.\n"
 "\n"
 " %1 : « %2 »\n"
 " %3 : « %4 »\n"
@@ -986,7 +985,7 @@ msgid ""
 "Cause: %3\n"
 "« %1 » = %2"
 msgstr ""
-"Ocurrió una excepción durante la ejecución el script Basic.\n"
+"Ocurrió una excepción durante la ejecución del script Basic.\n"
 "Causa: %3\n"
 "« %1 » = %2"
 
@@ -1095,7 +1094,7 @@ msgstr ""
 "El control '%1' del diálogo '%2' no es un campo de texto multilínea.\n"
 "No se ha podido ejecutar el método indicado."
 
-#. SFUnitTest could not locate the library gven as argument
+#. SFUnitTest could not locate the library given as argument
 #. %1: The name of the library
 #, kde-format
 msgctxt "UNITTESTLIBRARY"
@@ -1110,7 +1109,7 @@ msgstr ""
 "\n"
 "Nombre de la biblioteca: « %1 »"
 
-#. SFUnitTest finds a RunTest() call in a inappropriate location
+#. SFUnitTest finds a RunTest() call in an inappropriate location
 #. %1: The name of a method
 #, kde-format
 msgctxt "UNITTESTMETHOD"
@@ -1215,7 +1214,7 @@ msgstr "        « %1 » debe ser una matriz."
 #, kde-format
 msgctxt "VALIDATECLASS"
 msgid "        « %1 » must be a Basic object of class : %2"
-msgstr "        « %1 » debe ser de un objeto Basic de clase : %2"
+msgstr "        « %1 » debe ser un objeto Basic de clase : %2"
 
 #. SF_Utils._ValidateArray error message
 #. %1: Wrong argument name
@@ -1315,7 +1314,7 @@ msgstr "        « %1 » debe ser del tipo o tipos siguientes: %2"
 #, kde-format
 msgctxt "VALIDATEVALUES"
 msgid "        « %1 » must contain one of next values : %2"
-msgstr "        « %1 » debe contener uno de los siguiente valores : %2"
+msgstr "        « %1 » debe contener uno de los siguientes valores : %2"
 
 #. SF_Utils._ValidateFile error message
 #. %1: Wrong argument name

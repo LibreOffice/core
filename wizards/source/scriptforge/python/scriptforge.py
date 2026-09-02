@@ -797,7 +797,7 @@ class SFScriptForge:
         @staticmethod
         def CDateToUnoDateTime(date):
             """
-                Converts a date representation into the ccom.sun.star.util.DateTime date format
+                Converts a date representation into the com.sun.star.util.DateTime date format
                 Acceptable boundaries: year >= 1900 and <= 32767
                 :param date: datetime.datetime, datetime.date, datetime.time, float (time.time) or time.struct_time
                 :return: a com.sun.star.util.DateTime

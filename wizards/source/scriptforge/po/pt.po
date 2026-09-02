@@ -105,7 +105,7 @@ msgstr "Argumentos: %1"
 #, kde-format
 msgctxt "VALIDATEERROR"
 msgid "A serious error has been detected in your code on argument : « %1 »."
-msgstr "Um erro grave foi detectado em seu código no argumento : « %1»."
+msgstr "Um erro grave foi detectado em seu código no argumento : « %1 »."
 
 #. SF_Utils.Validate error message
 msgctxt "VALIDATIONRULES"
@@ -189,7 +189,7 @@ msgstr "        « %1 » não pode conter nenhum elemento NULL ou EMPTY."
 #, kde-format
 msgctxt "VALIDATEFILE"
 msgid "        « %1 » must be of type String."
-msgstr "        « %1 » deve ser to tipo String."
+msgstr "        « %1 » deve ser t-do tipo String."
 
 #. SF_Utils._ValidateFile error message
 #. %1: Wrong argument name
@@ -360,7 +360,7 @@ msgid ""
 "because the given key contains only spaces."
 msgstr ""
 "A inserção ou atualização de uma entrada em um dicionário falhou porque a "
-"chave fornecido contém apenas espaços."
+"chave fornecida contém apenas espaços."
 
 #. SF_FileSystem copy/move/delete error message
 #. %1: An identifier
@@ -978,7 +978,7 @@ msgid  ""
 "%3 = %4"
 msgstr ""
 "O intervalo fornecido não pode ser exportado.\n"
-"O arquivo de destino não pode ser sobrescrito ou ele está"
+"O arquivo de destino não pode ser sobrescrito ou ele está "
 "configurado como somente leitura.\n"
 "\n"
 "%1 = '%2'\n"
@@ -1000,7 +1000,7 @@ msgid  ""
 "%3 = %4"
 msgstr ""
 "O gráfico não pode ser exportado.\n"
-"O arquivo de destino não pode ser sobrescrito ou ele está"
+"O arquivo de destino não pode ser sobrescrito ou ele está "
 "configurado como somente leitura.\n"
 "\n"
 "%1 = '%2'\n"
@@ -1348,9 +1348,9 @@ msgctxt "PYTHONSHELL"
 msgid ""
 "The APSO extension could not be located in your LibreOffice installation."
 msgstr ""
-"A extensão APSO não pode ser localizada sem sua instalação do LibreOffice."
+"A extensão APSO não pode ser localizada em sua instalação do LibreOffice."
 
-#. SFUnitTest could not locate the library gven as argument
+#. SFUnitTest could not locate the library given as argument
 #. %1: The name of the library
 #, kde-format
 msgctxt "UNITTESTLIBRARY"
@@ -1365,7 +1365,7 @@ msgstr ""
 "\n"
 "Nome da biblioteca : « %1 »"
 
-#. SFUnitTest finds a RunTest() call in a inappropriate location
+#. SFUnitTest finds a RunTest() call in an inappropriate location
 #. %1: The name of a method
 #, kde-format
 msgctxt "UNITTESTMETHOD"
