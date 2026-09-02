@@ -46,28 +46,24 @@ void AccTopWindowListener::HandleWindowOpened(vcl::Window* pWindow)
     if (!pSystemData)
         return;
 
-    Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
-    if (!xAccessible.is())
-        return;
-
-    Reference<css::accessibility::XAccessibleContext> xContext = xAccessible->getAccessibleContext();
-    if(!xContext.is())
+    rtl::Reference<comphelper::OAccessible> pAccessible = pWindow->GetAccessible();
+    if (!pAccessible.is())
         return;
 
     // add all listeners
-    m_aAccObjectManager.SaveTopWindowHandle(pSystemData->hWnd, xAccessible.get());
+    m_aAccObjectManager.SaveTopWindowHandle(pSystemData->hWnd, pAccessible.get());
 
-    AddAllListeners(xAccessible.get(), nullptr, pSystemData->hWnd);
+    AddAllListeners(pAccessible.get(), nullptr, pSystemData->hWnd);
 
     if (pWindow->GetStyle() & WB_MOVEABLE)
-        m_aAccObjectManager.IncreaseState(xAccessible.get(), static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
+        m_aAccObjectManager.IncreaseState(pAccessible.get(), static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
 
-    short role = xContext->getAccessibleRole();
+    short role = pAccessible->getAccessibleRole();
 
     if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
             role == css::accessibility::AccessibleRole::MENU )
     {
-        m_aAccObjectManager.NotifyAccEvent(xAccessible.get(), UnoMSAAEvent::MENUPOPUPSTART);
+        m_aAccObjectManager.NotifyAccEvent(pAccessible.get(), UnoMSAAEvent::MENUPOPUPSTART);
     }
 
     if (role == css::accessibility::AccessibleRole::FRAME ||
@@ -75,7 +71,7 @@ void AccTopWindowListener::HandleWindowOpened(vcl::Window* pWindow)
             role == css::accessibility::AccessibleRole::WINDOW ||
             role == css::accessibility::AccessibleRole::ALERT)
     {
-        m_aAccObjectManager.NotifyAccEvent(xAccessible.get(), UnoMSAAEvent::SHOW);
+        m_aAccObjectManager.NotifyAccEvent(pAccessible.get(), UnoMSAAEvent::SHOW);
     }
 }
 
