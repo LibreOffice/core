@@ -166,7 +166,7 @@ public class ScAccessiblePreviewTable extends TestCase {
         XAccessibleContext zoomIn =
             AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
-        log.println("Getting \"" + zoomIn.getAccessibleName() + "\" which is a \"" + UnoRuntime.queryInterface(com.sun.star.lang.XServiceInfo.class, zoomIn).getImplementationName() + "\"");
+        log.println("Getting \"" + zoomIn.getAccessibleName());
 
         final XAccessibleAction pressZoom = UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
