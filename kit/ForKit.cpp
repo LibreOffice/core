@@ -1064,6 +1064,10 @@ int forkit_main(int argc, char** argv)
 
     ProcUtil::setThreadName("forkit");
 
+    // Expand the library paths here, once. The expansion reads the whole of /lib and /lib64,
+    // and each child forked from here inherits the result.
+    Landlock::precomputeGlobPaths();
+
     LOG_INF("Preinit stage OK.");
 
     // We must have at least one child, more are created dynamically.

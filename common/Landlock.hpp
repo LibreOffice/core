@@ -36,6 +36,11 @@ namespace Landlock
     /// True when the kernel allows restricting file truncate
     bool restrictsTruncate();
 
+    /// Expand the glob patterns for the shared library paths that every locked-down
+    /// process is allowed to read. The expansion reads the whole of /lib and /lib64, and
+    /// the result is kept, so later calls cost nothing.
+    void precomputeGlobPaths();
+
     /// Lock-down process paths denying read/write access to many of them
     bool lock(const std::vector<Permission> &perms);
 
