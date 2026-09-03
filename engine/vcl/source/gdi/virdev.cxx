@@ -383,7 +383,13 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndKitBuffer(
     assert( rNewSize.Width() >= 1 );
     assert( rNewSize.Height() >= 1 );
 
+#ifdef IOS
+    // iOS doesn't support SetSizeUsingBuffer. Not setting the size here means
+    // that no visible content will render to slides in presentations, for instance...
+    bool bRet = mpVirDev->SetSize( rNewSize.Width(), rNewSize.Height(), false );
+#else
     bool bRet = mpVirDev->SetSizeUsingBuffer( rNewSize.Width(), rNewSize.Height(), pBuffer );
+#endif
     if ( bRet )
     {
         mnOutWidth  = rNewSize.Width();
