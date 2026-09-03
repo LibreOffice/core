@@ -361,9 +361,11 @@ bool isJailCopied(const std::string& root)
     FileUtil::Stat delFileStat(root + '/' + COPIED_JAIL_MARKER_FILE);
     return delFileStat.exists();
 }
+#endif
 
 namespace
 {
+#if ENABLE_CHILDROOTS
 
 bool safeRemoveDir(const std::string& path)
 {
