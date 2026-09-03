@@ -143,6 +143,14 @@ enum class COKitSelectionType
     COMPLEX
 };
 
+/// What the document has selected, and the text of it when eType is
+/// COKitSelectionType::TEXT. The text is empty for every other type.
+struct COKitSelection
+{
+    COKitSelectionType eType = COKitSelectionType::NONE;
+    std::string aText;
+};
+
 /** Optional features of COKit, in particular callbacks that block
  *  COKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.
@@ -2432,15 +2440,12 @@ struct COKitDocument
      * Gets the type of the selected content and possibly its text.
      *
      * This function is a more efficient combination of getSelectionType() and getTextSelection().
-     * It returns the same as getSelectionType(), and additionally if the return value is
-     * COKitSelectionType::TEXT then it also returns the same as getTextSelection(), otherwise
-     * pText is unchanged.
+     * The type is the same as getSelectionType() gives, and for a text selection the text is the
+     * same as getTextSelection() gives.
      *
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
-     * @param pText the currently selected text
-     * @return what kind of selection the document holds.
      */
-    virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, std::string* pText) = 0;
+    virtual COKitSelection getSelectionTypeAndText(const char* pMimeType) = 0;
 
     /// Get the data area of one part, that is, in Calc, its last column and
     /// last row.

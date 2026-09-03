@@ -1226,9 +1226,7 @@ static void doc_setTextSelection (COKitDocument* pThis,
                                   int nY);
 static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view aMimeType);
 static COKitSelectionType doc_getSelectionType(COKitDocument* pThis);
-static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
-                                                      const char* pMimeType,
-                                                      std::string* pText);
+static COKitSelection doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType);
 static bool doc_getClipboard (COKitDocument* pThis,
                               const char **pMimeTypes,
                               std::vector<std::string>& rOutMimeTypes,
@@ -1807,9 +1805,9 @@ void COKitDocumentImpl::sendContentControlEvent(const char* pArguments)
     doc_sendContentControlEvent(this, pArguments);
 }
 
-COKitSelectionType COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeType, std::string* pText)
+COKitSelection COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeType)
 {
-    return doc_getSelectionTypeAndText(this, pMimeType, pText);
+    return doc_getSelectionTypeAndText(this, pMimeType);
 }
 
 COKitDataArea COKitDocumentImpl::getDataArea(long nPart)
@@ -7442,8 +7440,7 @@ static COKitSelectionType doc_getSelectionType(COKitDocument* pThis)
     return !aRet.isEmpty() ? COKitSelectionType::TEXT : COKitSelectionType::NONE;
 }
 
-static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType,
-                                                      std::string* pText)
+static COKitSelection doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType)
 {
     // The purpose of this function is to avoid double call to pDoc->getSelection(),
     // which may be expensive.
@@ -7456,19 +7453,19 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, cons
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return COKitSelectionType::NONE;
+        return {};
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
-        return COKitSelectionType::NONE;
+        return {};
     }
 
     css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
-        return COKitSelectionType::COMPLEX;
+        return { COKitSelectionType::COMPLEX, {} };
 
     OString aType
         = pMimeType && pMimeType[0] != '\0' ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
@@ -7476,18 +7473,15 @@ static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, cons
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
-        return COKitSelectionType::NONE;
+        return {};
 
     if (aRet.getLength() > 10000)
-        return COKitSelectionType::COMPLEX;
+        return { COKitSelectionType::COMPLEX, {} };
 
     if (aRet.isEmpty())
-        return COKitSelectionType::NONE;
+        return {};
 
-    if (pText)
-        *pText = aRet;
-
-    return COKitSelectionType::TEXT;
+    return { COKitSelectionType::TEXT, std::string(aRet) };
 }
 
 // Serialize the current clipboard's contents into the out parameters. The

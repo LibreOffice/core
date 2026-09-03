@@ -1736,10 +1736,9 @@ bool ChildSession::getTextSelection(const StringVector& tokens)
     Poco::JSON::Object selectionObject;
     for (const auto& type : mimeTypes)
     {
-        std::string selection;
-        const COKitSelectionType selectionType
-            = getLOKitDocument()->getSelectionTypeAndText(type.c_str(), &selection);
-        if (selectionType == COKitSelectionType::COMPLEX)
+        const COKitSelection aSelection
+            = getLOKitDocument()->getSelectionTypeAndText(type.c_str());
+        if (aSelection.eType == COKitSelectionType::COMPLEX)
         {
             // Flag complex data so the client will download async.
             sendTextFrame("complexselection:");
@@ -1748,11 +1747,11 @@ bool ChildSession::getTextSelection(const StringVector& tokens)
         if (mimeTypes.size() == 1)
         {
             // Single format: send that as-is.
-            sendTextFrame("textselectioncontent: " + selection);
+            sendTextFrame("textselectioncontent: " + aSelection.aText);
             return true;
         }
 
-        selectionObject.set(type, selection);
+        selectionObject.set(type, aSelection.aText);
     }
 
     // Multiple formats: send in JSON.
