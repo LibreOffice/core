@@ -149,10 +149,10 @@ class ContextToolbar extends JSDialogComponent {
 		return [
 			{
 				id: 'context-switchtoedit',
-				type: 'bigcustomtoolitem',
+				type: 'customtoolitem',
+				inlineLabel: true,
 				text: _('Switch to Editing'),
 				command: 'switchtoedit',
-				icon: 'lc_editdoc.svg',
 			} as ToolItemWidgetJSON,
 		];
 	}

@@ -719,6 +719,7 @@ class LOUtil {
 			fielddialog: 'insertfield',
 			updatefields3funlocksoftfixed3abool3d1: 'updateall',
 			navelement: 'navigator',
+			switchtoedit: 'edit',
 		};
 		if (iconURLAliases[cleanName]) {
 			cleanName = iconURLAliases[cleanName];
