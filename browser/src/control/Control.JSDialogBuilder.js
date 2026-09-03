@@ -2042,8 +2042,21 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	},
 
 	// executes actions like changing the selection without rebuilding the widget
+	//
+	// container may be an element, or a function returning one. A caller
+	// whose own container can be replaced before this runs (this is applied
+	// on a deferred layouting task, not immediately) should pass a function,
+	// so the container is read fresh here rather than a snapshot taken when
+	// the action was queued. Applying it to a stale snapshot would silently
+	// update a container already removed from the document, for example
+	// dropping the on-demand render replies that populate a style gallery.
 	executeAction: function(container, data) {
-		app.layoutingService.appendLayoutingTask(() => { this.executeActionImpl(container, data); });
+		app.layoutingService.appendLayoutingTask(() => {
+			const target = typeof container === 'function' ? container() : container;
+			if (!target)
+				return;
+			this.executeActionImpl(target, data);
+		});
 	},
 
 	executeActionImpl: function(container, data) {

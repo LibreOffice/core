@@ -131,7 +131,7 @@ abstract class JSDialogComponent {
 
 		if (!this.ownsContainerContent()) return false;
 
-		this.builder.executeAction(this.container, data.data);
+		this.builder.executeAction(() => this.container, data.data);
 
 		return true;
 	}

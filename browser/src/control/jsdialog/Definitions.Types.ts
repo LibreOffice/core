@@ -76,7 +76,13 @@ interface JSBuilder {
 		hasVerticalParent: boolean,
 	) => boolean;
 	updateWidget: (parentContainer: Element, updateJSON: WidgetJSON) => void;
-	executeAction: (parentContainer: Element, actionJSON: ActionData) => void;
+	// parentContainer may be an element, or a function returning one (or
+	// undefined) for a caller whose container can be replaced before this
+	// runs - it is applied on a deferred layouting task, not immediately.
+	executeAction: (
+		parentContainer: Element | (() => Element | undefined),
+		actionJSON: ActionData,
+	) => void;
 	callback: JSDialogCallback;
 	_defaultCallbackHandlerSendMessage: JSDialogCallback;
 	_defaultCallbackHandler: JSDialogCallback;
