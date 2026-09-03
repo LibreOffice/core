@@ -38,6 +38,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
+#include <svx/fmshell.hxx>
 
 #include <cmdid.h>
 #include <unotxdoc.hxx>
@@ -46,6 +47,8 @@
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
+#include <pview.hxx>
+#include <textsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
 using namespace css;
@@ -651,6 +654,47 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 
     // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testPrintPreviewPopsViewShells)
+{
+    createSwDoc();
+    SwView* pView = getSwDocShell()->GetView();
+    pView->StopShellTimer();
+    SfxDispatcher* pDispatcher = pView->GetViewFrame().GetDispatcher();
+    auto hasTextShell = [pDispatcher] {
+        for (sal_uInt16 i = 0; SfxShell* pShell = pDispatcher->GetShell(i); ++i)
+        {
+            if (dynamic_cast<SwTextShell*>(pShell))
+                return true;
+        }
+        return false;
+    };
+    CPPUNIT_ASSERT(hasTextShell());
+
+    // Build the stack a document loaded over the UNO bridge leaves: the view shell above the shells
+    // it pushed, with its cached form shell in a slot on either side of it:
+    FmFormShell* pFormShell = pView->GetFormShell();
+    CPPUNIT_ASSERT(pFormShell);
+    pDispatcher->Pop(*pView);
+    pDispatcher->Pop(*pFormShell);
+    pDispatcher->Flush();
+    pDispatcher->Push(*pFormShell);
+    pDispatcher->Flush();
+    pDispatcher->Push(*pView);
+    pDispatcher->Push(*pFormShell);
+    pDispatcher->Flush();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pDispatcher->GetShellLevel(*pFormShell));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDispatcher->GetShellLevel(*pView));
+
+    // When switching that view to the print preview (what .uno:PrintPreview dispatches):
+    pDispatcher->Execute(SID_VIEWSHELL1, SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT(dynamic_cast<SwPagePreview*>(pDispatcher->GetShell(0)));
+
+    // Then make sure the replaced view left no shell of its own behind: without the fix, its
+    // SwTextShell stayed and a state query read a reset SwWrtShell
+    CPPUNIT_ASSERT(!hasTextShell());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDispatcher->GetShellLevel(*getSwDocShell()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

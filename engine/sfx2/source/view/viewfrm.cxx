@@ -97,6 +97,7 @@
 #include <framework/framelistanalyzer.hxx>
 
 #include <optional>
+#include <unordered_set>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -1106,13 +1107,25 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
     sal_uInt16 nLevel = m_pDispatcher->GetShellLevel( i_rViewShell );
     if ( nLevel != USHRT_MAX )
     {
-        if ( nLevel )
+        // shells pushed while loading sit below the view shell
+        sal_uInt16 nDeepest = nLevel;
+        if (const SfxObjectShell* pObjSh = GetObjectShell())
         {
-            // more sub shells on the stack, which were not affected by PopSubShells_Impl
-            if (SfxShell *pSubShell = m_pDispatcher->GetShell( nLevel-1 ))
-                m_pDispatcher->Pop( *pSubShell, SfxDispatcherPopFlags::POP_UNTIL | SfxDispatcherPopFlags::POP_DELETE );
+            const sal_uInt16 nObjLevel = m_pDispatcher->GetShellLevel(*pObjSh);
+            if (nObjLevel != USHRT_MAX && nObjLevel > nLevel)
+                nDeepest = nObjLevel - 1;
         }
-        m_pDispatcher->Pop( i_rViewShell );
+
+        // a shell can occupy several slots; Pop drops a request repeating the one before it, and
+        // Flush erases every slot before it deletes anything, so the first slot can do the delete
+        std::unordered_set<const SfxShell*> aSeen{ &i_rViewShell }; // its owner deletes the view
+        for (sal_uInt16 i = 0; i <= nDeepest; ++i)
+        {
+            SfxShell* pShell = m_pDispatcher->GetShell(i);
+            m_pDispatcher->Pop(*pShell, aSeen.insert(pShell).second
+                                            ? SfxDispatcherPopFlags::POP_DELETE
+                                            : SfxDispatcherPopFlags::NONE);
+        }
         m_pDispatcher->Flush();
     }
 
