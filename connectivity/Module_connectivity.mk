@@ -83,9 +83,12 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_firebird \
 	Library_firebird_sdbc \
 ))
+
+ifeq ($(SYSTEM_FIREBIRD),)
 $(eval $(call gb_Module_add_check_targets,connectivity,\
     CppunitTest_connectivity_firebird_test \
 ))
+endif
 endif
 
 ifeq ($(ENABLE_MARIADBC),TRUE)
