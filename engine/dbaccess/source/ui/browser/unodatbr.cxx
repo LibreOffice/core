@@ -3346,7 +3346,7 @@ bool SbaTableQueryBrowser::ensureConnection(const weld::TreeIter* pDSEntry, void
 
             // connect
             rConnection.reset(
-                connect(getDataSourceAccessor(*pDSEntry), sConnectingContext, nullptr),
+                connect(getDataSourceAccessor(*pDSEntry), sConnectingContext),
                 SharedConnection::TakeOwnership);
 
             // remember the connection

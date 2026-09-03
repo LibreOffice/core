@@ -54,16 +54,14 @@ namespace dbaui
         */
         css::uno::Reference< css::sdbc::XConnection >
                     connect(
-                        const OUString& _rDataSourceName,
-                        ::dbtools::SQLExceptionInfo* _pErrorInfo
+                        const OUString& _rDataSourceName
                     ) const;
 
         /** creates a connection to the data source, displays the possible error to the user, or returns it
         */
         css::uno::Reference< css::sdbc::XConnection >
                     connect(
-                        const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource,
-                        ::dbtools::SQLExceptionInfo* _pErrorInfo
+                        const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource
                     ) const;
     };
 

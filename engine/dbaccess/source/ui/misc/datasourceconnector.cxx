@@ -61,8 +61,7 @@ using namespace cpo::uno;
     {
     }
 
-    Reference< XConnection > ODatasourceConnector::connect( const OUString& _rDataSourceName,
-        ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
+    Reference< XConnection > ODatasourceConnector::connect( const OUString& _rDataSourceName ) const
     {
         Reference< XConnection > xConnection;
 
@@ -72,15 +71,14 @@ using namespace cpo::uno;
 
         // get the data source
         Reference< XDataSource > xDatasource =
-            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xContext, _pErrorInfo );
+            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xContext, nullptr );
 
         if ( xDatasource.is() )
-            xConnection = connect( xDatasource, _pErrorInfo );
+            xConnection = connect( xDatasource );
         return xConnection;
     }
 
-    Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource,
-        ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
+    Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource) const
     {
         Reference< XConnection > xConnection;
 
@@ -175,14 +173,7 @@ using namespace cpo::uno;
         // was there an error?
         if ( aInfo.isValid() )
         {
-            if ( _pErrorInfo )
-            {
-                *_pErrorInfo = std::move(aInfo);
-            }
-            else
-            {
-                showError(aInfo, m_pErrorMessageParent ? m_pErrorMessageParent->GetXWindow() : nullptr, m_xContext);
-            }
+            showError(aInfo, m_pErrorMessageParent ? m_pErrorMessageParent->GetXWindow() : nullptr, m_xContext);
         }
         return xConnection;
     }

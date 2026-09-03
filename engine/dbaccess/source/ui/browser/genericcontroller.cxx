@@ -783,12 +783,12 @@ void OGenericUnoController::startConnectionListening(const Reference< XConnectio
 }
 
 Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataSourceName,
-    const OUString& _rContextInformation, ::dbtools::SQLExceptionInfo* _pErrorInfo )
+    const OUString& _rContextInformation )
 {
     weld::WaitObject aWaitCursor(getFrameWeld());
 
     ODatasourceConnector aConnector( getORB(), getFrameWeld(), _rContextInformation );
-    Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName, _pErrorInfo );
+    Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName );
     startConnectionListening( xConnection );
 
     return xConnection;
