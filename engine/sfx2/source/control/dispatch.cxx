@@ -1409,6 +1409,12 @@ void SfxDispatcher::FlushImpl()
     {
         if (i->bDelete && !i->bDeleted)
         {
+            // a shell can hold several slots, and each of them got an entry of its own
+            for (auto & subelem : aToDoCopy)
+            {
+                if (subelem.pCluster == i->pCluster)
+                    subelem.bDeleted = true;
+            }
             if (!xImp->aToDoCopyStack.empty())
             {
                 //fdo#70703 if there is an outer FlushImpl then inform it that

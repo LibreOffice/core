@@ -97,7 +97,6 @@
 #include <framework/framelistanalyzer.hxx>
 
 #include <optional>
-#include <unordered_set>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -1116,16 +1115,15 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
                 nDeepest = nObjLevel - 1;
         }
 
-        // a shell can occupy several slots; Pop drops a request repeating the one before it, and
-        // Flush erases every slot before it deletes anything, so the first slot can do the delete
-        std::unordered_set<const SfxShell*> aSeen{ &i_rViewShell }; // its owner deletes the view
+        // Pop drops a request repeating the one before it, so the view shell is popped in place;
+        // Flush deletes a shell once, however many of these slots it holds
         for (sal_uInt16 i = 0; i <= nDeepest; ++i)
         {
             SfxShell* pShell = m_pDispatcher->GetShell(i);
             assert(pShell); // Pop does not touch the stack; the Flush does
-            m_pDispatcher->Pop(*pShell, aSeen.insert(pShell).second
-                                            ? SfxDispatcherPopFlags::POP_DELETE
-                                            : SfxDispatcherPopFlags::NONE);
+            m_pDispatcher->Pop(*pShell, pShell == &i_rViewShell // its owner deletes the view
+                                            ? SfxDispatcherPopFlags::NONE
+                                            : SfxDispatcherPopFlags::POP_DELETE);
         }
         m_pDispatcher->Flush();
     }
