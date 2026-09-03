@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_AUTOFORMATHELPER_HXX
 
 #include <svx/svxdllapi.h>
+#include <bitset>
 #include <memory>
 
 class SvStream;
@@ -88,6 +89,20 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
+/// One entry per attribute an AutoFormatBase holds, in declaration order, naming the
+/// attributes a style actually defines as opposed to the defaults every instance starts with.
+enum class AutoFormatItem : sal_uInt8
+{
+    Font, Height, Weight, Posture,
+    CJKFont, CJKHeight, CJKWeight, CJKPosture,
+    CTLFont, CTLHeight, CTLWeight, CTLPosture,
+    Underline, Overline, CrossedOut, Contour, Shadowed, Color,
+    Box, TLBR, BLTR, Background,
+    Adjust,
+    HorJustify, VerJustify, Stacked, Margin, Linebreak, RotateAngle, RotateMode,
+    COUNT
+};
+
 class SVX_DLLPUBLIC AutoFormatBase
 {
 protected:
@@ -133,6 +148,10 @@ protected:
     std::unique_ptr<SfxInt32Item>           m_aRotateAngle;
     std::unique_ptr<SvxRotateModeItem>      m_aRotateMode;
 
+    /// The attributes that have been set explicitly, through a setter or by loading a
+    /// stored format. Every other attribute still holds the value it was constructed with.
+    std::bitset<static_cast<size_t>(AutoFormatItem::COUNT)> m_aDefinedItems;
+
     // assignment-op is protected due to this being a tooling
     // class, so callers need to be aware of what they do
     AutoFormatBase& operator=(const AutoFormatBase&);
@@ -145,6 +164,12 @@ protected:
     bool operator==(const AutoFormatBase& rRight) const;
 
 public:
+    bool IsDefined(AutoFormatItem eItem) const
+        { return m_aDefinedItems.test(static_cast<size_t>(eItem)); }
+    void MarkDefined(AutoFormatItem eItem)
+        { m_aDefinedItems.set(static_cast<size_t>(eItem)); }
+    void MarkAllDefined() { m_aDefinedItems.set(); }
+
     // The get-methods.
     const SvxFontItem       &GetFont() const        { return *m_aFont; }
     const SvxFontHeightItem &GetHeight() const      { return *m_aHeight; }

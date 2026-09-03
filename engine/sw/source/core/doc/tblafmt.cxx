@@ -579,51 +579,67 @@ void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bCellSpansT
 
     if( SwTableAutoFormatUpdateFlags::Char & eFlags )
     {
+        const bool bDefinedOnly = bool(SwTableAutoFormatUpdateFlags::DefinedOnly & eFlags);
+        auto put = [&rChg, &rSet, bDefinedOnly](AutoFormatItem eItem, const SfxPoolItem& rItem)
+        {
+            if (!bDefinedOnly || rChg.IsDefined(eItem))
+                rSet.Put(rItem);
+        };
+        // With no CJK or CTL font of its own, a box format reuses the Western size, weight
+        // and posture for those scripts; each of those follows its Western source's own
+        // defined state.
+        auto putAsWhich = [&rChg, &rSet, bDefinedOnly](AutoFormatItem eItem, const SfxPoolItem& rItem,
+                                                        sal_uInt16 nWhich)
+        {
+            if (!bDefinedOnly || rChg.IsDefined(eItem))
+                rSet.Put(rItem.CloneSetWhich(nWhich));
+        };
+
         if( IsFont() )
         {
-            rSet.Put( rChg.GetFont() );
-            rSet.Put( rChg.GetHeight() );
-            rSet.Put( rChg.GetWeight() );
-            rSet.Put( rChg.GetPosture() );
+            put( AutoFormatItem::Font, rChg.GetFont() );
+            put( AutoFormatItem::Height, rChg.GetHeight() );
+            put( AutoFormatItem::Weight, rChg.GetWeight() );
+            put( AutoFormatItem::Posture, rChg.GetPosture() );
             // do not insert empty CJK font
             const SvxFontItem& rCJKFont = rChg.GetCJKFont();
             if (!rCJKFont.GetStyleName().isEmpty())
             {
-                rSet.Put( rChg.GetCJKFont() );
-                rSet.Put( rChg.GetCJKHeight() );
-                rSet.Put( rChg.GetCJKWeight() );
-                rSet.Put( rChg.GetCJKPosture() );
+                put( AutoFormatItem::CJKFont, rChg.GetCJKFont() );
+                put( AutoFormatItem::CJKHeight, rChg.GetCJKHeight() );
+                put( AutoFormatItem::CJKWeight, rChg.GetCJKWeight() );
+                put( AutoFormatItem::CJKPosture, rChg.GetCJKPosture() );
             }
             else
             {
-                rSet.Put( rChg.GetHeight().CloneSetWhich(RES_CHRATR_CJK_FONTSIZE) );
-                rSet.Put( rChg.GetWeight().CloneSetWhich(RES_CHRATR_CJK_WEIGHT) );
-                rSet.Put( rChg.GetPosture().CloneSetWhich(RES_CHRATR_CJK_POSTURE) );
+                putAsWhich( AutoFormatItem::Height, rChg.GetHeight(), RES_CHRATR_CJK_FONTSIZE );
+                putAsWhich( AutoFormatItem::Weight, rChg.GetWeight(), RES_CHRATR_CJK_WEIGHT );
+                putAsWhich( AutoFormatItem::Posture, rChg.GetPosture(), RES_CHRATR_CJK_POSTURE );
             }
             // do not insert empty CTL font
             const SvxFontItem& rCTLFont = rChg.GetCTLFont();
             if (!rCTLFont.GetStyleName().isEmpty())
             {
-                rSet.Put( rChg.GetCTLFont() );
-                rSet.Put( rChg.GetCTLHeight() );
-                rSet.Put( rChg.GetCTLWeight() );
-                rSet.Put( rChg.GetCTLPosture() );
+                put( AutoFormatItem::CTLFont, rChg.GetCTLFont() );
+                put( AutoFormatItem::CTLHeight, rChg.GetCTLHeight() );
+                put( AutoFormatItem::CTLWeight, rChg.GetCTLWeight() );
+                put( AutoFormatItem::CTLPosture, rChg.GetCTLPosture() );
             }
             else
             {
-                rSet.Put( rChg.GetHeight().CloneSetWhich(RES_CHRATR_CTL_FONTSIZE) );
-                rSet.Put( rChg.GetWeight().CloneSetWhich(RES_CHRATR_CTL_WEIGHT) );
-                rSet.Put( rChg.GetPosture().CloneSetWhich(RES_CHRATR_CTL_POSTURE) );
+                putAsWhich( AutoFormatItem::Height, rChg.GetHeight(), RES_CHRATR_CTL_FONTSIZE );
+                putAsWhich( AutoFormatItem::Weight, rChg.GetWeight(), RES_CHRATR_CTL_WEIGHT );
+                putAsWhich( AutoFormatItem::Posture, rChg.GetPosture(), RES_CHRATR_CTL_POSTURE );
             }
-            rSet.Put( rChg.GetUnderline() );
-            rSet.Put( rChg.GetOverline() );
-            rSet.Put( rChg.GetCrossedOut() );
-            rSet.Put( rChg.GetContour() );
-            rSet.Put( rChg.GetShadowed() );
-            rSet.Put( rChg.GetColor() );
+            put( AutoFormatItem::Underline, rChg.GetUnderline() );
+            put( AutoFormatItem::Overline, rChg.GetOverline() );
+            put( AutoFormatItem::CrossedOut, rChg.GetCrossedOut() );
+            put( AutoFormatItem::Contour, rChg.GetContour() );
+            put( AutoFormatItem::Shadowed, rChg.GetShadowed() );
+            put( AutoFormatItem::Color, rChg.GetColor() );
         }
         if( IsJustify() )
-            rSet.Put( rChg.GetAdjust() );
+            put( AutoFormatItem::Adjust, rChg.GetAdjust() );
     }
 
     if( !(SwTableAutoFormatUpdateFlags::Box & eFlags) )

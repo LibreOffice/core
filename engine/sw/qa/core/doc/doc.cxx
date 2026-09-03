@@ -1284,6 +1284,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBuiltInWordTableStyleCatalog)
     CPPUNIT_ASSERT(aBandFill != Color(0xFADBDB));
     CPPUNIT_ASSERT(aBandFill.GetBlue() > aBandFill.GetRed());
     CPPUNIT_ASSERT(aBandFill.GetLuminance() > aHeaderFill.GetLuminance());
+
+    // A converted style defines only what the document's style did: the header text color,
+    // not a font. Asking for the defined text attributes must give exactly that, while the
+    // full set still carries the constructed default font for the old bake.
+    const SwAutoFormatProps& rHeaderProps = pGridTable4->GetBoxFormat(nHeaderCorner).GetProps();
+    CPPUNIT_ASSERT(rHeaderProps.IsDefined(AutoFormatItem::Color));
+    CPPUNIT_ASSERT(!rHeaderProps.IsDefined(AutoFormatItem::Font));
+    CPPUNIT_ASSERT(!rHeaderProps.IsDefined(AutoFormatItem::Height));
+
+    SfxItemSet aDefinedSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END - 1>(pDoc->GetAttrPool()));
+    pGridTable4->UpdateToSet(nHeaderCorner, false, false, aDefinedSet,
+                             SwTableAutoFormatUpdateFlags::Char | SwTableAutoFormatUpdateFlags::DefinedOnly, nullptr);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aDefinedSet.GetItemState(RES_CHRATR_COLOR, false));
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, aDefinedSet.GetItemState(RES_CHRATR_FONT, false));
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, aDefinedSet.GetItemState(RES_CHRATR_FONTSIZE, false));
+
+    SfxItemSet aFullSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END - 1>(pDoc->GetAttrPool()));
+    pGridTable4->UpdateToSet(nHeaderCorner, false, false, aFullSet, SwTableAutoFormatUpdateFlags::Char, nullptr);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aFullSet.GetItemState(RES_CHRATR_FONT, false));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

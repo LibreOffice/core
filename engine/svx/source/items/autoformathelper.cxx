@@ -141,36 +141,36 @@ void AutoFormatVersions::WriteBlockB(SvStream& rStream, sal_uInt16 fileVersion)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void AutoFormatBase::SetFont( const SvxFontItem& rNew )             { m_aFont.reset(rNew.Clone()); }
-void AutoFormatBase::SetHeight( const SvxFontHeightItem& rNew )     { m_aHeight.reset(rNew.Clone()); }
-void AutoFormatBase::SetWeight( const SvxWeightItem& rNew )         { m_aWeight.reset(rNew.Clone()); }
-void AutoFormatBase::SetPosture( const SvxPostureItem& rNew )       { m_aPosture.reset(rNew.Clone()); }
-void AutoFormatBase::SetCJKFont( const SvxFontItem& rNew )          { m_aCJKFont.reset(rNew.Clone()); }
-void AutoFormatBase::SetCJKHeight( const SvxFontHeightItem& rNew )  { m_aCJKHeight.reset(rNew.Clone()); }
-void AutoFormatBase::SetCJKWeight( const SvxWeightItem& rNew )      { m_aCJKWeight.reset(rNew.Clone()); }
-void AutoFormatBase::SetCJKPosture( const SvxPostureItem& rNew )    { m_aCJKPosture.reset(rNew.Clone()); }
-void AutoFormatBase::SetCTLFont( const SvxFontItem& rNew )          { m_aCTLFont.reset(rNew.Clone()); }
-void AutoFormatBase::SetCTLHeight( const SvxFontHeightItem& rNew )  { m_aCTLHeight.reset(rNew.Clone()); }
-void AutoFormatBase::SetCTLWeight( const SvxWeightItem& rNew )      { m_aCTLWeight.reset(rNew.Clone()); }
-void AutoFormatBase::SetCTLPosture( const SvxPostureItem& rNew )    { m_aCTLPosture.reset(rNew.Clone()); }
-void AutoFormatBase::SetUnderline( const SvxUnderlineItem& rNew )   { m_aUnderline.reset(rNew.Clone()); }
-void AutoFormatBase::SetOverline( const SvxOverlineItem& rNew )     { m_aOverline.reset(rNew.Clone()); }
-void AutoFormatBase::SetCrossedOut( const SvxCrossedOutItem& rNew ) { m_aCrossedOut.reset(rNew.Clone()); }
-void AutoFormatBase::SetContour( const SvxContourItem& rNew )       { m_aContour.reset(rNew.Clone()); }
-void AutoFormatBase::SetShadowed( const SvxShadowedItem& rNew )     { m_aShadowed.reset(rNew.Clone()); }
-void AutoFormatBase::SetColor( const SvxColorItem& rNew )           { m_aColor.reset(rNew.Clone()); }
-void AutoFormatBase::SetBox( const SvxBoxItem& rNew )               { m_aBox.reset(rNew.Clone()); }
-void AutoFormatBase::SetTLBR( const SvxLineItem& rNew )             { m_aTLBR.reset(rNew.Clone()); }
-void AutoFormatBase::SetBLTR( const SvxLineItem& rNew )             { m_aBLTR.reset(rNew.Clone()); }
-void AutoFormatBase::SetBackground( const SvxBrushItem& rNew )      { m_aBackground.reset(rNew.Clone()); }
-void AutoFormatBase::SetAdjust( const SvxAdjustItem& rNew )         { m_aAdjust.reset(rNew.Clone()); }
-void AutoFormatBase::SetHorJustify( const SvxHorJustifyItem& rNew ) { m_aHorJustify.reset(rNew.Clone()); }
-void AutoFormatBase::SetVerJustify( const SvxVerJustifyItem& rNew ) { m_aVerJustify.reset(rNew.Clone()); }
-void AutoFormatBase::SetStacked( const SfxBoolItem& rNew ) { m_aStacked.reset(rNew.Clone()); }
-void AutoFormatBase::SetMargin( const SvxMarginItem& rNew ) { m_aMargin.reset(rNew.Clone()); }
-void AutoFormatBase::SetLinebreak( const SfxBoolItem& rNew ) { m_aLinebreak.reset(rNew.Clone()); }
-void AutoFormatBase::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle.reset(rNew.Clone()); }
-void AutoFormatBase::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(rNew.Clone()); }
+void AutoFormatBase::SetFont( const SvxFontItem& rNew )             { m_aFont.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Font); }
+void AutoFormatBase::SetHeight( const SvxFontHeightItem& rNew )     { m_aHeight.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Height); }
+void AutoFormatBase::SetWeight( const SvxWeightItem& rNew )         { m_aWeight.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Weight); }
+void AutoFormatBase::SetPosture( const SvxPostureItem& rNew )       { m_aPosture.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Posture); }
+void AutoFormatBase::SetCJKFont( const SvxFontItem& rNew )          { m_aCJKFont.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CJKFont); }
+void AutoFormatBase::SetCJKHeight( const SvxFontHeightItem& rNew )  { m_aCJKHeight.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CJKHeight); }
+void AutoFormatBase::SetCJKWeight( const SvxWeightItem& rNew )      { m_aCJKWeight.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CJKWeight); }
+void AutoFormatBase::SetCJKPosture( const SvxPostureItem& rNew )    { m_aCJKPosture.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CJKPosture); }
+void AutoFormatBase::SetCTLFont( const SvxFontItem& rNew )          { m_aCTLFont.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CTLFont); }
+void AutoFormatBase::SetCTLHeight( const SvxFontHeightItem& rNew )  { m_aCTLHeight.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CTLHeight); }
+void AutoFormatBase::SetCTLWeight( const SvxWeightItem& rNew )      { m_aCTLWeight.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CTLWeight); }
+void AutoFormatBase::SetCTLPosture( const SvxPostureItem& rNew )    { m_aCTLPosture.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CTLPosture); }
+void AutoFormatBase::SetUnderline( const SvxUnderlineItem& rNew )   { m_aUnderline.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Underline); }
+void AutoFormatBase::SetOverline( const SvxOverlineItem& rNew )     { m_aOverline.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Overline); }
+void AutoFormatBase::SetCrossedOut( const SvxCrossedOutItem& rNew ) { m_aCrossedOut.reset(rNew.Clone()); MarkDefined(AutoFormatItem::CrossedOut); }
+void AutoFormatBase::SetContour( const SvxContourItem& rNew )       { m_aContour.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Contour); }
+void AutoFormatBase::SetShadowed( const SvxShadowedItem& rNew )     { m_aShadowed.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Shadowed); }
+void AutoFormatBase::SetColor( const SvxColorItem& rNew )           { m_aColor.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Color); }
+void AutoFormatBase::SetBox( const SvxBoxItem& rNew )               { m_aBox.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Box); }
+void AutoFormatBase::SetTLBR( const SvxLineItem& rNew )             { m_aTLBR.reset(rNew.Clone()); MarkDefined(AutoFormatItem::TLBR); }
+void AutoFormatBase::SetBLTR( const SvxLineItem& rNew )             { m_aBLTR.reset(rNew.Clone()); MarkDefined(AutoFormatItem::BLTR); }
+void AutoFormatBase::SetBackground( const SvxBrushItem& rNew )      { m_aBackground.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Background); }
+void AutoFormatBase::SetAdjust( const SvxAdjustItem& rNew )         { m_aAdjust.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Adjust); }
+void AutoFormatBase::SetHorJustify( const SvxHorJustifyItem& rNew ) { m_aHorJustify.reset(rNew.Clone()); MarkDefined(AutoFormatItem::HorJustify); }
+void AutoFormatBase::SetVerJustify( const SvxVerJustifyItem& rNew ) { m_aVerJustify.reset(rNew.Clone()); MarkDefined(AutoFormatItem::VerJustify); }
+void AutoFormatBase::SetStacked( const SfxBoolItem& rNew ) { m_aStacked.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Stacked); }
+void AutoFormatBase::SetMargin( const SvxMarginItem& rNew ) { m_aMargin.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Margin); }
+void AutoFormatBase::SetLinebreak( const SfxBoolItem& rNew ) { m_aLinebreak.reset(rNew.Clone()); MarkDefined(AutoFormatItem::Linebreak); }
+void AutoFormatBase::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle.reset(rNew.Clone()); MarkDefined(AutoFormatItem::RotateAngle); }
+void AutoFormatBase::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(rNew.Clone()); MarkDefined(AutoFormatItem::RotateMode); }
 
 AutoFormatBase::AutoFormatBase()
 {
@@ -206,7 +206,8 @@ AutoFormatBase::AutoFormatBase( const AutoFormatBase& rNew )
     m_aMargin(rNew.m_aMargin->Clone()),
     m_aLinebreak(rNew.m_aLinebreak->Clone()),
     m_aRotateAngle(rNew.m_aRotateAngle->Clone()),
-    m_aRotateMode(rNew.m_aRotateMode->Clone())
+    m_aRotateMode(rNew.m_aRotateMode->Clone()),
+    m_aDefinedItems(rNew.m_aDefinedItems)
 {
 }
 
@@ -253,6 +254,8 @@ AutoFormatBase& AutoFormatBase::operator=(const AutoFormatBase& rRef)
     SetLinebreak(rRef.GetLinebreak());
     SetRotateAngle(rRef.GetRotateAngle());
     SetRotateMode(rRef.GetRotateMode());
+
+    m_aDefinedItems = rRef.m_aDefinedItems;
 
     return *this;
 }
@@ -312,6 +315,7 @@ bool AutoFormatBase::LoadBlockA( SvStream& rStream, const AutoFormatVersions& rV
     legacy::SvxBrush::Create(*m_aBackground, rStream, rVersions.nBrushVersion);
     legacy::SvxAdjust::Create(*m_aAdjust, rStream, rVersions.nAdjustVersion);
 
+    MarkAllDefined();
     return ERRCODE_NONE == rStream.GetError();
 }
 
@@ -333,6 +337,7 @@ bool AutoFormatBase::LoadBlockB( SvStream& rStream, const AutoFormatVersions& rV
     m_aStacked->SetValue( aOrientation.IsStacked() );
     m_aRotateAngle->SetValue( aOrientation.GetRotation( Degree100(m_aRotateAngle->GetValue()) ).get() );
 
+    MarkAllDefined();
     return ERRCODE_NONE == rStream.GetError();
 }
 

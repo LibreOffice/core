@@ -115,9 +115,12 @@ public:
     SwAutoFormatProps& GetProps() { return *m_aAutoFormat; }
 };
 
-enum class SwTableAutoFormatUpdateFlags { Char = 1, Box = 2 };
+/// Char and Box select the attribute groups; DefinedOnly restricts them to the attributes the
+/// box format actually defines (AutoFormatBase::IsDefined), leaving out the constructed
+/// defaults that every box format holds for the rest.
+enum class SwTableAutoFormatUpdateFlags { Char = 1, Box = 2, DefinedOnly = 4 };
 namespace o3tl {
-    template<> struct typed_flags<SwTableAutoFormatUpdateFlags> : is_typed_flags<SwTableAutoFormatUpdateFlags, 0x03> {};
+    template<> struct typed_flags<SwTableAutoFormatUpdateFlags> : is_typed_flags<SwTableAutoFormatUpdateFlags, 0x07> {};
 };
 
 /*
