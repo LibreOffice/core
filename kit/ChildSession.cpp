@@ -3764,14 +3764,11 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     auto const source = full.substr(lineEnd + 1, sourceEnd - lineEnd - 1);
     std::string const script(full.substr(sourceEnd + 1));
 
-    char * result = nullptr;
-    char * error = nullptr;
-    bool usedLegacyUnoApi = false;
     // Capturing `this` is safe even though the proxy callback can fire long after
     // executeScript has returned, since the callback runs only while the proxy stays
     // attached and ChildSession outlives that:
-    _docManager->getLOKit()->executeScript(
-        script.c_str(), source, line, &result, &error,
+    const COKitScriptResult aScriptResult = _docManager->getLOKit()->executeScript(
+        script.c_str(), source, line,
         [](void * data, std::string_view level, std::string_view message) {
             static_cast<ChildSession *>(data)->sendTextFrame(
                 std::string("consolemsg ").append(level).append("\n").append(message));
@@ -3781,33 +3778,30 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
             static_cast<ChildSession *>(data)->sendTextFrame(
                 "proxycall: " + std::string(payload));
         },
-        this,
-        &usedLegacyUnoApi);
+        this);
 
     // Build the response by string concatenation rather than via Poco JSON,
-    // because @c result is already a JSON value (whatever JSON.stringify
+    // because oResult is already a JSON value (whatever JSON.stringify
     // produced for the script's last expression) and feeding it through a
     // JSON parser/serializer would either re-quote scalars or fail.
     std::string body = "{\"id\":\"" + JsonUtil::escapeJSONValue(callId) + "\"";
-    if (error)
+    if (aScriptResult.oError)
     {
         // A jsuno::Exception arrives as a JSON object, any other exception is a plain message
         // string:
         body += ",\"err\":";
-        if (error[0] == '{') {
-            body += error;
+        if (aScriptResult.oError->starts_with('{')) {
+            body += *aScriptResult.oError;
         } else {
-            body += "\"" + JsonUtil::escapeJSONValue(error) + "\"";
+            body += "\"" + JsonUtil::escapeJSONValue(*aScriptResult.oError) + "\"";
         }
-        std::free(error);
     }
-    else if (result)
+    else if (aScriptResult.oResult)
     {
         body += ",\"ok\":";
-        body += result;
-        std::free(result);
+        body += *aScriptResult.oResult;
     }
-    if (usedLegacyUnoApi)
+    if (aScriptResult.bUsedLegacyUnoApi)
     {
         body += ",\"legacyUnoApi\":true";
     }

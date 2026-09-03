@@ -431,20 +431,6 @@ OUString getUString(const char* pString)
     return OStringToOUString(pString, RTL_TEXTENCODING_UTF8);
 }
 
-// Tolerate embedded \0s etc.
-char *convertOString(const OString &rStr)
-{
-    char* pMemory = static_cast<char*>(malloc(rStr.getLength() + 1));
-    assert(pMemory); // don't tolerate failed allocations.
-    memcpy(pMemory, rStr.getStr(), rStr.getLength() + 1);
-    return pMemory;
-}
-
-char *convertOUString(std::u16string_view aStr)
-{
-    return convertOString(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
-}
-
 // The length is carried over, so a string with an embedded \0 survives the copy.
 std::string convertOStringToStdString(const OString &rStr)
 {
@@ -9119,20 +9105,17 @@ static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis
     KitHelper::setColorPreviewState(nId, bEnabled);
 }
 
-void COKitImpl::executeScript(
-    char const * script, std::string_view source, int line, char ** result, char ** error,
+COKitScriptResult COKitImpl::executeScript(
+    char const * script, std::string_view source, int line,
     std::function<void(void * data, std::string_view level, std::string_view message)>
         consoleCallback,
     void * consoleCallbackData,
-    void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData,
-    bool * usedLegacyUnoApi)
+    void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData)
 {
-    assert(usedLegacyUnoApi != nullptr);
     comphelper::ProfileZone zone("lo_executeScript");
     SolarMutexGuard guard;
     SetLastExceptionMsg();
-    *result = nullptr;
-    *error = nullptr;
+    COKitScriptResult aScriptResult;
 #if HAVE_FEATURE_QUICKJS
     std::function<void(OUString const&)> hook;
     if (proxyCallback != nullptr) {
@@ -9146,9 +9129,9 @@ void COKitImpl::executeScript(
             OUString::fromUtf8(script), OUString::fromUtf8(source), line,
             [consoleCallback, consoleCallbackData](OUString const & level, OUString const & message)
             { consoleCallback(consoleCallbackData, level.toUtf8(), message.toUtf8()); },
-            std::move(hook), usedLegacyUnoApi);
+            std::move(hook), &aScriptResult.bUsedLegacyUnoApi);
         if (!value.isEmpty()) {
-            *result = convertOUString(value);
+            aScriptResult.oResult = convertOUStringToStdString(value);
         }
     } catch (jsuno::Exception const & exception) {
         // Ship as a JSON object; the receiver (ChildSession::executeScript) recognises the leading
@@ -9167,10 +9150,10 @@ void COKitImpl::executeScript(
                 w.put("functionName", f.functionName);
             }
         }
-        *error = strdup(w.finishAndGetAsOString().getStr());
+        aScriptResult.oError = convertOStringToStdString(w.finishAndGetAsOString());
     } catch (cpo::uno::Exception const & exception) {
         SetLastExceptionMsg(exception.Message);
-        *error = convertOUString(exception.Message);
+        aScriptResult.oError = convertOUStringToStdString(exception.Message);
     }
 #else
     (void) script;
@@ -9180,11 +9163,11 @@ void COKitImpl::executeScript(
     (void) consoleCallbackData;
     (void) proxyCallback;
     (void) proxyCallbackData;
-    (void) usedLegacyUnoApi;
     static constexpr auto msg = u"executeScript: QuickJS support is not enabled in this build"_ustr;
     SetLastExceptionMsg(msg);
-    *error = convertOUString(msg);
+    aScriptResult.oError = convertOUStringToStdString(msg);
 #endif
+    return aScriptResult;
 }
 
 void COKitImpl::deliverProxyResult(char const * callId, char const * jsonValue)

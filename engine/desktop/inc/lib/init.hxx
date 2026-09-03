@@ -474,14 +474,13 @@ namespace desktop {
         void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) override;
         int getDocsCount() override;
         void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
-        void executeScript(char const * script, std::string_view source, int line,
-                           char ** result, char ** error,
+        COKitScriptResult executeScript(char const * script, std::string_view source, int line,
                            std::function<void(
                                void * data, std::string_view level, std::string_view message)>
                                consoleCallback,
                            void * consoleCallbackData,
                            void (*proxyCallback) (void * data, char const * payload),
-                           void * proxyCallbackData, bool * usedLegacyUnoApi) override;
+                           void * proxyCallbackData) override;
         void deliverProxyResult(char const * callId, char const * jsonValue) override;
         void cancelProxyCalls() override;
         bool isExpectedReentry() override;

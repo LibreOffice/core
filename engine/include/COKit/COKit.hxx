@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <string_view>
@@ -78,6 +79,18 @@ enum class COKitDocumentType
   PRESENTATION,
   DRAWING,
   OTHER
+};
+
+/// What running a script produced. At most one of oResult and oError holds a
+/// value. Both are empty when the script ran and its value was one that
+/// JSON.stringify drops, such as undefined, a function or a symbol.
+/// oResult is the value, JSON-encoded. oError is either a JSON object
+/// describing a JS exception or a plain message.
+struct COKitScriptResult
+{
+    std::optional<std::string> oResult;
+    std::optional<std::string> oError;
+    bool bUsedLegacyUnoApi = false;
 };
 
 /// A rendered image. The pixels are four bytes each, so aPixels holds
@@ -1685,14 +1698,13 @@ struct COKit
     /**
      * Execute a JavaScript snippet via the embedded JS UNO support.
      *
-     * On success, @c *result is set to the script's last expression result, JSON-stringified (or
-     * null if it stringifies to nothing, e.g. `undefined`), and @c *error is set to null.  On
-     * error, @c *result is null and @c *error holds the JS exception message.
+     * On success the returned oResult holds the script's last expression result,
+     * JSON-stringified, and oError is empty.  On error oResult is empty and oError holds the
+     * JS exception message.  A script whose value stringifies to nothing, such as `undefined`,
+     * leaves both empty.
      *
-     * The caller takes ownership of @c *result and @c *error and must @c free() them.
-     *
-     * The @c script, @c *result and @c *error strings are NUL-terminated C strings, thus cannot
-     * contain embedded NUL characters.
+     * The @c script string is a NUL-terminated C string, thus cannot contain embedded NUL
+     * characters.
      *
      * @c consoleCallback receives every call the script makes on the global @c console object.
      * jsuno registers the WHATWG Console API methods @c log, @c info, @c warn, @c error, @c debug,
@@ -1713,23 +1725,20 @@ struct COKit
      * @param script the script source.
      * @param source used for any exception stack frames that are reported back.
      * @param line (1-based) used for any exception stack frames that are reported back.
-     * @param result out-param for the result.
-     * @param error out-param for the error message.
      * @param consoleCallback hook for console.* method calls.
      * @param consoleCallbackData opaque pointer passed to @c consoleCallback on each call.
      * @param proxyCallback hook for proxy listener fires; may be null.
      * @param proxyCallbackData opaque pointer passed to @c proxyCallback on each call.
-     * @param usedLegacyUnoApi must be non-null; set to true if the script touched the legacy
-     *        com.sun.star UNO API, not modified otherwise.
+     * @return the script's result or error, and whether it resolved an identifier in the
+     *         legacy com.sun.star UNO API.
      */
-    virtual void executeScript(char const * script, std::string_view source, int line,
-                               char ** result, char ** error,
+    virtual COKitScriptResult executeScript(char const * script, std::string_view source, int line,
                                std::function<void(
                                    void * data, std::string_view level, std::string_view message)>
                                    consoleCallback,
                                void * consoleCallbackData,
                                void (*proxyCallback) (void * data, char const * payload),
-                               void * proxyCallbackData, bool * usedLegacyUnoApi) = 0;
+                               void * proxyCallbackData) = 0;
 
     /**
      * Deliver the iframe-side response value back to a JS-UNO proxy listener whose
