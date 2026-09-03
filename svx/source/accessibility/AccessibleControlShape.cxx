@@ -201,10 +201,9 @@ void AccessibleControlShape::Init()
         else
         {
             Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
-            Reference< XAccessible > xControlAccessible( xControlModes, UNO_QUERY );
             Reference< XAccessibleContext > xNativeControlContext;
-            if ( xControlAccessible.is() )
-                xNativeControlContext = xControlAccessible->getAccessibleContext();
+            if (UnoControl* pUnoControl = dynamic_cast<UnoControl*>(xControlModes.get()))
+                xNativeControlContext = pUnoControl->getAccessible();
             OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
             m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
 

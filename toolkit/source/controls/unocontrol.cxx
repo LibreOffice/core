@@ -1461,7 +1461,7 @@ Sequence< OUString > UnoControl::getSupportedServiceNames(  )
 }
 
 
-Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
+rtl::Reference<comphelper::OAccessible> UnoControl::getAccessible()
 {
     // creation of the context will certainly require the SolarMutex ...
     SolarMutexGuard aSolarGuard;
@@ -1485,7 +1485,7 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
             pCurrentAccessible = ::toolkit::OAccessibleControlContext::create(this);
 
         DBG_ASSERT(pCurrentAccessible.is(),
-                   "UnoControl::getAccessibleContext: invalid context (invalid peer?)!");
+                   "UnoControl::getAccessible: invalid context (invalid peer?)!");
         mpAccessible = unotools::WeakReference<comphelper::OAccessible>(pCurrentAccessible);
 
         // get notified when the accessible is disposed

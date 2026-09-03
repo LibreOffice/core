@@ -33,7 +33,7 @@
 #include <tools/long.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/OAccessible.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <unotools/weakref.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <memory>
@@ -61,12 +61,11 @@ struct UnoControlComponentInfos
 struct UnoControl_Data;
 
 
-typedef ::cppu::WeakAggImplHelper9  <   css::awt::XControl
+typedef ::cppu::WeakAggImplHelper8  <   css::awt::XControl
                                     ,   css::awt::XWindow2
                                     ,   css::awt::XView
                                     ,   css::beans::XPropertiesChangeListener
                                     ,   css::lang::XServiceInfo
-                                    ,   css::accessibility::XAccessible
                                     ,   css::util::XModeChangeBroadcaster
                                     ,   css::awt::XUnitConversion
                                     ,   css::awt::XStyleSettingsSupplier
@@ -199,9 +198,6 @@ public:
     sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
-
     // XModeChangeBroadcaster
     virtual void SAL_CALL addModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
     virtual void SAL_CALL removeModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
@@ -217,6 +213,7 @@ public:
     // XStyleSettingsSupplier
     virtual css::uno::Reference< css::awt::XStyleSettings > SAL_CALL getStyleSettings() override;
 
+    rtl::Reference<comphelper::OAccessible> getAccessible();
     css::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer();
 
 protected:

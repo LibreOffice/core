@@ -34,6 +34,7 @@
 #include <test/a11y/XAccessibleEventBroadcasterTester.hxx>
 #include <test/a11y/XAccessibleTextTester.hxx>
 #include <test/a11y/accessibletestbase.hxx>
+#include <toolkit/controls/unocontrol.hxx>
 #include <vcl/scheduler.hxx>
 
 using namespace css;
@@ -101,7 +102,10 @@ void AccessibleFixedTextTest::testFixedText()
 
     Scheduler::ProcessEventsToIdle();
 
-    css::uno::Reference<css::accessibility::XAccessible> xRoot(xWinDlg, css::uno::UNO_QUERY_THROW);
+    UnoControl* pControl = dynamic_cast<UnoControl*>(xWinDlg.get());
+    CPPUNIT_ASSERT(pControl);
+
+    css::uno::Reference<css::accessibility::XAccessible> xRoot = pControl->getAccessible();
     test::AccessibleTestBase::dumpA11YTree(xRoot);
 
     css::uno::Reference<css::accessibility::XAccessibleContext> xContext
