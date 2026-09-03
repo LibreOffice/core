@@ -117,6 +117,10 @@ class ViewLayoutCompareChanges extends ViewLayoutBase {
 		}
 	}
 
+	protected override buildsViewedRectangleFromPages(): boolean {
+		return true;
+	}
+
 	protected refreshVisibleAreaRectangle(): void {
 		Util.ensureValue(app.activeDocument);
 

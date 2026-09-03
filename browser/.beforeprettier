@@ -98,11 +98,6 @@
 /src/dom/Draggable.js
 /src/dom/NotebookbarAccessibility.js
 /src/dom/NotebookbarAccessibilityDefinitions.js
-/src/errormessages.js
-/src/geo/crs/CRS.js
-/src/geo/LatLng.js
-/src/geo/LatLngBounds.js
-/src/geo/projection/Projection.LonLat.js
 /src/geometry/Bounds.ts
 /src/geometry/LineUtil.js
 /src/geometry/Point.ts

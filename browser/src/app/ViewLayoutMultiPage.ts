@@ -192,6 +192,10 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		return part;
 	}
 
+	protected override buildsViewedRectangleFromPages(): boolean {
+		return true;
+	}
+
 	protected refreshVisibleAreaRectangle(): void {
 		this.refreshVisibleAreaRectangleImpl(
 			this.documentRectangles,

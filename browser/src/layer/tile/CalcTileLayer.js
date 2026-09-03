@@ -186,13 +186,16 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		app.activeDocument.activeLayout.refreshTiles();
 	},
 
-	_restrictDocumentSize: function () {
+	// The extent (in twips) the scrollable area should span: the data area plus a
+	// screen of margin to scroll into, up to the size of the sheet. Null when the
+	// document already spans exactly that.
+	_restrictedDocumentSize: function () {
 		if (this._documentSizeFrozen) {
-			return;
+			return null;
 		}
 
-		if (!this.sheetGeometry || !this._lastColumn || !this._lastRow) {
-			return;
+		if (!this.sheetGeometry) {
+			return null;
 		}
 
 		var maxDocSize = this.sheetGeometry.getSize('tiletwips');
@@ -234,22 +237,30 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			newDocHeight = Math.min(app.activeDocument.fileSize.y + mapSizeTwips.y, maxDocSize.y);
 		}
 
-		var shouldRestrict = (newDocWidth !== app.activeDocument.fileSize.x ||
-				newDocHeight !== app.activeDocument.fileSize.y);
-
-		if (!shouldRestrict) {
-			return;
+		if (newDocWidth === app.activeDocument.fileSize.x &&
+				newDocHeight === app.activeDocument.fileSize.y) {
+			return null;
 		}
 
+		return new cool.SimplePoint(newDocWidth, newDocHeight);
+	},
+
+	_applyDocumentSize: function (size) {
+		app.activeDocument.fileSize = size;
+		app.activeDocument.activeLayout.viewSize = size.clone();
+
 		// When there will be a Intern conversion, we should use CSS pixels.
-		var newSizePx = this._twipsToPixels(new cool.Point(newDocWidth, newDocHeight));
+		const sizePx = this._twipsToPixels(new cool.Point(size.x, size.y));
+		this._docPixelSize = sizePx.clone();
+		this._map.fire('scrolllimits', sizePx.clone());
+	},
 
-		this._docPixelSize = newSizePx.clone();
-		app.activeDocument.fileSize = new cool.SimplePoint(newDocWidth, newDocHeight);
-		app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+	_restrictDocumentSize: function () {
+		const size = this._restrictedDocumentSize();
+		if (!size)
+			return;
 
-		this._map.fire('scrolllimits', newSizePx.clone());
-
+		this._applyDocumentSize(size);
 		this._syncTileContainerSize();
 	},
 
@@ -267,13 +278,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		this._documentSizeFrozen = false;
 
 		if (this._pendingDocumentSize) {
-			app.activeDocument.fileSize = this._pendingDocumentSize.clone();
-			app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+			this._applyDocumentSize(this._pendingDocumentSize);
 			this._pendingDocumentSize = null;
 			this._syncTileContainerSize();
 		}
-
-		this._restrictDocumentSize();
+		else {
+			this._restrictDocumentSize();
+		}
 	},
 
 	_getCursorPosSize: function () {
@@ -384,10 +395,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	_syncTileContainerSize: function() {
-		// Remember the frame size and scroll position across the relayout.
+		// Remember the frame size across the relayout.
 		const oldFrame = app.activeDocument.activeLayout.frameSize;
-		const scrollX = app.activeDocument.activeLayout.viewedRectangle.pX1;
-		const scrollY = app.activeDocument.activeLayout.viewedRectangle.pY1;
 
 		// Size the spacers, then let the canvas match the document container
 		// automatically: onResize(0, 0) reads the container's own size. Calc no
@@ -395,18 +404,27 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		// shrinks to the content via the spacers during the relayout.
 		this._updateSpacerSizes();
 		app.sectionContainer.onResize(0, 0);
-		this._updateHeaderSections();
 
 		// The viewed rectangle spans the visible frame (the tiles section). Now
-		// that the layout has settled, rebuild it at that size (twips at the
-		// current zoom) and re-apply the scroll position. Nothing else maintains
-		// the viewed rectangle on load/resize, so establishing it here is what
-		// makes the document draw on load and after a resize.
-		const frame = app.activeDocument.activeLayout.frameSize;
-		app.activeDocument.activeLayout.viewedRectangle = cool.SimpleRectangle.fromCorePixels(
-			[scrollX, scrollY, frame.pX, frame.pY]);
-		app.activeDocument.activeLayout.scrollTo(scrollX, scrollY);
+		// that the layout has settled, rebuild it at that size from the scroll
+		// position the layout holds. Nothing else maintains the viewed rectangle
+		// on load/resize, so establishing it here is what makes the document draw
+		// on load and after a resize.
+		app.activeDocument.activeLayout.rebuildViewedRectangle();
 
+		if (this.widthShrinked || this.heightShrinked) {
+			const restrictedSize = this._restrictedDocumentSize();
+			if (restrictedSize) {
+				this._applyDocumentSize(restrictedSize);
+				this._updateSpacerSizes();
+				app.sectionContainer.onResize(0, 0);
+				app.activeDocument.activeLayout.rebuildViewedRectangle();
+			}
+		}
+
+		this._updateHeaderSections();
+
+		const frame = app.activeDocument.activeLayout.frameSize;
 		const widthIncreased = oldFrame.pX < frame.pX;
 		const heightIncreased = oldFrame.pY < frame.pY;
 
@@ -444,8 +462,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				this._pendingDocumentSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
 			}
 			else {
-				app.activeDocument.fileSize = new cool.SimplePoint(statusJSON.width, statusJSON.height);
-				app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
+				this._applyDocumentSize(new cool.SimplePoint(statusJSON.width, statusJSON.height));
 
 				if (app.map._docLoaded)
 					this._syncTileContainerSize();
@@ -479,21 +496,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			app.activeDocument.setActiveViewID(this._viewId);
 
 			console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
-
-			var frameSize = app.activeDocument.activeLayout.frameSize;
-			var sizePx = this._twipsToPixels(new cool.Point(app.activeDocument.fileSize.x, app.activeDocument.fileSize.y));
-			var width = sizePx.x;
-			var height = sizePx.y;
-
-			if (width < frameSize.cX || height < frameSize.cY) {
-				width = Math.max(width, frameSize.cX);
-				height = Math.max(height, frameSize.cY);
-				this._docPixelSize = {x: width, y: height};
-				this._map.fire('scrolllimits', {x: width, y: height});
-			}
-			else {
-				this._updateScrollLimits();
-			}
 
 			this._adjustCanvasSectionsForLayoutChange();
 

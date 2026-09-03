@@ -322,6 +322,12 @@ class ViewLayoutBase {
 		return false;
 	}
 
+	// True when the viewed rectangle spans the pages on screen, built from the
+	// page geometry, instead of being the frame placed at the scroll position.
+	protected buildsViewedRectangleFromPages(): boolean {
+		return false;
+	}
+
 	// Single resize handler, bound to app.events 'resize' in the constructor and
 	// dispatched polymorphically. First resize the canvas / document-anchor
 	// section (the doc layer's _syncTileContainerSize; Calc's override is
@@ -340,12 +346,10 @@ class ViewLayoutBase {
 	private rebuildSingleWindowView(): void {
 		if (!this.usesSingleWindowView()) return; // subclasses handle their own
 
-		// applyZoom rebuilds the viewed rectangle around the zoom anchor
-		// (setViewRectangleFromPointAndScale) which may leave a non-negative scroll
-		// offset (when zoomed in) or the negative centering origin (when it fits).
-		// Fold only the real (non-negative) scroll back into scrollProperties, then
-		// let refreshVisibleAreaRectangle re-derive and re-centre the rectangle for
-		// the current frame/zoom and request the tiles.
+		// A zoom or a resize can leave the scroll position past the end of a
+		// document that has just become shorter or narrower on screen, so clamp it
+		// here, then let refreshVisibleAreaRectangle re-derive and re-centre the
+		// rectangle for the current frame/zoom and request the tiles.
 		// The scroll stays inside the range the document itself spans,
 		// [0, base view size - frame]. The base size leaves out the comment
 		// overflow, so a document narrower than the frame keeps its centred
@@ -359,11 +363,11 @@ class ViewLayoutBase {
 
 		this.scrollProperties.viewX = Math.min(
 			maxX,
-			Math.max(0, this._viewedRectangle.pX1),
+			Math.max(0, this.scrollProperties.viewX),
 		);
 		this.scrollProperties.viewY = Math.min(
 			maxY,
-			Math.max(0, this._viewedRectangle.pY1),
+			Math.max(0, this.scrollProperties.viewY),
 		);
 		this.updateViewData();
 	}
@@ -388,18 +392,19 @@ class ViewLayoutBase {
 	// Shared, map-free zoom for the new-structure layouts. ZoomControl calls
 	// these; the data (scale, viewed rectangle, tile requests) lives here so the
 	// map is not involved. This is the single-scrollable-window model (Calc,
-	// single-page). Stacked-page layouts (ViewLayoutMultiPage/FileBased) whose
-	// viewed rectangle is computed from page geometry override the positioning
-	// (setViewRectangleFromPointAndScale) and applyZoom as needed.
+	// single-page).
 
-	// Rebuild the viewed rectangle for a new zoom: centre it on the given
-	// document-space point and size it to the current frame at the given scale.
-	// point is in twips, scale is the twips-to-core-pixel factor for the new
-	// zoom.
+	// Move the scroll position for a new zoom: centre the frame on the given
+	// document-space point at the given scale, then let the layout rebuild its
+	// viewed rectangle from the new position. point is in twips, scale is the
+	// twips-to-core-pixel factor for the new zoom.
 	public setViewRectangleFromPointAndScale(
 		point: cool.SimplePoint,
 		scale: number,
 	): void {
+		// A rectangle built from the pages does not follow the scroll position.
+		if (this.buildsViewedRectangleFromPages()) return;
+
 		if (!scale) return;
 		const frame = this.frameSize;
 		const widthTwips = Math.round(frame.pX / scale);
@@ -417,12 +422,9 @@ class ViewLayoutBase {
 			Math.max(0, Math.round(point.y - heightTwips / 2)),
 		);
 
-		this.viewedRectangle = new cool.SimpleRectangle(
-			x,
-			y,
-			widthTwips,
-			heightTwips,
-		);
+		this.scrollProperties.viewX = Math.round(x * scale);
+		this.scrollProperties.viewY = Math.round(y * scale);
+		this.refreshVisibleAreaRectangle();
 	}
 
 	// The document-space point (twips) a zoom should keep fixed on screen.
