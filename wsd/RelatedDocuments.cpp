@@ -335,9 +335,26 @@ void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
 {
     docBroker.assertCorrectThread();
 
+    if (!RemoteDocumentBroker::isEnabled())
+        return;
+
+    // A subscription reaches through at most this many documents, so a chain
+    // holds that many docKeys and the record keeps that many.
+    static const std::size_t maxChainDepth =
+        std::max(0, ConfigUtil::getConfigValue<int>("remote_documents.max_chain_depth", 3));
+
     const StringVector docKeys = StringVector::tokenize(docKeyChain, ',');
     for (std::size_t i = 0; i < docKeys.size(); ++i)
     {
+        if (_incomingDocKeyChain.size() >= maxChainDepth)
+        {
+            LOG_WRN("The connection chain of ["
+                    << docBroker.getDocKey() << "] holds " << _incomingDocKeyChain.size()
+                    << " docKeys, as many as a chain reaches, so the remaining "
+                    << docKeys.size() - i << " are ignored");
+            break;
+        }
+
         std::string docKey = docKeys[i];
         if (docKey.empty() ||
             std::find(_incomingDocKeyChain.begin(), _incomingDocKeyChain.end(), docKey) !=
