@@ -3574,7 +3574,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                 CPPUNIT_ASSERT_EQUAL("Link"_ostr, pASubtype->GetValue());
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
-                CPPUNIT_ASSERT(!pAContents);
+                CPPUNIT_ASSERT_EQUAL(
+                    u"https://de.wikipedia.org/wiki/Kl\u00E4ranlage#Mechanische_Vorreinigung"_ustr,
+                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 CPPUNIT_ASSERT_EQUAL("Link"_ostr, pASubtype->GetValue());
                 auto pAA
                     = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"_ostr));

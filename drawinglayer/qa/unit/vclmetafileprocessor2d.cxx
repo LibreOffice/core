@@ -17,6 +17,7 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
@@ -28,6 +29,8 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/string.hxx>
+
+#include <optional>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -152,8 +155,9 @@ public:
         CPPUNIT_ASSERT_GREATER(100, nonWhiteCount);
     }
 
-    // Test that a link's clickable bounding box is correctly transformed
-    void tdf169919_link_bounding_box_transform()
+    /// Export a hyperlink field to a PDF in rTempFile
+    void exportLinkFieldToPDF(std::vector<std::pair<OUString, OUString>>& rValues,
+                              utl::TempFileNamed& rTempFile)
     {
         // Impress presentation mode first draws the slide to a metafile.
         GDIMetaFile metafile;
@@ -175,10 +179,7 @@ public:
         aContext.PDFDocumentAction = vcl::pdf::PDFWriter::ActionDefault;
         aContext.PageLayout = vcl::pdf::PDFWriter::DefaultLayout;
 
-        // Create a temp file to store the written PDF
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
-        aContext.URL = aTempFile.GetURL();
+        aContext.URL = rTempFile.GetURL();
 
         rtl::Reference<beans::XMaterialHolder> xEnc;
         vcl::pdf::PDFWriter aPDFWriter(aContext, xEnc);
@@ -205,13 +206,9 @@ public:
         aSeq[0] = new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aPolygon, lineAttributes);
 
         // The primitive2d for the link itself
-        std::vector<std::pair<OUString, OUString>> meValues;
-        OString aLinkUrl("http://libreoffice.org"_ostr);
-        meValues.emplace_back("URL", OUString::fromUtf8(aLinkUrl));
-        meValues.emplace_back("AltText", "link");
         rtl::Reference<primitive2d::TextHierarchyFieldPrimitive2D> fieldPrimitive(
             new primitive2d::TextHierarchyFieldPrimitive2D(
-                std::move(aSeq), drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues));
+                std::move(aSeq), drawinglayer::primitive2d::FIELD_TYPE_URL, &rValues));
 
         primitive2d::Primitive2DContainer primitives;
         primitives.push_back(fieldPrimitive);
@@ -231,6 +228,50 @@ public:
         aPDFExtOutDevData.PlayGlobalActions(aPDFWriter);
         CPPUNIT_ASSERT(aPDFWriter.Emit());
         CPPUNIT_ASSERT(aPDFWriter.GetErrors().empty());
+    }
+
+    std::optional<OUString> exportLinkContents(std::vector<std::pair<OUString, OUString>>& rValues)
+    {
+        utl::TempFileNamed aTempFile;
+        aTempFile.EnableKillingFile();
+        exportLinkFieldToPDF(rValues, aTempFile);
+
+        vcl::filter::PDFDocument aDocument;
+        SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+        CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+        std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+        auto pAnnots
+            = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+        CPPUNIT_ASSERT(pAnnots);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
+
+        auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+        CPPUNIT_ASSERT(pAnnotRef);
+        vcl::filter::PDFObjectElement* pAnnot = pAnnotRef->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+
+        auto pContents
+            = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"_ostr));
+        if (!pContents)
+            return std::nullopt;
+
+        return vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pContents);
+    }
+
+    // Test that a link's clickable bounding box is correctly transformed
+    void tdf169919_link_bounding_box_transform()
+    {
+        OString aLinkUrl("http://libreoffice.org"_ostr);
+        std::vector<std::pair<OUString, OUString>> aValues{
+            { u"URL"_ustr, OUString::fromUtf8(aLinkUrl) }, { u"AltText"_ustr, u"link"_ustr }
+        };
+
+        utl::TempFileNamed aTempFile;
+        aTempFile.EnableKillingFile();
+        exportLinkFieldToPDF(aValues, aTempFile);
 
         SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
         CPPUNIT_ASSERT(pStream->TellEnd() > 5000);
@@ -281,9 +322,41 @@ public:
         CPPUNIT_ASSERT(found);
     }
 
+    // Test that the Contents entry of a link falls back to the link text and then the URL
+    void testLinkContentsFallback()
+    {
+        static constexpr OUString aURL = u"http://example.org"_ustr;
+
+        // The Name of the hyperlink is used if it is set
+        std::vector<std::pair<OUString, OUString>> aNamed{ { u"URL"_ustr, aURL },
+                                                           { u"Representation"_ustr,
+                                                             u"the link text"_ustr },
+                                                           { u"AltText"_ustr, u"the name"_ustr } };
+        std::optional<OUString> oContents = exportLinkContents(aNamed);
+        CPPUNIT_ASSERT(oContents.has_value());
+        CPPUNIT_ASSERT_EQUAL(u"the name"_ustr, *oContents);
+
+        // Without a Name, the text shown in the document is used
+        std::vector<std::pair<OUString, OUString>> aUnnamed{
+            { u"URL"_ustr, aURL }, { u"Representation"_ustr, u"the link text"_ustr }
+        };
+        oContents = exportLinkContents(aUnnamed);
+
+        // Without the fix, no Contents entry was written at all
+        CPPUNIT_ASSERT(oContents.has_value());
+        CPPUNIT_ASSERT_EQUAL(u"the link text"_ustr, *oContents);
+
+        // Without a Name and without text, the URL is used
+        std::vector<std::pair<OUString, OUString>> aBare{ { u"URL"_ustr, aURL } };
+        oContents = exportLinkContents(aBare);
+        CPPUNIT_ASSERT(oContents.has_value());
+        CPPUNIT_ASSERT_EQUAL(aURL, *oContents);
+    }
+
     CPPUNIT_TEST_SUITE(VclMetaFileProcessor2DTest);
     CPPUNIT_TEST(tdf136957_draw_impress_dotted_line);
     CPPUNIT_TEST(tdf169919_link_bounding_box_transform);
+    CPPUNIT_TEST(testLinkContentsFallback);
     CPPUNIT_TEST_SUITE_END();
 };
 

@@ -2793,10 +2793,12 @@ bool PDFWriterImpl::emitLinkAnnotations()
         appendFixedInt( rLink.m_aRect.Bottom(), aLine );
         aLine.append( "]" );
         // ISO 14289-1:2014, Clause: 7.18.5
-        if (!rLink.m_AltText.isEmpty())
+        OUString const& rContents(rLink.m_AltText.isEmpty() && rLink.m_nDest < 0 ? rLink.m_aURL
+                                                                                 : rLink.m_AltText);
+        if (!rContents.isEmpty())
         {
             aLine.append("/Contents");
-            aWriter.writeUnicodeEncrypt(rLink.m_AltText, rLink.m_nObject);
+            aWriter.writeUnicodeEncrypt(rContents, rLink.m_nObject);
         }
         if( rLink.m_nDest >= 0 )
         {
