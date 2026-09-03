@@ -789,6 +789,7 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome)
 {
     QWebEnginePage* page = new LoggingWebEnginePage(profile, _webView.get());
     _webView->setPage(page);
+    page->setBackgroundColor(Qt::transparent);
 
     seedPrefs(page);
 
