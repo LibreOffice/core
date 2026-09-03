@@ -4436,8 +4436,7 @@ void lokit_main(
         }
         if (queryVersion)
         {
-            LOKitHelper::ScopedString versionInfo(coKit->getVersionInfo());
-            std::string versionString(versionInfo.get());
+            std::string versionString = coKit->getVersionInfo();
             if (displayVersion)
                 std::cout << "office version details: " << versionString << std::endl;
 

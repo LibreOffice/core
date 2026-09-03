@@ -16,19 +16,12 @@
 
 #include <COKit/COKit.hxx>
 
-#include <cstdlib>
 #include <string>
 #include <unordered_map>
 
 namespace LOKitHelper
 {
     constexpr auto tunnelledDialogImageCacheSize = 100;
-
-    struct StringDeleter
-    {
-        void operator()(char* string) { std::free(string); }
-    };
-    using ScopedString = std::unique_ptr<char, StringDeleter>;
 
     inline std::string documentTypeToString(COKitDocumentType type)
     {

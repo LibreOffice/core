@@ -445,7 +445,7 @@ namespace desktop {
         void registerCallback(COKitCallback pCallback, void* pData) override;
         void setOptionalFeatures(COKitOptionalFeatures features) override;
         void setDocumentPassword(char const* pURL, char const* pPassword) override;
-        char* getVersionInfo() override;
+        std::string getVersionInfo() override;
         bool runMacro(const char* pURL) override;
         bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
                           const int nCertificateBinarySize, const unsigned char* pPrivateKeyBinary,

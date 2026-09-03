@@ -1510,7 +1510,7 @@ struct COKit
      * "ProductExtension": ".0.0.alpha0",
      * "BuildId": "<full 40 char git hash>"}
      */
-    virtual char* getVersionInfo() = 0;
+    virtual std::string getVersionInfo() = 0;
 
     /**
      * Run a macro.

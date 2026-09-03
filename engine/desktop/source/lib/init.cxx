@@ -3181,7 +3181,7 @@ static void                    lo_setOptionalFeatures(COKit* pThis, COKitOptiona
 static void                    lo_setDocumentPassword(COKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
-static char*                   lo_getVersionInfo(COKit* pThis);
+static std::string             lo_getVersionInfo(COKit* pThis);
 static bool                    lo_runMacro      (COKit* pThis, const char* pURL);
 
 static bool lo_signDocument(COKit* pThis,
@@ -3280,7 +3280,7 @@ void COKitImpl::setDocumentPassword(char const* pURL, char const* pPassword)
     lo_setDocumentPassword(this, pURL, pPassword);
 }
 
-char* COKitImpl::getVersionInfo()
+std::string COKitImpl::getVersionInfo()
 {
     return lo_getVersionInfo(this);
 }
@@ -9314,10 +9314,10 @@ static void lo_setDocumentPassword(COKit* pThis,
         SetLastExceptionMsg(u"lo_setDocumentPassword: no interaction handler for the given URL"_ustr);
 }
 
-static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER COKit* /*pThis*/)
+static std::string lo_getVersionInfo(SAL_UNUSED_PARAMETER COKit* /*pThis*/)
 {
     SetLastExceptionMsg();
-    return convertOUString(ReplaceStringHookProc(
+    return convertOUStringToStdString(ReplaceStringHookProc(
         u"{ "
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
