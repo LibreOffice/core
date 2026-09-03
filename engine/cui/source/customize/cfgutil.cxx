@@ -536,25 +536,13 @@ void CuiConfigGroupListBox::FillFunctionsList(const cpo::uno::Sequence<DispatchI
 }
 
 void CuiConfigGroupListBox::Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-    const css::uno::Reference< css::frame::XFrame >& xFrame,
-    const OUString& sModuleLongName,
-    bool bEventMode)
+    const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     m_xTreeView->freeze();
     ClearAll(); // Remove all old entries from treelist box
 
     m_xContext = xContext;
     m_xFrame = xFrame;
-    sal_Int32 nAddedGroups = 0;
-    if( bEventMode )
-    {
-        m_sModuleLongName = sModuleLongName;
-        m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
-        m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
-        m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
-
-        nAddedGroups = InitModule();
-    }
 
     SAL_INFO("cui.customize", "** ** About to initialise SF Scripts");
     // Add Scripting Framework entries
@@ -575,50 +563,12 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< cpo::uno::XComponent
     m_xTreeView->make_unsorted();
     m_xTreeView->freeze();
 
-    // add All Commands to the top
-    if ( bEventMode && nAddedGroups )
-    {
-        aArr.insert(aArr.begin(), std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
-        OUString sId(weld::toId(aArr.front().get()));
-        OUString s(CuiResId(RID_CUISTR_ALLFUNCTIONS));
-        m_xTreeView->insert(nullptr, 0, &s, &sId, nullptr, nullptr, false, nullptr);
-    }
-
     // add application macros to the end
     if ( rootNode.is() )
     {
-        if ( bEventMode )
-        {
-                //We call acquire on the XBrowseNode so that it does not
-                //get autodestructed and become invalid when accessed later.
-            rootNode->acquire();
-
-            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
-                    static_cast<void *>(rootNode.get())));
-            OUString aTitle(xImp->m_sDlgMacros);
-            OUString sId(weld::toId(aArr.back().get()));
-            m_xTreeView->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, true, nullptr);
-        }
-        else
-        {
-             //We are only showing scripts not slot APIs so skip
-             //Root node and show location nodes
-            FillScriptList(rootNode, nullptr);
-        }
-    }
-
-    // add styles and sidebar decks to the end
-    if ( bEventMode )
-    {
-        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
-        OUString sStyle(xImp->m_aStrGroupStyles);
-        OUString sId(weld::toId(aArr.back().get()));
-        m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, true, nullptr);
-
-        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SIDEBARDECKS, 0));
-        OUString sSidebarDecks(xImp->m_aStrGroupSidebarDecks);
-        sId = weld::toId(aArr.back().get());
-        m_xTreeView->insert(nullptr, -1, &sSidebarDecks, &sId, nullptr, nullptr, false, nullptr);
+         //We are only showing scripts not slot APIs so skip
+         //Root node and show location nodes
+        FillScriptList(rootNode, nullptr);
     }
 
     m_xTreeView->thaw();
@@ -974,7 +924,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
-    m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, /*bShowSlots*/false);
+    m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame);
 
     m_xCategories->connect_changed(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );

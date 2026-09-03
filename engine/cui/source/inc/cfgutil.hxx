@@ -191,9 +191,7 @@ public:
     void                ClearAll();
 
     void                Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                             const css::uno::Reference< css::frame::XFrame >&          xFrame,
-                             const OUString&                                        sModuleLongName,
-                             bool bEventMode);
+                             const css::uno::Reference< css::frame::XFrame >&          xFrame);
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();

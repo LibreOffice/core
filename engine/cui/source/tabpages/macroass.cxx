@@ -319,8 +319,7 @@ IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Timer*,, void )
     // perhaps the tabpage is part of a SingleTabDialog then pDialog == nullptr
     std::unique_ptr<weld::WaitObject> xWait(pDialog ? new weld::WaitObject(pDialog) : nullptr);
     // fill macro list
-    mpImpl->m_xGroupLB->Init(comphelper::getProcessComponentContext(), GetFrame(),
-                             OUString(), false);
+    mpImpl->m_xGroupLB->Init(comphelper::getProcessComponentContext(), GetFrame());
 }
 
 void SfxMacroTabPage::InitAndSetHandler()
