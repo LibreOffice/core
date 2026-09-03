@@ -24,7 +24,9 @@
 #include <patattr.hxx>
 #include <postit.hxx>
 #include <queryparam.hxx>
+#include <refdata.hxx>
 #include <refundo.hxx>
+#include <token.hxx>
 #include <scitems.hxx>
 #include <scopetools.hxx>
 #include <stlpool.hxx>
@@ -10158,6 +10160,291 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipShiftsNamedDBs)
     ScRange aSrcArea;
     pSrc->GetArea(aSrcArea);
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 2, 0), aSrcArea);
+
+    xDestDocSh->DoClose();
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyFromClipSkipsOverlappingTable)
+{
+    // Where the pasted area covers part of a table already there, the cells paste but no
+    // table is planted: tables never intersect.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pTable = std::make_unique<ScDBData>(u"MyTable"_ustr, 0, 0, 0, 2, 2, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    m_pDoc->SetValue(2, 2, 0, 42.0);
+
+    // A second table over D6:F8, which the paste area C5:E7 reaches into.
+    auto pResident = std::make_unique<ScDBData>(u"Resident"_ustr, 0, 3, 5, 5, 7, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pResident)));
+
+    ScRange aClipRange(0, 0, 0, 2, 2, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    ScRange aDestRange(2, 4, 0, 4, 6, 0); // C5:E7
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // The cells pasted, and no second table was planted under any name.
+    CPPUNIT_ASSERT_EQUAL(42.0, m_pDoc->GetValue(4, 6, 0));
+    ScDBCollection::NamedDBs& rDBs = m_pDoc->GetDBCollection()->getNamedDBs();
+    CPPUNIT_ASSERT(!rDBs.findByUpperName(u"MYTABLE2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rDBs.size());
+
+    // The table the paste reached into is untouched.
+    const ScDBData* pKept = rDBs.findByUpperName(u"RESIDENT"_ustr);
+    CPPUNIT_ASSERT(pKept);
+    ScRange aKeptArea;
+    pKept->GetArea(aKeptArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(3, 5, 0, 5, 7, 0), aKeptArea);
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testPasteRebindDiesWithThePaste)
+{
+    // The note that pairs a clip table with the one the paste planted is read for every
+    // formula cell cloned afterwards, so it must not outlive its own paste: a later
+    // reference to the source table would otherwise be re-pointed at the copy.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    m_pDoc->SetString(0, 0, 0, u"A"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"B"_ustr);
+    m_pDoc->SetValue(1, 1, 0, 10.0);
+    m_pDoc->SetValue(1, 2, 0, 20.0);
+
+    auto pTable = std::make_unique<ScDBData>(u"Table1"_ustr, 0, 0, 0, 1, 2, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+
+    ScRange aClipRange(0, 0, 0, 1, 2, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    ScRange aDestRange(0, 9, 0, 1, 11, 0);
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE12"_ustr));
+
+    // A formula naming the source table, cloned the way entering one in a totals row does.
+    // With the paste's note still live this came back as Table12[B].
+    m_pDoc->SetFormula(ScAddress(5, 0, 0), u"=SUM(Table1[B])"_ustr,
+                       formula::FormulaGrammar::GRAM_ENGLISH);
+    ScFormulaCell* pSrc = m_pDoc->GetFormulaCell(ScAddress(5, 0, 0));
+    CPPUNIT_ASSERT(pSrc);
+
+    ScAddress aClonePos(5, 1, 0);
+    m_pDoc->SetFormulaCell(aClonePos, new ScFormulaCell(*pSrc, *m_pDoc, aClonePos));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table1[B])"_ustr, m_pDoc->GetFormula(5, 1, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteTableThisRowRefFollowsTheCopy)
+{
+    // Table[@Col] keeps its column as a string rather than an anchor cell, so only the
+    // table it names has to follow the copy. The value is what proves it: a reference left
+    // pointing at the source table still prints plausibly while reading the wrong row.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    m_pDoc->SetString(0, 0, 0, u"Qty"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"Price"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"Total"_ustr);
+    m_pDoc->SetValue(0, 1, 0, 2.0);
+    m_pDoc->SetValue(1, 1, 0, 3.0);
+
+    auto pTable = std::make_unique<ScDBData>(u"Table1"_ustr, 0, 0, 0, 2, 1, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    m_pDoc->SetFormula(ScAddress(2, 1, 0), u"=Table1[@Qty]*Table1[@Price]"_ustr,
+                       formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(2, 1, 0));
+
+    ScRange aClipRange(0, 0, 0, 2, 1, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    ScRange aDestRange(0, 9, 0, 2, 10, 0);
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE12"_ustr));
+
+    // Give the copy its own numbers, so reading the source table would show.
+    m_pDoc->SetValue(0, 10, 0, 5.0);
+    m_pDoc->SetValue(1, 10, 0, 7.0);
+    m_pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_EQUAL(u"=Table12[@Qty]*Table12[@Price]"_ustr, m_pDoc->GetFormula(2, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(2, 10, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteTableFreshNameSameDoc)
+{
+    // Pasting a whole styled table where its name is taken - always, within one
+    // document - recreates it under the source name plus the next free number,
+    // and the structured references the paste carries follow it.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    ScDBData* pTable = new ScDBData(u"Table1"_ustr, 0, 0, 0, 2, 2, true, true);
+    ScTableStyleParam aStyle;
+    aStyle.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyle);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pTable)));
+
+    m_pDoc->SetString(0, 0, 0, u"A"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"B"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"C"_ustr);
+    m_pDoc->SetValue(1, 1, 0, 1.0);
+    m_pDoc->SetValue(1, 2, 0, 2.0);
+    pTable->RefreshTableColumnNames(m_pDoc);
+    m_pDoc->SetString(0, 3, 0, u"=SUM(Table1[B])"_ustr); // included in the copy
+
+    // Copy the table with the formula row below it, A1:C4.
+    ScRange aClipRange(0, 0, 0, 2, 3, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Paste at F1.
+    ScRange aDestRange(5, 0, 0, 7, 3, 0);
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    aDestMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // The copy became Table12 at the paste location, and the pasted formula
+    // sums the copy, not the original.
+    ScDBCollection::NamedDBs& rDBs = m_pDoc->GetDBCollection()->getNamedDBs();
+    const ScDBData* pPasted = rDBs.findByUpperName(u"TABLE12"_ustr);
+    CPPUNIT_ASSERT(pPasted);
+    ScRange aPastedArea;
+    pPasted->GetArea(aPastedArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(5, 0, 0, 7, 2, 0), aPastedArea);
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table12[B])"_ustr, m_pDoc->GetFormula(5, 3, 0));
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(5, 3, 0));
+
+    // The original is untouched, formula included.
+    const ScDBData* pOrig = rDBs.findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pOrig);
+    ScRange aOrigArea;
+    pOrig->GetArea(aOrigArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 2, 0), aOrigArea);
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table1[B])"_ustr, m_pDoc->GetFormula(0, 3, 0));
+
+    // A second paste of the same clip numbers on: Table13, and the clip's own
+    // table still carries the original name.
+    ScRange aDestRange2(9, 0, 0, 11, 3, 0); // J1:L4
+    aDestMark.SetMarkArea(aDestRange2);
+    m_pDoc->CopyFromClip(aDestRange2, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+    CPPUNIT_ASSERT(rDBs.findByUpperName(u"TABLE13"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table13[B])"_ustr, m_pDoc->GetFormula(9, 3, 0));
+    CPPUNIT_ASSERT(aClipDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteTableFreshNameOtherDoc)
+{
+    // A cross-document paste where the destination owns the name: the styled
+    // table is recreated under a fresh name, a plain database range is not.
+    m_pDoc->InsertTab(0, u"Src"_ustr);
+
+    ScDBData* pTable = new ScDBData(u"Table1"_ustr, 0, 0, 0, 2, 2, true, true);
+    ScTableStyleParam aStyle;
+    aStyle.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyle);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pTable)));
+    m_pDoc->SetString(0, 0, 0, u"A"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"B"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"C"_ustr);
+    m_pDoc->SetValue(1, 1, 0, 1.0);
+    m_pDoc->SetValue(1, 2, 0, 2.0);
+    pTable->RefreshTableColumnNames(m_pDoc);
+    m_pDoc->SetString(0, 3, 0, u"=SUM(Table1[B])"_ustr);
+    auto pPlain = std::make_unique<ScDBData>(u"MyData"_ustr, 0, 0, 4, 2, 5, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pPlain)));
+
+    // Copy A1:C6, covering both.
+    ScRange aClipRange(0, 0, 0, 2, 5, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Destination owns both names already, far from the paste area.
+    ScDocShellRef xDestDocSh = new ScDocShell;
+    xDestDocSh->DoLoad(new SfxMedium(u"file:///dbfreshname.fake"_ustr, StreamMode::STD_READWRITE));
+    ScDocument& rDestDoc = xDestDocSh->GetDocument();
+    rDestDoc.InsertTab(0, u"Dest"_ustr);
+    ScDBCollection::NamedDBs& rDestDBs = rDestDoc.GetDBCollection()->getNamedDBs();
+    CPPUNIT_ASSERT(rDestDBs.insert(std::make_unique<ScDBData>(u"Table1"_ustr, 0, 10, 0, 12, 2, true, true)));
+    CPPUNIT_ASSERT(rDestDBs.insert(std::make_unique<ScDBData>(u"MyData"_ustr, 0, 10, 4, 12, 5, true, true)));
+
+    // Paste at A8.
+    ScRange aDestRange(0, 7, 0, 2, 12, 0);
+    ScMarkData aDestMark(rDestDoc.GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    aDestMark.SetMarkArea(aDestRange);
+    rDestDoc.CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // The pasted formula follows the recreated table and computes over the copy.
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table12[B])"_ustr, rDestDoc.GetFormula(0, 10, 0));
+    rDestDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(3.0, rDestDoc.GetValue(0, 10, 0));
+
+    // The styled table arrived as Table12; the plain range was not recreated.
+    const ScDBData* pPasted = rDestDBs.findByUpperName(u"TABLE12"_ustr);
+    CPPUNIT_ASSERT(pPasted);
+    ScRange aPastedArea;
+    pPasted->GetArea(aPastedArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 7, 0, 2, 9, 0), aPastedArea);
+    CPPUNIT_ASSERT(!rDestDBs.findByUpperName(u"MYDATA2"_ustr));
+
+    // The destination's own ranges are untouched.
+    const ScDBData* pOwnTable = rDestDBs.findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pOwnTable);
+    ScRange aOwnArea;
+    pOwnTable->GetArea(aOwnArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(10, 0, 0, 12, 2, 0), aOwnArea);
+    const ScDBData* pOwnData = rDestDBs.findByUpperName(u"MYDATA"_ustr);
+    CPPUNIT_ASSERT(pOwnData);
+    pOwnData->GetArea(aOwnArea);
+    CPPUNIT_ASSERT_EQUAL(ScRange(10, 4, 0, 12, 5, 0), aOwnArea);
 
     xDestDocSh->DoClose();
     m_pDoc->DeleteTab(0);

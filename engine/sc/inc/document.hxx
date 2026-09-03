@@ -953,6 +953,10 @@ public:
     SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     std::vector<const ScDBData*> GetAllNamedDBsInArea(const ScRange& rRange) const;
+    /// True if rRange intersects a database range (named or anonymous, pIgnore excepted) or a
+    /// pivot table. Merged cells are left to the callers they block (resize, not paste).
+    bool                         RangeReachesDBStructure(const ScRange& rRange, const ScDBData* pIgnore = nullptr);
+    /// Upper names of the styled tables rMark covers whole.
     std::vector<OUString>        GetTablesCoveredBy(const ScMarkData& rMark) const;
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();

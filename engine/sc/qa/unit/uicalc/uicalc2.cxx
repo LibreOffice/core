@@ -2498,6 +2498,92 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSetHyperlinkKeepSelection)
     CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, pURLField->GetRepresentation());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteKeepsRefToUncopiedTable)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"Value");
+    insertStringToCell(u"A2"_ustr, u"10");
+    insertStringToCell(u"A3"_ustr, u"20");
+
+    auto pTable = std::make_unique<ScDBData>(u"Table1"_ustr, 0, 0, 0, 0, 2, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+
+    insertStringToCell(u"C1"_ustr, u"=SUM(Table1[Value])");
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 0, 0)));
+
+    goToCell(u"C1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"C5"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: =SUM(Table1[Value])
+    // - Actual  : =SUM(#REF!)
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table1[Value])"_ustr, pDoc->GetFormula(2, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 4, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteTableWithFormulaRebindsRef)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"Value");
+    insertStringToCell(u"A2"_ustr, u"10");
+    insertStringToCell(u"A3"_ustr, u"20");
+
+    auto pTable = std::make_unique<ScDBData>(u"Table1"_ustr, 0, 0, 0, 0, 2, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+
+    insertStringToCell(u"C1"_ustr, u"=SUM(Table1[Value])");
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 0, 0)));
+
+    goToCell(u"A1:C3"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE12"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table12[Value])"_ustr, pDoc->GetFormula(2, 9, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 9, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteToOtherSheetKeepsRefToUncopiedTable)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"Value");
+    insertStringToCell(u"A2"_ustr, u"10");
+    insertStringToCell(u"A3"_ustr, u"20");
+
+    auto pTable = std::make_unique<ScDBData>(u"Table1"_ustr, 0, 0, 0, 0, 2, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pTable->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+
+    insertStringToCell(u"C1"_ustr, u"=SUM(Table1[Value])");
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 0, 0)));
+
+    insertNewSheet(*pDoc);
+    goToCell(u"$Sheet1.C1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"$NewTab.C1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(Table1[Value])"_ustr, pDoc->GetFormula(2, 0, 1));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 0, 1)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

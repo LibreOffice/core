@@ -2671,11 +2671,6 @@ void ScDocument::CopyDBsFromClip(const ScRange& rDestRange, const ScRange& rClip
         if (!rClipRange.Contains(aSrcArea))
             continue;
 
-        // Destination already owns a table of this name (same-document paste):
-        // leave it, and any references resolving to it, alone.
-        if (rDest.findByUpperName(rxClip->GetUpperName()))
-            continue;
-
         const SCCOL nNewCol1 = aSrcArea.aStart.Col() + nDx;
         const SCROW nNewRow1 = aSrcArea.aStart.Row() + nDy;
         const SCCOL nNewCol2 = aSrcArea.aEnd.Col() + nDx;
@@ -2683,8 +2678,29 @@ void ScDocument::CopyDBsFromClip(const ScRange& rDestRange, const ScRange& rClip
         if (!ValidColRowTab(nNewCol1, nNewRow1, nDestTab) || !ValidColRowTab(nNewCol2, nNewRow2, nDestTab))
             continue;
 
+        // Tables never sit on another structure: where the pasted area covers
+        // part of one the destination already has, the cell content still pastes
+        // but no table is planted. Merged cells do not block, the paste replaces
+        // them.
+        const ScRange aDestArea(nNewCol1, nNewRow1, nDestTab, nNewCol2, nNewRow2, nDestTab);
+        if (RangeReachesDBStructure(aDestArea))
+            continue;
+
+        // The name is taken - always, for a same-document paste. A styled table is
+        // recreated under a fresh name there. A plain database range keeps the
+        // destination's.
+        OUString aFreshName;
+        if (rDest.findByUpperName(rxClip->GetUpperName()))
+        {
+            if (!rxClip->GetTableStyleInfo())
+                continue;
+            aFreshName = rDest.getFreshTableName(rxClip->GetName());
+        }
+
         auto pClone = std::make_unique<ScDBData>(*rxClip);
         pClone->SetIndex(0); // let the destination assign a fresh, collision-free index
+        if (!aFreshName.isEmpty())
+            pClone->SetName(aFreshName);
 
         // Changing the area resets the table column names, because the header
         // range moves. Keep the names the clip carried so a structured
@@ -2695,7 +2711,11 @@ void ScDocument::CopyDBsFromClip(const ScRange& rDestRange, const ScRange& rClip
         if (!aColumnNames.empty())
             pClone->SetTableColumnNames(std::move(aColumnNames));
 
-        rDest.insert(std::move(pClone));
+        // Note which table of ours this became, so the structured references the paste
+        // carries can be pointed at it. pPlanted is only safe once the insert took it.
+        ScDBData* pPlanted = pClone.get();
+        if (rDest.insert(std::move(pClone)))
+            pDBCollection->addPasteRebind(rxClip->GetIndex(), pPlanted->GetIndex());
     }
 }
 
@@ -3312,6 +3332,12 @@ void ScDocument::CopyFromClip(
     }
 
     bInsertingFromOtherDoc = false;
+
+    // The table renames end with the paste that made them. adjustDBRange consults them for
+    // every formula cell it clones, so a note left behind would re-point a later reference
+    // at a table it has nothing to do with.
+    if (pDBCollection)
+        pDBCollection->clearPasteRebinds();
 
     // Put back the destination's own direct protection that the paste above
     // overwrote (see the note where aKeptProtection is filled).

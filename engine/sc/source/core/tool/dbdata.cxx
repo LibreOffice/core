@@ -1123,29 +1123,8 @@ bool ScDBData::IsBandBlockedAtRow(const ScDocument& rDoc, SCROW nShiftRow) const
 
 bool ScDBData::BandReachesStructure(ScDocument& rDoc, const ScRange& rBand) const
 {
-    auto bHitsOther = [&](const ScDBData* pOther) {
-        if (!pOther || pOther == this)
-            return false;
-        ScRange aOther;
-        pOther->GetArea(aOther);
-        return aOther.aStart.Tab() == nTable && rBand.Intersects(aOther);
-    };
-    if (const ScDBCollection* pDBs = rDoc.GetDBCollection())
-    {
-        for (const auto& rOther : pDBs->getNamedDBs())
-            if (bHitsOther(rOther.get()))
-                return true;
-        for (const auto& rOther : pDBs->getAnonDBs())
-            if (bHitsOther(rOther.get()))
-                return true;
-    }
-    // Sheet-local / document anonymous DB ranges (e.g. an AutoFilter on a plain range).
-    // Plain named ranges are not DB ranges and intentionally do not block.
-    if (bHitsOther(rDoc.GetAnonymousDBData(nTable)) || bHitsOther(rDoc.GetAnonymousDBData()))
+    if (rDoc.RangeReachesDBStructure(rBand, this))
         return true;
-    if (const ScDPCollection* pDPs = rDoc.GetDPCollection())
-        if (pDPs->HasTable(rBand))
-            return true;
     return rDoc.HasAttrib(rBand.aStart.Col(), rBand.aStart.Row(), nTable, rBand.aEnd.Col(),
                           rBand.aEnd.Row(), nTable, HasAttrFlags::Merged | HasAttrFlags::Overlapped);
 }
@@ -2638,6 +2617,20 @@ bool ScDBCollection::NamedDBs::rename(const OUString& rOldName, const OUString& 
     return true;
 }
 
+OUString ScDBCollection::NamedDBs::getFreshTableName(std::u16string_view rSourceName)
+{
+    // A pasted copy of Table1 becomes Table12, of Sales becomes Sales7: the full
+    // source name carries a number. Probe from 2 for the lowest that is free.
+    sal_Int32 nNumber = 2;
+    OUString aNewName;
+    do
+    {
+        aNewName = OUString::Concat(rSourceName) + OUString::number(nNumber);
+        ++nNumber;
+    } while (findByUpperName(ScGlobal::getCharClass().uppercase(aNewName)));
+    return aNewName;
+}
+
 bool ScDBCollection::NamedDBs::empty() const
 {
     return m_DBs.empty();
@@ -2752,6 +2745,14 @@ ScDBCollection::ScDBCollection(ScDocument& rDocument) :
 
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     rDoc(r.rDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs, *this), maAnonDBs(r.maAnonDBs) {}
+
+sal_uInt16 ScDBCollection::getPasteRebind(sal_uInt16 nClipIndex) const
+{
+    for (const auto& rRebind : maPasteRebinds)
+        if (rRebind.first == nClipIndex)
+            return rRebind.second;
+    return 0;
+}
 
 const ScDBData* ScDBCollection::GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
                                              ScDBDataPortion ePortion) const

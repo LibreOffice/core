@@ -381,6 +381,35 @@ std::vector<const ScDBData*> ScDocument::GetAllNamedDBsInArea(const ScRange& rRa
         return std::vector<const ScDBData*>();
 }
 
+bool ScDocument::RangeReachesDBStructure(const ScRange& rRange, const ScDBData* pIgnore)
+{
+    const SCTAB nTab = rRange.aStart.Tab();
+    auto bHitsOther = [&](const ScDBData* pOther) {
+        if (!pOther || pOther == pIgnore)
+            return false;
+        ScRange aOther;
+        pOther->GetArea(aOther);
+        return aOther.aStart.Tab() == nTab && rRange.Intersects(aOther);
+    };
+    if (pDBCollection)
+    {
+        for (const auto& rOther : pDBCollection->getNamedDBs())
+            if (bHitsOther(rOther.get()))
+                return true;
+        for (const auto& rOther : pDBCollection->getAnonDBs())
+            if (bHitsOther(rOther.get()))
+                return true;
+    }
+    // Sheet-local / document anonymous DB ranges (e.g. an AutoFilter on a plain range).
+    // Plain named ranges are not DB ranges and intentionally do not block.
+    if (bHitsOther(GetAnonymousDBData(nTab)) || bHitsOther(GetAnonymousDBData()))
+        return true;
+    if (const ScDPCollection* pDPs = GetDPCollection())
+        if (pDPs->HasTable(rRange))
+            return true;
+    return false;
+}
+
 std::vector<OUString> ScDocument::GetTablesCoveredBy(const ScMarkData& rMark) const
 {
     std::vector<OUString> aNames;

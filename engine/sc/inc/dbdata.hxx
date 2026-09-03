@@ -492,6 +492,10 @@ public:
             @return false if rOldName is missing or rNewName already exists. */
         bool rename(const OUString& rOldName, const OUString& rNewName);
 
+        /// Free name for a pasted copy of rSourceName: the full source name plus the
+        /// lowest number from 2 up that is not taken.
+        OUString getFreshTableName(std::u16string_view rSourceName);
+
         bool empty() const;
         size_t size() const;
         bool operator== (const NamedDBs& r) const;
@@ -535,6 +539,7 @@ private:
     sal_uInt16 nEntryIndex;         ///< counter for unique indices
     NamedDBs maNamedDBs;
     AnonDBs maAnonDBs;
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> maPasteRebinds;   ///< see clearPasteRebinds()
 
 public:
     ScDBCollection(ScDocument& rDocument);
@@ -545,6 +550,14 @@ public:
 
     AnonDBs& getAnonDBs() { return maAnonDBs;}
     const AnonDBs& getAnonDBs() const { return maAnonDBs;}
+
+    /// Which table of this document the paste in progress planted a clip table as, as the
+    /// clip's index paired with the planted one. Filled by CopyDBsFromClip, read back by
+    /// adjustDBRange to re-point the tokens the paste carries, and dropped at the end of
+    /// CopyFromClip so that no note outlives the paste that made it.
+    void clearPasteRebinds() { maPasteRebinds.clear(); }
+    void addPasteRebind(sal_uInt16 nClipIndex, sal_uInt16 nOwnIndex) { maPasteRebinds.emplace_back(nClipIndex, nOwnIndex); }
+    sal_uInt16 getPasteRebind(sal_uInt16 nClipIndex) const;
 
     const ScDBData* GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData* GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
