@@ -310,7 +310,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(COKit* pOffice)
 #if 0
     // FIXME disabled, as occasionally fails
     // we've got a meaningful result
-    OString aResult = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    OString aResult = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(OString("3\n"), aResult);
 
     pDocument.reset();
@@ -338,7 +338,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(COKit* pOffice)
     processEventsToIdle();
 
     // we've got a meaningful result
-    aResult = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    aResult = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(OString("3\n"), aResult);
 #endif
 }

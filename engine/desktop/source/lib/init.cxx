@@ -1224,9 +1224,7 @@ static void doc_setTextSelection (COKitDocument* pThis,
                                   COKitSetTextSelectionType eType,
                                   int nX,
                                   int nY);
-static std::string doc_getTextSelection(COKitDocument* pThis,
-                                  std::string_view pMimeType,
-                                  std::string* pUsedMimeType);
+static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view aMimeType);
 static COKitSelectionType doc_getSelectionType(COKitDocument* pThis);
 static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
                                                       const char* pMimeType,
@@ -1569,9 +1567,9 @@ void COKitDocumentImpl::setTextSelection(COKitSetTextSelectionType eType, int nX
     doc_setTextSelection(this, eType, nX, nY);
 }
 
-std::string COKitDocumentImpl::getTextSelection(std::string_view pMimeType, std::string* pUsedMimeType)
+std::string COKitDocumentImpl::getTextSelection(std::string_view aMimeType)
 {
-    return doc_getTextSelection(this, pMimeType, pUsedMimeType);
+    return doc_getTextSelection(this, aMimeType);
 }
 
 bool COKitDocumentImpl::paste(const char* pMimeType, const char* pData, size_t nSize)
@@ -7376,7 +7374,7 @@ static bool getFromTransferable(
     return true;
 }
 
-static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view pMimeType, std::string* pUsedMimeType)
+static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view aMimeType)
 {
     comphelper::ProfileZone aZone("doc_getTextSelection");
 
@@ -7398,20 +7396,12 @@ static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view p
     }
 
     OString aType
-        = !pMimeType.empty() ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
+        = !aMimeType.empty() ? OString(aMimeType) : "text/plain;charset=utf-8"_ostr;
 
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
         return {};
-
-    if (pUsedMimeType) // legacy
-    {
-        if (!pMimeType.empty())
-            *pUsedMimeType = std::string(pMimeType);
-        else
-            *pUsedMimeType = {};
-    }
 
     return std::string(aRet);
 }

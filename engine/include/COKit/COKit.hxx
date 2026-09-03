@@ -2019,10 +2019,12 @@ struct COKitDocument
     /**
      * Gets the currently selected text.
      *
-     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
-     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
+     * @param aMimeType the format to return the selection in, for example
+     *        text/plain;charset=utf-8. An empty one asks for plain text.
+     * @return the selection, empty when there is none or it cannot be had in
+     *         that format.
      */
-    virtual std::string getTextSelection(std::string_view pMimeType, std::string* pUsedMimeType) = 0;
+    virtual std::string getTextSelection(std::string_view aMimeType) = 0;
 
     /**
      * Pastes content at the current cursor position.

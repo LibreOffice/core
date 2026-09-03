@@ -1692,7 +1692,7 @@ std::string ChildSession::getTextSelectionInternal(const std::string& mimeType)
 {
     getLOKitDocument()->setView(_viewId);
 
-    return getLOKitDocument()->getTextSelection(mimeType, nullptr);
+    return getLOKitDocument()->getTextSelection(mimeType);
 }
 
 bool ChildSession::getTextSelection(const StringVector& tokens)

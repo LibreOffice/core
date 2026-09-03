@@ -4004,13 +4004,13 @@ kit_doc_view_copy_selection (KitDocumentView* pDocView,
     std::stringstream ss;
     ss << "COKitDocument::getTextSelection('" << pMimeType << "')";
     g_info("%s", ss.str().c_str());
-    std::string usedMimeType;
-    auto const selection = pDocument->getTextSelection(pMimeType, &usedMimeType);
+    auto const selection = pDocument->getTextSelection(pMimeType);
     if (selection.empty()) {
         return nullptr;
     }
     if (pUsedMimeType != nullptr) {
-        *pUsedMimeType = g_strdup(usedMimeType.c_str());
+        // The engine only ever echoed the requested type back.
+        *pUsedMimeType = g_strdup(pMimeType);
     }
     return g_strdup(selection.c_str());
 }

@@ -827,7 +827,7 @@ void DesktopKitTest::testPasteWriter()
 
     pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    std::string aSelectedText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    std::string aSelectedText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL("hello"_ostr, OString(aSelectedText));
 
     // textt/plain should be rejected.
@@ -1319,8 +1319,7 @@ void DesktopKitTest::testSheetSelections()
 
     // Copy the contents and check if matches expected data
     {
-        std::string aUsedMimeType;
-        std::string aCopiedContent = pDocument->getTextSelection("", &aUsedMimeType);
+        std::string aCopiedContent = pDocument->getTextSelection("");
         std::vector<long> aExpected = {5, 6, 7, 8, 9};
         std::istringstream iss(aCopiedContent);
         for (const long nIndex : aExpected)
@@ -1347,7 +1346,7 @@ void DesktopKitTest::testSheetSelections()
     // Selected text should get deselected and copying should give us
     // content of only one cell, now
     {
-        std::string aCopiedContent = pDocument->getTextSelection("", nullptr);
+        std::string aCopiedContent = pDocument->getTextSelection("");
         std::vector<long> aExpected = { 8 };
         std::istringstream iss(aCopiedContent);
         for (const long nIndex : aExpected)
@@ -1409,7 +1408,7 @@ void DesktopKitTest::testSheetDragDrop()
 
     // Check selection content
     {
-        std::string aSelContent = pDocument->getTextSelection("", nullptr);
+        std::string aSelContent = pDocument->getTextSelection("");
         std::vector<long> aExpected = {1, 2, 3, 4, 5};
         std::istringstream aContent(aSelContent);
         std::string token;
@@ -1457,7 +1456,7 @@ void DesktopKitTest::testSheetDragDrop()
 
     // Check selection content
     {
-        std::string aSelContent = pDocument->getTextSelection("", nullptr);
+        std::string aSelContent = pDocument->getTextSelection("");
         std::vector<long> aExpected = {1, 2, 3, 4, 5};
         std::istringstream aContent(aSelContent);
         std::string token;
@@ -2193,7 +2192,7 @@ void DesktopKitTest::testInput()
     // get the text ...
     pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    std::string aText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    std::string aText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL("far beyond lovely "_ostr, OString(aText));
 }
 
@@ -3400,7 +3399,7 @@ void DesktopKitTest::testCalcValidityDropdown()
     Scheduler::ProcessEventsToIdle();
 
     // Check the content of the current cell. The selected value of the dropdown was 1. It should be 4 now.
-    std::string aCellContent = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    std::string aCellContent = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL("4"_ostr, OString(aCellContent));
 }
 
@@ -3904,7 +3903,7 @@ void DesktopKitTest::testTextSelectionHandles()
     // select the inserted text
     pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    std::string aSelText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    std::string aSelText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(aText, OString(aSelText));
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL("1897, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
@@ -3914,7 +3913,7 @@ void DesktopKitTest::testTextSelectionHandles()
     m_aTextSelectionEnd = ""_ostr;
     pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
-    aSelText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    aSelText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(""_ostr, OString(aSelText));
     CPPUNIT_ASSERT_EQUAL(OString(), m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL(OString(), m_aTextSelectionEnd);
@@ -3923,7 +3922,7 @@ void DesktopKitTest::testTextSelectionHandles()
     // again
     pDocument->postUnoCommand(".uno:SelectAll", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    aSelText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    aSelText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(aText, OString(aSelText));
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL("1897, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
@@ -3987,16 +3986,16 @@ void DesktopKitTest::testComplexSelection()
     Scheduler::ProcessEventsToIdle();
 
     // Export as plain text, we should get only the text part "hello".
-    std::string aSelText = pDocument->getTextSelection("text/plain;charset=utf-8", nullptr);
+    std::string aSelText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(aText, OString(aSelText));
 
     // Export as rtf, we should also get the image.
-    aSelText = pDocument->getTextSelection("text/rtf", nullptr);
+    aSelText = pDocument->getTextSelection("text/rtf");
     CPPUNIT_ASSERT(aSelText.find(aText.getStr()) != std::string::npos); // Must have the text.
     CPPUNIT_ASSERT(aSelText.find("pict{") != std::string::npos); // Must have the image as well.
 
     // Export as html, we should also get the image.
-    aSelText = pDocument->getTextSelection("text/html", nullptr);
+    aSelText = pDocument->getTextSelection("text/html");
     CPPUNIT_ASSERT(aSelText.find(aText.getStr()) != std::string::npos); // Must have the text.
     CPPUNIT_ASSERT(aSelText.find("<img") != std::string::npos); // Must have the image as well.
 

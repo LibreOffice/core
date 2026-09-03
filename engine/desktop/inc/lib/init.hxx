@@ -333,7 +333,7 @@ namespace desktop {
         void postUnoCommand(const char* pCommand, const char* pArguments,
                             bool bNotifyWhenFinished) override;
         void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) override;
-        std::string getTextSelection(std::string_view pMimeType, std::string* pUsedMimeType) override;
+        std::string getTextSelection(std::string_view aMimeType) override;
         bool paste(const char* pMimeType, const char* pData, size_t nSize) override;
         void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
         void resetSelection() override;
