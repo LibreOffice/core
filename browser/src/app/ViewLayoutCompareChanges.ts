@@ -132,16 +132,12 @@ class ViewLayoutCompareChanges extends ViewLayoutBase {
 		// full document width with a small margin for twips rounding.
 		const margin = 15;
 
-		this._viewedRectangle = cool.SimpleRectangle.fromCorePixels([
+		this.viewedRectangle = cool.SimpleRectangle.fromCorePixels([
 			-margin,
 			this.scrollProperties.viewY - this.yStart,
 			app.activeDocument.fileSize.pX + 2 * margin,
 			documentAnchor.size[1],
 		]);
-
-		// Notify the section container that the document visible area changed, necessary
-		// for comment positions to update.
-		app.sectionContainer.onNewDocumentTopLeft();
 	}
 
 	protected updateViewData() {

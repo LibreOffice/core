@@ -54,7 +54,11 @@ class ViewLayoutBase {
 	protected lastViewedRectangle: cool.SimpleRectangle; // Previously viewed rectangle.
 
 	protected clientVisibleAreaCommand: string = ''; // Last visible area command. Checked to avoid sending the same command multiple times.
-	protected _viewedRectangle: cool.SimpleRectangle; // Currently viewed rectangle.
+	// Currently viewed rectangle. Written through the viewedRectangle
+	// property, which keeps lastViewedRectangle and the section container in
+	// step; setZoomFrameViewedRectangle is the one exception, for the
+	// intermediate frames of a zoom.
+	protected _viewedRectangle: cool.SimpleRectangle;
 	protected _viewSize: cool.SimplePoint; // Scrollable area (document extent plus any comment overflow).
 	// Scrollable extent WITHOUT comment overflow - the layout's own document/page
 	// extent. Stacked-page layouts capture it when they recompute their layout;
@@ -142,8 +146,10 @@ class ViewLayoutBase {
 		return result;
 	}
 
+	// Forget the area last sent, so the next send goes out even when the area
+	// is unchanged.
 	public resetClientVisibleArea(): void {
-		this.lastViewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
+		this.clientVisibleAreaCommand = '';
 	}
 
 	// The message text for the current visible area, in whole twips.
@@ -771,15 +777,9 @@ class ViewLayoutBase {
 				}
 			}
 
-			this._viewedRectangle = documentRectangles[nearest].clone();
-
-			app.sectionContainer.onNewDocumentTopLeft();
-			app.sectionContainer.requestReDraw();
+			this.viewedRectangle = documentRectangles[nearest].clone();
 		} else {
-			this._viewedRectangle = resultingRectangle;
-
-			app.sectionContainer.onNewDocumentTopLeft();
-			app.sectionContainer.requestReDraw();
+			this.viewedRectangle = resultingRectangle;
 		}
 	}
 
@@ -801,15 +801,12 @@ class ViewLayoutBase {
 		// the negative-origin viewed rectangle used by ViewLayoutCompareChanges.
 		const centering = this.getCenteringOffset();
 
-		this._viewedRectangle = cool.SimpleRectangle.fromCorePixels([
+		this.viewedRectangle = cool.SimpleRectangle.fromCorePixels([
 			this.scrollProperties.viewX - centering[0],
 			this.scrollProperties.viewY - centering[1],
 			documentAnchor.size[0],
 			documentAnchor.size[1],
 		]);
-
-		app.sectionContainer.onNewDocumentTopLeft();
-		app.sectionContainer.requestReDraw();
 	}
 
 	// Default commit used by scroll(): rebuild the viewed rectangle and fetch
