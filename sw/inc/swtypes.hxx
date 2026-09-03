@@ -111,7 +111,7 @@ constexpr short lOutlineMinTextDistance = o3tl::toTwips(15, o3tl::Length::in100)
 
 // defined in sw/source/uibase/app/swmodule.cxx
 SW_DLLPUBLIC OUString SwResId(TranslateId aId);
-OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality);
+SW_DLLPUBLIC OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality);
 
 css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
 css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();

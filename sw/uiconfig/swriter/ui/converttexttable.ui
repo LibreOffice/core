@@ -441,10 +441,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label16">
+                                  <object class="GtkLabel" id="lbColumns">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="label" translatable="yes" context="converttexttable|label16">columns</property>
+                                    <property name="label">columns</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">2</property>

@@ -117,6 +117,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xBtnFont(m_xBuilder->weld_check_button(u"fontcb"_ustr))
     , m_xBtnPattern(m_xBuilder->weld_check_button(u"patterncb"_ustr))
     , m_xBtnAlignment(m_xBuilder->weld_check_button(u"alignmentcb"_ustr))
+    , m_xLabelColumn(m_xBuilder->weld_label(u"lbColumns"_ustr))
     , m_aWndPreview(rView.GetWrtShell().IsCursorInTable() ? rView.GetWrtShell().IsTableRightToLeft()
                                                           : AllSettings::GetLayoutRTL())
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aWndPreview))
@@ -166,6 +167,9 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xParaBtn->connect_toggled(aLk);
     m_xOtherBtn->connect_toggled(aLk);
     m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
+
+    m_xColumnNumNF->connect_value_changed(LINK(this, SwConvertTableDlg, ColNumHdl));
+    ColNumHdl(*m_xColumnNumNF);
 
     const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
@@ -286,6 +290,12 @@ IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::ItemView&, void)
     m_aWndPreview.NotifyChange(m_xTableTable->GetResolvedStyle(m_xTableTable->GetData(m_nIndex)));
     UpdateChecks((*m_xTableTable)[m_nIndex], true);
     mxTAutoFormat = FillAutoFormatOfIndex();
+}
+
+IMPL_LINK(SwConvertTableDlg, ColNumHdl, weld::SpinButton&, rButton, void)
+{
+    const int nCols = rButton.get_value();
+    m_xLabelColumn->set_label(SwResId(STR_TEXT_TABLE_COLUMNS, nCols));
 }
 
 IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Toggleable&, rButton, void)

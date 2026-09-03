@@ -316,6 +316,8 @@
    $1 of STR_WORDCOUNT_CHARARG_NO_SELECTION is number of characters */
 #define STR_WORDCOUNT_CHARARG_NO_SELECTION      NNC_("STR_WORDCOUNT_CHARARG_NO_SELECTION", "$1 character", "$1 characters")
 #define STR_CONVERT_TEXT_TABLE                  NC_("STR_CONVERT_TEXT_TABLE", "Convert Text to Table")
+// To translators: Static label in Text-to-Table dialog after spin edit how many columns extra to add
+#define STR_TEXT_TABLE_COLUMNS                  NNC_("STR_TEXT_TABLE_COLUMNS", "column", "columns")
 #define STR_ADD_AUTOFORMAT_TITLE                NC_("STR_ADD_AUTOFORMAT_TITLE", "Add AutoFormat")
 #define STR_ADD_AUTOFORMAT_LABEL                NC_("STR_ADD_AUTOFORMAT_LABEL", "Name")
 #define STR_DEL_AUTOFORMAT_TITLE                NC_("STR_DEL_AUTOFORMAT_TITLE", "Delete AutoFormat")
