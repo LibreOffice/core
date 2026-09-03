@@ -370,10 +370,18 @@ public:
     }
 
     sal_Int32 getEndOffsetInclusive() override {
+        if (!isPartial()) {
+            return -1;
+        }
         return rangeLen_ == 0 ? startOffset_ : startOffset_ + rangeLen_ - 1;
     }
 
-    sal_Int32 getStartOffset() override { return startOffset_; }
+    sal_Int32 getStartOffset() override {
+        if (!isPartial()) {
+            return -1;
+        }
+        return startOffset_;
+    }
 
     bool isPartial() override {
         if (!paragraph_.is()) {
