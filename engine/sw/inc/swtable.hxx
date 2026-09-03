@@ -38,6 +38,8 @@
 
 class SwStartNode;
 class SwFormat;
+class SwTextFormatColl;
+class SwContentNode;
 class SwHTMLTableLayout;
 class SwTableLine;
 class SwTableBox;
@@ -161,6 +163,12 @@ protected:
     /// this table currently uses a live style.
     std::map<sal_uInt8, SwTableBoxFormat*> m_TableStyleRoleFormats;
 
+    /// Unlisted paragraph collections carrying the text formatting of a live table-style
+    /// role, one per role id and paragraph style the role's paragraphs use. Each derives from
+    /// that paragraph style, which is the second half of its key. Empty unless this table
+    /// currently uses a live style that defines text formatting.
+    std::map<std::pair<sal_uInt8, const SwTextFormatColl*>, SwTextFormatColl*> m_TableStyleRoleColls;
+
     bool        m_bModifyLocked   :1;
     bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
 
@@ -244,6 +252,22 @@ public:
     /// If pFormat is one of this table's cached live-style role formats and it now has no
     /// remaining listeners, drop it from the cache and free it. Returns whether it did.
     bool ReleaseTableStyleRoleFormatIfOrphaned(SwFrameFormat* pFormat);
+
+    /// Look up the cached paragraph collection for a live table-style role on top of the
+    /// paragraph style rBase, or nullptr if this table hasn't needed that combination yet.
+    SwTextFormatColl* FindTableStyleRoleColl(sal_uInt8 nRoleKey, const SwTextFormatColl& rBase) const;
+
+    /// Cache a paragraph collection for a live table-style role. The table takes ownership.
+    void AddTableStyleRoleColl(sal_uInt8 nRoleKey, const SwTextFormatColl& rBase, SwTextFormatColl* pColl);
+
+    /// Empty the live table-style role-collection cache, returning what it held so the caller
+    /// can delete whichever of those collections end up with no paragraphs still using them.
+    std::vector<SwTextFormatColl*> TakeTableStyleRoleColls();
+
+    /// Free the role collections built on the paragraph style rBase. The paragraphs that
+    /// used them go back to their paragraph style alone and are returned, so that they can
+    /// take a role collection again once they have a new paragraph style.
+    std::vector<SwContentNode*> DropTableStyleRoleCollsFor(const SwTextFormatColl& rBase);
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( o3tl::narrowing<sal_uInt16>(GetTabLines().size()), m_nRowsToRepeat ); }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }

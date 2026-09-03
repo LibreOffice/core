@@ -55,6 +55,7 @@
 #include <txtfrm.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
+#include <swtable.hxx>
 #include <pam.hxx>
 #include <UndoCore.hxx>
 #include <UndoAttribute.hxx>
@@ -893,6 +894,17 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const UIName &rFormatName,
     return pFormatColl;
 }
 
+SwTextFormatColl* SwDoc::MakeTableStyleRoleColl(SwTextFormatColl& rBase)
+{
+    // Same name as the paragraph style it extends, so that the style name items of the
+    // paragraphs below it keep naming that style. Not in the collection list, so it never
+    // shows up as a style of its own.
+    SwTextFormatColl* pRoleColl = new SwTextFormatColl(GetAttrPool(), rBase.GetName(), &rBase);
+    pRoleColl->SetAuto(false);
+    pRoleColl->SetHidden(true);
+    return pRoleColl;
+}
+
 SwFormat *SwDoc::MakeTextFormatColl_(const UIName &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool /*bAuto*/)
@@ -966,7 +978,26 @@ void SwDoc::DelTextFormatColl(size_t nFormatColl, bool bBroadcast)
     // Correct next
     for( SwTextFormatColls::const_iterator it = mpTextFormatCollTable->begin() + 1; it != mpTextFormatCollTable->end(); ++it )
         SetTextFormatCollNext( *it, pDel );
+
+    // A live table style keeps a role collection per paragraph style, found by the style's
+    // address. Free the ones built on the dying style now, so that a style created later at
+    // the same address does not find them; their paragraphs take a role collection for the
+    // style they move to once the dying one has handed them on.
+    std::vector<SwContentNode*> aRoleNodes;
+    for (SwTableFormat* pTableFormat : *GetTableFrameFormats())
+    {
+        if (SwTable* pTable = SwTable::FindTable(pTableFormat))
+        {
+            std::vector<SwContentNode*> aTableNodes = pTable->DropTableStyleRoleCollsFor(*pDel);
+            aRoleNodes.insert(aRoleNodes.end(), aTableNodes.begin(), aTableNodes.end());
+        }
+    }
+
     delete pDel;
+
+    for (SwContentNode* pNode : aRoleNodes)
+        pNode->ChkTableStyleRoleColl();
+
     getIDocumentState().SetModified();
 }
 

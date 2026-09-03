@@ -246,6 +246,10 @@ SwTextNode::SwTextNode( const SwNode& rWhere, SwTextFormatColl *pTextColl, const
         // call method <UpdateOutlineNode(..)> only for the document nodes array
         if (GetNodes().IsDocNodes())
             GetNodes().UpdateOutlineNode(*this);
+
+        // A paragraph created inside a cell of a table with a live table style starts out
+        // with that cell's role collection.
+        ChkTableStyleRoleColl();
     }
 
     m_bContainsHiddenChars = m_bHiddenCharsHidePara = false;
@@ -1305,7 +1309,9 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     aNewAttrSet.Put( aAnyFormatColl );
     aNewAttrSet.Put( aFormatColl );
 
-    aNewAttrSet.SetParent( &pAnyFormatColl->GetAttrSet() );
+    // The names above identify the paragraph style; the formatting comes from the layout
+    // collection, which adds the table style role's text formatting when there is one.
+    aNewAttrSet.SetParent( &GetLayoutFormatColl().GetAttrSet() );
     mpAttrSet = GetDoc().GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA, &sVal );
 }
 

@@ -42,6 +42,7 @@
 #include <frame.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <fmtcol.hxx>
 #include <tabcol.hxx>
 #include <tabfrm.hxx>
 #include <cellfrm.hxx>
@@ -247,6 +248,50 @@ bool SwTable::ReleaseTableStyleRoleFormatIfOrphaned(SwFrameFormat* pFormat)
     return false;
 }
 
+SwTextFormatColl* SwTable::FindTableStyleRoleColl(sal_uInt8 nRoleKey, const SwTextFormatColl& rBase) const
+{
+    auto it = m_TableStyleRoleColls.find({nRoleKey, &rBase});
+    return it == m_TableStyleRoleColls.end() ? nullptr : it->second;
+}
+
+void SwTable::AddTableStyleRoleColl(sal_uInt8 nRoleKey, const SwTextFormatColl& rBase, SwTextFormatColl* pColl)
+{
+    m_TableStyleRoleColls.emplace(std::make_pair(nRoleKey, &rBase), pColl);
+}
+
+std::vector<SwTextFormatColl*> SwTable::TakeTableStyleRoleColls()
+{
+    std::vector<SwTextFormatColl*> aColls;
+    aColls.reserve(m_TableStyleRoleColls.size());
+    for (auto& [aKey, pColl] : m_TableStyleRoleColls)
+        aColls.push_back(pColl);
+    m_TableStyleRoleColls.clear();
+    return aColls;
+}
+
+std::vector<SwContentNode*> SwTable::DropTableStyleRoleCollsFor(const SwTextFormatColl& rBase)
+{
+    std::vector<SwContentNode*> aNodes;
+    for (auto it = m_TableStyleRoleColls.begin(); it != m_TableStyleRoleColls.end();)
+    {
+        if (it->first.second != &rBase)
+        {
+            ++it;
+            continue;
+        }
+        SwTextFormatColl* pColl = it->second;
+        SwIterator<SwContentNode, SwTextFormatColl, sw::IteratorMode::UnwrapMulti> aIter(*pColl);
+        for (SwContentNode* pNode = aIter.First(); pNode; pNode = aIter.Next())
+        {
+            pNode->SetTableStyleRoleColl(nullptr);
+            aNodes.push_back(pNode);
+        }
+        delete pColl;
+        it = m_TableStyleRoleColls.erase(it);
+    }
+    return aNodes;
+}
+
 void DelBoxNode( SwTableSortBoxes const & rSortCntBoxes )
 {
     for (size_t n = 0; n < rSortCntBoxes.size(); ++n)
@@ -268,6 +313,7 @@ SwTable::~SwTable()
 
     // the table can be deleted if it's the last client of the FrameFormat
     SwTableFormat* pFormat = GetFrameFormat();
+    const bool bDocInDtor = pFormat->GetDoc().IsInDtor();
     pFormat->Remove(*this);               // remove
 
     if( !pFormat->HasWriterListeners() )
@@ -279,6 +325,24 @@ SwTable::~SwTable()
     // section need deletion.
     DelBoxNode(m_TabSortContentBoxes);
     m_TabSortContentBoxes.clear();
+
+    // The paragraphs of this table outlive it, so end their use of the role collections
+    // before those go. Cell formats still deriving from a role format are moved to the
+    // format's own parent by the format's destruction, the way every dying format does.
+    for (auto& [aKey, pColl] : m_TableStyleRoleColls)
+    {
+        if (!bDocInDtor)
+        {
+            SwIterator<SwContentNode, SwTextFormatColl, sw::IteratorMode::UnwrapMulti> aIter(*pColl);
+            for (SwContentNode* pNode = aIter.First(); pNode; pNode = aIter.Next())
+                pNode->SetTableStyleRoleColl(nullptr);
+        }
+        delete pColl;
+    }
+    m_TableStyleRoleColls.clear();
+    for (auto& [nKey, pRoleFormat] : m_TableStyleRoleFormats)
+        delete pRoleFormat;
+    m_TableStyleRoleFormats.clear();
 }
 
 namespace

@@ -537,7 +537,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             }
             else
             {
-                const SwFontObj& rFontAccess = rTextNode.GetTextFormatColl().GetFontObj(pSh);
+                const SwFontObj& rFontAccess = rTextNode.GetLayoutTextFormatColl().GetFontObj(pSh);
                 pFnt.reset(new SwFont( rFontAccess.GetFont() ));
             }
 

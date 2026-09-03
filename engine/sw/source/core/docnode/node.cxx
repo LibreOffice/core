@@ -69,6 +69,7 @@
 #include <memory>
 #include <swcrsr.hxx>
 #include <hints.hxx>
+#include <svl/itemiter.hxx>
 #include <frameformats.hxx>
 #include <OnlineAccessibilityCheck.hxx>
 #ifdef DBG_UTIL
@@ -112,15 +113,22 @@ static void GetNewAutoStyle( std::shared_ptr<const SwAttrSet>& rpAttrSet,
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
 
+/// Re-parent the node's own attribute set. pParentFormat and pConditionalFormat give the
+/// style names that go into the set; pLayoutFormat, when given, is the format whose attribute
+/// set becomes the parent instead of pParentFormat's (the table style role collection, which
+/// carries the same name as pParentFormat but more formatting).
 static void SetParent( std::shared_ptr<const SwAttrSet>& rpAttrSet,
                 const SwContentNode& rNode,
                 const SwFormat* pParentFormat,
-                const SwFormat* pConditionalFormat )
+                const SwFormat* pConditionalFormat,
+                const SwFormat* pLayoutFormat = nullptr )
 {
     OSL_ENSURE( rpAttrSet, "no SwAttrSet" );
     OSL_ENSURE( pParentFormat || !pConditionalFormat, "ConditionalFormat without ParentFormat?" );
 
-    const SwAttrSet* pParentSet = pParentFormat ? &pParentFormat->GetAttrSet() : nullptr;
+    if ( !pLayoutFormat )
+        pLayoutFormat = pParentFormat;
+    const SwAttrSet* pParentSet = pLayoutFormat ? &pLayoutFormat->GetAttrSet() : nullptr;
 
     if ( pParentSet == rpAttrSet->GetParent() )
         return;
@@ -1078,6 +1086,8 @@ SwContentNode::SwContentNode()
     : SwNode()
     , m_aCondCollListener( *this )
     , m_pCondColl( nullptr )
+    , m_aTableStyleRoleCollListener( *this )
+    , m_pTableStyleRoleColl( nullptr )
     , mbSetModifyAtAttr( false )
 {}
 
@@ -1086,6 +1096,8 @@ SwContentNode::SwContentNode( const SwNode& rWhere, const SwNodeType nNdType,
     : SwNode( rWhere, nNdType )
     , m_aCondCollListener( *this )
     , m_pCondColl( nullptr )
+    , m_aTableStyleRoleCollListener( *this )
+    , m_pTableStyleRoleColl( nullptr )
     , mbSetModifyAtAttr( false )
 {
     if(pColl)
@@ -1112,6 +1124,8 @@ void SwContentNode::ImplDestroy()
 
     m_aCondCollListener.EndListeningAll();
     m_pCondColl = nullptr;
+    m_aTableStyleRoleCollListener.EndListeningAll();
+    m_pTableStyleRoleColl = nullptr;
 
     if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(mpAttrSet.get())->SetModifyAtAttr( nullptr );
@@ -1132,7 +1146,7 @@ void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
     CallSwClientNotify(sw::UpdateAttrHint(&rUpdate, &rUpdate));
 }
 
-void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
+void SwContentNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
@@ -1219,7 +1233,13 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
     else if (rHint.GetId() == SfxHintId::SwModifyChanged)
     {
         auto pModifyChangedHint = static_cast<const sw::ModifyChangedHint*>(&rHint);
-        m_pCondColl = const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(pModifyChangedHint->m_pNew));
+        // A dying collection hands its listeners to the collection it derived from. For the
+        // table style role layer that parent is the paragraph style itself, which is no
+        // role collection, so the layer simply ends here.
+        if (m_pTableStyleRoleColl && &rModify == m_pTableStyleRoleColl)
+            m_pTableStyleRoleColl = nullptr;
+        else
+            m_pCondColl = const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(pModifyChangedHint->m_pNew));
     }
     else if(rHint.GetId() == SfxHintId::SwCondCollCondChg)
     {
@@ -1297,6 +1317,9 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl, bool /*bSetL
         {
             assert(dynamic_cast<SwTextFormatColl*>(pNewColl));
             ChkCondColl(static_cast<SwTextFormatColl*>(pNewColl));
+            // The table style role collection derives from the paragraph style, so a new
+            // style means a new role collection as well.
+            ChkTableStyleRoleColl();
             CallSwClientNotify( SwFormatChangeHint(pOldColl, pNewColl) );
         }
     }
@@ -1669,10 +1692,10 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
             // FME 2007-07-10 #i78124# If autostyle does not have a parent,
             // the string is empty.
             const SfxStringItem* pNameItem = nullptr;
-            if ( nullptr != GetCondFormatColl() ||
+            if ( nullptr != GetCondFormatColl() || nullptr != m_pTableStyleRoleColl ||
                  !(pNameItem = mpAttrSet->GetItemIfSet( RES_FRMATR_STYLE_NAME, false )) ||
                  pNameItem->GetValue().isEmpty() )
-                AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl() );
+                AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl(), &GetLayoutFormatColl() );
             else
                 const_cast<SwAttrSet*>(mpAttrSet.get())->SetParent( &GetFormatColl()->GetAttrSet() );
         }
@@ -1950,13 +1973,81 @@ void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)
         m_aCondCollListener.StartListening(pColl);
     m_pCondColl = pColl;
     if(GetpSwAttrSet())
-        AttrSetHandleHelper::SetParent(mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl());
+        AttrSetHandleHelper::SetParent(mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl(), &GetLayoutFormatColl());
 
     if(!IsModifyLocked())
     {
         CallSwClientNotify(SwFormatChangeHint(pOldColl ? pOldColl : GetFormatColl(), pColl ? pColl : GetFormatColl()));
     }
     InvalidateInSwCache();
+
+    // The table style role collection derives from the conditional result, so it has to
+    // follow the change.
+    ChkTableStyleRoleColl();
+}
+
+void SwContentNode::SetTableStyleRoleColl(SwTextFormatColl* pColl)
+{
+    if (pColl == m_pTableStyleRoleColl)
+        return;
+
+    const SwTextFormatColl* pOldRoleColl = m_pTableStyleRoleColl;
+    const SwFormatColl& rOldLayoutColl = GetLayoutFormatColl();
+    m_aTableStyleRoleCollListener.EndListeningAll();
+    if (pColl)
+        m_aTableStyleRoleCollListener.StartListening(pColl);
+    m_pTableStyleRoleColl = pColl;
+    if (GetpSwAttrSet())
+        AttrSetHandleHelper::SetParent(mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl(), &GetLayoutFormatColl());
+
+    if (!IsModifyLocked() && HasWriterListeners())
+    {
+        // The paragraph keeps its style; only the attributes the two role collections carry
+        // change their effective value. Announce exactly those, the way direct formatting
+        // does, so that the layout reformats the text without treating this as a style
+        // change that would also invalidate every frame position.
+        const SwFormatColl& rNewLayoutColl = GetLayoutFormatColl();
+        SwAttrSet aOldSet(GetDoc().GetAttrPool(), aTextFormatCollSetRange);
+        SwAttrSet aNewSet(GetDoc().GetAttrPool(), aTextFormatCollSetRange);
+        auto collect = [&](const SwTextFormatColl* pRoleColl)
+        {
+            if (!pRoleColl)
+                return;
+            SfxItemIter aIter(pRoleColl->GetAttrSet());
+            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            {
+                aOldSet.Put(rOldLayoutColl.GetAttrSet().Get(pItem->Which()));
+                aNewSet.Put(rNewLayoutColl.GetAttrSet().Get(pItem->Which()));
+            }
+        };
+        collect(pOldRoleColl);
+        collect(pColl);
+        if (aNewSet.Count())
+        {
+            SwAttrSetChg aOldChg(GetSwAttrSet(), aOldSet);
+            SwAttrSetChg aNewChg(GetSwAttrSet(), aNewSet);
+            CallSwClientNotify(sw::AttrSetChangeHint(&aOldChg, &aNewChg));
+        }
+    }
+    InvalidateInSwCache();
+}
+
+void SwContentNode::ChkTableStyleRoleColl()
+{
+    SwTextFormatColl* pRoleColl = nullptr;
+    if (IsTextNode() && GetNodes().IsDocNodes() && !GetDoc().IsInDtor())
+    {
+        // Text in a frame or footnote anchored in a cell lives in its own section outside
+        // the cell, so this only finds the cell for text that is really inside it.
+        if (const SwStartNode* pBoxStartNode = FindTableBoxStartNode())
+        {
+            if (const SwTableNode* pTableNode = pBoxStartNode->FindTableNode())
+                pRoleColl = GetDoc().GetTableStyleRoleColl(
+                    const_cast<SwTable&>(pTableNode->GetTable()), *pBoxStartNode,
+                    GetTextFormatColl());
+        }
+    }
+    SetTableStyleRoleColl(pRoleColl);
 }
 
 bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const

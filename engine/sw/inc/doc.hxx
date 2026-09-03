@@ -816,8 +816,12 @@ public:
                                   SwTextFormatColl *pDerivedFrom);
     SwConditionTextFormatColl* MakeCondTextFormatColl( const UIName &rFormatName,
                                                SwTextFormatColl *pDerivedFrom);
+    /// Create a paragraph collection that carries a table style role's text formatting on
+    /// top of rBase. It is not in the collection list and belongs to the table that asked
+    /// for it.
+    SwTextFormatColl* MakeTableStyleRoleColl(SwTextFormatColl& rBase);
     void DelTextFormatColl(size_t nFormat, bool bBroadcast = false);
-    void DelTextFormatColl( SwTextFormatColl const * pColl, bool bBroadcast = false );
+    SW_DLLPUBLIC void DelTextFormatColl( SwTextFormatColl const * pColl, bool bBroadcast = false );
     /** Add 4th optional parameter <bResetListAttrs>.
      'side effect' of <SetTextFormatColl> with <bReset = true> is that the hard
      attributes of the affected text nodes are cleared, except the break
@@ -1290,6 +1294,13 @@ public:
     /// those values baked in, so a later settings or style change takes effect without
     /// touching cell content again. Returns false if the table has no style set.
     SW_DLLPUBLIC bool ApplyTableStyleLive(SwTableNode& rTableNode);
+
+    /// The paragraph collection carrying the table style text formatting for paragraphs
+    /// with the paragraph style rBase in the cell whose section starts at rBoxStart, or
+    /// nullptr if the table has no live style or the style defines no text formatting for
+    /// that cell's role.
+    SwTextFormatColl* GetTableStyleRoleColl(SwTable& rTable, const SwStartNode& rBoxStart,
+                                            SwTextFormatColl& rBase);
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );

@@ -4060,14 +4060,30 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
 
 namespace {
 
+/// One id for a role position together with the single-row and single-column variants, which
+/// select different boxes of the style for the same position.
+sal_uInt8 lcl_TableStyleRoleKey(sal_uInt8 nPos, bool bSingleRow, bool bSingleCol)
+{
+    return static_cast<sal_uInt8>(nPos + (bSingleRow ? 16 : 0) + (bSingleCol ? 32 : 0));
+}
+
+/// The role position of the top-level cell in row nRow and column nCol.
+sal_uInt8 lcl_TableStyleRolePosition(const SwTable& rTable, size_t nRow, size_t nRows,
+                                     size_t nCol, size_t nCols)
+{
+    const SwTableStyleSettings& rSettings = rTable.GetTableStyleSettings();
+    const sal_uInt8 nRowRole = SwTableAutoFormat::GetTableStyleRowRole(nRow, nRows, rSettings);
+    const sal_uInt8 nColRole = SwTableAutoFormat::GetTableStyleColRole(nCol, nCols, rSettings);
+    return static_cast<sal_uInt8>(nRowRole * SwTableAutoFormat::nRoleCount + nColRole);
+}
+
 /// Look up (or lazily build) the frame format this table shares between every cell in the
 /// given role, so that toggling a role or switching styles later is a re-parenting of a few
 /// shared formats rather than a rewrite of every cell's attributes.
 SwTableBoxFormat* lcl_GetOrCreateTableStyleRoleFormat(SwDoc& rDoc, SwTable& rTable,
         const SwTableAutoFormat& rStyle, sal_uInt8 nPos, bool bSingleRow, bool bSingleCol)
 {
-    const sal_uInt8 nRoleKey
-        = static_cast<sal_uInt8>(nPos + (bSingleRow ? 16 : 0) + (bSingleCol ? 32 : 0));
+    const sal_uInt8 nRoleKey = lcl_TableStyleRoleKey(nPos, bSingleRow, bSingleCol);
     if (SwTableBoxFormat* pExisting = rTable.FindTableStyleRoleFormat(nRoleKey))
         return pExisting;
 
@@ -4086,6 +4102,101 @@ SwTableBoxFormat* lcl_GetOrCreateTableStyleRoleFormat(SwDoc& rDoc, SwTable& rTab
     return pRoleFormat;
 }
 
+/// Look up (or lazily build) the paragraph collection that carries the text formatting the
+/// style defines for the given role, on top of the paragraph style rBase. Returns nullptr
+/// when the role defines no text formatting, so that such paragraphs simply keep rBase.
+SwTextFormatColl* lcl_GetOrCreateTableStyleRoleColl(SwDoc& rDoc, SwTable& rTable,
+        const SwTableAutoFormat& rStyle, sal_uInt8 nPos, bool bSingleRow, bool bSingleCol,
+        SwTextFormatColl& rBase)
+{
+    const sal_uInt8 nRoleKey = lcl_TableStyleRoleKey(nPos, bSingleRow, bSingleCol);
+    if (SwTextFormatColl* pExisting = rTable.FindTableStyleRoleColl(nRoleKey, rBase))
+        return pExisting;
+
+    // Only the text items the style really defines for this role go onto the collection;
+    // everything else keeps coming from the paragraph style below it.
+    SfxItemSet aTextSet(rDoc.GetAttrPool(), aTextFormatCollSetRange);
+    rStyle.UpdateToSet(nPos, bSingleRow, bSingleCol, aTextSet,
+            SwTableAutoFormatUpdateFlags::Char | SwTableAutoFormatUpdateFlags::DefinedOnly,
+            nullptr);
+    if (!aTextSet.Count())
+        return nullptr;
+
+    SwTextFormatColl* pRoleColl = rDoc.MakeTableStyleRoleColl(rBase);
+    pRoleColl->SetFormatAttr(aTextSet);
+    rTable.AddTableStyleRoleColl(nRoleKey, rBase, pRoleColl);
+    return pRoleColl;
+}
+
+/// Resolve the text formatting of every paragraph in the cell whose section starts at
+/// rBoxStart against the role at nPos, or end the table style text layer for them when
+/// pStyle is null. Paragraphs of a table nested in the cell belong to that table's own
+/// style and are left alone.
+void lcl_ApplyTableStyleRoleToCellText(SwDoc& rDoc, SwTable& rTable,
+        const SwTableAutoFormat* pStyle, sal_uInt8 nPos, bool bSingleRow, bool bSingleCol,
+        const SwStartNode& rBoxStart)
+{
+    SwNodes& rNodes = rDoc.GetNodes();
+    SwNodeOffset nIndex = rBoxStart.GetIndex() + 1;
+    const SwNodeOffset nEnd = rBoxStart.EndOfSectionIndex();
+    while (nIndex < nEnd)
+    {
+        SwNode* pNode = rNodes[nIndex];
+        if (pNode->IsTableNode())
+        {
+            nIndex = pNode->EndOfSectionIndex() + 1;
+            continue;
+        }
+        if (SwTextNode* pTextNode = pNode->GetTextNode())
+        {
+            SwTextFormatColl* pRoleColl = pStyle
+                ? lcl_GetOrCreateTableStyleRoleColl(rDoc, rTable, *pStyle, nPos, bSingleRow,
+                                                    bSingleCol, pTextNode->GetTextFormatColl())
+                : nullptr;
+            pTextNode->SetTableStyleRoleColl(pRoleColl);
+        }
+        ++nIndex;
+    }
+}
+
+}
+
+SwTextFormatColl* SwDoc::GetTableStyleRoleColl(SwTable& rTable, const SwStartNode& rBoxStart,
+                                               SwTextFormatColl& rBase)
+{
+    const TableStyleName& rStyleName = rTable.GetTableStyleName();
+    if (rStyleName.isEmpty())
+        return nullptr;
+    const SwTableAutoFormat* pStyle = GetTableStyles().FindAutoFormat(rStyleName);
+    if (!pStyle)
+        return nullptr;
+
+    const SwTableBox* pBox = rTable.GetTableBox(rBoxStart.GetIndex());
+    if (!pBox)
+        return nullptr;
+    // Roles follow the top-level grid: a cell of a sub table (old table model) takes the role
+    // of the top-level cell that holds it.
+    const SwTableLine* pLine = pBox->GetUpper();
+    while (pLine && pLine->GetUpper())
+    {
+        pBox = pLine->GetUpper();
+        pLine = pBox->GetUpper();
+    }
+    if (!pLine)
+        return nullptr;
+
+    const SwTableLines& rLines = rTable.GetTabLines();
+    const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+    const sal_uInt16 nRow = rLines.GetPos(pLine);
+    const auto aBoxIt = std::find(rBoxes.begin(), rBoxes.end(), pBox);
+    if (nRow == USHRT_MAX || aBoxIt == rBoxes.end())
+        return nullptr;
+    const size_t nRows = rLines.size();
+    const size_t nCols = rBoxes.size();
+    const size_t nCol = std::distance(rBoxes.begin(), aBoxIt);
+    const sal_uInt8 nPos = lcl_TableStyleRolePosition(rTable, nRow, nRows, nCol, nCols);
+    return lcl_GetOrCreateTableStyleRoleColl(*this, rTable, *pStyle, nPos, nRows == 1,
+                                             nCols == 1, rBase);
 }
 
 bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode)
@@ -4095,38 +4206,41 @@ bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode)
     SwTableAutoFormat* pStyle
         = rStyleName.isEmpty() ? nullptr : GetTableStyles().FindAutoFormat(rStyleName);
 
-    // A cached role format is only valid for the exact style and settings combination it was
-    // built under, either of which may have changed since cells last derived from it. Start
-    // every application from a clean cache rather than trying to tell which entries still
-    // apply; TakeTableStyleRoleFormats keeps the old formats around just long enough to free
-    // whichever ones end up with no cells still deriving from them, below.
+    // A cached role format or collection is only valid for the exact style and settings
+    // combination it was built under, either of which may have changed since cells last
+    // derived from it. Start every application from a clean cache rather than trying to tell
+    // which entries still apply; the Take calls keep the old objects around just long enough
+    // to free whichever ones end up with no cells or paragraphs still using them, below.
     std::vector<SwTableBoxFormat*> aPreviousRoleFormats = rTable.TakeTableStyleRoleFormats();
+    std::vector<SwTextFormatColl*> aPreviousRoleColls = rTable.TakeTableStyleRoleColls();
 
     bool bChangedAnyBox = false;
-    const SwTableStyleSettings& rSettings = rTable.GetTableStyleSettings();
     const SwTableLines& rLines = rTable.GetTabLines();
     const size_t nRows = rLines.size();
     for (size_t nRow = 0; nRow < nRows; ++nRow)
     {
         const SwTableBoxes& rBoxes = rLines[nRow]->GetTabBoxes();
         const size_t nCols = rBoxes.size();
-        const sal_uInt8 nRowRole
-            = pStyle ? SwTableAutoFormat::GetTableStyleRowRole(nRow, nRows, rSettings) : 0;
         for (size_t nCol = 0; nCol < nCols; ++nCol)
         {
             SwTableBox* pBox = rBoxes[nCol];
             // A box without its own start node is a container for a nested table rather
             // than a real cell; leave whatever formatting it already has alone.
-            if (!pBox->GetSttNd() || pBox->HasDirectFormatting())
+            if (!pBox->GetSttNd())
+                continue;
+
+            const sal_uInt8 nPos
+                = pStyle ? lcl_TableStyleRolePosition(rTable, nRow, nRows, nCol, nCols) : 0;
+            lcl_ApplyTableStyleRoleToCellText(*this, rTable, pStyle, nPos, nRows == 1,
+                                              nCols == 1, *pBox->GetSttNd());
+
+            if (pBox->HasDirectFormatting())
                 continue;
 
             SwTableBoxFormat* pOwnFormat = pBox->ClaimFrameFormat();
             SwFrameFormat* pTargetFormat;
             if (pStyle)
             {
-                const sal_uInt8 nColRole = SwTableAutoFormat::GetTableStyleColRole(nCol, nCols, rSettings);
-                const sal_uInt8 nPos = static_cast<sal_uInt8>(
-                        nRowRole * SwTableAutoFormat::nRoleCount + nColRole);
                 pTargetFormat = lcl_GetOrCreateTableStyleRoleFormat(
                         *this, rTable, *pStyle, nPos, nRows == 1, nCols == 1);
             }
@@ -4158,6 +4272,9 @@ bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode)
     for (SwTableBoxFormat* pOldFormat : aPreviousRoleFormats)
         if (!pOldFormat->HasWriterListeners())
             delete pOldFormat;
+    for (SwTextFormatColl* pOldColl : aPreviousRoleColls)
+        if (!pOldColl->HasWriterListeners())
+            delete pOldColl;
 
     if (bChangedAnyBox)
         getIDocumentState().SetModified();

@@ -185,6 +185,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
 
                 if( RES_CONDTXTFMTCOLL == rTextNd.GetTextColl()->Which() )
                     rTextNd.ChkCondColl();
+                rTextNd.ChkTableStyleRoleColl();
             }
             else if( rNd.IsContentNode() )
                 static_cast<SwContentNode&>(rNd).InvalidateNumRule();
@@ -339,6 +340,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
 
                     if( RES_CONDTXTFMTCOLL == pTextNd->GetTextColl()->Which() )
                         pTextNd->ChkCondColl();
+                    pTextNd->ChkTableStyleRoleColl();
                 }
                 else
                 {

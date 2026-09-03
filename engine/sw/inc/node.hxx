@@ -401,6 +401,12 @@ class SAL_DLLPUBLIC_RTTI SwContentNode: public sw::BroadcastingModify, public Sw
 
     sw::WriterMultiListener m_aCondCollListener;
     SwFormatColl* m_pCondColl;
+    /// The paragraph collection that carries the text formatting of the table style role
+    /// this paragraph is in, or nullptr when the paragraph is not inside a cell of a table
+    /// with a live table style. It is an unlisted collection owned by the table, derived
+    /// from the collection GetAnyFormatColl returns, and has the same name as that one.
+    sw::WriterMultiListener m_aTableStyleRoleCollListener;
+    SwTextFormatColl* m_pTableStyleRoleColl;
     mutable bool mbSetModifyAtAttr;
 
 protected:
@@ -504,6 +510,19 @@ public:
     inline SwTextFormatColl& GetTextFormatColl() const;
     void SetCondFormatColl( SwFormatColl* );
     inline SwFormatColl* GetCondFormatColl() const;
+
+    /// The collection whose attribute set the node's own attributes inherit from and whose
+    /// font the layout starts from: the table style role collection when there is one, else
+    /// the same collection as GetAnyFormatColl. GetAnyFormatColl and GetTextFormatColl keep
+    /// answering "which paragraph style is this", so use them for everything that copies,
+    /// compares, names or exports the style.
+    inline SwFormatColl& GetLayoutFormatColl() const;
+    inline SwTextFormatColl& GetLayoutTextFormatColl() const;
+    SwTextFormatColl* GetTableStyleRoleColl() const { return m_pTableStyleRoleColl; }
+    void SetTableStyleRoleColl( SwTextFormatColl* );
+    /// Look up which table style role, if any, this node's position gives it and switch to
+    /// that role's collection.
+    void ChkTableStyleRoleColl();
 
     bool IsAnyCondition( SwCollCondition& rTmp ) const;
     void ChkCondColl(const SwTextFormatColl* pColl = nullptr);
@@ -745,9 +764,19 @@ inline SwTextFormatColl& SwContentNode::GetTextFormatColl() const
     return *const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(pRegistered));
 }
 
+inline SwFormatColl& SwContentNode::GetLayoutFormatColl() const
+{
+    return m_pTableStyleRoleColl ? *m_pTableStyleRoleColl : GetAnyFormatColl();
+}
+
+inline SwTextFormatColl& SwContentNode::GetLayoutTextFormatColl() const
+{
+    return m_pTableStyleRoleColl ? *m_pTableStyleRoleColl : GetTextFormatColl();
+}
+
 inline const SwAttrSet& SwContentNode::GetSwAttrSet() const
 {
-    return mpAttrSet ? *GetpSwAttrSet() : GetAnyFormatColl().GetAttrSet();
+    return mpAttrSet ? *GetpSwAttrSet() : GetLayoutFormatColl().GetAttrSet();
 }
 
 inline const SfxPoolItem& SwContentNode::GetAttr( sal_uInt16 nWhich,

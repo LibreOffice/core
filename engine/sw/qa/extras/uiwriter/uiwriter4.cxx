@@ -20,6 +20,7 @@
 #include <IDocumentSettingAccess.hxx>
 
 #include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 
@@ -30,6 +31,9 @@
 #include <tblafmt.hxx>
 #include <swtable.hxx>
 #include <itabenum.hxx>
+#include <fmtcol.hxx>
+#include <poolfmt.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
@@ -1333,6 +1337,193 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleChgUpdatesLiveCells)
     pDoc->ChgTableStyle(TableStyleName(u"Test Style"_ustr), aNewStyle);
 
     CPPUNIT_ASSERT(bool(pTopLeftBox->GetFrameFormat()->GetFormatAttr(RES_BACKGROUND) == aBackground2));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleLiveSurvivesParagraphStyleDeletion)
+{
+    // A table whose header row takes white text from a live table style (the built-in
+    // "Grid Table 4 Accent 1"), and a header paragraph in a paragraph style of its own.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const TableStyleName aStyleName(u"Grid Table 4 Accent 1"_ustr);
+    CPPUNIT_ASSERT(pDoc->GetTableStyles().FindAutoFormat(aStyleName));
+    SwInsertTableOptions aOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(aStyleName);
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    const SwTableBox* pHeaderBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+    SwTextNode* pHeader = pDoc->GetNodes()[pHeaderBox->GetSttIdx() + 1]->GetTextNode();
+    CPPUNIT_ASSERT(pHeader);
+    SwTextFormatColl* pParaStyle
+        = pDoc->MakeTextFormatColl(UIName(u"Header Style"_ustr), pDoc->GetDfltTextFormatColl());
+    pHeader->ChgFormatColl(pParaStyle);
+    CPPUNIT_ASSERT(pHeader->GetTableStyleRoleColl());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwFormat*>(pParaStyle),
+                         pHeader->GetTableStyleRoleColl()->DerivedFrom());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pHeader->GetSwAttrSet().Get(RES_CHRATR_COLOR).GetValue());
+
+    // Deleting the paragraph style moves the paragraph to the style's parent; the table style
+    // keeps giving it the header's text color, now on top of that parent.
+    pDoc->DelTextFormatColl(pParaStyle);
+    CPPUNIT_ASSERT(pHeader->GetTableStyleRoleColl());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwFormat*>(pHeader->GetTextColl()),
+                         pHeader->GetTableStyleRoleColl()->DerivedFrom());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pHeader->GetSwAttrSet().Get(RES_CHRATR_COLOR).GetValue());
+
+    // A paragraph style created afterwards can get the deleted style's address. The table
+    // style builds the header's formatting on that new style, not on what it had cached for
+    // the old one.
+    SwTextFormatColl* pNewParaStyle
+        = pDoc->MakeTextFormatColl(UIName(u"Header Style"_ustr), pDoc->GetDfltTextFormatColl());
+    pHeader->ChgFormatColl(pNewParaStyle);
+    CPPUNIT_ASSERT(pHeader->GetTableStyleRoleColl());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwFormat*>(pNewParaStyle),
+                         pHeader->GetTableStyleRoleColl()->DerivedFrom());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pHeader->GetSwAttrSet().Get(RES_CHRATR_COLOR).GetValue());
+}
+
+namespace
+{
+/// The first paragraph of a table cell.
+SwTextNode* lcl_GetCellTextNode(SwDoc& rDoc, const SwTable& rTable, size_t nRow, size_t nCol)
+{
+    const SwTableBox* pBox = rTable.GetTabLines()[nRow]->GetTabBoxes()[nCol];
+    return rDoc.GetNodes()[pBox->GetSttIdx() + 1]->GetTextNode();
+}
+
+Color lcl_GetEffectiveTextColor(const SwTextNode& rNode)
+{
+    return rNode.GetSwAttrSet().Get(RES_CHRATR_COLOR).GetValue();
+}
+
+/// A table style whose header row (the first four role positions) colors its text.
+SwTableAutoFormat* lcl_MakeHeaderTextColorStyle(SwDoc& rDoc, const Color& rColor)
+{
+    SwTableAutoFormat* pStyle = rDoc.MakeTableStyle(TableStyleName(u"Test Style"_ustr));
+    SvxColorItem aColor(rColor, RES_CHRATR_COLOR);
+    for (sal_uInt8 nPos = 0; nPos < 4; ++nPos)
+        pStyle->GetBoxFormat(nPos).GetProps().SetColor(aColor);
+    return pStyle;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleLiveTextFormatting)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    lcl_MakeHeaderTextColorStyle(*pDoc, COL_LIGHTRED);
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    SwTextNode* pHeaderNode = lcl_GetCellTextNode(*pDoc, rTable, 0, 0);
+    SwTextNode* pBodyNode = lcl_GetCellTextNode(*pDoc, rTable, 1, 0);
+
+    // The header text takes the style's color without the paragraph itself changing: no
+    // color item of its own, and the same paragraph style as before.
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pHeaderNode));
+    CPPUNIT_ASSERT(!pHeaderNode->GetpSwAttrSet()
+                   || SfxItemState::SET
+                          != pHeaderNode->GetpSwAttrSet()->GetItemState(RES_CHRATR_COLOR, false));
+    CPPUNIT_ASSERT(pDoc->GetTextFormatColls()->IsAlive(pHeaderNode->GetTextColl()));
+    CPPUNIT_ASSERT(pDoc->GetTextFormatColls()->IsAlive(&pHeaderNode->GetTextFormatColl()));
+    CPPUNIT_ASSERT(COL_LIGHTRED != lcl_GetEffectiveTextColor(*pBodyNode));
+
+    // Formatting the paragraph itself wins over the style.
+    SvxColorItem aOwnColor(COL_LIGHTBLUE, RES_CHRATR_COLOR);
+    pHeaderNode->SetAttr(aOwnColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, lcl_GetEffectiveTextColor(*pHeaderNode));
+    pHeaderNode->ResetAttr(RES_CHRATR_COLOR);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pHeaderNode));
+
+    // Switching the header row off takes its text formatting with it.
+    aSettings.m_bUseFirstRowStyle = false;
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+    CPPUNIT_ASSERT(COL_LIGHTRED != lcl_GetEffectiveTextColor(*pHeaderNode));
+
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pHeaderNode));
+
+    // So does removing the style from the table.
+    rMutableTable.SetTableStyleName(TableStyleName());
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+    CPPUNIT_ASSERT(!pHeaderNode->GetTableStyleRoleColl());
+    CPPUNIT_ASSERT(COL_LIGHTRED != lcl_GetEffectiveTextColor(*pHeaderNode));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleLiveTextFollowsParagraphs)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    lcl_MakeHeaderTextColorStyle(*pDoc, COL_LIGHTRED);
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED,
+                         lcl_GetEffectiveTextColor(*lcl_GetCellTextNode(*pDoc, rTable, 0, 0)));
+
+    // A new paragraph in the header cell is header text too. The split leaves the typed
+    // text in the first paragraph and the cursor in the new, second one.
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    pWrtShell->Insert(u"first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"second"_ustr);
+    const SwTableBox* pHeaderBox = rTable.GetTabLines()[0]->GetTabBoxes()[0];
+    SwTextNode* pFirstNode = pDoc->GetNodes()[pHeaderBox->GetSttIdx() + 1]->GetTextNode();
+    SwTextNode* pSecondNode = pDoc->GetNodes()[pHeaderBox->GetSttIdx() + 2]->GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(u"first"_ustr, pFirstNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"second"_ustr, pSecondNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(pSecondNode, pWrtShell->GetCursor()->GetPointNode().GetTextNode());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pFirstNode));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pSecondNode));
+
+    // Giving it another paragraph style keeps it header text on top of that style.
+    SwTextFormatColl* pHeading
+        = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_HEADLINE1);
+    pWrtShell->SetTextFormatColl(pHeading);
+    CPPUNIT_ASSERT_EQUAL(pHeading, pSecondNode->GetTextColl());
+    CPPUNIT_ASSERT(pSecondNode->GetTableStyleRoleColl());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwFormat*>(pHeading),
+                         pSecondNode->GetTableStyleRoleColl()->DerivedFrom());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pSecondNode));
+
+    // Undoing back to the single paragraph leaves that one as it was. The join may keep
+    // either node object, so look the paragraph up again.
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+    rUndoManager.Undo();
+    rUndoManager.Undo();
+    SwTextNode* pJoinedNode = lcl_GetCellTextNode(*pDoc, rTable, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(u"first"_ustr, pJoinedNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, lcl_GetEffectiveTextColor(*pJoinedNode));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)
