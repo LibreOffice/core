@@ -4979,23 +4979,6 @@ char* COKitDocumentImpl::getPartName(int nPart)
     return convertOUString(pDoc->getPartName(nPart));
 }
 
-char* COKitDocumentImpl::getPartHash(int nPart)
-{
-    comphelper::ProfileZone aZone("COKitDocumentImpl::getPartHash");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    ITiledRenderable* pDoc = getTiledRenderable(this);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
-    }
-
-    return convertOUString(pDoc->getPartHash(nPart));
-}
-
 void COKitDocumentImpl::setPartMode(COKitPartMode eMode)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setPartMode");

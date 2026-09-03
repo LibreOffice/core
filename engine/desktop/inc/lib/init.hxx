@@ -341,7 +341,6 @@ namespace desktop {
         void setView(int nId) override;
         int getView() override;
         int getViewsCount() override;
-        char* getPartHash(int nPart) override;
         void paintPartTile(unsigned char* pBuffer, const int nPart, const int nMode,
                            const int nCanvasWidth, const int nCanvasHeight, const int nTilePosX,
                            const int nTilePosY, const int nTileWidth, const int nTileHeight,

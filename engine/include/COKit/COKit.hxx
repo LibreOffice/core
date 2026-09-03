@@ -2054,9 +2054,6 @@ struct COKitDocument
      */
     virtual int getViewsCount() = 0;
 
-    /// Get the current part's hash.
-    virtual char* getPartHash(int nPart) = 0;
-
     /**
      * Renders a subset of the document's part to a pre-allocated buffer.
      *
