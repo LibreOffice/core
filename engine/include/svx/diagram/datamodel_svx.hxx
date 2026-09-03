@@ -59,18 +59,43 @@ enum TypeConstant {
 };
 
 // The values a Connection carries.
+struct Point;
+
 struct SVXCORE_DLLPUBLIC ConnectionValues
 {
-    /* Variable        varName    XML_Tag */
-    TypeConstant    mnXMLType = XML_parOf; // XML_type
-    OUString        msModelId; // XML_modelId
-    OUString        msSourceId; // XML_srcId
-    OUString        msDestId; // XML_destId
-    OUString        msPresId; // XML_presId
-    OUString        msSibTransId; // XML_sibTransId
-    OUString        msParTransId; // XML_parTransId
-    sal_Int32       mnSourceOrder = 0; // XML_srcOrd
-    sal_Int32       mnDestOrder = 0; // XML_destOrd
+    // XML_type: Which relation this Connection states: parOf a parent and a child of the data tree,
+    // presOf which presentation Point shows a Point, presParOf a parent and a child of the
+    // presentation tree.
+    TypeConstant    mnXMLType = XML_parOf;
+
+    // XML_modelId: The id of this Connection. A parTrans or a sibTrans Point names it in msCnxId.
+    OUString        msModelId;
+
+    // XML_srcId: The modelId of the Point the relation starts at.
+    OUString        msSourceId;
+
+    // XML_destId: The modelId of the Point the relation ends at.
+    OUString        msDestId;
+
+    // XML_presId: The id of the layout node that states this Connection.
+    OUString        msPresId;
+
+    // XML_sibTransId: For a parOf the modelId of the sibTrans Point that draws what separates this
+    // child from the next one.
+    OUString        msSibTransId;
+
+    // XML_parTransId: For a parOf the modelId of the parTrans Point that draws what joins this
+    // child to its parent.
+    OUString        msParTransId;
+
+    // XML_srcOrd: For a parOf or a presParOf the place of the child among its siblings. For a
+    // presOf which presentation of the Point this is, for a Point that is shown in more than one
+    // place.
+    sal_Int32       mnSourceOrder = 0;
+
+    // XML_destOrd: For a presOf the paragraph of the shape that represents this Point, where one
+    // shape represents several of them. Zero otherwise, and zero throughout many files.
+    sal_Int32       mnDestOrder = 0;
 };
 
 // A RefCounted Connection
@@ -88,58 +113,180 @@ struct SVXCORE_DLLPUBLIC Connection : public salhelper::SimpleReferenceObject,
     }
 
     void writeDiagramData_connection(sax_fastparser::FSHelperPtr& rTarget);
+
+    // The Points that msSourceId and msDestId name. Resolved by
+    // DiagramData_svx::buildDiagramDataModel, which resets them before it resolves them again,
+    // and left empty by a copy, which belongs to no model.
+    Point* mpSourcePoint = nullptr;
+    Point* mpDestinationPoint = nullptr;
+
+    // The child index that a parOf or a presParOf Connection defines
+    sal_Int32 getChildIndex() const;
+
+    // Which presentation of its Point a presOf Connection defines, for a Point that is shown in
+    // more than one place
+    sal_Int32 getPresentationIndex() const;
+
+    // Which paragraph of the shape a presOf Connection defines, for a shape that represents more
+    // than one Point
+    sal_Int32 getParagraphIndex() const;
 };
 
 typedef std::vector< rtl::Reference< Connection > > Connections;
 
 // A Point
+// The dgm:presLayoutVars of a presentation Point
+struct SVXCORE_DLLPUBLIC PresentationLayoutVariables
+{
+    // XML_resizeHandles: What the file states about resizing this node. Empty when it states
+    // nothing.
+    OUString     msResizeHandles;
+
+    // XML_chMax: The largest number of children the layout draws for this node. -1 when the file
+    // states none.
+    sal_Int32    mnMaxChildren = -1;
+
+    // XML_chPref: The number of children the layout is built for. -1 when the file states none.
+    sal_Int32    mnPreferredChildren = -1;
+
+    // XML_dir: The direction the layout runs in, norm or rev. A layout condition tests it.
+    sal_Int32    mnDirection = XML_norm;
+
+    // XML_hierBranch: For a hierarchy the side the branches go to. A Point that holds none takes
+    // the value of the nearest one above it that does.
+    std::optional<sal_Int32> moHierarchyBranch;
+
+    // XML_orgChart: The layout draws an organization chart, which is what gives an asst Point a
+    // place of its own.
+    bool         mbOrgChartEnabled : 1 = false;
+
+    // XML_bulletEnabled: Bullets are drawn for the text of this node.
+    bool         mbBulletEnabled : 1 = false;
+};
+
+// The layout, the quick style and the colours the whole Diagram was built with. Only its
+// root Point states them, so no other Point holds them.
+struct SVXCORE_DLLPUBLIC RootValues
+{
+    OUString     msColorTransformCategoryId; // XML_csCatId
+    OUString     msColorTransformTypeId; // XML_csTypeId
+    OUString     msLayoutCategoryId; // XML_loCatId
+    OUString     msLayoutTypeId; // XML_loTypeId
+    OUString     msQuickStyleCategoryId; // XML_qsCatId
+    OUString     msQuickStyleTypeId; // XML_qsTypeId
+};
+
+// The dgm:prSet attributes of a Point that are read on import and written on export and are not
+// looked at in between. No file of the 167 layout examples states any of them.
+struct SVXCORE_DLLPUBLIC PreservedValues
+{
+    /* Variable        varName    XML_Tag */
+    sal_Int32    mnCustomAngle = -1; // XML_custAng
+    sal_Int32    mnPercentageNeighbourWidth = -1; // XML_custLinFactNeighborX
+    sal_Int32    mnPercentageNeighbourHeight = -1; // XML_custLinFactNeighborY
+    sal_Int32    mnPercentageOwnWidth = -1; // XML_custLinFactX
+    sal_Int32    mnPercentageOwnHeight = -1; // XML_custLinFactY
+    sal_Int32    mnIncludeAngleScale = -1; // XML_custRadScaleInc
+    sal_Int32    mnRadiusScale = -1; // XML_custRadScaleRad
+    sal_Int32    mnWidthScale = -1; // XML_custScaleX
+    sal_Int32    mnHeightScale = -1; // XML_custScaleY
+    sal_Int32    mnWidthOverride = -1; // XML_custSzX
+    sal_Int32    mnHeightOverride = -1; // XML_custSzY
+    bool         mbCoherent3DOffset : 1 = false; // XML_coherent3DOff
+    bool         mbCustomHorizontalFlip : 1 = false; // XML_custFlipHor
+    bool         mbCustomVerticalFlip : 1 = false; // XML_custFlipVert
+    bool         mbIsPlaceholder : 1 = false; // XML_phldr
+};
+
+// What a presentation Point states about itself. A Point of another role states none of
+// it, so it holds no such values.
+struct SVXCORE_DLLPUBLIC PresentationValues
+{
+    // XML_presAssocID: For a presentation Point the modelId of the Point it was built for. A layout
+    // gives it to every presentation Point it builds for a Point, so it identifies none of them.
+    OUString     msPresentationAssociationId;
+
+    // XML_presName: The name the layout gives this presentation Point, rootText1 or ConnectLine1
+    // for example.
+    OUString     msPresentationLayoutName;
+
+    // XML_presStyleLbl: Which style of the quickStyle the shape takes, node1 or revTx for example.
+    // Empty for a Point that takes none.
+    OUString     msPresentationLayoutStyleLabel;
+
+    // XML_presStyleCnt: How many Points share this style label, so a style can vary over them. -1
+    // for a Point that states none.
+    sal_Int32    mnLayoutStyleCount = -1;
+
+    // XML_presStyleIdx: The place of this Point among those sharing the style label, counted from
+    // zero. -1 for a Point that states none.
+    sal_Int32    mnLayoutStyleIndex = -1;
+};
+
 struct SVXCORE_DLLPUBLIC PointValues
 {
     // PT: dgm:pt
     // PRS: dgm:prSet
     // PLV: dgm:presLayoutVars
 
-    /* TYP */ OUString     msCnxId; // XML_cxnId
-    /* PT  */ OUString     msModelId; // XML_modelId
-    /* PRS */ OUString     msColorTransformCategoryId; // XML_csCatId
-    /* PRS */ OUString     msColorTransformTypeId; // XML_csTypeId
-    /* PRS */ OUString     msLayoutCategoryId; // XML_loCatId
-    /* PRS */ OUString     msLayoutTypeId; // XML_loTypeId
-    /* PRS */ OUString     msPlaceholderText; // XML_phldrT
-    /* PRS */ OUString     msPresentationAssociationId; // XML_presAssocID
-    /* PRS */ OUString     msPresentationLayoutName; // XML_presName
-    /* PRS */ OUString     msPresentationLayoutStyleLabel; // XML_presStyleLbl
-    /* PRS */ OUString     msQuickStyleCategoryId; // XML_qsCatId
-    /* PRS */ OUString     msQuickStyleTypeId; // XML_qsTypeId
-    /* PLV */ OUString     msResizeHandles; // XML_resizeHandles
+    // XML_cxnId: For a parTrans or a sibTrans Point the modelId of the parOf Connection it belongs
+    // to. Empty for every other Point.
+    /* TYP */ OUString     msCnxId;
 
-    /* PT  */ TypeConstant mnXMLType = XML_node; // XML_type
-    /* PLV */ sal_Int32    mnMaxChildren = -1; // XML_chMax
-    /* PLV */ sal_Int32    mnPreferredChildren = -1; // XML_chPref
-    /* PLV */ sal_Int32    mnDirection = XML_norm; // XML_dir
-    /* PLV */ std::optional<sal_Int32> moHierarchyBranch; // XML_hierBranch
+    // XML_modelId: The id of this Point. Connections name it, and the shape that draws it carries
+    // it.
+    /* PT  */ OUString     msModelId;
 
-    /* PRS */ sal_Int32    mnCustomAngle = -1; // XML_custAng
-    /* PRS */ sal_Int32    mnPercentageNeighbourWidth = -1; // XML_custLinFactNeighborX
-    /* PRS */ sal_Int32    mnPercentageNeighbourHeight = -1; // XML_custLinFactNeighborY
-    /* PRS */ sal_Int32    mnPercentageOwnWidth = -1; // XML_custLinFactX
-    /* PRS */ sal_Int32    mnPercentageOwnHeight = -1; // XML_custLinFactY
-    /* PRS */ sal_Int32    mnIncludeAngleScale = -1; // XML_custRadScaleInc
-    /* PRS */ sal_Int32    mnRadiusScale = -1; // XML_custRadScaleRad
-    /* PRS */ sal_Int32    mnWidthScale = -1; // XML_custScaleX
-    /* PRS */ sal_Int32    mnHeightScale = -1; // XML_custScaleY
-    /* PRS */ sal_Int32    mnWidthOverride = -1; // XML_custSzX
-    /* PRS */ sal_Int32    mnHeightOverride = -1; // XML_custSzY
-    /* PRS */ sal_Int32    mnLayoutStyleCount = -1; // XML_presStyleCnt
-    /* PRS */ sal_Int32    mnLayoutStyleIndex = -1; // XML_presStyleIdx
+    // XML_phldrT: The text a node shows while it holds none of its own, [Text] for a node that was
+    // just added.
+    /* PRS */ OUString     msPlaceholderText;
 
-    /* PLV */ bool         mbOrgChartEnabled : 1 = false; // XML_orgChart
-    /* PLV */ bool         mbBulletEnabled : 1 = false; // XML_bulletEnabled
-    /* PRS */ bool         mbCoherent3DOffset : 1 = false; // XML_coherent3DOff
-    /* PRS */ bool         mbCustomHorizontalFlip : 1 = false; // XML_custFlipHor
-    /* PRS */ bool         mbCustomVerticalFlip : 1 = false; // XML_custFlipVert
-    /* PRS */ bool         mbCustomText : 1 = false; // XML_custT
-    /* PRS */ bool         mbIsPlaceholder : 1 = false; // XML_phldr
+    // XML_type: Which kind of Point this is: doc the single root of the data tree, node and asst
+    // hold the text, parTrans and sibTrans draw what joins and separates, pres is built by the
+    // layout.
+    /* PT  */ TypeConstant mnXMLType = XML_node;
+
+    // XML_custT: The text of the node is the user's own, so the layout leaves it as it is.
+    /* PRS */ bool         mbCustomText : 1 = false;
+
+    // The dgm:presLayoutVars of a presentation Point. A Point that states none of them holds no
+    // variables at all, which is also what decides whether the element gets written again.
+    std::optional<PresentationLayoutVariables> moLayoutVariables;
+
+    // The variables, or the defaults for a Point that holds none
+    const PresentationLayoutVariables& getLayoutVariables() const;
+
+    // The variables, created at the defaults if the Point holds none yet
+    PresentationLayoutVariables& ensureLayoutVariables();
+
+    // The values that only travel from the file back to the file. Nothing reasons about them, so
+    // a Point that states none of them holds none, and then writes none.
+    std::optional<PreservedValues> moPreserved;
+
+    // The preserved values, or the defaults for a Point that holds none
+    const PreservedValues& getPreserved() const;
+
+    // The preserved values, created at the defaults if the Point holds none yet
+    PreservedValues& ensurePreserved();
+
+    // The layout, the style and the colours of the whole Diagram, on its root Point only.
+    std::optional<RootValues> moRoot;
+
+    // The root values, or the defaults for a Point that holds none
+    const RootValues& getRoot() const;
+
+    // The root values, created at the defaults if the Point holds none yet
+    RootValues& ensureRoot();
+
+    // What a presentation Point states about itself. A Point of another role holds none of it.
+    std::optional<PresentationValues> moPresentation;
+
+    // The presentation values, or the defaults for a Point that holds none
+    const PresentationValues& getPresentation() const;
+
+    // The presentation values, created at the defaults if the Point holds none yet
+    PresentationValues& ensurePresentation();
+
 };
 
 // A ref-counted point
@@ -156,6 +303,14 @@ struct SVXCORE_DLLPUBLIC Point : public salhelper::SimpleReferenceObject, public
     }
 
     void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
+
+    // The presOf Connections that start at this Point, so the presentation Points that show it.
+    // Resolved and reset like the Connection members above.
+    std::vector<Connection*> maShownBy;
+
+    // The presOf Connections that end at this Point, so the Points that this presentation Point
+    // shows. Its size is how many Points one shape represents.
+    std::vector<Connection*> maShows;
 };
 
 std::u16string_view SVXCORE_DLLPUBLIC getNameForTypeConstant(TypeConstant aTypeConstant);

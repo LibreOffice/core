@@ -101,30 +101,35 @@ public:
             case DGM_TOKEN( animOne ):
                 break;
             case DGM_TOKEN( bulletEnabled ):
-                mrPoint.mbBulletEnabled = rAttribs.getBool( XML_val, false );
+                mrPoint.ensureLayoutVariables().mbBulletEnabled
+                    = rAttribs.getBool( XML_val, false );
                 break;
             case DGM_TOKEN( chMax ):
-                mrPoint.mnMaxChildren = rAttribs.getInteger( XML_val, -1 );
+                mrPoint.ensureLayoutVariables().mnMaxChildren = rAttribs.getInteger( XML_val, -1 );
                 break;
             case DGM_TOKEN( chPref ):
-                mrPoint.mnPreferredChildren = rAttribs.getInteger( XML_val, -1 );
+                mrPoint.ensureLayoutVariables().mnPreferredChildren
+                    = rAttribs.getInteger( XML_val, -1 );
                 break;
             case DGM_TOKEN( dir ):
-                mrPoint.mnDirection = rAttribs.getToken( XML_val, XML_norm );
+                mrPoint.ensureLayoutVariables().mnDirection
+                    = rAttribs.getToken( XML_val, XML_norm );
                 break;
             case DGM_TOKEN( hierBranch ):
             {
                 // need to convert from oox::OptValue to std::optional since 1st is not available in svx
                 const std::optional< sal_Int32 > aOptVal(rAttribs.getToken( XML_val ));
                 if(aOptVal.has_value())
-                    mrPoint.moHierarchyBranch = aOptVal.value();
+                    mrPoint.ensureLayoutVariables().moHierarchyBranch = aOptVal.value();
                 break;
             }
             case DGM_TOKEN( orgChart ):
-                mrPoint.mbOrgChartEnabled = rAttribs.getBool( XML_val, false );
+                mrPoint.ensureLayoutVariables().mbOrgChartEnabled
+                    = rAttribs.getBool( XML_val, false );
                 break;
             case DGM_TOKEN( resizeHandles ):
-                mrPoint.msResizeHandles = rAttribs.getStringDefaulted( XML_val );
+                mrPoint.ensureLayoutVariables().msResizeHandles
+                    = rAttribs.getStringDefaulted( XML_val );
                 break;
             default:
                 break;
@@ -148,36 +153,51 @@ public:
         ContextHandler2( rParent ),
         mrPoint( rPoint )
     {
-        mrPoint.msColorTransformCategoryId = rAttribs.getStringDefaulted( XML_csCatId);
-        mrPoint.msColorTransformTypeId = rAttribs.getStringDefaulted( XML_csTypeId);
-        mrPoint.msLayoutCategoryId = rAttribs.getStringDefaulted( XML_loCatId);
-        mrPoint.msLayoutTypeId = rAttribs.getStringDefaulted( XML_loTypeId);
+        mrPoint.ensureRoot().msColorTransformCategoryId
+            = rAttribs.getStringDefaulted( XML_csCatId);
+        mrPoint.ensureRoot().msColorTransformTypeId
+            = rAttribs.getStringDefaulted( XML_csTypeId);
+        mrPoint.ensureRoot().msLayoutCategoryId = rAttribs.getStringDefaulted( XML_loCatId);
+        mrPoint.ensureRoot().msLayoutTypeId = rAttribs.getStringDefaulted( XML_loTypeId);
         mrPoint.msPlaceholderText = rAttribs.getStringDefaulted( XML_phldrT);
-        mrPoint.msPresentationAssociationId = rAttribs.getStringDefaulted( XML_presAssocID);
-        mrPoint.msPresentationLayoutName = rAttribs.getStringDefaulted( XML_presName);
-        mrPoint.msPresentationLayoutStyleLabel = rAttribs.getStringDefaulted( XML_presStyleLbl);
-        mrPoint.msQuickStyleCategoryId = rAttribs.getStringDefaulted( XML_qsCatId);
-        mrPoint.msQuickStyleTypeId = rAttribs.getStringDefaulted( XML_qsTypeId);
+        mrPoint.ensurePresentation().msPresentationAssociationId =
+            rAttribs.getStringDefaulted( XML_presAssocID);
+        mrPoint.ensurePresentation().msPresentationLayoutName =
+            rAttribs.getStringDefaulted( XML_presName);
+        mrPoint.ensurePresentation().msPresentationLayoutStyleLabel =
+            rAttribs.getStringDefaulted( XML_presStyleLbl);
+        mrPoint.ensureRoot().msQuickStyleCategoryId
+            = rAttribs.getStringDefaulted( XML_qsCatId);
+        mrPoint.ensureRoot().msQuickStyleTypeId = rAttribs.getStringDefaulted( XML_qsTypeId);
 
-        mrPoint.mnCustomAngle = rAttribs.getInteger( XML_custAng, -1 );
-        mrPoint.mnPercentageNeighbourWidth = rAttribs.getInteger( XML_custLinFactNeighborX, -1 );
-        mrPoint.mnPercentageNeighbourHeight = rAttribs.getInteger( XML_custLinFactNeighborY, -1 );
-        mrPoint.mnPercentageOwnWidth = rAttribs.getInteger( XML_custLinFactX, -1 );
-        mrPoint.mnPercentageOwnHeight = rAttribs.getInteger( XML_custLinFactY, -1 );
-        mrPoint.mnIncludeAngleScale = rAttribs.getInteger( XML_custRadScaleInc, -1 );
-        mrPoint.mnRadiusScale = rAttribs.getInteger( XML_custRadScaleRad, -1 );
-        mrPoint.mnWidthScale = rAttribs.getInteger( XML_custScaleX, -1 );
-        mrPoint.mnHeightScale = rAttribs.getInteger( XML_custScaleY, -1 );
-        mrPoint.mnWidthOverride = rAttribs.getInteger( XML_custSzX, -1 );
-        mrPoint.mnHeightOverride = rAttribs.getInteger( XML_custSzY, -1 );
-        mrPoint.mnLayoutStyleCount = rAttribs.getInteger( XML_presStyleCnt, -1 );
-        mrPoint.mnLayoutStyleIndex = rAttribs.getInteger( XML_presStyleIdx, -1 );
+        mrPoint.ensurePreserved().mnCustomAngle = rAttribs.getInteger( XML_custAng, -1 );
+        mrPoint.ensurePreserved().mnPercentageNeighbourWidth
+            = rAttribs.getInteger( XML_custLinFactNeighborX, -1 );
+        mrPoint.ensurePreserved().mnPercentageNeighbourHeight
+            = rAttribs.getInteger( XML_custLinFactNeighborY, -1 );
+        mrPoint.ensurePreserved().mnPercentageOwnWidth
+            = rAttribs.getInteger( XML_custLinFactX, -1 );
+        mrPoint.ensurePreserved().mnPercentageOwnHeight
+            = rAttribs.getInteger( XML_custLinFactY, -1 );
+        mrPoint.ensurePreserved().mnIncludeAngleScale
+            = rAttribs.getInteger( XML_custRadScaleInc, -1 );
+        mrPoint.ensurePreserved().mnRadiusScale = rAttribs.getInteger( XML_custRadScaleRad, -1 );
+        mrPoint.ensurePreserved().mnWidthScale = rAttribs.getInteger( XML_custScaleX, -1 );
+        mrPoint.ensurePreserved().mnHeightScale = rAttribs.getInteger( XML_custScaleY, -1 );
+        mrPoint.ensurePreserved().mnWidthOverride = rAttribs.getInteger( XML_custSzX, -1 );
+        mrPoint.ensurePreserved().mnHeightOverride = rAttribs.getInteger( XML_custSzY, -1 );
+        mrPoint.ensurePresentation().mnLayoutStyleCount =
+            rAttribs.getInteger( XML_presStyleCnt, -1 );
+        mrPoint.ensurePresentation().mnLayoutStyleIndex =
+            rAttribs.getInteger( XML_presStyleIdx, -1 );
 
-        mrPoint.mbCoherent3DOffset = rAttribs.getBool( XML_coherent3DOff, false );
-        mrPoint.mbCustomHorizontalFlip = rAttribs.getBool( XML_custFlipHor, false );
-        mrPoint.mbCustomVerticalFlip = rAttribs.getBool( XML_custFlipVert, false );
+        mrPoint.ensurePreserved().mbCoherent3DOffset = rAttribs.getBool( XML_coherent3DOff, false );
+        mrPoint.ensurePreserved().mbCustomHorizontalFlip
+            = rAttribs.getBool( XML_custFlipHor, false );
+        mrPoint.ensurePreserved().mbCustomVerticalFlip
+            = rAttribs.getBool( XML_custFlipVert, false );
         mrPoint.mbCustomText = rAttribs.getBool( XML_custT, false );
-        mrPoint.mbIsPlaceholder = rAttribs.getBool( XML_phldr, false );
+        mrPoint.ensurePreserved().mbIsPlaceholder = rAttribs.getBool( XML_phldr, false );
     }
 
     virtual ContextHandlerRef

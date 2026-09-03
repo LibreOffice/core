@@ -2413,6 +2413,36 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testEachNodeGetsItsOwnParagraphOfASha
         CPPUNIT_ASSERT_EQUAL(aExpected[a], aTexts[a]);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeTakesTheShapeThatHoldsTextWhenSeveralAreDrawn)
+{
+    createSdImpressDoc("pptx/Segmented_Cycle_oneColor.pptx");
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    std::vector<OUString> aTexts;
+    collectDiagramTexts(*rHelper, EMPTY_OUSTRING, aTexts);
+
+    // Two shapes are drawn for every node of this file, one holding the text of it and its
+    // siblings and one drawing the segment around them, and the file names the two in no fixed
+    // order. Being drawn tells them apart in no way, so the shape that holds text is taken.
+    const std::vector<OUString> aExpected{ u"One"_ustr,        u"Eleven"_ustr,
+                                           u"Twelve"_ustr,     u"Thirteen"_ustr,
+                                           u"Two"_ustr,        u"Twenty-one"_ustr,
+                                           u"Twenty-two"_ustr, u"Three"_ustr,
+                                           u"Four"_ustr,       u"Forty-one"_ustr,
+                                           u"Forty-two"_ustr,  u"Five"_ustr };
+
+    CPPUNIT_ASSERT_EQUAL(aExpected.size(), aTexts.size());
+
+    for (size_t a(0); a < aExpected.size(); a++)
+        CPPUNIT_ASSERT_EQUAL(aExpected[a], aTexts[a]);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

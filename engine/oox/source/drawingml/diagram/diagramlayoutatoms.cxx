@@ -874,7 +874,7 @@ sal_Int32 ConditionAtom::getNodeCount(const SmartArtDiagram& rDgm,
                                       const rtl::Reference<svx::diagram::Point>& rPresPoint) const
 {
     sal_Int32 nCount = 0;
-    OUString sNodeId = rPresPoint->msPresentationAssociationId;
+    OUString sNodeId = rPresPoint->getPresentation().msPresentationAssociationId;
 
     // HACK: special case - count children of first child
     if (maIter.maAxis.size() == 2 && maIter.maAxis[0] == XML_ch && maIter.maAxis[1] == XML_ch)
@@ -905,11 +905,14 @@ bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm,
     case XML_var:
     {
         if (maCond.mnArg == XML_dir)
-            return compareResult(maCond.mnOp, rPresPoint->mnDirection, maCond.mnVal);
+            return compareResult(maCond.mnOp,
+                                     rPresPoint->getLayoutVariables().mnDirection,
+                                     maCond.mnVal);
         else if (maCond.mnArg == XML_hierBranch)
         {
-            sal_Int32 nHierarchyBranch = rPresPoint->moHierarchyBranch.value_or(XML_std);
-            if (!rPresPoint->moHierarchyBranch.has_value())
+            sal_Int32 nHierarchyBranch
+                    = rPresPoint->getLayoutVariables().moHierarchyBranch.value_or(XML_std);
+            if (!rPresPoint->getLayoutVariables().moHierarchyBranch.has_value())
             {
                 // If <dgm:hierBranch> is missing in the current presentation
                 // point, ask the parent.
@@ -920,8 +923,8 @@ bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm,
                     rDgm.getData()->getPointByModelID(aParent));
                 if (it.is())
                 {
-                    if (it->moHierarchyBranch.has_value())
-                        nHierarchyBranch = it->moHierarchyBranch.value();
+                    if (it->getLayoutVariables().moHierarchyBranch.has_value())
+                        nHierarchyBranch = it->getLayoutVariables().moHierarchyBranch.value();
                 }
             }
             return compareResult(maCond.mnOp, nHierarchyBranch, maCond.mnVal);
@@ -934,7 +937,8 @@ bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm,
 
     case XML_maxDepth:
     {
-        sal_Int32 nMaxDepth = calcMaxDepth(rPresPoint->msPresentationAssociationId,
+        sal_Int32 nMaxDepth =
+            calcMaxDepth(rPresPoint->getPresentation().msPresentationAssociationId,
                                            rDgm.getData()->getConnections());
         return compareResult(maCond.mnOp, nMaxDepth, maCond.msVal.toInt32());
     }
@@ -2196,7 +2200,7 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
     // point's presStyleLbl for both style & color
     // if not found use layout node's styleLbl
     // however, docs are a bit unclear on this
-    OUString aStyleLabel = rPresNode->msPresentationLayoutStyleLabel;
+    OUString aStyleLabel = rPresNode->getPresentation().msPresentationLayoutStyleLabel;
     if (aStyleLabel.isEmpty())
         aStyleLabel = msStyleLabel;
     if( !aStyleLabel.isEmpty() )

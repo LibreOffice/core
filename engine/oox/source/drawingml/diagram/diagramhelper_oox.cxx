@@ -452,8 +452,8 @@ OUString readShapeIdOfNode(const svx::diagram::DiagramData_svx& rData, std::u16s
             return rCxn->msDestId;
 
     for (const rtl::Reference<svx::diagram::Point>& rPoint : rData.getPoints())
-        if (!rPoint->msPresentationAssociationId.isEmpty()
-            && rPoint->msPresentationAssociationId == rNodeId)
+        if (!rPoint->getPresentation().msPresentationAssociationId.isEmpty()
+            && rPoint->getPresentation().msPresentationAssociationId == rNodeId)
             return rPoint->msModelId;
 
     return OUString();
@@ -820,7 +820,7 @@ bool DiagramHelper_oox::isTextNodeModelID(const OUString& rModelID) const
              mpDiagramPtr->getData()->getPoints())
     {
         if (rCandidate->msModelId == rModelID
-            && rCandidate->msPresentationLayoutName == u"textNode"_ustr)
+            && rCandidate->getPresentation().msPresentationLayoutName == u"textNode"_ustr)
             return true;
     }
 

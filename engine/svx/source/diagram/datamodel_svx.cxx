@@ -138,6 +138,30 @@ Connection::~Connection()
 {
 }
 
+sal_Int32 Connection::getChildIndex() const
+{
+    assert((TypeConstant::XML_parOf == mnXMLType || TypeConstant::XML_presParOf == mnXMLType)
+           && "a child index is defined by a parOf or a presParOf Connection only");
+
+    return mnSourceOrder;
+}
+
+sal_Int32 Connection::getPresentationIndex() const
+{
+    assert(TypeConstant::XML_presOf == mnXMLType
+           && "a presentation index is defined by a presOf Connection only");
+
+    return mnSourceOrder;
+}
+
+sal_Int32 Connection::getParagraphIndex() const
+{
+    assert(TypeConstant::XML_presOf == mnXMLType
+           && "a paragraph index is defined by a presOf Connection only");
+
+    return mnDestOrder;
+}
+
 void Connection::writeDiagramData_connection(sax_fastparser::FSHelperPtr& rTarget)
 {
     if (!rTarget)
@@ -178,79 +202,172 @@ Point::~Point()
 {
 }
 
+const RootValues& PointValues::getRoot() const
+{
+    static const RootValues aDefaults;
+
+    return moRoot.has_value() ? *moRoot : aDefaults;
+}
+
+RootValues& PointValues::ensureRoot()
+{
+    if (!moRoot.has_value())
+        moRoot.emplace();
+
+    return *moRoot;
+}
+
+const PresentationValues& PointValues::getPresentation() const
+{
+    static const PresentationValues aDefaults;
+
+    return moPresentation.has_value() ? *moPresentation : aDefaults;
+}
+
+PresentationValues& PointValues::ensurePresentation()
+{
+    if (!moPresentation.has_value())
+        moPresentation.emplace();
+
+    return *moPresentation;
+}
+
+const PreservedValues& PointValues::getPreserved() const
+{
+    static const PreservedValues aDefaults;
+
+    return moPreserved.has_value() ? *moPreserved : aDefaults;
+}
+
+PreservedValues& PointValues::ensurePreserved()
+{
+    if (!moPreserved.has_value())
+        moPreserved.emplace();
+
+    return *moPreserved;
+}
+
+const PresentationLayoutVariables& PointValues::getLayoutVariables() const
+{
+    static const PresentationLayoutVariables aDefaults;
+
+    return moLayoutVariables.has_value() ? *moLayoutVariables : aDefaults;
+}
+
+PresentationLayoutVariables& PointValues::ensureLayoutVariables()
+{
+    if (!moLayoutVariables.has_value())
+        moLayoutVariables.emplace();
+
+    return *moLayoutVariables;
+}
+
 void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
 {
+    const RootValues& rRoot(getRoot());
+    const PresentationValues& rPresentation(getPresentation());
+    const PreservedValues& rPreserved(getPreserved());
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(sax_fastparser::FastSerializerHelper::createAttrList());
 
-    if (!msColorTransformCategoryId.isEmpty()) pAttributeList->add(XML_csCatId, msColorTransformCategoryId);
-    if (!msColorTransformTypeId.isEmpty()) pAttributeList->add(XML_csTypeId, msColorTransformTypeId);
-    if (!msLayoutCategoryId.isEmpty()) pAttributeList->add(XML_loCatId, msLayoutCategoryId);
-    if (!msLayoutTypeId.isEmpty()) pAttributeList->add(XML_loTypeId, msLayoutTypeId);
+    if (!rRoot.msColorTransformCategoryId.isEmpty())
+        pAttributeList->add(XML_csCatId, rRoot.msColorTransformCategoryId);
+    if (!rRoot.msColorTransformTypeId.isEmpty())
+        pAttributeList->add(XML_csTypeId, rRoot.msColorTransformTypeId);
+    if (!rRoot.msLayoutCategoryId.isEmpty())
+        pAttributeList->add(XML_loCatId, rRoot.msLayoutCategoryId);
+    if (!rRoot.msLayoutTypeId.isEmpty())
+        pAttributeList->add(XML_loTypeId, rRoot.msLayoutTypeId);
     if (!msPlaceholderText.isEmpty()) pAttributeList->add(XML_phldrT, msPlaceholderText);
-    if (!msPresentationAssociationId.isEmpty()) pAttributeList->add(XML_presAssocID, msPresentationAssociationId);
-    if (!msPresentationLayoutName.isEmpty()) pAttributeList->add(XML_presName, msPresentationLayoutName);
-    if (!msPresentationLayoutStyleLabel.isEmpty()) pAttributeList->add(XML_presStyleLbl, msPresentationLayoutStyleLabel);
-    if (!msQuickStyleCategoryId.isEmpty()) pAttributeList->add(XML_qsCatId, msQuickStyleCategoryId);
-    if (!msQuickStyleTypeId.isEmpty()) pAttributeList->add(XML_qsTypeId, msQuickStyleTypeId);
+    if (!rPresentation.msPresentationAssociationId.isEmpty()) pAttributeList->add(XML_presAssocID,
+        rPresentation.msPresentationAssociationId);
+    if (!rPresentation.msPresentationLayoutName.isEmpty()) pAttributeList->add(XML_presName,
+        rPresentation.msPresentationLayoutName);
+    if (!rPresentation.msPresentationLayoutStyleLabel.isEmpty())
+        pAttributeList->add(XML_presStyleLbl, rPresentation.msPresentationLayoutStyleLabel);
+    if (!rRoot.msQuickStyleCategoryId.isEmpty())
+        pAttributeList->add(XML_qsCatId, rRoot.msQuickStyleCategoryId);
+    if (!rRoot.msQuickStyleTypeId.isEmpty())
+        pAttributeList->add(XML_qsTypeId, rRoot.msQuickStyleTypeId);
 
-    if (-1 != mnCustomAngle) pAttributeList->add(XML_custAng, OUString::number(mnCustomAngle));
-    if (-1 != mnPercentageNeighbourWidth) pAttributeList->add(XML_custLinFactNeighborX, OUString::number(mnPercentageNeighbourWidth));
-    if (-1 != mnPercentageNeighbourHeight) pAttributeList->add(XML_custLinFactNeighborY, OUString::number(mnPercentageNeighbourHeight));
-    if (-1 != mnPercentageOwnWidth) pAttributeList->add(XML_custLinFactX, OUString::number(mnPercentageOwnWidth));
-    if (-1 != mnPercentageOwnHeight) pAttributeList->add(XML_custLinFactY, OUString::number(mnPercentageOwnHeight));
-    if (-1 != mnIncludeAngleScale) pAttributeList->add(XML_custRadScaleInc, OUString::number(mnIncludeAngleScale));
-    if (-1 != mnRadiusScale) pAttributeList->add(XML_custRadScaleRad, OUString::number(mnRadiusScale));
-    if (-1 != mnWidthScale) pAttributeList->add(XML_custScaleX, OUString::number(mnWidthScale));
-    if (-1 != mnHeightScale) pAttributeList->add(XML_custScaleY, OUString::number(mnHeightScale));
-    if (-1 != mnWidthOverride) pAttributeList->add(XML_custSzX, OUString::number(mnWidthOverride));
-    if (-1 != mnHeightOverride) pAttributeList->add(XML_custSzY, OUString::number(mnHeightOverride));
-    if (-1 != mnLayoutStyleCount) pAttributeList->add(XML_presStyleCnt, OUString::number(mnLayoutStyleCount));
-    if (-1 != mnLayoutStyleIndex) pAttributeList->add(XML_presStyleIdx, OUString::number(mnLayoutStyleIndex));
+    if (-1 != rPreserved.mnCustomAngle)
+        pAttributeList->add(XML_custAng, OUString::number(rPreserved.mnCustomAngle));
+    if (-1 != rPreserved.mnPercentageNeighbourWidth)
+        pAttributeList->add(XML_custLinFactNeighborX,
+                            OUString::number(rPreserved.mnPercentageNeighbourWidth));
+    if (-1 != rPreserved.mnPercentageNeighbourHeight)
+        pAttributeList->add(XML_custLinFactNeighborY,
+                            OUString::number(rPreserved.mnPercentageNeighbourHeight));
+    if (-1 != rPreserved.mnPercentageOwnWidth)
+        pAttributeList->add(XML_custLinFactX, OUString::number(rPreserved.mnPercentageOwnWidth));
+    if (-1 != rPreserved.mnPercentageOwnHeight)
+        pAttributeList->add(XML_custLinFactY, OUString::number(rPreserved.mnPercentageOwnHeight));
+    if (-1 != rPreserved.mnIncludeAngleScale)
+        pAttributeList->add(XML_custRadScaleInc, OUString::number(rPreserved.mnIncludeAngleScale));
+    if (-1 != rPreserved.mnRadiusScale)
+        pAttributeList->add(XML_custRadScaleRad, OUString::number(rPreserved.mnRadiusScale));
+    if (-1 != rPreserved.mnWidthScale)
+        pAttributeList->add(XML_custScaleX, OUString::number(rPreserved.mnWidthScale));
+    if (-1 != rPreserved.mnHeightScale)
+        pAttributeList->add(XML_custScaleY, OUString::number(rPreserved.mnHeightScale));
+    if (-1 != rPreserved.mnWidthOverride)
+        pAttributeList->add(XML_custSzX, OUString::number(rPreserved.mnWidthOverride));
+    if (-1 != rPreserved.mnHeightOverride)
+        pAttributeList->add(XML_custSzY, OUString::number(rPreserved.mnHeightOverride));
+    if (-1 != rPresentation.mnLayoutStyleCount) pAttributeList->add(XML_presStyleCnt,
+        OUString::number(rPresentation.mnLayoutStyleCount));
+    if (-1 != rPresentation.mnLayoutStyleIndex) pAttributeList->add(XML_presStyleIdx,
+        OUString::number(rPresentation.mnLayoutStyleIndex));
 
     static constexpr OUString aStrTrue = u"1"_ustr; // this uses "1", not "true"
-    if (mbCoherent3DOffset) pAttributeList->add(XML_coherent3DOff, aStrTrue);
-    if (mbCustomHorizontalFlip) pAttributeList->add(XML_custFlipHor, aStrTrue);
-    if (mbCustomVerticalFlip) pAttributeList->add(XML_custFlipVert, aStrTrue);
+    if (rPreserved.mbCoherent3DOffset) pAttributeList->add(XML_coherent3DOff, aStrTrue);
+    if (rPreserved.mbCustomHorizontalFlip) pAttributeList->add(XML_custFlipHor, aStrTrue);
+    if (rPreserved.mbCustomVerticalFlip) pAttributeList->add(XML_custFlipVert, aStrTrue);
     if (mbCustomText) pAttributeList->add(XML_custT, aStrTrue);
-    if (mbIsPlaceholder) pAttributeList->add(XML_phldr, aStrTrue);
+    if (rPreserved.mbIsPlaceholder) pAttributeList->add(XML_phldr, aStrTrue);
 
-    const bool bNeed_presLayoutVars(mbBulletEnabled
-        || -1 != mnMaxChildren
-        || -1 != mnPreferredChildren
-        || XML_norm != mnDirection
-        || moHierarchyBranch.has_value()
-        || mbOrgChartEnabled
-        || !msResizeHandles.isEmpty());
+    const PresentationLayoutVariables& rLayoutVariables(getLayoutVariables());
+    const bool bNeed_presLayoutVars(rLayoutVariables.mbBulletEnabled
+        || -1 != rLayoutVariables.mnMaxChildren
+        || -1 != rLayoutVariables.mnPreferredChildren
+        || XML_norm != rLayoutVariables.mnDirection
+        || rLayoutVariables.moHierarchyBranch.has_value()
+        || rLayoutVariables.mbOrgChartEnabled
+        || !rLayoutVariables.msResizeHandles.isEmpty());
 
     if (bNeed_presLayoutVars)
     {
         rTarget->startElementNS(XML_dgm, XML_prSet, pAttributeList);
         rTarget->startElementNS(XML_dgm, XML_presLayoutVars);
 
-        if (mbOrgChartEnabled)
+        if (rLayoutVariables.mbOrgChartEnabled)
             rTarget->singleElementNS(XML_dgm, XML_orgChart, XML_val, aStrTrue);
 
-        if (-1 != mnMaxChildren)
-            rTarget->singleElementNS(XML_dgm, XML_chMax, XML_val, OUString::number(mnMaxChildren));
+        if (-1 != rLayoutVariables.mnMaxChildren)
+            rTarget->singleElementNS(XML_dgm, XML_chMax, XML_val,
+                                     OUString::number(rLayoutVariables.mnMaxChildren));
 
-        if (-1 != mnPreferredChildren)
-            rTarget->singleElementNS(XML_dgm, XML_chPref, XML_val, OUString::number(mnPreferredChildren));
+        if (-1 != rLayoutVariables.mnPreferredChildren)
+            rTarget->singleElementNS(XML_dgm, XML_chPref, XML_val,
+                                     OUString::number(rLayoutVariables.mnPreferredChildren));
 
-        if (mbBulletEnabled)
+        if (rLayoutVariables.mbBulletEnabled)
             rTarget->singleElementNS(XML_dgm, XML_bulletEnabled, XML_val, aStrTrue);
 
-        if (XML_norm != mnDirection)
-            rTarget->singleElementNS(XML_dgm, XML_dir, XML_val, getNameForOOXToken(mnDirection));
+        if (XML_norm != rLayoutVariables.mnDirection)
+            rTarget->singleElementNS(XML_dgm, XML_dir, XML_val,
+                                     getNameForOOXToken(rLayoutVariables.mnDirection));
 
-        if (moHierarchyBranch.has_value())
-            rTarget->singleElementNS(XML_dgm, XML_hierBranch, XML_val, getNameForOOXToken(moHierarchyBranch.value()));
+        if (rLayoutVariables.moHierarchyBranch.has_value())
+            rTarget->singleElementNS(XML_dgm, XML_hierBranch, XML_val,
+                getNameForOOXToken(rLayoutVariables.moHierarchyBranch.value()));
 
         // ToDo: animOne not implemented
 
         // ToDo: animLvl not implemented
 
-        if (!msResizeHandles.isEmpty())
-            rTarget->singleElementNS(XML_dgm, XML_resizeHandles, XML_val, msResizeHandles);
+        if (!rLayoutVariables.msResizeHandles.isEmpty())
+            rTarget->singleElementNS(XML_dgm, XML_resizeHandles, XML_val,
+                                     rLayoutVariables.msResizeHandles);
 
         rTarget->endElementNS(XML_dgm, XML_presLayoutVars);
         rTarget->endElementNS(XML_dgm, XML_prSet);
@@ -381,8 +498,10 @@ void correctPresentationStyleIndexes(Points& rPoints)
     std::map<OUString, std::vector<Point*>> aGroupedByLabel;
 
     for (const rtl::Reference<Point>& rPoint : rPoints)
-        if (!rPoint->msPresentationLayoutStyleLabel.isEmpty() && rPoint->mnLayoutStyleIndex >= 0)
-            aGroupedByLabel[rPoint->msPresentationLayoutStyleLabel].push_back(rPoint.get());
+        if (!rPoint->getPresentation().msPresentationLayoutStyleLabel.isEmpty()
+            && rPoint->getPresentation().mnLayoutStyleIndex >= 0)
+            aGroupedByLabel[rPoint->getPresentation().msPresentationLayoutStyleLabel]
+                .push_back(rPoint.get());
 
     for (auto& rGroup : aGroupedByLabel)
     {
@@ -390,7 +509,7 @@ void correctPresentationStyleIndexes(Points& rPoints)
         std::map<sal_Int32, sal_Int32> aNewIndexForOld;
 
         for (const Point* xPoint : rGroup.second)
-            aNewIndexForOld[xPoint->mnLayoutStyleIndex] = 0;
+            aNewIndexForOld[xPoint->getPresentation().mnLayoutStyleIndex] = 0;
 
         sal_Int32 nNextIndex(0);
 
@@ -401,8 +520,9 @@ void correctPresentationStyleIndexes(Points& rPoints)
 
         for (Point* xPoint : rGroup.second)
         {
-            xPoint->mnLayoutStyleIndex = aNewIndexForOld[xPoint->mnLayoutStyleIndex];
-            xPoint->mnLayoutStyleCount = nCount;
+            xPoint->ensurePresentation().mnLayoutStyleIndex =
+                aNewIndexForOld[xPoint->getPresentation().mnLayoutStyleIndex];
+            xPoint->ensurePresentation().mnLayoutStyleCount = nCount;
         }
     }
 }
@@ -534,7 +654,7 @@ bool DiagramData_svx::canHoldChildNode(std::u16string_view rNodeId) const
         if (TypeConstant::XML_parOf != rCxn->mnXMLType)
             continue;
 
-        rtl::Reference<Point> xParent(getPointByModelID(rCxn->msSourceId));
+        rtl::Reference<Point> xParent(rCxn->mpSourcePoint);
 
         if (!xParent.is() || TypeConstant::XML_doc == xParent->mnXMLType)
             continue;
@@ -542,17 +662,19 @@ bool DiagramData_svx::canHoldChildNode(std::u16string_view rNodeId) const
         for (const rtl::Reference<Point>& rPoint : maPoints)
         {
             if (TypeConstant::XML_pres != rPoint->mnXMLType
-                || rPoint->msPresentationAssociationId != rCxn->msDestId)
+                || rPoint->getPresentation().msPresentationAssociationId != rCxn->msDestId)
                 continue;
 
             for (const rtl::Reference<Connection>& rOther : maConnections)
                 if (TypeConstant::XML_presParOf == rOther->mnXMLType
                     && rOther->msDestId == rPoint->msModelId)
                 {
-                    rtl::Reference<Point> xContainer(getPointByModelID(rOther->msSourceId));
+                    rtl::Reference<Point> xContainer(rOther->mpSourcePoint);
 
-                    if (xContainer.is() && !xContainer->msPresentationLayoutName.isEmpty())
-                        aContainerNames.insert(xContainer->msPresentationLayoutName);
+                    if (xContainer.is()
+                        && !xContainer->getPresentation().msPresentationLayoutName.isEmpty())
+                        aContainerNames.insert(
+                            xContainer->getPresentation().msPresentationLayoutName);
                 }
         }
     }
@@ -566,8 +688,8 @@ bool DiagramData_svx::canHoldChildNode(std::u16string_view rNodeId) const
 
         for (const rtl::Reference<Point>& rPoint : maPoints)
             if (TypeConstant::XML_pres == rPoint->mnXMLType
-                && rPoint->msPresentationAssociationId == aNodeId
-                && rPoint->msPresentationLayoutName == rContainerName)
+                && rPoint->getPresentation().msPresentationAssociationId == aNodeId
+                && rPoint->getPresentation().msPresentationLayoutName == rContainerName)
                 bFound = true;
 
         if (!bFound)
@@ -596,10 +718,11 @@ bool DiagramData_svx::isPresentationOfDataNode(std::u16string_view rModelId) con
     rtl::Reference<Point> xPoint(getPointByModelID(rModelId));
 
     if (!xPoint.is() || TypeConstant::XML_pres != xPoint->mnXMLType
-        || xPoint->msPresentationAssociationId.isEmpty())
+        || xPoint->getPresentation().msPresentationAssociationId.isEmpty())
         return false;
 
-    rtl::Reference<Point> xAssociated(getPointByModelID(xPoint->msPresentationAssociationId));
+    rtl::Reference<Point> xAssociated(
+        getPointByModelID(xPoint->getPresentation().msPresentationAssociationId));
 
     // The Diagram as a whole is a Point of its own, of the document type, and so is each of the
     // two transition Points that a Connection brings along. Only a Point of the node type is one
@@ -613,9 +736,9 @@ rtl::Reference<Point> DiagramData_svx::getDataNodeForModelID(std::u16string_view
 
     // a presentation Point names the data node that it was made for
     if (xRetval.is() && TypeConstant::XML_pres == xRetval->mnXMLType)
-        xRetval = xRetval->msPresentationAssociationId.isEmpty()
+        xRetval = xRetval->getPresentation().msPresentationAssociationId.isEmpty()
             ? nullptr
-            : getPointByModelID(xRetval->msPresentationAssociationId);
+            : getPointByModelID(xRetval->getPresentation().msPresentationAssociationId);
 
     // a transition Point reaches the data node through the Connection that it belongs to
     if (xRetval.is()
@@ -632,7 +755,7 @@ rtl::Reference<Point> DiagramData_svx::getDataNodeForModelID(std::u16string_view
                     break;
                 }
 
-        xRetval = xOwner.is() ? getPointByModelID(xOwner->msDestId) : nullptr;
+        xRetval = xOwner.is() ? rtl::Reference<Point>(xOwner->mpDestinationPoint) : nullptr;
     }
 
     return xRetval;
@@ -757,7 +880,8 @@ DomMapFlags DiagramData_svx::removeDiagramNode(std::u16string_view rNodeId, bool
             && !pPreviousSibling->msSibTransId.isEmpty())
         {
             for (const rtl::Reference<Point>& rPoint : maPoints)
-                if (rPoint->msPresentationAssociationId == pPreviousSibling->msSibTransId)
+                if (rPoint->getPresentation().msPresentationAssociationId
+                    == pPreviousSibling->msSibTransId)
                     aDeadPoints.insert(rPoint->msModelId);
         }
     }
@@ -770,8 +894,8 @@ DomMapFlags DiagramData_svx::removeDiagramNode(std::u16string_view rNodeId, bool
         bSetGrew = false;
 
         for (const rtl::Reference<Point>& rPoint : maPoints)
-            if (!rPoint->msPresentationAssociationId.isEmpty()
-                && aDeadPoints.count(rPoint->msPresentationAssociationId)
+            if (!rPoint->getPresentation().msPresentationAssociationId.isEmpty()
+                && aDeadPoints.count(rPoint->getPresentation().msPresentationAssociationId)
                 && aDeadPoints.insert(rPoint->msModelId).second)
                 bSetGrew = true;
     }
@@ -862,26 +986,28 @@ PresentationRoles readPresentationRoles(const Points& rPoints, const Connections
     for (const rtl::Reference<Point>& rPoint : rPoints)
     {
         if (TypeConstant::XML_pres != rPoint->mnXMLType
-            || rPoint->msPresentationAssociationId.isEmpty())
+            || rPoint->getPresentation().msPresentationAssociationId.isEmpty())
             continue;
 
         PresentationRole aRole;
 
-        if (rPoint->msPresentationAssociationId == rNodeId)
+        if (rPoint->getPresentation().msPresentationAssociationId == rNodeId)
             aRole.meAssociation = PresentationAssociation::Node;
-        else if (!rParTransId.empty() && rPoint->msPresentationAssociationId == rParTransId)
+        else if (!rParTransId.empty()
+            && rPoint->getPresentation().msPresentationAssociationId == rParTransId)
             aRole.meAssociation = PresentationAssociation::ParTrans;
-        else if (!rSibTransId.empty() && rPoint->msPresentationAssociationId == rSibTransId)
+        else if (!rSibTransId.empty()
+            && rPoint->getPresentation().msPresentationAssociationId == rSibTransId)
             aRole.meAssociation = PresentationAssociation::SibTrans;
         else
             continue;
 
         aRole.msTemplateModelId = rPoint->msModelId;
-        aRole.msPresName = rPoint->msPresentationLayoutName;
-        aRole.msStyleLabel = rPoint->msPresentationLayoutStyleLabel;
-        aRole.mnStyleIndex = rPoint->mnLayoutStyleIndex;
-        aRole.mnStyleCount = rPoint->mnLayoutStyleCount;
-        aRole.mbBulletEnabled = rPoint->mbBulletEnabled;
+        aRole.msPresName = rPoint->getPresentation().msPresentationLayoutName;
+        aRole.msStyleLabel = rPoint->getPresentation().msPresentationLayoutStyleLabel;
+        aRole.mnStyleIndex = rPoint->getPresentation().mnLayoutStyleIndex;
+        aRole.mnStyleCount = rPoint->getPresentation().mnLayoutStyleCount;
+        aRole.mbBulletEnabled = rPoint->getLayoutVariables().mbBulletEnabled;
 
         for (const rtl::Reference<Connection>& rCxn : rConnections)
         {
@@ -910,7 +1036,7 @@ PresentationRoles readPresentationRoles(const Points& rPoints, const Connections
         for (const rtl::Reference<Point>& rContainer : rPoints)
             if (rContainer->msModelId == aRole.msContainerId)
             {
-                aRole.msContainerPresName = rContainer->msPresentationLayoutName;
+                aRole.msContainerPresName = rContainer->getPresentation().msPresentationLayoutName;
                 break;
             }
 
@@ -952,7 +1078,7 @@ void readNodesInDocumentOrder(const Connections& rConnections, std::u16string_vi
 OUString readOwningNode(const Points& rPoints, const Connections& rConnections,
                         const Point& rPresentationPoint)
 {
-    const OUString& rAssociation(rPresentationPoint.msPresentationAssociationId);
+    const OUString& rAssociation(rPresentationPoint.getPresentation().msPresentationAssociationId);
 
     if (rAssociation.isEmpty())
         return OUString();
@@ -1226,8 +1352,9 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
 
             for (const rtl::Reference<Point>& rPoint : maPoints)
                 if (TypeConstant::XML_pres == rPoint->mnXMLType
-                    && rPoint->msPresentationAssociationId == aParentId
-                    && rPoint->msPresentationLayoutName == rRole.msContainerPresName)
+                    && rPoint->getPresentation().msPresentationAssociationId == aParentId
+                    && rPoint->getPresentation().msPresentationLayoutName
+                        == rRole.msContainerPresName)
                     aOwnContainerId = rPoint->msModelId;
 
             if (aOwnContainerId.isEmpty())
@@ -1372,15 +1499,15 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
         for (const rtl::Reference<Point>& rPoint : maPoints)
         {
             if (TypeConstant::XML_pres != rPoint->mnXMLType
-                || rPoint->msPresentationLayoutStyleLabel != rRole.msStyleLabel
-                || rPoint->mnLayoutStyleIndex < 0)
+                || rPoint->getPresentation().msPresentationLayoutStyleLabel != rRole.msStyleLabel
+                || rPoint->getPresentation().mnLayoutStyleIndex < 0)
                 continue;
 
             const OUString aOwnerId(readOwningNode(maPoints, maConnections, *rPoint));
 
             for (size_t a(0); a < aWalk.size() && a <= nParentAt; a++)
                 if (aWalk[a] == aOwnerId)
-                    aIndexesBefore.insert(rPoint->mnLayoutStyleIndex);
+                    aIndexesBefore.insert(rPoint->getPresentation().mnLayoutStyleIndex);
         }
 
         aNewIndexForLabel[rRole.msStyleLabel] = static_cast<sal_Int32>(aIndexesBefore.size());
@@ -1408,9 +1535,9 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
 
     for (const auto& rEntry : aNewIndexForLabel)
         for (const rtl::Reference<Point>& rPoint : maPoints)
-            if (rPoint->msPresentationLayoutStyleLabel == rEntry.first
-                && rPoint->mnLayoutStyleIndex >= rEntry.second)
-                rPoint->mnLayoutStyleIndex++;
+            if (rPoint->getPresentation().msPresentationLayoutStyleLabel == rEntry.first
+                && rPoint->getPresentation().mnLayoutStyleIndex >= rEntry.second)
+                rPoint->ensurePresentation().mnLayoutStyleIndex++;
 
     // the Connection that holds the new node, and the two transition Points that hang off it
     Connection& rNewParOf(appendConnection(maConnections, TypeConstant::XML_parOf, aNewParOfId,
@@ -1448,14 +1575,16 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
             rtl::Reference<Point> xNewPresentation(new Point);
             xNewPresentation->mnXMLType = TypeConstant::XML_pres;
             xNewPresentation->msModelId = rNew.msModelId;
-            xNewPresentation->msPresentationAssociationId = rNew.msAssociationId;
-            xNewPresentation->msPresentationLayoutName = rRole.msPresName;
-            xNewPresentation->msPresentationLayoutStyleLabel = rRole.msStyleLabel;
-            xNewPresentation->mnLayoutStyleCount = rRole.mnStyleCount;
-            xNewPresentation->mbBulletEnabled = rRole.mbBulletEnabled;
+            xNewPresentation->ensurePresentation().msPresentationAssociationId =
+                rNew.msAssociationId;
+            xNewPresentation->ensurePresentation().msPresentationLayoutName = rRole.msPresName;
+            xNewPresentation->ensurePresentation().msPresentationLayoutStyleLabel =
+                rRole.msStyleLabel;
+            xNewPresentation->ensurePresentation().mnLayoutStyleCount = rRole.mnStyleCount;
+            xNewPresentation->ensureLayoutVariables().mbBulletEnabled = rRole.mbBulletEnabled;
 
             const auto aFound(aNewIndexForLabel.find(rRole.msStyleLabel));
-            xNewPresentation->mnLayoutStyleIndex
+            xNewPresentation->ensurePresentation().mnLayoutStyleIndex
                 = (aFound == aNewIndexForLabel.end()) ? -1 : aFound->second;
 
             maPoints.push_back(xNewPresentation);
@@ -1599,11 +1728,11 @@ void DiagramData_svx::getDiagramChildrenString(
     for (const rtl::Reference<Connection>& rCxn : maConnections)
         if (rCxn->mnXMLType == TypeConstant::XML_parOf && rCxn->msSourceId == xPoint->msModelId)
         {
-            if (rCxn->mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
-                aChildren.resize(rCxn->mnSourceOrder + 1);
-            rtl::Reference<Point> xChild(getPointByModelID(rCxn->msDestId));
+            if (rCxn->getChildIndex() >= static_cast<sal_Int32>(aChildren.size()))
+                aChildren.resize(rCxn->getChildIndex() + 1);
+            rtl::Reference<Point> xChild(rCxn->mpDestinationPoint);
             if (xChild.is())
-                aChildren[rCxn->mnSourceOrder] = xChild;
+                aChildren[rCxn->getChildIndex()] = xChild;
         }
 
     for (const rtl::Reference<Point>& rChild : aChildren)
@@ -1638,55 +1767,12 @@ rtl::Reference<Point> DiagramData_svx::getPointByModelID(std::u16string_view rMo
     return nullptr;
 }
 
-uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(
-    const Point& rPoint, sal_Int32& rParagraph) const
+namespace
 {
-    // The presentation Points that show what a Point represents are identified by the presOf
-    // Connections that start at that Point. There is usually more than one of them, one
-    // representing the text and others representing what belongs with it. They cannot be held apart
-    // in the data: mnDestOrder is zero, a file writes them in any order, and the one representing
-    // the text needs neither a style nor own layout variables. What does diversify them is that
-    // only one of them gets a visualization, so the one that leads to a shape is the one that holds
-    // the text. Going the other way round, over the Points that represent this one in
-    // msPresentationAssociationId, sorts none of them out: a layout gives that association to every
-    // presentation Point it builds for a Point, and may not give it to one at all.
-    for (const rtl::Reference<Connection>& rCandidate : maConnections)
-    {
-        if (TypeConstant::XML_presOf != rCandidate->mnXMLType
-            || rCandidate->msSourceId != rPoint.msModelId)
-            continue;
-
-        const uno::Reference<drawing::XShape> xShowingShape(
-            getXShapeByModelID(rCandidate->msDestId));
-
-        if (xShowingShape)
-        {
-            // A shape can represent several Points, one paragraph of it each, and mnDestOrder
-            // gives which paragraph belongs to which Point. A shape that represents a single
-            // Point represents all its paragraphs, so -1 asks for the whole text.
-            sal_Int32 nRepresentedPoints(0);
-
-            for (const rtl::Reference<Connection>& rCounted : maConnections)
-                if (TypeConstant::XML_presOf == rCounted->mnXMLType
-                    && rCounted->msDestId == rCandidate->msDestId)
-                    nRepresentedPoints++;
-
-            rParagraph = nRepresentedPoints > 1 ? rCandidate->mnDestOrder : -1;
-
-            return xShowingShape;
-        }
-    }
-
-    rParagraph = -1;
-
-    return uno::Reference<drawing::XShape>();
-}
-
-OUString DiagramData_svx::getTextForPoint(const Point& rPoint) const
+// The text of one paragraph of a shape, and all of its text for a negative index
+OUString readTextOfShape(const uno::Reference<drawing::XShape>& rShape, sal_Int32 nParagraph)
 {
-    sal_Int32 nParagraph(-1);
-    uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, nParagraph));
-    uno::Reference<text::XText> xText(xMasterText, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(rShape, uno::UNO_QUERY);
 
     if (!xText)
         return OUString();
@@ -1714,6 +1800,69 @@ OUString DiagramData_svx::getTextForPoint(const Point& rPoint) const
 
     return OUString();
 }
+}
+
+uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(
+    const Point& rPoint, sal_Int32& rParagraph) const
+{
+    // The presentation Points that show what a Point represents are identified by the presOf
+    // Connections that start at that Point, which maShownBy holds. There is usually more than one
+    // of them, one representing the text and others representing what belongs with it, and they
+    // cannot be held apart in the data: mnDestOrder is zero in many files, a file writes them in
+    // any order, the one representing the text needs neither a style nor own layout variables, and
+    // more than one of them gets a visualization. What does diversify them is the text itself, so
+    // the one that leads to a shape that holds text is the one we want. A Point whose text is
+    // empty takes the first shape it finds. Going the other way round, over the Points that
+    // represent this one in msPresentationAssociationId, sorts none of them out: a layout gives
+    // that association to every presentation Point it builds for a Point, and may not give it to
+    // one at all.
+    uno::Reference<drawing::XShape> xFirstShape;
+    sal_Int32 nFirstParagraph(-1);
+
+    for (const Connection* pCandidate : rPoint.maShownBy)
+    {
+        const uno::Reference<drawing::XShape> xShowingShape(
+            getXShapeByModelID(pCandidate->msDestId));
+
+        if (!xShowingShape)
+            continue;
+
+        // A shape can represent several Points, one paragraph of it each, and maShows of the
+        // presentation Point holds them all. A shape that represents a single Point represents all
+        // its paragraphs, so -1 asks for the whole text.
+        const bool bSharedShape(nullptr != pCandidate->mpDestinationPoint
+                                && pCandidate->mpDestinationPoint->maShows.size() > 1);
+        const sal_Int32 nParagraph(bSharedShape ? pCandidate->getParagraphIndex() : -1);
+
+        if (!readTextOfShape(xShowingShape, nParagraph).isEmpty())
+        {
+            rParagraph = nParagraph;
+
+            return xShowingShape;
+        }
+
+        if (!xFirstShape)
+        {
+            xFirstShape = xShowingShape;
+            nFirstParagraph = nParagraph;
+        }
+    }
+
+    rParagraph = nFirstParagraph;
+
+    return xFirstShape;
+}
+
+OUString DiagramData_svx::getTextForPoint(const Point& rPoint) const
+{
+    sal_Int32 nParagraph(-1);
+
+    // getMasterXShapeForPoint fills nParagraph, so it has to run before nParagraph is read. As
+    // arguments of one call the order they are evaluated in is not defined.
+    const uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, nParagraph));
+
+    return readTextOfShape(xMasterText, nParagraph);
+}
 
 std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(const OUString& rParentId) const
 {
@@ -1722,13 +1871,13 @@ std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(c
     for (const rtl::Reference<Connection>& rCxn : maConnections)
         if (rCxn->mnXMLType == TypeConstant::XML_parOf && rCxn->msSourceId == sModelId)
         {
-            if (rCxn->mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
-                aChildren.resize(rCxn->mnSourceOrder + 1);
-            rtl::Reference<Point> xChild(getPointByModelID(rCxn->msDestId));
+            if (rCxn->getChildIndex() >= static_cast<sal_Int32>(aChildren.size()))
+                aChildren.resize(rCxn->getChildIndex() + 1);
+            rtl::Reference<Point> xChild(rCxn->mpDestinationPoint);
             if (xChild.is())
             {
                 const OUString aText(getTextForPoint(*xChild));
-                aChildren[rCxn->mnSourceOrder] = std::make_pair(
+                aChildren[rCxn->getChildIndex()] = std::make_pair(
                     xChild->msModelId,
                     aText);
             }
@@ -1802,6 +1951,48 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
     maConnectionNameMap.clear();
     maPresOfNameMap.clear();
 
+    // The resolved links are rebuilt from scratch here, so drop what an earlier round left
+    std::unordered_map<OUString, Point*> aPointsByModelId;
+
+    for (const rtl::Reference<Point>& rPoint : getPoints())
+    {
+        rPoint->maShownBy.clear();
+        rPoint->maShows.clear();
+
+        const bool bFirstWithThatId(
+            aPointsByModelId.insert({ rPoint->msModelId, rPoint.get() }).second);
+
+        SAL_WARN_IF(!bFirstWithThatId, "oox.drawingml",
+                    "DiagramData_svx::buildDiagramDataModel(): non-unique point model id");
+    }
+
+    for (const rtl::Reference<Connection>& rConnection : getConnections())
+    {
+        rConnection->mpSourcePoint = nullptr;
+        rConnection->mpDestinationPoint = nullptr;
+    }
+
+    for (const rtl::Reference<Connection>& rConnection : getConnections())
+    {
+        const auto aSource(aPointsByModelId.find(rConnection->msSourceId));
+        const auto aDestination(aPointsByModelId.find(rConnection->msDestId));
+
+        if (aPointsByModelId.end() != aSource)
+            rConnection->mpSourcePoint = aSource->second;
+
+        if (aPointsByModelId.end() != aDestination)
+            rConnection->mpDestinationPoint = aDestination->second;
+
+        if (TypeConstant::XML_presOf != rConnection->mnXMLType)
+            continue;
+
+        if (nullptr != rConnection->mpSourcePoint)
+            rConnection->mpSourcePoint->maShownBy.push_back(rConnection.get());
+
+        if (nullptr != rConnection->mpDestinationPoint)
+            rConnection->mpDestinationPoint->maShows.push_back(rConnection.get());
+    }
+
 #ifdef DEBUG_OOX_DIAGRAM
     std::ofstream output("tree.dot");
 
@@ -1815,10 +2006,10 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
                << normalizeDotName(point->msModelId).getStr()
                << "[";
 
-        if( !point->msPresentationLayoutName.isEmpty() )
+        if( !point->getPresentation().msPresentationLayoutName.isEmpty() )
             output << "label=\""
                    << OUStringToOString(
-                       point->msPresentationLayoutName,
+                       point->getPresentation().msPresentationLayoutName,
                        RTL_TEXTENCODING_UTF8).getStr() << "\", ";
         else
             output << "label=\""
@@ -1862,13 +2053,10 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 #endif
         }
 
-        const bool bInserted1(nullptr != getPointByModelID(point->msModelId));
-        SAL_WARN_IF(!bInserted1, "oox.drawingml", "DiagramData_svx::build(): non-unique point model id");
-
-        if( !point->msPresentationLayoutName.isEmpty() )
+        if( !point->getPresentation().msPresentationLayoutName.isEmpty() )
         {
             DiagramData_svx::PointsNameMap::value_type::second_type& rVec=
-                getPointsPresNameMap()[point->msPresentationLayoutName];
+                getPointsPresNameMap()[point->getPresentation().msPresentationLayoutName];
             rVec.push_back(point);
         }
     }

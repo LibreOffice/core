@@ -181,7 +181,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                 // only for those mentioned BgShapes because for TextNodes
                 // (presName="textNode") the fill is written to the associated
                 // text node (phldrT="[Text]")
-                if (u"bgShp"_ustr == rPoint->msPresentationLayoutStyleLabel)
+                if (u"bgShp"_ustr == rPoint->getPresentation().msPresentationLayoutStyleLabel)
                 {
                     // check for fill
                     xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
@@ -248,7 +248,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
                 const bool bWriteEmptyText(
                     TypeConstant::XML_parTrans == rPoint->mnXMLType ||
                     TypeConstant::XML_sibTrans == rPoint->mnXMLType ||
-                    "textNode" == rPoint->msPresentationLayoutName);
+                    "textNode" == rPoint->getPresentation().msPresentationLayoutName);
 
                 // empty text is written by MSO, but may not be needed. For now, just do it
                 static bool bSuppressEmptyText(false);
@@ -376,14 +376,21 @@ static void Point_dump(const svx::diagram::Point& rPoint, const uno::Reference<d
 {
     SAL_INFO("oox.drawingml", "PT: " << rXShape.is() << ", cnxId " << rPoint.msCnxId << ", modelId " << rPoint.msModelId << ", type " << rPoint.mnXMLType);
 
-    SAL_INFO("oox.drawingml", "  PRS_0: " << rPoint.msColorTransformCategoryId << "," << rPoint.msColorTransformTypeId << "," << rPoint.msLayoutCategoryId << "," << rPoint.msLayoutTypeId << "," << rPoint.msPlaceholderText);
-    SAL_INFO("oox.drawingml", "  PRS_1: " << rPoint.msPresentationAssociationId << "," << rPoint.msPresentationLayoutName << "," << rPoint.msPresentationLayoutStyleLabel << "," << rPoint.msQuickStyleCategoryId << "," << rPoint.msQuickStyleTypeId);
-    SAL_INFO("oox.drawingml", "  PRS_2: " << rPoint.mnCustomAngle << "," << rPoint.mnPercentageNeighbourWidth << "," << rPoint.mnPercentageNeighbourHeight << "," << rPoint.mnPercentageOwnWidth << "," << rPoint.mnPercentageOwnHeight);
-    SAL_INFO("oox.drawingml", "  PRS_3: " << rPoint.mnIncludeAngleScale<< rPoint.mnRadiusScale << "," << rPoint.mnWidthScale << "," << rPoint.mnHeightScale << "," << rPoint.mnWidthOverride << "," << rPoint.mnHeightOverride << "," <<  rPoint.mnLayoutStyleCount << "," << rPoint.mnLayoutStyleIndex);
-    SAL_INFO("oox.drawingml", "  PRS_4: " << rPoint.mbCoherent3DOffset << "," << rPoint.mbCustomHorizontalFlip << "," << rPoint.mbCustomVerticalFlip << "," << rPoint.mbCustomText << "," << rPoint.mbIsPlaceholder);
+    const svx::diagram::RootValues& rRootVals(rPoint.getRoot());
+    const svx::diagram::PreservedValues& rPres(rPoint.getPreserved());
+    SAL_INFO("oox.drawingml", "  PRS_0: " << rRootVals.msColorTransformCategoryId << "," << rRootVals.msColorTransformTypeId << "," << rRootVals.msLayoutCategoryId << "," << rRootVals.msLayoutTypeId << "," << rPoint.msPlaceholderText);
+    SAL_INFO("oox.drawingml", "  PRS_1: " << rPoint.getPresentation().msPresentationAssociationId << "," << rPoint.getPresentation().msPresentationLayoutName << "," << rPoint.getPresentation().msPresentationLayoutStyleLabel << "," << rRootVals.msQuickStyleCategoryId << "," << rRootVals.msQuickStyleTypeId);
+    SAL_INFO("oox.drawingml", "  PRS_2: " << rPres.mnCustomAngle << "," << rPres.mnPercentageNeighbourWidth << "," << rPres.mnPercentageNeighbourHeight << "," << rPres.mnPercentageOwnWidth << "," << rPres.mnPercentageOwnHeight);
+    SAL_INFO("oox.drawingml", "  PRS_3: " << rPres.mnIncludeAngleScale<< rPres.mnRadiusScale << "," << rPres.mnWidthScale << "," << rPres.mnHeightScale << "," << rPres.mnWidthOverride << "," << rPres.mnHeightOverride << "," <<  rPoint.getPresentation().mnLayoutStyleCount << "," << rPoint.getPresentation().mnLayoutStyleIndex);
+    SAL_INFO("oox.drawingml", "  PRS_4: " << rPres.mbCoherent3DOffset << "," << rPres.mbCustomHorizontalFlip << "," << rPres.mbCustomVerticalFlip << "," << rPoint.mbCustomText << "," << rPres.mbIsPlaceholder);
 
-    SAL_INFO("oox.drawingml", "  PLV_0: " << rPoint.msResizeHandles << "," << rPoint.mnMaxChildren << "," << rPoint.mnPreferredChildren << "," << rPoint.mnDirection << "," << rPoint.mbOrgChartEnabled << "," << rPoint.mbBulletEnabled);
-    SAL_INFO("oox.drawingml", "  PLV_1: " << (rPoint.moHierarchyBranch.has_value() ? rPoint.moHierarchyBranch.value() : 0));
+    const svx::diagram::PresentationLayoutVariables& rVars(rPoint.getLayoutVariables());
+    SAL_INFO("oox.drawingml", "  PLV_0: " << rVars.msResizeHandles << ","
+             << rVars.mnMaxChildren << "," << rVars.mnPreferredChildren << ","
+             << rVars.mnDirection << "," << rVars.mbOrgChartEnabled << ","
+             << rVars.mbBulletEnabled);
+    SAL_INFO("oox.drawingml", "  PLV_1: "
+             << (rVars.moHierarchyBranch.has_value() ? rVars.moHierarchyBranch.value() : 0));
 
 }
 
