@@ -60,6 +60,7 @@ void SpifPolicyTest::testParse()
   <spif:securityClassifications>
     <spif:securityClassification name="OFFICIAL" color="yellow" lacv="3" hierarchy="3" obsolete="false" />
     <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" obsolete="false" />
+    <spif:securityClassification name="TOP SECRET" color="red" lacv="21745403334774610" hierarchy="5" obsolete="false" />
   </spif:securityClassifications>
   <spif:securityCategoryTagSets>
     <spif:securityCategoryTagSet name="Release Categories" id="1.2.826.0.1310.1.2.0.0">
@@ -75,7 +76,11 @@ void SpifPolicyTest::testParse()
     <spif:securityCategoryTagSet name="UK Restrictive Codeword - NTK" id="1.2.826.0.1310.1.2.0.4">
       <spif:securityCategoryTag name="UK Restrictive Codewords - NTK" tagType="enumerated" enumType="restrictive" singleSelection="false">
         <spif:tagCategory name="INT" lacv="21745403334774610" obsolete="false">
-          <spif:excludedClass>OFFICIAL</spif:excludedClass>
+          <!-- Pretty-printed: the surrounding whitespace must not defeat the
+               classification comparison in isSelectable(). -->
+          <spif:excludedClass>
+            OFFICIAL
+          </spif:excludedClass>
         </spif:tagCategory>
         <spif:tagCategory name="OPS" lacv="21745403334774611" obsolete="true">
           <spif:excludedClass>OFFICIAL</spif:excludedClass>
@@ -99,17 +104,22 @@ void SpifPolicyTest::testParse()
     CPPUNIT_ASSERT_EQUAL(u"SPIF Collabora"_ustr, aPolicy.aName);
     CPPUNIT_ASSERT_EQUAL(u"1.2.826.0.1310.1.2.0"_ustr, aPolicy.aId);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPolicy.aClassifications.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPolicy.aClassifications.size());
 
     CPPUNIT_ASSERT_EQUAL(u"OFFICIAL"_ustr, aPolicy.aClassifications[0].aName);
     CPPUNIT_ASSERT_EQUAL(u"yellow"_ustr, aPolicy.aClassifications[0].aColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aPolicy.aClassifications[0].nLacv);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aPolicy.aClassifications[0].nHierarchy);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aPolicy.aClassifications[0].nLacv);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aPolicy.aClassifications[0].nHierarchy);
     CPPUNIT_ASSERT(!aPolicy.aClassifications[0].bObsolete);
 
     CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aPolicy.aClassifications[1].aName);
     CPPUNIT_ASSERT_EQUAL(u"red"_ustr, aPolicy.aClassifications[1].aColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aPolicy.aClassifications[1].nLacv);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(4), aPolicy.aClassifications[1].nLacv);
+
+    // A classification lacv is an unbounded xs:integer, like a category's.
+    CPPUNIT_ASSERT_EQUAL(u"TOP SECRET"_ustr, aPolicy.aClassifications[2].aName);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(21745403334774610),
+                         aPolicy.aClassifications[2].nLacv);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPolicy.aTagSets.size());
 

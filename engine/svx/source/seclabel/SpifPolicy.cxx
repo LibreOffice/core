@@ -117,7 +117,13 @@ SpifTagCategory parseTagCategory(tools::XmlWalker& rWalker)
                 aCategory.aReplacePolicyPhrase = aData.aPhrase;
         }
         else if (rWalker.name() == "excludedClass")
-            aCategory.aExcludedClasses.push_back(toOU(rWalker.content()));
+        {
+            // The text node carries whatever whitespace the policy is formatted
+            // with; isSelectable() compares it to a classification name exactly,
+            // so untrimmed content would let an excluded category through.
+            const OString aExcluded = rWalker.content();
+            aCategory.aExcludedClasses.push_back(toOU(o3tl::trim(aExcluded)));
+        }
         else if (rWalker.name() == "excludedCategory")
             aCategory.aExcludedCategories.push_back(parseCategoryRef(rWalker));
         else if (rWalker.name() == "requiredCategory")
@@ -336,8 +342,8 @@ bool SpifPolicy::parse(SvStream& rStream)
                     SpifClassification aClass;
                     aClass.aName = toOU(aWalker.attribute("name"_ostr));
                     aClass.aColor = toOU(aWalker.attribute("color"_ostr));
-                    aClass.nLacv = aWalker.attribute("lacv"_ostr).toInt32();
-                    aClass.nHierarchy = aWalker.attribute("hierarchy"_ostr).toInt32();
+                    aClass.nLacv = aWalker.attribute("lacv"_ostr).toInt64();
+                    aClass.nHierarchy = aWalker.attribute("hierarchy"_ostr).toInt64();
                     aClass.bObsolete = aWalker.attribute("obsolete"_ostr) == "true";
                     aWalker.children();
                     while (aWalker.isValid())

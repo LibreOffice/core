@@ -24,8 +24,8 @@ struct SpifClassification
 {
     OUString aName; ///< securityClassification/@name; default marking phrase
     OUString aColor; ///< @color: W3C name or #RRGGBB; may be empty
-    sal_Int32 nLacv = 0; ///< @lacv (label and certificate value)
-    sal_Int32 nHierarchy = 0; ///< @hierarchy (dominance ordering)
+    sal_Int64 nLacv = 0; ///< @lacv (label and certificate value; may exceed 32 bits)
+    sal_Int64 nHierarchy = 0; ///< @hierarchy (dominance ordering; may exceed 32 bits)
     bool bObsolete = false; ///< @obsolete: not for newly created labels
     OUString aMarkingPhrase; ///< markingData @phrase (shown when noNameDisplay)
     bool bNoNameDisplay = false; ///< markingData code: show phrase, not the name
