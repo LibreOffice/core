@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-01 16:27+0200\n"
-"PO-Revision-Date: 2026-09-03 05:51+0000\n"
+"PO-Revision-Date: 2026-09-04 06:51+0000\n"
 "Last-Translator: tigran54 <tigran@flib.sci.am>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hy/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.9\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -2081,108 +2081,114 @@ msgstr "Պատկերի ստեղծումը ձախողվեց. մոդելից հո�
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "Փաստաթուղթը հասանելի չէ"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "Խմբագրված ուրվագիծը վավեր չէ: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2179
 msgid "Could not build any slides from the outline. Please try again."
-msgstr ""
+msgstr "Հնարավոր չէ որևէ սահիկ կառուցել ուրվագծից։ Խնդրում ենք կրկին փորձել։"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "ԱԲ պատկերի կարգավորումները կարգաբերված չեն"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "Պատկերի մոդելը կարգաբերված չէ"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Պատկերի ստեղծումը ձախողվեց: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "Պատկեր չի գեներացվել"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Չհաջողվեց վերլուծել ԱԲ-ն արձագանքը"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "ԱԲ մատակարարը մերժեց հարցումը՝ այն համարելով անվավեր"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "API սխալ ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Հղումների թիրախների արդյունահանում..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Գնահատվում է բանաձևը..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Բեռնվում է ֆունկցիաների քարտարանը..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Մտածում է..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Աշխատում է..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Բանաձևերի սահմանում..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Կառուցվում է {0} սահիկը {1}-ից..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Սահիկ {0}-ը բաց է թողնվում..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Գեներացվում է {0} պատկերը {1}-ից..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Այս փաստաթուղթը չափազանց մեծ է ամբողջությամբ կարդալու համար։ Ընտրեք բաժին, "
+"որի վրա կկենտրոնանաք:"
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Այս թերթիկը չափազանց մեծ է ամբողջությամբ կարդալու համար։ Այն սահմանափակելու "
+"համար կարող եք:"
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
-msgstr ""
+msgstr "Ընտրեք աղյուսակի բջիջների միջակայքը, ապա կրկին տվեք ձեր հարցը"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
-msgstr ""
+msgstr "Արձագանքեք կենտրոնանալու միջակայքով, օրինակ `A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
 msgstr ""
+"Ձեր քարտերի տախտակը պատրաստ է. {0} սահիկներ կառուցված են հաստատված ուրվագծի "
+"հիման վրա։"
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "{0} սահիկ(ներ) հնարավոր չէր կառուցել և բաց թողնվեցին։"
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
-msgstr ""
+msgstr "{0} պատկեր(ներ) հանարավոր չէ գեներացնել և ցուցադրել տեղապահը։"
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -4251,7 +4257,7 @@ msgstr "Աղյուսակի դիզայն"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Գործիքներ"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4448,19 +4454,19 @@ msgstr "Սկսել:"
 
 #: src/control/Control.Notebookbar.js:581
 msgid "End:"
-msgstr ""
+msgstr "Ավարտ:"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Սկսել նետաձև ոճը"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Ավարտել նետաձև ոճը"
 
 #: src/control/Control.Notebookbar.js:669
 msgid "Line Width"
-msgstr ""
+msgstr "Գծի լայնություն"
 
 #: src/control/Control.Notebookbar.js:694
 msgid "Line Transparency:"
