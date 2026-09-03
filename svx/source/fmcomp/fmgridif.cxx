@@ -739,9 +739,8 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
         // dispose our current AccessibleContext, if we have one
         // (changing the design mode implies having a new implementation for this context,
         // so the old one must be declared DEFUNC)
-        DisposeAccessibleContext(
-                Reference<XComponent>(maAccessibleContext, UNO_QUERY));
-        maAccessibleContext.clear();
+        DisposeAccessibleContext(mpAccessible.get());
+        mpAccessible.clear();
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;

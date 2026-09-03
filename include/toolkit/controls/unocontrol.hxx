@@ -32,8 +32,9 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <tools/long.hxx>
 #include <comphelper/interfacecontainer3.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase9.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <memory>
 
@@ -92,8 +93,8 @@ protected:
     css::uno::Reference< css::awt::XControlModel >    mxModel;
     css::uno::Reference< css::awt::XGraphics >        mxGraphics;
 
-    css::uno::WeakReferenceHelper
-                                        maAccessibleContext;    /// our most recent XAccessibleContext instance
+    /// our most recent accessible
+    unotools::WeakReference<comphelper::OAccessible> mpAccessible;
 
     bool                            mbDisposePeer;
     bool                            mbRefreshingPeer;

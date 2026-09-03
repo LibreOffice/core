@@ -335,7 +335,7 @@ UnoControl::DisposeAccessibleContext(Reference<XComponent> const& xContextComp)
 void UnoControl::dispose(  )
 {
     Reference< XVclWindowPeer > xPeer;
-    Reference<XComponent> xAccessibleComp;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if( mbDisposePeer )
@@ -343,8 +343,8 @@ void UnoControl::dispose(  )
             xPeer = mxVclWindowPeer;
         }
         setPeer( nullptr );
-        xAccessibleComp.set(maAccessibleContext, UNO_QUERY);
-        maAccessibleContext.clear();
+        pAccessible = mpAccessible.get();
+        mpAccessible.clear();
     }
     if( xPeer.is() )
     {
@@ -352,7 +352,7 @@ void UnoControl::dispose(  )
     }
 
     // dispose our AccessibleContext - without Mutex locked
-    DisposeAccessibleContext(xAccessibleComp);
+    DisposeAccessibleContext(pAccessible);
 
     EventObject aDisposeEvent;
     aDisposeEvent.Source = static_cast< XAggregation* >( this );
@@ -641,10 +641,11 @@ void UnoControl::disposing( const EventObject& rEvt )
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // do not compare differing types in case of multiple inheritance
 
-    if ( maAccessibleContext.get() == rEvt.Source )
+    if (uno::Reference<XAccessible>(mpAccessible.get())
+        == uno::Reference<XAccessible>(rEvt.Source, UNO_QUERY))
     {
         // just in case the context is disposed, but not released - ensure that we do not re-use it in the future
-        maAccessibleContext.clear();
+        mpAccessible.clear();
     }
     else if( mxModel.get() == Reference< XControlModel >(rEvt.Source,UNO_QUERY).get() )
     {
@@ -1402,7 +1403,7 @@ void UnoControl::setDesignMode( sal_Bool bOn )
     ModeChangeEvent aModeChangeEvent;
 
     Reference< XWindow > xWindow;
-    Reference<XComponent> xAccessibleComp;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( bool(bOn) == mbDesignMode )
@@ -1412,8 +1413,8 @@ void UnoControl::setDesignMode( sal_Bool bOn )
         mbDesignMode = bOn;
         xWindow.set(getPeer(), css::uno::UNO_QUERY);
 
-        xAccessibleComp.set(maAccessibleContext, UNO_QUERY);
-        maAccessibleContext.clear();
+        pAccessible = mpAccessible.get();
+        mpAccessible.clear();
 
         aModeChangeEvent.Source = *this;
         aModeChangeEvent.NewMode = mbDesignMode ? std::u16string_view(u"design") : std::u16string_view(u"alive" );
@@ -1422,7 +1423,7 @@ void UnoControl::setDesignMode( sal_Bool bOn )
     // dispose current AccessibleContext, if we have one - without Mutex lock
     // (changing the design mode implies having a new implementation for this context,
     // so the old one must be declared DEFUNC)
-    DisposeAccessibleContext(xAccessibleComp);
+    DisposeAccessibleContext(pAccessible);
 
     // adjust the visibility of our window
     if ( xWindow.is() )
@@ -1466,8 +1467,8 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    Reference< XAccessibleContext > xCurrentContext( maAccessibleContext.get(), UNO_QUERY );
-    if ( !xCurrentContext.is() )
+    rtl::Reference<comphelper::OAccessible> pCurrentAccessible = mpAccessible.get();
+    if (!pCurrentAccessible.is())
     {
         if ( !mbDesignMode )
         {
@@ -1476,27 +1477,27 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
             {
                 rtl::Reference<comphelper::OAccessible> pWinAcc = pWindow->GetAccessible();
                 if (pWinAcc.is())
-                    xCurrentContext = pWinAcc;
+                    pCurrentAccessible = pWinAcc;
             }
         }
         else
             // in design mode, use a fallback
-            xCurrentContext = ::toolkit::OAccessibleControlContext::create( this );
+            pCurrentAccessible = ::toolkit::OAccessibleControlContext::create(this);
 
-        DBG_ASSERT( xCurrentContext.is(), "UnoControl::getAccessibleContext: invalid context (invalid peer?)!" );
-        maAccessibleContext = xCurrentContext;
+        DBG_ASSERT(pCurrentAccessible.is(),
+                   "UnoControl::getAccessibleContext: invalid context (invalid peer?)!");
+        mpAccessible = unotools::WeakReference<comphelper::OAccessible>(pCurrentAccessible);
 
-        // get notified when the context is disposed
-        Reference< XComponent > xContextComp( xCurrentContext, UNO_QUERY );
-        if ( xContextComp.is() )
-            xContextComp->addEventListener( this );
+        // get notified when the accessible is disposed
+        if (pCurrentAccessible.is())
+            pCurrentAccessible->addEventListener(this);
         // In an ideal world, this is not necessary - there the object would be released as soon as it has been
         // disposed, and thus our weak reference would be empty, too.
         // But 'til this ideal world comes (means 'til we do never have any refcount/lifetime bugs anymore), we
         // need to listen for disposal and reset our weak reference then.
     }
 
-    return xCurrentContext;
+    return pCurrentAccessible;
 }
 
 void SAL_CALL UnoControl::addModeChangeListener( const Reference< XModeChangeListener >& _rxListener )
