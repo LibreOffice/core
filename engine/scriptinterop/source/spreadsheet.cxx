@@ -10,6 +10,7 @@
  */
 
 #include <utility>
+#include <vector>
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -19,6 +20,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
@@ -57,6 +59,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
@@ -163,6 +166,32 @@ documentSheets(cpo::uno::Reference<css::frame::XModel> const& model)
     cpo::uno::Reference<css::sheet::XSpreadsheetDocument> const doc(model,
                                                                     cpo::uno::UNO_QUERY_THROW);
     return doc->getSheets();
+}
+
+// SpreadsheetApp-style code names a sheet in front of the cells with "!", as in "Data!A1:B2",
+// and single-quotes a name holding spaces or a "!" of its own, as in "'Rate data'!A1". Calc's
+// own parser writes that same reference as "Data.A1", so a qualified name is split here and
+// resolved against the sheet it names. The last "!" is the separator, which keeps a quoted
+// name containing one intact. Sets cells either way, to the whole name when it carries no
+// sheet, and reports whether there was a sheet to split off at all.
+bool splitSheetQualifiedName(OUString const& a1Notation, OUString& sheetName, OUString& cells)
+{
+    auto const separator = a1Notation.lastIndexOf('!');
+    if (separator < 0)
+    {
+        cells = a1Notation;
+        return false;
+    }
+    auto name = a1Notation.copy(0, separator);
+    if (name.getLength() >= 2 && name.startsWith(u"'"_ustr) && name.endsWith(u"'"_ustr))
+    {
+        // A quoted name carries its own quotes doubled, the way Calc and SpreadsheetApp both
+        // write them.
+        name = name.copy(1, name.getLength() - 2).replaceAll(u"''"_ustr, u"'"_ustr);
+    }
+    sheetName = name;
+    cells = a1Notation.copy(separator + 1);
+    return true;
 }
 
 // Builds the range at a 1-based row/column/size, checked before the sheet is asked for it.
@@ -530,12 +559,29 @@ public:
     cpo::uno::Reference<scriptinterop::XRange>
         SAL_CALL getRange(OUString const& a1Notation) override
     {
-        cpo::uno::Reference<css::table::XCellRange> const sheetRange(sheet_,
-                                                                     cpo::uno::UNO_QUERY_THROW);
+        OUString qualifiedSheet;
+        OUString cells;
+        auto const qualified = splitSheetQualifiedName(a1Notation, qualifiedSheet, cells);
+        cpo::uno::Reference<css::table::XCellRange> sheetRange;
+        if (qualified)
+        {
+            cpo::uno::Reference<css::container::XNameAccess> const sheets(
+                documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
+            if (!sheets->hasByName(qualifiedSheet))
+            {
+                throw cpo::uno::RuntimeException(OUString::Concat("getRange: no sheet named ")
+                                                 + qualifiedSheet);
+            }
+            sheetRange.set(sheets->getByName(qualifiedSheet), cpo::uno::UNO_QUERY_THROW);
+        }
+        else
+        {
+            sheetRange.set(sheet_, cpo::uno::UNO_QUERY_THROW);
+        }
         cpo::uno::Reference<css::table::XCellRange> range;
         try
         {
-            range = sheetRange->getCellRangeByName(a1Notation);
+            range = sheetRange->getCellRangeByName(cells);
         }
         catch (cpo::uno::Exception const& e)
         {
@@ -1011,6 +1057,56 @@ public:
         cpo::uno::Reference<css::sheet::XCalculatable> const calc(model_,
                                                                   cpo::uno::UNO_QUERY_THROW);
         calc->calculateAll();
+    }
+
+    OUString SAL_CALL getName() override
+    {
+        try
+        {
+            // A saved document is named after its file, without the folders in front of it and
+            // without the extension, which is the name SpreadsheetApp-style code expects. One
+            // that has never been saved has no file, so its own placeholder title stands in.
+            auto const url = model_->getURL();
+            if (url.isEmpty())
+            {
+                cpo::uno::Reference<css::frame::XTitle> const title(model_,
+                                                                     cpo::uno::UNO_QUERY_THROW);
+                return title->getTitle();
+            }
+            auto const file = rtl::Uri::decode(url.copy(url.lastIndexOf('/') + 1),
+                                               rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+            auto const extension = file.lastIndexOf('.');
+            // A leading dot belongs to the name rather than starting an extension.
+            return extension > 0 ? file.copy(0, extension) : file;
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("getName: ") + e.Message);
+        }
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSheet>> SAL_CALL getSheets() override
+    {
+        try
+        {
+            cpo::uno::Reference<css::container::XIndexAccess> const indexed(
+                documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
+            auto const n = indexed->getCount();
+            std::vector<cpo::uno::Reference<scriptinterop::XSheet>> sheets;
+            sheets.reserve(n);
+            for (sal_Int32 i = 0; i != n; ++i)
+            {
+                cpo::uno::Reference<css::sheet::XSpreadsheet> const sheet(
+                    indexed->getByIndex(i), cpo::uno::UNO_QUERY_THROW);
+                sheets.emplace_back(new SheetImpl(model_, sheet));
+            }
+            return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSheet>>(sheets.data(),
+                                                                                   sheets.size());
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("getSheets: ") + e.Message);
+        }
     }
 
 private:

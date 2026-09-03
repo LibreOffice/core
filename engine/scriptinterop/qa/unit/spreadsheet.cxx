@@ -379,6 +379,85 @@ CPPUNIT_TEST_FIXTURE(Test, testGetSheetByName)
     CPPUNIT_ASSERT(!xSpreadsheet->getSheetByName(u"NoSuchSheet"_ustr).is());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGetNameAndSheets)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    // A document that has never been saved still reports the placeholder title it shows in its
+    // own window rather than nothing at all.
+    CPPUNIT_ASSERT(!xSpreadsheet->getName().isEmpty());
+    auto const xSheets = xSpreadsheet->getSheets();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSheets.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"Sheet1"_ustr, xSheets[0]->getName());
+    // Sheets come back in the document's own order, with a newly inserted one last.
+    xSpreadsheet->insertSheet(u"Second"_ustr);
+    auto const xGrown = xSpreadsheet->getSheets();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGrown.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"Sheet1"_ustr, xGrown[0]->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, xGrown[1]->getName());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testGetNameOfSavedDocument)
+{
+    loadSpreadsheet();
+    saveAndReload(TestFilter::ODS);
+    auto const xSpreadsheet
+        = cool::get(comphelper::getProcessComponentContext())->getActiveSpreadsheet();
+    // A document with a file behind it is named after that file, without the folders in front
+    // of it and without the extension.
+    auto const sFile = maTempFile.GetFileName().copy(
+        maTempFile.GetFileName().lastIndexOf('/') + 1);
+    auto const sExpected = sFile.copy(0, sFile.lastIndexOf('.'));
+    CPPUNIT_ASSERT_EQUAL(sExpected, xSpreadsheet->getName());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testGetRangeAcceptsSheetQualifiedName)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    xSpreadsheet->insertSheet(u"Rate data"_ustr);
+    xSpreadsheet->getSheetByName(u"Rate data"_ustr)
+        ->getRange(u"B2"_ustr)
+        ->setValue(cpo::uno::Any(7.0));
+    auto const xSheet1 = xSpreadsheet->getActiveSheet();
+    xSheet1->getRange(u"B2"_ustr)->setValue(cpo::uno::Any(1.0));
+
+    // A name qualified with "!" reads the sheet it names, not the one asked for the range.
+    double d = 0;
+    CPPUNIT_ASSERT(xSheet1->getRange(u"Rate data!B2"_ustr)->getValue() >>= d);
+    CPPUNIT_ASSERT_EQUAL(7.0, d);
+    // A quoted sheet name works the same way.
+    CPPUNIT_ASSERT(xSheet1->getRange(u"'Rate data'!B2"_ustr)->getValue() >>= d);
+    CPPUNIT_ASSERT_EQUAL(7.0, d);
+    // An unqualified name still means this sheet.
+    CPPUNIT_ASSERT(xSheet1->getRange(u"B2"_ustr)->getValue() >>= d);
+    CPPUNIT_ASSERT_EQUAL(1.0, d);
+    // A qualified name matches a sheet the way getSheetByName does, without regard to case.
+    CPPUNIT_ASSERT(xSheet1->getRange(u"rate data!B2"_ustr)->getValue() >>= d);
+    CPPUNIT_ASSERT_EQUAL(7.0, d);
+    CPPUNIT_ASSERT_THROW(xSheet1->getRange(u"NoSuchSheet!B2"_ustr), cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testGetRangeAcceptsQuotedSheetNameAndSpans)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    // A sheet name may hold an apostrophe, which a qualified name doubles inside its quotes.
+    xSpreadsheet->insertSheet(u"Bob's data"_ustr);
+    auto const xData = xSpreadsheet->getSheetByName(u"Bob's data"_ustr);
+    xData->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(1.0));
+    xData->getRange(u"B2"_ustr)->setValue(cpo::uno::Any(4.0));
+
+    auto const xSheet1 = xSpreadsheet->getActiveSheet();
+    auto const xSpan = xSheet1->getRange(u"'Bob''s data'!A1:B2"_ustr);
+    // A qualified name may span several cells, and the range keeps that shape.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSpan->getNumRows());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSpan->getNumColumns());
+    auto const values = xSpan->getValues();
+    double d = 0;
+    CPPUNIT_ASSERT(values[0][0] >>= d);
+    CPPUNIT_ASSERT_EQUAL(1.0, d);
+    CPPUNIT_ASSERT(values[1][1] >>= d);
+    CPPUNIT_ASSERT_EQUAL(4.0, d);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertSheet)
 {
     auto const xSpreadsheet = loadSpreadsheet();

@@ -24,6 +24,10 @@ interface XSpreadsheet : XBase
     XRange getRangeByName([in] string name);
 
     void flush();
+
+    string getName();
+
+    sequence< XSheet > getSheets();
 };
 
 };
