@@ -1064,15 +1064,16 @@ public:
         return probe->getString().getLength();
     }
 
-    OUString getSurroundingText() override {
+    css::uno::Reference<scriptinterop::XText> getSurroundingText() override {
         auto const para = findContainingParagraph(viewCursor());
         if (!para.is()) {
             throw cpo::uno::RuntimeException(
                 u"getSurroundingText: the cursor is not inside a paragraph"_ustr);
         }
-        return css::uno::Reference<css::text::XTextRange>(para, css::uno::UNO_QUERY_THROW)
-            ->getString();
+        return new TextImpl(para);
     }
+
+    sal_Int32 getSurroundingTextOffset() override { return getOffset(); }
 
     void insertText(OUString const & text) override {
         auto const c = viewCursor();

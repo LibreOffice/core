@@ -16,25 +16,6 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
     try {
         function activeDoc() { return cool.getActiveDocument(); }
 
-        function cursorFacade() {
-            const xc = activeDoc().getCursor();
-            return {
-                getElement: function() {
-                    const p = xc.getElement();
-                    return p ? p : { getType: function() {
-                        return uno.idl.scriptinterop.ElementType.TEXT;
-                    } };
-                },
-                getOffset: function() { return xc.getOffset(); },
-                getSurroundingText: function() {
-                    const t = xc.getSurroundingText();
-                    return { getText: function() { return t; } };
-                },
-                getSurroundingTextOffset: function() { return xc.getOffset(); },
-                insertText: function(t) { xc.insertText(String(t)); }
-            };
-        }
-
         const uiStub = {
             createAddonMenu: function() {
                 const m = { addItem: function() { return m; }, addToUi: function() {} };
@@ -76,7 +57,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             getActiveDocument: function() {
                 return {
                     getSelection: function() { return activeDoc().getSelection(); },
-                    getCursor: cursorFacade,
+                    getCursor: function() { return activeDoc().getCursor(); },
                     getBody: function() { return activeDoc().getBody(); },
                     getFootnotes: function() { return activeDoc().getFootnotes(); },
                     newRange: function() { return activeDoc().newRange(); },
