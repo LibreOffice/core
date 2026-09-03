@@ -1414,6 +1414,10 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         value18 = this;
     }
 
+    OUString getOverloadedNoArgs() override { return u"foo"_ustr; }
+
+    sal_Int32 getOverloadedOneArg(sal_Int32 value) override { return value; }
+
     void SAL_CALL throwRuntimeException() override
     {
         throw cpo::uno::RuntimeException(u"test"_ustr);

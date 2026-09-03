@@ -22,6 +22,7 @@
 #include <mutex>
 #include <optional>
 #include <regex>
+#include <set>
 #include <sstream>
 #include <string_view>
 #include <utility>
@@ -57,6 +58,7 @@
 #include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cool.hpp>
+#include <cppuhelper/annotations.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <jsuno/detail/dllapi.hxx>
@@ -489,6 +491,120 @@ JSValue enumerationIterator(JSContext* ctx, JSValueConst this_val, int, JSValueC
     });
 }
 
+void collectOverloadMembers(
+    OUString const & ann, typelib_InterfaceTypeDescription * ifaceTd, std::set<OUString> & visited,
+    std::vector<OUString> & members)
+{
+    auto const interfaceName = OUString::unacquired(&ifaceTd->aBase.pTypeName);
+    if (!visited.insert(interfaceName).second) {
+        return;
+    }
+    for (sal_Int32 i = 0; i != ifaceTd->nBaseTypes; ++i) {
+        collectOverloadMembers(ann, ifaceTd->ppBaseTypes[i], visited, members);
+    }
+    for (sal_Int32 i = 0; i != ifaceTd->nMembers; ++i) {
+        typelib_TypeDescription * memberTd = nullptr;
+        typelib_typedescriptionreference_getDescription(&memberTd, ifaceTd->ppMembers[i]);
+        if (memberTd == nullptr) {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat("findOverloads: no description for member of ") + interfaceName);
+        }
+        if (memberTd->eTypeClass == typelib_TypeClass_INTERFACE_METHOD) {
+            auto const methodName = OUString::unacquired(
+                &reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(memberTd)
+                    ->aBase.pMemberName);
+            for (auto const & a: cppuhelper::getInterfaceMethodAnnotations(
+                     comphelper::getProcessComponentContext(), interfaceName, methodName))
+            {
+                if (a == ann) {
+                    members.push_back(methodName);
+                    break;
+                }
+            }
+        }
+        typelib_typedescription_release(memberTd);
+    }
+}
+
+std::vector<OUString> findOverloads(
+   css::uno::Reference<cpo::uno::XInterface> const & object, std::u16string_view name)
+{
+    css::uno::Reference<css::lang::XTypeProvider> const tp(object, css::uno::UNO_QUERY);
+    if (!tp.is()) {
+        return {};
+    }
+    std::set<OUString> visited;
+    std::vector<OUString> members;
+    for (auto const & type: tp->getTypes()) {
+        css::uno::TypeDescription desc(type);
+        if (!desc.is() || desc.get()->eTypeClass != typelib_TypeClass_INTERFACE) {
+            throw cpo::uno::RuntimeException(
+                u"findOverloads: XTypeProvider returned a non-interface type"_ustr);
+        }
+        desc.makeComplete();
+        collectOverloadMembers(
+            OUString(OUString::Concat("overload ") + name),
+            reinterpret_cast<typelib_InterfaceTypeDescription *>(desc.get()), visited, members);
+    }
+    return members;
+}
+
+JSValue overloadDispatch(
+    JSContext * ctx, JSValueConst this_val, int argc, JSValueConst * argv, int, JSValueConst * data)
+{
+    return callFromJs(ctx, [&]() -> JSValue {
+        auto const obj = static_cast<cpo::uno::XInterface *>(
+            JS_GetOpaque(this_val, getRuntimeData(ctx)->wrapperClassId));
+        if (obj == nullptr) {
+            JS_ThrowTypeError(ctx, "overload dispatch: missing this");
+            throw JsException();
+        }
+        css::uno::Reference<css::script::XInvocation2> invoke(
+            css::script::Invocation::create(comphelper::getProcessComponentContext())
+                ->createInstanceWithArguments({cpo::uno::Any(css::uno::Reference(obj))}),
+            css::uno::UNO_QUERY_THROW);
+        // data[0] is a JS array of the overload set's method names:
+        ValueRef const lenVal(ctx, JS_GetPropertyStr(ctx, data[0], "length"));
+        std::uint32_t nMembers = 0;
+        JS_ToUint32(ctx, &nMembers, lenVal);
+        std::optional<css::script::InvocationInfo> chosen;
+        for (std::uint32_t i = 0; i != nMembers; ++i) {
+            ValueRef const nameVal(ctx, JS_GetPropertyUint32(ctx, data[0], i));
+            UniqueCString8 const nameStr(ctx, JS_ToCString(ctx, nameVal));
+            if (nameStr.get() == nullptr) {
+                throw cpo::uno::RuntimeException(
+                    u"overload dispatch: JS_ToCString failed on the member-name array"_ustr);
+            }
+            // A css::script::Invocation limitation, not specific to overloading, is that it cannot
+            // properly handle cases where an object implements unrelated interfaces X1 and X2 that
+            // each have a method f that adds to the same overload set (just the same as when X1::f
+            // and X2::f are not in overload sets, and css::script::Invocation can't decide which
+            // implementation of f to invoke):
+            auto info = invoke->getInfoForName(OUString::fromUtf8(nameStr.get()), false);
+            if (info.aParamTypes.getLength() == argc) {
+                chosen = info;
+                break;
+            }
+        }
+        if (!chosen) {
+            JS_ThrowTypeError(ctx, "overload dispatch: no member matches %d argument(s)", argc);
+            throw JsException();
+        }
+        ValueRef data0(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->pointerClassId));
+        [[maybe_unused]] auto const e
+            = JS_SetOpaque(data0, new css::script::InvocationInfo(*chosen));
+        assert(e == 0);
+#if defined DBG_UTIL
+        getRuntimeData(ctx)->toFinalize.inc();
+#endif
+        ValueRef fn(
+            ctx,
+            JS_NewCFunctionData(
+                ctx, invokeUno, chosen->aParamTypes.getLength(), 0, 1, data0.ptr()));
+        return JS_Call(ctx, fn, this_val, argc, argv);
+    });
+}
+
 int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueConst obj, JSAtom atom)
 {
     try
@@ -517,16 +633,35 @@ int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueCon
         {
             return 0;
         }
+        auto const name = OUString::fromUtf8(JS_AtomToCString(ctx, atom));
+        // Check for UNO interface method overloads:
+        css::uno::Reference<cpo::uno::XInterface> const object(
+            static_cast<cpo::uno::XInterface *>(
+                JS_GetOpaque(obj, getRuntimeData(ctx)->wrapperClassId)));
+        auto const overloads = findOverloads(object, name);
+        if (!overloads.empty()) {
+            if (desc != nullptr) {
+                ValueRef membersArr(ctx, JS_NewArray(ctx));
+                for (std::size_t i = 0; i != overloads.size(); ++i) {
+                    JS_SetPropertyUint32(
+                        ctx, membersArr, i, JS_NewString(ctx, overloads[i].toUtf8().getStr()));
+                }
+                desc->flags = JS_PROP_C_W_E;
+                desc->value = JS_NewCFunctionData(ctx, overloadDispatch, 0, 0, 1, membersArr.ptr());
+                desc->getter = JS_UNDEFINED;
+                desc->setter = JS_UNDEFINED;
+            }
+            return 1;
+        }
         css::uno::Reference<css::script::XInvocation2> invoke(
             css::script::Invocation::create(comphelper::getProcessComponentContext())
                 ->createInstanceWithArguments(
-                    { cpo::uno::Any(css::uno::Reference(static_cast<cpo::uno::XInterface*>(
-                        JS_GetOpaque(obj, getRuntimeData(ctx)->wrapperClassId)))) }),
+                    { cpo::uno::Any(object) }),
             css::uno::UNO_QUERY_THROW);
         css::script::InvocationInfo info;
         try
         {
-            info = invoke->getInfoForName(OUString::fromUtf8(JS_AtomToCString(ctx, atom)), false);
+            info = invoke->getInfoForName(name, false);
         }
         catch (css::lang::IllegalArgumentException)
         {

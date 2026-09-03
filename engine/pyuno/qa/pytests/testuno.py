@@ -451,6 +451,12 @@ class Test(unohelper.Base, XTest):
                 self),
             self)
 
+    def getOverloadedNoArgs(self):
+        return 'foo'
+
+    def getOverloadedOneArg(self, value):
+        return value
+
     def throwRuntimeException(self):
         raise RuntimeException('test', None)
 
@@ -888,6 +894,9 @@ class TestUno(unittest.TestCase):
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 test))
         self.assertEqual(v18, test)
+
+        self.assertEqual(test.getOverloadedNoArgs(), 'foo')
+        self.assertEqual(test.getOverloadedOneArg(-123456), -123456)
 
         with self.assertRaises(RuntimeException) as cm:
             test.throwRuntimeException()

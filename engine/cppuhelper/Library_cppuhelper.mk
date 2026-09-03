@@ -53,6 +53,7 @@ $(eval $(call gb_Library_set_include,cppuhelper,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
+	cppuhelper/source/annotations \
 	cppuhelper/source/bootstrap \
 	cppuhelper/source/compbase \
 	cppuhelper/source/component_context \

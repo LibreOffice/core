@@ -809,6 +809,8 @@ Module.uno_init.then(function() {
     console.assert(test.isFloat(Module.uno.com.sun.star.testuno.Constants.Float));
     console.assert(Module.uno.com.sun.star.testuno.Constants.Double === 100.5);
     console.assert(test.isDouble(Module.uno.com.sun.star.testuno.Constants.Double));
+    console.assert(test.getOverloadedNoArgs() === 'foo');
+    console.assert(test.getOverloadedOneArg(-123456) === -123456);
     try {
         test.throwRuntimeException();
         console.assert(false);

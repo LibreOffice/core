@@ -1896,6 +1896,23 @@ cppuhelper::TypeManager::resolve(OUString const & name) {
     return desc;
 }
 
+std::vector<OUString> cppuhelper::TypeManager::getInterfaceMethodAnnotations(
+    OUString const & interfaceName, std::u16string_view methodName)
+{
+    if (auto const entity = findEntity(interfaceName);
+        entity.is() && entity->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE)
+    {
+        auto const iface = static_cast<unoidl::InterfaceTypeEntity const *>(entity.get());
+        for (auto const & method: iface->getDirectMethods()) {
+            if (method.name == methodName) {
+                return method.annotations;
+            }
+        }
+    }
+    throw cpo::uno::RuntimeException(
+        "no interface \"" + interfaceName + "\" method \"" + methodName + "\"");
+}
+
 cppuhelper::TypeManager::~TypeManager() noexcept {}
 
 OUString cppuhelper::TypeManager::getImplementationName()

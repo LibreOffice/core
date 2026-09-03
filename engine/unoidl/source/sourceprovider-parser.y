@@ -906,6 +906,7 @@ std::vector<OUString> annotations(bool deprecated) {
 %token TOK_MODULE
 %token TOK_OPTIONAL
 %token TOK_OUT
+%token TOK_OVERLOAD
 %token TOK_PROPERTY
 %token TOK_PUBLISHED
 %token TOK_RAISES
@@ -932,7 +933,7 @@ std::vector<OUString> annotations(bool deprecated) {
 
 %token TOK_ERROR
 
-%type<sval> identifier name singleInheritance singleInheritance_opt
+%type<sval> identifier name singleInheritance singleInheritance_opt overload_opt
 %type<bval> ctors_opt deprecated_opt ellipsis_opt published_opt
 %type<decls> attributeAccessDecl attributeAccessDecls
 %type<dir> direction
@@ -1799,15 +1800,15 @@ attributeAccessDecl:
 ;
 
 interfaceMethod:
-  deprecated_opt type identifier
+  deprecated_opt overload_opt type identifier
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
-      unoidl::detail::SourceProviderType t(*$2);
-      delete $2;
-      OUString id(convertName($3));
+      unoidl::detail::SourceProviderType t(*$3);
+      delete $3;
+      OUString id(convertName($4));
       if (t.type == unoidl::detail::SourceProviderType::TYPE_EXCEPTION) {
           error(
-              @3, yyscanner,
+              @4, yyscanner,
               ("illegal interface type " + data->currentName
                + " direct method " + id + " return type"));
           YYERROR;
@@ -1815,25 +1816,29 @@ interfaceMethod:
       rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad> pad(
           getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
               data));
-      if (!pad->addDirectMember(@3, yyscanner, data, id)) {
+      if (!pad->addDirectMember(@4, yyscanner, data, id)) {
           YYERROR;
+      }
+      auto ann = annotations($1);
+      if ($2 != nullptr) {
+          ann.push_back("overload " + convertName($2));
       }
       pad->directMethods.emplace_back(
           id, t.getName(),
           std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>(),
-          std::vector<OUString>(), annotations($1));
+          std::vector<OUString>(), std::move(ann));
   }
   '(' methodParams_opt ')' exceptionSpec_opt ';'
   {
-      if ($8 != nullptr) {
+      if ($9 != nullptr) {
           unoidl::detail::SourceProviderScannerData * data
               = yyget_extra(yyscanner);
           rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad>
               pad(getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
                   data));
           assert(!pad->directMethods.empty());
-          pad->directMethods.back().exceptions = *$8;
-          delete $8;
+          pad->directMethods.back().exceptions = *$9;
+          delete $9;
       }
   }
 ;
@@ -3969,6 +3974,7 @@ name:
 identifier:
   TOK_IDENTIFIER
 | TOK_GET { $$ = new OString("get"_ostr); }
+| TOK_OVERLOAD { $$ = new OString("overload"_ostr); }
 | TOK_PUBLISHED { $$ = new OString("published"_ostr); }
 | TOK_SET { $$ = new OString("set"_ostr); }
 ;
@@ -3976,6 +3982,11 @@ identifier:
 deprecated_opt:
   TOK_DEPRECATED { $$ = true; }
 | /* empty */ { $$ = false; }
+;
+
+overload_opt:
+  '[' TOK_OVERLOAD identifier ']' { $$ = $3; }
+| /* empty */ { $$ = nullptr; }
 ;
 
 %%

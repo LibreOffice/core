@@ -12,6 +12,8 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <string_view>
+#include <vector>
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
@@ -20,6 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <compbase2.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 namespace com::sun::star {
@@ -52,6 +55,9 @@ public:
 
     css::uno::Reference< css::reflection::XTypeDescription > resolve(
         OUString const & name);
+
+    std::vector<OUString> getInterfaceMethodAnnotations(
+        OUString const & interfaceName, std::u16string_view methodName);
 
 private:
     virtual ~TypeManager() noexcept override;

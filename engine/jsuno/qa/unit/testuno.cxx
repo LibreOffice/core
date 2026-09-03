@@ -783,6 +783,10 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
 }
 )"
                        uR"(
+{
+    console.assert(test.getOverloaded() === 'foo');
+    console.assert(test.getOverloaded(-123456) === -123456);
+}
 try {
     test.throwRuntimeException();
     console.assert(false);

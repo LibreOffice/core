@@ -99,6 +99,7 @@ int nonZeroIntegerLiteral(
 %}
 
 %x comment1 comment2 doc docdepr
+%s annotation
 
 DIGIT [0-9]
 UPPER [A-Z]
@@ -135,6 +136,8 @@ ALNUM {DIGIT}|{ALPHA}
 <doc>"*"
 <doc>[^ \t\r\n*]+
 
+"[" BEGIN annotation; return yytext[0];
+<annotation>"]" BEGIN INITIAL; return yytext[0];
 [%&()*+,\-/:;<=>[\]^{|}~] return yytext[0];
 
 "..." return TOK_ELLIPSIS;
@@ -188,6 +191,8 @@ ALNUM {DIGIT}|{ALPHA}
 "typedef" return TOK_TYPEDEF;
 "unsigned" return TOK_UNSIGNED;
 "void" return TOK_VOID;
+
+<annotation>"overload" return TOK_OVERLOAD;
 
 {UPPER}("_"?{ALNUM})*|{LOWER}{ALNUM}* {
     yylval->sval = new OString(yytext);

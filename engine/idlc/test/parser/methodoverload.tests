@@ -175,3 +175,30 @@ interface I2: I1 {
     void geta();
     void seta();
 };
+
+
+EXPECT SUCCESS "methodoverload.tests 17":
+interface I {
+    void overload([in] long overload);
+};
+
+
+EXPECT SUCCESS "methodoverload.tests 18":
+interface I {
+    [overload f] void f0();
+    [overload f] long f1([in] long v);
+};
+
+
+EXPECT SUCCESS "methodoverload.tests 19":
+interface I {
+    [overload f0] void f0();
+    [overload f0] long f1([in] long v);
+};
+
+
+EXPECT SUCCESS "methodoverload.tests 20":
+interface I {
+    [overload overload] void overload();
+    [overload overload] void overload1([in] long v);
+};
