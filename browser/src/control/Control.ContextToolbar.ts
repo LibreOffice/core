@@ -119,9 +119,8 @@ class ContextToolbar extends JSDialogComponent {
 		}
 
 		URLPopUpSection.closeURLPopUp();
-		const statRect = app.file.textCursor.rectangle;
-		if (!TextSelections || !TextSelections.getStartRectangle() || !statRect)
-			return;
+		const statRect = TextSelections.getStartRectangle();
+		if (!statRect) return;
 
 		Util.ensureValue(app.activeDocument);
 
