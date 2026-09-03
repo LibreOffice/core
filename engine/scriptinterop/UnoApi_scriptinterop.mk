@@ -47,6 +47,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XInlineImage \
     XPage \
     XParagraph \
+    XPivotTable \
     XPresentation \
     XRange \
     XRangeBuilder \

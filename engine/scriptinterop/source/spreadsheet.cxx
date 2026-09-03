@@ -31,10 +31,16 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
+#include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
+#include <com/sun/star/sheet/XDataPilotTable.hpp>
+#include <com/sun/star/sheet/XDataPilotTables.hpp>
+#include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
@@ -48,6 +54,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -75,6 +82,7 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <scriptinterop/XChart.hpp>
+#include <scriptinterop/XPivotTable.hpp>
 #include <scriptinterop/XRange.hpp>
 #include <scriptinterop/XSheet.hpp>
 #include <scriptinterop/XSpreadsheet.hpp>
@@ -180,6 +188,24 @@ documentSheets(cpo::uno::Reference<css::frame::XModel> const& model)
     return doc->getSheets();
 }
 
+// Calc gives a chart and a pivot table a name of its own, and both have to be free across the
+// whole document rather than only on the sheet the new one goes on, because both live in pools
+// the document shares. A name another sheet has taken makes Calc refuse a chart outright and
+// drop a pivot table without a word, so the collections of every sheet are asked here.
+OUString freeName(std::u16string_view prefix,
+                  std::vector<cpo::uno::Reference<css::container::XNameAccess>> const& taken)
+{
+    for (sal_Int32 i = 1;; ++i)
+    {
+        OUString const name = prefix + OUString::number(i);
+        if (std::none_of(taken.begin(), taken.end(),
+                         [&name](auto const& names) { return names->hasByName(name); }))
+        {
+            return name;
+        }
+    }
+}
+
 // SpreadsheetApp-style code names a sheet in front of the cells with "!", as in "Data!A1:B2",
 // and single-quotes a name holding spaces or a "!" of its own, as in "'Rate data'!A1". Calc's
 // own parser writes that same reference as "Data.A1", so a qualified name is split here and
@@ -205,6 +231,206 @@ bool splitSheetQualifiedName(OUString const& a1Notation, OUString& sheetName, OU
     cells = a1Notation.copy(separator + 1);
     return true;
 }
+
+// SpreadsheetApp names the way a pivot value is summarized after its own
+// PivotTableSummarizeFunction constants. Two of those names cross over against Calc's: what
+// SpreadsheetApp calls COUNTA, counting every non-empty value, is Calc's COUNT, and what it
+// calls COUNT, counting only numbers, is Calc's COUNTNUMS.
+css::sheet::GeneralFunction summarizeFunction(OUString const& name, std::u16string_view caller)
+{
+    auto const wanted = name.toAsciiLowerCase();
+    if (wanted == "sum")
+    {
+        return css::sheet::GeneralFunction_SUM;
+    }
+    if (wanted == "counta")
+    {
+        return css::sheet::GeneralFunction_COUNT;
+    }
+    if (wanted == "count")
+    {
+        return css::sheet::GeneralFunction_COUNTNUMS;
+    }
+    if (wanted == "average")
+    {
+        return css::sheet::GeneralFunction_AVERAGE;
+    }
+    if (wanted == "max")
+    {
+        return css::sheet::GeneralFunction_MAX;
+    }
+    if (wanted == "min")
+    {
+        return css::sheet::GeneralFunction_MIN;
+    }
+    if (wanted == "product")
+    {
+        return css::sheet::GeneralFunction_PRODUCT;
+    }
+    if (wanted == "stdev")
+    {
+        return css::sheet::GeneralFunction_STDEV;
+    }
+    if (wanted == "stdevp")
+    {
+        return css::sheet::GeneralFunction_STDEVP;
+    }
+    if (wanted == "var")
+    {
+        return css::sheet::GeneralFunction_VAR;
+    }
+    if (wanted == "varp")
+    {
+        return css::sheet::GeneralFunction_VARP;
+    }
+    // SpreadsheetApp also offers countunique, median and a custom formula, which Calc's pivot
+    // tables have no equivalent for.
+    throw cpo::uno::RuntimeException(
+        OUString::Concat(caller)
+        + ": expected sum, counta, count, average, max, min, product, stdev, stdevp, "
+          "var or varp, got "
+        + name);
+}
+
+// A pivot table keeps the collection it lives in and its own name rather than the table, for
+// the same reason a chart does: the table has to be looked up again for each call so that one
+// somebody has meanwhile deleted is noticed. Pivot names are per sheet, unlike chart names.
+class PivotTableImpl : public cppu::WeakImplHelper<scriptinterop::XPivotTable>
+{
+public:
+    PivotTableImpl(cpo::uno::Reference<css::sheet::XDataPilotTables> const& tables,
+                   OUString const& name)
+        : tables_(tables)
+        , name_(name)
+    {
+    }
+
+    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return liveTable(); }
+
+    OUString SAL_CALL getName() override { return name_; }
+
+    cpo::uno::Reference<scriptinterop::XPivotTable> SAL_CALL addRowGroup(sal_Int32 sourceColumn)
+        override
+    {
+        orient(sourceColumn, css::sheet::DataPilotFieldOrientation_ROW, u"addRowGroup"_ustr);
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPivotTable> SAL_CALL addColumnGroup(sal_Int32 sourceColumn)
+        override
+    {
+        orient(sourceColumn, css::sheet::DataPilotFieldOrientation_COLUMN,
+               u"addColumnGroup"_ustr);
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPivotTable>
+        SAL_CALL addPivotValue(sal_Int32 sourceColumn, OUString const& function) override
+    {
+        auto const wanted = summarizeFunction(function, u"addPivotValue"_ustr);
+        try
+        {
+            auto const props = fieldProperties(sourceColumn, u"addPivotValue"_ustr);
+            props->setPropertyValue(u"Orientation"_ustr,
+                                    cpo::uno::Any(css::sheet::DataPilotFieldOrientation_DATA));
+            props->setPropertyValue(u"Function"_ustr, cpo::uno::Any(wanted));
+            refresh();
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("addPivotValue: ") + e.Message);
+        }
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPivotTable>
+        SAL_CALL addFilter(sal_Int32 sourceColumn, OUString const& visibleValue) override
+    {
+        try
+        {
+            auto const props = fieldProperties(sourceColumn, u"addFilter"_ustr);
+            props->setPropertyValue(u"Orientation"_ustr,
+                                    cpo::uno::Any(css::sheet::DataPilotFieldOrientation_PAGE));
+            // The page field shows one value at a time, which is the part of SpreadsheetApp's
+            // richer filter criteria that a pivot page field can carry.
+            props->setPropertyValue(u"SelectedPage"_ustr, cpo::uno::Any(visibleValue));
+            props->setPropertyValue(u"UseSelectedPage"_ustr, cpo::uno::Any(true));
+            refresh();
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("addFilter: ") + e.Message);
+        }
+        return this;
+    }
+
+    void SAL_CALL remove() override
+    {
+        try
+        {
+            tables_->removeByName(name_);
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("remove: ") + e.Message);
+        }
+    }
+
+private:
+    cpo::uno::Reference<css::sheet::XDataPilotTable> liveTable()
+    {
+        if (!tables_->hasByName(name_))
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("the pivot table ") + name_
+                                             + " is no longer on its sheet");
+        }
+        return cpo::uno::Reference<css::sheet::XDataPilotTable>(tables_->getByName(name_),
+                                                                  cpo::uno::UNO_QUERY_THROW);
+    }
+
+    // SpreadsheetApp counts the source columns from 1, and the fields sit in that same order.
+    // The field list carries one more entry than the source has columns, a synthetic "Data"
+    // field that stands for the values themselves, so the source range decides what a caller
+    // may ask for rather than the length of that list.
+    cpo::uno::Reference<css::beans::XPropertySet> fieldProperties(sal_Int32 sourceColumn,
+                                                                    std::u16string_view caller)
+    {
+        cpo::uno::Reference<css::sheet::XDataPilotDescriptor> const descriptor(
+            liveTable(), cpo::uno::UNO_QUERY_THROW);
+        auto const source = descriptor->getSourceRange();
+        auto const columns = source.EndColumn - source.StartColumn + 1;
+        if (sourceColumn < 1 || sourceColumn > columns)
+        {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat(caller) + ": expected a source column between 1 and "
+                + OUString::number(columns) + ", got " + OUString::number(sourceColumn));
+        }
+        return cpo::uno::Reference<css::beans::XPropertySet>(
+            descriptor->getDataPilotFields()->getByIndex(sourceColumn - 1),
+            cpo::uno::UNO_QUERY_THROW);
+    }
+
+    void orient(sal_Int32 sourceColumn, css::sheet::DataPilotFieldOrientation orientation,
+                std::u16string_view caller)
+    {
+        try
+        {
+            fieldProperties(sourceColumn, caller)
+                ->setPropertyValue(u"Orientation"_ustr, cpo::uno::Any(orientation));
+            refresh();
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat(caller) + ": " + e.Message);
+        }
+    }
+
+    // The output only catches up with a changed field once the table is told to rebuild it.
+    void refresh() { liveTable()->refresh(); }
+
+    cpo::uno::Reference<css::sheet::XDataPilotTables> tables_;
+    OUString name_;
+};
 
 // Builds the range at a 1-based row/column/size, checked before the sheet is asked for it.
 cpo::uno::Reference<scriptinterop::XRange>
@@ -502,7 +728,66 @@ public:
         return this;
     }
 
+    cpo::uno::Reference<scriptinterop::XPivotTable>
+        SAL_CALL createPivotTable(cpo::uno::Reference<scriptinterop::XRange> const& sourceData)
+        override
+    {
+        if (!sourceData.is())
+        {
+            throw cpo::uno::RuntimeException(u"createPivotTable: expected a source range"_ustr);
+        }
+        css::table::CellRangeAddress source;
+        auto const anchor = address();
+        cpo::uno::Reference<css::sheet::XDataPilotTables> tables;
+        OUString name;
+        try
+        {
+            cpo::uno::Reference<css::sheet::XCellRangeAddressable> const addressable(
+                sourceData->getuno(), cpo::uno::UNO_QUERY_THROW);
+            source = addressable->getRangeAddress();
+            // The table goes on the sheet this range sits on, while its source may live on
+            // another one.
+            cpo::uno::Reference<css::sheet::XDataPilotTablesSupplier> const supplier(
+                sheetAt(anchor.Sheet), cpo::uno::UNO_QUERY_THROW);
+            tables = supplier->getDataPilotTables();
+            name = freePivotTableName();
+            auto const descriptor = tables->createDataPilotDescriptor();
+            descriptor->setSourceRange(source);
+            // The table starts empty, the way SpreadsheetApp hands one back before any group
+            // or value has been added to it.
+            tables->insertNewByName(
+                name, css::table::CellAddress(anchor.Sheet, anchor.StartColumn, anchor.StartRow),
+                descriptor);
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("createPivotTable: ") + e.Message);
+        }
+        if (!tables->hasByName(name))
+        {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat("createPivotTable: the table ") + name + " was not created");
+        }
+        return new PivotTableImpl(tables, name);
+    }
+
 private:
+    OUString freePivotTableName()
+    {
+        cpo::uno::Reference<css::container::XIndexAccess> const sheets(
+            documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
+        auto const sheetCount = sheets->getCount();
+        std::vector<cpo::uno::Reference<css::container::XNameAccess>> taken;
+        taken.reserve(sheetCount);
+        for (sal_Int32 i = 0; i != sheetCount; ++i)
+        {
+            cpo::uno::Reference<css::sheet::XDataPilotTablesSupplier> const supplier(
+                sheets->getByIndex(i), cpo::uno::UNO_QUERY_THROW);
+            taken.emplace_back(supplier->getDataPilotTables(), cpo::uno::UNO_QUERY_THROW);
+        }
+        return freeName(u"Pivot "_ustr, taken);
+    }
+
     css::table::CellRangeAddress address()
     {
         cpo::uno::Reference<css::sheet::XCellRangeAddressable> const addr(
@@ -1024,6 +1309,30 @@ public:
         }
     }
 
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPivotTable>> SAL_CALL getPivotTables()
+        override
+    {
+        try
+        {
+            cpo::uno::Reference<css::sheet::XDataPilotTablesSupplier> const supplier(
+                sheet_, cpo::uno::UNO_QUERY_THROW);
+            auto const tables = supplier->getDataPilotTables();
+            auto const names = tables->getElementNames();
+            std::vector<cpo::uno::Reference<scriptinterop::XPivotTable>> result;
+            result.reserve(names.getLength());
+            for (auto const& name : names)
+            {
+                result.emplace_back(new PivotTableImpl(tables, name));
+            }
+            return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPivotTable>>(
+                result.data(), result.size());
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("getPivotTables: ") + e.Message);
+        }
+    }
+
 private:
     void removeRows(sal_Int32 startRow, sal_Int32 numRows, std::u16string_view name)
     {
@@ -1104,32 +1413,20 @@ private:
         return range;
     }
 
-    // The first "Chart N" name that no chart anywhere in the document holds yet. A chart is an
-    // embedded object, and those share one pool across the whole document, so Calc refuses a
-    // name another sheet has already taken even though that sheet's own collection is the only
-    // one this sheet can see.
     OUString freeChartName()
     {
         cpo::uno::Reference<css::container::XIndexAccess> const sheets(
             documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
         auto const sheetCount = sheets->getCount();
-        std::vector<cpo::uno::Reference<css::table::XTableCharts>> collections;
-        collections.reserve(sheetCount);
+        std::vector<cpo::uno::Reference<css::container::XNameAccess>> taken;
+        taken.reserve(sheetCount);
         for (sal_Int32 i = 0; i != sheetCount; ++i)
         {
             cpo::uno::Reference<css::table::XTableChartsSupplier> const supplier(
                 sheets->getByIndex(i), cpo::uno::UNO_QUERY_THROW);
-            collections.emplace_back(supplier->getCharts());
+            taken.emplace_back(supplier->getCharts(), cpo::uno::UNO_QUERY_THROW);
         }
-        for (sal_Int32 i = 1;; ++i)
-        {
-            OUString const name = OUString::Concat("Chart ") + OUString::number(i);
-            if (std::none_of(collections.begin(), collections.end(),
-                             [&name](auto const& charts) { return charts->hasByName(name); }))
-            {
-                return name;
-            }
-        }
+        return freeName(u"Chart "_ustr, taken);
     }
 
     // A hidden column or row keeps the width it would have if it were shown, but takes up no

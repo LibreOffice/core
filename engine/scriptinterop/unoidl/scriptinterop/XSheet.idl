@@ -66,6 +66,8 @@ interface XSheet : XBase
                        [in] boolean firstRowAsHeaders, [in] boolean firstColumnAsHeaders);
 
     sequence< XChart > getCharts();
+
+    sequence< XPivotTable > getPivotTables();
 };
 
 };

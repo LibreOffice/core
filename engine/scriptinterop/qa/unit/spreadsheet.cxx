@@ -11,6 +11,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -19,12 +21,18 @@
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
+#include <com/sun/star/sheet/XDataPilotTable.hpp>
+#include <com/sun/star/sheet/XDataPilotTables.hpp>
+#include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -46,6 +54,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <scriptinterop/XChart.hpp>
+#include <scriptinterop/XPivotTable.hpp>
 #include <scriptinterop/XRange.hpp>
 #include <scriptinterop/XSheet.hpp>
 #include <scriptinterop/XSpreadsheet.hpp>
@@ -802,6 +811,137 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoResizeColumnsAndRows)
     CPPUNIT_ASSERT(nHeightAfter > 0);
 
     CPPUNIT_ASSERT_THROW(xSheet->autoResizeColumns(0, 1), cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCreatePivotTable)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    auto const xSheet = xSpreadsheet->getActiveSheet();
+    // Three columns of sales, two regions and two products, so a pivot has something to fold.
+    cpo::uno::Sequence<cpo::uno::Any> const header{ cpo::uno::Any(u"Region"_ustr),
+                                                    cpo::uno::Any(u"Product"_ustr),
+                                                    cpo::uno::Any(u"Amount"_ustr) };
+    cpo::uno::Sequence<cpo::uno::Any> const row1{ cpo::uno::Any(u"North"_ustr),
+                                                  cpo::uno::Any(u"Bolt"_ustr),
+                                                  cpo::uno::Any(2.0) };
+    cpo::uno::Sequence<cpo::uno::Any> const row2{ cpo::uno::Any(u"North"_ustr),
+                                                  cpo::uno::Any(u"Nut"_ustr),
+                                                  cpo::uno::Any(3.0) };
+    cpo::uno::Sequence<cpo::uno::Any> const row3{ cpo::uno::Any(u"South"_ustr),
+                                                  cpo::uno::Any(u"Bolt"_ustr),
+                                                  cpo::uno::Any(4.0) };
+    xSheet->getRange(u"A1:C4"_ustr)
+        ->setValues(cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>{ header, row1, row2,
+                                                                          row3 });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheet->getPivotTables().getLength());
+    auto const xPivot = xSheet->getRange(u"E1"_ustr)->createPivotTable(
+        xSheet->getRange(u"A1:C4"_ustr));
+    CPPUNIT_ASSERT(xPivot.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSheet->getPivotTables().getLength());
+    CPPUNIT_ASSERT_EQUAL(xPivot->getName(), xSheet->getPivotTables()[0]->getName());
+
+    // Region down the side, amounts summed in the body.
+    xPivot->addRowGroup(1);
+    xPivot->addPivotValue(3, u"sum"_ustr);
+
+    // The table lands where the range it was created on starts, and the totals are the ones
+    // the source adds up to.
+    cpo::uno::Reference<css::sheet::XDataPilotTable> const xTable(xPivot->getuno(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    auto const aOutput = xTable->getOutputRange();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aOutput.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aOutput.StartRow);
+    auto const xOutput = xSheet->getRangeAt(aOutput.StartRow + 1, aOutput.StartColumn + 1,
+                                            aOutput.EndRow - aOutput.StartRow + 1,
+                                            aOutput.EndColumn - aOutput.StartColumn + 1);
+    auto const aValues = xOutput->getValues();
+    double fTotal = 0;
+    for (auto const& aRow : aValues)
+    {
+        for (auto const& aCell : aRow)
+        {
+            double d = 0;
+            if (aCell >>= d)
+            {
+                fTotal = std::max(fTotal, d);
+            }
+        }
+    }
+    // The grand total of 2, 3 and 4 shows up somewhere in the output.
+    CPPUNIT_ASSERT_EQUAL(9.0, fTotal);
+
+    xPivot->remove();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheet->getPivotTables().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPivotTableSourceColumnRange)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    auto const xSheet = xSpreadsheet->getActiveSheet();
+    xSheet->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(u"Region"_ustr));
+    xSheet->getRange(u"B1"_ustr)->setValue(cpo::uno::Any(u"Amount"_ustr));
+    xSheet->getRange(u"A2"_ustr)->setValue(cpo::uno::Any(u"North"_ustr));
+    xSheet->getRange(u"B2"_ustr)->setValue(cpo::uno::Any(1.0));
+    auto const xPivot = xSheet->getRange(u"D1"_ustr)->createPivotTable(
+        xSheet->getRange(u"A1:B2"_ustr));
+
+    // Columns are counted from 1 the way SpreadsheetApp counts them. The field list carries a
+    // synthetic entry past the source columns, and asking for it is still out of range.
+    CPPUNIT_ASSERT_THROW(xPivot->addRowGroup(0), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xPivot->addRowGroup(3), cpo::uno::RuntimeException);
+    xPivot->addRowGroup(1);
+    xPivot->addPivotValue(2, u"counta"_ustr);
+
+    // A summarize function Calc has no equivalent for is refused rather than quietly swapped.
+    CPPUNIT_ASSERT_THROW(xPivot->addPivotValue(2, u"countunique"_ustr),
+                         cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xPivot->addPivotValue(2, u"median"_ustr), cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPivotTableFromAnotherSheet)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    xSpreadsheet->insertSheet(u"Out"_ustr);
+    auto const xData = xSpreadsheet->getSheetByName(u"Sheet1"_ustr);
+    xData->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(u"Region"_ustr));
+    xData->getRange(u"B1"_ustr)->setValue(cpo::uno::Any(u"Amount"_ustr));
+    xData->getRange(u"A2"_ustr)->setValue(cpo::uno::Any(u"North"_ustr));
+    xData->getRange(u"B2"_ustr)->setValue(cpo::uno::Any(5.0));
+
+    // The pivot goes on its own sheet while the source stays put, which is what the sample it
+    // is modelled on does.
+    auto const xOut = xSpreadsheet->getSheetByName(u"Out"_ustr);
+    auto const xPivot
+        = xOut->getRange(u"A1"_ustr)->createPivotTable(xData->getRange(u"A1:B2"_ustr));
+    xPivot->addRowGroup(1);
+    xPivot->addPivotValue(2, u"sum"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xOut->getPivotTables().getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xData->getPivotTables().getLength());
+
+    // A pivot name is taken for the whole document, so a table on a second sheet gets one of
+    // its own. Calc drops a duplicate without a word rather than refusing it, which is why the
+    // name has to be free everywhere before the table is inserted.
+    auto const xSecond
+        = xData->getRange(u"D1"_ustr)->createPivotTable(xData->getRange(u"A1:B2"_ustr));
+    CPPUNIT_ASSERT(xPivot->getName() != xSecond->getName());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getPivotTables().getLength());
+
+    CPPUNIT_ASSERT_THROW(xOut->getRange(u"A1"_ustr)->createPivotTable(
+                             cpo::uno::Reference<scriptinterop::XRange>()),
+                         cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPivotTableOutlivesItsReference)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    auto const xSheet = xSpreadsheet->getActiveSheet();
+    xSheet->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(u"Region"_ustr));
+    xSheet->getRange(u"A2"_ustr)->setValue(cpo::uno::Any(u"North"_ustr));
+    auto const xPivot
+        = xSheet->getRange(u"C1"_ustr)->createPivotTable(xSheet->getRange(u"A1:A2"_ustr));
+    xPivot->remove();
+    CPPUNIT_ASSERT_THROW(xPivot->addRowGroup(1), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertChart)

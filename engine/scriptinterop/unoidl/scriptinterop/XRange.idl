@@ -44,6 +44,8 @@ interface XRange : XBase
                      [in] boolean right, [in] string hexColor);
 
     XRange setNumberFormat([in] string format);
+
+    XPivotTable createPivotTable([in] XRange sourceData);
 };
 
 };
