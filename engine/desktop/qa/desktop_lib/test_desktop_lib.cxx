@@ -994,9 +994,9 @@ void DesktopKitTest::testRowColumnHeaders()
 
     pDocument->initializeForRendering(nullptr);
 
-    long nWidth = 0;
-    long nHeight = 0;
-    pDocument->getDocumentSize(&nWidth, &nHeight);
+    const COKitSize aDocSize = pDocument->getDocumentSize();
+    tools::Long nWidth = aDocSize.nWidth;
+    tools::Long nHeight = aDocSize.nHeight;
     tools::Long nX = rtl::math::round(nWidth / 4.0);
     tools::Long nY = rtl::math::round(nHeight / 4.0);
     nWidth = rtl::math::round(nWidth / 2.0);
@@ -1078,12 +1078,11 @@ void DesktopKitTest::testHiddenRowHeaders()
 
     tools::Long const nX = 0;
     tools::Long const nY = 0;
-    long nWidth = 0;
-    long nHeight = 0;
-    pDocument->getDocumentSize(&nWidth, &nHeight);
+    const COKitSize aDocSize = pDocument->getDocumentSize();
 
     std::stringstream aPayload;
-    aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << nWidth << "&height=" << nHeight;
+    aPayload << ".uno:ViewRowColumnHeaders?x=" << nX << "&y=" << nY << "&width=" << aDocSize.nWidth
+             << "&height=" << aDocSize.nHeight;
 
     boost::property_tree::ptree aTree;
     std::string aJSON = pDocument->getCommandValues(aPayload.str().c_str());
@@ -2770,11 +2769,10 @@ void DesktopKitTest::testCommentsWriter()
 {
     COKitDocumentImpl* pDocument = loadDoc("comments.odt");
     pDocument->initializeForRendering(nullptr);
-    long nWidth, nHeight;
-    pDocument->getDocumentSize(&nWidth, &nHeight);
+    const COKitSize aDocSize = pDocument->getDocumentSize();
 
     // Document width alongwith without sidebar comes to be < 13000
-    CPPUNIT_ASSERT( nWidth < 13000 );
+    CPPUNIT_ASSERT( aDocSize.nWidth < 13000 );
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
     boost::property_tree::ptree aTree;

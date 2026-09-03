@@ -897,7 +897,9 @@ static void refreshSize(KitDocumentView* pDocView)
 {
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
-    priv->m_pDocument->getDocumentSize(&priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+    const COKitSize aDocSize = priv->m_pDocument->getDocumentSize();
+    priv->m_nDocumentWidthTwips = aDocSize.nWidth;
+    priv->m_nDocumentHeightTwips = aDocSize.nHeight;
     float zoom = priv->m_fZoom;
     gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
     gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;

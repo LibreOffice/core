@@ -148,15 +148,14 @@ namespace LOKitHelper
         const int partsCount = loKitDocument->getParts();
         const std::string selectedPart = loKitDocument->getPart();
 
-        long width, height;
-        loKitDocument->getDocumentSize(&width, &height);
+        const COKitSize aDocSize = loKitDocument->getDocumentSize();
         int viewId = loKitDocument->getView();
 
         resultInfo["type"] = '"' + documentTypeToString(type) + '"';
         resultInfo["partscount"] = std::to_string(partsCount);
         resultInfo["selectedpart"] = '"' + selectedPart + '"';
-        resultInfo["width"] = std::to_string(width);
-        resultInfo["height"] = std::to_string(height);
+        resultInfo["width"] = std::to_string(aDocSize.nWidth);
+        resultInfo["height"] = std::to_string(aDocSize.nHeight);
         resultInfo["viewid"] = std::to_string(viewId);
 
         std::string value(loKitDocument->getCommandValues(".uno:ReadOnly"));

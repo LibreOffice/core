@@ -184,7 +184,9 @@ static void testTile( COKitDocument *pDocument, int max_parts,
         const int nPart = (nOriginalPart + n) % nTotalParts;
         const std::string aName = pDocument->getPartName(nPart);
         setPartByIndex(pDocument, nPart);
-        pDocument->getDocumentSize(&nWidth, &nHeight);
+        const COKitSize aPartSize = pDocument->getDocumentSize();
+        nWidth = aPartSize.nWidth;
+        nHeight = aPartSize.nHeight;
         fprintf (stderr, "  '%s' -> %ld, %ld\n", aName.c_str(), nWidth, nHeight);
     }
     aTimes.emplace_back();
@@ -208,7 +210,9 @@ static void testTile( COKitDocument *pDocument, int max_parts,
         const int nPart = (nOriginalPart + n) % nTotalParts;
         const std::string aName = pDocument->getPartName(nPart);
         setPartByIndex(pDocument, nPart);
-        pDocument->getDocumentSize(&nWidth, &nHeight);
+        const COKitSize aPartSize = pDocument->getDocumentSize();
+        nWidth = aPartSize.nWidth;
+        nHeight = aPartSize.nHeight;
         fprintf (stderr, "render '%s' -> %ld, %ld\n", aName.c_str(), nWidth, nHeight);
 
         if (dump || pDocument->getDocumentType() != COKitDocumentType::TEXT)
@@ -442,8 +446,9 @@ static int testJoinsAt( COKitDocument *pDocument, long nX, long nY,
 static int testJoin( COKitDocument *pDocument)
 {
     // Ignore parts - just the first for now ...
-    long nWidth = 0, nHeight = 0;
-    pDocument->getDocumentSize(&nWidth, &nHeight);
+    const COKitSize aDocSize = pDocument->getDocumentSize();
+    const long nWidth = aDocSize.nWidth;
+    const long nHeight = aDocSize.nHeight;
     fprintf (stderr, "Width is %ld, %ld (twips)\n", nWidth, nHeight);
 
     // Use realistic dimensions, similar to the Online client.

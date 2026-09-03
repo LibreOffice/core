@@ -1158,9 +1158,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
                               const int nTileWidth, const int nTileHeight,
                               bool bIsPreview = false);
 static COKitTileMode doc_getTileMode(COKitDocument* pThis);
-static void doc_getDocumentSize(COKitDocument* pThis,
-                                long* pWidth,
-                                long* pHeight);
+static COKitSize doc_getDocumentSize(COKitDocument* pThis);
 static void doc_getDataArea(COKitDocument* pThis,
                             long nTab,
                             long* pCol,
@@ -1536,9 +1534,9 @@ COKitTileMode COKitDocumentImpl::getTileMode()
     return doc_getTileMode(this);
 }
 
-void COKitDocumentImpl::getDocumentSize(long* pWidth, long* pHeight)
+COKitSize COKitDocumentImpl::getDocumentSize()
 {
-    doc_getDocumentSize(this, pWidth, pHeight);
+    return doc_getDocumentSize(this);
 }
 
 void COKitDocumentImpl::initializeForRendering(const char* pArguments)
@@ -5438,9 +5436,7 @@ static COKitTileMode doc_getTileMode(SAL_UNUSED_PARAMETER COKitDocument* /*pThis
 #endif
 }
 
-static void doc_getDocumentSize(COKitDocument* pThis,
-                                long* pWidth,
-                                long* pHeight)
+static COKitSize doc_getDocumentSize(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getDocumentSize");
 
@@ -5448,16 +5444,14 @@ static void doc_getDocumentSize(COKitDocument* pThis,
     SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (pDoc)
-    {
-        Size aDocumentSize = pDoc->getDocumentSize();
-        *pWidth = aDocumentSize.Width();
-        *pHeight = aDocumentSize.Height();
-    }
-    else
+    if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return {};
     }
+
+    const Size aDocumentSize = pDoc->getDocumentSize();
+    return { aDocumentSize.Width(), aDocumentSize.Height() };
 }
 
 static void doc_getDataArea(COKitDocument* pThis,

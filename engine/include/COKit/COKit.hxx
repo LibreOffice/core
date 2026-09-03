@@ -93,6 +93,13 @@ struct COKitScriptResult
     bool bUsedLegacyUnoApi = false;
 };
 
+/// A size in twips. Zero in both when the document cannot report one.
+struct COKitSize
+{
+    int64_t nWidth = 0;
+    int64_t nHeight = 0;
+};
+
 /// A rendered image. The pixels are four bytes each, so aPixels holds
 /// nWidth * nHeight * 4 bytes. An empty aPixels means nothing was rendered.
 struct COKitBitmap
@@ -1910,8 +1917,9 @@ struct COKitDocument
      */
     virtual COKitTileMode getTileMode() = 0;
 
-    /// Get the document sizes in TWIPs.
-    virtual void getDocumentSize(long* pWidth, long* pHeight) = 0;
+    /// Get the document size in TWIPs, or zeroes when the document does not
+    /// support tiled rendering.
+    virtual COKitSize getDocumentSize() = 0;
 
     /**
      * Initialize document for rendering.

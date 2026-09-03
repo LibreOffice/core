@@ -324,7 +324,7 @@ namespace desktop {
                        const int nTilePosX, const int nTilePosY, const int nTileWidth,
                        const int nTileHeight) override;
         COKitTileMode getTileMode() override;
-        void getDocumentSize(long* pWidth, long* pHeight) override;
+        COKitSize getDocumentSize() override;
         void initializeForRendering(const char* pArguments) override;
         void registerCallback(COKitCallback pCallback, void* pData) override;
         void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) override;
