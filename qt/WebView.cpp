@@ -378,6 +378,19 @@ QStringList droppedLocalFiles(const QMimeData* mimeData)
     return files;
 }
 
+bool hasOnlyImageFiles(const QStringList& files)
+{
+    if (files.isEmpty())
+        return false;
+    for (const QString& file : files)
+    {
+        QString ext = QFileInfo(file).suffix().toLower();
+        if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "gif" && ext != "svg" && ext != "webp")
+            return false;
+    }
+    return true;
+}
+
 constexpr const char* PORTAL_FILETRANSFER_MIME = "application/vnd.portal.filetransfer";
 
 bool hasDroppableFiles(const QMimeData* mimeData)
@@ -496,6 +509,12 @@ void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
+    if (hasOnlyImageFiles(droppedLocalFiles(event->mimeData())))
+    {
+        QWebEngineView::dragEnterEvent(event);
+        return;
+    }
+
     if (hasDroppableFiles(event->mimeData()))
     {
         event->acceptProposedAction();
@@ -511,6 +530,12 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
+    if (hasOnlyImageFiles(droppedLocalFiles(event->mimeData())))
+    {
+        QWebEngineView::dragMoveEvent(event);
+        return;
+    }
+
     if (hasDroppableFiles(event->mimeData()))
         event->acceptProposedAction();
 }
@@ -518,12 +543,18 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
 void CODAWebEngineView::dragLeaveEvent(QDragLeaveEvent* event)
 {
     setDropFeedbackVisible(false);
-    event->accept();
+    QWebEngineView::dragLeaveEvent(event);
 }
 
 void CODAWebEngineView::dropEvent(QDropEvent* event)
 {
     if (event->source())
+    {
+        QWebEngineView::dropEvent(event);
+        return;
+    }
+
+    if (hasOnlyImageFiles(droppedLocalFiles(event->mimeData())))
     {
         QWebEngineView::dropEvent(event);
         return;
