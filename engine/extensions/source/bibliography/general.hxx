@@ -35,7 +35,7 @@ class BibGeneralPage : public InterimItemWindow
                      , public BibShortCutHandler
 {
     std::unique_ptr<weld::ScrolledWindow> xScrolledWindow;
-    std::unique_ptr<weld::Widget> xGrid;
+    std::unique_ptr<weld::Container> xGrid;
 
     std::unique_ptr<weld::Label> xIdentifierFT;
     std::unique_ptr<weld::Entry> xIdentifierED;

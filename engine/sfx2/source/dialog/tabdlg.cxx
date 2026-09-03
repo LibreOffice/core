@@ -964,7 +964,7 @@ void SfxTabDialogController::setPreviewsToSamePlace()
             continue;
         if (!pDataObject->xTabPage->m_xBuilder)
             continue;
-        std::unique_ptr<weld::Widget> pGrid = pDataObject->xTabPage->m_xBuilder->weld_widget(u"maingrid"_ustr);
+        std::unique_ptr<weld::Container> pGrid = pDataObject->xTabPage->m_xBuilder->weld_container(u"maingrid"_ustr);
         if (!pGrid)
             continue;
         aGrids.emplace_back(std::move(pGrid));

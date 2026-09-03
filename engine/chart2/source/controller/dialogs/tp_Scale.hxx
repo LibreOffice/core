@@ -62,7 +62,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxLogarithm;
     std::unique_ptr<weld::Widget> m_xBxType;
     std::unique_ptr<weld::ComboBox> m_xLB_AxisType;
-    std::unique_ptr<weld::Widget> m_xBxMinMax;
+    std::unique_ptr<weld::Container> m_xBxMinMax;
     std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldMin;
     std::unique_ptr<weld::CheckButton> m_xCbxAutoMin;
     std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldMax;
@@ -83,7 +83,7 @@ private:
     std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldOrigin;
     std::unique_ptr<weld::CheckButton> m_xCbxAutoOrigin;
     std::unique_ptr<weld::Widget> m_xBxOrigin;
-    std::unique_ptr<weld::Widget> m_xBxHistogramBinning;
+    std::unique_ptr<weld::Frame> m_xBxHistogramBinning;
     std::unique_ptr<weld::RadioButton> m_xRbtHistogramAutomatic;
     std::unique_ptr<weld::RadioButton> m_xRbtHistogramBinWidth;
     std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldHistogramBinWidth;

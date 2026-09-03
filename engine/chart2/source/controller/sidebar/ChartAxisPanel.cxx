@@ -223,7 +223,7 @@ ChartAxisPanel::ChartAxisPanel(
     , mxLBLabelPos(m_xBuilder->weld_combo_box(u"comboboxtext_label_position"_ustr))
     , mxGridLabel(m_xBuilder->weld_widget(u"label_props"_ustr))
     , mxNFRotation(m_xBuilder->weld_metric_spin_button(u"spinbutton1"_ustr, FieldUnit::DEGREE))
-    , mxBxHistogramBinning(m_xBuilder->weld_widget(u"boxHISTOGRAM_BINNING"_ustr))
+    , mxBxHistogramBinning(m_xBuilder->weld_frame(u"boxHISTOGRAM_BINNING"_ustr))
     , mxRBHistogramAutomatic(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_AUTOMATIC"_ustr))
     , mxRBHistogramBinWidth(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_BIN_WIDTH"_ustr))
     , mxHistogramBinWidth(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_BIN_WIDTH"_ustr))

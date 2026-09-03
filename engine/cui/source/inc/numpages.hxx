@@ -233,7 +233,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     SvxRatioConnector m_aRatioTop;
     SvxRatioConnector m_aRatioBottom;
     SvxNumberingPreview m_aPreviewWIN;
-    std::unique_ptr<weld::Widget> m_xGrid;
+    std::unique_ptr<weld::Container> m_xGrid;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBox> m_xFmtLB;
     std::unique_ptr<weld::Label> m_xSeparatorFT;
@@ -266,7 +266,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
     std::unique_ptr<weld::Label> m_xOrientFT;
     std::unique_ptr<weld::ComboBox> m_xOrientLB;
-    std::unique_ptr<weld::Widget> m_xAllLevelsFrame;
+    std::unique_ptr<weld::Frame> m_xAllLevelsFrame;
     std::unique_ptr<weld::Menu> m_xGalleryMenu;
     std::unique_ptr<weld::CheckButton> m_xSameLevelCB;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;

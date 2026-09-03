@@ -94,7 +94,7 @@ SwFormatTablePage::SwFormatTablePage(weld::Container* pPage, weld::DialogControl
     , m_xBottomFT(m_xBuilder->weld_label(u"belowft"_ustr))
     , m_xBottomMF(m_xBuilder->weld_metric_spin_button(u"belowmf"_ustr, FieldUnit::CM))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"textdirection"_ustr)))
-    , m_xProperties(m_xBuilder->weld_widget(u"properties"_ustr))
+    , m_xProperties(m_xBuilder->weld_frame(u"properties"_ustr))
 {
     m_xWidthMF->GetMetricFieldRange(m_nOrigWidthMin, m_nOrigWidthMax);
     m_xLeftMF->GetMetricFieldRange(m_nOrigLeftMin, m_nOrigLeftMax);
@@ -1279,7 +1279,7 @@ SwTextFlowPage::SwTextFlowPage(weld::Container* pPage, weld::DialogController* p
     , m_xSplitRowCB(m_xBuilder->weld_check_button(u"splitrow"_ustr))
     , m_xKeepCB(m_xBuilder->weld_check_button(u"keep"_ustr))
     , m_xHeadLineCB(m_xBuilder->weld_check_button(u"headline"_ustr))
-    , m_xRepeatHeaderCombo(m_xBuilder->weld_widget(u"repeatheader"_ustr))
+    , m_xRepeatHeaderCombo(m_xBuilder->weld_container(u"repeatheader"_ustr))
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button(u"repeatheadernf"_ustr))
     , m_xTextDirectionLB(m_xBuilder->weld_combo_box(u"textorientation"_ustr))
     , m_xVertOrientLB(m_xBuilder->weld_combo_box(u"vertorient"_ustr))

@@ -33,7 +33,7 @@ class SwInsFootNoteDlg final : public weld::GenericDialogController
     bool        m_bExtCharAvailable;
     bool        m_bEdit;
 
-    std::unique_ptr<weld::Widget>     m_xNumberFrame;
+    std::unique_ptr<weld::Frame>     m_xNumberFrame;
     std::unique_ptr<weld::RadioButton>    m_xNumberAutoBtn;
     std::unique_ptr<weld::RadioButton>    m_xNumberCharBtn;
     std::unique_ptr<weld::Entry>      m_xNumberCharEdit;

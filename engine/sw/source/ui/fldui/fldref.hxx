@@ -46,11 +46,11 @@ class SwFieldRefPage : public SwFieldPage
     size_t mnSavedSelectedPos;
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;
-    std::unique_ptr<weld::Widget> m_xSelection;
+    std::unique_ptr<weld::Frame> m_xSelection;
     std::unique_ptr<weld::TreeView> m_xSelectionLB;
     // #i83479#
     std::unique_ptr<weld::TreeView> m_xSelectionToolTipLB;
-    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<weld::Frame> m_xFormat;
     std::unique_ptr<weld::TreeView> m_xFormatLB;
     std::unique_ptr<weld::Label> m_xNameFT;
     std::unique_ptr<weld::Entry> m_xNameED;

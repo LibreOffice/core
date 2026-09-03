@@ -310,7 +310,7 @@ private:
     sal_uInt16              m_nEndBracketPosition;
 
     std::unique_ptr<weld::CheckButton>  m_xTwoLinesBtn;
-    std::unique_ptr<weld::Widget> m_xEnclosingFrame;
+    std::unique_ptr<weld::Frame> m_xEnclosingFrame;
     std::unique_ptr<weld::TreeView> m_xStartBracketLB;
     std::unique_ptr<weld::TreeView> m_xEndBracketLB;
 

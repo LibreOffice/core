@@ -55,7 +55,7 @@ class SwInsTableDlg final : public SfxDialogController
     std::unique_ptr<weld::CheckButton> m_xHeaderCB;
     std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
-    std::unique_ptr<weld::Widget> m_xRepeatGroup;
+    std::unique_ptr<weld::Container> m_xRepeatGroup;
     std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
     std::unique_ptr<weld::Button> m_xInsertBtn;
     std::unique_ptr<weld::TreeView> m_xLbFormat;

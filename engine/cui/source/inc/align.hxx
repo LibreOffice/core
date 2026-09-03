@@ -110,9 +110,9 @@ private:
     std::unique_ptr<weld::Label> m_xFtCelLock;
     std::unique_ptr<weld::Label> m_xFtABCD;
 
-    std::unique_ptr<weld::Widget> m_xAlignmentFrame;
-    std::unique_ptr<weld::Widget> m_xOrientFrame;
-    std::unique_ptr<weld::Widget> m_xPropertiesFrame;
+    std::unique_ptr<weld::Frame> m_xAlignmentFrame;
+    std::unique_ptr<weld::Frame> m_xOrientFrame;
+    std::unique_ptr<weld::Frame> m_xPropertiesFrame;
 
     std::unique_ptr<weld::IconView> m_xIVRefEdge;
     std::unique_ptr<DialControl> m_xCtrlDial;

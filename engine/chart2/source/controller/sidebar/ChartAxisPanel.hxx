@@ -74,7 +74,7 @@ private:
     std::unique_ptr<weld::Widget> mxGridLabel;
     std::unique_ptr<weld::MetricSpinButton> mxNFRotation;
 
-    std::unique_ptr<weld::Widget> mxBxHistogramBinning;
+    std::unique_ptr<weld::Frame> mxBxHistogramBinning;
     std::unique_ptr<weld::RadioButton> mxRBHistogramAutomatic;
     std::unique_ptr<weld::RadioButton> mxRBHistogramBinWidth;
     std::unique_ptr<weld::FormattedSpinButton> mxHistogramBinWidth;

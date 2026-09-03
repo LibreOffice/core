@@ -29,7 +29,7 @@ class SwLineNumberingDlg final : public SfxDialogController
 {
 private:
     SwWrtShell* m_pSh;
-    std::unique_ptr<weld::Widget> m_xBodyContent;
+    std::unique_ptr<weld::Container> m_xBodyContent;
     std::unique_ptr<weld::Widget> m_xDivIntervalFT;
     std::unique_ptr<weld::SpinButton> m_xDivIntervalNF;
     std::unique_ptr<weld::Widget> m_xDivRowsFT;

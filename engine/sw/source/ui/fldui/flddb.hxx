@@ -36,15 +36,15 @@ class SwFieldDBPage : public SwFieldPage
     std::unique_ptr<weld::TreeView> m_xTypeLB;
     std::unique_ptr<SwDBTreeList> m_xDatabaseTLB;
     std::unique_ptr<weld::Button> m_xAddDBPB;
-    std::unique_ptr<weld::Widget> m_xCondition;
+    std::unique_ptr<weld::Container> m_xCondition;
     std::unique_ptr<ConditionEdit<weld::Entry>> m_xConditionED;
-    std::unique_ptr<weld::Widget> m_xValue;
+    std::unique_ptr<weld::Container> m_xValue;
     std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::RadioButton> m_xDBFormatRB;
     std::unique_ptr<weld::RadioButton> m_xNewFormatRB;
     std::unique_ptr<NumFormatListBox> m_xNumFormatLB;
     std::unique_ptr<weld::ComboBox> m_xFormatLB;
-    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<weld::Frame> m_xFormat;
 
     DECL_LINK( TypeListBoxHdl, weld::TreeView&, void );
     DECL_LINK( NumSelectHdl, weld::ComboBox&, void );

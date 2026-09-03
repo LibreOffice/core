@@ -153,7 +153,7 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(weld::Window *pParent, SwWrtShell &rShell, bo
     , m_eCharSet(RTL_TEXTENCODING_DONTKNOW)
     , m_bExtCharAvailable(false)
     , m_bEdit(bEd)
-    , m_xNumberFrame(m_xBuilder->weld_widget(u"numberingframe"_ustr))
+    , m_xNumberFrame(m_xBuilder->weld_frame(u"numberingframe"_ustr))
     , m_xNumberAutoBtn(m_xBuilder->weld_radio_button(u"automatic"_ustr))
     , m_xNumberCharBtn(m_xBuilder->weld_radio_button(u"character"_ustr))
     , m_xNumberCharEdit(m_xBuilder->weld_entry(u"characterentry"_ustr))

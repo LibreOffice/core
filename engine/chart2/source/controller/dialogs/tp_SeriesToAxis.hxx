@@ -54,16 +54,16 @@ private: //member
     bool m_bProvidesOverlapAndGapWidth;
     bool m_bProvidesBarConnectors;
 
-    std::unique_ptr<weld::Widget> m_xGrpAxis;
+    std::unique_ptr<weld::Frame> m_xGrpAxis;
     std::unique_ptr<weld::RadioButton> m_xRbtAxis1;
     std::unique_ptr<weld::RadioButton> m_xRbtAxis2;
-    std::unique_ptr<weld::Widget> m_xGrpBar;
+    std::unique_ptr<weld::Frame> m_xGrpBar;
     std::unique_ptr<weld::MetricSpinButton> m_xMTGap;
     std::unique_ptr<weld::MetricSpinButton> m_xMTOverlap;
     std::unique_ptr<weld::CheckButton> m_xCBConnect;
     std::unique_ptr<weld::CheckButton> m_xCBAxisSideBySide;
-    std::unique_ptr<weld::Widget> m_xGrpPlotOptions;
-    std::unique_ptr<weld::Widget> m_xGridPlotOptions;
+    std::unique_ptr<weld::Frame> m_xGrpPlotOptions;
+    std::unique_ptr<weld::Container> m_xGridPlotOptions;
     std::unique_ptr<weld::RadioButton> m_xRB_DontPaint;
     std::unique_ptr<weld::RadioButton> m_xRB_AssumeZero;
     std::unique_ptr<weld::RadioButton> m_xRB_ContinueLine;

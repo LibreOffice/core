@@ -39,7 +39,7 @@ SvxPostItDialog::SvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreS
     , m_xLastEditFT(m_xBuilder->weld_label(u"lastedit"_ustr))
     , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
     , m_xEditED(m_xBuilder->weld_text_view(u"edit"_ustr))
-    , m_xInsertAuthor(m_xBuilder->weld_widget(u"insertauthor"_ustr))
+    , m_xInsertAuthor(m_xBuilder->weld_container(u"insertauthor"_ustr))
     , m_xAuthorBtn(m_xBuilder->weld_button(u"author"_ustr))
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xPrevBtn(m_xBuilder->weld_button(u"previous"_ustr))

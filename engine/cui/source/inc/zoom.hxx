@@ -37,7 +37,7 @@ private:
     std::unique_ptr<weld::RadioButton>        m_x100Btn;
     std::unique_ptr<weld::RadioButton>        m_xUserBtn;
     std::unique_ptr<weld::MetricSpinButton>   m_xUserEdit;
-    std::unique_ptr<weld::Widget>             m_xViewFrame;
+    std::unique_ptr<weld::Frame>              m_xViewFrame;
     std::unique_ptr<weld::RadioButton>        m_xAutomaticBtn;
     std::unique_ptr<weld::RadioButton>        m_xSingleBtn;
     std::unique_ptr<weld::RadioButton>        m_xColumnsBtn;

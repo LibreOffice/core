@@ -181,11 +181,11 @@ private:
 
     SvxRectCtl m_aCtlRect;
 
-    std::unique_ptr<weld::Widget> m_xFlPosition;
+    std::unique_ptr<weld::Frame> m_xFlPosition;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
     std::unique_ptr<weld::CustomWeld> m_xCtlRect;
-    std::unique_ptr<weld::Widget> m_xFlAngle;
+    std::unique_ptr<weld::Frame> m_xFlAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xNfAngle;
     std::unique_ptr<svx::DialControl> m_xCtlAngle;
     std::unique_ptr<weld::CustomWeld> m_xCtlAngleWin;
@@ -224,11 +224,11 @@ private:
     MapUnit             ePoolUnit;
     FieldUnit           eDlgUnit;
 
-    std::unique_ptr<weld::Widget> m_xFlRadius;
+    std::unique_ptr<weld::Frame> m_xFlRadius;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrRadius;
-    std::unique_ptr<weld::Widget> m_xFlAngle;
+    std::unique_ptr<weld::Frame> m_xFlAngle;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrAngle;
-    std::unique_ptr<weld::Widget> m_aControlGroups[2];
+    std::unique_ptr<weld::Frame> m_aControlGroups[2];
     std::unique_ptr<weld::Widget> m_aControlGroupX[2];
     std::unique_ptr<weld::MetricSpinButton> m_aControlX[2];
     std::unique_ptr<weld::Widget> m_aControlGroupY[2];

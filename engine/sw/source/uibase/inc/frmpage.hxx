@@ -100,13 +100,13 @@ class SwFramePage final : public SfxTabPage
     std::unique_ptr<weld::Button> m_xRealSizeBT;
 
     // protect
-    std::unique_ptr<weld::Widget> m_xProtectFrame;
+    std::unique_ptr<weld::Frame> m_xProtectFrame;
     std::unique_ptr<weld::CheckButton> m_xProtectContentCB;
     std::unique_ptr<weld::CheckButton> m_xProtectFrameCB;
     std::unique_ptr<weld::CheckButton> m_xProtectSizeCB;
 
     // anchor
-    std::unique_ptr<weld::Widget> m_xAnchorFrame;
+    std::unique_ptr<weld::Frame> m_xAnchorFrame;
     std::unique_ptr<weld::RadioButton> m_xAnchorAtPageRB;
     std::unique_ptr<weld::RadioButton> m_xAnchorAtParaRB;
     std::unique_ptr<weld::RadioButton> m_xAnchorAtCharRB;
@@ -223,7 +223,7 @@ class SwGrfExtPage final : public SfxTabPage
 
     // mirror
     BmpWindow m_aBmpWin;
-    std::unique_ptr<weld::Widget> m_xMirror;
+    std::unique_ptr<weld::Frame> m_xMirror;
     std::unique_ptr<weld::CheckButton> m_xMirrorVertBox;
     std::unique_ptr<weld::CheckButton> m_xMirrorHorzBox;
     std::unique_ptr<weld::RadioButton> m_xAllPagesRB;
@@ -293,7 +293,7 @@ class SwFrameAddPage final : public SfxTabPage
     bool      m_bFormat;
     bool      m_bNew;
 
-    std::unique_ptr<weld::Widget> m_xNameFrame;
+    std::unique_ptr<weld::Frame> m_xNameFrame;
     std::unique_ptr<weld::Label> m_xNameFT;
     std::unique_ptr<weld::Entry> m_xNameED;
     std::unique_ptr<weld::Label> m_xAltNameFT;
@@ -301,14 +301,14 @@ class SwFrameAddPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xDescriptionFT;
     std::unique_ptr<weld::TextView> m_xDescriptionED;
     std::unique_ptr<weld::CheckButton> m_xDecorativeCB;
-    std::unique_ptr<weld::Widget> m_xSequenceFrame;
+    std::unique_ptr<weld::Frame> m_xSequenceFrame;
     std::unique_ptr<weld::ComboBox> m_xPrevLB;
     std::unique_ptr<weld::ComboBox> m_xNextLB;
 
-    std::unique_ptr<weld::Widget> m_xContentAlignFrame;
+    std::unique_ptr<weld::Frame> m_xContentAlignFrame;
     std::unique_ptr<weld::ComboBox> m_xVertAlignLB;
 
-    std::unique_ptr<weld::Widget> m_xPropertiesFrame;
+    std::unique_ptr<weld::Frame> m_xPropertiesFrame;
     std::unique_ptr<weld::CheckButton> m_xEditInReadonlyCB;
     std::unique_ptr<weld::CheckButton> m_xPrintFrameCB;
     std::unique_ptr<weld::Label> m_xTextFlowFT;

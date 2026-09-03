@@ -143,7 +143,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnResetAll;
 
     std::unique_ptr<weld::Label> m_xResultFT;
-    std::unique_ptr<weld::Widget> m_xContents;
+    std::unique_ptr<weld::Container> m_xContents;
 
     std::shared_ptr<ScSolverOptionsDialog> m_xOptDlg;
     std::shared_ptr<sc::SolverSettings> m_pSolverSettings;

@@ -192,7 +192,7 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xBtnSolve(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xBtnResetAll(m_xBuilder->weld_button(u"resetall"_ustr))
     , m_xResultFT(m_xBuilder->weld_label(u"result"_ustr))
-    , m_xContents(m_xBuilder->weld_widget(u"grid"_ustr))
+    , m_xContents(m_xBuilder->weld_container(u"grid"_ustr))
     , m_pSolverSettings(mrDoc.FetchTable(mnCurTab)->GetSolverSettings())
 {
     m_xEdObjectiveCell->SetReferences(this, m_xFtObjectiveCell.get());

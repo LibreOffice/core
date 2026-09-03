@@ -89,7 +89,7 @@ private:
     std::unique_ptr<weld::Label>    m_xLastEditFT;
     std::unique_ptr<weld::Label>    m_xAltTitle;
     std::unique_ptr<weld::TextView> m_xEditED;
-    std::unique_ptr<weld::Widget>   m_xInsertAuthor;
+    std::unique_ptr<weld::Container>   m_xInsertAuthor;
     std::unique_ptr<weld::Button>   m_xAuthorBtn;
     std::unique_ptr<weld::Button>   m_xOKBtn;
     std::unique_ptr<weld::Button>   m_xPrevBtn;

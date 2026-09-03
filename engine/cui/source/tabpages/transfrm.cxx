@@ -160,11 +160,11 @@ SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController*
     , pView(nullptr)
     , eDlgUnit(FieldUnit::NONE)
     , m_aCtlRect(this)
-    , m_xFlPosition(m_xBuilder->weld_widget(u"FL_POSITION"_ustr))
+    , m_xFlPosition(m_xBuilder->weld_frame(u"FL_POSITION"_ustr))
     , m_xMtrPosX(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_POS_X"_ustr, FieldUnit::CM))
     , m_xMtrPosY(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_POS_Y"_ustr, FieldUnit::CM))
     , m_xCtlRect(new weld::CustomWeld(*m_xBuilder, u"CTL_RECT"_ustr, m_aCtlRect))
-    , m_xFlAngle(m_xBuilder->weld_widget(u"FL_ANGLE"_ustr))
+    , m_xFlAngle(m_xBuilder->weld_frame(u"FL_ANGLE"_ustr))
     , m_xNfAngle(m_xBuilder->weld_metric_spin_button(u"NF_ANGLE"_ustr, FieldUnit::DEGREE))
     , m_xCtlAngle(new svx::DialControl)
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, u"CTL_ANGLE"_ustr, *m_xCtlAngle))
@@ -387,14 +387,14 @@ SvxSlantTabPage::SvxSlantTabPage(weld::Container* pPage, weld::DialogController*
     : SfxTabPage(pPage, pController, u"cui/ui/slantcornertabpage.ui"_ustr, u"SlantAndCornerRadius"_ustr, &rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FieldUnit::NONE)
-    , m_xFlRadius(m_xBuilder->weld_widget(u"FL_RADIUS"_ustr))
+    , m_xFlRadius(m_xBuilder->weld_frame(u"FL_RADIUS"_ustr))
     , m_xMtrRadius(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_RADIUS"_ustr, FieldUnit::CM))
-    , m_xFlAngle(m_xBuilder->weld_widget(u"FL_SLANT"_ustr))
+    , m_xFlAngle(m_xBuilder->weld_frame(u"FL_SLANT"_ustr))
     , m_xMtrAngle(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_ANGLE"_ustr, FieldUnit::DEGREE))
 {
     for (int i = 0; i < 2; ++i)
     {
-        m_aControlGroups[i] = m_xBuilder->weld_widget("controlgroups" + OUString::number(i+1));
+        m_aControlGroups[i] = m_xBuilder->weld_frame("controlgroups" + OUString::number(i+1));
         m_aControlGroupX[i] = m_xBuilder->weld_widget("controlgroupx" + OUString::number(i+1));
         m_aControlX[i] = m_xBuilder->weld_metric_spin_button("controlx" + OUString::number(i+1), FieldUnit::CM);
         m_aControlGroupY[i] = m_xBuilder->weld_widget("controlgroupy" + OUString::number(i+1));

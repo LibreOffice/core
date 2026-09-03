@@ -46,7 +46,7 @@ class SwParagraphNumTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xNewStartNumberCB;
     std::unique_ptr<weld::SpinButton> m_xNewStartNF;
 
-    std::unique_ptr<weld::Widget> m_xCountParaFram;
+    std::unique_ptr<weld::Frame> m_xCountParaFram;
     std::unique_ptr<weld::CheckButton> m_xCountParaCB;
     std::unique_ptr<weld::CheckButton> m_xRestartParaCountCB;
 

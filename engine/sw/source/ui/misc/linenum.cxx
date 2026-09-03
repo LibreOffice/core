@@ -66,7 +66,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
     : SfxDialogController(rVw.GetViewFrame().GetFrameWeld(),
             u"modules/swriter/ui/linenumbering.ui"_ustr, u"LineNumberingDialog"_ustr)
     , m_pSh(rVw.GetWrtShellPtr())
-    , m_xBodyContent(m_xBuilder->weld_widget(u"content"_ustr))
+    , m_xBodyContent(m_xBuilder->weld_container(u"content"_ustr))
     , m_xDivIntervalFT(m_xBuilder->weld_widget(u"every"_ustr))
     , m_xDivIntervalNF(m_xBuilder->weld_spin_button(u"linesspin"_ustr))
     , m_xDivRowsFT(m_xBuilder->weld_widget(u"lines"_ustr))

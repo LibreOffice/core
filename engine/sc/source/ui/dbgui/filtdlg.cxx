@@ -91,7 +91,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xEdVal4(m_xBuilder->weld_combo_box(u"val4"_ustr))
     , m_xLbColor4(m_xBuilder->weld_combo_box(u"color4"_ustr))
     , m_xBtnRemove4(m_xBuilder->weld_button(u"remove4"_ustr))
-    , m_xContents(m_xBuilder->weld_widget(u"grid"_ustr))
+    , m_xContents(m_xBuilder->weld_container(u"grid"_ustr))
     , m_xScrollBar(m_xBuilder->weld_scrolled_window(u"scrollbar"_ustr, true))
     , m_xExpander(m_xBuilder->weld_expander(u"more"_ustr))
     , m_xBtnClear(m_xBuilder->weld_button(u"clear"_ustr))

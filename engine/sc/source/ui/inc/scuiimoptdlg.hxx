@@ -50,7 +50,7 @@ private:
 
     std::unique_ptr<weld::Frame> m_xFieldFrame;
     std::unique_ptr<weld::Label> m_xFtCharset;
-    std::unique_ptr<weld::Widget> m_xEncGrid;
+    std::unique_ptr<weld::Container> m_xEncGrid;
     std::unique_ptr<weld::Label> m_xFtFieldSep;
     std::unique_ptr<weld::ComboBox> m_xEdFieldSep;
     std::unique_ptr<weld::Label> m_xFtTextSep;

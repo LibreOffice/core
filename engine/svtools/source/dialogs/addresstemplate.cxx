@@ -488,7 +488,7 @@ void AssignmentPersistentData::ImplCommit()
         m_xAdministrateDatasources = m_xBuilder->weld_button(u"admin"_ustr);
         m_xTable = m_xBuilder->weld_combo_box(u"datatable"_ustr);
         m_xFieldScroller = m_xBuilder->weld_scrolled_window(u"scrollwindow"_ustr, true);
-        m_xGrid = m_xBuilder->weld_widget(u"grid"_ustr);
+        m_xGrid = m_xBuilder->weld_container(u"grid"_ustr);
 
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {

@@ -893,6 +893,9 @@ std::unique_ptr<weld::CustomWidget> JSInstanceBuilder::weld_custom_widget(const 
 std::unique_ptr<weld::Widget> JSInstanceBuilder::weld_widget(const OUString& id)
 {
     vcl::Window* pWidget = m_xBuilder->get(id);
+    assert(!dynamic_cast<VclGrid*>(pWidget)
+           && "a grid needs weld_container or weld_grid, not weld_widget");
+    assert(!dynamic_cast<VclFrame*>(pWidget) && "a frame needs weld_frame, not weld_widget");
     auto pWeldWidget
         = pWidget ? std::make_unique<JSWidgetInstance>(this, pWidget, this, false) : nullptr;
 

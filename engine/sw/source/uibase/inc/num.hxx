@@ -43,7 +43,7 @@ class SwNumPositionTabPage final : public SfxTabPage
     NumberingPreview  m_aPreviewWIN;
 
     std::unique_ptr<weld::TreeView> m_xLevelLB;
-    std::unique_ptr<weld::Widget> m_xPositionFrame;
+    std::unique_ptr<weld::Frame> m_xPositionFrame;
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION

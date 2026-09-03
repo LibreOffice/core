@@ -90,7 +90,7 @@ class SvxRubyDialog final : public SfxModelessDialogController
     std::unique_ptr<weld::Button> m_xClosePB;
 
     std::unique_ptr<weld::Container> m_xContentArea;
-    std::unique_ptr<weld::Widget> m_xGrid;
+    std::unique_ptr<weld::Container> m_xGrid;
 
     std::unique_ptr<RubyPreview> m_xPreviewWin;
     std::unique_ptr<weld::CustomWeld> m_xPreview;

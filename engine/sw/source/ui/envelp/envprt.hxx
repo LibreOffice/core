@@ -28,8 +28,8 @@
 
 class SwEnvPrtPage : public SfxTabPage
 {
-    std::unique_ptr<weld::Widget> m_xUpper;
-    std::unique_ptr<weld::Widget> m_xLower;
+    std::unique_ptr<weld::Container> m_xUpper;
+    std::unique_ptr<weld::Container> m_xLower;
     std::unique_ptr<weld::RadioButton> m_xTopButton;
     std::unique_ptr<weld::RadioButton> m_xBottomButton;
     std::unique_ptr<weld::MetricSpinButton> m_xRightField;

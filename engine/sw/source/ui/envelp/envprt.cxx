@@ -28,8 +28,8 @@
 
 SwEnvPrtPage::SwEnvPrtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, u"modules/swriter/ui/envprinterpage.ui"_ustr, u"EnvPrinterPage"_ustr, &rSet)
-    , m_xUpper(m_xBuilder->weld_widget(u"upper"_ustr))
-    , m_xLower(m_xBuilder->weld_widget(u"lower"_ustr))
+    , m_xUpper(m_xBuilder->weld_container(u"upper"_ustr))
+    , m_xLower(m_xBuilder->weld_container(u"lower"_ustr))
     , m_xTopButton(m_xBuilder->weld_radio_button(u"top"_ustr))
     , m_xBottomButton(m_xBuilder->weld_radio_button(u"bottom"_ustr))
     , m_xRightField(m_xBuilder->weld_metric_spin_button(u"right"_ustr, FieldUnit::CM))

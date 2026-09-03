@@ -94,7 +94,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , m_aRatioTop(ConnectorType::Top)
     , m_aRatioBottom(ConnectorType::Bottom)
-    , m_xGrid(m_xBuilder->weld_widget(u"grid2"_ustr))
+    , m_xGrid(m_xBuilder->weld_container(u"grid2"_ustr))
     , m_xLevelLB(m_xBuilder->weld_tree_view(u"levellb"_ustr))
     , m_xFmtLB(m_xBuilder->weld_combo_box(u"numfmtlb"_ustr))
     , m_xPrefixFT(m_xBuilder->weld_label(u"prefixft"_ustr))

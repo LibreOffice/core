@@ -44,8 +44,8 @@ private:
 
     SvxRectCtl m_aCtlPosition;
 
-    std::unique_ptr<weld::Widget> m_xDrawingText;
-    std::unique_ptr<weld::Widget> m_xCustomShapeText;
+    std::unique_ptr<weld::Frame> m_xDrawingText;
+    std::unique_ptr<weld::Frame> m_xCustomShapeText;
     std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowWidth;
     std::unique_ptr<weld::CheckButton> m_xTsbAutoGrowHeight;
     std::unique_ptr<weld::CheckButton> m_xTsbFitToSize;

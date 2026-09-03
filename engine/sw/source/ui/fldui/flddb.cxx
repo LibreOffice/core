@@ -37,15 +37,15 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xTypeLB(m_xBuilder->weld_tree_view(u"type"_ustr))
     , m_xDatabaseTLB(new SwDBTreeList(m_xBuilder->weld_tree_view(u"select"_ustr)))
     , m_xAddDBPB(m_xBuilder->weld_button(u"browse"_ustr))
-    , m_xCondition(m_xBuilder->weld_widget(u"condgroup"_ustr))
+    , m_xCondition(m_xBuilder->weld_container(u"condgroup"_ustr))
     , m_xConditionED(new ConditionEdit<weld::Entry>(m_xBuilder->weld_entry(u"condition"_ustr)))
-    , m_xValue(m_xBuilder->weld_widget(u"recgroup"_ustr))
+    , m_xValue(m_xBuilder->weld_container(u"recgroup"_ustr))
     , m_xValueED(m_xBuilder->weld_entry(u"recnumber"_ustr))
     , m_xDBFormatRB(m_xBuilder->weld_radio_button(u"fromdatabasecb"_ustr))
     , m_xNewFormatRB(m_xBuilder->weld_radio_button(u"userdefinedcb"_ustr))
     , m_xNumFormatLB(new NumFormatListBox(m_xBuilder->weld_combo_box(u"numformat"_ustr)))
     , m_xFormatLB(m_xBuilder->weld_combo_box(u"format"_ustr))
-    , m_xFormat(m_xBuilder->weld_widget(u"formatframe"_ustr))
+    , m_xFormat(m_xBuilder->weld_frame(u"formatframe"_ustr))
 {
     SetTypeSel(-1); //TODO
 

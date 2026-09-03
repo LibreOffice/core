@@ -130,13 +130,13 @@ class SwTOXSelectTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xReadOnlyCB;
     std::unique_ptr<weld::CheckButton> m_xTitleToggleCB;
 
-    std::unique_ptr<weld::Widget> m_xAreaFrame;
+    std::unique_ptr<weld::Frame> m_xAreaFrame;
     std::unique_ptr<weld::ComboBox> m_xAreaLB;
     std::unique_ptr<weld::Widget> m_xLevelFT;   //content, user
     std::unique_ptr<weld::SpinButton> m_xLevelNF;   //content, user
 
     //content
-    std::unique_ptr<weld::Widget> m_xCreateFrame;  // content, user, illustration
+    std::unique_ptr<weld::Frame> m_xCreateFrame;  // content, user, illustration
     std::unique_ptr<weld::CheckButton> m_xFromHeadingsCB;
     std::unique_ptr<weld::CheckButton> m_xStylesCB;
     std::unique_ptr<weld::CheckButton> m_xAddStylesCB;
@@ -164,7 +164,7 @@ class SwTOXSelectTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xTOXMarksCB;
 
     //index only
-    std::unique_ptr<weld::Widget>   m_xIdxOptionsFrame;
+    std::unique_ptr<weld::Frame>   m_xIdxOptionsFrame;
     std::unique_ptr<weld::CheckButton> m_xCollectSameCB;
     std::unique_ptr<weld::CheckButton> m_xUseFFCB;
     std::unique_ptr<weld::CheckButton> m_xUseDashCB;
@@ -176,14 +176,14 @@ class SwTOXSelectTabPage final : public SfxTabPage
 
     // object only
     std::unique_ptr<weld::TreeView> m_xFromObjCLB;
-    std::unique_ptr<weld::Widget> m_xFromObjFrame;
+    std::unique_ptr<weld::Frame> m_xFromObjFrame;
 
     std::unique_ptr<weld::CheckButton> m_xSequenceCB;
     std::unique_ptr<weld::ComboBox> m_xBracketLB;
-    std::unique_ptr<weld::Widget> m_xAuthorityFrame;
+    std::unique_ptr<weld::Frame> m_xAuthorityFrame;
 
     //all
-    std::unique_ptr<weld::Widget> m_xSortFrame;
+    std::unique_ptr<weld::Frame> m_xSortFrame;
     std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::ComboBox> m_xSortAlgorithmLB;
 
@@ -338,16 +338,16 @@ class SwTOXEntryTabPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xTabPosFT;
     std::unique_ptr<weld::MetricSpinButton> m_xTabPosMF;          // tab stop position
     std::unique_ptr<weld::CheckButton> m_xAutoRightCB;
-    std::unique_ptr<weld::Widget> m_xFormatFrame;
+    std::unique_ptr<weld::Frame> m_xFormatFrame;
     std::unique_ptr<weld::Label> m_xMainEntryStyleFT;
     std::unique_ptr<weld::ComboBox> m_xMainEntryStyleLB;  // character style of main entries in indexes
     std::unique_ptr<weld::CheckButton> m_xAlphaDelimCB;
     std::unique_ptr<weld::CheckButton> m_xCommaSeparatedCB;
     std::unique_ptr<weld::CheckButton> m_xRelToStyleCB;      // position relative to the right margin of the para style
-    std::unique_ptr<weld::Widget> m_xSortingFrame;
+    std::unique_ptr<weld::Frame> m_xSortingFrame;
     std::unique_ptr<weld::RadioButton> m_xSortDocPosRB;
     std::unique_ptr<weld::RadioButton> m_xSortContentRB;
-    std::unique_ptr<weld::Widget> m_xSortKeyFrame;
+    std::unique_ptr<weld::Frame> m_xSortKeyFrame;
     std::unique_ptr<weld::ComboBox> m_xFirstKeyLB;
     std::unique_ptr<weld::ToggleButton> m_xFirstSortUpRB;
     std::unique_ptr<weld::ToggleButton> m_xFirstSortDownRB;

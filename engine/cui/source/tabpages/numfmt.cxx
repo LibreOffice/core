@@ -221,7 +221,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xEdLeadZeroes(m_xBuilder->weld_spin_button(u"leadzerosed"_ustr))
     , m_xBtnThousand(m_xBuilder->weld_check_button(u"thousands"_ustr))
     , m_xBtnEngineering(m_xBuilder->weld_check_button(u"engineering"_ustr))
-    , m_xFormatCodeFrame(m_xBuilder->weld_widget(u"formatcode"_ustr))
+    , m_xFormatCodeFrame(m_xBuilder->weld_frame(u"formatcode"_ustr))
     , m_xEdFormat(m_xBuilder->weld_entry(u"formatted"_ustr))
     , m_xIbAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xIbInfo(m_xBuilder->weld_button(u"edit"_ustr))

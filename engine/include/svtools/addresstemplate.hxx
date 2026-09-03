@@ -118,7 +118,7 @@ namespace svt
         std::unique_ptr<weld::ComboBox> m_xTable;
         std::unique_ptr<weld::ScrolledWindow> m_xFieldScroller;
         std::unique_ptr<weld::Button> m_xOKButton;
-        std::unique_ptr<weld::Widget> m_xGrid;
+        std::unique_ptr<weld::Container> m_xGrid;
 
         std::unique_ptr<AddressBookSourceDialogData> m_pImpl;
     };

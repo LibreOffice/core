@@ -59,7 +59,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbScaleMode;
     std::unique_ptr<weld::Widget> m_xBxScaleAll;
     std::unique_ptr<weld::MetricSpinButton> m_xEdScaleAll;
-    std::unique_ptr<weld::Widget> m_xGrHeightWidth;
+    std::unique_ptr<weld::Container> m_xGrHeightWidth;
     std::unique_ptr<weld::SpinButton> m_xEdScalePageWidth;
     std::unique_ptr<weld::CheckButton> m_xCbScalePageWidth;
     std::unique_ptr<weld::SpinButton> m_xEdScalePageHeight;

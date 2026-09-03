@@ -34,11 +34,11 @@ class SwFieldFuncPage : public SwFieldPage
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;
     std::unique_ptr<weld::TreeView> m_xSelectionLB;
-    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<weld::Frame> m_xFormat;
     std::unique_ptr<weld::TreeView> m_xFormatLB;
     std::unique_ptr<weld::Label> m_xNameFT;
     std::unique_ptr<ConditionEdit<weld::Entry>> m_xNameED;
-    std::unique_ptr<weld::Widget> m_xValueGroup;
+    std::unique_ptr<weld::Container> m_xValueGroup;
     std::unique_ptr<weld::Label> m_xValueFT;
     std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::Label> m_xCond1FT;
@@ -48,7 +48,7 @@ class SwFieldFuncPage : public SwFieldPage
     std::unique_ptr<weld::Button> m_xMacroBT;
 
     //controls of "Input list"
-    std::unique_ptr<weld::Widget> m_xListGroup;
+    std::unique_ptr<weld::Container> m_xListGroup;
     std::unique_ptr<weld::Entry> m_xListItemED;
     std::unique_ptr<weld::Button> m_xListAddPB;
     std::unique_ptr<weld::TreeView> m_xListItemsLB;

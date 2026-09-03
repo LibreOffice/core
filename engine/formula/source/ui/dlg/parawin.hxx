@@ -60,8 +60,8 @@ private:
         std::unique_ptr<weld::Container> m_xContainer;
 
         std::unique_ptr<weld::ScrolledWindow> m_xSlider;
-        std::unique_ptr<weld::Widget> m_xParamGrid;
-        std::unique_ptr<weld::Widget> m_xGrid;
+        std::unique_ptr<weld::Container> m_xParamGrid;
+        std::unique_ptr<weld::Container> m_xGrid;
 
         std::unique_ptr<weld::Label> m_xFtEditDesc;
         std::unique_ptr<weld::Label> m_xFtArgName;

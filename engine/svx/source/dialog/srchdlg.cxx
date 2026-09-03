@@ -297,7 +297,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xAttributeBtn(m_xBuilder->weld_button(u"attributes"_ustr))
     , m_xFormatBtn(m_xBuilder->weld_button(u"format"_ustr))
     , m_xNoFormatBtn(m_xBuilder->weld_button(u"noformat"_ustr))
-    , m_xCalcGrid(m_xBuilder->weld_widget(u"calcgrid"_ustr))
+    , m_xCalcGrid(m_xBuilder->weld_container(u"calcgrid"_ustr))
     , m_xCalcSearchInFT(m_xBuilder->weld_label(u"searchinlabel"_ustr))
     , m_xCalcSearchInLB(m_xBuilder->weld_combo_box(u"calcsearchin"_ustr))
     , m_xCalcSearchDirFT(m_xBuilder->weld_label(u"searchdir"_ustr))

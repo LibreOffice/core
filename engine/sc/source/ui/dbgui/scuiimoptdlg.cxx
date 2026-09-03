@@ -115,7 +115,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     , m_bIsAsciiImport(bAscii)
     , m_xFieldFrame(m_xBuilder->weld_frame(u"fieldframe"_ustr))
     , m_xFtCharset(m_xBuilder->weld_label(u"charsetft"_ustr))
-    , m_xEncGrid(m_xBuilder->weld_widget(u"grid2"_ustr))
+    , m_xEncGrid(m_xBuilder->weld_container(u"grid2"_ustr))
     , m_xFtFieldSep(m_xBuilder->weld_label(u"fieldft"_ustr))
     , m_xEdFieldSep(m_xBuilder->weld_combo_box(u"field"_ustr))
     , m_xFtTextSep(m_xBuilder->weld_label(u"textft"_ustr))

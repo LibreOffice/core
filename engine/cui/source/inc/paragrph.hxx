@@ -145,7 +145,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     //preview
     std::unique_ptr<weld::CustomWeld> m_xExampleWin;
     //vertical alignment
-    std::unique_ptr<weld::Widget> m_xVertAlignFL;
+    std::unique_ptr<weld::Frame> m_xVertAlignFL;
     std::unique_ptr<weld::ComboBox> m_xVertAlignLB;
     std::unique_ptr<weld::Label> m_xVertAlign;
     std::unique_ptr<weld::Label> m_xVertAlignSdr;

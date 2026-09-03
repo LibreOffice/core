@@ -30,7 +30,7 @@ class SwFieldDokPage : public SwFieldPage
     sal_uInt32               m_nOldFormat;
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;
-    std::unique_ptr<weld::Widget> m_xSelection;
+    std::unique_ptr<weld::Frame> m_xSelection;
     std::unique_ptr<weld::TreeView> m_xSelectionLB;
     std::unique_ptr<weld::Label> m_xValueFT;
     std::unique_ptr<weld::Entry> m_xValueED;
@@ -39,7 +39,7 @@ class SwFieldDokPage : public SwFieldPage
     std::unique_ptr<weld::Label> m_xDateFT;
     std::unique_ptr<weld::Label> m_xTimeFT;
     std::unique_ptr<weld::SpinButton> m_xDateOffsetED;
-    std::unique_ptr<weld::Widget> m_xFormat;
+    std::unique_ptr<weld::Frame> m_xFormat;
     std::unique_ptr<weld::TreeView> m_xFormatLB;
     std::unique_ptr<SwNumFormatTreeView> m_xNumFormatLB;
     std::unique_ptr<weld::CheckButton> m_xFixedCB;

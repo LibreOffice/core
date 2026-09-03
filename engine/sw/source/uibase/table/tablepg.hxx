@@ -62,7 +62,7 @@ class SwFormatTablePage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xBottomMF;
 
     std::unique_ptr<svx::FrameDirectionListBox> m_xTextDirectionLB;
-    std::unique_ptr<weld::Widget> m_xProperties;
+    std::unique_ptr<weld::Frame> m_xProperties;
 
     sal_Int64 m_nOrigWidthMin;
     sal_Int64 m_nOrigWidthMax;
@@ -161,7 +161,7 @@ class SwTextFlowPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xSplitRowCB;
     std::unique_ptr<weld::CheckButton> m_xKeepCB;
     std::unique_ptr<weld::CheckButton> m_xHeadLineCB;
-    std::unique_ptr<weld::Widget> m_xRepeatHeaderCombo;
+    std::unique_ptr<weld::Container> m_xRepeatHeaderCombo;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
     std::unique_ptr<weld::ComboBox> m_xTextDirectionLB;
     std::unique_ptr<weld::ComboBox> m_xVertOrientLB;

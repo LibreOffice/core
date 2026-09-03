@@ -58,7 +58,7 @@ class SwEditRegionDlg final : public SfxDialogController
     std::unique_ptr<weld::TreeView> m_xTree;
     std::unique_ptr<weld::CheckButton> m_xFileCB;
     std::unique_ptr<weld::CheckButton> m_xDDECB;
-    std::unique_ptr<weld::Widget> m_xDDEFrame;
+    std::unique_ptr<weld::Container> m_xDDEFrame;
     std::unique_ptr<weld::Label> m_xFileNameFT;
     std::unique_ptr<weld::Label> m_xDDECommandFT;
     std::unique_ptr<weld::Entry> m_xFileNameED;
@@ -76,7 +76,7 @@ class SwEditRegionDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xOK;
     std::unique_ptr<weld::Button> m_xOptionsPB;
     std::unique_ptr<weld::Button> m_xDismiss;
-    std::unique_ptr<weld::Widget> m_xHideFrame;
+    std::unique_ptr<weld::Frame> m_xHideFrame;
     std::unique_ptr<weld::Frame> m_xLinkFrame;
 
     void RecurseList(const SwSectionFormat* pFormat, const weld::TreeIter* pIter);

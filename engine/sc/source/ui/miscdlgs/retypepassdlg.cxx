@@ -271,7 +271,7 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(weld::Window* pParent, ScPassHashProt
     , m_pProtected(pProtected)
     , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xBtnRetypePassword(m_xBuilder->weld_radio_button(u"retypepassword"_ustr))
-    , m_xPasswordGrid(m_xBuilder->weld_widget(u"passwordgrid"_ustr))
+    , m_xPasswordGrid(m_xBuilder->weld_container(u"passwordgrid"_ustr))
     , m_xPassword1Edit(m_xBuilder->weld_entry(u"newpassEntry"_ustr))
     , m_xPassword2Edit(m_xBuilder->weld_entry(u"confirmpassEntry"_ustr))
     , m_xBtnMatchOldPass(m_xBuilder->weld_check_button(u"mustmatch"_ustr))

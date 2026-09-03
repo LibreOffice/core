@@ -676,8 +676,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
     std::unique_ptr<weld::RadioButton> m_xRbRGB;
     std::unique_ptr<weld::RadioButton> m_xRbCMYK;
-    std::unique_ptr<weld::Widget> m_xRGBcustom;
-    std::unique_ptr<weld::Widget> m_xRGBpreset;
+    std::unique_ptr<weld::Container> m_xRGBcustom;
+    std::unique_ptr<weld::Container> m_xRGBpreset;
     std::unique_ptr<weld::Entry> m_xRpreset;
     std::unique_ptr<weld::Entry> m_xGpreset;
     std::unique_ptr<weld::Entry> m_xBpreset;
@@ -686,8 +686,8 @@ private:
     std::unique_ptr<weld::SpinButton> m_xBcustom;
     std::unique_ptr<weld::HexColorControl> m_xHexpreset;
     std::unique_ptr<weld::HexColorControl> m_xHexcustom;
-    std::unique_ptr<weld::Widget> m_xCMYKcustom;
-    std::unique_ptr<weld::Widget> m_xCMYKpreset;
+    std::unique_ptr<weld::Container> m_xCMYKcustom;
+    std::unique_ptr<weld::Container> m_xCMYKpreset;
     std::unique_ptr<weld::Entry> m_xCpreset;
     std::unique_ptr<weld::Entry> m_xYpreset;
     std::unique_ptr<weld::Entry> m_xMpreset;

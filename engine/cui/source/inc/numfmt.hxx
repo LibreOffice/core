@@ -104,7 +104,7 @@ private:
     std::unique_ptr<weld::SpinButton> m_xEdLeadZeroes;
     std::unique_ptr<weld::CheckButton> m_xBtnThousand;
     std::unique_ptr<weld::CheckButton> m_xBtnEngineering;
-    std::unique_ptr<weld::Widget> m_xFormatCodeFrame;
+    std::unique_ptr<weld::Frame> m_xFormatCodeFrame;
     std::unique_ptr<weld::Entry> m_xEdFormat;
     std::unique_ptr<weld::Button> m_xIbAdd;
     std::unique_ptr<weld::Button> m_xIbInfo;

@@ -70,7 +70,7 @@ class SvxBulletAndPositionDlg final : public weld::GenericDialogController
     SvxNumberingPreview m_aPreviewWIN;
     SvxRatioConnector m_aRatioTop;
     SvxRatioConnector m_aRatioBottom;
-    std::unique_ptr<weld::Widget> m_xGrid;
+    std::unique_ptr<weld::Container> m_xGrid;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBox> m_xFmtLB;
     std::unique_ptr<weld::Label> m_xPrefixFT;

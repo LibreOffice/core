@@ -26,7 +26,7 @@ namespace pcr
     class InspectorHelpWindow
     {
     private:
-        std::unique_ptr<weld::Widget> m_xHelpFrame;
+        std::unique_ptr<weld::Frame> m_xHelpFrame;
         std::unique_ptr<weld::TextView> m_xHelpText;
 
     public:

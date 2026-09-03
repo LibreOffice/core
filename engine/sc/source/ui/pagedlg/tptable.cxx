@@ -102,7 +102,7 @@ ScTablePage::ScTablePage(weld::Container* pPage, weld::DialogController* pContro
     , m_xLbScaleMode(m_xBuilder->weld_combo_box(u"comboLB_SCALEMODE"_ustr))
     , m_xBxScaleAll(m_xBuilder->weld_widget(u"boxSCALEALL"_ustr))
     , m_xEdScaleAll(m_xBuilder->weld_metric_spin_button(u"spinED_SCALEALL"_ustr, FieldUnit::PERCENT))
-    , m_xGrHeightWidth(m_xBuilder->weld_widget(u"gridWH"_ustr))
+    , m_xGrHeightWidth(m_xBuilder->weld_container(u"gridWH"_ustr))
     , m_xEdScalePageWidth(m_xBuilder->weld_spin_button(u"spinED_SCALEPAGEWIDTH"_ustr))
     , m_xCbScalePageWidth(m_xBuilder->weld_check_button(u"labelWP"_ustr))
     , m_xEdScalePageHeight(m_xBuilder->weld_spin_button(u"spinED_SCALEPAGEHEIGHT"_ustr))

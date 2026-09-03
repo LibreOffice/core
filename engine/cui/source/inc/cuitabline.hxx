@@ -140,28 +140,28 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrLineWidth;
     std::unique_ptr<weld::Widget> m_xBoxTransparency;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;
-    std::unique_ptr<weld::Widget> m_xFlLineEnds;
+    std::unique_ptr<weld::Frame> m_xFlLineEnds;
     std::unique_ptr<weld::Widget> m_xBoxArrowStyles;
     std::unique_ptr<SvxLineEndLB> m_xLbStartStyle;
-    std::unique_ptr<weld::Widget> m_xBoxStart;
+    std::unique_ptr<weld::Container> m_xBoxStart;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrStartWidth;
     std::unique_ptr<weld::CheckButton> m_xTsbCenterStart;
-    std::unique_ptr<weld::Widget> m_xBoxEnd;
+    std::unique_ptr<weld::Container> m_xBoxEnd;
     std::unique_ptr<SvxLineEndLB> m_xLbEndStyle;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrEndWidth;
     std::unique_ptr<weld::CheckButton> m_xTsbCenterEnd;
     std::unique_ptr<weld::CheckButton> m_xCbxSynchronize;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
 
-    std::unique_ptr<weld::Widget> m_xFLEdgeStyle;
-    std::unique_ptr<weld::Widget> m_xGridEdgeCaps;
+    std::unique_ptr<weld::Frame> m_xFLEdgeStyle;
+    std::unique_ptr<weld::Container> m_xGridEdgeCaps;
     std::unique_ptr<weld::ComboBox> m_xLBEdgeStyle;
 
     // LineCaps
     std::unique_ptr<weld::ComboBox> m_xLBCapStyle;
 
-    std::unique_ptr<weld::Widget> m_xFlSymbol;
-    std::unique_ptr<weld::Widget> m_xGridIconSize;
+    std::unique_ptr<weld::Frame> m_xFlSymbol;
+    std::unique_ptr<weld::Container> m_xGridIconSize;
     std::unique_ptr<weld::MenuButton> m_xSymbolMB;
     std::unique_ptr<weld::Menu> m_xSymbolsMenu;
     std::unique_ptr<weld::Menu> m_xGalleryMenu;

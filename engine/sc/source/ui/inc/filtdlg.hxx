@@ -127,7 +127,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbColor4;
     std::unique_ptr<weld::Button>   m_xBtnRemove4;
 
-    std::unique_ptr<weld::Widget> m_xContents;
+    std::unique_ptr<weld::Container> m_xContents;
     std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
     std::unique_ptr<weld::Expander> m_xExpander;
 

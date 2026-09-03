@@ -60,7 +60,7 @@ class SvxGrfCropPage : public SfxTabPage
 
     SvxCropExample m_aExampleWN;
 
-    std::unique_ptr<weld::Widget> m_xCropFrame;
+    std::unique_ptr<weld::Frame> m_xCropFrame;
     std::unique_ptr<weld::RadioButton> m_xZoomConstRB;
     std::unique_ptr<weld::RadioButton> m_xSizeConstRB;
     std::unique_ptr<weld::MetricSpinButton> m_xLeftMF;
@@ -68,15 +68,15 @@ class SvxGrfCropPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xTopMF;
     std::unique_ptr<weld::MetricSpinButton> m_xBottomMF;
 
-    std::unique_ptr<weld::Widget> m_xScaleFrame;
+    std::unique_ptr<weld::Frame> m_xScaleFrame;
     std::unique_ptr<weld::MetricSpinButton> m_xWidthZoomMF;
     std::unique_ptr<weld::MetricSpinButton> m_xHeightZoomMF;
 
-    std::unique_ptr<weld::Widget> m_xSizeFrame;
+    std::unique_ptr<weld::Frame> m_xSizeFrame;
     std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
     std::unique_ptr<weld::MetricSpinButton> m_xHeightMF;
 
-    std::unique_ptr<weld::Widget> m_xOrigSizeGrid;
+    std::unique_ptr<weld::Container> m_xOrigSizeGrid;
     std::unique_ptr<weld::Label> m_xOrigSizeFT;
     std::unique_ptr<weld::Button> m_xOrigSizePB;
 

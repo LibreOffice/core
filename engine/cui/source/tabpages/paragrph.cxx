@@ -1280,7 +1280,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xExpandCB(m_xBuilder->weld_check_button(u"checkCB_EXPAND"_ustr))
     , m_xSnapToGridCB(m_xBuilder->weld_check_button(u"checkCB_SNAP"_ustr))
     , m_xExampleWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaWN_EXAMPLE"_ustr, m_aExampleWin))
-    , m_xVertAlignFL(m_xBuilder->weld_widget(u"frameFL_VERTALIGN"_ustr))
+    , m_xVertAlignFL(m_xBuilder->weld_frame(u"frameFL_VERTALIGN"_ustr))
     , m_xVertAlignLB(m_xBuilder->weld_combo_box(u"comboLB_VERTALIGN"_ustr))
     , m_xVertAlign(m_xBuilder->weld_label(u"labelFL_VERTALIGN"_ustr))
     , m_xVertAlignSdr(m_xBuilder->weld_label(u"labelST_VERTALIGN_SDR"_ustr))

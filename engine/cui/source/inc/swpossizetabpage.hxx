@@ -73,7 +73,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     std::unique_ptr<weld::RadioButton> m_xToFrameRB;
     std::unique_ptr<weld::CheckButton> m_xPositionCB;
     std::unique_ptr<weld::CheckButton> m_xSizeCB;
-    std::unique_ptr<weld::Widget> m_xPosFrame;
+    std::unique_ptr<weld::Frame> m_xPosFrame;
     std::unique_ptr<weld::Label> m_xHoriFT;
     std::unique_ptr<weld::ComboBox> m_xHoriLB;
     std::unique_ptr<weld::Label> m_xHoriByFT;

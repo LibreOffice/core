@@ -60,9 +60,9 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     // when there are custom properties which use the expander, so the common case of no custom
     // properties doesn't have an 'unexplained' expander margin
     , m_pTypeView(m_xTypeTree.get())
-    , m_xSelection(m_xBuilder->weld_widget(u"selectframe"_ustr))
+    , m_xSelection(m_xBuilder->weld_frame(u"selectframe"_ustr))
     , m_xSelectionLB(m_xBuilder->weld_tree_view(u"select"_ustr))
-    , m_xFormat(m_xBuilder->weld_widget(u"formatframe"_ustr))
+    , m_xFormat(m_xBuilder->weld_frame(u"formatframe"_ustr))
     , m_xFormatLB(new SwNumFormatTreeView(m_xBuilder->weld_tree_view(u"format"_ustr)))
     , m_xFixedCB(m_xBuilder->weld_check_button(u"fixed"_ustr))
 {

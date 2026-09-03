@@ -111,7 +111,7 @@ private:
 
     std::unique_ptr<weld::RadioButton> m_xBtnRetypePassword;
 
-    std::unique_ptr<weld::Widget> m_xPasswordGrid;
+    std::unique_ptr<weld::Container> m_xPasswordGrid;
     std::unique_ptr<weld::Entry> m_xPassword1Edit;
     std::unique_ptr<weld::Entry> m_xPassword2Edit;
 

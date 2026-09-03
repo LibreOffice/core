@@ -558,7 +558,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(weld::Container* pPage, weld::DialogCon
     , m_xToFrameRB(m_xBuilder->weld_radio_button(u"toframe"_ustr))
     , m_xPositionCB(m_xBuilder->weld_check_button(u"pos"_ustr))
     , m_xSizeCB(m_xBuilder->weld_check_button(u"size"_ustr))
-    , m_xPosFrame(m_xBuilder->weld_widget(u"posframe"_ustr))
+    , m_xPosFrame(m_xBuilder->weld_frame(u"posframe"_ustr))
     , m_xHoriFT(m_xBuilder->weld_label(u"horiposft"_ustr))
     , m_xHoriLB(m_xBuilder->weld_combo_box(u"horipos"_ustr))
     , m_xHoriByFT(m_xBuilder->weld_label(u"horibyft"_ustr))

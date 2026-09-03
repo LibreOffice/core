@@ -160,7 +160,7 @@ private:
     std::unique_ptr<weld::RadioButton>  m_xRbSortAsc;
     std::unique_ptr<weld::RadioButton>  m_xRbSortDesc;
     std::unique_ptr<weld::RadioButton>  m_xRbSortMan;
-    std::unique_ptr<weld::Widget>       m_xLayoutFrame;
+    std::unique_ptr<weld::Frame>        m_xLayoutFrame;
     std::unique_ptr<weld::ComboBox>     m_xLbLayout;
     std::unique_ptr<weld::CheckButton>  m_xCbLayoutEmpty;
     std::unique_ptr<weld::CheckButton>  m_xCbRepeatItemLabels;
@@ -171,7 +171,7 @@ private:
     std::unique_ptr<weld::ComboBox>     m_xLbShowFrom;
     std::unique_ptr<weld::Label>        m_xFtShowUsing;
     std::unique_ptr<weld::ComboBox>     m_xLbShowUsing;
-    std::unique_ptr<weld::Widget>       m_xHideFrame;
+    std::unique_ptr<weld::Frame>        m_xHideFrame;
     std::unique_ptr<weld::TreeView>     m_xLbHide;
     std::unique_ptr<weld::Label>        m_xFtHierarchy;
     std::unique_ptr<weld::ComboBox>     m_xLbHierarchy;

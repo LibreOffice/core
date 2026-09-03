@@ -18978,6 +18978,8 @@ public:
         GtkWidget* pWidget = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, OUStringToOString(id, RTL_TEXTENCODING_UTF8).getStr()));
         if (!pWidget)
             return nullptr;
+        assert(!GTK_IS_GRID(pWidget) && "a grid needs weld_container or weld_grid, not weld_widget");
+        assert(!GTK_IS_FRAME(pWidget) && "a frame needs weld_frame, not weld_widget");
         auto_add_parentless_widgets_to_container(pWidget);
         return std::make_unique<GtkInstanceWidget>(pWidget, this, false);
     }

@@ -55,7 +55,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     , m_xNewStartBX(m_xBuilder->weld_widget(u"boxNEW_START"_ustr))
     , m_xNewStartNumberCB(m_xBuilder->weld_check_button(u"checkCB_NUMBER_NEW_START"_ustr))
     , m_xNewStartNF(m_xBuilder->weld_spin_button(u"spinNF_NEW_START"_ustr))
-    , m_xCountParaFram(m_xBuilder->weld_widget(u"frameFL_COUNT_PARA"_ustr))
+    , m_xCountParaFram(m_xBuilder->weld_frame(u"frameFL_COUNT_PARA"_ustr))
     , m_xCountParaCB(m_xBuilder->weld_check_button(u"checkCB_COUNT_PARA"_ustr))
     , m_xRestartParaCountCB(m_xBuilder->weld_check_button(u"checkCB_RESTART_PARACOUNT"_ustr))
     , m_xRestartBX(m_xBuilder->weld_widget(u"boxRESTART_NO"_ustr))

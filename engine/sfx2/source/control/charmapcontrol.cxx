@@ -94,7 +94,7 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
                      std::make_unique<weld::CustomWeld>(rBuilder, u"favchar15"_ustr, m_aFavCharView[14]),
                      std::make_unique<weld::CustomWeld>(rBuilder, u"favchar16"_ustr, m_aFavCharView[15])}
     , m_xRecentGrid(rBuilder.weld_widget(u"viewgrid"_ustr))
-    , m_xFavGrid(rBuilder.weld_widget(u"favgrid"_ustr))
+    , m_xFavGrid(rBuilder.weld_container(u"favgrid"_ustr))
 {
     if (bLockGridSizes)
     {
