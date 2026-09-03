@@ -34,11 +34,6 @@ else !ENABLE_MACOSAPP
 if ENABLE_QTAPP
 SUBDIRS = qt browser
 
-if ENABLE_QTAPP_TESTS
-check-qtapp:
-	$(MAKE) $(AM_MAKEFLAGS) -C qt check-qtapp
-endif ENABLE_QTAPP_TESTS
-
 else !ENABLE_QTAPP
 if ENABLE_WASM
 SUBDIRS = wasm browser
@@ -793,6 +788,11 @@ all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)
 build-nocheck: all-am
 
 endif
+
+if ENABLE_QTAPP_TESTS
+check-qtapp:
+	$(MAKE) $(AM_MAKEFLAGS) -C qt check-qtapp
+endif ENABLE_QTAPP_TESTS
 
 distclean-local:
 	rm -rf $(top_srcdir)/scripts/__pycache__
