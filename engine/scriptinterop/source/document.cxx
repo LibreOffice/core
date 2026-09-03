@@ -57,6 +57,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hdl>
 #include <cpo/uno/Sequence.hxx>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -73,6 +74,7 @@
 #include <scriptinterop/XElement.hpp>
 #include <scriptinterop/XFootnote.hpp>
 #include <scriptinterop/XParagraph.hpp>
+#include <scriptinterop/XRangeBuilder.hpp>
 #include <scriptinterop/XRangeElement.hpp>
 #include <scriptinterop/XSelection.hpp>
 #include <scriptinterop/XTable.hpp>
@@ -143,6 +145,101 @@ public:
 
 private:
     css::uno::Reference<css::container::XIndexAccess> ranges_;
+};
+
+// Trivial single-element XIndexAccess wrapper so the XRangeBuilder can hand a single XTextRange
+// to SelectionImpl without depending on Writer's own SwXTextRanges service:
+class SingleRangeIndex: public cppu::WeakImplHelper<css::container::XIndexAccess> {
+public:
+    explicit SingleRangeIndex(css::uno::Reference<css::text::XTextRange> const & range):
+        range_(range) {}
+
+    sal_Int32 getCount() override { return 1; }
+
+    cpo::uno::Any getByIndex(sal_Int32 index) override {
+        if (index != 0) {
+            throw css::lang::IndexOutOfBoundsException();
+        }
+        return cpo::uno::Any(range_);
+    }
+
+    cpo::uno::Type getElementType() override {
+        return cppu::UnoType<css::text::XTextRange>::get();
+    }
+
+    bool hasElements() override { return true; }
+
+private:
+    css::uno::Reference<css::text::XTextRange> range_;
+};
+
+class RangeBuilderImpl: public cppu::WeakImplHelper<scriptinterop::XRangeBuilder> {
+public:
+    css::uno::Reference<scriptinterop::XRangeBuilder> addElement(
+        css::uno::Reference<scriptinterop::XElement> const & element) override
+    {
+        if (element.is()) {
+            css::uno::Reference<css::text::XTextRange> const range(
+                element->getuno(), css::uno::UNO_QUERY);
+            if (range.is()) {
+                extend(range->getStart(), range->getEnd());
+            }
+        }
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XRangeBuilder> addElementRange(
+        css::uno::Reference<scriptinterop::XText> const & text, sal_Int32 startOffset,
+        sal_Int32 endOffsetInclusive) override
+    {
+        if (!text.is() || startOffset < 0 || endOffsetInclusive < startOffset) {
+            return this;
+        }
+        css::uno::Reference<css::text::XTextRange> const para(text->getuno(), css::uno::UNO_QUERY);
+        if (!para.is()) {
+            return this;
+        }
+        auto const host = para->getText();
+        if (!host.is()) {
+            return this;
+        }
+        auto const cursor = host->createTextCursorByRange(para->getStart());
+        if (!cursor.is()) {
+            return this;
+        }
+        cursor->goRight(startOffset, false);
+        cursor->goRight(endOffsetInclusive - startOffset + 1, true);
+        extend(cursor->getStart(), cursor->getEnd());
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XSelection> build() override {
+        if (!cursor_.is()) {
+            return new SelectionImpl(nullptr);
+        }
+        return new SelectionImpl(new SingleRangeIndex(cursor_));
+    }
+
+private:
+    void extend(
+        css::uno::Reference<css::text::XTextRange> const & start,
+        css::uno::Reference<css::text::XTextRange> const & end)
+    {
+        if (!start.is() || !end.is()) {
+            return;
+        }
+        if (!cursor_.is()) {
+            auto const host = start->getText();
+            if (host.is()) {
+                cursor_ = host->createTextCursorByRange(start);
+            }
+        }
+        if (cursor_.is()) {
+            cursor_->gotoRange(end, true);
+        }
+    }
+
+    css::uno::Reference<css::text::XTextCursor> cursor_;
 };
 
 class TextImpl: public cppu::WeakImplHelper<scriptinterop::XText> {
@@ -1110,6 +1207,34 @@ public:
     css::uno::Reference<scriptinterop::XCursor> getCursor() override
     {
         return new CursorImpl(model_);
+    }
+
+    css::uno::Reference<scriptinterop::XRangeBuilder> newRange() override {
+        return new RangeBuilderImpl;
+    }
+
+    void setSelection(css::uno::Reference<scriptinterop::XSelection> const & selection) override {
+        if (!selection.is()) {
+            return;
+        }
+        css::uno::Reference<css::view::XSelectionSupplier> const sup(
+            model_->getCurrentController(), css::uno::UNO_QUERY);
+        if (!sup.is()) {
+            return;
+        }
+        // Writer's select typically only recognises its own SwXTextRanges; when our XSelection
+        // wraps a single XTextRange, unwrap and pass that directly so Writer accepts it:
+        css::uno::Reference<css::container::XIndexAccess> const idx(
+            selection->getuno(), css::uno::UNO_QUERY);
+        if (idx.is() && idx->getCount() == 1) {
+            css::uno::Reference<css::text::XTextRange> range;
+            idx->getByIndex(0) >>= range;
+            if (range.is()) {
+                sup->select(cpo::uno::Any(range));
+                return;
+            }
+        }
+        sup->select(cpo::uno::Any(selection->getuno()));
     }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XFootnote>> getFootnotes() override {

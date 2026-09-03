@@ -11,21 +11,13 @@
 
 module scriptinterop {
 
-interface XDocument : XBase
-{
-    XSelection getSelection();
+interface XRangeBuilder {
+    [overload addElement] XRangeBuilder addElement([in] XElement element);
 
-    XBody getBody();
+    [overload addElement] XRangeBuilder addElementRange(
+        [in] XText text, [in] long startOffset, [in] long endOffsetInclusive);
 
-    XCursor getCursor();
-
-    sequence<XFootnote> getFootnotes();
-
-    void insertImage([in] sequence<byte> data, [in] ImageOptions opts);
-
-    XRangeBuilder newRange();
-
-    void setSelection([in] XSelection selection);
+    XSelection build();
 };
 
 };

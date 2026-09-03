@@ -191,6 +191,8 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                     getCursor: cursorFacade,
                     getBody: bodyFacade,
                     getFootnotes: footnotesFacade,
+                    newRange: function() { return activeDoc().newRange(); },
+                    setSelection: function(sel) { activeDoc().setSelection(sel); },
                     getName: function() { return 'Untitled'; },
                     getUrl: function() { return ''; },
                     getId: function() { return ''; },
