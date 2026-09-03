@@ -263,8 +263,7 @@ namespace FileUtil
 
     std::unique_ptr<std::vector<char>> readFile(const std::string& path, int maxSize)
     {
-        auto data = std::make_unique<std::vector<char>>(maxSize);
-        data->resize(0);
+        auto data = std::make_unique<std::vector<char>>();
         return (readFile(path, *data, maxSize) >= 0) ? std::move(data) : nullptr;
     }
 

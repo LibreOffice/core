@@ -916,7 +916,15 @@ void WhiteBoxTests::testReadFile()
     LOK_ASSERT(size > 0);
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(size), status.size());
     LOK_ASSERT(status.starts_with("Name:"));
+
+    // The overload that returns the buffer reads the same content.
+    const std::unique_ptr<std::vector<char>> owned = FileUtil::readFile("/proc/self/status");
+    LOK_ASSERT(owned);
+    LOK_ASSERT(Util::toString(*owned).starts_with("Name:"));
 #endif
+
+    // A file that cannot be read yields a null pointer.
+    LOK_ASSERT(!FileUtil::readFile("/missing/file/path"));
 }
 
 void WhiteBoxTests::testStringCompare()
