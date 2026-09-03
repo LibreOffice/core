@@ -2545,6 +2545,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
                     OUString altText(p->rINetAttr.GetINetFormat().GetName());
+                    if (altText.isEmpty())
+                        altText = p->sText;
+                    if (altText.isEmpty())
+                        altText = bInternal ? aURL.copy(1) : aURL;
 
                     const SwPageFrame* pSelectionPage =
                         static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
@@ -2668,7 +2672,19 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 {
                     Point aNullPt;
                     const SwRect aLinkRect = pFrameFormat->FindLayoutRect( false, &aNullPt );
-                    UIName const linkName(pItem->GetName());
+                    OUString altText(pItem->GetName());
+                    if (altText.isEmpty())
+                    {
+                        // The same alt text the figure would have (see above)
+                        SwFlyFrameFormat const& rFly(
+                            *static_cast<SwFlyFrameFormat const*>(pFrameFormat));
+                        OUString const sep(
+                            (rFly.GetObjTitle().isEmpty() || rFly.GetObjDescription().isEmpty())
+                            ? OUString() : u" - "_ustr);
+                        altText = rFly.GetObjTitle() + sep + rFly.GetObjDescription();
+                    }
+                    if (altText.isEmpty())
+                        altText = aURL;
                     // Link PageNums
                     std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
@@ -2677,7 +2693,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink(aRect, linkName.toString(), aLinkPageNum);
+                            pPDFExtOutDevData->CreateLink(aRect, altText, aLinkPageNum);
 
                         // Store link info for tagged pdf output:
                         const IdMapEntry aLinkEntry(aLinkRect, nLinkId);
@@ -2698,7 +2714,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             {
                                 const SwTextNode* pTNd = pAnchorNode->GetTextNode();
                                 if ( pTNd )
-                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, linkName.toString());
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, altText);
                             }
                         }
                     }

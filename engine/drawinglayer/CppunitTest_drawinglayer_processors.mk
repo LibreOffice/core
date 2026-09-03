@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_processors, \
 	test \
 	tl \
 	unotest \
+	utl \
 	svt \
 ))
 
@@ -49,6 +50,7 @@ $(eval $(call gb_CppunitTest_use_vcl,drawinglayer_processors))
 $(eval $(call gb_CppunitTest_use_components,drawinglayer_processors,\
     canvas/source/factory/canvasfactory \
     configmgr/source/configmgr \
+    framework/util/fwk \
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
