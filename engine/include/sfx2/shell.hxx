@@ -266,11 +266,6 @@ public:
         */
     const SfxPoolItemHolder& ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = nullptr );
 
-    /**
-        Asynchronous ExecuteSlot for the RELOAD
-        */
-    void                        ExecuteSlot( SfxRequest &rReq, bool bAsync );
-
     inline SfxItemPool&         GetPool() const;
     inline void                 SetPool( SfxItemPool *pNewPool ) ;
 

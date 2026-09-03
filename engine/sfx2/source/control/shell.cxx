@@ -65,7 +65,6 @@ struct SfxShell_Impl: public SfxBroadcaster
     SfxRepeatTarget*            pRepeatTarget; // SbxObjectRef xParent;
     bool                        bActive;
     SfxDisableFlags             nDisableFlags;
-    std::unique_ptr<svtools::AsynchronLink> pExecuter;
     std::unique_ptr<svtools::AsynchronLink> pUpdater;
     std::vector<std::unique_ptr<SfxSlot> >  aSlotArr;
 
@@ -81,7 +80,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     {
     }
 
-    virtual ~SfxShell_Impl() override { pExecuter.reset(); pUpdater.reset();}
+    virtual ~SfxShell_Impl() override { pUpdater.reset();}
 };
 
 
@@ -418,24 +417,6 @@ bool SfxShell::IsConditionalFastCall( const SfxRequest &rReq )
     return bRet;
 }
 
-
-static void ShellCall_Impl( void* pObj, void* pArg )
-{
-    static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg) );
-}
-
-void SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
-{
-    if( !bAsync )
-        ExecuteSlot( rReq );
-    else
-    {
-        if( !pImpl->pExecuter )
-            pImpl->pExecuter.reset( new svtools::AsynchronLink(
-                LINK_NONMEMBER( this, ShellCall_Impl ) ) );
-        pImpl->pExecuter->Call( new SfxRequest( rReq ) );
-    }
-}
 
 const SfxPoolItemHolder& SfxShell::ExecuteSlot
 (

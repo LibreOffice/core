@@ -1385,7 +1385,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     aRequest.AppendItem(SfxUInt32Item(ID_VAL_WHATPAGE, 1));
     aRequest.AppendItem(
         SfxUInt32Item(ID_VAL_WHATKIND, static_cast<sal_uInt32>(PageKind::Standard)));
-    pViewShell2->ExecuteSlot(aRequest, /*bAsync=*/false);
+    pViewShell2->ExecuteSlot(aRequest);
 
     // Start text edit in window 1.
     SdPage* pPage1 = pViewShell1->GetActualPage();

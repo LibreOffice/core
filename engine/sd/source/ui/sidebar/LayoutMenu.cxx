@@ -395,7 +395,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             SfxRequest aRequest(mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
             aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, (rpPage->GetPageNum()-1)/2));
             aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-            pMainViewShell->ExecuteSlot (aRequest, false);
+            pMainViewShell->ExecuteSlot (aRequest);
         }
     }
     while(false);
