@@ -25,6 +25,7 @@
 #include <rtl/string.hxx>
 
 #include <swdllapi.h>
+#include <nodeoffset.hxx>
 
 class SwWrtShell;
 class SwPaM;
@@ -33,6 +34,12 @@ namespace SwTranslateHelper
 {
 SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor);
 SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData);
+
+/// Node range to walk for translation: the current selection when there is one, otherwise
+/// the whole document body, but never the header/footer/footnote sections that also live in
+/// the shell's node array outside the body.
+SW_DLLPUBLIC void GetTranslationNodeRange(SwWrtShell& rWrtSh, SwNodeOffset& rStartNode,
+                                          SwNodeOffset& rEndNode);
 #if HAVE_FEATURE_CURL
 SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang);
 SW_DLLPUBLIC bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,

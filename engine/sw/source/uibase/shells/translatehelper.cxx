@@ -94,6 +94,32 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rDa
     }
 }
 
+void GetTranslationNodeRange(SwWrtShell& rWrtSh, SwNodeOffset& rStartNode, SwNodeOffset& rEndNode)
+{
+    auto const& rNodes = rWrtSh.GetNodes();
+    // The node array also holds the header/footer/footnote sections, ahead of the body.
+    // Clamp to the body so a document-wide translate, or a selection that a caller failed
+    // to normalize into the body, never walks into and overwrites that other content.
+    const SwNodeOffset nBodyStart = rNodes.GetEndOfExtras().GetIndex();
+    const SwNodeOffset nBodyEnd = rNodes.GetEndOfContent().GetIndex();
+
+    bool bHasSelection = rWrtSh.HasSelection();
+    if (!bHasSelection)
+    {
+        rStartNode = nBodyStart;
+        rEndNode = nBodyEnd;
+        return;
+    }
+
+    auto pCurrentPam = rWrtSh.GetCursor();
+    // iteration will start top to bottom
+    pCurrentPam->Normalize();
+    SwPosition aPoint = *pCurrentPam->GetPoint();
+    SwPosition aMark = *pCurrentPam->GetMark();
+    rStartNode = std::max(aPoint.nNode.GetIndex(), nBodyStart);
+    rEndNode = std::min(aMark.nNode.GetIndex(), nBodyEnd);
+}
+
 #if HAVE_FEATURE_CURL
 void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang)
 {
@@ -128,20 +154,16 @@ bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang
         return false;
     }
 
-    auto m_pCurrentPam = rWrtSh.GetCursor();
     bool bHasSelection = rWrtSh.HasSelection();
-
-    if (bHasSelection)
-    {
-        // iteration will start top to bottom
-        m_pCurrentPam->Normalize();
-    }
-
     auto const& pNodes = rWrtSh.GetNodes();
+    SwNodeOffset startNode;
+    SwNodeOffset endNode;
+    GetTranslationNodeRange(rWrtSh, startNode, endNode);
+
+    // Re-read the cursor after GetTranslationNodeRange() has normalized it.
+    auto m_pCurrentPam = rWrtSh.GetCursor();
     SwPosition aPoint = *m_pCurrentPam->GetPoint();
     SwPosition aMark = *m_pCurrentPam->GetMark();
-    auto startNode = bHasSelection ? aPoint.nNode.GetIndex() : SwNodeOffset(0);
-    auto endNode = bHasSelection ? aMark.nNode.GetIndex() : pNodes.Count() - 1;
 
     sal_Int32 nCount(0);
     sal_Int32 nProgress(0);
