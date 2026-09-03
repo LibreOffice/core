@@ -116,18 +116,13 @@ UnitBase::TestResult UnitInsertDelete::testInsertDelete()
         for (size_t it = 1; it <= 10; it++)
         {
             helpers::sendTextFrame(socket, "uno .uno:InsertPage", testname);
-            response = helpers::getResponseString(socket, "status:", testname);
 
-            LOK_ASSERT_MESSAGE("did not receive a status: message as expected",
-                                   !response.empty());
+            // InsertPage can broadcast its status: message more than once. Drain any
+            // stale ones and ask again, so the count below reflects this insert and
+            // not a duplicate left over from the previous iteration.
+            currentPartHashes = drainAndGetPartHashCodes(socket, testname, parser);
 
-            statusJsonVar = parser.parse(response.substr(7));
-            const Poco::SharedPtr<Poco::JSON::Object>& loopStatusJsonObject = statusJsonVar.extract<Poco::JSON::Object::Ptr>();
-
-            currentPartHashes = getPartHashCodes(loopStatusJsonObject);
-
-            //FIXME: enable this when fixed
-            //LOK_ASSERT_EQUAL(it + 1, currentPartHashes.size());
+            LOK_ASSERT_EQUAL(it + 1, currentPartHashes.size());
         }
 
         currentPartHashes = drainAndGetPartHashCodes(socket, testname, parser);
