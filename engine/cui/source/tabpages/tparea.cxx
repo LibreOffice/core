@@ -408,11 +408,8 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateWithSlideBackground(
     return xRet;
 }
 
-void SvxAreaTabPage::SelectFillTypeByPage(FillType eFillType, const SfxItemSet* _pSet)
+void SvxAreaTabPage::SelectFillTypeByPage(FillType eFillType)
 {
-    if (_pSet)
-        m_aFillAttributeSet.Set(*_pSet);
-
     OUString sPageId = getPageId(eFillType);
     if (sPageId.isEmpty())
         return;
