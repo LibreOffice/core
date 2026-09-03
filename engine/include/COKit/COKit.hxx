@@ -15,6 +15,7 @@
 #include <functional>
 #include <ostream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #ifdef __APPLE__
