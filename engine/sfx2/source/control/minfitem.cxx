@@ -33,15 +33,13 @@ SfxMacroInfoItem::SfxMacroInfoItem(
     OUString _aLibName,
     OUString _aModuleName,
     OUString _aMethodName,
-    OUString _aComment,
-    OUString _aLocationName) :
+    OUString _aComment) :
     SfxPoolItem(nWhichId),
     pBasicManager(pMgr),
     aLibName(std::move(_aLibName)),
     aModuleName(std::move(_aModuleName)),
     aMethodName(std::move(_aMethodName)),
-    aCommentText(std::move(_aComment)),
-    aLocationName(std::move(_aLocationName))
+    aCommentText(std::move(_aComment))
 {
 }
 
