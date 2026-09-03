@@ -57,13 +57,6 @@ class ContextToolbar extends JSDialogComponent {
 	}
 
 	showContextToolbar(): void {
-		const map = this.map;
-		if (
-			map.isReadOnlyMode() ||
-			!window.mode.isDesktop() ||
-			map.getDocType() === 'spreadsheet'
-		)
-			return;
 		if (this.lastIinputEvent.input === 'mouse') this.pendingShow = true;
 		if (this.lastIinputEvent.type !== 'buttonup') return;
 
@@ -73,6 +66,11 @@ class ContextToolbar extends JSDialogComponent {
 	showContextToolbarImpl(): void {
 		this.pendingShow = false;
 
+		const map = this.map;
+		if (!window.mode.isDesktop() || map.getDocType() === 'spreadsheet') return;
+		if (map.isReadOnlyMode() && map.getDocType() !== 'text') return;
+		if (map.isReadOnlyMode() && app.isReadOnly()) return;
+
 		if (this.pendingTask)
 			app.layoutingService.cancelLayoutingTask(this.pendingTask);
 
@@ -80,16 +78,20 @@ class ContextToolbar extends JSDialogComponent {
 			this.pendingTask = null;
 
 			if (!this.initialized) {
-				const contextToolbarItems = this.getWriterTextContext();
+				if (this.map.isReadOnlyMode()) {
+					this.builder?.build(this.container, this.getViewModeContext(), false);
+				} else {
+					const contextToolbarItems = this.getWriterTextContext();
 
-				for (const i in this.additionalContextButtons) {
-					const item = this.additionalContextButtons[i];
-					contextToolbarItems.push(item);
+					for (const i in this.additionalContextButtons) {
+						const item = this.additionalContextButtons[i];
+						contextToolbarItems.push(item);
+					}
+
+					this.builder?.build(this.container, contextToolbarItems, false);
+
+					this.map.uiManager.initializeNotebookbarInCore();
 				}
-
-				this.builder?.build(this.container, contextToolbarItems, false);
-
-				this.map.uiManager.initializeNotebookbarInCore();
 
 				this.initialized = true;
 			}
@@ -141,6 +143,18 @@ class ContextToolbar extends JSDialogComponent {
 			this.container.style.top = pos.y + 'px';
 			this.container.style.left = pos.x + 'px';
 		});
+	}
+
+	getViewModeContext(): ToolItemWidgetJSON[] {
+		return [
+			{
+				id: 'context-switchtoedit',
+				type: 'bigcustomtoolitem',
+				text: _('Switch to Editing'),
+				command: 'switchtoedit',
+				icon: 'lc_editdoc.svg',
+			} as ToolItemWidgetJSON,
+		];
 	}
 
 	getWriterTextContext(): ToolItemWidgetJSON[] {
