@@ -1162,7 +1162,8 @@ int main(int argc, char**argv)
     /// Convert a vector to a string. Useful for conversion in templates.
     inline std::string toString(const std::vector<char>& x)
     {
-        return std::string(x.data(), x.size());
+        // The iterator constructor is defined for an empty range, while data() may be null then.
+        return std::string(x.begin(), x.end());
     }
 
     /// No-op string conversion. Useful for conversion in templates.

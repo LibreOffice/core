@@ -100,8 +100,7 @@ void WopiProxy::handleRequest(std::istream & message,
             if (data)
             {
                 http::Response response(http::StatusCode::OK);
-                response.setBody(std::string(data->data(), data->size()),
-                                 "application/octet-stream");
+                response.setBody(Util::toString(*data), "application/octet-stream");
                 socket->sendAndShutdown(response);
             }
             else

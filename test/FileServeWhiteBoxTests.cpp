@@ -19,6 +19,7 @@
 #include <wsd/FileServer.hpp>
 #include <common/ContainerUtil.hpp>
 #include <common/FileUtil.hpp>
+#include <common/Util.hpp>
 #include <test/lokassert.hpp>
 
 #include <Poco/String.h>
@@ -373,7 +374,7 @@ void FileServeTests::testPreProcessedFileRoundtrip()
 
         if (data)
         {
-            const std::string orig(data->data(), data->size());
+            const std::string orig = Util::toString(*data);
             PreProcessedFile ppf(file, orig);
             LOK_ASSERT_EQUAL(file, ppf.filename());
             LOK_ASSERT_EQUAL(data->size(), ppf.size());
@@ -399,7 +400,7 @@ void FileServeTests::preProcessedFileSubstitution(
 
         if (data)
         {
-            std::string orig(data->data(), data->size());
+            std::string orig = Util::toString(*data);
             PreProcessedFile ppf(file, orig);
             LOK_ASSERT_EQUAL(file, ppf.filename());
             LOK_ASSERT_EQUAL(data->size(), ppf.size());
