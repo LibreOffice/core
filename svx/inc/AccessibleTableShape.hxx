@@ -125,15 +125,10 @@ private:
     sal_Int64 GetIndexOfSelectedChild( sal_Int64 nSelectedChildIndex ) const;
 };
 
-typedef ::cppu::WeakImplHelper<
-            css::accessibility::XAccessible,
-            css::accessibility::XAccessibleComponent,
-            css::accessibility::XAccessibleContext,
-            css::accessibility::XAccessibleTable,
-            css::accessibility::XAccessibleTableSelection >
-            AccessibleTableHeaderShape_BASE;
-
-class AccessibleTableHeaderShape final : public AccessibleTableHeaderShape_BASE
+class AccessibleTableHeaderShape final
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
+                                         css::accessibility::XAccessibleTable,
+                                         css::accessibility::XAccessibleTableSelection>
 {
 public:
     // bRow, true means rowheader, false means columnheader
@@ -141,9 +136,6 @@ public:
     virtual ~AccessibleTableHeaderShape() override;
     AccessibleTableHeaderShape(const AccessibleTableHeaderShape&) = delete;
     AccessibleTableHeaderShape& operator=(const AccessibleTableHeaderShape&) = delete;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext( ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
@@ -158,12 +150,8 @@ public:
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
     //XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
     virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
     virtual void SAL_CALL grabFocus(  ) override;
@@ -194,6 +182,10 @@ public:
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override ;
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override ;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override ;
+
+protected:
+    virtual css::awt::Rectangle implGetBounds() override;
+
 private:
     bool mbRow;
     rtl::Reference< AccessibleTableShape > mpTable;

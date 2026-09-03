@@ -953,12 +953,6 @@ AccessibleTableHeaderShape::~AccessibleTableHeaderShape()
     mpTable = nullptr;
 }
 
-// XAccessible
-Reference< XAccessibleContext > SAL_CALL AccessibleTableHeaderShape::getAccessibleContext()
-{
-    return this;
-}
-
 // XAccessibleContext
 sal_Int64 SAL_CALL AccessibleTableHeaderShape::getAccessibleChildCount( )
 {
@@ -1012,34 +1006,17 @@ Locale SAL_CALL AccessibleTableHeaderShape::getLocale()
 }
 
 //XAccessibleComponent
-sal_Bool SAL_CALL AccessibleTableHeaderShape::containsPoint ( const css::awt::Point& aPoint )
-{
-    return mpTable->containsPoint( aPoint );
-}
 
 Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleAtPoint ( const css::awt::Point& aPoint)
 {
     return mpTable->getAccessibleAtPoint( aPoint );
 }
 
-css::awt::Rectangle SAL_CALL AccessibleTableHeaderShape::getBounds()
-{
-    return mpTable->getBounds();
-}
-
-css::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocation()
-{
-    return mpTable->getLocation();
-}
+css::awt::Rectangle AccessibleTableHeaderShape::implGetBounds() { return mpTable->getBounds(); }
 
 css::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocationOnScreen()
 {
     return mpTable->getLocationOnScreen();
-}
-
-css::awt::Size SAL_CALL AccessibleTableHeaderShape::getSize()
-{
-    return mpTable->getSize();
 }
 
 sal_Int32 SAL_CALL AccessibleTableHeaderShape::getForeground()
