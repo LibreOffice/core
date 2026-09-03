@@ -90,7 +90,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'id': pictureTabName + '-tab-label',
 				'name': pictureTabName,
 				'context': 'Graphic',
-				'accessibility': { focusBack: true, combination: 'PI', de: 'PI' }
+				'accessibility': { focusBack: true, combination: 'IM', de: 'PI' }
 			},
 			{
 				'text': _('Chart'),
@@ -122,7 +122,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'id': formulaTabName + '-tab-label',
 				'name': formulaTabName,
 				'context': 'Math',
-				'accessibility': { focusBack: true, combination: 'V', de: 'Y' }
+				'accessibility': { focusBack: true, combination: 'EQ', de: 'Y' }
 			}
 		], this._getContributedNotebookbarTabNames(), function(tab) {
 			return {
@@ -2105,7 +2105,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: false,	combination: 'OL', de: null },
 				'more': {
 					'command':'.uno:TransformDialog',
-					'accessibility': { focusBack: true,	combination: 'MA', de: null },
+					'accessibility': { focusBack: true,	combination: 'AL', de: null },
 				},
 				'children' : [
 					{
@@ -2176,7 +2176,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: false,	combination: 'OF', de: null },
 				'more': {
 					'command':'.uno:TransformDialog',
-					'accessibility': { focusBack: true,	combination: 'MR', de: null },
+					'accessibility': { focusBack: true,	combination: 'AR', de: null },
 				},
 				'children' : [
 					{
