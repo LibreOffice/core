@@ -210,28 +210,13 @@ class Dispatcher {
 			function () {
 				app.map.fire('postMessage', { msgId: 'UI_InsertGraphic' });
 			};
-
-		// Opens the import pane and the integration's file chooser with it, filtered to
-		// presentations. The chooser replies with the picked file in an Action_InsertSlides
-		// message, and the pane shows the slides of it.
 		this.actionsMap['importslides'] = function () {
 			const pane = app.map.slideImportPane;
-			if (!pane) return;
-			pane.open();
-			if (pane.isVisible())
-				app.map.fire('postMessage', {
-					msgId: 'UI_InsertFile',
-					args: {
-						callback: 'Action_InsertSlides',
-						mimeTypeFilter: app.LOUtil.presentationMimeFilter,
-					},
-				});
+			if (pane) pane.open();
 		};
 		this.actionsMap['closeimportslides'] = function () {
 			if (app.map.slideImportPane) app.map.slideImportPane.close();
 		};
-		// Refreshes the slides that are linked to another file, one source
-		// file at a time.
 		this.actionsMap['updateslidelinks'] = function () {
 			if (app.map.slideLinks) app.map.slideLinks.updateAll();
 		};

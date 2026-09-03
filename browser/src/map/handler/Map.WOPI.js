@@ -791,20 +791,6 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				this._map.fire('insertfile', {file: msg.Values.File});
 			}
 		}
-		else if (msg.MessageId === 'Action_InsertSlides') {
-			if (msg.Values && (msg.Values.File instanceof Blob)) {
-				app.events.fire('slideimport:pick', {
-					file: msg.Values.File,
-					fileName: msg.Values.FileName
-				});
-			}
-			else if (msg.Values && msg.Values.url) {
-				app.events.fire('slideimport:pick', {
-					url: msg.Values.url,
-					fileName: msg.Values.filename
-				});
-			}
-		}
 		else if (msg.MessageId == 'Action_Paste') {
 			if (msg.Values && msg.Values.Mimetype && msg.Values.Data) {
 				var blob = new Blob(['paste mimetype=' + msg.Values.Mimetype + '\n', msg.Values.Data]);

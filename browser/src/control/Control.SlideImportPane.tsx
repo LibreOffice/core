@@ -40,9 +40,6 @@ class SlideImportPane {
 
   // Whether the pages this pane asked a source to write are still to come.
   private awaitingExport: boolean = false;
-  // A document chosen while its link was still being opened, so that its slides are shown
-  // once it is live. Empty when nothing is waiting.
-  private chosenRemote: string = '';
   // The connected remote document whose slides the pane is showing, named by
   // its WOPISrc, or empty when none is open. The remote's structure and
   // thumbnails below belong to it.
@@ -62,7 +59,6 @@ class SlideImportPane {
     ) as HTMLElement;
     this.panel = document.getElementById('slide-import-panel') as HTMLElement;
 
-    app.events.on('slideimport:pick', this.onPick.bind(this));
     app.events.on('slideimport:statechange', this.onSessionChanged.bind(this));
     app.events.on('slideimport:error', this.onSessionChanged.bind(this));
     app.events.on('slideimport:selection', this.onSelectionChanged.bind(this));
@@ -145,16 +141,6 @@ class SlideImportPane {
   }
 
   private onRelatedDocuments(): void {
-    // A document chosen before its link was live is shown as soon as it is.
-    if (this.chosenRemote) {
-      const chosen = SlideImportSession.findRelatedDocument(this.chosenRemote);
-      if (chosen && chosen.state === 'connected') {
-        const wopiSrc = this.chosenRemote;
-        this.chosenRemote = '';
-        this.openRemoteDocument(wopiSrc);
-      }
-    }
-
     // Drop the open remote view when its link is no longer connected.
     if (this.selectedRemote) {
       const open = SlideImportSession.findRelatedDocument(this.selectedRemote);
@@ -178,68 +164,26 @@ class SlideImportPane {
     SlideImportSession.subscribeRelatedDocument(wopiSrc);
   }
 
-  // The Choose file button opens the integration's file chooser, filtered to presentations,
-  // which replies with the picked file in an Action_InsertSlides message.
-  private chooseFile(): void {
-    app.dispatcher.dispatch('importslides');
-  }
+  // The "Browse files for import" button asks the integration to open its own
+  // file chooser, filtered to presentations, and to add the picked file as a
+  // related document. The integration registers it with a POST to
+  // /cool/relateddocument using the one-time token below. The added file then
+  // arrives in the related documents list, from where its slides are imported.
+  private browseForImport(): void {
+    if (!app.relatedDocumentToken) return;
 
-  // The file the integration's chooser picked, named by its WOPISrc. The integration makes
-  // it available to this document by registering it as a related document, so the pick is
-  // held until it appears in that list; a document that never arrives is said out loud rather
-  // than left to look like nothing happened.
-  private onPick(e: any): void {
-    this.open();
-    if (!this.visible) return;
-
-    const name =
-      e.detail.fileName ||
-      (e.detail.file instanceof File ? e.detail.file.name : '');
-    if (!name) return;
-
-    const chosen = (app.relatedDocuments || []).find(
-      (doc: { wopiSrc: string }) =>
-        this.relatedDocumentName(doc.wopiSrc) === name,
-    );
-
-    if (!chosen) {
-      this.session.showError(
-        _('{0} cannot be imported from yet.').replace('{0}', name),
-      );
-      if (this.visible) this.render();
-      return;
-    }
-
-    this.chooseRelatedDocument(chosen.wopiSrc);
-  }
-
-  // Choosing a document is one gesture: a link to it is opened when the document holds none
-  // yet, and its slides are shown as soon as that link is live.
-  private chooseRelatedDocument(wopiSrc: string): void {
-    const chosen = SlideImportSession.findRelatedDocument(wopiSrc);
-
-    if (chosen && chosen.state === 'connected') {
-      this.openRemoteDocument(wopiSrc);
-      return;
-    }
-
-    // The view holds no token for this source, so it cannot be opened.
-    if (chosen && chosen.state === 'noaccess') {
-      this.session.showError(
-        _('You do not have access to {0}.').replace(
-          '{0}',
-          this.relatedDocumentName(wopiSrc),
-        ),
-      );
-      if (this.visible) this.render();
-      return;
-    }
-
-    // The document is being opened, which the pane says while the link comes up.
-    this.chosenRemote = wopiSrc;
-    this.session.setSource(this.relatedDocumentName(wopiSrc));
-    this.subscribeRelatedDocument(wopiSrc);
-    if (this.visible) this.render();
+    app.map.fire('postMessage', {
+      msgId: 'UI_AddRelatedDocument',
+      args: {
+        Nonce: app.relatedDocumentToken,
+        WOPISrc: window.wopiSrc,
+        Endpoint:
+          window.makeHttpUrl('/cool/relateddocument') +
+          '?WOPISrc=' +
+          encodeURIComponent(window.wopiSrc),
+        mimeTypeFilter: app.LOUtil.presentationMimeFilter,
+      },
+    });
   }
 
   // Sends a read-only client command to a subscribed remote document. Its
@@ -651,10 +595,10 @@ class SlideImportPane {
         <div class="slide-import-body">
           <button
             class="button slide-import-choose"
-            disabled={session.state === 'opening'}
-            onClick={() => this.chooseFile()}
+            disabled={session.state === 'opening' || !app.relatedDocumentToken}
+            onClick={() => this.browseForImport()}
           >
-            {_('Choose file')}
+            {_('Browse files for import')}
           </button>
           {session.fileName && (
             <div class="slide-import-filename">{session.fileName}</div>

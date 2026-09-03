@@ -232,6 +232,13 @@ interface AppInterface {
 	impressTableStyles: ImpressTableStylesService;
 	colorLastSelection: any;
 	serverAudit: any;
+	relatedDocuments: Array<{
+		wopiSrc: string;
+		state: string;
+		lastModifiedTime?: string;
+	}>;
+	// One-time token authorizing this view to call a POST to /cool/relateddocument
+	relatedDocumentToken: string;
 	events: DocEvents;
 	showNavigator: boolean;
 
@@ -448,6 +455,7 @@ interface Window {
 	initializedUI?: () => void; // initializedUI is an optional function, potentially defined in branding
 	setupToolbar(map: any): void; // TODO should be L.Map
 	makeWsUrl: (url: string) => string;
+	makeHttpUrl: (path: string) => string;
 	getBorderStyleUNOCommand: (
 		a: number,
 		b: number,
