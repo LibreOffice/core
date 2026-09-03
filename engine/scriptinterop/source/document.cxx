@@ -263,6 +263,22 @@ public:
 
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
 
+    css::uno::Reference<scriptinterop::XText> appendText(OUString const & text) override {
+        auto const whole = wholeRange();
+        auto const host = whole->getText();
+        host->insertString(host->createTextCursorByRange(whole->getEnd()), text, false);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> deleteText(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive) override
+    {
+        subRange(startOffset, endOffsetInclusive)->setString(OUString());
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> editAsText() override { return this; }
+
     OUString getFontFamily(sal_Int32 offset) override {
         OUString name;
         getProp(runAt(offset), u"CharFontName"_ustr) >>= name;
@@ -301,6 +317,17 @@ public:
             v.push_back(0);
         }
         return cpo::uno::Sequence(v.data(), v.size());
+    }
+
+    css::uno::Reference<scriptinterop::XText> insertText(sal_Int32 offset, OUString const & text)
+        override
+    {
+        auto const whole = wholeRange();
+        auto const host = whole->getText();
+        auto const cursor = host->createTextCursorByRange(whole->getStart());
+        cursor->goRight(offset, false);
+        host->insertString(cursor, text, false);
+        return this;
     }
 
     scriptinterop::ElementType getType() override {
@@ -402,6 +429,11 @@ public:
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
         setStrikethroughOn(subRange(startOffset, endOffsetInclusive), value);
+        return this;
+    }
+
+    css::uno::Reference<scriptinterop::XText> setText(OUString const & text) override {
+        wholeRange()->setString(text);
         return this;
     }
 

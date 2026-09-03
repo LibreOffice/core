@@ -51,29 +51,6 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             return t;
         }
 
-        function selectionFacade() {
-            const sel = activeDoc().getSelection();
-            if (!sel) return null;
-            const ranges = sel.getRangeElements();
-            if (!ranges.length) return null;
-            const wrapped = [];
-            for (let i = 0; i < ranges.length; ++i) {
-                const r = ranges[i];
-                const para = r.getElement();
-                const el = para ? para : textFacade(sel, sel.getText());
-                wrapped.push({
-                    isPartial: function() { return r.isPartial(); },
-                    getElement: function() { return el; },
-                    getStartOffset: function() { return r.getStartOffset(); },
-                    getEndOffsetInclusive: function() { return r.getEndOffsetInclusive(); }
-                });
-            }
-            return {
-                getSelectedElements: function() { return wrapped; },
-                getRangeElements: function() { return wrapped; }
-            };
-        }
-
         function cursorFacade() {
             const xc = activeDoc().getCursor();
             return {
@@ -187,7 +164,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
         globalThis.DocumentApp = {
             getActiveDocument: function() {
                 return {
-                    getSelection: selectionFacade,
+                    getSelection: function() { return activeDoc().getSelection(); },
                     getCursor: cursorFacade,
                     getBody: bodyFacade,
                     getFootnotes: footnotesFacade,

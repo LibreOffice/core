@@ -12,6 +12,12 @@
 module scriptinterop {
 
 interface XText: XElement {
+    XText appendText([in] string text);
+
+    XText deleteText([in] long startOffset, [in] long endOffsetInclusive);
+
+    XText editAsText();
+
     string getFontFamily([in] long offset);
 
     string getLinkUrl([in] long offset);
@@ -19,6 +25,8 @@ interface XText: XElement {
     TextAlignment getTextAlignment([in] long offset);
 
     sequence<long> getTextAttributeIndices();
+
+    XText insertText([in] long offset, [in] string text);
 
     boolean isBold([in] long offset);
 
@@ -52,6 +60,8 @@ interface XText: XElement {
 
     [overload setStrikethrough] XText setStrikethroughRange(
         [in] long startOffset, [in] long endOffsetInclusive, [in] boolean value);
+
+    XText setText([in] string text);
 
     [overload setTextAlignment] XText setTextAlignment([in] TextAlignment textAlignment);
 

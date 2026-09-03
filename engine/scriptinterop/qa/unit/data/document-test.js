@@ -118,6 +118,14 @@ function documentTest() {
     console.assert(appended.editAsText().isBold(0) === false);
     console.assert(appended.editAsText().isBold(4) === true);
 
+    // Exercise the Text mutation methods; each returns Text so the calls chain:
+    appended.editAsText().setText('foo').appendText('bar').insertText(3, '-');
+    console.assert(appended.getText() === 'foo-bar');
+    appended.editAsText().deleteText(3, 3);
+    console.assert(appended.getText() === 'foobar');
+    appended.editAsText().setText('');
+    console.assert(appended.getText() === '');
+
     const listItem = body.appendListItem('Item');
     console.assert(listItem.getType() === DocumentApp.ElementType.LIST_ITEM);
     console.assert(listItem.getText() === 'Item');
