@@ -99,8 +99,16 @@ class OverflowManager {
 			app.layoutingService.cancelLayoutingTask(this.scheduledRefresh);
 		}
 
+		// Force the deferred refresh to actually measure: an intervening
+		// synchronous refreshoverflows call (e.g. from a notebookbar tab
+		// switch) may already have set lastMaxWidth for this window size
+		// from a premature measurement, taken before the newly shown
+		// content (icons, fonts) has settled. Without force, onRefresh's
+		// lastMaxWidth guard would then skip this later, layout-settled
+		// measurement and leave the earlier, possibly wrong fold state in
+		// place.
 		this.scheduledRefresh = app.layoutingService.appendLayoutingTask(() =>
-			this.onRefresh(event),
+			this.onRefresh({ force: true } as Event & { force?: boolean }),
 		);
 	}
 
