@@ -60,6 +60,12 @@ interface XSheet : XBase
     void autoResizeColumns([in] long startColumn, [in] long numColumns);
 
     void autoResizeRows([in] long startRow, [in] long numRows);
+
+    XChart insertChart([in] sequence< XRange > dataRanges, [in] long anchorRow,
+                       [in] long anchorColumn, [in] double width, [in] double height,
+                       [in] boolean firstRowAsHeaders, [in] boolean firstColumnAsHeaders);
+
+    sequence< XChart > getCharts();
 };
 
 };

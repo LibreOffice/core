@@ -9,19 +9,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
+#include <string_view>
 #include <utility>
 #include <vector>
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart/ChartLegendPosition.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
@@ -45,6 +53,9 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/XTableChart.hpp>
+#include <com/sun/star/table/XTableCharts.hpp>
+#include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -63,6 +74,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
+#include <scriptinterop/XChart.hpp>
 #include <scriptinterop/XRange.hpp>
 #include <scriptinterop/XSheet.hpp>
 #include <scriptinterop/XSpreadsheet.hpp>
@@ -538,6 +550,209 @@ rangeAt(cpo::uno::Reference<css::frame::XModel> const& model,
     return new RangeImpl(model, range);
 }
 
+// SpreadsheetApp-style code names a chart type the way its own Charts.ChartType constants do,
+// and each of those names one of Calc's diagram services. A column chart and a bar chart are
+// the same diagram lying on a different axis, so they share a service and differ in Vertical.
+struct DiagramKind
+{
+    OUString service;
+    bool horizontal;
+};
+
+DiagramKind diagramKind(OUString const& chartType, std::u16string_view caller)
+{
+    auto const wanted = chartType.toAsciiLowerCase();
+    if (wanted == "line")
+    {
+        return { u"com.sun.star.chart.LineDiagram"_ustr, false };
+    }
+    if (wanted == "area")
+    {
+        return { u"com.sun.star.chart.AreaDiagram"_ustr, false };
+    }
+    if (wanted == "pie")
+    {
+        return { u"com.sun.star.chart.PieDiagram"_ustr, false };
+    }
+    if (wanted == "donut")
+    {
+        return { u"com.sun.star.chart.DonutDiagram"_ustr, false };
+    }
+    if (wanted == "scatter")
+    {
+        return { u"com.sun.star.chart.XYDiagram"_ustr, false };
+    }
+    if (wanted == "column")
+    {
+        return { u"com.sun.star.chart.BarDiagram"_ustr, false };
+    }
+    if (wanted == "bar")
+    {
+        return { u"com.sun.star.chart.BarDiagram"_ustr, true };
+    }
+    throw cpo::uno::RuntimeException(
+        OUString::Concat(caller) + ": expected line, area, pie, donut, scatter, column or bar, got "
+        + chartType);
+}
+
+css::chart::ChartLegendPosition legendPosition(OUString const& position,
+                                               std::u16string_view caller)
+{
+    auto const wanted = position.toAsciiLowerCase();
+    if (wanted == "right")
+    {
+        return css::chart::ChartLegendPosition_RIGHT;
+    }
+    if (wanted == "left")
+    {
+        return css::chart::ChartLegendPosition_LEFT;
+    }
+    if (wanted == "top")
+    {
+        return css::chart::ChartLegendPosition_TOP;
+    }
+    if (wanted == "bottom")
+    {
+        return css::chart::ChartLegendPosition_BOTTOM;
+    }
+    throw cpo::uno::RuntimeException(
+        OUString::Concat(caller) + ": expected none, right, left, top or bottom, got " + position);
+}
+
+// A chart keeps the collection it lives in and its own name rather than the chart object,
+// because the settings a script changes all live on the embedded chart document behind it,
+// which has to be fetched fresh each time.
+class ChartImpl : public cppu::WeakImplHelper<scriptinterop::XChart>
+{
+public:
+    ChartImpl(cpo::uno::Reference<css::table::XTableCharts> const& charts, OUString const& name)
+        : charts_(charts)
+        , name_(name)
+    {
+    }
+
+    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return tableChart(); }
+
+    OUString SAL_CALL getName() override { return name_; }
+
+    cpo::uno::Reference<scriptinterop::XChart> SAL_CALL setChartType(OUString const& chartType)
+        override
+    {
+        auto const kind = diagramKind(chartType, u"setChartType"_ustr);
+        try
+        {
+            auto const document = chartDocument();
+            cpo::uno::Reference<css::lang::XMultiServiceFactory> const factory(
+                document, cpo::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::chart::XDiagram> const diagram(
+                factory->createInstance(kind.service), cpo::uno::UNO_QUERY_THROW);
+            document->setDiagram(diagram);
+            cpo::uno::Reference<css::beans::XPropertySet> const props(diagram,
+                                                                       cpo::uno::UNO_QUERY_THROW);
+            if (props->getPropertySetInfo()->hasPropertyByName(u"Vertical"_ustr))
+            {
+                props->setPropertyValue(u"Vertical"_ustr,
+                                        cpo::uno::Any(kind.horizontal));
+            }
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("setChartType: ") + e.Message);
+        }
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XChart> SAL_CALL setTitle(OUString const& title) override
+    {
+        try
+        {
+            auto const document = chartDocument();
+            cpo::uno::Reference<css::beans::XPropertySet> const documentProps(
+                document, cpo::uno::UNO_QUERY_THROW);
+            documentProps->setPropertyValue(u"HasMainTitle"_ustr, cpo::uno::Any(true));
+            cpo::uno::Reference<css::beans::XPropertySet> const titleProps(
+                document->getTitle(), cpo::uno::UNO_QUERY_THROW);
+            titleProps->setPropertyValue(u"String"_ustr, cpo::uno::Any(title));
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("setTitle: ") + e.Message);
+        }
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XChart> SAL_CALL setLegendPosition(OUString const& position)
+        override
+    {
+        if (position.toAsciiLowerCase() == "none")
+        {
+            try
+            {
+                cpo::uno::Reference<css::beans::XPropertySet> const documentProps(
+                    chartDocument(), cpo::uno::UNO_QUERY_THROW);
+                documentProps->setPropertyValue(u"HasLegend"_ustr, cpo::uno::Any(false));
+            }
+            catch (cpo::uno::Exception const& e)
+            {
+                throw cpo::uno::RuntimeException(OUString::Concat("setLegendPosition: ")
+                                                 + e.Message);
+            }
+            return this;
+        }
+        auto const alignment = legendPosition(position, u"setLegendPosition"_ustr);
+        try
+        {
+            auto const document = chartDocument();
+            cpo::uno::Reference<css::beans::XPropertySet> const documentProps(
+                document, cpo::uno::UNO_QUERY_THROW);
+            documentProps->setPropertyValue(u"HasLegend"_ustr, cpo::uno::Any(true));
+            cpo::uno::Reference<css::beans::XPropertySet> const legendProps(
+                document->getLegend(), cpo::uno::UNO_QUERY_THROW);
+            legendProps->setPropertyValue(u"Alignment"_ustr, cpo::uno::Any(alignment));
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("setLegendPosition: ") + e.Message);
+        }
+        return this;
+    }
+
+    void SAL_CALL remove() override
+    {
+        try
+        {
+            charts_->removeByName(name_);
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("remove: ") + e.Message);
+        }
+    }
+
+private:
+    cpo::uno::Reference<css::table::XTableChart> tableChart()
+    {
+        if (!charts_->hasByName(name_))
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("the chart ") + name_
+                                             + " is no longer on its sheet");
+        }
+        return cpo::uno::Reference<css::table::XTableChart>(charts_->getByName(name_),
+                                                             cpo::uno::UNO_QUERY_THROW);
+    }
+
+    cpo::uno::Reference<css::chart::XChartDocument> chartDocument()
+    {
+        cpo::uno::Reference<css::document::XEmbeddedObjectSupplier> const supplier(
+            tableChart(), cpo::uno::UNO_QUERY_THROW);
+        return cpo::uno::Reference<css::chart::XChartDocument>(supplier->getEmbeddedObject(),
+                                                                cpo::uno::UNO_QUERY_THROW);
+    }
+
+    cpo::uno::Reference<css::table::XTableCharts> charts_;
+    OUString name_;
+};
+
 class SheetImpl : public cppu::WeakImplHelper<scriptinterop::XSheet>
 {
 public:
@@ -559,40 +774,7 @@ public:
     cpo::uno::Reference<scriptinterop::XRange>
         SAL_CALL getRange(OUString const& a1Notation) override
     {
-        OUString qualifiedSheet;
-        OUString cells;
-        auto const qualified = splitSheetQualifiedName(a1Notation, qualifiedSheet, cells);
-        cpo::uno::Reference<css::table::XCellRange> sheetRange;
-        if (qualified)
-        {
-            cpo::uno::Reference<css::container::XNameAccess> const sheets(
-                documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
-            if (!sheets->hasByName(qualifiedSheet))
-            {
-                throw cpo::uno::RuntimeException(OUString::Concat("getRange: no sheet named ")
-                                                 + qualifiedSheet);
-            }
-            sheetRange.set(sheets->getByName(qualifiedSheet), cpo::uno::UNO_QUERY_THROW);
-        }
-        else
-        {
-            sheetRange.set(sheet_, cpo::uno::UNO_QUERY_THROW);
-        }
-        cpo::uno::Reference<css::table::XCellRange> range;
-        try
-        {
-            range = sheetRange->getCellRangeByName(cells);
-        }
-        catch (cpo::uno::Exception const& e)
-        {
-            throw cpo::uno::RuntimeException(OUString::Concat("getRange: ") + e.Message);
-        }
-        if (!range.is())
-        {
-            throw cpo::uno::RuntimeException(
-                OUString::Concat("getRange: expected a valid A1-style range, got ") + a1Notation);
-        }
-        return new RangeImpl(model_, range);
+        return new RangeImpl(model_, cellRangeByA1(a1Notation, u"getRange"_ustr));
     }
 
     cpo::uno::Reference<scriptinterop::XRange> SAL_CALL getRangeAtCell(sal_Int32 row,
@@ -760,6 +942,88 @@ public:
         }
     }
 
+    cpo::uno::Reference<scriptinterop::XChart> SAL_CALL insertChart(
+        cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRange>> const& dataRanges,
+        sal_Int32 anchorRow, sal_Int32 anchorColumn, double width, double height,
+        bool firstRowAsHeaders, bool firstColumnAsHeaders) override
+    {
+        if (anchorRow < 1 || anchorColumn < 1)
+        {
+            throw cpo::uno::RuntimeException(
+                u"insertChart: expected an anchor row and column of at least 1"_ustr);
+        }
+        if (!dataRanges.hasElements())
+        {
+            throw cpo::uno::RuntimeException(u"insertChart: expected at least one data range"_ustr);
+        }
+        auto const widthHundredthMm = extentToHundredthMm(width);
+        auto const heightHundredthMm = extentToHundredthMm(height);
+        std::vector<css::table::CellRangeAddress> addresses;
+        for (auto const& dataRange : dataRanges)
+        {
+            if (!dataRange.is())
+            {
+                throw cpo::uno::RuntimeException(u"insertChart: expected a data range"_ustr);
+            }
+            // A range reports the cells behind it, which carry the sheet they sit on, so a
+            // chart can take its data from a sheet other than the one holding the chart.
+            cpo::uno::Reference<css::sheet::XCellRangeAddressable> const addressable(
+                dataRange->getuno(), cpo::uno::UNO_QUERY_THROW);
+            addresses.emplace_back(addressable->getRangeAddress());
+        }
+        cpo::uno::Reference<css::table::XTableChartsSupplier> const supplier(
+            sheet_, cpo::uno::UNO_QUERY_THROW);
+        auto const charts = supplier->getCharts();
+        auto const name = freeChartName();
+        // The chart sits where the anchor cell starts, which is the total width of the columns
+        // and the total height of the rows in front of it.
+        css::awt::Rectangle const rect(columnsExtent(anchorColumn - 1), rowsExtent(anchorRow - 1),
+                                       widthHundredthMm, heightHundredthMm);
+        try
+        {
+            charts->addNewByName(name, rect,
+                                 cpo::uno::Sequence<css::table::CellRangeAddress>(addresses.data(),
+                                                                                  addresses.size()),
+                                 firstRowAsHeaders, firstColumnAsHeaders);
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("insertChart: ") + e.Message);
+        }
+        if (!charts->hasByName(name))
+        {
+            // Calc drops the request without a word when the chart module is not part of the
+            // installation.
+            throw cpo::uno::RuntimeException(u"insertChart: this build cannot create charts"_ustr);
+        }
+        return new ChartImpl(charts, name);
+    }
+
+    // The charts come back in the order the collection keeps them, which is neither the order
+    // a script added them nor the order they lie on the sheet.
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XChart>> SAL_CALL getCharts() override
+    {
+        try
+        {
+            cpo::uno::Reference<css::table::XTableChartsSupplier> const supplier(
+                sheet_, cpo::uno::UNO_QUERY_THROW);
+            auto const charts = supplier->getCharts();
+            auto const names = charts->getElementNames();
+            std::vector<cpo::uno::Reference<scriptinterop::XChart>> result;
+            result.reserve(names.getLength());
+            for (auto const& name : names)
+            {
+                result.emplace_back(new ChartImpl(charts, name));
+            }
+            return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XChart>>(result.data(),
+                                                                                   result.size());
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat("getCharts: ") + e.Message);
+        }
+    }
+
 private:
     void removeRows(sal_Int32 startRow, sal_Int32 numRows, std::u16string_view name)
     {
@@ -799,6 +1063,106 @@ private:
     cpo::uno::Reference<css::table::XColumnRowRange> columnRowRange()
     {
         return cpo::uno::Reference<css::table::XColumnRowRange>(sheet_, cpo::uno::UNO_QUERY_THROW);
+    }
+
+    // Resolves an A1 name against this sheet, or against the sheet a qualified name points at.
+    cpo::uno::Reference<css::table::XCellRange> cellRangeByA1(OUString const& a1Notation,
+                                                                std::u16string_view caller)
+    {
+        OUString qualifiedSheet;
+        OUString cells;
+        cpo::uno::Reference<css::table::XCellRange> sheetRange;
+        if (splitSheetQualifiedName(a1Notation, qualifiedSheet, cells))
+        {
+            cpo::uno::Reference<css::container::XNameAccess> const sheets(
+                documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
+            if (!sheets->hasByName(qualifiedSheet))
+            {
+                throw cpo::uno::RuntimeException(OUString::Concat(caller) + ": no sheet named "
+                                                 + qualifiedSheet);
+            }
+            sheetRange.set(sheets->getByName(qualifiedSheet), cpo::uno::UNO_QUERY_THROW);
+        }
+        else
+        {
+            sheetRange.set(sheet_, cpo::uno::UNO_QUERY_THROW);
+        }
+        cpo::uno::Reference<css::table::XCellRange> range;
+        try
+        {
+            range = sheetRange->getCellRangeByName(cells);
+        }
+        catch (cpo::uno::Exception const& e)
+        {
+            throw cpo::uno::RuntimeException(OUString::Concat(caller) + ": " + e.Message);
+        }
+        if (!range.is())
+        {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat(caller) + ": expected a valid A1-style range, got " + a1Notation);
+        }
+        return range;
+    }
+
+    // The first "Chart N" name that no chart anywhere in the document holds yet. A chart is an
+    // embedded object, and those share one pool across the whole document, so Calc refuses a
+    // name another sheet has already taken even though that sheet's own collection is the only
+    // one this sheet can see.
+    OUString freeChartName()
+    {
+        cpo::uno::Reference<css::container::XIndexAccess> const sheets(
+            documentSheets(model_), cpo::uno::UNO_QUERY_THROW);
+        auto const sheetCount = sheets->getCount();
+        std::vector<cpo::uno::Reference<css::table::XTableCharts>> collections;
+        collections.reserve(sheetCount);
+        for (sal_Int32 i = 0; i != sheetCount; ++i)
+        {
+            cpo::uno::Reference<css::table::XTableChartsSupplier> const supplier(
+                sheets->getByIndex(i), cpo::uno::UNO_QUERY_THROW);
+            collections.emplace_back(supplier->getCharts());
+        }
+        for (sal_Int32 i = 1;; ++i)
+        {
+            OUString const name = OUString::Concat("Chart ") + OUString::number(i);
+            if (std::none_of(collections.begin(), collections.end(),
+                             [&name](auto const& charts) { return charts->hasByName(name); }))
+            {
+                return name;
+            }
+        }
+    }
+
+    // A hidden column or row keeps the width it would have if it were shown, but takes up no
+    // space on the sheet, so it must not push the anchor along.
+    static sal_Int32 visibleExtent(cpo::uno::Reference<css::container::XIndexAccess> const& lines,
+                                   OUString const& sizeProperty, sal_Int32 count)
+    {
+        sal_Int32 extent = 0;
+        for (sal_Int32 i = 0; i != count; ++i)
+        {
+            cpo::uno::Reference<css::beans::XPropertySet> const props(lines->getByIndex(i),
+                                                                       cpo::uno::UNO_QUERY_THROW);
+            bool visible = true;
+            props->getPropertyValue(u"IsVisible"_ustr) >>= visible;
+            if (!visible)
+            {
+                continue;
+            }
+            sal_Int32 size = 0;
+            props->getPropertyValue(sizeProperty) >>= size;
+            extent += size;
+        }
+        return extent;
+    }
+
+    sal_Int32 columnsExtent(sal_Int32 count)
+    {
+        return visibleExtent(columnRowRange()->getColumns(), u"Width"_ustr, count);
+    }
+
+    sal_Int32 rowsExtent(sal_Int32 count)
+    {
+        return visibleExtent(columnRowRange()->getRows(), u"Height"_ustr, count);
     }
 
     // The bounding box of every non-empty cell on the sheet.

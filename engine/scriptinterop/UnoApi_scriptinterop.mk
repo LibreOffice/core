@@ -35,6 +35,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XBase \
     XBlob \
     XBody \
+    XChart \
     XClientRuntime \
     XContainerElement \
     XCursor \

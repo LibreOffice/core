@@ -14,8 +14,14 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart/ChartLegendPosition.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -28,7 +34,7 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#include <cpo/uno/Reference.hxx>
+#include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -39,6 +45,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <scriptinterop/XChart.hpp>
 #include <scriptinterop/XRange.hpp>
 #include <scriptinterop/XSheet.hpp>
 #include <scriptinterop/XSpreadsheet.hpp>
@@ -795,6 +802,213 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoResizeColumnsAndRows)
     CPPUNIT_ASSERT(nHeightAfter > 0);
 
     CPPUNIT_ASSERT_THROW(xSheet->autoResizeColumns(0, 1), cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertChart)
+{
+    auto const xSheet = loadSpreadsheet()->getActiveSheet();
+    xSheet->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(u"Rate"_ustr));
+    xSheet->getRange(u"A2"_ustr)->setValue(cpo::uno::Any(1.0));
+    xSheet->getRange(u"A3"_ustr)->setValue(cpo::uno::Any(2.0));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheet->getCharts().getLength());
+    auto const xChart
+        = xSheet->insertChart({ xSheet->getRange(u"A1:A3"_ustr) }, 5, 3, 300, 200, true, false);
+    CPPUNIT_ASSERT(xChart.is());
+
+    auto const xCharts = xSheet->getCharts();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCharts.getLength());
+    CPPUNIT_ASSERT_EQUAL(xChart->getName(), xCharts[0]->getName());
+    // The chart covers the data it was given.
+    cpo::uno::Reference<css::table::XTableChart> const xTableChart(xChart->getuno(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    auto const aRanges = xTableChart->getRanges();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRanges.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRanges[0].StartColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRanges[0].StartRow);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aRanges[0].EndRow);
+    CPPUNIT_ASSERT(xTableChart->getHasColumnHeaders());
+    CPPUNIT_ASSERT(!xTableChart->getHasRowHeaders());
+
+    xChart->remove();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheet->getCharts().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertChartAnchorsAtItsCell)
+{
+    auto const xSheet = loadSpreadsheet()->getActiveSheet();
+    xSheet->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(1.0));
+    auto const xRange = xSheet->getRange(u"A1"_ustr);
+    cpo::uno::Reference<css::drawing::XDrawPageSupplier> const xPageSupplier(
+        xSheet->getuno(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> const xShapes(xPageSupplier->getDrawPage(),
+                                                                    cpo::uno::UNO_QUERY_THROW);
+    auto const newestShapePosition = [&xShapes]() {
+        cpo::uno::Reference<css::drawing::XShape> const xShape(
+            xShapes->getByIndex(xShapes->getCount() - 1), cpo::uno::UNO_QUERY_THROW);
+        return xShape->getPosition();
+    };
+
+    // A chart anchored at the very first cell starts at the corner of the sheet.
+    xSheet->insertChart({ xRange }, 1, 1, 300, 200, false, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), newestShapePosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), newestShapePosition().Y);
+
+    // Anchoring further along puts the chart past the columns and rows in front of it.
+    xSheet->insertChart({ xRange }, 4, 3, 300, 200, false, false);
+    auto const aAnchored = newestShapePosition();
+    CPPUNIT_ASSERT(aAnchored.X > 0);
+    CPPUNIT_ASSERT(aAnchored.Y > 0);
+
+    // A hidden column takes up no room, so the same anchor moves left once one is hidden.
+    cpo::uno::Reference<css::table::XColumnRowRange> const xColumnRowRange(
+        xSheet->getuno(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const xColumnProps(
+        xColumnRowRange->getColumns()->getByIndex(0), cpo::uno::UNO_QUERY_THROW);
+    xColumnProps->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
+    xSheet->insertChart({ xRange }, 4, 3, 300, 200, false, false);
+    CPPUNIT_ASSERT(newestShapePosition().X < aAnchored.X);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertChartFromAnotherSheet)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    xSpreadsheet->insertSheet(u"Rate data"_ustr);
+    auto const xData = xSpreadsheet->getSheetByName(u"Rate data"_ustr);
+    xData->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(1.0));
+    xData->getRange(u"A2"_ustr)->setValue(cpo::uno::Any(2.0));
+
+    // The chart goes on one sheet while its data stays on another, which is how the dataset and
+    // the chart usually sit apart in a real document.
+    auto const xSheet = xSpreadsheet->getActiveSheet();
+    auto const xChart = xSheet->insertChart({ xSheet->getRange(u"Rate data!A1:A2"_ustr) }, 1, 3,
+                                            300, 200, false, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSheet->getCharts().getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xData->getCharts().getLength());
+    cpo::uno::Reference<css::table::XTableChart> const xTableChart(xChart->getuno(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    auto const aRanges = xTableChart->getRanges();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRanges.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aRanges[0].Sheet);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertChartRejectsBadArguments)
+{
+    auto const xSheet = loadSpreadsheet()->getActiveSheet();
+    auto const xRange = xSheet->getRange(u"A1"_ustr);
+    CPPUNIT_ASSERT_THROW(xSheet->insertChart({ xRange }, 0, 1, 300, 200, false, false),
+                         cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xSheet->insertChart({}, 1, 1, 300, 200, false, false),
+                         cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xSheet->insertChart({ xRange }, 1, 1, -300, 200, false, false),
+                         cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(
+        xSheet->insertChart({ cpo::uno::Reference<scriptinterop::XRange>() }, 1, 1, 300, 200, false,
+                            false),
+        cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChartTypeTitleAndLegend)
+{
+    auto const xSheet = loadSpreadsheet()->getActiveSheet();
+    xSheet->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(1.0));
+    xSheet->getRange(u"A2"_ustr)->setValue(cpo::uno::Any(2.0));
+    auto const xChart
+        = xSheet->insertChart({ xSheet->getRange(u"A1:A2"_ustr) }, 1, 3, 300, 200, false, false);
+
+    xChart->setChartType(u"line"_ustr)->setTitle(u"USD Exchange rates"_ustr)
+        ->setLegendPosition(u"right"_ustr);
+
+    cpo::uno::Reference<css::table::XTableChart> const xTableChart(xChart->getuno(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedObjectSupplier> const xSupplier(
+        xTableChart, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::chart::XChartDocument> const xDocument(xSupplier->getEmbeddedObject(),
+                                                                     cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart.LineDiagram"_ustr,
+                         xDocument->getDiagram()->getDiagramType());
+    cpo::uno::Reference<css::beans::XPropertySet> const xTitleProps(xDocument->getTitle(),
+                                                                     cpo::uno::UNO_QUERY_THROW);
+    OUString sTitle;
+    xTitleProps->getPropertyValue(u"String"_ustr) >>= sTitle;
+    CPPUNIT_ASSERT_EQUAL(u"USD Exchange rates"_ustr, sTitle);
+    cpo::uno::Reference<css::beans::XPropertySet> const xDocumentProps(xDocument,
+                                                                        cpo::uno::UNO_QUERY_THROW);
+    bool bHasLegend = false;
+    xDocumentProps->getPropertyValue(u"HasLegend"_ustr) >>= bHasLegend;
+    CPPUNIT_ASSERT(bHasLegend);
+    cpo::uno::Reference<css::beans::XPropertySet> const xLegendProps(xDocument->getLegend(),
+                                                                      cpo::uno::UNO_QUERY_THROW);
+    css::chart::ChartLegendPosition eAlignment = css::chart::ChartLegendPosition_NONE;
+    xLegendProps->getPropertyValue(u"Alignment"_ustr) >>= eAlignment;
+    CPPUNIT_ASSERT_EQUAL(css::chart::ChartLegendPosition_RIGHT, eAlignment);
+
+    // A column chart and a bar chart share a diagram, and differ in which axis it stands on.
+    xChart->setChartType(u"column"_ustr);
+    cpo::uno::Reference<css::beans::XPropertySet> const xDiagramProps(xDocument->getDiagram(),
+                                                                       cpo::uno::UNO_QUERY_THROW);
+    bool bVertical = true;
+    xDiagramProps->getPropertyValue(u"Vertical"_ustr) >>= bVertical;
+    CPPUNIT_ASSERT(!bVertical);
+    xChart->setChartType(u"bar"_ustr);
+    cpo::uno::Reference<css::beans::XPropertySet> const xBarProps(xDocument->getDiagram(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    xBarProps->getPropertyValue(u"Vertical"_ustr) >>= bVertical;
+    CPPUNIT_ASSERT(bVertical);
+
+    // Changing the type keeps the title, since the title belongs to the chart rather than to
+    // the diagram the type replaces.
+    xTitleProps->getPropertyValue(u"String"_ustr) >>= sTitle;
+    CPPUNIT_ASSERT_EQUAL(u"USD Exchange rates"_ustr, sTitle);
+
+    // Hiding the legend leaves the chart alone otherwise.
+    xChart->setLegendPosition(u"none"_ustr);
+    xDocumentProps->getPropertyValue(u"HasLegend"_ustr) >>= bHasLegend;
+    CPPUNIT_ASSERT(!bHasLegend);
+
+    CPPUNIT_ASSERT_THROW(xChart->setChartType(u"sunburst"_ustr), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xChart->setLegendPosition(u"sideways"_ustr), cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertChartOnSeveralSheets)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    xSpreadsheet->insertSheet(u"Other"_ustr);
+    auto const xSheet1 = xSpreadsheet->getSheetByName(u"Sheet1"_ustr);
+    auto const xOther = xSpreadsheet->getSheetByName(u"Other"_ustr);
+    xSheet1->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(1.0));
+    xOther->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(2.0));
+
+    // Charts are embedded objects, and a name one sheet has taken is taken for the whole
+    // document, so a chart on a second sheet has to be given a name of its own.
+    auto const xFirst
+        = xSheet1->insertChart({ xSheet1->getRange(u"A1"_ustr) }, 1, 3, 300, 200, false, false);
+    auto const xSecond
+        = xOther->insertChart({ xOther->getRange(u"A1"_ustr) }, 1, 3, 300, 200, false, false);
+    CPPUNIT_ASSERT(xFirst->getName() != xSecond->getName());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSheet1->getCharts().getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xOther->getCharts().getLength());
+
+    // Two charts on one sheet both come back, and still under names of their own.
+    auto const xThird
+        = xSheet1->insertChart({ xSheet1->getRange(u"A1"_ustr) }, 20, 3, 300, 200, false, false);
+    auto const xCharts = xSheet1->getCharts();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xCharts.getLength());
+    CPPUNIT_ASSERT(xCharts[0]->getName() != xCharts[1]->getName());
+    CPPUNIT_ASSERT(xThird->getName() != xFirst->getName());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChartOutlivesItsSheetReference)
+{
+    auto const xSpreadsheet = loadSpreadsheet();
+    auto const xSheet = xSpreadsheet->getActiveSheet();
+    xSheet->getRange(u"A1"_ustr)->setValue(cpo::uno::Any(1.0));
+    auto const xChart
+        = xSheet->insertChart({ xSheet->getRange(u"A1"_ustr) }, 1, 3, 300, 200, false, false);
+    // A chart that has been taken off its sheet reports that rather than handing back a stale
+    // chart object.
+    xChart->remove();
+    CPPUNIT_ASSERT_THROW(xChart->setTitle(u"gone"_ustr), cpo::uno::RuntimeException);
 }
 }
 
