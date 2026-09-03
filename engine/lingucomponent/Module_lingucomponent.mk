@@ -23,6 +23,10 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_spell \
 	StaticLibrary_ulingu \
 ))
+
+$(eval $(call gb_Module_add_check_targets,lingucomponent,\
+	CppunitTest_lingucomponent_spell \
+))
 endif
 
 ifeq ($(ENABLE_CURL),TRUE)
