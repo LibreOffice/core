@@ -47,14 +47,34 @@ class SpellChecker :
         css::lang::XServiceDisplayName
     >
 {
+
+    // The word list of one dictionary: the path of its .aff/.dic file pair without the
+    // extension, the Hunspell instance loaded from those files, and the text encoding that
+    // instance expects. m_pDict stays null until Load has run.
+    struct DictInstance
+    {
+        OUString m_aDName;
+        std::unique_ptr<Hunspell> m_pDict;
+        rtl_TextEncoding m_aDEnc = RTL_TEXTENCODING_DONTKNOW;
+
+        explicit DictInstance(OUString const& i_rDName)
+            : m_aDName(i_rDName)
+        {}
+
+        void Load();
+    };
+
+    // One entry per locale. A dictionary that names several locales gets one DictItem for each
+    // of them, and those items point to the same DictInstance.
     struct DictItem
     {
-        OUString                  m_aDName;
-        css::lang::Locale         m_aDLoc;
-        std::shared_ptr<Hunspell> m_pDict;
-        rtl_TextEncoding          m_aDEnc;
+        css::lang::Locale m_aDLoc;
+        std::shared_ptr<DictInstance> m_pInstance;
 
-        DictItem(OUString i_DName, css::lang::Locale i_DLoc, rtl_TextEncoding i_DEnc);
+        DictItem(css::lang::Locale const& i_rDLocale, std::shared_ptr<DictInstance> const& i_pInstance)
+            : m_aDLoc(i_rDLocale)
+            , m_pInstance(i_pInstance)
+        {}
     };
 
     std::vector<DictItem> m_DictItems;

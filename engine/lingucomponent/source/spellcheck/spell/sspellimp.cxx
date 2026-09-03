@@ -78,11 +78,34 @@ SpellChecker::SpellChecker() :
 {
 }
 
-SpellChecker::DictItem::DictItem(OUString i_DName, Locale i_DLoc, rtl_TextEncoding i_DEnc)
-    : m_aDName(std::move(i_DName))
-    , m_aDLoc(std::move(i_DLoc))
-    , m_aDEnc(i_DEnc)
+
+void SpellChecker::DictInstance::Load()
 {
+    OUString dicpath = m_aDName + ".dic";
+    OUString affpath = m_aDName + ".aff";
+    OUString dict;
+    OUString aff;
+    osl::FileBase::getSystemPathFromFileURL(dicpath, dict);
+    osl::FileBase::getSystemPathFromFileURL(affpath, aff);
+#if defined(_WIN32)
+    // workaround for Windows specific problem that the
+    // path length in calls to 'fopen' is limited to somewhat
+    // about 120+ characters which will usually be exceed when
+    // using dictionaries as extensions. (Hunspell waits UTF-8 encoded
+    // path with \\?\ long path prefix.)
+    OString aTmpaff = Win_AddLongPathPrefix(OUStringToOString(aff, RTL_TEXTENCODING_UTF8));
+    OString aTmpdict = Win_AddLongPathPrefix(OUStringToOString(dict, RTL_TEXTENCODING_UTF8));
+#else
+    OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
+    OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
+#endif
+
+    m_pDict = std::make_unique<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
+#if defined(H_DEPRECATED)
+    m_aDEnc = getTextEncodingFromCharset(m_pDict->get_dict_encoding().c_str());
+#else
+    m_aDEnc = getTextEncodingFromCharset(m_pDict->get_dic_encoding());
+#endif
 }
 
 SpellChecker::~SpellChecker()
@@ -197,19 +220,21 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 {
                     const cpo::uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
 
+                    // also both files have to be in the same directory and the
+                    // file names must only differ in the extension (.aff/.dic).
+                    // Thus we use the first location only and strip the extension part.
+                    OUString aLocation = dict.aLocations[0];
+                    sal_Int32 nPosition = aLocation.lastIndexOf('.');
+                    aLocation = aLocation.copy(0, nPosition);
+
                     // currently only one language per dictionary is supported in the actual implementation...
                     // Thus here we work-around this by adding the same dictionary several times.
-                    // Once for each of its supported locales.
+                    // Once for each of its supported locales. The entries share one instance, so
+                    // the word list behind them is loaded only once.
+                    auto pInstance = std::make_shared<DictInstance>(aLocation);
                     for (auto const& localeName : aLocaleNames)
                     {
-                        // also both files have to be in the same directory and the
-                        // file names must only differ in the extension (.aff/.dic).
-                        // Thus we use the first location only and strip the extension part.
-                        OUString aLocation = dict.aLocations[0];
-                        sal_Int32 nPos = aLocation.lastIndexOf( '.' );
-                        aLocation = aLocation.copy( 0, nPos );
-
-                        m_DictItems.emplace_back(aLocation, LanguageTag::convertToLocale(localeName), RTL_TEXTENCODING_DONTKNOW);
+                        m_DictItems.emplace_back(LanguageTag::convertToLocale(localeName), pInstance);
                     }
                 }
             }
@@ -294,53 +319,13 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
 
             if (rLocale == currDict.m_aDLoc)
             {
-                if (!currDict.m_pDict)
-                {
-                    // One entry per locale, and a dictionary that names several locales
-                    // appears once for each of them, so the files may already be loaded
-                    // under a sibling entry. Take that one rather than building a second
-                    // copy of the same word list.
-                    for (auto& loadedDict : m_DictItems)
-                    {
-                        if (loadedDict.m_pDict && loadedDict.m_aDName == currDict.m_aDName)
-                        {
-                            currDict.m_pDict = loadedDict.m_pDict;
-                            currDict.m_aDEnc = loadedDict.m_aDEnc;
-                            break;
-                        }
-                    }
-                }
-
-                if (!currDict.m_pDict)
-                {
-                    OUString dicpath = currDict.m_aDName + ".dic";
-                    OUString affpath = currDict.m_aDName + ".aff";
-                    OUString dict;
-                    OUString aff;
-                    osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
-                    osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-#if defined(_WIN32)
-                    // workaround for Windows specific problem that the
-                    // path length in calls to 'fopen' is limited to somewhat
-                    // about 120+ characters which will usually be exceed when
-                    // using dictionaries as extensions. (Hunspell waits UTF-8 encoded
-                    // path with \\?\ long path prefix.)
-                    OString aTmpaff = Win_AddLongPathPrefix(OUStringToOString(aff, RTL_TEXTENCODING_UTF8));
-                    OString aTmpdict = Win_AddLongPathPrefix(OUStringToOString(dict, RTL_TEXTENCODING_UTF8));
-#else
-                    OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
-                    OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
-#endif
-
-                    currDict.m_pDict = std::make_shared<Hunspell>(aTmpaff.getStr(),aTmpdict.getStr());
-#if defined(H_DEPRECATED)
-                    currDict.m_aDEnc = getTextEncodingFromCharset(currDict.m_pDict->get_dict_encoding().c_str());
-#else
-                    currDict.m_aDEnc = getTextEncodingFromCharset(currDict.m_pDict->get_dic_encoding());
-#endif
-                }
-                pMS  = currDict.m_pDict.get();
-                eEnc = currDict.m_aDEnc;
+                // The instance is shared with the entries for the dictionary's other locales,
+                // so loading it here loads it for them as well.
+                DictInstance& rInstance = *currDict.m_pInstance;
+                if (!rInstance.m_pDict)
+                    rInstance.Load();
+                pMS  = rInstance.m_pDict.get();
+                eEnc = rInstance.m_aDEnc;
             }
 
             if (pMS)
@@ -488,16 +473,30 @@ Reference< XSpellAlternatives >
         LanguageType nLang = LinguLocaleToLanguage( rLocale );
         int numsug = 0;
 
+        // A SPELLML add query inserts a word into the Hunspell instance it runs against, and
+        // that word belongs to the locale of the query alone.
+        const bool bAddQuery = nWord.match(SPELL_XML, 0)
+            && (nWord.indexOf("type='add'") >= 0 || nWord.indexOf("type=\"add\"") >= 0);
+
         Sequence< OUString > aStr( 0 );
-        for (const auto& currDict : m_DictItems)
+        for (auto& currDict : m_DictItems)
         {
             pMS = nullptr;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
 
             if (rLocale == currDict.m_aDLoc)
             {
-                pMS  = currDict.m_pDict.get();
-                eEnc = currDict.m_aDEnc;
+                if (bAddQuery && currDict.m_pInstance->m_pDict && currDict.m_pInstance.use_count() > 1)
+                {
+                    // Run the add query against a freshly loaded instance owned by this entry
+                    // alone, so the inserted word stays scoped to this locale and the instance
+                    // the sibling locale entries point to keeps the plain file content.
+                    auto pOwnInstance = std::make_shared<DictInstance>(currDict.m_pInstance->m_aDName);
+                    pOwnInstance->Load();
+                    currDict.m_pInstance = std::move(pOwnInstance);
+                }
+                pMS  = currDict.m_pInstance->m_pDict.get();
+                eEnc = currDict.m_pInstance->m_aDEnc;
             }
 
             if (pMS)
