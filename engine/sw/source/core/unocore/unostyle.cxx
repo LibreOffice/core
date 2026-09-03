@@ -220,7 +220,10 @@ private:
             , m_fTranslateIndex(fTranslateIndex)
         { }
     template<SfxStyleFamily> static inline sal_Int32 GetCountOrName(const SwDoc& rDoc, UIName* pString, sal_Int32 nIndex);
-    template<SfxStyleFamily> static inline SwPoolFormatId TranslateIndex(const sal_uInt16 nIndex) { return SwPoolFormatId(nIndex); }
+    // Table and cell styles have no pool ids of their own to map an index onto; they are
+    // always looked up by name. Taking the raw index as a pool id would make a large enough
+    // index land on a character or paragraph style's id instead.
+    template<SfxStyleFamily> static inline SwPoolFormatId TranslateIndex(const sal_uInt16) { return SwPoolFormatId::UNKNOWN; }
 };
 
 template<>
