@@ -1846,7 +1846,7 @@ struct COKitDocument
     virtual void setPart(int nPart) = 0;
 
     /// Get the current part's name.
-    virtual char* getPartName(int nPart) = 0;
+    virtual std::string getPartName(int nPart) = 0;
 
     virtual void setPartMode(COKitPartMode eMode) = 0;
 

@@ -166,11 +166,10 @@ static void testTile( COKitDocument *pDocument, int max_parts,
     for (int n = 0; n < nParts; ++n)
     {
         const int nPart = (nOriginalPart + n) % nTotalParts;
-        char* pName = pDocument->getPartName(nPart);
+        const std::string aName = pDocument->getPartName(nPart);
         pDocument->setPart(nPart);
         pDocument->getDocumentSize(&nWidth, &nHeight);
-        fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
-        free (pName);
+        fprintf (stderr, "  '%s' -> %ld, %ld\n", aName.c_str(), nWidth, nHeight);
     }
     aTimes.emplace_back();
 
@@ -191,11 +190,10 @@ static void testTile( COKitDocument *pDocument, int max_parts,
     for (int n = 0; n < nParts; ++n)
     {
         const int nPart = (nOriginalPart + n) % nTotalParts;
-        char* pName = pDocument->getPartName(nPart);
+        const std::string aName = pDocument->getPartName(nPart);
         pDocument->setPart(nPart);
         pDocument->getDocumentSize(&nWidth, &nHeight);
-        fprintf (stderr, "render '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
-        free (pName);
+        fprintf (stderr, "render '%s' -> %ld, %ld\n", aName.c_str(), nWidth, nHeight);
 
         if (dump || pDocument->getDocumentType() != COKitDocumentType::TEXT)
         {

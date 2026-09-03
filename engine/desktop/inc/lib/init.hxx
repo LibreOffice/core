@@ -313,7 +313,7 @@ namespace desktop {
         std::string getWriterPageRectangles() override;
         int getPart() override;
         void setPart(int nPart) override;
-        char* getPartName(int nPart) override;
+        std::string getPartName(int nPart) override;
         void setPartMode(COKitPartMode eMode) override;
         void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
                        const int nTilePosX, const int nTilePosY, const int nTileWidth,

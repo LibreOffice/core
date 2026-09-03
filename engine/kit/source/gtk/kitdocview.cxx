@@ -3821,7 +3821,7 @@ kit_doc_view_get_part_name (KitDocumentView* pDocView, int nPart)
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    return priv->m_pDocument->getPartName(nPart );
+    return g_strdup(priv->m_pDocument->getPartName(nPart).c_str());
 }
 
 SAL_DLLPUBLIC_EXPORT void

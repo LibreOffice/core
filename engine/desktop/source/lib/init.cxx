@@ -4973,7 +4973,7 @@ static int  doc_getA11yCaretPosition(COKitDocument* pThis)
 
 }
 
-char* COKitDocumentImpl::getPartName(int nPart)
+std::string COKitDocumentImpl::getPartName(int nPart)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::getPartName");
 
@@ -4984,10 +4984,10 @@ char* COKitDocumentImpl::getPartName(int nPart)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
-    return convertOUString(pDoc->getPartName(nPart));
+    return convertOUStringToStdString(pDoc->getPartName(nPart));
 }
 
 void COKitDocumentImpl::setPartMode(COKitPartMode eMode)

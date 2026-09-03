@@ -201,7 +201,7 @@ static void populatePartSelector(GtvMainToolbar* toolbar)
         char* pName = kit_doc_view_get_part_name(KIT_DOC_VIEW(window->kitdocview), i);
         assert( pName );
         snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
-        free( pName );
+        g_free( pName );
 
         gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT(priv->m_pPartSelector), sText );
     }

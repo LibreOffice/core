@@ -245,8 +245,8 @@ void TiledRenderingTest::testImpressSlideNames( COKit* pOffice )
     std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "impress_slidenames.odp"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
-    CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
-    CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), std::string(pDocument->getPartName(1)));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), pDocument->getPartName(0));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), pDocument->getPartName(1));
     // The third slide hasn't had a name given to it (i.e. using the rename
     // context menu in Impress), thus it should (as far as I can determine)
     // have a localised version of "Slide 3".
@@ -257,9 +257,9 @@ void TiledRenderingTest::testCalcSheetNames( COKit* pOffice )
     std::unique_ptr<COKitDocument> pDocument(loadDocument(pOffice, "calc_sheetnames.ods"));
 
     CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
-    CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
-    CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), std::string(pDocument->getPartName(1)));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet3"), std::string(pDocument->getPartName(2)));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), pDocument->getPartName(0));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), pDocument->getPartName(1));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet3"), pDocument->getPartName(2));
 }
 
 void TiledRenderingTest::testPaintPartTile(COKit* pOffice)

@@ -1271,12 +1271,10 @@ void DesktopKitTest::testSheetOperations()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(6, pDocument->getParts());
 
-    std::vector<OString> aExpected = { "FirstSheet"_ostr, "Renamed"_ostr, "Sheet3"_ostr, "Sheet4"_ostr, "Sheet5"_ostr, "LastSheet"_ostr };
+    std::vector<std::string> aExpected = { "FirstSheet", "Renamed", "Sheet3", "Sheet4", "Sheet5", "LastSheet" };
     for (int i = 0; i < 6; ++i)
     {
-        char* pPartName = pDocument->getPartName(i);
-        CPPUNIT_ASSERT_EQUAL(aExpected[i], OString(pPartName));
-        free(pPartName);
+        CPPUNIT_ASSERT_EQUAL(aExpected[i], pDocument->getPartName(i));
     }
 }
 
