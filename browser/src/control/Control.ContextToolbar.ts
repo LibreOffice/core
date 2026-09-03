@@ -29,7 +29,13 @@ class ContextToolbar extends JSDialogComponent {
 		this.createBuilder();
 		this.setupContainer(undefined);
 		this.registerMessageHandlers();
+		app.events.on('updatepermission', this.onUpdatePermission);
 	}
+
+	onUpdatePermission = (): void => {
+		if (!this.initialized) return;
+		this._forceRebuild();
+	};
 
 	protected createBuilder() {
 		this.builder = new window.L.control.notebookbarBuilder({
@@ -47,7 +53,7 @@ class ContextToolbar extends JSDialogComponent {
 			'context-toolbar',
 			document.body,
 		);
-		window.L.DomUtil.addClass(this.container, 'notebookbar horizontal');
+		window.L.DomUtil.addClass(this.container, 'notebookbar horizontal hidden');
 	}
 
 	showContextToolbar(): void {
@@ -343,6 +349,7 @@ class ContextToolbar extends JSDialogComponent {
 	// current additionalContextButtons, since showContextToolbarImpl only ever
 	// reads that list once, the first time the toolbar is shown.
 	private _forceRebuild(): void {
+		document.removeEventListener('pointermove', this.pointerMove);
 		document.getElementById('context-toolbar')?.remove();
 		this.setupContainer(undefined);
 		this.initialized = false;
