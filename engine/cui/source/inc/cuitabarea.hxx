@@ -106,7 +106,7 @@ class SvxTransparenceTabPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;
 
     // gradient transparency
-    std::unique_ptr<weld::Widget> m_xGridGradient;
+    std::unique_ptr<weld::Container> m_xGridGradient;
     std::unique_ptr<weld::ComboBox> m_xLbTrgrGradientType;
     std::unique_ptr<weld::Label> m_xFtTrgrCenterX;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrTrgrCenterX;

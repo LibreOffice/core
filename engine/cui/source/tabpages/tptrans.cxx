@@ -195,7 +195,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(weld::Container* pPage, weld::Dia
     , m_xRbtTransLinear(m_xBuilder->weld_radio_button(u"RBT_TRANS_LINEAR"_ustr))
     , m_xRbtTransGradient(m_xBuilder->weld_radio_button(u"RBT_TRANS_GRADIENT"_ustr))
     , m_xMtrTransparent(m_xBuilder->weld_metric_spin_button(u"MTR_TRANSPARENT"_ustr, FieldUnit::PERCENT))
-    , m_xGridGradient(m_xBuilder->weld_widget(u"gridGradient"_ustr))
+    , m_xGridGradient(m_xBuilder->weld_container(u"gridGradient"_ustr))
     , m_xLbTrgrGradientType(m_xBuilder->weld_combo_box(u"LB_TRGR_GRADIENT_TYPES"_ustr))
     , m_xFtTrgrCenterX(m_xBuilder->weld_label(u"FT_TRGR_CENTER_X"_ustr))
     , m_xMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button(u"MTR_TRGR_CENTER_X"_ustr, FieldUnit::PERCENT))
