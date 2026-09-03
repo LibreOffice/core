@@ -47,6 +47,8 @@
 #include <itabenum.hxx>
 #include <redline.hxx>
 #include <UndoRedline.hxx>
+#include <tblafmt.hxx>
+#include <editeng/brushitem.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -1242,6 +1244,46 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCloseDocWithFillBitmapLinkTracker)
     // ~FillBitmapLinkTracker as the document was destroyed.
     mxComponent->dispose();
     mxComponent.clear();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBuiltInWordTableStyleCatalog)
+{
+    // Given a new document in a profile with no autotbl.fmt of its own, which is the
+    // situation inside a coolwsd kit's jail:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // Then the table style catalog offers Word's built-in styles next to the default one.
+    const SwTableAutoFormatTable& rStyles = pDoc->GetTableStyles();
+    // 246 named styles from the embedded catalog plus the default style built in code.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(247), rStyles.size());
+
+    CPPUNIT_ASSERT(rStyles.FindAutoFormat(TableStyleName(u"Plain Table 1"_ustr)));
+    CPPUNIT_ASSERT(rStyles.FindAutoFormat(TableStyleName(u"Light Shading Accent 1"_ustr)));
+    CPPUNIT_ASSERT(rStyles.FindAutoFormat(TableStyleName(u"List Table 7 Colorful Accent 6"_ustr)));
+
+    // And the colors resolve against the stock Office theme, so a first-row header cell of
+    // "Grid Table 4 Accent 1" is filled with the theme's accent1 blue, not with whatever
+    // theme the document the catalog was extracted from happened to use.
+    const SwTableAutoFormat* pGridTable4
+        = rStyles.FindAutoFormat(TableStyleName(u"Grid Table 4 Accent 1"_ustr));
+    CPPUNIT_ASSERT(pGridTable4);
+    const sal_uInt8 nHeaderCorner
+        = static_cast<sal_uInt8>(SwTableAutoFormat::RowColRole::First) * SwTableAutoFormat::nRoleCount
+          + static_cast<sal_uInt8>(SwTableAutoFormat::RowColRole::First);
+    const Color aHeaderFill = pGridTable4->GetBoxFormat(nHeaderCorner).GetProps().GetBackground().GetColor();
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472C4), aHeaderFill);
+
+    // A banded body cell of the same style is a light tint of that blue: the tinted literal
+    // was recomputed from the stock theme as well, not left at the source document's pink.
+    const sal_uInt8 nBandCell
+        = static_cast<sal_uInt8>(SwTableAutoFormat::RowColRole::BandA) * SwTableAutoFormat::nRoleCount
+          + static_cast<sal_uInt8>(SwTableAutoFormat::RowColRole::BandA);
+    const Color aBandFill = pGridTable4->GetBoxFormat(nBandCell).GetProps().GetBackground().GetColor();
+    CPPUNIT_ASSERT(aBandFill != COL_TRANSPARENT);
+    CPPUNIT_ASSERT(aBandFill != Color(0xFADBDB));
+    CPPUNIT_ASSERT(aBandFill.GetBlue() > aBandFill.GetRed());
+    CPPUNIT_ASSERT(aBandFill.GetLuminance() > aHeaderFill.GetLuminance());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

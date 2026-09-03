@@ -82,6 +82,51 @@ class CheckStyle(unittest.TestCase):
             self.assertIn(xStyle.Name, vExpectedNames)
             self.assertFalse(xStyle.isUserDefined())
 
+    # Like __test_StyleFamily, but only requires vBaseNames as a subset: TableStyles/CellStyles
+    # also carry Word's built-in table style catalog whenever no autotbl.fmt profile is found,
+    # and that catalog's size isn't something a test should hardcode. A preset from the catalog
+    # or from a profile counts as user defined, the same way an autotbl.fmt preset always has,
+    # so only the base names are checked for that.
+    def __test_StyleFamilyContains(self, xFamily, vBaseNames, sElementImplName):
+        self.assertEqual(xFamily.ImplementationName, "XStyleFamily")
+        self.assertEqual(len(xFamily.SupportedServiceNames), 1)
+
+        for sServicename in xFamily.SupportedServiceNames:
+            self.assertIn(sServicename, ["com.sun.star.style.StyleFamily"])
+            self.assertTrue(xFamily.supportsService(sServicename))
+        self.assertFalse(xFamily.supportsService("foobarbaz"))
+        self.assertTrue(xFamily.hasElements())
+        self.assertRegex(str(xFamily.ElementType), r"com\.sun\.star\.style\.XStyle")
+
+        with self.assertRaises(NoSuchElementException):
+            xFamily.getByName("foobarbaz")
+
+        with self.assertRaises(IndexError):
+            xFamily[len(xFamily) + 1]
+
+        vNames = list(xFamily.ElementNames)
+        for sStylename in vNames:
+            self.assertTrue(xFamily.hasByName(sStylename))
+            self.assertEqual(xFamily[sStylename].ImplementationName, sElementImplName)
+
+        for sBaseName in vBaseNames:
+            self.assertIn(sBaseName, vNames)
+            self.assertFalse(xFamily[sBaseName].isUserDefined())
+
+    # Index counterpart of __test_StyleFamilyContains.
+    def __test_StyleFamilyIndexContains(self, xFamily, vBaseNames, sElementImplName):
+        self.assertGreaterEqual(len(xFamily), len(vBaseNames))
+
+        vNames = []
+        for nIndex in range(len(xFamily)):
+            xStyle = xFamily[nIndex]
+            self.assertEqual(xStyle.ImplementationName, sElementImplName)
+            vNames.append(xStyle.Name)
+
+        for sBaseName in vBaseNames:
+            self.assertIn(sBaseName, vNames)
+            self.assertFalse(xFamily[sBaseName].isUserDefined())
+
     def __test_StyleFamilyInsert(self, xDoc, xFamily, vExpectedNames, sRightStyle, sWrongStyle):
         xRightStyle = xDoc.createInstance(sRightStyle)
         xRightStyle.Name = "RightStyleOld"
@@ -165,9 +210,11 @@ class CheckStyle(unittest.TestCase):
     def test_TableFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xTableStyles = xDoc.StyleFamilies["TableStyles"]
+        # A profile's autotbl.fmt (or, lacking one, Word's built-in catalog) may add many more
+        # styles beyond this baseline, so only require 'Default Style' to be among them.
         vEmptyDocStyles = ['Default Style']
-        self.__test_StyleFamily(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
-        self.__test_StyleFamilyIndex(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
+        self.__test_StyleFamilyContains(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
+        self.__test_StyleFamilyIndexContains(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
         self.__test_StyleFamilyInsert(xDoc, xTableStyles, vEmptyDocStyles, "com.sun.star.style.TableStyle", "com.sun.star.style.CharacterStyle")
         for sStyleName in vEmptyDocStyles:
             self.assertIsNotNone(xTableStyles.getByName(sStyleName))
@@ -211,9 +258,11 @@ class CheckStyle(unittest.TestCase):
     def test_CellFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCellStyles = xDoc.StyleFamilies["CellStyles"]
+        # CellStyles carries the per-role cell styles of every table style (see test_TableFamily),
+        # so only require the default table style's own 16 roles to be among them.
         vEmptyDocStyles = ['Default Style.1', 'Default Style.2', 'Default Style.3', 'Default Style.4', 'Default Style.5', 'Default Style.6', 'Default Style.7', 'Default Style.8', 'Default Style.9', 'Default Style.10', 'Default Style.11', 'Default Style.12', 'Default Style.13', 'Default Style.14', 'Default Style.15', 'Default Style.16']
-        self.__test_StyleFamily(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
-        self.__test_StyleFamilyIndex(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
+        self.__test_StyleFamilyContains(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
+        self.__test_StyleFamilyIndexContains(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
         self.__test_StyleFamilyInsert(xDoc, xCellStyles, vEmptyDocStyles, "com.sun.star.style.CellStyle", "com.sun.star.style.CharacterStyle")
         xTableStyle = xDoc.createInstance("com.sun.star.style.TableStyle")
         xCellStyle = xTableStyle.getByName("first-row")

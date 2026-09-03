@@ -35,6 +35,24 @@
 #include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <hintids.hxx>
+#include "tblwordstylesdata.hxx"
+#include <docsh.hxx>
+#include <algorithm>
+#include <o3tl/safeint.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <unotools/streamwrap.hxx>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <fmtornt.hxx>
 #include <editsh.hxx>
 #include <fmtlsplt.hxx>
@@ -1102,6 +1120,187 @@ bool SwTableAutoFormatTable::Save() const
     return m_pImpl->Save();
 }
 
+namespace {
+
+/// Writes one package part as a raw byte stream at the given path, creating any storage levels
+/// the path needs along the way.
+void lcl_WriteWordStylesPackagePart(const cpo::uno::Reference<css::embed::XStorage>& xRoot,
+                                     std::u16string_view sPath, std::string_view sContent)
+{
+    // Every storage level from the root down to this part's own parent needs its own commit
+    // for the part to actually persist - committing only the innermost one leaves the change
+    // invisible to its parent storage.
+    std::vector<cpo::uno::Reference<css::embed::XStorage>> aStorageChain{ xRoot };
+    size_t nStart = 0;
+    for (;;)
+    {
+        const size_t nSlash = sPath.find(u'/', nStart);
+        if (nSlash == std::u16string_view::npos)
+            break;
+        const OUString sSegment(sPath.substr(nStart, nSlash - nStart));
+        aStorageChain.push_back(
+            aStorageChain.back()->openStorageElement(sSegment, css::embed::ElementModes::READWRITE));
+        nStart = nSlash + 1;
+    }
+
+    const OUString sName(sPath.substr(nStart));
+    cpo::uno::Reference<css::io::XStream> xPartStream
+        = aStorageChain.back()->openStreamElement(sName, css::embed::ElementModes::READWRITE);
+    cpo::uno::Reference<css::io::XOutputStream> xOut = xPartStream->getOutputStream();
+    xOut->writeBytes(cpo::uno::Sequence<sal_Int8>(
+        reinterpret_cast<const sal_Int8*>(sContent.data()), sContent.size()));
+    xOut->closeOutput();
+
+    for (auto it = aStorageChain.rbegin(); it != aStorageChain.rend(); ++it)
+    {
+        cpo::uno::Reference<css::embed::XTransactedObject> xTransacted(*it, cpo::uno::UNO_QUERY);
+        if (xTransacted.is())
+            xTransacted->commit();
+    }
+}
+
+/// Builds a minimal in-memory DOCX package from the embedded Word table style catalog (see
+/// tblwordstylesdata.hxx) and returns it as a fresh, seekable input stream ready to hand to the
+/// DOCX import filter.
+cpo::uno::Reference<css::io::XInputStream> lcl_BuildWordTableStylesPackage()
+{
+    // The stream is owned here until the returned OSeekableInputStreamWrapper takes it over at
+    // the end, so it stays alive for as long as the caller holds the returned reference, and
+    // an exception on the way frees it.
+    auto pMemStream = std::make_unique<SvMemoryStream>(64 * 1024, 64 * 1024);
+    cpo::uno::Reference<css::io::XStream> xPackageStream(new utl::OStreamWrapper(*pMemStream));
+
+    // A plain zip: the OFOPXML storage format would generate [Content_Types].xml and the
+    // _rels parts itself from stream properties and refuses those names, while the parts
+    // written here are already complete. The import filter opens the result as a zip too.
+    cpo::uno::Reference<css::embed::XStorage> xRoot
+        = comphelper::OStorageHelper::GetStorageOfFormatFromStream(
+            ZIP_STORAGE_FORMAT_STRING, xPackageStream,
+            css::embed::ElementModes::READWRITE | css::embed::ElementModes::TRUNCATE);
+
+    static constexpr OUString sContentTypesXml
+        = u"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+          u"<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">"
+          u"<Default Extension=\"rels\" "
+          u"ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>"
+          u"<Default Extension=\"xml\" ContentType=\"application/xml\"/>"
+          u"<Override PartName=\"/word/document.xml\" "
+          u"ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml."
+          u"document.main+xml\"/>"
+          u"<Override PartName=\"/word/styles.xml\" "
+          u"ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml."
+          u"styles+xml\"/>"
+          u"<Override PartName=\"/word/theme/theme1.xml\" "
+          u"ContentType=\"application/vnd.openxmlformats-officedocument.theme+xml\"/>"
+          u"</Types>"_ustr;
+    static constexpr OUString sRootRelsXml
+        = u"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+          u"<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
+          u"<Relationship Id=\"rId1\" "
+          u"Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/"
+          u"officeDocument\" Target=\"word/document.xml\"/>"
+          u"</Relationships>"_ustr;
+    static constexpr OUString sDocumentRelsXml
+        = u"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+          u"<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
+          u"<Relationship Id=\"rId1\" "
+          u"Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles\" "
+          u"Target=\"styles.xml\"/>"
+          u"<Relationship Id=\"rId2\" "
+          u"Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme\" "
+          u"Target=\"theme/theme1.xml\"/>"
+          u"</Relationships>"_ustr;
+
+    auto toUtf8 = [](const OUString& s) { return OUStringToOString(s, RTL_TEXTENCODING_UTF8); };
+    const OString aContentTypes = toUtf8(sContentTypesXml);
+    const OString aRootRels = toUtf8(sRootRelsXml);
+    const OString aDocumentRels = toUtf8(sDocumentRelsXml);
+
+    lcl_WriteWordStylesPackagePart(xRoot, u"[Content_Types].xml",
+                                    { aContentTypes.getStr(), o3tl::make_unsigned(aContentTypes.getLength()) });
+    lcl_WriteWordStylesPackagePart(xRoot, u"_rels/.rels",
+                                    { aRootRels.getStr(), o3tl::make_unsigned(aRootRels.getLength()) });
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/document.xml", sw::tblwordstylesdata::g_sDocumentXml);
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/styles.xml", sw::tblwordstylesdata::g_sStylesXml);
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/theme/theme1.xml", sw::tblwordstylesdata::g_sTheme1Xml);
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/_rels/document.xml.rels",
+                                    { aDocumentRels.getStr(), o3tl::make_unsigned(aDocumentRels.getLength()) });
+
+    cpo::uno::Reference<css::embed::XTransactedObject> xRootTransacted(xRoot, cpo::uno::UNO_QUERY);
+    if (xRootTransacted.is())
+        xRootTransacted->commit();
+
+    pMemStream->Seek(0);
+    return new utl::OSeekableInputStreamWrapper(pMemStream.release(), /*bOwner=*/true);
+}
+
+/// Loads Word's built-in table style catalog (embedded as a small DOCX package, see
+/// tblwordstylesdata.hxx) through the ordinary DOCX import filter, appending each resulting
+/// style to rTarget - the same conversion path a document defining its own custom table style
+/// already goes through, so no theme or role resolution logic needs reimplementing here.
+void lcl_LoadWordTableStylePresets(std::vector<std::unique_ptr<SwTableAutoFormat>>& rTarget)
+{
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xServiceFactory(
+        comphelper::getProcessServiceFactory());
+    cpo::uno::Reference<cpo::uno::XInterface> xInterface(
+        xServiceFactory->createInstance(u"com.sun.star.comp.Writer.WriterFilter"_ustr),
+        cpo::uno::UNO_SET_THROW);
+    cpo::uno::Reference<css::document::XFilter> xFilter(xInterface, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XImporter> xImporter(xInterface, cpo::uno::UNO_QUERY_THROW);
+
+    SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+    if (!xDocSh->DoInitNew())
+        return;
+
+    cpo::uno::Reference<css::lang::XComponent> xDstDoc(xDocSh->GetModel(),
+                                                        cpo::uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xDstDoc);
+
+    cpo::uno::Reference<css::io::XInputStream> xPackageStream = lcl_BuildWordTableStylesPackage();
+    const cpo::uno::Sequence<css::beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { u"InputStream"_ustr, cpo::uno::Any(xPackageStream) } }));
+
+    try
+    {
+        if (!xFilter->filter(aDescriptor))
+            return;
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.core", "lcl_LoadWordTableStylePresets");
+        return;
+    }
+
+    SwDoc* pImportedDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
+    if (!pImportedDoc)
+        return;
+
+    // The imported document's own catalog starts as a copy of the module-wide one, so it
+    // carries the built-in default style too; only the styles the import added are new.
+    const SwTableAutoFormatTable& rImportedStyles = pImportedDoc->GetTableStyles();
+    rTarget.reserve(rTarget.size() + rImportedStyles.size());
+    for (size_t i = 0; i < rImportedStyles.size(); ++i)
+    {
+        const SwTableAutoFormat& rStyle = rImportedStyles[i];
+        const bool bAlreadyPresent = std::any_of(rTarget.begin(), rTarget.end(),
+            [&rStyle](const std::unique_ptr<SwTableAutoFormat>& rpExisting)
+            { return rpExisting->GetName() == rStyle.GetName(); });
+        if (bAlreadyPresent)
+            continue;
+        auto pPreset = std::make_unique<SwTableAutoFormat>(rStyle);
+        // These are Word's built-in presets, not user-created styles, like the default one.
+        pPreset->SetUserDefined(false);
+        rTarget.push_back(std::move(pPreset));
+    }
+}
+
+/// True while the Word table style catalog is being imported. Importing it runs the DOCX
+/// filter on an internal document, and that document asks the module for the shared table
+/// style catalog in turn, which is the very catalog still being built here.
+bool g_bLoadingWordTableStylePresets = false;
+
+}
+
 void SwTableAutoFormatTable::Impl::Load()
 {
     if (comphelper::IsFuzzing())
@@ -1112,6 +1311,29 @@ void SwTableAutoFormatTable::Impl::Load()
     {
         SfxMedium aStream( sNm, StreamMode::STD_READ );
         Load( *aStream.GetInStream() );
+        return;
+    }
+
+    // SearchFile() only ever finds a user-config or shared-config copy of this file; a
+    // coolwsd kit's per-document jail has no seeded user profile to find one in, so fall back
+    // to Word's own built-in table style catalog, embedded as a small DOCX package (see
+    // tblwordstylesdata.hxx) rather than shipping our own separate style set.
+    //
+    // The internal document that import creates gets a catalog holding only the default
+    // style built above; the styles it imports are copied into this one afterwards.
+    if (g_bLoadingWordTableStylePresets)
+        return;
+    g_bLoadingWordTableStylePresets = true;
+    comphelper::ScopeGuard aResetGuard([] { g_bLoadingWordTableStylePresets = false; });
+
+    try
+    {
+        lcl_LoadWordTableStylePresets(m_AutoFormats);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        // A failed import leaves the catalog with just the default style.
+        TOOLS_WARN_EXCEPTION("sw.core", "loading the built-in table style catalog");
     }
 }
 
@@ -1224,7 +1446,6 @@ bool SwTableAutoFormatTable::Impl::Save( SvStream& rStream ) const
 
         // Write this version number for all attributes
         SwAfVersions::Write(rStream, AUTOFORMAT_FILE_VERSION);
-
         rStream.WriteUInt16( m_AutoFormats.size() - 1 );
         bRet = ERRCODE_NONE == rStream.GetError();
 
