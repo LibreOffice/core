@@ -378,13 +378,25 @@ static std::string write_phony_dep_file(const char* fn)
     return std::string();
 }
 
+/* Only ccache writes relative paths here: cl always emits absolute ones, and
+   ccache rewrites them when its base_dir (CCACHE_BASEDIR) is set, so that one
+   cache can serve several build trees. On a cache hit they come back relative,
+   and they point inside this tree, so keep them. */
+static bool path_is_relative(const std::string& path)
+{
+    return !path.empty() && path[0] != '/' && !(path.size() >= 2 && path[1] == ':');
+}
+
 /* Decide whether a forward-slash include path lies inside the source tree, the
    build tree or the work directory. System headers (for instance under Program
    Files) live outside all three and are dropped, matching the allowlist that
    filter-showIncludes.awk applies. On Windows PATHNCMP is case-insensitive, so
-   the lower-cased paths cl emits still match the mixed-case prefixes. */
+   the lower-cased paths cl emits still match the mixed-case prefixes. Relative
+   paths are kept too; see path_is_relative above. */
 static bool include_in_build_tree(const std::string& path)
 {
+    if (path_is_relative(path))
+        return true;
     for (const std::string& prefix : build_tree_prefixes)
     {
         if (path.size() >= prefix.size()
