@@ -281,7 +281,7 @@ private:
     SvxRectCtl m_aCtlPosition;
     SvxXShadowPreview  m_aCtlXRectPreview;
     std::unique_ptr<weld::CheckButton> m_xTsbShowShadow;
-    std::unique_ptr<weld::Widget> m_xGridShadow;
+    std::unique_ptr<weld::Container> m_xGridShadow;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;
     std::unique_ptr<ColorListBox> m_xLbShadowColor;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;

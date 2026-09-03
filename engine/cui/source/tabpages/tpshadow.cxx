@@ -58,7 +58,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aFillAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST))
     , m_aCtlPosition(this)
     , m_xTsbShowShadow(m_xBuilder->weld_check_button(u"TSB_SHOW_SHADOW"_ustr))
-    , m_xGridShadow(m_xBuilder->weld_widget(u"gridSHADOW"_ustr))
+    , m_xGridShadow(m_xBuilder->weld_container(u"gridSHADOW"_ustr))
     , m_xMtrDistance(m_xBuilder->weld_metric_spin_button(u"MTR_FLD_DISTANCE"_ustr, FieldUnit::CM))
     , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button(u"LB_SHADOW_COLOR"_ustr),
                 [this]{ return GetDialogController()->getDialog(); }))
