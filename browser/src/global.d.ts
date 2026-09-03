@@ -384,6 +384,7 @@ interface Window {
 	autoShowWelcome: boolean;
 	bundlejsLoaded: boolean;
 	canvasSlideshowEnabled: boolean;
+	remoteDocumentsEnabled: boolean;
 	deeplEnabled: boolean;
 	documentSigningEnabled: boolean;
 	deviceFormFactor?: string;

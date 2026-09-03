@@ -295,6 +295,7 @@ class InitializerBase {
 		window.indirectionUrl = "";
 		window.geolocationSetup = false;
 		window.canvasSlideshowEnabled = false;
+		window.remoteDocumentsEnabled = false;
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl;
 		window.enableExperimentalFeatures = element.dataset.enableExperimentalFeatures === 'true';
 
@@ -475,6 +476,7 @@ class BrowserInitializer extends InitializerBase {
 		window.indirectionUrl = element.dataset.indirectionUrl;
 		window.geolocationSetup = element.dataset.geolocationSetup.toLowerCase().trim() === "true";
 		window.canvasSlideshowEnabled = element.dataset.canvasSlideshowEnabled.toLowerCase().trim() === "true";
+		window.remoteDocumentsEnabled = element.dataset.remoteDocumentsEnabled.toLowerCase().trim() === "true";
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl;
 		// The value is percent-encoded server-side (see FileServer.cpp) before
 		// being embedded in the data attribute, so decode it back for display.
@@ -537,6 +539,7 @@ class MobileAppInitializer extends InitializerBase {
 		window.idleTimeoutSecs = 1000000;
 
 		window.canvasSlideshowEnabled = true;
+		window.remoteDocumentsEnabled = false;
 		window.enableAccessibility = true;
 		window.enableExperimentalFeatures = element.dataset.enableExperimentalFeatures === 'true';
 	}

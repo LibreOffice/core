@@ -319,6 +319,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-out-of-focus-timeout-secs = "%OUT_OF_FOCUS_TIMEOUT_SECS%"
       data-post-message-origin-ext = "%POSTMESSAGE_ORIGIN%"
       data-protocol-debug = "%PROTOCOL_DEBUG%"
+      data-remote-documents-enabled = "%REMOTE_DOCUMENTS_ENABLED%"
       data-saved-ui-state = "%SAVED_UI_STATE%"
       data-service-root = "%SERVICE_ROOT%"
       data-smart-zoom = "%SMART_ZOOM%"

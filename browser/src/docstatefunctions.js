@@ -499,10 +499,10 @@ app.impress.isSlideSelected = function (index) {
 	} else return false;
 };
 
-// Slide import relies on backend export and import support that only the
-// coolwsd server build provides.
+// Slide import builds on the live links between documents. It is available
+// only when remote documents are enabled in the server configuration.
 app.impress.isSlideImportSupported = function () {
-	return !window.ThisIsAMobileApp;
+	return window.remoteDocumentsEnabled;
 };
 
 app.enterRAF = function () {

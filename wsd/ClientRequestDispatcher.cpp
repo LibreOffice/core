@@ -3267,7 +3267,9 @@ std::string getCapabilitiesJson(bool convertToAvailable)
     capabilities->set("hasWopiAccessCheck", true);
 
     // Set if this instance supports importing slides from another presentation.
-    capabilities->set("hasSlideImportSupport", true);
+    // That builds on the live links between documents, so it follows the same
+    // remote_documents switch in the configuration.
+    capabilities->set("hasSlideImportSupport", RemoteDocumentBroker::isEnabled());
 
     const std::string serverName = ConfigUtil::getString("indirection_endpoint.server_name", "");
     if (const char* podName = std::getenv("POD_NAME"))
