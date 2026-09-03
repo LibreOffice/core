@@ -1159,10 +1159,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
                               bool bIsPreview = false);
 static COKitTileMode doc_getTileMode(COKitDocument* pThis);
 static COKitSize doc_getDocumentSize(COKitDocument* pThis);
-static void doc_getDataArea(COKitDocument* pThis,
-                            long nTab,
-                            long* pCol,
-                            long* pRow);
+static COKitDataArea doc_getDataArea(COKitDocument* pThis, long nTab);
 static void doc_initializeForRendering(COKitDocument* pThis,
                                        const char* pArguments);
 
@@ -1816,9 +1813,9 @@ COKitSelectionType COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeT
     return doc_getSelectionTypeAndText(this, pMimeType, pText);
 }
 
-void COKitDocumentImpl::getDataArea(long nPart, long* pCol, long* pRow)
+COKitDataArea COKitDocumentImpl::getDataArea(long nPart)
 {
-    doc_getDataArea(this, nPart, pCol, pRow);
+    return doc_getDataArea(this, nPart);
 }
 
 void COKitDocumentImpl::setViewTimezone(int nId, const char* pTimezone)
@@ -5454,10 +5451,7 @@ static COKitSize doc_getDocumentSize(COKitDocument* pThis)
     return { aDocumentSize.Width(), aDocumentSize.Height() };
 }
 
-static void doc_getDataArea(COKitDocument* pThis,
-                            long nTab,
-                            long* pCol,
-                            long* pRow)
+static COKitDataArea doc_getDataArea(COKitDocument* pThis, long nTab)
 {
     comphelper::ProfileZone aZone("doc_getDataArea");
 
@@ -5465,16 +5459,14 @@ static void doc_getDataArea(COKitDocument* pThis,
     SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (pDoc)
-    {
-        Size aDocumentSize = pDoc->getDataArea(nTab);
-        *pCol = aDocumentSize.Width();
-        *pRow = aDocumentSize.Height();
-    }
-    else
+    if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return {};
     }
+
+    const Size aDataArea = pDoc->getDataArea(nTab);
+    return { aDataArea.Width(), aDataArea.Height() };
 }
 
 static void doc_initializeForRendering(COKitDocument* pThis,

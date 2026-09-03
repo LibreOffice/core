@@ -119,10 +119,9 @@ namespace LOKitHelper
 
     inline void fetchCalcSpecificData(COKitDocument *loKitDocument, std::unordered_map<std::string, std::string> &resultInfo, int part)
     {
-        long lastColumn, lastRow;
-        loKitDocument->getDataArea(part, &lastColumn, &lastRow);
-        resultInfo["lastcolumn"] = std::to_string(lastColumn);
-        resultInfo["lastrow"] = std::to_string(lastRow);
+        const COKitDataArea aDataArea = loKitDocument->getDataArea(part);
+        resultInfo["lastcolumn"] = std::to_string(aDataArea.nLastColumn);
+        resultInfo["lastrow"] = std::to_string(aDataArea.nLastRow);
 
         std::string value(loKitDocument->getCommandValues(".uno:DefinePrintArea"));
         if (!value.empty())

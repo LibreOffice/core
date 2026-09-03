@@ -93,6 +93,15 @@ struct COKitScriptResult
     bool bUsedLegacyUnoApi = false;
 };
 
+/// The last column and the last row of a Calc sheet that hold data, both
+/// counted from zero. Both are 1 for a document with no data area, which is
+/// every document that is not a spreadsheet.
+struct COKitDataArea
+{
+    int64_t nLastColumn = 1;
+    int64_t nLastRow = 1;
+};
+
 /// A size in twips. Zero in both when the document cannot report one.
 struct COKitSize
 {
@@ -2431,8 +2440,9 @@ struct COKitDocument
      */
     virtual COKitSelectionType getSelectionTypeAndText(const char* pMimeType, std::string* pText) = 0;
 
-    /// Get the data area (in Calc last row and column).
-    virtual void getDataArea(long nPart, long* pCol, long* pRow) = 0;
+    /// Get the data area of one part, that is, in Calc, its last column and
+    /// last row.
+    virtual COKitDataArea getDataArea(long nPart) = 0;
 
     virtual int getEditMode() = 0;
 

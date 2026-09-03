@@ -401,7 +401,7 @@ namespace desktop {
                                 int* pWidth, int* pHeight) override;
         void sendContentControlEvent(const char* pArguments) override;
         COKitSelectionType getSelectionTypeAndText(const char* pMimeType, std::string* pText) override;
-        void getDataArea(long nPart, long* pCol, long* pRow) override;
+        COKitDataArea getDataArea(long nPart) override;
         int getEditMode() override;
         void setViewTimezone(int nId, const char* pTimezone) override;
         void setAccessibilityState(int nId, bool nEnabled) override;
