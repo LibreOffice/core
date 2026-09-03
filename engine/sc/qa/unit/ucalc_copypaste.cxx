@@ -9173,6 +9173,55 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142065)
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 7, nTab));
 }
 
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testPasteDroppedTableRefKeepsNoColumn)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Table2 over E1:G3, its third column called Value.
+    m_pDoc->SetString(4, 0, 0, u"Name"_ustr);
+    m_pDoc->SetString(5, 0, 0, u"Data"_ustr);
+    m_pDoc->SetString(6, 0, 0, u"Value"_ustr);
+    m_pDoc->SetValue(6, 1, 0, 100.0);
+    m_pDoc->SetValue(6, 2, 0, 7.0);
+    auto pOther = std::make_unique<ScDBData>(u"Table2"_ustr, 0, 4, 0, 6, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pOther)));
+
+    // Table333 over A1:C3, whose third column carries the same name, referencing Table2.
+    m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"Data"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"Value"_ustr);
+    m_pDoc->SetValue(2, 1, 0, 1.0);
+    auto pTable = std::make_unique<ScDBData>(u"Table333"_ustr, 0, 0, 0, 2, 2, true, true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pTable)));
+    m_pDoc->SetFormula(ScAddress(2, 2, 0), u"=SUM(Table2[Value])"_ustr,
+                       formula::FormulaGrammar::GRAM_ENGLISH);
+
+    ScRange aClipRange(0, 0, 0, 2, 2, 0);
+    ScClipParam aClipParam(aClipRange, false);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aClipRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Paste into another document over E1:G3, so the anchor cell G1 - Table2's Value header -
+    // lands inside the pasted table, which has a column of its own there.
+    ScDocShellRef xDestDocSh = new ScDocShell;
+    xDestDocSh->DoLoad(new SfxMedium(u"file:///droppedtableref.fake"_ustr, StreamMode::STD_READWRITE));
+    ScDocument& rDestDoc = xDestDocSh->GetDocument();
+    rDestDoc.InsertTab(0, u"Dest"_ustr);
+    ScMarkData aDestMark(rDestDoc.GetSheetLimits());
+    aDestMark.SelectOneTable(0);
+    rDestDoc.CopyFromClip(ScRange(4, 0, 0, 6, 2, 0), aDestMark, InsertDeleteFlags::ALL, nullptr,
+                          &aClipDoc);
+
+    CPPUNIT_ASSERT(rDestDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE333"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(#NAME?['#REF!])"_ustr, rDestDoc.GetFormula(6, 2, 0));
+
+    xDestDocSh->DoClose();
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMultiRange)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

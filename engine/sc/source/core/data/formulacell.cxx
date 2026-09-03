@@ -470,7 +470,16 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     ScDBCollection::NamedDBs& aOldNamedDBs = pOldDBCollection->getNamedDBs();
     ScDBData* pDBData = aOldNamedDBs.findByIndex(nIndex);
     if (!pDBData)
+    {
+        if (rOldDoc.IsClipboard())
+        {
+            if (eOpCode == ocDBArea)
+                static_cast<FormulaIndexToken*>(pToken)->SetIndex(0);
+            else if (eOpCode == ocTableRef)
+                static_cast<ScTableRefToken*>(pToken)->SetIndex(0);
+        }
         return; //invalid index
+    }
     OUString aDBName = pDBData->GetUpperName();
 
     //search in new document

@@ -6329,7 +6329,17 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     {
         OUString aStr;
         ScAddress aAbs = rRef.toAbs(rDoc, aPos);
-        const ScDBData* pData = rDoc.GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::AREA);
+        const ScDBData* pData = nullptr;
+        for (sal_uInt16 nBack = maArrIterator.GetIndex(); nBack > 0; )
+        {
+            const FormulaToken* pPrev = mpArr->GetArray()[--nBack];
+            if (pPrev->GetOpCode() == ocTableRef && pPrev->GetType() == svIndex)
+            {
+                pData = rDoc.GetDBCollection()->getNamedDBs().findByIndex(
+                    static_cast<const ScTableRefToken*>(pPrev)->GetIndex());
+                break;
+            }
+        }
         SAL_WARN_IF( !pData, "sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef without ScDBData: " <<
                 aAbs.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc));
         if (pData)
