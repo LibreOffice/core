@@ -2094,14 +2094,12 @@ struct COKitDocument
                                const int nTileHeight, bool bIsPreview = false) = 0;
 
     /**
-     * Returns the viewID for each existing view. Since viewIDs are not reused,
-     * viewIDs are not the same as the index of the view in the view array over
-     * time. Use getViewsCount() to know the minimal nSize that's large enough.
-     *
-     * @param rIds the array to write the viewIDs into
-     * @returns true if result was written, false otherwise.
+     * Returns the viewID for each existing view, the most recently used one
+     * first. Since viewIDs are not reused, viewIDs are not the same as the
+     * index of the view in the view array over time. The list is empty when
+     * the document has no views.
      */
-    virtual bool getViewIds(std::vector<int>& rIds) = 0;
+    virtual std::vector<int> getViewIds() = 0;
 
     /**
      * Show/Hide a single row/column header outline for Calc documents.

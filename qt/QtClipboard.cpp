@@ -46,8 +46,8 @@ namespace
 /// a multi-view document would need the specific copying view instead.
 int firstViewId(COKitDocument* loKitDoc)
 {
-    std::vector<int> aViewIds;
-    if (!loKitDoc->getViewIds(aViewIds) || aViewIds.empty() || aViewIds[0] < 0)
+    const std::vector<int> aViewIds = loKitDoc->getViewIds();
+    if (aViewIds.empty() || aViewIds[0] < 0)
         return -1;
     return aViewIds[0];
 }

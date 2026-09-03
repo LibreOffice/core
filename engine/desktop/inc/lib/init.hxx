@@ -350,7 +350,7 @@ namespace desktop {
                            const int nCanvasWidth, const int nCanvasHeight, const int nTilePosX,
                            const int nTilePosY, const int nTileWidth, const int nTileHeight,
                            bool bIsPreview = false) override;
-        bool getViewIds(std::vector<int>& rIds) override;
+        std::vector<int> getViewIds() override;
         void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
         void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
                          const int width, const int height) override;

@@ -1587,8 +1587,7 @@ void Document::handleSaveMessage(const std::string &)
         LOG_TRC("BgSave completed");
 
         // unregister the view callbacks
-        std::vector<int> viewIds;
-        getLOKitDocument()->getViewIds(viewIds);
+        const std::vector<int> viewIds = getLOKitDocument()->getViewIds();
         for (const auto viewId : viewIds)
         {
             _loKitDocument->setView(viewId);
@@ -1868,8 +1867,7 @@ void replaceKeysWithPlaceholder(std::string& json, std::initializer_list<std::st
 void Document::notifyViewInfo()
 {
     // Get the list of view ids from the core
-    std::vector<int> viewIds;
-    getLOKitDocument()->getViewIds(viewIds);
+    const std::vector<int> viewIds = getLOKitDocument()->getViewIds();
 
     const std::map<int, UserInfo> viewInfoMap = getViewInfo();
 
