@@ -119,8 +119,7 @@ protected:
     void                                                                        ImplLockPropertyChangeNotification( const OUString& rPropertyName, bool bLock );
     void                                                                        ImplLockPropertyChangeNotifications( const css::uno::Sequence< OUString >& rPropertyNames, bool bLock );
 
-    void DisposeAccessibleContext(css::uno::Reference<
-            css::lang::XComponent> const& xContext);
+    void DisposeAccessibleContext(const rtl::Reference<comphelper::OAccessible>& rpAccessible);
 
     void setPeer( const css::uno::Reference< css::awt::XVclWindowPeer >& _xPeer)
     {

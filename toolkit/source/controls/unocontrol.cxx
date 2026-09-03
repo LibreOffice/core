@@ -315,19 +315,19 @@ void UnoControl::updateFromModel()
 // XTypeProvider
 IMPL_IMPLEMENTATION_ID( UnoControl )
 
-void
-UnoControl::DisposeAccessibleContext(Reference<XComponent> const& xContextComp)
+void UnoControl::DisposeAccessibleContext(
+    const rtl::Reference<comphelper::OAccessible>& rpAccessible)
 {
-    if (xContextComp.is())
+    if (rpAccessible.is())
     {
         try
         {
-            xContextComp->removeEventListener( this );
-            xContextComp->dispose();
+            rpAccessible->removeEventListener(this);
+            rpAccessible->dispose();
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
+            OSL_FAIL("UnoControl::disposeAccessibleContext: could not dispose accessible!");
         }
     }
 }
