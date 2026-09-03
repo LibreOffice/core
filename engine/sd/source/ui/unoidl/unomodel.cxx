@@ -2259,6 +2259,29 @@ void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPa
     }
 }
 
+/// Count the part's version up and record the change under the top-level
+/// object the primitive tree carries.
+void recordObjectChange(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject,
+                        SdrHintKind eKind)
+{
+    ++rState.mnVersion;
+
+    // A change inside a group redraws the whole top-level object, so
+    // record it under the top-level ancestor's id, the id the primitive
+    // tree carries.
+    const SdrObject* pTopLevel = pObject;
+    while (const SdrObject* pParent = pTopLevel->getParentSdrObjectFromSdrObject())
+        pTopLevel = pParent;
+    const sal_uInt64 nObjectId = pTopLevel->GetUniqueID();
+
+    // Removing an object inside a group changes the group, which stays
+    // alive, so only a removed top-level object drops its change record.
+    if (eKind == SdrHintKind::ObjectRemoved && pTopLevel == pObject)
+        rState.maObjectChangeVersions.erase(nObjectId);
+    else
+        rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
+}
+
 // A slide's presentation info changed, so tell every view of the document.
 // The payload names the reason and the changed part.
 void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart)
@@ -2348,28 +2371,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         else if (pPage->GetPageNum() > 0)
                         {
                             const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-                            VectorPartState& rState
-                                = maVectorParts[{ nPart, constVectorModeSlides }];
-                            ++rState.mnVersion;
-
-                            // A change inside a group redraws the whole
-                            // top-level object, so record it under the
-                            // top-level ancestor's id, the id the primitive
-                            // tree carries.
-                            const SdrObject* pTopLevel = pObject;
-                            while (const SdrObject* pParent
-                                   = pTopLevel->getParentSdrObjectFromSdrObject())
-                                pTopLevel = pParent;
-                            const sal_uInt64 nObjectId = pTopLevel->GetUniqueID();
-
-                            // Removing an object inside a group changes the
-                            // group, which stays alive, so only a removed
-                            // top-level object drops its change record.
-                            if (eKind == SdrHintKind::ObjectRemoved && pTopLevel == pObject)
-                                rState.maObjectChangeVersions.erase(nObjectId);
-                            else
-                                rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
-
+                            recordObjectChange(maVectorParts[{ nPart, constVectorModeSlides }],
+                                               pObject, eKind);
                             notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
 
                             // An animated image was added, moved, resized,
