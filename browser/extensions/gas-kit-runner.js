@@ -16,41 +16,6 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
     try {
         function activeDoc() { return cool.getActiveDocument(); }
 
-        function textFacade(sel, initial) {
-            let cur = initial;
-            const commit = function() { if (sel) sel.replace(cur); };
-            const t = {
-                getText: function() { return cur; },
-                setText: function(v) { cur = String(v); commit(); return t; },
-                appendText: function(v) { cur += String(v); commit(); return t; },
-                insertText: function(idx, v) {
-                    cur = cur.substring(0, idx) + String(v) + cur.substring(idx);
-                    commit();
-                    return t;
-                },
-                deleteText: function(a, b) {
-                    cur = cur.substring(0, a) + cur.substring(b + 1);
-                    commit();
-                    return t;
-                },
-                clear: function() { cur = ''; commit(); return t; },
-                asText: function() { return t; },
-                editAsText: function() { return t; },
-                removeFromParent: function() { cur = ''; commit(); return t; },
-                getParent: function() {
-                    return {
-                        asText: function() { return t; },
-                        getPreviousSibling: function() { return null; },
-                        getNextSibling: function() { return null; }
-                    };
-                },
-                getPreviousSibling: function() { return null; },
-                getNextSibling: function() { return null; },
-                getType: function() { return uno.idl.scriptinterop.ElementType.TEXT; }
-            };
-            return t;
-        }
-
         function cursorFacade() {
             const xc = activeDoc().getCursor();
             return {
@@ -107,67 +72,13 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             }
         };
 
-        function footnoteContentsFacade(footnote) {
-            const paras = footnote.getParagraphs();
-            const section = {
-                getType: function() { return 'FOOTNOTE_SECTION'; },
-                getNumChildren: function() { return paras.length; },
-                getChild: function(n) { return paras[n]; },
-                getParent: function() { return null; },
-                getAttributes: function() { return {}; },
-                findText: function() { return null; }
-            };
-            return section;
-        }
-        function footnoteFacade(footnote) {
-            let contents = null;
-            return {
-                getType: function() { return 'FOOTNOTE'; },
-                getFootnoteContents: function() {
-                    if (!contents) contents = footnoteContentsFacade(footnote);
-                    return contents;
-                },
-                getParent: function() { return null; },
-                getAttributes: function() { return {}; }
-            };
-        }
-
-        function bodyFacade() {
-            const xbody = activeDoc().getBody();
-            const body = {
-                getType: function() { return uno.idl.scriptinterop.ElementType.BODY_SECTION; },
-                getText: function() { return xbody.getText(); },
-                getNumChildren: function() { return xbody.getNumChildren(); },
-                getChild: function(n) { return xbody.getChild(n); },
-                editAsText: function() { return textFacade(null, xbody.getText()); },
-                asText: function() { return textFacade(null, xbody.getText()); },
-                copy: function() { return body; },
-                appendParagraph: function(text) { return xbody.appendParagraph(text || ''); },
-                appendListItem: function(text) { return xbody.appendListItem(text || ''); },
-                getParent: function() { return null; },
-                getAttributes: function() { return {}; },
-                findText: function() { return null; }
-            };
-            return body;
-        }
-
-        function footnotesFacade() {
-            const doc = activeDoc();
-            const list = doc.getFootnotes();
-            const facades = [];
-            for (let i = 0; i < list.length; ++i) {
-                facades.push(footnoteFacade(list[i]));
-            }
-            return facades;
-        }
-
         globalThis.DocumentApp = {
             getActiveDocument: function() {
                 return {
                     getSelection: function() { return activeDoc().getSelection(); },
                     getCursor: cursorFacade,
-                    getBody: bodyFacade,
-                    getFootnotes: footnotesFacade,
+                    getBody: function() { return activeDoc().getBody(); },
+                    getFootnotes: function() { return activeDoc().getFootnotes(); },
                     newRange: function() { return activeDoc().newRange(); },
                     setSelection: function(sel) { activeDoc().setSelection(sel); },
                     getName: function() { return 'Untitled'; },
@@ -190,8 +101,8 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 EQUATION_FUNCTION_ARGUMENT_SEPARATOR: 'EQUATION_FUNCTION_ARGUMENT_SEPARATOR',
                 EQUATION_SYMBOL: 'EQUATION_SYMBOL',
                 FOOTER_SECTION: 'FOOTER_SECTION',
-                FOOTNOTE: 'FOOTNOTE',
-                FOOTNOTE_SECTION: 'FOOTNOTE_SECTION',
+                FOOTNOTE: uno.idl.scriptinterop.ElementType.FOOTNOTE,
+                FOOTNOTE_SECTION: uno.idl.scriptinterop.ElementType.FOOTNOTE_SECTION,
                 HEADER_SECTION: 'HEADER_SECTION',
                 HORIZONTAL_RULE: uno.idl.scriptinterop.ElementType.HORIZONTAL_RULE,
                 INLINE_DRAWING: 'INLINE_DRAWING',

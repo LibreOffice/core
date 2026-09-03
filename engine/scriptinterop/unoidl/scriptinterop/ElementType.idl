@@ -23,6 +23,8 @@ enum ElementType {
     PAGE_BREAK,
     HORIZONTAL_RULE,
     BODY_SECTION,
+    FOOTNOTE,
+    FOOTNOTE_SECTION,
     TEXT,
     UNSUPPORTED
 };

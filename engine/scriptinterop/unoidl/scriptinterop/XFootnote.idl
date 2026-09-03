@@ -11,8 +11,8 @@
 
 module scriptinterop {
 
-interface XFootnote: XBase {
-    sequence<XParagraph> getParagraphs();
+interface XFootnote: XElement {
+    XContainerElement getFootnoteContents();
 };
 
 };

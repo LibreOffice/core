@@ -1060,6 +1060,30 @@ private:
     css::uno::Reference<css::frame::XModel> model_;
 };
 
+class FootnoteSectionImpl: public cppu::WeakImplHelper<scriptinterop::XContainerElement> {
+public:
+    explicit FootnoteSectionImpl(css::uno::Reference<css::text::XText> const & text):
+        text_(text) {}
+
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+
+    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        auto const list = enumerateElements(text_);
+        return index >= 0 && index < list.getLength() ? list[index] : nullptr;
+    }
+
+    sal_Int32 getNumChildren() override { return enumerateElements(text_).getLength(); }
+
+    OUString getText() override { return text_.is() ? text_->getString() : u""_ustr; }
+
+    scriptinterop::ElementType getType() override {
+        return scriptinterop::ElementType_FOOTNOTE_SECTION;
+    }
+
+private:
+    css::uno::Reference<css::text::XText> text_;
+};
+
 class FootnoteImpl: public cppu::WeakImplHelper<scriptinterop::XFootnote> {
 public:
     explicit FootnoteImpl(css::uno::Reference<css::text::XFootnote> const & footnote):
@@ -1067,28 +1091,17 @@ public:
 
     css::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getParagraphs() override {
-        std::vector<css::uno::Reference<scriptinterop::XParagraph>> v;
-        css::uno::Reference<css::text::XText> const text(footnote_, css::uno::UNO_QUERY);
-        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
-                text, css::uno::UNO_QUERY})
-        {
-            auto const en = ea->createEnumeration();
-            while (en.is() && en->hasMoreElements()) {
-                css::uno::Reference<css::text::XTextContent> xtc;
-                en->nextElement() >>= xtc;
-                if (!xtc.is()) {
-                    continue;
-                }
-                css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
-                if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
-                    continue;
-                }
-                v.emplace_back(new ParagraphImpl(xtc));
-            }
-        }
-        return cpo::uno::Sequence(v.data(), v.size());
+    css::uno::Reference<scriptinterop::XContainerElement> getFootnoteContents() override {
+        return new FootnoteSectionImpl(
+            css::uno::Reference<css::text::XText>(footnote_, css::uno::UNO_QUERY_THROW));
     }
+
+    OUString getText() override {
+        css::uno::Reference<css::text::XText> const text(footnote_, css::uno::UNO_QUERY);
+        return text.is() ? text->getString() : u""_ustr;
+    }
+
+    scriptinterop::ElementType getType() override { return scriptinterop::ElementType_FOOTNOTE; }
 
 private:
     css::uno::Reference<css::text::XFootnote> footnote_;

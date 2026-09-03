@@ -84,7 +84,9 @@ function documentTest() {
     console.assert(body.getChild(4).getText().substring(0, 8) === 'Trailing');
     const fns = DocumentApp.getActiveDocument().getFootnotes();
     console.assert(fns.length === 1);
+    console.assert(fns[0].getType() === DocumentApp.ElementType.FOOTNOTE);
     const noteContents = fns[0].getFootnoteContents();
+    console.assert(noteContents.getType() === DocumentApp.ElementType.FOOTNOTE_SECTION);
     console.assert(noteContents.getNumChildren() >= 1);
     console.assert(noteContents.getChild(0).getText() === 'Note');
 
