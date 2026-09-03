@@ -250,6 +250,11 @@ public:
     /// from request data. Empty when none of the sources is available.
     static std::string getServerUrl();
 
+    /// The upgrade request header for a headless connection with secret.
+    static constexpr std::string_view ChainSecretHeader = "X-COOL-Remote-Document-Secret";
+
+    static const std::string& getChainSecret();
+
     static void initialize()
     {
         assert(Instance == nullptr && "Unexpected double initialization of RemoteDocumentBroker");

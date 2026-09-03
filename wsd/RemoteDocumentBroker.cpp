@@ -20,6 +20,7 @@
 #include <common/SigUtil.hpp>
 #include <common/StringVector.hpp>
 #include <common/Uri.hpp>
+#include <common/Util.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/Uri.hpp>
 #include <wsd/COOLWSD.hpp>
@@ -98,6 +99,11 @@ bool HeadlessClientSession::connect(const std::string& uri, SocketPoll& poll)
                                         << Anonymizer::anonymizeUrl(pathAndQuery) << ']');
 
     http::Request request(pathAndQuery);
+
+    // The secret marks as a connection only RemoteDocumentBroker could made
+    request.add(std::string(RemoteDocumentBroker::ChainSecretHeader),
+                RemoteDocumentBroker::getChainSecret());
+
     return wsRequest(request, host, port, secure, poll);
 }
 
@@ -628,6 +634,26 @@ std::string RemoteDocumentBroker::getServerUrl()
     }();
 
     return serverUrl;
+}
+
+const std::string& RemoteDocumentBroker::getChainSecret()
+{
+    constexpr std::size_t GeneratedSecretLengthBytes = 32;
+
+    static const std::string secret = []() -> std::string
+    {
+        std::string configured =
+            ConfigUtil::getConfigValue<std::string>("remote_documents.chain_secret", "");
+        if (!configured.empty())
+            return configured;
+
+        LOG_WRN("RemoteDoc: no remote_documents.chain_secret is configured, so a connection "
+                "chain is accepted only from this process. Set one, the same on every node, to "
+                "let the nodes of a cluster refuse the connection cycles they form together");
+        return Util::rng::getHexString(GeneratedSecretLengthBytes);
+    }();
+
+    return secret;
 }
 
 void RemoteDocumentBroker::subscribeAsync(RemoteDocumentRequest request)

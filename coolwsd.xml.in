@@ -410,6 +410,7 @@
     <remote_documents desc="Live links from open documents to documents open on this or another server">
       <enable desc="Enable subscriptions to remote documents" type="bool" default="false">false</enable>
       <server_url desc="Base URL this server dials remote documents through, usually the public proxy in front of the cluster. Empty falls back to server_name, then to this server's own address." type="string" default=""></server_url>
+      <chain_secret desc="Secret a server proves a remote document connection of its own with, so that such a connection may name the documents already on its chain and the cycles between two servers are refused. Set the same value on every server of a cluster. Empty gets a secret for this process alone, which no other server holds." type="string" default=""></chain_secret>
       <max_remote_docs desc="The maximum number of remote documents this server connects to" type="uint" default="16">16</max_remote_docs>
       <max_links_per_document desc="The maximum number of remote documents one document may subscribe to" type="uint" default="4">4</max_links_per_document>
       <max_chain_depth desc="The maximum length of a chain of documents linked to each other" type="uint" default="3">3</max_chain_depth>

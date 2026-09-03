@@ -1178,6 +1178,22 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         RequestDetails requestDetails(request, COOLWSD::ServiceRoot);
         // LOG_TRC("Request details " << requestDetails.toString());
 
+#if !MOBILEAPP
+        // A headless connection that a RemoteDocumentBroker made carries the secret.
+        // A browser sets no such header of its own on an upgrade request.
+        if (const std::string secret =
+                request.get(std::string(RemoteDocumentBroker::ChainSecretHeader), std::string());
+            !secret.empty())
+        {
+            const bool matches = secret == RemoteDocumentBroker::getChainSecret();
+            if (!matches)
+                LOG_WRN("A request carried a remote document secret that does not match this "
+                        "node's, so it is not taken for a headless connection");
+
+            requestDetails.setRemoteDocument(matches);
+        }
+#endif // !MOBILEAPP
+
         // Config & security ...
         if (requestDetails.isProxy())
         {

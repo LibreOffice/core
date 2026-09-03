@@ -672,6 +672,9 @@ private:
     /// If Session is for convert-to
     bool _isConvertTo;
 
+    /// Whether this session is the headless connection
+    bool _isRemoteDocumentConnection;
+
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)

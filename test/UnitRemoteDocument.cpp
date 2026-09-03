@@ -25,6 +25,7 @@
 
 #include <net/HttpRequest.hpp>
 #include <wsd/ClientSession.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 
 #include <Poco/Net/HTTPRequest.h>
 
@@ -1188,13 +1189,161 @@ public:
     }
 };
 
+/// A headless connection carries the secret of the server that made it, and
+/// names the documents already on the chain it was made for. Verifies that
+/// such a connection naming no chain is refused, and that the same connection
+/// naming one loads the document.
+class UnitRemoteDocumentNoChain : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, Connecting, Done) _phase;
+
+    /// Carries the two connections below, so that waiting for their answers
+    /// leaves coolwsd's main thread free to fork the kit one of them loads in.
+    std::thread _connectThread;
+
+    std::string fileWopiSrc(int fileId) const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(fileId);
+    }
+
+    /// Loads the given document over a connection carrying the secret of a
+    /// headless one, with the given options after the url. Returns the answer
+    /// to the load: a status: for a document that loaded, an error: for a load
+    /// that was refused, and an empty string when neither arrived.
+    std::string loadOverHeadlessConnection(const std::string& wopiSrc,
+                                           const std::string& loadOptions)
+    {
+        const std::string encodedWopiSrc = Uri::encode(wopiSrc + "?access_token=anything");
+
+        const std::shared_ptr<http::WebSocketSession> session =
+            http::WebSocketSession::create(helpers::getTestServerURI());
+        if (!session)
+            return std::string();
+
+        // The secret this server holds is the one it gives every headless
+        // connection of its own, so the connection is taken for one of them.
+        http::Request request("/cool/" + encodedWopiSrc + "/ws");
+        request.add(std::string(RemoteDocumentBroker::ChainSecretHeader),
+                    RemoteDocumentBroker::getChainSecret());
+        session->asyncRequest(request, socketPoll());
+
+        helpers::sendTextFrame(session, "load url=" + encodedWopiSrc + " readonly=1" + loadOptions,
+                               getTestname());
+
+        const std::string answer =
+            helpers::getResponseStringAny(session, { "status:", "error:" }, getTestname());
+        session->asyncShutdown();
+        return answer;
+    }
+
+public:
+    UnitRemoteDocumentNoChain()
+        : WopiTestServer("UnitRemoteDocumentNoChain")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitRemoteDocumentNoChain()
+    {
+        if (_connectThread.joinable())
+            _connectThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        // The documents here are read for their load answer alone and none of
+        // them is ever saved, so a document leaving with nothing uploaded is
+        // what this test does rather than a loss it reports.
+        TST_LOG("onDataLoss (expected): " << reason);
+        return false;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        // The source document loading over the second connection below also
+        // lands here; only the first client drives the connections.
+        if (_phase != Phase::WaitLoadStatus)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Connecting);
+
+        // An assertion failure throws, which would leave this thread through
+        // no catch of its own, so each answer is reported instead.
+        _connectThread = std::thread(
+            [this]
+            {
+                static constexpr std::string_view Refusal = "error: cmd=load kind=syntax";
+
+                // The chain is the whole record the source has of what reads
+                // it, and the only thing a link of its own back to the other
+                // end is refused by, so a connection naming none is refused.
+                // Each connection reads a document of its own, so that the
+                // refused one leaves no document unloading in the way of the
+                // load below.
+                const std::string refused =
+                    loadOverHeadlessConnection(fileWopiSrc(2), std::string());
+                if (refused != Refusal)
+                {
+                    failTest("A headless connection naming no chain must be answered with [" +
+                             std::string(Refusal) + "], got [" + refused + ']');
+                    return;
+                }
+
+                // The same connection naming a chain loads the document.
+                const std::string loaded = loadOverHeadlessConnection(
+                    fileWopiSrc(3), " remotechain=" + Uri::encode(fileWopiSrc(4)));
+                if (!loaded.starts_with("status:"))
+                {
+                    failTest("A headless connection naming a chain must load the document, got [" +
+                             loaded + ']');
+                    return;
+                }
+
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("A headless connection naming no chain is refused, and one naming a "
+                         "chain loads");
+            });
+
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::Connecting:
+            case Phase::Done:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
                               new UnitRelatedDocumentPost(), new UnitRemoteDocumentMutual(),
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
                               new UnitRemoteDocumentIsolation(), new UnitRemoteDocumentSaved(),
-                              nullptr };
+                              new UnitRemoteDocumentNoChain(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

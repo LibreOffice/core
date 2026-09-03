@@ -140,6 +140,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _sentAudit(false)
     , _sentBrowserSetting(false)
     , _isConvertTo(false)
+    , _isRemoteDocumentConnection(requestDetails.isRemoteDocument())
 {
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()
@@ -2281,14 +2282,32 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 #if !MOBILEAPP
         // A headless session names the docKeys already on its connection
         // chain, so a subscription that would close a cycle can be refused.
+        bool namedDocKeyChain = false;
         for (std::size_t i = 1; i < tokens.size(); ++i)
         {
             std::string docKeyChain;
-            if (COOLProtocol::getTokenString(tokens[i], "remotechain", docKeyChain) &&
-                !docKeyChain.empty())
+            if (!COOLProtocol::getTokenString(tokens[i], "remotechain", docKeyChain) ||
+                docKeyChain.empty())
+                continue;
+
+            if (!_isRemoteDocumentConnection)
             {
-                docBroker->addToIncomingDocKeyChain(docKeyChain);
+                LOG_WRN("Ignoring the connection chain named by session ["
+                        << getId()
+                        << "]: the connection is not one a RemoteDocumentBroker made");
+                continue;
             }
+
+            namedDocKeyChain = true;
+            docBroker->addToIncomingDocKeyChain(docKeyChain);
+        }
+
+        // A headless connection carries the chain of the document, one naming no chain
+        // is refused instead, so that cycle protection is not skipped.
+        if (_isRemoteDocumentConnection && !namedDocKeyChain)
+        {
+            sendTextFrameAndLogError("error: cmd=load kind=syntax");
+            return false;
         }
 #endif
 
@@ -4252,6 +4271,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tclip sockets: " << _clipSockets.size()
        << "\n\t\tproxy access:: " << _proxyAccess
        << "\n\t\trelatedDocumentToken set: " << !_relatedDocumentToken.empty()
+       << "\n\t\tisRemoteDocumentConnection: " << _isRemoteDocumentConnection
        << "\n\t\tclientSelectedMode: " << _clientSelectedMode
        << "\n\t\tvisibleAreaMode: " << _visibleAreaMode
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()
