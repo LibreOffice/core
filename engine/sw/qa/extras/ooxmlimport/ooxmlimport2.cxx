@@ -53,6 +53,11 @@
 #include <fmtftn.hxx>
 #include <ftnidx.hxx>
 #include <unotxdoc.hxx>
+#include <swtable.hxx>
+#include <frmfmt.hxx>
+#include <frmatr.hxx>
+#include <frameformats.hxx>
+#include <editeng/brushitem.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <frame.hxx>
@@ -1649,6 +1654,30 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTableFirstInCellWithTblPrExRows)
     // A cell with more than one paragraph keeps the margin set on the cell itself.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(529),
                          getProperty<sal_Int32>(xSecondCell, u"TopBorderDistance"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBuiltInTableStyleReference)
+{
+    // Given a document whose table names one of Word's built-in table styles in w:tblStyle
+    // without defining that style in its styles.xml:
+    createSwDoc("table-style-builtin-reference.docx");
+    SwDoc* pDoc = getSwDoc();
+
+    // Then the table gets the matching style from the built-in catalog...
+    const sw::TableFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rTableFormats.size());
+    SwTable* pTable = SwTable::FindTable(rTableFormats[0]);
+    CPPUNIT_ASSERT(pTable);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Grid Table 4 Accent 1
+    // - Actual  :
+    // i.e. an undefined style reference left the table without any style.
+    CPPUNIT_ASSERT_EQUAL(u"Grid Table 4 Accent 1"_ustr, pTable->GetTableStyleName().toString());
+
+    // ...and the style shows in the cells: the header row is filled with the accent color.
+    const SwTableBox* pHeaderBox = pTable->GetTabLines()[0]->GetTabBoxes()[0];
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472C4),
+                         pHeaderBox->GetFrameFormat()->GetAttrSet().GetBackground().GetColor());
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT

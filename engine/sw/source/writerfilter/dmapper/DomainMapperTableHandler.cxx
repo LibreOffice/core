@@ -51,6 +51,7 @@
 #include "util.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -257,6 +258,8 @@ struct TableInfo
     PropertyMapPtr pTableDefaults;
     PropertyMapPtr pTableBorders;
     TableStyleSheetEntry* pTableStyle;
+    /// The style id the table's w:tblStyle names, whether or not styles.xml defines it.
+    OUString sTableStyleId;
     css::beans::PropertyValues aTableProperties;
     std::vector< PropertyIds > aTablePropertyIds;
 
@@ -409,6 +412,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             // Apply table style properties recursively
             OUString sTableStyleName;
             aTableStyleVal->second >>= sTableStyleName;
+            rInfo.sTableStyleId = sTableStyleName;
             StyleSheetTablePtr pStyleSheetTable = m_rDMapper_Impl.GetStyleSheetTable();
             const StyleSheetEntryPtr pStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( sTableStyleName );
             pTableStyle = dynamic_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
@@ -1672,6 +1676,32 @@ TableStyleName lcl_ImportTableStyle(SwDoc& rDoc, TableStyleSheetEntry& rStyle)
     return aStyleName;
 }
 
+/// Find the built-in table style a DOCX style id refers to when the file does not define the
+/// style itself. Word derives these ids from the style names: the spaces dropped, and the
+/// accent color set off with a hyphen, so "Grid Table 4 Accent 1" is "GridTable4-Accent1".
+TableStyleName lcl_FindBuiltInTableStyle(const SwDoc& rDoc, std::u16string_view rStyleId)
+{
+    const SwTableAutoFormatTable& rStyles = rDoc.GetTableStyles();
+    for (size_t i = 0; i < rStyles.size(); ++i)
+    {
+        const TableStyleName& rName = rStyles[i].GetName();
+        const OUString sId
+            = rName.toString().replaceAll(u" Accent ", u"-Accent").replaceAll(u" ", u"");
+        if (sId.equalsIgnoreAsciiCase(rStyleId))
+            return rName;
+    }
+
+    // The one id that does not follow the rule.
+    if (o3tl::equalsIgnoreAsciiCase(rStyleId, u"TableGridLight"))
+    {
+        const TableStyleName aName(u"Grid Table Light"_ustr);
+        if (rStyles.FindAutoFormat(aName))
+            return aName;
+    }
+
+    return TableStyleName();
+}
+
 }
 
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
@@ -1796,10 +1826,14 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 {
                     SwTable* pTable
                         = xTable->GetFrameFormat() ? SwTable::FindTable(xTable->GetFrameFormat()) : nullptr;
-                    if (aTableInfo.pTableStyle && pTable)
+                    if (pTable && (aTableInfo.pTableStyle || !aTableInfo.sTableStyleId.isEmpty()))
                     {
-                        const TableStyleName aStyleName = lcl_ImportTableStyle(
-                            xTable->GetFrameFormat()->GetDoc(), *aTableInfo.pTableStyle);
+                        SwDoc& rDoc = xTable->GetFrameFormat()->GetDoc();
+                        TableStyleName aStyleName;
+                        if (aTableInfo.pTableStyle)
+                            aStyleName = lcl_ImportTableStyle(rDoc, *aTableInfo.pTableStyle);
+                        else
+                            aStyleName = lcl_FindBuiltInTableStyle(rDoc, aTableInfo.sTableStyleId);
                         if (!aStyleName.isEmpty())
                         {
                             pTable->SetTableStyleName(aStyleName);
@@ -1812,6 +1846,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                             aSettings.m_bUseRowBandingStyle = !(aTableInfo.nOriginalTblLook & 0x200);
                             aSettings.m_bUseColumnBandingStyle = !(aTableInfo.nOriginalTblLook & 0x400);
                             pTable->SetTableStyleSettings(aSettings);
+
+                            // A style the file only refers to has put nothing into the cells
+                            // during import, so resolve it into them now.
+                            if (!aTableInfo.pTableStyle)
+                                rDoc.ApplyTableStyleLive(*pTable->GetTableNode());
                         }
                     }
 
