@@ -6628,13 +6628,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixConcatRendersBooleansAsTrueFalse)
     m_pDoc->DeleteTab(0);
 }
 
-CPPUNIT_TEST_FIXTURE(TestFormula2, testAutoSpillFromChooseAndLet)
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAutoSpillFromChooseAndLetAndLambda)
 {
     // A UI-typed CHOOSE or LET whose result is a multi-cell array
     // auto-promotes the cell to a dynamic-array master and spills
     // the result. CHOOSE inspects each alternative slice and reports
     // array if any one of them produces an array. LET recurses into
-    // the body slice.
+    // the body slice, but not the parameters. LAMBDA never outputs
+    // an array.
 
     m_pDoc->SetAutoCalc(false);
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
@@ -6646,39 +6647,107 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAutoSpillFromChooseAndLet)
     m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
     m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
 
-    // CHOOSE(2; A1:A3; B1:B3) picks B1:B3, a 3x1 column array. The
-    // cell at D1 spills into D1:D3 with 10, 20 and 30.
-    ScAddress aChoosePos(3, 0, 0);
-    ScCompiler aChooseComp(*m_pDoc, aChoosePos, m_pDoc->GetGrammar(), false, false);
-    std::unique_ptr<ScTokenArray> pChooseCode
-        = aChooseComp.CompileString(u"=CHOOSE(2; A1:A3; B1:B3)"_ustr);
-    auto pChooseCell = new ScFormulaCell(*m_pDoc, aChoosePos, std::move(pChooseCode));
-    pChooseCell->SetAutoDynamicArrayEligible(true);
-    m_pDoc->SetFormulaCell(aChoosePos, pChooseCell);
+    // CHOOSE(1; A1; A2*5; SUM(B1:B3)) picks A1, which is a single
+    // value. The cell at D1 does not spill, because none of the
+    // alternatives produce an array.
+    ScAddress aChoosePos1(3, 0, 0);
+    ScCompiler aChooseComp1(*m_pDoc, aChoosePos1, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pChooseCode1
+        = aChooseComp1.CompileString(u"=CHOOSE(1; A1; A2*5; SUM(B1:B3))"_ustr);
+    auto pChooseCell1 = new ScFormulaCell(*m_pDoc, aChoosePos1, std::move(pChooseCode1));
+    pChooseCell1->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aChoosePos1, pChooseCell1);
 
-    // LET(x; A1:A3; x*2) binds x to A1:A3 and doubles it. The cell
-    // at E1 spills into E1:E3 with 2, 4 and 6.
-    ScAddress aLetPos(4, 0, 0);
-    ScCompiler aLetComp(*m_pDoc, aLetPos, m_pDoc->GetGrammar(), false, false);
-    std::unique_ptr<ScTokenArray> pLetCode = aLetComp.CompileString(u"=LET(x; A1:A3; x*2)"_ustr);
-    auto pLetCell = new ScFormulaCell(*m_pDoc, aLetPos, std::move(pLetCode));
-    pLetCell->SetAutoDynamicArrayEligible(true);
-    m_pDoc->SetFormulaCell(aLetPos, pLetCell);
+    // CHOOSE(2; A1:A3; B1:B3) picks B1:B3, a 3x1 column array. The
+    // cell at E1 spills into E1:E3 with 10, 20 and 30.
+    ScAddress aChoosePos2(4, 0, 0);
+    ScCompiler aChooseComp2(*m_pDoc, aChoosePos2, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pChooseCode2
+        = aChooseComp2.CompileString(u"=CHOOSE(2; A1:A3; B1:B3)"_ustr);
+    auto pChooseCell2 = new ScFormulaCell(*m_pDoc, aChoosePos2, std::move(pChooseCode2));
+    pChooseCell2->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aChoosePos2, pChooseCell2);
+
+    // LET(x; A1:A3; MAX(x)*2) binds x to A1:A3 and doubles its MAX.
+    // The cell at F1 does not spill, because the last subexpression
+    // is not an array formula.
+    ScAddress aLetPos1(5, 0, 0);
+    ScCompiler aLetComp1(*m_pDoc, aLetPos1, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pLetCode1
+        = aLetComp1.CompileString(u"=LET(x; A1:A3; MAX(x)*2)"_ustr);
+    auto pLetCell1 = new ScFormulaCell(*m_pDoc, aLetPos1, std::move(pLetCode1));
+    pLetCell1->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aLetPos1, pLetCell1);
+
+    // LET(x; A3; SEQUENCE(x;1;1;1)*2) binds x to A3 and generates a
+    // sequence from it. The cell at G1 spills into G1:G3 with 2, 4
+    // and 6, because the last subexpression uses SEQUENCE, which
+    // always returns an array.
+    ScAddress aLetPos2(6, 0, 0);
+    ScCompiler aLetComp2(*m_pDoc, aLetPos2, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pLetCode2
+        = aLetComp2.CompileString(u"=LET(x; 3; SEQUENCE(x;1;1;1)*2)"_ustr);
+    auto pLetCell2 = new ScFormulaCell(*m_pDoc, aLetPos2, std::move(pLetCode2));
+    pLetCell2->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aLetPos2, pLetCell2);
+
+    // LAMBDA(x; MAP(A1:B3; LAMBDA(y; y+x)))(6) does not spill,
+    // because LAMBDA never returns an array, and a called LAMBDA
+    // cannot offer any guarantee one way or the other.
+    ScAddress aLambdaPos1(7, 0, 0);
+    ScCompiler aLambdaComp1(*m_pDoc, aLambdaPos1, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pLambdaCode1
+        = aLambdaComp1.CompileString(u"=LAMBDA(x; MAP(A1:B3; LAMBDA(y; y+x)))(6)"_ustr);
+    auto pLambdaCell1 = new ScFormulaCell(*m_pDoc, aLambdaPos1, std::move(pLambdaCode1));
+    pLambdaCell1->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aLambdaPos1, pLambdaCell1);
+
+    // MAKEARRAY(3; 2; LAMBDA(r; c; r*(10*c-9))) generates a 3x2
+    // array. The cell at I1 spills into I1:I3 with 1, 2 and 3,
+    // and J1:J3 with 10, 20 and 30.
+    ScAddress aLambdaPos2(8, 0, 0);
+    ScCompiler aLambdaComp2(*m_pDoc, aLambdaPos2, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pLambdaCode2
+        = aLambdaComp2.CompileString(u"=MAKEARRAY(3; 2; LAMBDA(r; c; r*(15*c-10)))"_ustr);
+    auto pLambdaCell2 = new ScFormulaCell(*m_pDoc, aLambdaPos2, std::move(pLambdaCode2));
+    pLambdaCell2->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aLambdaPos2, pLambdaCell2);
 
     m_pDoc->SetAutoCalc(true);
     m_pDoc->CalcAll();
 
-    CPPUNIT_ASSERT_MESSAGE("CHOOSE with a range branch should auto-spill",
-                           pChooseCell->IsDynamicArrayMaster());
-    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_MESSAGE("CHOOSE with no array branches should not auto-spill",
+                           !pChooseCell1->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
 
-    CPPUNIT_ASSERT_MESSAGE("LET binding a range should auto-spill",
-                           pLetCell->IsDynamicArrayMaster());
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(4, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(4, 2, 0)));
+    CPPUNIT_ASSERT_MESSAGE("CHOOSE with a range branch should auto-spill",
+                           pChooseCell2->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(4, 2, 0)));
+
+    CPPUNIT_ASSERT_MESSAGE("LET binding a range should not auto-spill on its own",
+                           !pLetCell1->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+
+    CPPUNIT_ASSERT_MESSAGE("LET generating an array should auto-spill",
+                           pLetCell2->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(6, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(6, 2, 0)));
+
+    CPPUNIT_ASSERT_MESSAGE("LAMBDA containing an array function should not auto-spill",
+                           !pLambdaCell1->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(7, 0, 0)));
+
+    CPPUNIT_ASSERT_MESSAGE("Array formula containing a LAMBDA should auto-spill",
+                           pLambdaCell2->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(8, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(8, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(8, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(9, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(ScAddress(9, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(ScAddress(9, 2, 0)));
 
     m_pDoc->DeleteTab(0);
 }

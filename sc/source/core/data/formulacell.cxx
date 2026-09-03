@@ -1604,16 +1604,18 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
         {
             const formula::StackVar eType = p->GetType();
             aStackIsArray.push_back(eType == formula::svDoubleRef
+                                    || eType == formula::svExternalDoubleRef
                                     || eType == formula::svMatrix);
             continue;
         }
         // Jump commands expose their branches through a
-        // FormulaJumpToken. Branches k=1..nJumpCount-1 hold the
-        // result expressions: IF carries THEN and ELSE, CHOOSE
-        // carries the alternatives, LET carries the bindings and
-        // the body. The token is array-intent if any branch is.
+        // FormulaJumpToken. In most cases, branches
+        // k=1..nJumpCount-1 hold the result expressions: IF
+        // carries THEN and ELSE, CHOOSE carries the
+        // alternatives. The token is array-intent if any branch
+        // is.
         if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA
-            || eOp == ocChoose || eOp == ocLet)
+            || eOp == ocChoose)
         {
             if (aStackIsArray.empty())
                 return false;
@@ -1632,6 +1634,42 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
                     bAnyBranchArray = true;
             }
             aStackIsArray.push_back(bAnyBranchArray);
+            i = pJump[nJumpCount];
+            continue;
+        }
+        // Whether LET intends an array depends (only) on the
+        // last subexpression.
+        // TODO: More sophisticated analysis is possible; the
+        // other subexpressions can be substituted into the
+        // last one, to determine the answer more conclusively.
+        // Is it worthwhile to do this analysis?
+        if (eOp == ocLet)
+        {
+            if (aStackIsArray.empty())
+                return false;
+            aStackIsArray.pop_back();
+            const auto* pJumpTok = static_cast<const formula::FormulaJumpToken*>(p);
+            const short* pJump = pJumpTok->GetJump();
+            const short nJumpCount = pJump[0];
+            short nBranch = nJumpCount - 1;
+            const sal_uInt16 nBranchStart = pJump[nBranch] + 1;
+            const sal_uInt16 nBranchEnd = pJump[nBranch + 1];
+            if (nBranchEnd > nBranchStart && nBranchEnd <= nEnd)
+                aStackIsArray.push_back(intendsArrayResultInRange(pRpn, nBranchStart, nBranchEnd));
+            else
+                aStackIsArray.push_back(false);
+            i = pJump[nJumpCount];
+            continue;
+        }
+        // The output of a LAMBDA is always a callable (or an
+        // error), never an array. ocLambda also appears before
+        // the first subexpression, instead of after.
+        if (eOp == ocLambda)
+        {
+            const auto* pJumpTok = static_cast<const formula::FormulaJumpToken*>(p);
+            const short* pJump = pJumpTok->GetJump();
+            const short nJumpCount = pJump[0];
+            aStackIsArray.push_back(false);
             i = pJump[nJumpCount];
             continue;
         }
