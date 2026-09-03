@@ -214,6 +214,7 @@ $(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKE
 $(call gb_UnpackedTarball_get_version_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
+$(call gb_UnpackedTarball_get_final_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_final_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))
 
 private gb_UnpackedTarball_PATTERN_RULES_$(1) :=
