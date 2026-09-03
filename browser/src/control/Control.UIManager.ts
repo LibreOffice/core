@@ -241,7 +241,9 @@ class UIManager extends window.L.Control {
 		const permissionMode = this.permissionViewMode;
 		const viewModeBtn = permissionMode && (permissionMode.viewModeDropdown || permissionMode.viewModeContainer);
 		if (viewModeBtn) {
-			this.showAttention(viewModeBtn, _('You are currently in View mode'), true, 5000);
+			const message = _('You are currently in View mode, press {0} to edit')
+				.replace('{0}', JSDialog.ShortcutsUtil.getShortcutText('switchtoedit'));
+			this.showAttention(viewModeBtn, message, true, 5000);
 		}
 	}
 

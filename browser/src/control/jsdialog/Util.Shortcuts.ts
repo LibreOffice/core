@@ -40,6 +40,7 @@ const EXPLICIT_ALIASES: Record<string, string> = {
 	// reflects the desktop shortcut, which differs from the browser binding
 	// in some locales (e.g. German desktop uses Shift+Alt+F).
 	find: 'Ctrl+F',
+	switchtoedit: 'Ctrl+Shift+E',
 };
 
 class ShortcutsUtil {

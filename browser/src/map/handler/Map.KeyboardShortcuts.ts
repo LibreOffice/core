@@ -441,6 +441,8 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
 
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'w', platform: Platform.CODAWINDOWS | Platform.CODAQT, unoAction: '.uno:CloseWin', showViewModeAttention: false }),
 
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'E', dispatchAction: 'switchtoedit', viewType: ViewType.ReadOnly, showViewModeAttention: false }),
+
     /*
         Disable F5 or assign it something to prevent browser refresh.
         Disable multi-sheet selection shortcuts in Calc.
