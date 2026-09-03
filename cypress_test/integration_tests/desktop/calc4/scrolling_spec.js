@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
+var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', { testIsolation: false }, function() {
 
@@ -249,6 +250,55 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.cGet(helper.addressInputSelector).invoke('val').should((val) => {
 			expect(endRow(val)).to.be.greaterThan(rowBeforeScroll + 3);
 		});
+	});
+
+	// While a formula is being edited, the cell ranges it refers to are drawn on
+	// the overlay canvas from their positions in the sheet. The overlay has to
+	// be told which part of the sheet is on screen, so that what it draws moves
+	// with the view. Before the fix the overlay kept the area the sheet showed
+	// when it loaded, and everything drawn on it stayed behind by however far
+	// the view had scrolled.
+	it('Formula reference marks follow the view when it scrolls', function() {
+		// The highlight of the ranges a formula refers to is built when editing
+		// starts on a formula the cell already holds, so the formula goes in
+		// first and the cell is then reopened for editing.
+		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+		helper.typeIntoDocument('=SUM(A5:A10){enter}');
+		helper.processToIdle(this.win);
+
+		calcHelper.dblClickOnFirstCell();
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-canvas').should(() => {
+			expect(this.win.app.map._docLayer._referencesAll,
+				'reference marks while a formula is edited').to.have.length.greaterThan(0);
+		});
+
+		// A mouse wheel or a scroll bar drag reaches core through this same
+		// layout scroll; driving it directly keeps the test free of
+		// wheel-animation timing.
+		cy.then(() => {
+			this.win.app.activeDocument.activeLayout.scroll(0, 500, true);
+		});
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-canvas').should(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			const overlayBounds = this.win.app.map._docLayer._canvasOverlay.getBounds();
+
+			// The document must really have scrolled for the test to mean anything.
+			expect(layout.viewedRectangle.pY1, 'the view scrolled').to.be.greaterThan(0);
+
+			expect(overlayBounds.min.x, 'overlay left edge').to.equal(layout.viewedRectangle.pX1);
+			expect(overlayBounds.min.y, 'overlay top edge').to.equal(layout.viewedRectangle.pY1);
+		});
+
+		// Leave the cell and take the formula back out of the sheet, so the
+		// tests below start from the document as it was loaded.
+		helper.typeIntoDocument('{esc}');
+		helper.processToIdle(this.win);
+		helper.typeIntoDocument('{ctrl}z');
+		helper.processToIdle(this.win);
 	});
 
 	// The scrollbar positions the tests above check are pixel positions of the thumb,

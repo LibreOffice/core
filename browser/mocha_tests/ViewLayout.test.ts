@@ -102,6 +102,12 @@ describe('ViewLayout', function () {
 					getSelectedPart: function () {
 						return '0';
 					},
+					// Text and spreadsheet documents name a part by its index
+					// written in decimal, so the identifier parses back to the
+					// index.
+					getIndexFromPart: function (part: string) {
+						return parseInt(part);
+					},
 					// applyZoom calls this to recompute app.twipsToPixels for the new
 					// zoom. The tests pin twipsToPixels to a fixed scale (see above),
 					// so keep it a no-op to preserve that scale.
@@ -526,6 +532,94 @@ describe('ViewLayout', function () {
 				Math.max(768, app.activeDocument.fileSize.pY + yStart),
 			]);
 			return layout;
+		}
+
+		// The document-anchor stub that setupAppStubs installs is a fixed literal.
+		// This one comes back by reference, so a test can change the frame size and
+		// see the layout react to it.
+		function installResizableDocumentAnchor(
+			width: number,
+			height: number,
+		): { size: number[]; myTopLeft: number[] } {
+			const anchor = { size: [width, height], myTopLeft: [0, 0] };
+			(app.sectionContainer as any).getDocumentAnchorSection = function () {
+				return anchor;
+			};
+			return anchor;
+		}
+
+		// The plain single-window layout at pixelsToTwips=15, with a 1024x768 frame
+		// and a 5000x5000 core-pixel scrollable extent, so both axes have room to
+		// scroll. This is the base that carries the shared scroll and visible-area
+		// bookkeeping.
+		function setupBaseLayoutForTest(): ViewLayoutBase {
+			setupAppStubs(15);
+			installResizableDocumentAnchor(1024, 768);
+			resetRenderManagerState();
+
+			const activeDocument = new DocumentBase();
+			(activeDocument as any)._fileSize = new cool.SimplePoint(75000, 75000);
+			app.activeDocument = activeDocument;
+
+			const layout = new ViewLayoutBase();
+			app.activeDocument.activeLayout = layout;
+			layout.viewSize = cool.SimplePoint.fromCorePixels([5000, 5000]);
+			return layout;
+		}
+
+		// A spreadsheet layout with the same frame and extent. Calc takes the sheet
+		// direction, the frozen panes and the selected sheet from the doc layer, and
+		// looks the two header sections up by name after a scroll; no header section
+		// is registered here, so the names alone are enough. The two spacer entries
+		// are there because a spreadsheet document builds those sections.
+		function setupCalcForTest(): {
+			layout: ViewLayoutCalc;
+			anchor: { size: number[]; myTopLeft: number[] };
+		} {
+			setupAppStubs(15);
+			const anchor = installResizableDocumentAnchor(1024, 768);
+			resetRenderManagerState();
+
+			const docLayer: any = app.map._docLayer;
+			docLayer._docType = 'spreadsheet';
+			docLayer.isWriter = function () {
+				return false;
+			};
+			docLayer.isCalc = function () {
+				return true;
+			};
+			docLayer.isCalcRTL = function () {
+				return false;
+			};
+			docLayer.getSplitPanesContext = function () {
+				return null;
+			};
+			(app.map as any).getSplitPanesContext = function () {
+				return null;
+			};
+
+			(app.CSections as any).RowHeader = { name: 'row header' };
+			(app.CSections as any).ColumnHeader = { name: 'column header' };
+			(app.CSections as any).RightSpacer = {
+				name: 'right spacer',
+				zIndex: 5,
+				processingOrder: 56,
+				drawingOrder: 45,
+			};
+			(app.CSections as any).BottomSpacer = {
+				name: 'bottom spacer',
+				zIndex: 5,
+				processingOrder: 57,
+				drawingOrder: 46,
+			};
+
+			const activeDocument = new DocumentBase();
+			(activeDocument as any)._fileSize = new cool.SimplePoint(75000, 75000);
+			app.activeDocument = activeDocument;
+
+			const layout = activeDocument.activeLayout as ViewLayoutCalc;
+			layout.viewSize = cool.SimplePoint.fromCorePixels([5000, 5000]);
+			return { layout, anchor };
 		}
 
 		// ========================================================================
@@ -1159,6 +1253,292 @@ describe('ViewLayout', function () {
 			} finally {
 				layoutingService.appendLayoutingTask = originalAppendLayoutingTask;
 				(window as any).mode = originalWindowMode;
+			}
+		});
+
+		// ================================================================
+		// Scroll position (scrollProperties.viewX / viewY)
+		// ================================================================
+
+		// The viewport bounds say which part of the document is on screen, in
+		// document core pixels, so they have to move as the view scrolls.
+		it('Calc: the viewport follows the scroll position', function () {
+			const { layout } = setupCalcForTest();
+
+			layout.scrollTo(240, 300);
+
+			const bounds = layout.getViewportCorePixelBounds();
+			nodeassert.strictEqual(bounds.min.x, 240, 'viewport left edge');
+			nodeassert.strictEqual(bounds.min.y, 300, 'viewport top edge');
+			nodeassert.strictEqual(bounds.max.x, 240 + 1024, 'viewport right edge');
+			nodeassert.strictEqual(bounds.max.y, 300 + 768, 'viewport bottom edge');
+		});
+
+		it('Calc: the viewed rectangle is the frame placed at the scroll position', function () {
+			const { layout } = setupCalcForTest();
+
+			layout.scrollTo(240, 300);
+
+			nodeassert.deepStrictEqual(
+				layout.viewedRectangle.pToArray(),
+				[240, 300, 1024, 768],
+			);
+		});
+
+		it('Calc: a frame with no size leaves the viewed rectangle where it is', function () {
+			const { layout, anchor } = setupCalcForTest();
+
+			layout.scrollTo(0, 300);
+			const rectangleBefore = layout.viewedRectangle.toArray();
+
+			// The document container is hidden, or has not been laid out yet.
+			anchor.size = [0, 0];
+			layout.rebuildViewedRectangle();
+
+			nodeassert.deepStrictEqual(
+				layout.viewedRectangle.toArray(),
+				rectangleBefore,
+			);
+		});
+
+		it('Calc: the document end stays at the view edge when the frame grows', function () {
+			const { layout, anchor } = setupCalcForTest();
+
+			// Scroll past the end of the sheet, which lands on the last position the
+			// document spans.
+			layout.scrollTo(0, 100000);
+			nodeassert.strictEqual(
+				layout.scrollProperties.viewY + 768,
+				5000,
+				'the sheet ends at the bottom of the view',
+			);
+
+			// A bigger window, or a panel that closes, leaves less document below the
+			// current position than the frame now shows.
+			anchor.size = [1024, 1200];
+			layout.rebuildViewedRectangle();
+
+			nodeassert.strictEqual(
+				layout.scrollProperties.viewY + 1200,
+				5000,
+				'the sheet still ends at the bottom of the view',
+			);
+			nodeassert.strictEqual(layout.viewedRectangle.pY1, 3800);
+		});
+
+		it('Calc: the scroll position stays inside the document', function () {
+			const { layout } = setupCalcForTest();
+
+			layout.scrollTo(0, 4000);
+
+			// The extent shrinks under the current position, as it does when the
+			// sheet's used area gets smaller.
+			layout.viewSize = cool.SimplePoint.fromCorePixels([5000, 3000]);
+			layout.rebuildViewedRectangle();
+			nodeassert.strictEqual(layout.scrollProperties.viewY, 3000 - 768);
+
+			// The first row is the top of the scrollable range.
+			layout.scrollProperties.viewY = -50;
+			layout.rebuildViewedRectangle();
+			nodeassert.strictEqual(layout.scrollProperties.viewY, 0);
+		});
+
+		it('Calc: the scroll bar thumb follows the scroll position', function () {
+			const { layout } = setupCalcForTest();
+			const scrollProps = layout.scrollProperties;
+
+			layout.refreshScrollProperties();
+			const thumbAtTop = scrollProps.startY;
+
+			layout.scrollTo(0, 2000);
+			layout.refreshScrollProperties();
+			nodeassert.ok(
+				scrollProps.startY > thumbAtTop,
+				'the thumb moved down with the view',
+			);
+
+			layout.scrollTo(0, 100000);
+			layout.refreshScrollProperties();
+			const thumbEnd = scrollProps.startY + scrollProps.verticalScrollSize;
+			const trackEnd = scrollProps.yOffset + scrollProps.verticalScrollLength;
+			nodeassert.ok(
+				Math.abs(thumbEnd - trackEnd) <= 1,
+				'at the end of the sheet the thumb sits at the end of its track: ' +
+					thumbEnd +
+					' against ' +
+					trackEnd,
+			);
+		});
+
+		it('Calc: a zoom keeps the anchor point in the middle of the view', function () {
+			const { layout } = setupCalcForTest();
+			const docLayer: any = app.map._docLayer;
+
+			// The stubs pin the twips-per-pixel factor, so the rebuild that a zoom
+			// runs is where the new scale is set. This one halves the scale.
+			docLayer._updateTileTwips = function () {
+				app.pixelsToTwips = 30;
+				app.twipsToPixels = 1 / 30;
+			};
+
+			const anchorTwips = new cool.SimplePoint(40000, 40000);
+			layout.applyZoom(9, anchorTwips);
+
+			// One core pixel is 30 twips at the new scale, and the position is kept
+			// in whole pixels.
+			const center = layout.viewedRectangle.center;
+			nodeassert.ok(
+				Math.abs(center[0] - anchorTwips.x) <= 30,
+				'anchor x against view center: ' + anchorTwips.x + ', ' + center[0],
+			);
+			nodeassert.ok(
+				Math.abs(center[1] - anchorTwips.y) <= 30,
+				'anchor y against view center: ' + anchorTwips.y + ', ' + center[1],
+			);
+
+			// The zoom moved the scroll position as well, so the viewport starts
+			// where the viewed rectangle does.
+			const bounds = layout.getViewportCorePixelBounds();
+			nodeassert.ok(bounds.min.y > 0, 'the view is away from the first row');
+			nodeassert.strictEqual(bounds.min.x, layout.viewedRectangle.pX1);
+			nodeassert.strictEqual(bounds.min.y, layout.viewedRectangle.pY1);
+		});
+
+		// A page-stack layout builds its viewed rectangle from the pages that are on
+		// screen, so a zoom leaves the scroll position alone.
+		it('Stacked-page layouts keep their scroll position across a zoom', function () {
+			const layout = setupMultiPageForTest();
+
+			layout.scrollProperties.viewY = 768;
+			const rectangleBefore = layout.viewedRectangle.toArray();
+
+			layout.setViewRectangleFromPointAndScale(
+				new cool.SimplePoint(1000, 1000),
+				app.twipsToPixels,
+			);
+
+			nodeassert.strictEqual(layout.scrollProperties.viewY, 768);
+			nodeassert.deepStrictEqual(
+				layout.viewedRectangle.toArray(),
+				rectangleBefore,
+			);
+		});
+
+		// ================================================================
+		// Visible-area bookkeeping
+		// ================================================================
+
+		it('The pan direction follows the direction of the last scroll', function () {
+			const layout = setupBaseLayoutForTest();
+
+			layout.scroll(0, 400);
+			nodeassert.strictEqual(
+				layout.getLastPanDirection()[1],
+				1,
+				'scrolling down',
+			);
+
+			layout.scroll(0, -200);
+			nodeassert.strictEqual(
+				layout.getLastPanDirection()[1],
+				-1,
+				'scrolling up',
+			);
+		});
+
+		// Tiles are fetched a little beyond the visible area, further on the side the
+		// view is heading for.
+		it('The pre-fetch range grows towards the side the view is moving to', function () {
+			const layout = setupBaseLayoutForTest();
+
+			// Scroll down first, so that the scroll up afterwards has room.
+			layout.scroll(0, 2000);
+			layout.scroll(0, -1000);
+
+			const range = new cool.Bounds(
+				new cool.Point(0, 10),
+				new cool.Point(4, 14),
+			);
+			const expanded = RenderManager.expandTileRange(range);
+
+			const grewAbove = range.min.y - expanded.min.y;
+			const grewBelow = expanded.max.y - range.max.y;
+			nodeassert.ok(
+				grewAbove > grewBelow,
+				'more rows of tiles above the view than below: ' +
+					grewAbove +
+					' against ' +
+					grewBelow,
+			);
+		});
+
+		it('The visible area is sent again after a reset, changed or not', function () {
+			const layout = setupBaseLayoutForTest();
+
+			const sentMessages: string[] = [];
+			(app.socket as any).sendMessage = function (message: string) {
+				sentMessages.push(message);
+			};
+			(app.socket as any).connected = function () {
+				return true;
+			};
+
+			layout.viewedRectangle = cool.SimpleRectangle.fromCorePixels([
+				0, 400, 1024, 768,
+			]);
+			(app.map as any)._docLoaded = true;
+
+			layout.sendClientVisibleArea();
+			nodeassert.strictEqual(sentMessages.length, 1, 'a new area is sent');
+
+			layout.sendClientVisibleArea();
+			nodeassert.strictEqual(
+				sentMessages.length,
+				1,
+				'an area the server already has is not sent again',
+			);
+
+			// A reconnection or a user interface mode change resets the area, and the
+			// server has to hear it again even though it did not change.
+			layout.resetClientVisibleArea();
+			layout.sendClientVisibleArea();
+			nodeassert.strictEqual(sentMessages.length, 2, 'the area is sent again');
+		});
+
+		it('CompareChanges tracks the previous visible area and asks for a redraw', function () {
+			const layout = setupCompareChangesForTest();
+			const container: any = app.sectionContainer;
+			const originalRequestReDraw = container.requestReDraw;
+
+			let redrawRequests = 0;
+			container.requestReDraw = function () {
+				redrawRequests++;
+			};
+
+			try {
+				layout.scrollProperties.viewY = 500;
+				(layout as any).refreshVisibleAreaRectangle();
+				nodeassert.strictEqual(
+					layout.getLastPanDirection()[1],
+					1,
+					'scrolling down',
+				);
+
+				layout.scrollProperties.viewY = 300;
+				(layout as any).refreshVisibleAreaRectangle();
+				nodeassert.strictEqual(
+					layout.getLastPanDirection()[1],
+					-1,
+					'scrolling up',
+				);
+
+				nodeassert.strictEqual(
+					redrawRequests,
+					2,
+					'each new visible area asks for a redraw',
+				);
+			} finally {
+				container.requestReDraw = originalRequestReDraw;
 			}
 		});
 	});
