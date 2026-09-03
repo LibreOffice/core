@@ -444,6 +444,17 @@ char *convertOUString(std::u16string_view aStr)
     return convertOString(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
 }
 
+// The length is carried over, so a string with an embedded \0 survives the copy.
+std::string convertOStringToStdString(const OString &rStr)
+{
+    return std::string(rStr.getStr(), rStr.getLength());
+}
+
+std::string convertOUStringToStdString(std::u16string_view aStr)
+{
+    return convertOStringToStdString(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
+}
+
 /// Try to convert a relative URL to an absolute one, unless it already looks like a URL.
 OUString getAbsoluteURL(const char* pURL)
 {
@@ -8319,7 +8330,7 @@ static std::string doc_getCommandValues(COKitDocument* pThis, const char* pComma
     }
     else if (aCommand == ".uno:ViewRenderState")
     {
-        return convertOString(pDoc->getViewRenderState());
+        return convertOStringToStdString(pDoc->getViewRenderState());
     }
     else if (aCommand == ".uno:AllPageSize")
     {
@@ -9266,7 +9277,7 @@ static std::string lo_getError (COKit *pThis)
     SolarMutexGuard aGuard;
 
     COKitImpl* pLib = static_cast<COKitImpl*>(pThis);
-    return convertOUString(pLib->maLastExceptionMsg);
+    return convertOUStringToStdString(pLib->maLastExceptionMsg);
 }
 
 static void lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures const features)
