@@ -4437,17 +4437,6 @@ void lokit_main(
         if (queryVersion)
         {
             LOKitHelper::ScopedString versionInfo(coKit->getVersionInfo());
-            if (!versionInfo)
-            {
-                // A matching office library always hands back a version string. A null
-                // means the call landed on some other COKit member, i.e. the library
-                // has a different vtable layout than the one we were built against.
-                LOG_FTL("COKit returned no version information. The office library in ["
-                        << instdir_path
-                        << "] does not match the one coolwsd was built against. Exiting.");
-                Util::forcedExit(EX_SOFTWARE);
-            }
-
             std::string versionString(versionInfo.get());
             if (displayVersion)
                 std::cout << "office version details: " << versionString << std::endl;
