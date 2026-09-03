@@ -950,6 +950,11 @@ void WhiteBoxTests::testReadFile()
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(size), status.size());
     LOK_ASSERT(status.starts_with("Name:"));
 
+    // Content over maxSize is an error also when the size is not known up front.
+    std::string clipped;
+    LOK_ASSERT_EQUAL(static_cast<ssize_t>(-1), FileUtil::readFile("/proc/self/status", clipped, 128));
+    LOK_ASSERT(clipped.empty());
+
     // The overload that returns the buffer reads the same content.
     const std::unique_ptr<std::vector<char>> owned = FileUtil::readFile("/proc/self/status");
     LOK_ASSERT(owned);

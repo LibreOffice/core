@@ -284,6 +284,20 @@ namespace FileUtil
             if (o3tl::make_unsigned(n) < room)
                 break;
         }
+
+        if (got == limit)
+        {
+            // Probe one more byte: anything but end-of-file means the content is over maxSize.
+            char probe;
+            const ssize_t n = read(fd, &probe, 1);
+            if (n != 0)
+            {
+                closeFD(fd);
+                data.resize(originalSize);
+                data.shrink_to_fit();
+                return -1;
+            }
+        }
         closeFD(fd);
 
         data.resize(originalSize + got);
