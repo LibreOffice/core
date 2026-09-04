@@ -41,7 +41,7 @@ namespace
 constexpr OUString gSourceScheme = u"vnd.collabora.slide-source:"_ustr;
 
 /// The reference the pages of a written presentation record, which names no document.
-constexpr OUString gOriginReference = u"vnd.collabora.slide-origin:"_ustr;
+constexpr OUString gOriginReference = u"vnd.collabora.slide-origin:self"_ustr;
 
 /// Whether rUrl names a file on this machine.
 bool isLocalFile(std::u16string_view rUrl)
@@ -65,6 +65,29 @@ std::vector<sal_uInt16> getLinkedPages(const SdDrawDocument& rDoc, std::u16strin
             aPages.push_back(nIndex);
     }
     return aPages;
+}
+
+/// The slide of rSourceDoc that rPage is linked to, or nothing when the file holds no slide for it.
+const SdPage* findSourcePage(const SdDrawDocument& rSourceDoc, const SdPage& rPage)
+{
+    const OUString& rSourceGuid = rPage.GetSourcePageGuid();
+    if (!rSourceGuid.isEmpty())
+    {
+        for (sal_uInt16 nIndex = 0, nCount = rSourceDoc.GetSdPageCount(PageKind::Standard);
+             nIndex < nCount; ++nIndex)
+        {
+            const SdPage* pSourcePage = rSourceDoc.GetSdPage(nIndex, PageKind::Standard);
+            if (pSourcePage && pSourcePage->GetGuid().getOUString() == rSourceGuid)
+                return pSourcePage;
+        }
+    }
+
+    bool bIsMasterPage = false;
+    const sal_uInt16 nNamed = rSourceDoc.GetPageByName(rPage.GetBookmarkName(), bIsMasterPage);
+    if (nNamed == SDRPAGE_NOTFOUND || bIsMasterPage)
+        return nullptr;
+
+    return dynamic_cast<const SdPage*>(rSourceDoc.GetPage(nNamed));
 }
 
 /// The undo manager of rDoc, or nothing for a document that is served without one.
@@ -262,27 +285,29 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
     // The file stays with the document, so that a later update of its links reads this same file.
     rDoc.SetStagedLinkSourceFile(aReference, rFileUrl);
 
-    // The pages the file holds a slide for, by their index in the standard page list. A page whose
-    // slide the file has lost keeps the content it holds.
+    // The pages the file holds a slide for, by their index in the standard page list, and the slide
+    // each one is read from: its name in the file and the identifier it holds. A page whose slide
+    // the file has lost keeps the content it holds.
     std::vector<sal_uInt16> aPages;
+    std::vector<OUString> aSourceNames;
+    std::vector<OUString> aSourceGuids;
     for (sal_uInt16 nIndex : aLinkedPages)
     {
         const SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
         if (!pPage)
             continue;
 
-        // A page of that name in the master pages is a design rather than a slide, so the file
-        // holds no slide to read.
-        bool bIsMasterPage = false;
-        const OUString aSourcePage = pPage->GetBookmarkName();
-        if (pSourceDoc->GetPageByName(aSourcePage, bIsMasterPage) == SDRPAGE_NOTFOUND
-            || bIsMasterPage)
+        const SdPage* pSourcePage = findSourcePage(*pSourceDoc, *pPage);
+        if (!pSourcePage)
         {
-            SAL_WARN("sd", "slide link refresh: no slide named " << aSourcePage << " in the file");
+            SAL_WARN("sd", "slide link refresh: no slide for the page linked to "
+                               << pPage->GetBookmarkName() << " in the file");
             continue;
         }
 
         aPages.push_back(nIndex);
+        aSourceNames.push_back(pSourcePage->GetName());
+        aSourceGuids.push_back(pSourcePage->GetGuid().getOUString());
     }
 
     SfxUndoManager* pUndoManager = rDoc.beginUndoAction(SdResId(STR_UNDO_UPDATE_LINKED_SLIDES));
@@ -308,7 +333,7 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
             if (!pPage)
                 break;
 
-            aSourcePages.push_back(pPage->GetBookmarkName());
+            aSourcePages.push_back(aSourceNames[nPos]);
             aPageIds.push_back(pPage->GetGuid().getString());
         }
 
@@ -325,13 +350,15 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
 
         // A resolution puts the slide it read in place of the page at its position, and a page read
         // from a file holds an identifier of its own, so the identifier a position holds now says
-        // whether that page was refreshed. A refreshed page records the time its source was last
-        // modified now, so that its content and that time agree again.
+        // whether that page was refreshed. A refreshed page records the slide it was read from and
+        // the time its source was last modified now, so that its content, the slide it names and
+        // that time all agree again.
         for (size_t nPos = 0; nPos < aPageIds.size(); ++nPos)
         {
             SdPage* pPage = rDoc.GetSdPage(aPages[nFirst + nPos], PageKind::Standard);
             if (pPage && pPage->GetGuid().getString() != aPageIds[nPos])
             {
+                pPage->SetSourcePageGuid(aSourceGuids[nFirst + nPos]);
                 pPage->SetSourceModifiedTime(rLastModifiedTime);
                 ++nRefreshed;
             }

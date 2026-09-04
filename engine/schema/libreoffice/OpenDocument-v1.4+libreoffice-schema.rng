@@ -4545,6 +4545,17 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- TODO no proposal -->
+  <!-- The identifier of the slide of the source document the page came from,
+       which names that slide wherever it stands in the source. It goes with
+       the reference above. -->
+  <rng:define name="draw-page-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:source-page-guid">
+        <rng:ref name="coext-guid-value"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <!-- TODO no proposal for page number on multipage formats -->
   <rng:define name="draw-image-attlist" combine="interleave">
     <rng:optional>

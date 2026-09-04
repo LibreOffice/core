@@ -365,6 +365,7 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     maFileName = rSrcPage.maFileName;
     maBookmarkName = rSrcPage.maBookmarkName;
     maSourceModifiedTime = rSrcPage.maSourceModifiedTime;
+    maSourcePageGuid = rSrcPage.maSourcePageGuid;
     mbScaleObjects = rSrcPage.mbScaleObjects;
     meCharSet = rSrcPage.meCharSet;
     mnPaperBin = rSrcPage.mnPaperBin;
@@ -657,6 +658,10 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (pPageKind)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
 
+
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("maSourcePageGuid"),
+        BAD_CAST(OUStringToOString(maSourcePageGuid, RTL_TEXTENCODING_UTF8).getStr()));
 
     FmFormPage::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

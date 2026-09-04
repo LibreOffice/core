@@ -121,6 +121,7 @@ friend class sd::UndoAttrObject;
     OUString    maFileName;               ///< file name.
     OUString    maBookmarkName;           ///< Bookmark name.
     OUString    maSourceModifiedTime;     ///< time the source document was last modified, ISO8601.
+    OUString    maSourcePageGuid;         ///< identifier of the slide of the source, braced form.
     bool    mbScaleObjects;           ///< Objects should be scaled
     rtl_TextEncoding meCharSet;           ///< Text encoding
     sal_uInt16  mnPaperBin;               ///< PaperBin
@@ -289,6 +290,8 @@ public:
     const OUString& GetBookmarkName() const       { return maBookmarkName; }
     void            SetSourceModifiedTime(const OUString& aTime) { maSourceModifiedTime = aTime; }
     const OUString& GetSourceModifiedTime() const { return maSourceModifiedTime; }
+    void            SetSourcePageGuid(const OUString& aGuid) { maSourcePageGuid = aGuid; }
+    const OUString& GetSourcePageGuid() const { return maSourcePageGuid; }
 
     SD_DLLPUBLIC void ConnectLink();
     void            DisconnectLink();

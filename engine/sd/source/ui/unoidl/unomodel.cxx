@@ -6541,10 +6541,10 @@ void clearInsertedPageLinks(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uI
     }
 }
 
-/// Names on the pages the name of the source document's slides each one came from.
-void nameInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
-                             const std::vector<OUString>& rReadPages, sal_uInt16 nFirstSlide,
-                             sal_uInt16 nSlideCount)
+/// Marks on the pages the id of the source document's slides each one came from.
+void recordInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
+                               const std::vector<OUString>& rReadPages, sal_uInt16 nFirstSlide,
+                               sal_uInt16 nSlideCount)
 {
     if (rReadPages.size() != static_cast<size_t>(nSlideCount))
         return;
@@ -6562,10 +6562,14 @@ void nameInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
             continue;
 
         const SdPage* pReadPage = dynamic_cast<const SdPage*>(rSource.GetPage(nRead));
-        const OUString aOriginPage
-            = pReadPage ? sd::SlideLink::GetOriginPage(*pReadPage) : OUString();
+        if (!pReadPage)
+            continue;
+
+        const OUString aOriginPage = sd::SlideLink::GetOriginPage(*pReadPage);
         if (!aOriginPage.isEmpty())
             pPage->SetBookmarkName(aOriginPage);
+
+        pPage->SetSourcePageGuid(pReadPage->GetGuid().getOUString());
     }
 }
 
@@ -6661,7 +6665,7 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     {
         // A linked page records the slide of the source document it came from, which is the slide
         // the file was written from rather than the page it holds in the file.
-        nameInsertedPageSources(*mpDoc, *pSource, aBookmarkList, nFirstSlide, nInsertedCount);
+        recordInsertedPageSources(*mpDoc, *pSource, aBookmarkList, nFirstSlide, nInsertedCount);
         if (!aLastModifiedTime.isEmpty())
             stampInsertedPageSource(*mpDoc, nFirstSlide, nInsertedCount, aLastModifiedTime);
     }

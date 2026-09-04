@@ -1700,9 +1700,11 @@ void SdXMLExport::ExportContent_()
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
 
                         // The time the source document was last modified, kept
-                        // so a later refresh can tell whether it moved on. The
+                        // so a later refresh can tell whether it moved on, and
+                        // the identifier of the slide the page came from, which
+                        // names that slide wherever it stands in the source. The
                         // coext namespace is declared only in extended ODF, so
-                        // the attribute goes only there, as coext:guid does.
+                        // the attributes go only there, as coext:guid does.
                         if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                         {
                             OUString aSourceModifiedTime;
@@ -1711,6 +1713,12 @@ void SdXMLExport::ExportContent_()
                             if( !aSourceModifiedTime.isEmpty() )
                                 AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
                                               aSourceModifiedTime );
+
+                            OUString aSourcePageGuid;
+                            xProps->getPropertyValue(u"SourcePageGuid"_ustr) >>= aSourcePageGuid;
+                            if( !aSourcePageGuid.isEmpty() )
+                                AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_PAGE_GUID,
+                                              aSourcePageGuid );
                         }
                     }
                 }

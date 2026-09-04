@@ -51,7 +51,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 ,   mbHadSMILNodes( false )
 {
     bool bHaveXmlId( false );
-    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF, sSourceModifiedTime;
+    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF, sSourceModifiedTime,
+        sSourcePageGuid;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
@@ -120,6 +121,11 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             case XML_ELEMENT(CO_EXT, XML_SOURCE_MODIFIED_TIME):
             {
                 sSourceModifiedTime = sValue;
+                break;
+            }
+            case XML_ELEMENT(CO_EXT, XML_SOURCE_PAGE_GUID):
+            {
+                sSourcePageGuid = sValue;
                 break;
             }
         }
@@ -230,6 +236,10 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             if( !sSourceModifiedTime.isEmpty() )
                 xProps->setPropertyValue(u"SourceModifiedTime"_ustr,
                                          cpo::uno::Any( sSourceModifiedTime ) );
+
+            if( !sSourcePageGuid.isEmpty() )
+                xProps->setPropertyValue(u"SourcePageGuid"_ustr,
+                                         cpo::uno::Any( sSourcePageGuid ) );
         }
     }
 

@@ -8,6 +8,11 @@
                  office:mimetype="application/vnd.oasis.opendocument.presentation">
  <office:body>
   <office:presentation>
+   <draw:page coext:guid="{33333333-3333-3333-3333-333333333333}">
+    <draw:frame svg:width="10cm" svg:height="2cm" svg:x="2cm" svg:y="2cm">
+     <draw:text-box><text:p>Source three, revised</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
    <draw:page coext:guid="{11111111-1111-1111-1111-111111111111}">
     <draw:frame svg:width="10cm" svg:height="2cm" svg:x="2cm" svg:y="2cm">
      <draw:text-box><text:p>Source one</text:p></draw:text-box>
@@ -16,11 +21,6 @@
    <draw:page coext:guid="{22222222-2222-2222-2222-222222222222}">
     <draw:frame svg:width="10cm" svg:height="2cm" svg:x="2cm" svg:y="2cm">
      <draw:text-box><text:p>Source two</text:p></draw:text-box>
-    </draw:frame>
-   </draw:page>
-   <draw:page coext:guid="{33333333-3333-3333-3333-333333333333}">
-    <draw:frame svg:width="10cm" svg:height="2cm" svg:x="2cm" svg:y="2cm">
-     <draw:text-box><text:p>Source three</text:p></draw:text-box>
     </draw:frame>
    </draw:page>
   </office:presentation>
