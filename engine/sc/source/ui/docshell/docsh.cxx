@@ -779,7 +779,10 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     // the readonly documents should not be opened in shared mode
-                    if ( HasSharedXMLFlagSet() && !ScModule::get()->IsInSharedDocLoading() && !IsReadOnly() )
+                    // shared mode needs a sharing control file and a temp file that outlive the
+                    // jail a document is edited in, so it stays off here
+                    if ( HasSharedXMLFlagSet() && !ScModule::get()->IsInSharedDocLoading() && !IsReadOnly()
+                         && !comphelper::COKit::isActive() )
                     {
                         if ( SwitchToShared( true, false ) )
                         {
