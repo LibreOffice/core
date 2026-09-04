@@ -1,4 +1,4 @@
-/* global describe it cy require expect */
+/* global describe it cy require expect Cypress */
 
 var helper = require('../../common/helper');
 
@@ -187,13 +187,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 		});
 	});
 
-	it('Paste of <img src="..."> HTML without an image blob', function() {
+	it('Paste of <img src="..."> HTML pastes the SVG image', function() {
 		// Given a clipboard with just text/html referring to an image URL:
 		helper.setupAndLoadDocument('writer/copy_paste.odt');
-		const imageUrl = 'https://example.com/foo.svg';
-		const html = '<img src="' + imageUrl + '"/>';
 		cy.getFrameWindow().then(function(win) {
 			const clip = win.app.map._clip;
+			const imageUrl = win.location.origin + '/browser/'
+				+ Cypress.env('WSD_VERSION_HASH') + '/images/lc_paste.svg';
+			const html = '<img src="' + imageUrl + '"/>';
 			const clipboardItem = {
 				types: ['text/html'],
 				getType: function(type) {
@@ -217,36 +218,28 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 					};
 				},
 			};
-			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
 
 			// When doing async paste:
 			clip.filterExecCopyPaste('.uno:Paste');
 		});
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 
-		// Then make sure that results in a 'paste' websocket message containing that URL:
-		function getPasteBlobs(spy) {
-			return spy.getCalls()
-				.map(function(call) { return call.args[0]; })
-				.filter(function(arg) { return typeof arg !== 'string'; });
-		}
-		cy.get('@sendMessage')
-			.should(function(spy) {
-				// Without the accompanying fix in place, this test would have failed with:
-				// - assert      expected **0** to be at least **1**
-				// i.e. no paste message was sent.
-				expect(getPasteBlobs(spy).length).to.be.at.least(1);
-			})
-			.then(function(spy) {
-				const blobs = getPasteBlobs(spy);
-				return cy.wrap(Promise.all(blobs.map(function(b) { return b.text(); })))
-					.then(function(texts) {
-						const matched = texts.some(function(t) {
-							return t.startsWith('paste mimetype=text/uri-list\n')
-								&& t.indexOf(imageUrl) !== -1;
-						});
-						expect(matched, 'paste message').to.be.true;
-					});
-			});
+		// Then make sure that results in a pasted image, visible in the navigator:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.sendUnoCommand('.uno:Navigator');
+		});
+		// Without the accompanying fix in place, this test would have failed, the navigator
+		// had no visible 'Images' container, as nothing was pasted.
+		cy.cGet('#contenttree')
+			.contains('.ui-treeview-cell-text-content', 'Images')
+			.parents('.ui-treeview-entry')
+			.find('.ui-treeview-expander')
+			.click();
+		cy.cGet('#contenttree')
+			.contains('.ui-treeview-cell-text-content', 'Image1')
+			.should('be.visible');
 	});
 
 	it('Async paste special offers both HTML and plain text when the clipboard has both', function() {

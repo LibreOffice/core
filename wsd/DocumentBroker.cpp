@@ -46,6 +46,7 @@
 #endif
 #include <wsd/Exceptions.hpp>
 #include <wsd/FileServer.hpp>
+#include <wsd/HostUtil.hpp>
 #include <wsd/PlatformDesktop.hpp>
 #include <wsd/PresetsInstall.hpp>
 #include <wsd/Process.hpp>
@@ -6268,6 +6269,11 @@ bool DocumentBroker::forwardToChild(const std::shared_ptr<ClientSession>& sessio
         }
     }
 
+#if !MOBILEAPP
+    if (forwardPasteToChild(viewId, message, binary))
+        return true;
+#endif
+
     // Forward message with prefix to the Kit.
     return _childProcess->sendFrame(msg + message, binary);
 }
@@ -6611,6 +6617,80 @@ void DocumentBroker::checkFileInfo(const std::shared_ptr<ClientSession>& session
         LOG_INF("Resetting async CheckFileInfo as it failed to start");
         _checkFileInfo.reset();
     }
+}
+
+bool DocumentBroker::forwardPasteToChild(const std::string& viewId, const std::string& message,
+                                         bool binary)
+{
+    // Intercept a paste of an external URL pointing at an SVG.
+    static constexpr std::string_view uriListPastePrefix = "paste mimetype=text/uri-list\n";
+    if (!message.starts_with(uriListPastePrefix))
+        return false;
+
+    std::string url(message.substr(uriListPastePrefix.size()));
+    while (!url.empty() && (url.back() == '\r' || url.back() == '\n'))
+        url.pop_back();
+    if (!url.starts_with("http"))
+        return false;
+
+    try
+    {
+        const Poco::URI uri{ url };
+        // Does the path (ignoring e.g. the fragment) end with SVG?
+        if (!uri.getPath().ends_with(".svg"))
+            return false;
+        // Reject forbidden hosts.
+        if (HostUtil::isForbiddenKitHost(uri.getHost()))
+            return false;
+        std::shared_ptr<http::Session> httpSession(
+            StorageConnectionManager::getHttpSession(uri));
+        if (!httpSession)
+            return false;
+
+        http::Request request(uri.getPathAndQuery());
+
+        http::Session::FinishedCallback finishedCallback =
+            [selfWeak = weak_from_this(), viewId, binary,
+             uriAnonym = Anonymizer::anonymizeUrl(url)](
+                const std::shared_ptr<http::Session>& fetchSession) {
+                std::shared_ptr<DocumentBroker> self = selfWeak.lock();
+                if (!self)
+                    return;
+                const std::shared_ptr<const http::Response> response = fetchSession->response();
+                if (response->state() != http::Response::State::Complete)
+                {
+                    LOG_WRN("Paste-of-URL: fetch of [" << uriAnonym << "] did not complete");
+                    return;
+                }
+                if (response->statusLine().statusCode() != http::StatusCode::OK)
+                {
+                    LOG_WRN("Paste-of-URL: fetch of [" << uriAnonym << "] failed with status "
+                                                       << response->statusLine().reasonPhrase());
+                    return;
+                }
+                const std::string& body = response->getBody();
+                std::string rewritten
+                    = "child-" + viewId
+                    + R"( paste mimetype=image/svg+xml;windows_formatname="image/svg+xml")"
+                    + '\n' + body;
+                self->_childProcess->sendFrame(rewritten, binary);
+            };
+
+        httpSession->setFinishedHandler(std::move(finishedCallback));
+        if (!httpSession->asyncRequest(request, getPoll()))
+            return false;
+        httpSession->response()->setBodySizeLimit(MaxHttpFetchSizeBytes);
+
+        // We consumed the message, the caller doesn't forward the original one.
+        return true;
+    }
+    catch (const Poco::Exception& e)
+    {
+        LOG_WRN("Paste-of-URL: not fetching malformed URL: " << e.displayText());
+    }
+
+    // Forward the original message.
+    return false;
 }
 #endif // !MOBILEAPP
 

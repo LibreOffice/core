@@ -22,6 +22,15 @@
 #include <Poco/URI.h>
 #include <Poco/Util/Application.h>
 
+/// The largest response body we accept from an async HTTP fetch WSD makes to
+/// a remote server, in bytes. Guards the settings/config/wordbook/model and
+/// paste-URL fetch paths against unbounded memory use when the far side
+/// serves an oversized body. A whole-language spelling dictionary, the
+/// biggest legitimate file any of these paths carries, tops out around
+/// 4.5 MB, so 20 MB leaves generous headroom while bounding what one request
+/// can hold in memory on the thread that serves every client.
+constexpr int64_t MaxHttpFetchSizeBytes = 20 * 1024 * 1024;
+
 /// A Storage Manager is responsible for the settings
 /// of Storage and the creation of http::Session and
 /// related objects.

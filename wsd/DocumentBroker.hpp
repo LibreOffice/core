@@ -711,6 +711,8 @@ public:
 
     static std::shared_ptr<const http::Response> sendHttpSyncRequest(const std::string& url,
                                                                      const std::string& logContext);
+
+    bool forwardPasteToChild(const std::string& viewId, const std::string& message, bool binary);
 #endif // !MOBILEAPP
 
     /// Update the stored last-modified timestamp to match a collab
