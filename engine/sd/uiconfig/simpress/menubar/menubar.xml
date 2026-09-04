@@ -586,7 +586,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:RehearseTimings"/>
       <menu:menuitem menu:id=".uno:CustomShowDialog"/>
-      <menu:menuitem menu:id=".uno:Remote"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PresentationDialog"/>
     </menu:menupopup>

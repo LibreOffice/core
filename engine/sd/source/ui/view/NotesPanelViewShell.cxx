@@ -786,16 +786,6 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_REMOTE_DLG:
-        {
-#ifdef ENABLE_SDREMOTE
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateRemoteDialog(GetFrameWeld()));
-            pDlg->Execute();
-#endif
-        }
-        break;
-
         case SID_CUSTOMSHOW_DLG:
         {
             SetCurrentFunction(FuCustomShowDlg::Create(*this, GetActiveWindow(),

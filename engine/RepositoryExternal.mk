@@ -213,22 +213,6 @@ gb_LinkTarget__use_sane_headers :=
 
 endif
 
-ifneq ($(SYSTEM_BLUEZ),)
-
-gb_LinkTarget__use_bluez_bluetooth_headers :=
-
-else # !SYSTEM_BLUEZ
-
-define gb_LinkTarget__use_bluez_bluetooth_headers
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/external/bluez_bluetooth/inc \
-	$$(INCLUDE) \
-)
-
-endef
-
-endif # SYSTEM_BLUEZ
-
 # External libraries
 
 ifneq ($(SYSTEM_CPPUNIT),)
@@ -2461,19 +2445,6 @@ gb_LinkTarget__use_coinmp :=
 
 endif # ENABLE_COINMP
 
-ifneq (,$(filter MDNSRESPONDER,$(BUILD_TYPE)))
-
-define gb_LinkTarget__use_mDNSResponder
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/mDNSResponder/mDNSShared \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_use_static_libraries,$(1),mDNSResponder)
-$(call gb_Helper_LinkTarget_use_external,$(1),mndsresponder)
-endef
-
-endif # MDNSRESPONDER
-
 ifeq ($(ENABLE_GIO),TRUE)
 
 define gb_LinkTarget__use_gio
@@ -2493,28 +2464,6 @@ define gb_LinkTarget__use_gio
 endef
 
 endif # ENABLE_GIO
-
-ifeq ($(ENABLE_AVAHI),TRUE)
-
-define gb_LinkTarget__use_avahi
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(AVAHI_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-    -DENABLE_AVAHI \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(AVAHI_LIBS))
-
-endef
-
-else # ENABLE_AVAHI
-
-gb_LinkTarget__use_avahi :=
-
-endif # ENABLE_AVAHI
 
 ifeq ($(ENABLE_CPDB),TRUE)
 

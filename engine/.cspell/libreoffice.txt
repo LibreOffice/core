@@ -5,7 +5,6 @@ allbuild
 allcheck
 atspi
 autogen
-avahi
 avmedia
 buildall
 ccache
@@ -70,7 +69,6 @@ rcfile
 rhbz
 schart
 sdbc
-sdremote
 showdeliverables
 skia
 slowcheck

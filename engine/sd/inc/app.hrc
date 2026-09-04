@@ -330,7 +330,7 @@
 #define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
     // FREE
 #define SID_PHOTOALBUM                      (SID_SD_START+336)
-#define SID_REMOTE_DLG                      (SID_SD_START+337)
+    // FREE
 #define SID_PRESENTATION_DLG                (SID_SD_START+339)
 #define SID_HYPHENATION                     (SID_SD_START+340)
 #define SID_CONNECTION_NEW_ROUTING          (SID_SD_START+341)

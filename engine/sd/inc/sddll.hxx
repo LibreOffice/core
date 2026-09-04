@@ -35,9 +35,6 @@ class SdModule;
 
 class SD_DLLPUBLIC SdDLL final
 {
-#ifdef ENABLE_SDREMOTE
-    static void     RegisterRemotes();
-#endif
     static void     RegisterFactorys();
     static void     RegisterInterfaces(const SdModule* pMod);
     static void     RegisterControllers(SdModule* pMod);

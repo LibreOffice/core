@@ -173,9 +173,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/rendering/XBitmap.hpp
     - com/sun/star/awt/XWindowListener.hpp
-    sd/source/ui/remotecontrol/Listener.hxx:
-    # base class has to be a complete type
-    - com/sun/star/presentation/XSlideShowListener.hpp
     sd/source/ui/sidebar/PanelFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XUIElementFactory.hpp
@@ -341,9 +338,6 @@ excludelist:
     sd/source/ui/func/fuhhconv.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XWindow.hpp
-    sd/source/ui/dlg/RemoteDialogClientBox.cxx:
-    # Actually used
-    - vector
     sd/source/ui/dlg/sdtreelb.cxx:
     # Needed for template
     - com/sun/star/embed/XEmbeddedObject.hpp

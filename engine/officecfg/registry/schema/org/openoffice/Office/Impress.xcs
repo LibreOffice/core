@@ -611,13 +611,6 @@
         <info>
           <desc>Specifies configuration items governing behavior when starting a presentation.</desc>
         </info>
-        <prop oor:name="EnableSdremote" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Indicates whether to enable the Impress remote controller.</desc>
-            <label>Enable remote control</label>
-          </info>
-          <value>false</value>
-        </prop>
        <prop oor:name="ShowNavigationPanel" oor:type="xs:boolean" oor:nillable="false">
         <info>
          <desc>Indicates whether to show navigation panel for presentations.</desc>

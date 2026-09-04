@@ -17,19 +17,6 @@ $(eval $(call gb_Library_set_include,sdui,\
     -I$(SRCDIR)/sd/source/ui/inc \
 ))
 
-ifeq ($(ENABLE_SDREMOTE),TRUE)
-$(eval $(call gb_Library_add_defs,sdui,\
-    -DENABLE_SDREMOTE \
-))
-
-ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),TRUE)
-$(eval $(call gb_Library_add_defs,sdui,\
-    -DENABLE_SDREMOTE_BLUETOOTH \
-))
-endif
-
-endif
-
 $(eval $(call gb_Library_use_custom_headers,sdui,\
 	officecfg/registry \
 ))
@@ -78,8 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/paragr \
     sd/source/ui/dlg/present \
     sd/source/ui/dlg/prltempl \
-    sd/source/ui/dlg/RemoteDialog \
-    sd/source/ui/dlg/RemoteDialogClientBox \
     sd/source/ui/dlg/sddlgfact \
     sd/source/ui/dlg/sdpreslt \
     sd/source/ui/dlg/sduiexp \

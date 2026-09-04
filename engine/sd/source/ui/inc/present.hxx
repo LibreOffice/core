@@ -57,9 +57,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxShowNavigationButton;
     std::unique_ptr<weld::ComboBox>    m_xLbNavigationButtonsSize;
     std::unique_ptr<weld::Label>       m_xFtNavigationButtonsSize;
-    std::unique_ptr<weld::Frame> m_xFrameEnableRemote;
-    std::unique_ptr<weld::CheckButton> m_xCbxEnableRemote;
-    std::unique_ptr<weld::CheckButton> m_xCbxEnableRemoteInsecure;
     std::unique_ptr<weld::CheckButton> m_xCbxInteractiveMode;
 
     std::unique_ptr<weld::Label> m_xFtMonitor;
@@ -70,7 +67,6 @@ private:
     std::unique_ptr<weld::Label> m_xMonitorExternal;
     std::unique_ptr<weld::Label> m_xExternal;
 
-    DECL_LINK(ChangeRemoteHdl, weld::Toggleable&, void);
     DECL_LINK(ChangeRangeHdl, weld::Toggleable&, void);
     DECL_LINK(ClickWindowPresentationHdl, weld::Toggleable&, void);
     void ChangePause();

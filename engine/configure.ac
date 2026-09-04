@@ -1266,7 +1266,6 @@ haiku*)
     test_gtk3=no
     enable_coinmp=no
     enable_pdfium=no
-    enable_sdremote=no
     _os=Haiku
     ;;
 
@@ -1709,11 +1708,6 @@ libo_FUZZ_ARG_ENABLE(evolution2,
          enabled.])
 )
 
-AC_ARG_ENABLE(avahi,
-    AS_HELP_STRING([--enable-avahi],
-        [Determines whether to use Avahi to advertise Impress to remote controls.])
-)
-
 AC_ARG_ENABLE(msvc-debug-runtime,
     AS_HELP_STRING([--enable-msvc-debug-runtime],
         [Determines whether to use the Microsoft Visual Studio debugging runtime.
@@ -1868,18 +1862,6 @@ libo_FUZZ_ARG_ENABLE(dbus,
         [Determines whether to enable features that depend on dbus.
          e.g. Presentation mode screensaver control, bluetooth presentation control, automatic font install]),
 ,test "${enable_dbus+set}" = set || enable_dbus=yes)
-
-libo_FUZZ_ARG_ENABLE(sdremote,
-    AS_HELP_STRING([--enable-sdremote],
-        [Enable Impress remote control (i.e. the server component).
-         Disabled by default.]),
-,enable_sdremote=no)
-
-libo_FUZZ_ARG_ENABLE(sdremote-bluetooth,
-    AS_HELP_STRING([--enable-sdremote-bluetooth],
-        [Build sdremote with bluetooth support. Requires dbus on Linux.
-         Disabled by default.]),
-,enable_sdremote_bluetooth=no)
 
 libo_FUZZ_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
@@ -2406,11 +2388,6 @@ AC_ARG_WITH(system-sane,
         [Use sane.h already on system.]),,
     [with_system_sane="$with_system_headers"])
 
-AC_ARG_WITH(system-bluez,
-    AS_HELP_STRING([--with-system-bluez],
-        [Use bluetooth.h already on system.]),,
-    [with_system_bluez="$with_system_headers"])
-
 AC_ARG_WITH(system-boost,
     AS_HELP_STRING([--with-system-boost],
         [Use boost already on system.]),,
@@ -2905,12 +2882,6 @@ dnl Check for incompatible options set by fuzzing, and reset those
 dnl automatically to working combinations
 dnl ===================================================================
 
-if test "$libo_fuzzed_enable_dbus" = yes -a "$libo_fuzzed_enable_avahi" -a \
-        "$enable_dbus" != "$enable_avahi"; then
-    AC_MSG_NOTICE([Resetting --enable-avahi=$enable_dbus])
-    enable_avahi=$enable_dbus
-fi
-
 add_lopath_after ()
 {
     if ! echo "$LO_PATH" | $EGREP -q "(^|${P_SEP})$1($|${P_SEP})"; then
@@ -3048,8 +3019,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_pdfimport=no
     enable_randr=no
     enable_scripting=no
-    enable_sdremote=no
-    enable_sdremote_bluetooth=no
     enable_skia=no
     enable_xmlhelp=no
     enable_zxing=no
@@ -11676,83 +11645,6 @@ AC_SUBST(DBUS_GLIB_CFLAGS)
 AC_SUBST(DBUS_GLIB_LIBS)
 AC_SUBST(DBUS_HAVE_GLIB)
 
-AC_MSG_CHECKING([whether to enable Impress remote control])
-if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_SDREMOTE=TRUE
-    SDREMOTE_ENTITLEMENT="	<key>com.apple.security.network.server</key>
-	<true/>"
-    AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
-
-    if test $OS = MACOSX; then
-        # The Bluetooth code doesn't compile since macOS SDK 10.15
-        if test "$enable_sdremote_bluetooth" = yes; then
-            AC_MSG_ERROR([macOS SDK $macosx_sdk does not currently support --enable-sdremote-bluetooth])
-        fi
-        add_warning "not building the bluetooth part of the sdremote - used api was removed from macOS SDK 10.15"
-        enable_sdremote_bluetooth=no
-    fi
-    # If not explicitly enabled or disabled, default
-    if test -z "$enable_sdremote_bluetooth"; then
-        case "$OS" in
-        LINUX|MACOSX|WNT)
-            # Default to yes for these
-            enable_sdremote_bluetooth=yes
-            ;;
-        *)
-            # otherwise no
-            enable_sdremote_bluetooth=no
-            ;;
-        esac
-    fi
-    # $enable_sdremote_bluetooth is guaranteed non-empty now
-
-    if test "$enable_sdremote_bluetooth" != "no"; then
-        if test "$OS" = "LINUX"; then
-            if test "$ENABLE_DBUS" = "TRUE" -a "$DBUS_HAVE_GLIB" = "TRUE"; then
-                AC_MSG_RESULT([yes])
-                ENABLE_SDREMOTE_BLUETOOTH=TRUE
-                dnl ===================================================================
-                dnl Check for system bluez
-                dnl ===================================================================
-                AC_MSG_CHECKING([which Bluetooth header to use])
-                if test "$with_system_bluez" = "yes"; then
-                    AC_MSG_RESULT([external])
-                    AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
-                        [AC_MSG_ERROR(bluetooth.h not found. install bluez)], [])
-                    SYSTEM_BLUEZ=TRUE
-                else
-                    AC_MSG_RESULT([internal])
-                    SYSTEM_BLUEZ=
-                fi
-            else
-                AC_MSG_RESULT([no, dbus disabled])
-                ENABLE_SDREMOTE_BLUETOOTH=
-                SYSTEM_BLUEZ=
-            fi
-        else
-            AC_MSG_RESULT([yes])
-            ENABLE_SDREMOTE_BLUETOOTH=TRUE
-            SYSTEM_BLUEZ=
-            SDREMOTE_ENTITLEMENT="$SDREMOTE_ENTITLEMENT
-	<key>com.apple.security.device.bluetooth</key>
-	<true/>"
-        fi
-    else
-        AC_MSG_RESULT([no])
-        ENABLE_SDREMOTE_BLUETOOTH=
-        SYSTEM_BLUEZ=
-    fi
-else
-    ENABLE_SDREMOTE=
-    SYSTEM_BLUEZ=
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_SDREMOTE)
-AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
-AC_SUBST(SDREMOTE_ENTITLEMENT)
-AC_SUBST(SYSTEM_BLUEZ)
-
 dnl ===================================================================
 dnl Check whether to enable GIO support
 dnl ===================================================================
@@ -12715,25 +12607,6 @@ else
 fi
 AC_SUBST(x_NINJA)
 AC_SUBST(NINJA)
-
-dnl ===================================================================
-dnl Test whether to use avahi
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-    # Windows uses bundled mDNSResponder
-    BUILD_TYPE="$BUILD_TYPE MDNSRESPONDER"
-elif test "$_os" != "Darwin" -a "$enable_avahi" = "yes"; then
-    PKG_CHECK_MODULES([AVAHI], [avahi-client >= 0.6.10],
-                      [ENABLE_AVAHI="TRUE"])
-    AC_DEFINE(HAVE_FEATURE_AVAHI)
-    AVAHI_CFLAGS=$(printf '%s' "$AVAHI_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "${AVAHI_LIBS}"
-    AVAHI_LIBS="${filteredlibs}"
-fi
-
-AC_SUBST(ENABLE_AVAHI)
-AC_SUBST(AVAHI_CFLAGS)
-AC_SUBST(AVAHI_LIBS)
 
 dnl ===================================================================
 dnl Test whether to use MSVC /analyze

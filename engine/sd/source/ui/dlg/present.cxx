@@ -18,7 +18,6 @@
  */
 
 #include <officecfg/Office/Impress.hxx>
-#include <officecfg/Office/Security.hxx>
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -58,9 +57,6 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xCbxShowNavigationButton(m_xBuilder->weld_check_button(u"shownavigationbutton"_ustr))
     , m_xLbNavigationButtonsSize(m_xBuilder->weld_combo_box(u"navigation_buttons_size_cb"_ustr))
     , m_xFtNavigationButtonsSize(m_xBuilder->weld_label(u"navbar_btn_size_label"_ustr))
-    , m_xFrameEnableRemote(m_xBuilder->weld_frame(u"frameremote"_ustr))
-    , m_xCbxEnableRemote(m_xBuilder->weld_check_button(u"enableremote"_ustr))
-    , m_xCbxEnableRemoteInsecure(m_xBuilder->weld_check_button(u"enableremoteinsecure"_ustr))
     , m_xCbxInteractiveMode(m_xBuilder->weld_check_button(u"enableinteractivemode"_ustr))
     , m_xFtMonitor(m_xBuilder->weld_label(u"presdisplay_label"_ustr))
     , m_xLBMonitor(m_xBuilder->weld_combo_box(u"presdisplay_cb"_ustr))
@@ -150,16 +146,6 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     if( bEndless )
         m_xCbxAuto->set_active(true);
 
-#ifdef ENABLE_SDREMOTE
-    m_xCbxEnableRemote->connect_toggled( LINK(this, SdStartPresentationDlg, ChangeRemoteHdl) );
-    m_xCbxEnableRemote->set_active(officecfg::Office::Impress::Misc::Start::EnableSdremote::get());
-    ChangeRemoteHdl(*m_xCbxEnableRemote);
-    m_xCbxEnableRemoteInsecure->set_active(m_xCbxEnableRemote->get_active()
-        && officecfg::Office::Security::Net::AllowInsecureImpressRemoteWiFi::get());
-#else
-    m_xFrameEnableRemote->hide();
-#endif
-
     m_xCbxInteractiveMode->set_active( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_INTERACTIVE ) ).GetValue() );
 
     InitMonitorSettings();
@@ -185,11 +171,6 @@ short SdStartPresentationDlg::run()
             m_xCbxShowNavigationButton->get_active(), batch);
         officecfg::Office::Impress::Layout::Display::NavigationBtnScale::set(
             m_xLbNavigationButtonsSize->get_active(), batch);
-
-#ifdef ENABLE_SDREMOTE
-        officecfg::Office::Impress::Misc::Start::EnableSdremote::set(m_xCbxEnableRemote->get_active(), batch);
-        officecfg::Office::Security::Net::AllowInsecureImpressRemoteWiFi::set(m_xCbxEnableRemoteInsecure->get_active(), batch);
-#endif
         batch->commit();
     }
     return nRet;
@@ -322,11 +303,6 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     nPos = m_xLbCustomshow->get_active();
     if (nPos != -1)
         pCustomShowList->Seek( nPos );
-}
-
-IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRemoteHdl, weld::Toggleable&, void)
-{
-    m_xCbxEnableRemoteInsecure->set_sensitive(m_xCbxEnableRemote->get_active());
 }
 
 /**

@@ -491,11 +491,6 @@ MDDS_TARBALL := mdds-3.1.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MDNSRESPONDER_SHA256SUM := e777b4d7dbf5eb1552cb80090ad1ede319067ab6e45e3990d68aabf6e8b3f5a0
-MDNSRESPONDER_TARBALL := mDNSResponder-878.200.35.tar.gz
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 MESON_SHA256SUM := f118aa910fc0a137cc2dd0122232dbf82153d9a12fb5b0f5bb64896f6a157abf
 MESON_TARBALL := meson-1.8.3.tar.gz
 # three static lines

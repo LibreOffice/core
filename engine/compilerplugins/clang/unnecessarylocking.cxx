@@ -145,7 +145,6 @@ bool UnnecessaryLocking::VisitCompoundStmt(const CompoundStmt* compoundStmt)
             && !loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/vba/vbaapplication.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/unoidl/unodoc.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/unoidl/unomodule.cxx")
-            && !loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/remotecontrol/Receiver.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR
                                          "/sd/source/ui/slidesorter/controller/SlsClipboard.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/appl/fwkhelper.cxx")

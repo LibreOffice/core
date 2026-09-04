@@ -360,11 +360,6 @@ interface OutlineView
     [
         ExecMethod = FuTemporary ;
     ]
-    SID_REMOTE_DLG
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_CUSTOMSHOW_DLG
     [
         ExecMethod = FuTemporary ;

@@ -39,7 +39,6 @@ modules/sdraw/ui/vectorize.ui
 modules/simpress/ui/customslideshows.ui
 modules/simpress/ui/dlgfield.ui
 modules/simpress/ui/presentationdialog.ui
-modules/simpress/ui/remotedialog.ui
 modules/simpress/ui/templatedialog.ui
 modules/simpress/ui/slidedesigndialog.ui
 modules/simpress/ui/interactiondialog.ui

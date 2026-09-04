@@ -62,36 +62,10 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,sd_uimpress,\
 ))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
-	-lobjc \
-))
-
-$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sd_uimpress,\
-	Foundation \
-	IOBluetooth \
-))
-endif
-
 $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
     boost_headers \
-    dbus \
-	$(if $(ENABLE_AVAHI), \
-	    avahi \
-	) \
-	$(if $(filter WNT,$(OS)),mDNSResponder) \
 	libxml2 \
 ))
-
-ifneq ($(DBUS_HAVE_GLIB),)
-$(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
-	$$(INCLUDE) \
-	$(DBUS_GLIB_CFLAGS) \
-))
-$(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
-	$(DBUS_GLIB_LIBS) \
-))
-endif
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
     sd/qa/unit/uimpress \

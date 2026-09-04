@@ -901,7 +901,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/pmslidespage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/pmsummarypage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/presentationdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/remotedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/rotatemenu.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/scalemenu.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/simpress/ui/sidebarslidebackground.ui \

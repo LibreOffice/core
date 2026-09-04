@@ -21,7 +21,6 @@
         <!-- Allow Base to import data from Address Book -->
         <key>com.apple.security.personal-information.addressbook</key>
         <true/>
-@SDREMOTE_ENTITLEMENT@
 @MACOSX_PROVISIONING_INFO@
 @GET_TASK_ALLOW_ENTITLEMENT@
 </dict>

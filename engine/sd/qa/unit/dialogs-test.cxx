@@ -221,7 +221,6 @@ void SdDialogsTest::registerKnownDialogsByID(mapType& rKnownDialogs)
     rKnownDialogs["modules/sdraw/ui/crossfadedialog.ui"_ostr] = 9;
     rKnownDialogs["modules/sdraw/ui/drawparadialog.ui"_ostr] = 10;
     rKnownDialogs["modules/simpress/ui/presentationdialog.ui"_ostr] = 11;
-    rKnownDialogs["modules/simpress/ui/remotedialog.ui"_ostr] = 12;
     rKnownDialogs["modules/sdraw/ui/drawprtldialog.ui"_ostr] = 13;
     rKnownDialogs["modules/simpress/ui/slidedesigndialog.ui"_ostr] = 14;
     rKnownDialogs["modules/simpress/ui/templatedialog.ui"_ostr] = 15;
@@ -406,13 +405,6 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 aDlgSet,
                 std::vector<OUString>(),
                 nullptr);
-            break;
-        }
-        case 12:
-        {
-            // CreateRemoteDialog(vcl::Window* pWindow) override; // ad for RemoteDialog
-            pRetval = getSdAbstractDialogFactory()->CreateRemoteDialog(
-                Application::GetDefDialogParent());
             break;
         }
         case 13:

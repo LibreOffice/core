@@ -25,7 +25,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <svx/fmobjfac.hxx>
 #include <svx/objfac3d.hxx>
-#include <vcl/svapp.hxx>
 
 #include <registerinterfaces.hxx>
 #include <sddll.hxx>
@@ -264,12 +263,6 @@ void SdDLL::Init()
 
     // register css::form::component::Form-Object-Factory
     FmFormObjFactory();
-
-    // register your exotic remote controls here
-#ifdef ENABLE_SDREMOTE
-    if (!comphelper::IsFuzzing() && !Application::IsHeadlessModeEnabled())
-        RegisterRemotes();
-#endif
 }
 
 #ifndef DISABLE_DYNLOADING

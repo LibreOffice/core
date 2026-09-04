@@ -159,7 +159,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,MDDS,MDDS_TARBALL) \
 	$(call fetch_Optional,ZXCVBN,ZXCVBN_C_TARBALL) \
 	$(call fetch_Optional,ZXING,ZXING_TARBALL) \
-	$(call fetch_Optional,MDNSRESPONDER,MDNSRESPONDER_TARBALL) \
 	$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \
 	$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
 	$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \

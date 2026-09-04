@@ -61,7 +61,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LXML,lxml) \
 	$(call gb_Helper_optional,MD4C,md4c) \
 	$(call gb_Helper_optional,MDDS,mdds) \
-	$(call gb_Helper_optional,MDNSRESPONDER,mdnsresponder) \
 	$(call gb_Helper_optional,MESON,meson) \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \

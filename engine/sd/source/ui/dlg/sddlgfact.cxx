@@ -31,7 +31,6 @@
 #include <morphdlg.hxx>
 #include <paragr.hxx>
 #include <present.hxx>
-#include "RemoteDialog.hxx"
 #include <prltempl.hxx>
 #include <sdpreslt.hxx>
 #include <tabtempl.hxx>
@@ -289,11 +288,6 @@ VclPtr<AbstractSdStartPresDlg> SdAbstractDialogFactory_Impl::CreateSdStartPresen
         const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList)
 {
     return VclPtr<AbstractSdStartPresDlg_Impl>::Create(pParent, rInAttrs, rPageNames, pCSList);
-}
-
-VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateRemoteDialog(weld::Window* pParent)
-{
-    return VclPtr<SdAbstractGenericDialog_Impl<sd::RemoteDialog>>::Create(pParent);
 }
 
 namespace

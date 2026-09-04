@@ -2703,23 +2703,6 @@ SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem Remote SID_REMOTE_DLG
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
 SfxVoidItem PresentationEnd SID_PRESENTATION_END
 ()
 [

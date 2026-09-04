@@ -106,23 +106,9 @@ $(eval $(call gb_Library_use_libraries,sd,\
 $(eval $(call gb_Library_use_externals,sd,\
 	boost_headers \
 	libxml2 \
-	dbus \
-	$(if $(ENABLE_AVAHI), \
-		avahi \
-	) \
 	icu_headers \
 	frozen \
 ))
-
-ifneq ($(DBUS_HAVE_GLIB),)
-$(eval $(call gb_Library_set_include,sd,\
-	$$(INCLUDE) \
-	$(DBUS_GLIB_CFLAGS) \
-))
-$(eval $(call gb_Library_add_libs,sd,\
-	$(DBUS_GLIB_LIBS) \
-))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sd,\
@@ -516,91 +502,5 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/NotesPanelView \
 	sd/source/ui/view/NotesPanelViewShell \
 ))
-
-ifeq ($(ENABLE_SDREMOTE),TRUE)
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/remotecontrol/BufferedStreamSocket \
-	sd/source/ui/remotecontrol/Communicator \
-	sd/source/ui/remotecontrol/ImagePreparer \
-	sd/source/ui/remotecontrol/Server \
-	sd/source/ui/remotecontrol/Receiver \
-	sd/source/ui/remotecontrol/Listener \
-	sd/source/ui/remotecontrol/Transmitter \
-))
-
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_objcxxobjects,sd,\
-	sd/source/ui/remotecontrol/DiscoveryService \
-	sd/source/ui/remotecontrol/OSXNetworkService \
-))
-
-$(eval $(call gb_Library_use_system_darwin_frameworks,sd,\
-	Foundation \
-))
-
-else # OS!=MACSOX
-
-ifeq ($(ENABLE_AVAHI),TRUE)
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/remotecontrol/AvahiNetworkService \
-))
-endif # ENABLE_AVAHI=TRUE
-
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/remotecontrol/DiscoveryService \
-))
-
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/remotecontrol/WINNetworkService \
-))
-
-$(eval $(call gb_Library_use_external,sd,mDNSResponder))
-
-endif # OS=WNT
-
-endif # OS!=MACOSX
-
-$(eval $(call gb_Library_add_defs,sd,\
-	-DENABLE_SDREMOTE \
-))
-
-ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),TRUE)
-
-ifneq ($(OS),MACOSX)
-
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/remotecontrol/BluetoothServer \
-))
-
-else # OS!=MACOSX
-
-$(eval $(call gb_Library_add_objcxxobjects,sd,\
-	sd/source/ui/remotecontrol/BluetoothServer \
-	sd/source/ui/remotecontrol/OSXBluetooth \
-))
-
-$(eval $(call gb_Library_add_libs,sd,\
-	-lobjc \
-))
-
-$(eval $(call gb_Library_use_system_darwin_frameworks,sd,\
-	IOBluetooth \
-))
-
-endif # OS!=MACOSX
-
-$(eval $(call gb_Library_add_defs,sd,\
-	-DENABLE_SDREMOTE_BLUETOOTH \
-))
-
-$(eval $(call gb_Library_use_externals,sd,\
-	bluez_bluetooth_headers \
-))
-
-endif # ENABLE_SDREMOTE_BLUETOOTH=TRUE
-
-endif # ENABLE_SDREMOTE=TRUE
 
 # vim: set noet sw=4 ts=4:
