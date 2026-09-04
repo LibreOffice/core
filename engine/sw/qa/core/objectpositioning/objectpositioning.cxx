@@ -9,8 +9,11 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -635,6 +638,79 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyAutoWidthKeptInsideCell)
     // the edge it is aligned to.
     assertXPath(pXmlDoc, "(//fly[infos])[1]/infos/bounds", "width", u"4724");
     assertXPath(pXmlDoc, "(//fly[infos])[1]/infos/bounds", "right", u"6809");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRightAlignedShapeStaysInParagraphArea)
+{
+    // A paragraph holds two shapes that are aligned to the paragraph area: one at the left edge
+    // with the text wrapped on its right, and a wrap-through one at the right edge. The document
+    // adds the fly offsets of the format, so the left shape pushes the text start of the
+    // paragraph to the right.
+    createSwDoc("right-aligned-shape-beside-fly-paragraph-area.fodt");
+    uno::Reference<beans::XPropertySet> xShape(getShapeByName(u"Right shape"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME,
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,
+                         getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+
+    // The right shape ends at the right edge of the paragraph.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nParagraphRight
+        = getXPath(pXmlDoc, "//txt[anchored/SwAnchoredDrawObject]/infos/bounds", "right")
+              .toInt32();
+    sal_Int32 nShapeRight
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[SdrObject/@name='Right shape']/bounds",
+                   "right")
+              .toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 11055
+    // - Actual  : 12756
+    // The text start pushed by the left shape was added to the alignment area, but the area
+    // kept its full width, so the shape landed one left shape width past the paragraph edge,
+    // outside the page.
+    CPPUNIT_ASSERT_EQUAL(nParagraphRight, nShapeRight);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRightAlignedShapeBesideFly)
+{
+    // A table cell holds an empty paragraph with two objects anchored to it: a tight-wrapped
+    // text frame aligned to the left edge of the cell text area, and a wrap-through shape
+    // aligned to the right edge of it. The text frame pushes the text start of the paragraph
+    // to the right.
+    createSwDoc("right-aligned-shape-beside-fly.docx");
+
+    // The shape is 1002 twips wide and ends at the right edge of the cell text area, which is
+    // also the right edge of the anchor paragraph.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nParagraphRight
+        = getXPath(pXmlDoc, "//txt[anchored/SwAnchoredDrawObject[@page-frame]]/infos/bounds",
+                   "right")
+              .toInt32();
+    sal_Int32 nShapeLeft
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[@page-frame]/bounds", "left").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10155
+    // - Actual  : 15060
+    // The text start pushed by the text frame was added to the alignment area, but the area
+    // kept its full width, so the shape landed one text frame width too far right, outside
+    // the page.
+    CPPUNIT_ASSERT_EQUAL(nParagraphRight - 1001, nShapeLeft);
+
+    // And the shape keeps its alignment. Nothing turned it into an absolute position.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
+    bool bFound = false;
+    for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+    {
+        uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        if (!xInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr))
+            continue;
+        uno::Reference<beans::XPropertySet> xShape(xInfo, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,
+                             getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+        bFound = true;
+    }
+    CPPUNIT_ASSERT(bFound);
 }
 }
 
