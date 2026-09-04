@@ -1965,9 +1965,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		const section = TextCursorSection.getViewCursorSection(viewId);
 		if (section) {
-			const showCursor = obj.visible === 'true';
-			section.sectionProperties.showCursor = showCursor;
-			section.setShowSection(section.checkMyVisibility());
+			section.sectionProperties.showCursor = obj.visible === 'true';
+			section.applyVisibility();
 			if (!section.showSection)
 				CursorHeaderSection.deletePopUpNow(viewId);
 		}

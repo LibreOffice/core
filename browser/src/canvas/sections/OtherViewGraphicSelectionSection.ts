@@ -15,7 +15,7 @@
 class OtherViewGraphicSelectionSection extends CanvasSectionObject {
     documentObject: boolean = true;
     interactable: boolean = false; // We don't bother with events.
-    zIndex: number = app.CSections.DefaultForDocumentObjects.processingOrder;
+    zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
     drawingOrder: number = app.CSections.DefaultForDocumentObjects.drawingOrder;
     processingOrder: number = app.CSections.DefaultForDocumentObjects.processingOrder;
 

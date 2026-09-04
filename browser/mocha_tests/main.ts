@@ -56,4 +56,5 @@
 /// <reference path="./ContributedNotebookbarTabs.test.ts" />
 /// <reference path="./CDarkOverlay.test.ts" />
 /// <reference path="./AIChatMessageCodes.test.ts" />
+/// <reference path="./OtherViewCursorSection.test.ts" />
 // NOTE: reference new tests here ...

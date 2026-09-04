@@ -62,29 +62,37 @@ class HTMLObjectSection extends CanvasSectionObject {
 	}
 
 	adjustHTMLObjectPosition() {
-		if (app.sectionContainer.isInZoomAnimation())
-			this.myTopLeft = [this.documentPosition.vX, this.documentPosition.vY];
-
-		const leftNumber = Math.round(this.myTopLeft[0] / app.dpiScale);
-		const topNumber = Math.round(this.myTopLeft[1] / app.dpiScale);
-
 		// setup model data now and schedule DOM update during animation frame
-		this.htmlPosition = [leftNumber, topNumber];
+		this.updateHTMLPosition();
 
 		if (this.pendingUpdate) app.layoutingService.cancelLayoutingTask(this.pendingUpdate);
 
 		this.pendingUpdate = app.layoutingService.appendLayoutingTask(() => {
 			this.pendingUpdate = null;
-
-			const left = this.htmlPosition[0] + 'px';
-			const top = this.htmlPosition[1] + 'px';
-
-			if (this.sectionProperties.objectDiv.style.left !== left)
-				this.sectionProperties.objectDiv.style.left = left;
-
-			if (this.sectionProperties.objectDiv.style.top !== top)
-				this.sectionProperties.objectDiv.style.top = top;
+			this.writeHTMLPosition();
 		});
+	}
+
+	// The place the object gets, in CSS pixels.
+	private updateHTMLPosition() {
+		if (app.sectionContainer.isInZoomAnimation())
+			this.myTopLeft = [this.documentPosition.vX, this.documentPosition.vY];
+
+		this.htmlPosition = [
+			Math.round(this.myTopLeft[0] / app.dpiScale),
+			Math.round(this.myTopLeft[1] / app.dpiScale),
+		];
+	}
+
+	private writeHTMLPosition() {
+		const left = this.htmlPosition[0] + 'px';
+		const top = this.htmlPosition[1] + 'px';
+
+		if (this.sectionProperties.objectDiv.style.left !== left)
+			this.sectionProperties.objectDiv.style.left = left;
+
+		if (this.sectionProperties.objectDiv.style.top !== top)
+			this.sectionProperties.objectDiv.style.top = top;
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {

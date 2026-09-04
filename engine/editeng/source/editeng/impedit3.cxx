@@ -161,7 +161,9 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
     for (EditView* pView : maEditViews)
     {
-        pView->HideCursor();
+        // Taking the cursor down here belongs to the repaint below, so it happens without
+        // announcing a change of the cursor's visibility.
+        pView->HideCursor(/*bDeactivate=*/true);
 
         tools::Rectangle aClipRect(maInvalidRect);
         tools::Rectangle aVisArea( pView->GetVisArea() );

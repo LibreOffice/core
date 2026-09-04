@@ -15,7 +15,7 @@
 class TextCursorSection extends HTMLObjectSection {
 	documentObject: boolean = true;
 	interactable: boolean = true;
-	zIndex: number = app.CSections.DefaultForDocumentObjects.processingOrder;
+	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
 	drawingOrder: number = app.CSections.DefaultForDocumentObjects.drawingOrder;
 	processingOrder: number =
 		app.CSections.DefaultForDocumentObjects.processingOrder;
@@ -84,6 +84,18 @@ class TextCursorSection extends HTMLObjectSection {
 		return result;
 	}
 
+	// Show or hide the cursor according to the current state. The place of the
+	// HTML object is held as a copy of a view-relative coordinate, so it is
+	// taken again here: the visible area can have moved since the last cursor
+	// position arrived.
+	public applyVisibility(): void {
+		this.setPosition(this.position[0], this.position[1]);
+		this.setShowSection(this.checkMyVisibility());
+
+		// The object is hidden while it lies outside the visible area.
+		this.onNewDocumentTopLeft();
+	}
+
 	// Calculate the position of the cursor header above the actual cursor.
 	getHeaderPosition(): cool.SimplePoint {
 		return new cool.SimplePoint(
@@ -150,9 +162,7 @@ class TextCursorSection extends HTMLObjectSection {
 			TextCursorSection.sectionPointers.push(section);
 		}
 
-		section.setShowSection(section.checkMyVisibility());
-		section.onNewDocumentTopLeft();
-		section.adjustHTMLObjectPosition();
+		section.applyVisibility();
 		section.sectionProperties.username = username;
 
 		if (section.showSection && section.isVisible)
@@ -196,7 +206,7 @@ class TextCursorSection extends HTMLObjectSection {
 	public static updateVisibilities() {
 		for (let i = 0; i < TextCursorSection.sectionPointers.length; i++) {
 			const section = TextCursorSection.sectionPointers[i];
-			section.setShowSection(section.checkMyVisibility());
+			section.applyVisibility();
 			if (!section.showSection)
 				CursorHeaderSection.deletePopUpNow(section.sectionProperties.viewId);
 		}
