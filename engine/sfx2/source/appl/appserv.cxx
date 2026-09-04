@@ -524,16 +524,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_Q_AND_A:
-        {
-            // Askbot has URL's normalized to languages, not locales
-            // Get language from locale: ll or lll or ll-CC or lll-CC
-
-            OUString sURL(officecfg::Office::Common::Menus::QA_URL::get() + //https://hub.libreoffice.org/forum/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
         case SID_DOCUMENTATION:
         {
             // Open documentation page based on locales
