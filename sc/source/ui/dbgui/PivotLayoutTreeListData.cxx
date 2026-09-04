@@ -91,7 +91,8 @@ IMPL_LINK(ScPivotLayoutTreeListData, DoubleClickHdl, const weld::TreeIter&, rIte
 
     mpFunctionDlg = pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData);
 
-    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue, &rIter](int nResult) mutable {
+    std::shared_ptr<weld::TreeIter> pIter = mxControl->make_iterator(&rIter);
+    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue, pIter](int nResult) mutable {
         if (nResult == RET_OK)
         {
             ScPivotFuncData& rFunctionData = pCurrentItemValue->maFunctionData;
@@ -106,7 +107,7 @@ IMPL_LINK(ScPivotLayoutTreeListData, DoubleClickHdl, const weld::TreeIter&, rIte
                                         rLabelData.maName,
                                         rFunctionData.mnDupCount);
 
-            mxControl->set_text(rIter, sDataItemName);
+            mxControl->set_text(*pIter, sDataItemName);
         }
 
         mpFunctionDlg->disposeOnce();
