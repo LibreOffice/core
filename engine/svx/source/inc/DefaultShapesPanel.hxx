@@ -21,8 +21,9 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <svtools/valueset.hxx>
+#include <vcl/weld.hxx>
 #include <map>
+#include <vector>
 #include "ShapesUtil.hxx"
 
 namespace svx::sidebar {
@@ -42,33 +43,23 @@ public:
     virtual ~DefaultShapesPanel() override;
 
 private:
-    std::unique_ptr<ValueSet> mxLineArrowSet;
-    std::unique_ptr<weld::CustomWeld> mxLineArrowSetWin;
-    std::unique_ptr<ValueSet> mxCurveSet;
-    std::unique_ptr<weld::CustomWeld> mxCurveSetWin;
-    std::unique_ptr<ValueSet> mxConnectorSet;
-    std::unique_ptr<weld::CustomWeld> mxConnectorSetWin;
-    std::unique_ptr<ValueSet> mxBasicShapeSet;
-    std::unique_ptr<weld::CustomWeld> mxBasicShapeSetWin;
-    std::unique_ptr<ValueSet> mxSymbolShapeSet;
-    std::unique_ptr<weld::CustomWeld> mxSymbolShapeSetWin;
-    std::unique_ptr<ValueSet> mxBlockArrowSet;
-    std::unique_ptr<weld::CustomWeld> mxBlockArrowSetWin;
-    std::unique_ptr<ValueSet> mxFlowchartSet;
-    std::unique_ptr<weld::CustomWeld> mxFlowchartSetWin;
-    std::unique_ptr<ValueSet> mxCalloutSet;
-    std::unique_ptr<weld::CustomWeld> mxCalloutSetWin;
-    std::unique_ptr<ValueSet> mxStarSet;
-    std::unique_ptr<weld::CustomWeld> mxStarSetWin;
-    std::unique_ptr<ValueSet> mx3DObjectSet;
-    std::unique_ptr<weld::CustomWeld> mx3DObjectSetWin;
+    std::unique_ptr<weld::IconView> mxLineArrowSet;
+    std::unique_ptr<weld::IconView> mxCurveSet;
+    std::unique_ptr<weld::IconView> mxConnectorSet;
+    std::unique_ptr<weld::IconView> mxBasicShapeSet;
+    std::unique_ptr<weld::IconView> mxSymbolShapeSet;
+    std::unique_ptr<weld::IconView> mxBlockArrowSet;
+    std::unique_ptr<weld::IconView> mxFlowchartSet;
+    std::unique_ptr<weld::IconView> mxCalloutSet;
+    std::unique_ptr<weld::IconView> mxStarSet;
+    std::unique_ptr<weld::IconView> mx3DObjectSet;
 
     css::uno::Reference< css::frame::XFrame >       mxFrame;
-    std::map<ValueSet*, std::map<sal_uInt16, OUString>> mpShapesSetMap;
+    std::vector<std::pair<weld::IconView*, const std::map<sal_uInt16, OUString>*>> maShapeGalleries;
 
     void populateShapes();
     void Initialize();
-    DECL_LINK( ShapeSelectHdl, ValueSet*, void );
+    DECL_LINK( ShapeSelectHdl, weld::IconView&, bool );
 };
 
 } // end of namespace sd::sidebar

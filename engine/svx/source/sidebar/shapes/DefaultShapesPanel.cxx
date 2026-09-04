@@ -22,8 +22,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/image.hxx>
 
 using namespace svx::sidebar::commands;
 using namespace css;
@@ -36,26 +35,16 @@ DefaultShapesPanel::DefaultShapesPanel (
     weld::Widget* pParent,
     css::uno::Reference<css::frame::XFrame> xFrame)
     : PanelLayout(pParent, u"DefaultShapesPanel"_ustr, u"svx/ui/defaultshapespanel.ui"_ustr)
-    , mxLineArrowSet(new ValueSet(nullptr))
-    , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, u"LinesArrows"_ustr, *mxLineArrowSet))
-    , mxCurveSet(new ValueSet(nullptr))
-    , mxCurveSetWin(new weld::CustomWeld(*m_xBuilder, u"Curves"_ustr, *mxCurveSet))
-    , mxConnectorSet(new ValueSet(nullptr))
-    , mxConnectorSetWin(new weld::CustomWeld(*m_xBuilder, u"Connectors"_ustr, *mxConnectorSet))
-    , mxBasicShapeSet(new ValueSet(nullptr))
-    , mxBasicShapeSetWin(new weld::CustomWeld(*m_xBuilder, u"BasicShapes"_ustr, *mxBasicShapeSet))
-    , mxSymbolShapeSet(new ValueSet(nullptr))
-    , mxSymbolShapeSetWin(new weld::CustomWeld(*m_xBuilder, u"SymbolShapes"_ustr, *mxSymbolShapeSet))
-    , mxBlockArrowSet(new ValueSet(nullptr))
-    , mxBlockArrowSetWin(new weld::CustomWeld(*m_xBuilder, u"BlockArrows"_ustr, *mxBlockArrowSet))
-    , mxFlowchartSet(new ValueSet(nullptr))
-    , mxFlowchartSetWin(new weld::CustomWeld(*m_xBuilder, u"Flowcharts"_ustr, *mxFlowchartSet))
-    , mxCalloutSet(new ValueSet(nullptr))
-    , mxCalloutSetWin(new weld::CustomWeld(*m_xBuilder, u"Callouts"_ustr, *mxCalloutSet))
-    , mxStarSet(new ValueSet(nullptr))
-    , mxStarSetWin(new weld::CustomWeld(*m_xBuilder, u"Stars"_ustr, *mxStarSet))
-    , mx3DObjectSet(new ValueSet(nullptr))
-    , mx3DObjectSetWin(new weld::CustomWeld(*m_xBuilder, u"3DObjects"_ustr, *mx3DObjectSet))
+    , mxLineArrowSet(m_xBuilder->weld_icon_view(u"LinesArrows"_ustr))
+    , mxCurveSet(m_xBuilder->weld_icon_view(u"Curves"_ustr))
+    , mxConnectorSet(m_xBuilder->weld_icon_view(u"Connectors"_ustr))
+    , mxBasicShapeSet(m_xBuilder->weld_icon_view(u"BasicShapes"_ustr))
+    , mxSymbolShapeSet(m_xBuilder->weld_icon_view(u"SymbolShapes"_ustr))
+    , mxBlockArrowSet(m_xBuilder->weld_icon_view(u"BlockArrows"_ustr))
+    , mxFlowchartSet(m_xBuilder->weld_icon_view(u"Flowcharts"_ustr))
+    , mxCalloutSet(m_xBuilder->weld_icon_view(u"Callouts"_ustr))
+    , mxStarSet(m_xBuilder->weld_icon_view(u"Stars"_ustr))
+    , mx3DObjectSet(m_xBuilder->weld_icon_view(u"3DObjects"_ustr))
     , mxFrame(std::move(xFrame))
 {
     Initialize();
@@ -77,100 +66,78 @@ std::unique_ptr<PanelLayout> DefaultShapesPanel::Create(
 
 void DefaultShapesPanel::Initialize()
 {
-    mpShapesSetMap = decltype(mpShapesSetMap){
-        { mxLineArrowSet.get(),   gaLineShapes },
-        { mxCurveSet.get(),       gaCurveShapes },
-        { mxConnectorSet.get(),   gaConnectorShapes },
-        { mxBasicShapeSet.get(),  gaBasicShapes },
-        { mxSymbolShapeSet.get(), gaSymbolShapes },
-        { mxBlockArrowSet.get(),  gaBlockArrowShapes },
-        { mxFlowchartSet.get(),   gaFlowchartShapes },
-        { mxCalloutSet.get(),     gaCalloutShapes },
-        { mxStarSet.get(),        gaStarShapes },
-        { mx3DObjectSet.get(),    ga3DShapes }
+    maShapeGalleries = {
+        { mxLineArrowSet.get(),   &gaLineShapes },
+        { mxCurveSet.get(),       &gaCurveShapes },
+        { mxConnectorSet.get(),   &gaConnectorShapes },
+        { mxBasicShapeSet.get(),  &gaBasicShapes },
+        { mxSymbolShapeSet.get(), &gaSymbolShapes },
+        { mxBlockArrowSet.get(),  &gaBlockArrowShapes },
+        { mxFlowchartSet.get(),   &gaFlowchartShapes },
+        { mxCalloutSet.get(),     &gaCalloutShapes },
+        { mxStarSet.get(),        &gaStarShapes },
+        { mx3DObjectSet.get(),    &ga3DShapes }
     };
     populateShapes();
-    for(auto& aSetMap: mpShapesSetMap)
-    {
-        aSetMap.first->SetColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
-        aSetMap.first->SetSelectHdl(LINK(this, DefaultShapesPanel, ShapeSelectHdl));
-    }
-
-    // Each set draws its shape gallery onto a plain drawing area, which carries no text of its
-    // own, so name it after the heading of the frame it sits in.
-    const std::pair<ValueSet*, OUString> aSetLabelIds[] = {
-        { mxLineArrowSet.get(),   u"label1"_ustr },
-        { mxCurveSet.get(),       u"label2"_ustr },
-        { mxConnectorSet.get(),   u"label3"_ustr },
-        { mxBasicShapeSet.get(),  u"label4"_ustr },
-        { mxSymbolShapeSet.get(), u"label5"_ustr },
-        { mxBlockArrowSet.get(),  u"label6"_ustr },
-        { mxFlowchartSet.get(),   u"label7"_ustr },
-        { mxCalloutSet.get(),     u"label8"_ustr },
-        { mxStarSet.get(),        u"label9"_ustr },
-        { mx3DObjectSet.get(),    u"label10"_ustr },
-    };
-    for (const auto& rSetLabelId : aSetLabelIds)
-        rSetLabelId.first->GetDrawingArea()->set_accessible_name(
-            m_xBuilder->weld_label(rSetLabelId.second)->get_label());
+    for (const auto& rGallery : maShapeGalleries)
+        rGallery.first->connect_item_activated(LINK(this, DefaultShapesPanel, ShapeSelectHdl));
 }
 
 DefaultShapesPanel::~DefaultShapesPanel()
 {
-    mpShapesSetMap.clear();
-    mxLineArrowSetWin.reset();
+    maShapeGalleries.clear();
     mxLineArrowSet.reset();
-    mxCurveSetWin.reset();
     mxCurveSet.reset();
-    mxConnectorSetWin.reset();
     mxConnectorSet.reset();
-    mxBasicShapeSetWin.reset();
     mxBasicShapeSet.reset();
-    mxSymbolShapeSetWin.reset();
     mxSymbolShapeSet.reset();
-    mxBlockArrowSetWin.reset();
     mxBlockArrowSet.reset();
-    mxFlowchartSetWin.reset();
     mxFlowchartSet.reset();
-    mxCalloutSetWin.reset();
     mxCalloutSet.reset();
-    mxStarSetWin.reset();
     mxStarSet.reset();
-    mx3DObjectSetWin.reset();
     mx3DObjectSet.reset();
 }
 
-IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
+IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, weld::IconView&, rIconView, bool)
 {
-    for(auto& aSetMap : mpShapesSetMap)
+    const OUString sCommand = rIconView.get_selected_id();
+
+    for (const auto& rGallery : maShapeGalleries)
     {
-        if(rValueSet == aSetMap.first)
-        {
-            sal_uInt16 nSelectionId = aSetMap.first->GetSelectedItemId();
-            comphelper::dispatchCommand(aSetMap.second[nSelectionId - 1], {});
-        }
-        else
-            aSetMap.first->SetNoSelection();
+        if (rGallery.first != &rIconView)
+            rGallery.first->unselect_all();
     }
+
+    if (sCommand.isEmpty())
+        return false;
+
+    comphelper::dispatchCommand(sCommand, {});
+    return true;
 }
 
 void DefaultShapesPanel::populateShapes()
 {
-    OUString sSlotStr, sLabel;
-    Image aSlotImage;
-    for(auto& aSet : mpShapesSetMap)
+    const OUString sModuleId = vcl::CommandInfoProvider::GetModuleIdentifier(mxFrame);
+
+    for (const auto& rGallery : maShapeGalleries)
     {
-        aSet.first->SetColCount(6);
-        for(std::map<sal_uInt16, OUString>::size_type i = 0; i < aSet.second.size(); i++)
+        weld::IconView& rIconView = *rGallery.first;
+
+        rIconView.freeze();
+        for (const auto& rShape : *rGallery.second)
         {
-            sSlotStr = aSet.second[i];
-            aSlotImage = vcl::CommandInfoProvider::GetImageForCommand(sSlotStr, mxFrame);
-            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr,
-                vcl::CommandInfoProvider::GetModuleIdentifier(mxFrame));
-            sLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sSlotStr, aProperties, mxFrame);
-            sal_uInt16 nSelectionId = i + 1; // tdf#142767 id 0 is reserved for nothing-selected
-            aSet.first->InsertItem(nSelectionId, aSlotImage, sLabel);
+            const OUString& rCommand = rShape.second;
+            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, sModuleId);
+            const OUString sLabel = vcl::CommandInfoProvider::GetTooltipForCommand(
+                rCommand, aProperties, mxFrame);
+            Bitmap aShapeBitmap
+                = vcl::CommandInfoProvider::GetImageForCommand(rCommand, mxFrame).GetBitmap();
+
+            // The command is the item id, so the handler dispatches what was activated
+            // without having to map an index back onto the gallery it came from.
+            rIconView.append(rCommand, sLabel, &aShapeBitmap);
         }
+        rIconView.thaw();
     }
 }
 
