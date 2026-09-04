@@ -1,0 +1,265 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.librelogo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-05 18:08+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: panel.js:444
+msgid "%1 has no embedded LibreLogo program."
+msgstr ""
+
+#: panel.js:439
+msgid "%1 is not a valid SVG file."
+msgstr ""
+
+#: panel.js:414
+msgid "Animation"
+msgstr ""
+
+#: ui.json:commands.back
+msgid "Back"
+msgstr ""
+
+#: panel.js:415
+msgid "Beaver"
+msgstr ""
+
+#: index.html:67
+msgid "Cancel"
+msgstr ""
+
+#: ui.json:notebookbar.group.logoCanvas
+msgid "Canvas"
+msgstr ""
+
+#: ui.json:commands.clearscreen
+msgid "Clear Screen"
+msgstr ""
+
+#: index.html:39
+msgid "Command line"
+msgstr ""
+
+#: index.html:47
+msgid "Copy the document text (or the selection) into the editor"
+msgstr ""
+
+#: panel.js:376
+msgid "Could not insert the drawing: %1"
+msgstr ""
+
+#: panel.js:451
+msgid "Could not read %1: %2"
+msgstr ""
+
+#: panel.js:390
+msgid "Could not save %1: %2"
+msgstr ""
+
+#: panel.js:481
+msgid "Could not start LibreLogo: %1"
+msgstr ""
+
+#: panel.js:387
+msgid "Downloaded %1"
+msgstr ""
+
+#: panel.js:186
+msgid "Drawing removed from the document."
+msgstr ""
+
+#: index.html:59
+msgid "Empty: the Writer document (or the selected text) is the program."
+msgstr ""
+
+#: index.html:54
+msgid "Examples"
+msgstr ""
+
+#: index.html:41
+msgid "Execute the command line (Enter)"
+msgstr ""
+
+#: ui.json:commands.forward
+msgid "Forward"
+msgstr ""
+
+#: index.html:49
+msgid "From SVG"
+msgstr ""
+
+#: index.html:47
+msgid "From document"
+msgstr ""
+
+#: ui.json:commands.home
+msgid "Home"
+msgstr ""
+
+#: index.html:73
+msgid "Insert the drawing into the document after each run"
+msgstr ""
+
+#: panel.js:115
+msgid "Internal error: %1"
+msgstr ""
+
+#: ui.json:commands.left
+msgid "Left"
+msgstr ""
+
+#: manifest.json:name
+msgid "LibreLogo"
+msgstr ""
+
+#: index.html:56
+msgid "Load an example…"
+msgstr ""
+
+#: panel.js:459
+msgid "Loaded the document text."
+msgstr ""
+
+#: panel.js:449
+msgid "Loaded the program from %1."
+msgstr ""
+
+#: panel.js:459
+msgid "Loaded the selected text."
+msgstr ""
+
+#: ui.json:notebookbar.tab
+msgid "Logo"
+msgstr ""
+
+#: index.html:35
+msgid "Logo language: commands are read in this language and in English"
+msgstr ""
+
+#: panel.js:186
+msgid "No LibreLogo drawing in the document."
+msgstr ""
+
+#: index.html:66
+msgid "OK"
+msgstr ""
+
+#: index.html:72
+msgid "Options"
+msgstr ""
+
+#: index.html:74
+msgid "Place it"
+msgstr ""
+
+#: ui.json:notebookbar.group.logoProgram index.html:45
+msgid "Program"
+msgstr ""
+
+#: panel.js:473
+msgid "Program written to the document."
+msgstr ""
+
+#: index.html:49
+msgid "Recover the program embedded in an exported .svg file"
+msgstr ""
+
+#: index.html:81
+msgid "Remove the drawing from the document"
+msgstr ""
+
+#: ui.json:commands.right
+msgid "Right"
+msgstr ""
+
+#: panel.js:412
+msgid "Rosette"
+msgstr ""
+
+#: index.html:21
+msgid "Run"
+msgstr ""
+
+#: ui.json:commands.run
+msgid "Run Logo Program"
+msgstr ""
+
+#: index.html:21
+msgid "Run the Logo program (Ctrl+Enter)"
+msgstr ""
+
+#: panel.js:253
+msgid "Running the document text."
+msgstr ""
+
+#: panel.js:253
+msgid "Running the selected text."
+msgstr ""
+
+#: panel.js:388
+msgid "Saved %1"
+msgstr ""
+
+#: index.html:80
+msgid "Show the turtle in the inserted drawing"
+msgstr ""
+
+#: panel.js:411
+msgid "Square spiral"
+msgstr ""
+
+#: panel.js:410
+msgid "Star"
+msgstr ""
+
+#: ui.json:commands.stop index.html:22
+msgid "Stop"
+msgstr ""
+
+#: index.html:22
+msgid "Stop the program"
+msgstr ""
+
+#: panel.js:250
+msgid ""
+"The document is empty. Type a program in the editor or in the document."
+msgstr ""
+
+#: index.html:48
+msgid "To document"
+msgstr ""
+
+#: panel.js:413
+msgid "Tree"
+msgstr ""
+
+#: ui.json:notebookbar.group.logoTurtle
+msgid "Turtle"
+msgstr ""
+
+#: index.html:34
+msgid "Turtle canvas"
+msgstr ""
+
+#: panel.js:88
+msgid "Using A4 page size: %1"
+msgstr ""
+
+#: index.html:48
+msgid "Write the editor's program to the end of the document"
+msgstr ""
+
+#: index.html:77
+msgid "at the cursor, as an inline image"
+msgstr ""
+
+#: index.html:76
+msgid "on the page where the turtle drew"
+msgstr ""

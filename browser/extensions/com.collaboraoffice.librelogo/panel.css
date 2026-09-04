@@ -1,0 +1,289 @@
+/*
+ * Copyright the Collabora Online contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+:root {
+	color-scheme: light dark;
+	--fg: #222;
+	--muted: #666;
+	--bg: #fff;
+	--panel: #f4f4f4;
+	--border: #d0d0d0;
+	--accent: #3e8e41;
+	--accent-fg: #fff;
+	--error: #b3261e;
+	--font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	--mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--fg: #e6e6e6;
+		--muted: #a0a0a0;
+		--bg: #1f1f1f;
+		--panel: #2a2a2a;
+		--border: #444;
+		--accent: #6bbf6e;
+		--accent-fg: #102;
+		--error: #ff8a80;
+	}
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font: 13px/1.4 var(--font);
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 8px;
+	box-sizing: border-box;
+	min-height: 100vh;
+}
+
+button {
+	font: inherit;
+	color: var(--fg);
+	background: var(--panel);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 4px 8px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+button:hover:not(:disabled) {
+	border-color: var(--accent);
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+button.primary {
+	background: var(--accent);
+	color: var(--accent-fg);
+	border-color: var(--accent);
+}
+
+button.icon {
+	padding: 4px;
+}
+
+button.link {
+	background: none;
+	border: none;
+	color: var(--accent);
+	padding: 0 4px;
+	text-decoration: underline;
+}
+
+button img {
+	width: 16px;
+	height: 16px;
+	filter: none;
+}
+
+button.primary img {
+	filter: invert(1) brightness(2);
+}
+
+/* The stop icon carries its own red; never recolor it. */
+button.stop img {
+	filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	button:not(.primary):not(.stop) img {
+		filter: invert(0.9);
+	}
+	button.primary img,
+	button.stop img {
+		filter: none;
+	}
+}
+
+#toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	align-items: center;
+}
+
+.sep {
+	width: 1px;
+	height: 20px;
+	background: var(--border);
+	margin: 0 2px;
+}
+
+#preview-wrap {
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	background: #fff;
+	position: relative;
+	overflow: hidden;
+}
+
+#preview {
+	width: 100%;
+	aspect-ratio: 210 / 297;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background:
+		linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px) 0 0 / 10% 10%,
+		linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) 0 0 / 10% 10%,
+		#fff;
+}
+
+#preview svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+#status {
+	position: absolute;
+	right: 4px;
+	bottom: 2px;
+	font-size: 11px;
+	color: #444;
+	background: rgba(255, 255, 255, 0.8);
+	padding: 0 4px;
+	border-radius: 3px;
+	display: flex;
+	gap: 8px;
+}
+
+#commandline-row, #input-row .row {
+	display: flex;
+	gap: 4px;
+}
+
+input[type="text"], textarea, select {
+	font: inherit;
+	color: var(--fg);
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 4px 6px;
+	box-sizing: border-box;
+}
+
+input[type="text"] {
+	flex: 1;
+	font-family: var(--mono);
+}
+
+#examples-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 6px 0;
+	color: var(--muted);
+}
+
+#examples-row select {
+	flex: 1;
+	min-width: 0;
+}
+
+textarea#editor {
+	width: 100%;
+	min-height: 140px;
+	resize: vertical;
+	font-family: var(--mono);
+	font-size: 12px;
+	tab-size: 4;
+	white-space: pre;
+}
+
+details {
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 4px 8px;
+}
+
+summary {
+	cursor: pointer;
+	font-weight: 600;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.summary-tools {
+	font-weight: normal;
+	display: inline-flex;
+	gap: 4px;
+}
+
+#input-row {
+	border: 1px solid var(--accent);
+	border-radius: 4px;
+	padding: 6px 8px;
+	background: var(--panel);
+}
+
+#input-prompt {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.option {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 4px 0;
+	color: var(--muted);
+}
+
+.option select {
+	flex: 1;
+	min-width: 0;
+}
+
+#output {
+	flex: 1;
+	min-height: 60px;
+	max-height: 200px;
+	overflow: auto;
+	font-family: var(--mono);
+	font-size: 12px;
+	white-space: pre-wrap;
+	background: var(--panel);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 4px 6px;
+}
+
+#output .error {
+	color: var(--error);
+}
+
+#output .info {
+	color: var(--muted);
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+}

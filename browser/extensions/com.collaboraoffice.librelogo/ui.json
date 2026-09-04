@@ -1,0 +1,50 @@
+{
+    "commands": [
+        { "id": "run", "title": "Run Logo Program", "icon": "icons/run.svg", "panel": true },
+        { "id": "stop", "title": "Stop", "icon": "icons/stop.svg", "panel": true },
+        { "id": "home", "title": "Home", "icon": "icons/home.svg", "panel": true },
+        { "id": "clearscreen", "title": "Clear Screen", "icon": "icons/clearscreen.svg", "panel": true },
+        { "id": "forward", "title": "Forward", "icon": "icons/forward.svg", "panel": true },
+        { "id": "back", "title": "Back", "icon": "icons/back.svg", "panel": true },
+        { "id": "left", "title": "Left", "icon": "icons/left.svg", "panel": true },
+        { "id": "right", "title": "Right", "icon": "icons/right.svg", "panel": true }
+    ],
+    "menus": {
+        "tools": ["run", "stop", "home", "clearscreen"]
+    },
+    "notebookbar": [
+        {
+            "tab": "Logo",
+            "insertAfter": "Insert",
+            "groups": [
+                {
+                    "id": "logoProgram",
+                    "label": "Program",
+                    "items": [
+                        { "type": "button", "command": "run", "size": "large" },
+                        { "type": "button", "command": "stop", "size": "large" }
+                    ]
+                },
+                {
+                    "id": "logoTurtle",
+                    "label": "Turtle",
+                    "items": [
+                        { "type": "button", "command": "forward" },
+                        { "type": "button", "command": "back" },
+                        { "type": "separator" },
+                        { "type": "button", "command": "left" },
+                        { "type": "button", "command": "right" }
+                    ]
+                },
+                {
+                    "id": "logoCanvas",
+                    "label": "Canvas",
+                    "items": [
+                        { "type": "button", "command": "home" },
+                        { "type": "button", "command": "clearscreen" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "manifestVersion": "0.1",
+    "name": "LibreLogo",
+    "entry": "index.html",
+    "icon": "icon.svg",
+    "supports": ["text"],
+    "contributes": "ui.json"
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+    Copyright the Collabora Online contributors.
+
+    SPDX-License-Identifier: MPL-2.0
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>LibreLogo</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<!-- cool.js observes document.body on load, so it must come after <body> -->
+<script src="../cool.js"></script>
+<div id="toolbar" role="toolbar">
+    <button id="btn-run" class="icon primary" data-l10n-title="Run the Logo program (Ctrl+Enter)" title="Run the Logo program (Ctrl+Enter)" data-l10n-aria-label="Run" aria-label="Run"><img src="icons/run.svg" alt=""></button>
+    <button id="btn-stop" class="icon stop" data-l10n-title="Stop the program" title="Stop the program" data-l10n-aria-label="Stop" aria-label="Stop" disabled><img src="icons/stop.svg" alt=""></button>
+    <span class="sep"></span>
+    <button id="btn-fd" class="icon" title="FORWARD 10"><img src="icons/forward.svg" alt=""></button>
+    <button id="btn-bk" class="icon" title="BACK 10"><img src="icons/back.svg" alt=""></button>
+    <button id="btn-lt" class="icon" title="LEFT 15"><img src="icons/left.svg" alt=""></button>
+    <button id="btn-rt" class="icon" title="RIGHT 15"><img src="icons/right.svg" alt=""></button>
+    <span class="sep"></span>
+    <button id="btn-home" class="icon" title="HOME"><img src="icons/home.svg" alt=""></button>
+    <button id="btn-cs" class="icon" title="CLEARSCREEN"><img src="icons/clearscreen.svg" alt=""></button>
+</div>
+
+<div id="preview-wrap">
+    <div id="preview" data-l10n-aria-label="Turtle canvas" aria-label="Turtle canvas"></div>
+    <div id="status"><span id="status-pos"></span><span id="status-lang" data-l10n-title="Logo language: commands are read in this language and in English" title="Logo language: commands are read in this language and in English"></span></div>
+</div>
+
+<div id="commandline-row">
+    <label for="commandline" class="visually-hidden" data-l10n="Command line">Command line</label>
+    <input id="commandline" type="text" spellcheck="false" autocomplete="off" placeholder="FORWARD 100 LEFT 90">
+    <button id="btn-cmd" class="icon" data-l10n-title="Execute the command line (Enter)" title="Execute the command line (Enter)"><img src="icons/run.svg" alt=""></button>
+</div>
+
+<details id="editor-box" open>
+    <summary><span data-l10n="Program">Program</span>
+        <span class="summary-tools">
+            <button id="btn-load" class="link" data-l10n="From document" data-l10n-title="Copy the document text (or the selection) into the editor" title="Copy the document text (or the selection) into the editor">From document</button>
+            <button id="btn-save" class="link" data-l10n="To document" data-l10n-title="Write the editor's program to the end of the document" title="Write the editor's program to the end of the document">To document</button>
+            <button id="btn-from-svg" class="link" data-l10n="From SVG" data-l10n-title="Recover the program embedded in an exported .svg file" title="Recover the program embedded in an exported .svg file">From SVG</button>
+        </span>
+        <input id="svg-file" type="file" accept=".svg,image/svg+xml" hidden>
+    </summary>
+    <div id="examples-row">
+        <label for="examples" data-l10n="Examples">Examples</label>
+        <select id="examples">
+            <option value="" data-l10n="Load an example…">Load an example…</option>
+        </select>
+    </div>
+    <textarea id="editor" spellcheck="false" data-l10n-placeholder="Empty: the Writer document (or the selected text) is the program." placeholder="Empty: the Writer document (or the selected text) is the program."></textarea>
+</details>
+
+<div id="input-row" hidden>
+    <label id="input-prompt" for="input-value"></label>
+    <div class="row">
+        <input id="input-value" type="text" autocomplete="off">
+        <button id="btn-input-ok" class="primary" data-l10n="OK">OK</button>
+        <button id="btn-input-cancel" data-l10n="Cancel">Cancel</button>
+    </div>
+</div>
+
+<details id="options-box">
+    <summary data-l10n="Options">Options</summary>
+    <label class="option"><input type="checkbox" id="opt-insert" checked> <span data-l10n="Insert the drawing into the document after each run">Insert the drawing into the document after each run</span></label>
+    <label class="option"><span data-l10n="Place it">Place it</span>
+        <select id="opt-mode">
+            <option value="page" data-l10n="on the page where the turtle drew">on the page where the turtle drew</option>
+            <option value="cursor" data-l10n="at the cursor, as an inline image">at the cursor, as an inline image</option>
+        </select>
+    </label>
+    <label class="option"><input type="checkbox" id="opt-turtle" checked> <span data-l10n="Show the turtle in the inserted drawing">Show the turtle in the inserted drawing</span></label>
+    <div class="option"><button id="btn-remove" class="link" data-l10n="Remove the drawing from the document">Remove the drawing from the document</button></div>
+</details>
+
+<div id="output" role="log" aria-live="polite"></div>
+
+<script type="module" src="panel.js"></script>
+</body>
+</html>

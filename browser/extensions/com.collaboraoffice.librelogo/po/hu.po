@@ -1,0 +1,270 @@
+# Hungarian translation of the LibreLogo extension.
+# Copyright the Collabora Online contributors.
+# SPDX-License-Identifier: MPL-2.0
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.librelogo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-05 18:08+0000\n"
+"PO-Revision-Date: 2026-09-04 20:00+0000\n"
+"Last-Translator: Collabora Online contributors\n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: panel.js:444
+msgid "%1 has no embedded LibreLogo program."
+msgstr "A(z) %1 nem tartalmaz beágyazott LibreLogo-programot."
+
+#: panel.js:439
+msgid "%1 is not a valid SVG file."
+msgstr "A(z) %1 nem érvényes SVG-fájl."
+
+#: panel.js:414
+msgid "Animation"
+msgstr "Animáció"
+
+#: ui.json:commands.back
+msgid "Back"
+msgstr "Hátra"
+
+#: panel.js:415
+msgid "Beaver"
+msgstr "Hód"
+
+#: index.html:67
+msgid "Cancel"
+msgstr "Mégse"
+
+#: ui.json:notebookbar.group.logoCanvas
+msgid "Canvas"
+msgstr "Rajzlap"
+
+#: ui.json:commands.clearscreen
+msgid "Clear Screen"
+msgstr "Rajz törlése"
+
+#: index.html:39
+msgid "Command line"
+msgstr "Parancssor"
+
+#: index.html:47
+msgid "Copy the document text (or the selection) into the editor"
+msgstr "A dokumentum szövegének (vagy a kijelölésnek) másolása a szerkesztőbe"
+
+#: panel.js:376
+msgid "Could not insert the drawing: %1"
+msgstr "A rajz beszúrása nem sikerült: %1"
+
+#: panel.js:451
+msgid "Could not read %1: %2"
+msgstr "A(z) %1 nem olvasható: %2"
+
+#: panel.js:390
+msgid "Could not save %1: %2"
+msgstr "%1 mentése nem sikerült: %2"
+
+#: panel.js:481
+msgid "Could not start LibreLogo: %1"
+msgstr "A LibreLogo indítása nem sikerült: %1"
+
+#: panel.js:387
+msgid "Downloaded %1"
+msgstr "Letöltve: %1"
+
+#: panel.js:186
+msgid "Drawing removed from the document."
+msgstr "A rajz eltávolítva a dokumentumból."
+
+#: index.html:59
+msgid "Empty: the Writer document (or the selected text) is the program."
+msgstr "Üresen a Writer-dokumentum (vagy a kijelölt szöveg) a program."
+
+#: index.html:54
+msgid "Examples"
+msgstr "Példák"
+
+#: index.html:41
+msgid "Execute the command line (Enter)"
+msgstr "A parancssor végrehajtása (Enter)"
+
+#: ui.json:commands.forward
+msgid "Forward"
+msgstr "Előre"
+
+#: index.html:49
+msgid "From SVG"
+msgstr "SVG-ből"
+
+#: index.html:47
+msgid "From document"
+msgstr "Dokumentumból"
+
+#: ui.json:commands.home
+msgid "Home"
+msgstr "Kezdőpont"
+
+#: index.html:73
+msgid "Insert the drawing into the document after each run"
+msgstr "A rajz beszúrása a dokumentumba minden futtatás után"
+
+#: panel.js:115
+msgid "Internal error: %1"
+msgstr "Belső hiba: %1"
+
+#: ui.json:commands.left
+msgid "Left"
+msgstr "Balra"
+
+#: manifest.json:name
+msgid "LibreLogo"
+msgstr "LibreLogo"
+
+#: index.html:56
+msgid "Load an example…"
+msgstr "Példa betöltése…"
+
+#: panel.js:459
+msgid "Loaded the document text."
+msgstr "A dokumentum szövege betöltve."
+
+#: panel.js:449
+msgid "Loaded the program from %1."
+msgstr "A program betöltve innen: %1."
+
+#: panel.js:459
+msgid "Loaded the selected text."
+msgstr "A kijelölt szöveg betöltve."
+
+#: ui.json:notebookbar.tab
+msgid "Logo"
+msgstr "Logo"
+
+#: index.html:35
+msgid "Logo language: commands are read in this language and in English"
+msgstr "Logo nyelv: a parancsok ezen a nyelven és angolul is érthetők"
+
+#: panel.js:186
+msgid "No LibreLogo drawing in the document."
+msgstr "Nincs LibreLogo rajz a dokumentumban."
+
+#: index.html:66
+msgid "OK"
+msgstr "OK"
+
+#: index.html:72
+msgid "Options"
+msgstr "Beállítások"
+
+#: index.html:74
+msgid "Place it"
+msgstr "Elhelyezés"
+
+#: ui.json:notebookbar.group.logoProgram index.html:45
+msgid "Program"
+msgstr "Program"
+
+#: panel.js:473
+msgid "Program written to the document."
+msgstr "A program beírva a dokumentumba."
+
+#: index.html:49
+msgid "Recover the program embedded in an exported .svg file"
+msgstr "Az exportált .svg fájlba ágyazott program visszaállítása"
+
+#: index.html:81
+msgid "Remove the drawing from the document"
+msgstr "A rajz eltávolítása a dokumentumból"
+
+#: ui.json:commands.right
+msgid "Right"
+msgstr "Jobbra"
+
+#: panel.js:412
+msgid "Rosette"
+msgstr "Rozetta"
+
+#: index.html:21
+msgid "Run"
+msgstr "Futtatás"
+
+#: ui.json:commands.run
+msgid "Run Logo Program"
+msgstr "Logo program futtatása"
+
+#: index.html:21
+msgid "Run the Logo program (Ctrl+Enter)"
+msgstr "A Logo program futtatása (Ctrl+Enter)"
+
+#: panel.js:253
+msgid "Running the document text."
+msgstr "A dokumentum szövegének futtatása."
+
+#: panel.js:253
+msgid "Running the selected text."
+msgstr "A kijelölt szöveg futtatása."
+
+#: panel.js:388
+msgid "Saved %1"
+msgstr "Mentve: %1"
+
+#: index.html:80
+msgid "Show the turtle in the inserted drawing"
+msgstr "A teknőc megjelenítése a beszúrt rajzon"
+
+#: panel.js:411
+msgid "Square spiral"
+msgstr "Négyzetes spirál"
+
+#: panel.js:410
+msgid "Star"
+msgstr "Csillag"
+
+#: ui.json:commands.stop index.html:22
+msgid "Stop"
+msgstr "Leállítás"
+
+#: index.html:22
+msgid "Stop the program"
+msgstr "A program leállítása"
+
+#: panel.js:250
+msgid ""
+"The document is empty. Type a program in the editor or in the document."
+msgstr ""
+"A dokumentum üres. Írjon programot a szerkesztőbe vagy a dokumentumba."
+
+#: index.html:48
+msgid "To document"
+msgstr "Dokumentumba"
+
+#: panel.js:413
+msgid "Tree"
+msgstr "Fa"
+
+#: ui.json:notebookbar.group.logoTurtle
+msgid "Turtle"
+msgstr "Teknőc"
+
+#: index.html:34
+msgid "Turtle canvas"
+msgstr "Teknőc rajzlap"
+
+#: panel.js:88
+msgid "Using A4 page size: %1"
+msgstr "A4 oldalméret használata: %1"
+
+#: index.html:48
+msgid "Write the editor's program to the end of the document"
+msgstr "A szerkesztő programjának beírása a dokumentum végére"
+
+#: index.html:77
+msgid "at the cursor, as an inline image"
+msgstr "a kurzornál, beágyazott képként"
+
+#: index.html:76
+msgid "on the page where the turtle drew"
+msgstr "az oldalon, ahol a teknőc rajzolt"
