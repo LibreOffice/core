@@ -66,7 +66,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_helppack \
     scp2/source/ooo/module_langpack \
     scp2/source/ooo/module_ooo \
-    scp2/source/ooo/module_systemint \
 ))
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)

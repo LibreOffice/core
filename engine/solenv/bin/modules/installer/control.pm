@@ -317,21 +317,4 @@ sub check_oxtfiles
     }
 }
 
-#######################################################################
-# Setting global variable "$installer::globals::addsystemintegration"
-#######################################################################
-
-sub set_addsystemintegration
-{
-    my ($allvariables) = @_;
-
-    if ( $allvariables->{'ADDSYSTEMINTEGRATION'} ) { $installer::globals::addsystemintegration = 1; }
-
-    if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
-    if ( $installer::globals::helppack ) { $installer::globals::addsystemintegration = 0; }
-
-    my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-}
-
 1;

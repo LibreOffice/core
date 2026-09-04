@@ -129,7 +129,7 @@ fi
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "jre*" ! -name "*-userland-*" -print`
+RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "jre*" ! -name "*-userland-*" -print`
 
 if [ -z "$RPMLIST" ]
 then

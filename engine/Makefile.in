@@ -481,7 +481,6 @@ endif
 
 distro-pack-install: install
 	WITH_LANG_LIST="$(WITH_LANG_LIST)" WITH_POOR_HELP_LOCALIZATIONS="$(WITH_POOR_HELP_LOCALIZATIONS)" $(SRCDIR)/bin/distro-install-clean-up
-	$(SRCDIR)/bin/distro-install-desktop-integration
 	WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/bin/distro-install-file-lists
 
 install-package-%:

@@ -172,8 +172,6 @@ sub add_lowercase_productname_setupscriptvariable
                 $value =~ s/\s//g;
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
-                $newline = "\%SYSTEMINTUNIXPACKAGENAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
                 $newline = "\%UNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $value = $original;
@@ -473,7 +471,6 @@ sub replace_preset_properties
 
     my @presetproperties = ();
     push(@presetproperties, "SOLARISBRANDPACKAGENAME");
-    push(@presetproperties, "SYSTEMINTUNIXPACKAGENAME");
 
 
     foreach my $property ( @presetproperties )

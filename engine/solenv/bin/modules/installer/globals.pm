@@ -145,7 +145,6 @@ BEGIN
 
     $installer::globals::defaultlanguage = "";
     $installer::globals::addlicensefile = 1;
-    $installer::globals::addsystemintegration = 0;
     $installer::globals::makedownload = 1;
     @installer::globals::binarytableonlyfiles = ();
     @installer::globals::allscpactions = ();

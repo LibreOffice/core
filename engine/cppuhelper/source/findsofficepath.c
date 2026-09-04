@@ -138,7 +138,7 @@ static char* platformSpecific(void)
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
     const char* APPENDIX = "/libreoffice" LIBO_VERSION_DOTTED_2;
-        // must match the product's UNIXFILENAME.* in sysui/productlist.mk
+        // must match the product's unix installation directory name
 
     char* path = NULL;
     char* str = NULL;

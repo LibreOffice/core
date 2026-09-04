@@ -2752,13 +2752,6 @@ AC_ARG_WITH(android-package-name,
         [Set Android package name of the build.]),
 ,)
 
-AC_ARG_WITH(compat-oowrappers,
-    AS_HELP_STRING([--with-compat-oowrappers],
-        [Install oo* wrappers in parallel with
-         lo* ones to keep backward compatibility.
-         Has effect only with make distro-pack-install]),
-,)
-
 AC_ARG_WITH(os-version,
     AS_HELP_STRING([--with-os-version=<OSVERSION>],
         [For FreeBSD users, use this option to override the detected OSVERSION.]),
@@ -13337,16 +13330,6 @@ if test "$_os" = "Android" ; then
     fi
     AC_SUBST(ANDROID_PACKAGE_NAME)
 fi
-
-AC_MSG_CHECKING([whether to install the compat oo* wrappers])
-if test "$with_compat_oowrappers" = "yes"; then
-    WITH_COMPAT_OOWRAPPERS=TRUE
-    AC_MSG_RESULT(yes)
-else
-    WITH_COMPAT_OOWRAPPERS=
-    AC_MSG_RESULT(no)
-fi
-AC_SUBST(WITH_COMPAT_OOWRAPPERS)
 
 INSTALLDIRNAME=`echo AC_PACKAGE_NAME | $AWK '{gsub(" ", "", $0);print tolower($0)}'`
 AC_MSG_CHECKING([for install dirname])

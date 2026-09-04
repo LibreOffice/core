@@ -19,23 +19,6 @@ set -e
 cp -r "${PREFIXDIR?}"/lib/collaboraoffice /app/
 ln -s /app/collaboraoffice/program/soffice /app/bin/collaboraoffice
 
-mkdir -p /app/share/applications
-"${SRCDIR?}"/solenv/bin/assemble-flatpak-desktop.sh "${PREFIXDIR?}"/share/applications/ \
- /app/share/applications/ "${1?}"
-
-## icons/hicolor/*/apps/collaboraoffice-* ->
-## icons/hicolor/*/apps/$1-*:
-mkdir -p /app/share/icons
-for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/collaboraoffice-*
-do
- mkdir -p \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"
- cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(basename "$i")"
- cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"${1?}"."${i##*/apps/collaboraoffice-}"
-done
-
 mkdir -p /app/share/runtime/locale
 for i in $(ls /app/collaboraoffice/program/resource)
 do
@@ -68,9 +51,6 @@ do
   mv "${i}" /app/share/runtime/locale/"${lang}"/registry
   ln -rs /app/share/runtime/locale/"${lang}"/registry/"${basename}".xcd "${i}"
 done
-
-mkdir -p /app/share/appdata
-"${SRCDIR?}"/solenv/bin/assemble-flatpak-appdata.sh /app/share/appdata/ 1 "${1?}"
 
 ## see <https://github.com/flatpak/flatpak/blob/master/app/
 ## flatpak-builtins-build-finish.c> for further places where build-finish would

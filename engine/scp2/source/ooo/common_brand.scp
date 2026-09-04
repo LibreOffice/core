@@ -49,18 +49,9 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Ure,
             gid_Brand_Dir_Share_Ure_Share,
-            gid_Brand_Dir_Share_Registry,
-            gid_Brand_Dir_Share_Xdg);
+            gid_Brand_Dir_Share_Registry);
     Files = (auto_brand_ALL,
-	     gid_Brand_File_Desktophelper_Txt,
-             gid_Brand_File_Share_Xdg_Calc,
-             gid_Brand_File_Share_Xdg_Draw,
-             gid_Brand_File_Share_Xdg_Impress,
-             gid_Brand_File_Share_Xdg_Math,
-             gid_Brand_File_Share_Xdg_QStart,
-             gid_Brand_File_Share_Xdg_StartCenter,
-             gid_Brand_File_Share_Xdg_Writer,
-             gid_Brand_File_Share_Xdg_XsltFilter);
+	     gid_Brand_File_Desktophelper_Txt);
 End
 
 // Language specific brand module
@@ -138,13 +129,6 @@ Directory gid_Brand_Dir_Share_Registry
     DosName = "registry";
 End
 
-#if defined UNX && ! defined MACOSX
-Directory gid_Brand_Dir_Share_Xdg
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "xdg";
-End
-#endif
-
 // Files
 
 File gid_Brand_File_Share_Registry_Cjk_Xcd
@@ -156,69 +140,6 @@ File gid_Brand_File_Share_Registry_Cjk_Xcd
     Name (zh-CN) = "cjk.xcd";
     Name (zh-TW) = "cjk.xcd";
 End
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Calc
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "calc.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Draw
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "draw.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Impress
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "impress.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Math
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "math.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Writer
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "writer.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_StartCenter
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "startcenter.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_XsltFilter
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "xsltfilter.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
 
 // Profiles
 

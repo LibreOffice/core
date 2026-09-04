@@ -135,12 +135,6 @@ sub run {
 
     installer::simplepackage::check_simple_packager_project($allvariableshashref);
 
-    ####################################################################
-    # setting global variables
-    ####################################################################
-
-    installer::control::set_addsystemintegration($allvariableshashref);
-
     ########################################################
     # Re-define logging dir, after all variables are set
     ########################################################
@@ -353,14 +347,12 @@ sub run {
 
         if ( $installer::globals::languagepack )
         {
-            $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
         }
 
         if ( $installer::globals::helppack )
         {
-            $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
             @setuplanguagesarray = grep { $_ ne "en-US" } @setuplanguagesarray;
@@ -1053,9 +1045,6 @@ sub run {
 
             chdir($installdir);
 
-            # Copying the cde, kde and gnome packages into the installation set
-            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($installer::globals::epmoutpath, $includepatharrayref, $allvariableshashref, $modulesinproductarrayref); }
-
             # Adding license into installation set
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
@@ -1079,9 +1068,6 @@ sub run {
 
             # determine the destination directory
             my $newepmdir = installer::epmfile::determine_installdir_ooo();
-
-            # Copying the cde, kde and gnome packages into the installation set
-            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref, $modulesinproductarrayref); }
 
             # Adding license into installation set
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }

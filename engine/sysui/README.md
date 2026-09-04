@@ -1,3 +1,4 @@
 # Desktop System Integration
 
-`.desktop` files for various Linux distros, and similar stuff for other operating systems.
+Platform-specific application metadata: the Windows icon resources used by the
+soffice executables, and the macOS Info.plist, entitlements and icon sets.

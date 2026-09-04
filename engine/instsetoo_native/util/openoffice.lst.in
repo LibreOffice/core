@@ -44,7 +44,6 @@ CollaboraOffice
             USERDIRPRODUCTVERSION 4
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             UPDATEURL https://update.libreoffice.org/check.php
-            ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             PACKAGEREVISION @LIBO_VERSION_PATCH@
             LICENSENAME @LICENSE@
@@ -58,6 +57,6 @@ CollaboraOffice
         downloadname    CollaboraOffice_{productversion}_{os}_install_{languages}
         langpackdownloadname    CollaboraOffice_{productversion}_languagepack_{os}_install_{languages}
         helppackdownloadname    CollaboraOffice_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
+        include         {installscriptdir},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
