@@ -43,8 +43,6 @@
 #include <cstdio>
 #include <cstdarg>
 
-#include <apple_remote/RemoteMainController.h>
-
 class AquaSalFrame;
 class AquaSalInstance;
 class SalObject;
@@ -79,9 +77,6 @@ public:
     static oslThreadKey                           s_aAutoReleaseKey;
 
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
-#if !HAVE_FEATURE_MACOSX_SANDBOX
-    AppleRemoteMainController*                    mpAppleRemoteMainController;
-#endif
     NSObject*                                     mpDockIconClickHandler;
     sal_Int32                                     mnDPIX;           // #i100617# read DPI only once per office life
     sal_Int32                                     mnDPIY;           // #i100617# read DPI only once per office life

@@ -242,7 +242,6 @@ class Parser:
             "ure" : 1,
             "ios" : 1,
             "bean" : 1,
-            "apple_remote" : 1,
             "UnoControls" : 1,
             "accessibility" : 1,
             "android" : 1,

@@ -158,10 +158,4 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_osx,\
     ) \
 ))
 
-ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
-$(eval $(call gb_Library_use_libraries,vclplug_osx,\
-    AppleRemote \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

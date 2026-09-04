@@ -44,7 +44,6 @@
 #include <vcl/window.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svmain.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 
 #include <osx/saldata.hxx>
@@ -71,8 +70,6 @@
 #include <premac.h>
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
-#import "apple_remote/RemoteMainController.h"
-#include <apple_remote/RemoteControl.h>
 #include <postmac.h>
 
 #if HAVE_FEATURE_SKIA
@@ -197,20 +194,6 @@ void AquaSalInstance::AfterAppInit()
                                           selector: @selector(scrollbarSettingsChanged:)
                                           name: @"AppleNoRedisplayAppearancePreferenceChanged"
                                           object: nil ];
-#if !HAVE_FEATURE_MACOSX_SANDBOX
-    // Initialize Apple Remote
-    GetSalData()->mpAppleRemoteMainController = [[AppleRemoteMainController alloc] init];
-
-    [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
-                                           selector: @selector(applicationWillBecomeActive:)
-                                           name: @"AppleRemoteWillBecomeActive"
-                                           object: nil ];
-
-    [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
-                                           selector: @selector(applicationWillResignActive:)
-                                           name: @"AppleRemoteWillResignActive"
-                                           object: nil ];
-#endif
 
     SalInstance::MacStartupWorkarounds();
 }
@@ -443,73 +426,6 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
             pInst->mbTimerProcessed = pTimer->handleDispatchTimerEvent( pEvent );
         break;
     }
-#if !HAVE_FEATURE_MACOSX_SANDBOX
-    case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
-    {
-        MediaCommand nCommand;
-        AquaSalInstance *pInst = GetSalData()->mpInstance;
-        bool bIsFullScreenMode = false;
-
-        for( auto pSalFrame : pInst->getFrames() )
-        {
-            const AquaSalFrame* pFrame = static_cast<const AquaSalFrame*>( pSalFrame );
-            if ( pFrame->mbInternalFullScreen )
-            {
-                bIsFullScreenMode = true;
-                break;
-            }
-        }
-
-        switch ([pEvent data1])
-        {
-            case kRemoteButtonPlay:
-                nCommand = bIsFullScreenMode ? MediaCommand::PlayPause : MediaCommand::Play;
-                break;
-
-            // kept for experimentation purpose (scheduled for future implementation)
-            // case kRemoteButtonMenu:         nCommand = MediaCommand::Menu; break;
-
-            case kRemoteButtonPlus:         nCommand = MediaCommand::VolumeUp; break;
-
-            case kRemoteButtonMinus:        nCommand = MediaCommand::VolumeDown; break;
-
-            case kRemoteButtonRight:        nCommand = MediaCommand::NextTrack; break;
-
-            case kRemoteButtonRight_Hold:   nCommand = MediaCommand::NextTrackHold; break;
-
-            case kRemoteButtonLeft:         nCommand = MediaCommand::PreviousTrack; break;
-
-            case kRemoteButtonLeft_Hold:    nCommand = MediaCommand::Rewind; break;
-
-            case kRemoteButtonPlay_Hold:    nCommand = MediaCommand::PlayHold; break;
-
-            case kRemoteButtonMenu_Hold:    nCommand = MediaCommand::Stop; break;
-
-            // FIXME : not detected
-            case kRemoteButtonPlus_Hold:
-            case kRemoteButtonMinus_Hold:
-                break;
-
-            default:
-                break;
-        }
-        AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( pInst->anyFrame() );
-        vcl::Window* pWindow = pFrame ? pFrame->GetWindow() : nullptr;
-        if( pWindow )
-        {
-            const Point aPoint;
-            CommandMediaData aMediaData(nCommand);
-            CommandEvent aCEvt( aPoint, CommandEventId::Media, false, &aMediaData );
-            NotifyEvent aNCmdEvt( NotifyEventType::COMMAND, pWindow, &aCEvt );
-
-            if ( !ImplCallPreNotify( aNCmdEvt ) )
-                pWindow->Command( aCEvt );
-        }
-
-    }
-    break;
-#endif
-
     case YieldWakeupEvent:
         // do nothing, fall out of Yield
         break;

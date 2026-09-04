@@ -40,7 +40,6 @@
 
 #include <premac.h>
 #include <objc/objc-runtime.h>
-#import "apple_remote/RemoteControl.h"
 #include <postmac.h>
 
 
@@ -404,27 +403,10 @@
     [pDock insertItem: pNewItem atIndex: [pDock numberOfItems]];
 }
 
-// for Apple Remote implementation
-
-#if !HAVE_FEATURE_MACOSX_SANDBOX
 - (void)applicationWillBecomeActive:(NSNotification *)pNotification
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    AppleRemoteMainController* pAppleRemoteCtrl = pSalData->mpAppleRemoteMainController;
-    if( pAppleRemoteCtrl && pAppleRemoteCtrl->remoteControl)
-    {
-        // [remoteControl startListening: self];
-        // does crash because the right thing to do is
-        // [pAppleRemoteCtrl->remoteControl startListening: self];
-        // but the instance variable 'remoteControl' is declared protected
-        // workaround : declare remoteControl instance variable as public in RemoteMainController.m
-
-        [pAppleRemoteCtrl->remoteControl startListening: self];
-#if OSL_DEBUG_LEVEL >= 2
-        NSLog(@"Apple Remote will become active - Using remote controls");
-#endif
-    }
     for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
@@ -439,27 +421,12 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    AppleRemoteMainController* pAppleRemoteCtrl = pSalData->mpAppleRemoteMainController;
-    if( pAppleRemoteCtrl && pAppleRemoteCtrl->remoteControl)
-    {
-        // [remoteControl stopListening: self];
-        // does crash because the right thing to do is
-        // [pAppleRemoteCtrl->remoteControl stopListening: self];
-        // but the instance variable 'remoteControl' is declared protected
-        // workaround : declare remoteControl instance variable as public in RemoteMainController.m
-
-        [pAppleRemoteCtrl->remoteControl stopListening: self];
-#if OSL_DEBUG_LEVEL >= 2
-        NSLog(@"Apple Remote will resign active - Releasing remote controls");
-#endif
-    }
     for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
         [(*it)->getNSWindow() setLevel: NSNormalWindowLevel];
     }
 }
-#endif
 
 - (BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL) bWinVisible
 {

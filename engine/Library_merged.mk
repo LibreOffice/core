@@ -29,10 +29,4 @@ $(eval $(call gb_Library_add_ldflags,merged,\
 $(eval $(call gb_Library_add_nativeres,merged,vcl/salsrc))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_use_libraries,merged,\
-	$(if $(ENABLE_MACOSX_SANDBOX),,AppleRemote) \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

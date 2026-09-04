@@ -477,8 +477,7 @@ def isInUnoIncludeFile(path):
 # useful for automatically checking headers
 def isNonLinuxPath(path):
     return path.startswith("avmedia/source/win/") \
-        or path.startswith("avmedia/source/macavf/") \
-        or path.startswith("include/apple_remote/")
+        or path.startswith("avmedia/source/macavf/")
 
 def isNonLinuxFile(path):
     NonLinuxFiles = (

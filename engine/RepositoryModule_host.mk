@@ -54,7 +54,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
     $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	animations \
     ) \
-	apple_remote \
 	avmedia \
 	$(if $(ENABLE_WASM_STRIP_CALC),, \
 	basctl \
