@@ -936,6 +936,30 @@ function describeAXNode(node) {
 		});
 }
 
+/// A combobox's dropdown button must say which list it opens: the combobox's own
+/// name alone says nothing about the button, and a generic name says nothing
+/// about the list. The engine sends a name for one of the two only - a widget
+/// labelled by a caption carries no aria label of its own - so the button's
+/// name is read back from the tree rather than assumed.
+function assertDropdownButtonNamesItsList(id) {
+	return getAXNodesWithin('#' + id).then(function (nodes) {
+		const live = nodes.filter(function (node) { return !node.ignored; });
+		const box = live.find(function (node) { return node.role === 'combobox'; });
+		const button = live.find(function (node) { return node.role === 'button'; });
+
+		expect(box, '#' + id + ' is a combobox in the tree').to.not.be.undefined;
+		expect(button, '#' + id + ' offers a button to open its list').to.not.be.undefined;
+
+		const boxName = box.name.trim().replace(/:$/, '');
+
+		expect(boxName, '#' + id + ' combobox carries a name').to.not.be.empty;
+		expect(button.name.trim(), '#' + id + ' button does not repeat the combobox name')
+			.to.not.equal(box.name.trim());
+		expect(button.name.trim(), '#' + id + ' button says which list it opens')
+			.to.contain(boxName);
+	});
+}
+
 /// {role, name, ignored, properties} of the widget holding the focus, or null.
 /// The document root reports itself as focused too, so take the deepest one.
 function getFocusedAXNode() {
@@ -1050,3 +1074,4 @@ module.exports.assertToggleStatesAgree = assertToggleStatesAgree;
 module.exports.getAXNodes = getAXNodes;
 module.exports.getAXNodesWithin = getAXNodesWithin;
 module.exports.describeAXNode = describeAXNode;
+module.exports.assertDropdownButtonNamesItsList = assertDropdownButtonNamesItsList;
