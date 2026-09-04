@@ -947,25 +947,6 @@ if test -n "$with_android_sdk"; then
 fi
 AC_SUBST(ANDROID_SDK_DIR)
 
-AC_ARG_ENABLE([android-kit],
-    AS_HELP_STRING([--enable-android-kit],
-        [The Android app from the android/ subdir needs several tweaks all
-         over the place that break the COKit when used in the Online-based
-         Android app.  This switch indicates that the intent of this build is
-         actually the Online-based, non-modified COKit.])
-)
-ENABLE_ANDROID_KIT=
-if test -n "$ANDROID_NDK_DIR" ; then
-    if test "$enable_android_kit" = yes; then
-        ENABLE_ANDROID_KIT=TRUE
-        AC_DEFINE(HAVE_FEATURE_ANDROID_KIT)
-        AC_MSG_NOTICE([building the Android version... for the Online-based Android app])
-    else
-        AC_MSG_NOTICE([building the Android version... for the app from the android/ subdir])
-    fi
-fi
-AC_SUBST([ENABLE_ANDROID_KIT])
-
 AC_ARG_ENABLE([kit-always-active],
     AS_HELP_STRING([--enable-kit-always-active],
         [Make comphelper::COKit::isActive() a compile-time constant
@@ -3048,8 +3029,8 @@ else
 fi
 
 if test -z "$enable_extensions"; then
-    # For iOS and Android Viewer, disable extensions unless specifically overridden with --enable-extensions.
-    if test $_os != iOS && test $_os != Android -o "$ENABLE_ANDROID_KIT" = TRUE ; then
+    # For iOS, disable extensions unless specifically overridden with --enable-extensions.
+    if test $_os != iOS; then
         enable_extensions=yes
     fi
 fi

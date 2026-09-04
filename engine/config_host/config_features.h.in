@@ -93,12 +93,6 @@
 #define HAVE_FEATURE_PDFIMPORT 0
 
 /*
- * Whether we are avoiding the tweaks needed for the Android app from the
- * android/ subdir.
- */
-#define HAVE_FEATURE_ANDROID_KIT 0
-
-/*
  * Whether COKit::isActive() is a compile-time constant.
  * Enables dead code elimination for non-COKit code paths.
  */

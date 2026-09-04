@@ -3615,7 +3615,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             comphelper::COKit::setOriginalDocumentUrl(aOriginalDocumentUrlKey, aOriginalDocumentUrl);
         }
 
-#if defined(ANDROID) && HAVE_FEATURE_ANDROID_KIT
+#ifdef ANDROID
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
 #else
         const OUString aEnableMacrosExecution = extractParameter(aOptions, u"EnableMacrosExecution");
@@ -10119,7 +10119,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             SfxApplication::GetOrCreate();
 #endif
 
-#if HAVE_FEATURE_ANDROID_KIT
+#ifdef ANDROID
             // Register the bundled extensions - so that the dictionaries work
             desktop::Desktop::SynchronizeExtensionRepositories(false);
             bool bFailed = desktop::Desktop::CheckExtensionDependencies();
