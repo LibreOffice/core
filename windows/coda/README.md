@@ -13,6 +13,20 @@ directory in the repo ships
 files that set up a build machine for you; apply them, or follow them as a
 checklist if you prefer to install things by hand.
 
+## Clone the monorepo
+
+All the source code now lives in a single Gerrit monorepo; the former Collabora Office core is the `engine/` subdirectory of the `online` repo, so there is no separate repository to clone any more. Code review happens on [Gerrit](https://gerrit.collaboraoffice.com/), not GitHub pull requests; see the [first contribution guide](https://forum.collaboraonline.com/t/your-first-pull-request/41) for the full workflow.
+
+Install [Git Bash](https://gitforwindows.org/), then from that terminal, clone with protocol v2 and CRLF translation turned off:
+
+```bash
+git clone --config protocol.version=2 --config core.autocrlf=false \
+    ssh://YOUR_USERNAME@gerrit.collaboraoffice.com:29418/online collabora-office
+cd collabora-office
+```
+
+(If you applied `user_steps.winget`, those two git options are already set globally.) For an anonymous read-only clone, use `https://gerrit.collaboraoffice.com/online` in place of the SSH URL.
+
 ### Visual Studio 2026
 
 Install Visual Studio 2026 Community with the "Desktop development with C++" and
@@ -50,20 +64,6 @@ with the `lxml`/`polib` helpers):
 ```
 winget configure windows/.config/user_steps.winget
 ```
-
-## Clone the monorepo
-
-All the source code now lives in a single Gerrit monorepo; the former Collabora Office core is the `engine/` subdirectory of the `online` repo, so there is no separate repository to clone any more. Code review happens on [Gerrit](https://gerrit.collaboraoffice.com/), not GitHub pull requests; see the [first contribution guide](https://forum.collaboraonline.com/t/your-first-pull-request/41) for the full workflow.
-
-From a **Git Bash** terminal, clone with protocol v2 and CRLF translation turned off:
-
-```bash
-git clone --config protocol.version=2 --config core.autocrlf=false \
-    ssh://YOUR_USERNAME@gerrit.collaboraoffice.com:29418/online collabora-office
-cd collabora-office
-```
-
-(If you applied `user_steps.winget`, those two git options are already set globally.) For an anonymous read-only clone, use `https://gerrit.collaboraoffice.com/online` in place of the SSH URL.
 
 ## Build everything with one command (optional)
 
