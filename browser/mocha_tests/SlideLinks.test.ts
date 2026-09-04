@@ -88,6 +88,15 @@ describe('SlideLinks', function () {
 		);
 	}
 
+	// The command that asks one source for the slides it holds.
+	function infoOf(source: string): string {
+		return (
+			'remotedoccommand wopisrc=' +
+			encodeURIComponent(wopiSrcOf(source)) +
+			' getpresentationinfo'
+		);
+	}
+
 	// The command that has the document read the pages of one source from a staged file.
 	function updateOf(source: string, staged: string): string {
 		return (
@@ -309,7 +318,14 @@ describe('SlideLinks', function () {
 
 		(app as any).relatedDocuments = relatedDocuments();
 		deliver('relateddocuments', { documents: (app as any).relatedDocuments });
-		nodeassert.equal(sent[1], exportOf('Sales deck.odp'));
+
+		// Every source that came up is asked for the slides it holds, and the one
+		// the refresh in hand names for its pages.
+		nodeassert.deepEqual(sent.slice(1), [
+			infoOf('Sales deck.odp'),
+			infoOf('Support deck.odp'),
+			exportOf('Sales deck.odp'),
+		]);
 	});
 
 	it('refreshes a source once however often the update is asked for', function () {

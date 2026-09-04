@@ -6122,6 +6122,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("index", i);
                 aJsonWriter.put("hidden", true);
                 aJsonWriter.put("part", pPage->GetGuid().getString());
+                aJsonWriter.put("guid", pPage->GetGuid().getOUString());
             }
             else
             {
@@ -6130,6 +6131,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 aJsonWriter.put("hash", sSlideHash);
                 aJsonWriter.put("index", i);
                 aJsonWriter.put("part", pPage->GetGuid().getString());
+                aJsonWriter.put("guid", pPage->GetGuid().getOUString());
 
                 auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
                 aJsonWriter.put("name", aName);

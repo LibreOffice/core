@@ -75,6 +75,13 @@ class SlideLinks {
 	> = new Map();
 	// The sources the document links to, in the order the list reports them.
 	private sources: string[] = [];
+	// The slides a source reports, by the identifier of each one, and the time
+	// that source was last modified when they were read. A null set stands for a
+	// source that has been asked and has not answered yet.
+	private sourceSlides: Map<
+		string,
+		{ time: string; guids: Set<string> | null }
+	> = new Map();
 	// Whether the link list of this load has been asked for.
 	private loaded: boolean = false;
 	private queue: SlideLinkRefresh[] = [];
@@ -115,7 +122,20 @@ class SlideLinks {
 		const link = this.pages.get(part);
 		if (!link) return false;
 		const related = this.relatedDocument(link.source);
-		return related !== null && related.state === 'missing';
+		return (
+			(related !== null && related.state === 'missing') ||
+			this.isPageMissing(part)
+		);
+	}
+
+	public isPageMissing(part: string): boolean {
+		const link = this.pages.get(part);
+		if (!link || !link.sourceGuid || link.name) return false;
+
+		const slides = this.sourceSlides.get(link.source);
+		if (!slides || slides.guids === null) return false;
+
+		return !slides.guids.has(link.sourceGuid);
 	}
 
 	public isPageConnected(part: string): boolean {
@@ -202,6 +222,7 @@ class SlideLinks {
 					lastModifiedTime: slide.lastModifiedTime || '',
 				});
 		}
+		this.readSourceSlides();
 		app.events.fire('slidelink:changed', {});
 		this.showUpdateCommand();
 	}
@@ -297,8 +318,7 @@ class SlideLinks {
 
 	// A source this run is waiting on has come up, so it is asked for its pages.
 	private onRelatedDocuments(): void {
-		// A source's time may have moved on, so the pages linked to it are
-		// looked at again to see whether they are still up to date.
+		this.readSourceSlides();
 		app.events.fire('slidelink:changed', {});
 
 		if (this.running === null || this.running.accepted) return;
@@ -310,8 +330,16 @@ class SlideLinks {
 	// The pages the source wrote, staged in this document's jail by the server. The document
 	// reads the pages of that source from the file.
 	private onRemoteResult(e: any): void {
-		if (this.running === null) return;
 		const textMsg = e.textMsg || '';
+		if (textMsg.startsWith('presentationinfo:')) {
+			this.onSourceSlides(
+				e.wopiSrc || '',
+				textMsg.substring('presentationinfo:'.length),
+			);
+			return;
+		}
+
+		if (this.running === null) return;
 		if (!textMsg.startsWith('exportslides:')) return;
 
 		const body = textMsg.substring('exportslides:'.length);
@@ -365,7 +393,51 @@ class SlideLinks {
 		this.sendNext();
 	}
 
-	// The slides a refresh left as they were not available
+	// Asks every source this document is connected to for the slides it holds
+	private readSourceSlides(): void {
+		for (const source of this.sources) {
+			const related = this.relatedDocument(source);
+			if (!related || related.state !== 'connected') {
+				// A source that went down says nothing about its slides, so one that was
+				// asked and did not answer is asked again once it comes up.
+				const pending = this.sourceSlides.get(source);
+				if (pending && pending.guids === null) this.sourceSlides.delete(source);
+				continue;
+			}
+
+			const time = related.lastModifiedTime || '';
+			const known = this.sourceSlides.get(source);
+			if (known && known.time === time) continue;
+
+			this.sourceSlides.set(source, { time: time, guids: null });
+			SlideImportSession.sendRemoteCommand(
+				related.wopiSrc,
+				'getpresentationinfo',
+			);
+		}
+	}
+
+	// The slides a source holds, as it reports them.
+	private onSourceSlides(wopiSrc: string, json: string): void {
+		const source = SlideImportSession.relatedDocumentName(wopiSrc);
+		const asked = this.sourceSlides.get(source);
+		if (!asked) return;
+
+		const guids = new Set<string>();
+		try {
+			const info = JSON.parse(json);
+			const slides = Array.isArray(info.slides) ? info.slides : [];
+			for (const slide of slides)
+				if (slide && slide.guid) guids.add(slide.guid);
+		} catch {
+			return;
+		}
+
+		this.sourceSlides.set(source, { time: asked.time, guids: guids });
+		app.events.fire('slidelink:changed', {});
+	}
+
+	// The slides a refresh left as they were not available.
 	private sayNotUpdated(notUpdated: any): void {
 		if (!Array.isArray(notUpdated) || notUpdated.length === 0) return;
 

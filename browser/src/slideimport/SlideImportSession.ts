@@ -30,6 +30,7 @@ type SlideImportState = 'idle' | 'opening' | 'ready' | 'inserting';
 interface SlideImportSlide {
 	index: number;
 	name: string;
+	guid: string;
 }
 
 interface SlideImportSection {

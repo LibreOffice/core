@@ -281,12 +281,12 @@ class SlideImportPane {
       const info = JSON.parse(json);
       this.remoteDocWidth = info.docWidth || 0;
       this.remoteDocHeight = info.docHeight || 0;
-      this.remoteSlideParts = Array.isArray(info.slides)
-        ? info.slides.map((s: any) => s.uniqueID || 0)
-        : [];
-      this.session.slides = this.remoteSlideParts.map((_part, index) => ({
+      const slides = Array.isArray(info.slides) ? info.slides : [];
+      this.remoteSlideParts = slides.map((s: any) => s.uniqueID || 0);
+      this.session.slides = slides.map((s: any, index: number) => ({
         index: index,
         name: '',
+        guid: s.guid || '',
       }));
       this.session.slideCount = this.remoteSlideParts.length;
       this.session.size = {
