@@ -499,7 +499,9 @@ window.L.Control.Extension = window.L.Control.extend({
 				command.source +
 				'\ncommands[' +
 				JSON.stringify(commandId) +
-				'].apply(null, []);',
+				'].apply(null, [' +
+				JSON.stringify(commandContext()) +
+				']);',
 		);
 	},
 
@@ -565,7 +567,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		shell.content.classList.add('extension-panel-body');
 
 		const iframe = document.createElement('iframe');
-		iframe.src = this.options.baseUrl + manifest.entry;
+		iframe.src = withUiLanguage(this.options.baseUrl + manifest.entry);
 		iframe.setAttribute(
 			'sandbox',
 			'allow-scripts allow-same-origin allow-forms allow-popups',
@@ -759,7 +761,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		};
 		if (msg.title !== undefined) iframeOptions.title = msg.title;
 		const iframeDialog = window.L.iframeDialog(
-			resolved.href,
+			withUiLanguage(resolved.href),
 			{},
 			null,
 			iframeOptions,
@@ -913,6 +915,114 @@ async function tryLoadAppsScriptExtension(
 	return manifest;
 }
 
+// --- Localization ------------------------------------------------------------------------------
+//
+// Extensions are translated with gettext catalogs, like the rest of the UI: an
+// extension ships `l10n/<lang>.json` files (built by util/po2json.py from its
+// po/<lang>.po, see browser/extensions/README.md). The English strings in
+// manifest.json and the contributes file are the msgids. Discovery loads the
+// catalog for the UI language once per extension and translates the manifest
+// in place, so every consumer (notebookbar, menus, context menu, panel header)
+// sees translated text without knowing about catalogs. The panel iframe and
+// kit-side commands get the language too, and cool.js loads the same catalog
+// for the panel's own strings.
+
+// The UI language as COOL knows it, e.g. "en-US", "pt-BR", "de".
+function uiLanguage(): string {
+	return (window as any).langParam || 'en-US';
+}
+
+function uiDirection(): string {
+	return document.documentElement.dir === 'rtl' ? 'rtl' : 'ltr';
+}
+
+// Catalog file names use the po file convention: pt_BR, zh_CN, ca_valencia.
+// For "pt-BR" try pt_BR then pt; for "de" just de. English has no catalog.
+function catalogCandidates(lang: string): string[] {
+	const norm = lang.replace(/-/g, '_');
+	const parts = norm.split('_');
+	if (parts[0] === 'en') return [];
+	const out = [norm];
+	if (parts.length > 1) out.push(parts[0]);
+	return out;
+}
+
+// Append the UI language and direction to an extension page URL.
+function withUiLanguage(url: string): string {
+	const u = new URL(url, document.baseURI);
+	u.searchParams.set('lang', uiLanguage());
+	u.searchParams.set('dir', uiDirection());
+	return u.href;
+}
+
+// The object passed to kit-side command functions as their argument.
+function commandContext(): { lang: string; dir: string } {
+	return { lang: uiLanguage(), dir: uiDirection() };
+}
+
+const catalogCache: {
+	[baseRel: string]: Promise<{ [msgid: string]: string } | null>;
+} = {};
+
+// Fetch the extension's catalog for the UI language, or null when there is
+// none. 404s are the normal case for untranslated extensions and are silent.
+function loadExtensionCatalog(
+	baseRel: string,
+): Promise<{ [msgid: string]: string } | null> {
+	if (catalogCache[baseRel]) return catalogCache[baseRel];
+	catalogCache[baseRel] = (async () => {
+		// Fetch the candidates (pt_BR, pt) together; the most specific one
+		// that exists wins.
+		const fetched = await Promise.all(
+			catalogCandidates(uiLanguage()).map(async (cand) => {
+				try {
+					const resp = await fetch(
+						app.LOUtil.getURL(baseRel + 'l10n/' + cand + '.json'),
+					);
+					if (!resp.ok) return null;
+					const catalog = await resp.json();
+					return catalog && typeof catalog === 'object' ? catalog : null;
+				} catch (err) {
+					return null;
+				}
+			}),
+		);
+		return fetched.find((catalog) => catalog !== null) || null;
+	})();
+	return catalogCache[baseRel];
+}
+
+// Translate the user-visible strings of a manifest (and its resolved
+// contributes object) in place; msgids without a translation stay English.
+async function localizeManifest(
+	manifest: ExtensionManifest,
+	baseRel: string,
+): Promise<void> {
+	const catalog = await loadExtensionCatalog(baseRel);
+	if (!catalog) return;
+	const tr = (s: string | undefined): string | undefined =>
+		s !== undefined &&
+		Object.prototype.hasOwnProperty.call(catalog, s) &&
+		catalog[s] !== ''
+			? catalog[s]
+			: s;
+	manifest.name = tr(manifest.name);
+	const c = manifest.contributes;
+	if (!c) return;
+	if (c.commands) for (const cmd of c.commands) cmd.title = tr(cmd.title);
+	if (c.notebookbar) {
+		for (const tab of c.notebookbar) {
+			tab.tab = tr(tab.tab);
+			for (const group of tab.groups || []) {
+				group.label = tr(group.label);
+				for (const item of group.items || []) {
+					if (item.type === 'menu') item.title = tr(item.title);
+				}
+			}
+		}
+	}
+}
+
 // Discover and register the JS extensions for this document by fetching three discovery indexes
 // (built-in, admin preset, per-user preset), in that order, merging with per-user > admin >
 // built-in precedence on ID collision, then loading each surviving manifest.json and registering
@@ -1021,6 +1131,7 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 						}),
 					);
 				}
+				await localizeManifest(manifest, baseRel);
 				return { id, baseRel, manifest };
 			} catch (err) {
 				try {

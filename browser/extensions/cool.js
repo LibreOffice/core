@@ -6,6 +6,121 @@
 (function () {
 	window.cool = window.cool || {};
 
+	// --- Localization -------------------------------------------------------------------------
+	//
+	// COOL opens extension pages with ?lang=<UI language>&dir=<ltr|rtl>. The extension's
+	// translations live in l10n/<lang>.json under its own directory (built from po/<lang>.po,
+	// see README.md); cool.js loads the catalog for the UI language and offers gettext-style
+	// helpers, so a page can write English and stay translatable:
+	//
+	//   cool.lang                 "de", "pt-BR", ... (never empty; defaults to en-US)
+	//   cool.dir                  "ltr" or "rtl"
+	//   cool.l10n.ready           Promise resolved once the catalog is loaded (or found missing)
+	//   cool._(msgid)             translation of msgid, or msgid itself
+	//   cool._n(one, many, n)     plural form for n, using the catalog's Plural-Forms rule
+	//   <span data-l10n="Save">Save</span>     translated on load; also data-l10n-title,
+	//                                          data-l10n-placeholder, data-l10n-aria-label
+	//   cool.l10n.apply(element)  translate data-l10n attributes under element (added later)
+	const pageParams = new URLSearchParams(window.location.search);
+	window.cool.lang = pageParams.get('lang') || 'en-US';
+	window.cool.dir = pageParams.get('dir') === 'rtl' ? 'rtl' : 'ltr';
+	let catalog = null;
+	// po2json.py joins msgid and msgid_plural, and the plural forms, with NUL.
+	const NUL = "\u0000";
+
+	// The extension's own directory: everything up to and including /extensions/<id>/ in
+	// this page's URL, whether built in or shipped as a preset.
+	function extensionBase() {
+		const m = /^(.*\/extensions\/[^/]+\/)/.exec(window.location.href);
+		return m ? m[1] : new URL('./', window.location.href).href;
+	}
+
+	function catalogCandidates(lang) {
+		const norm = lang.replace(/-/g, '_');
+		const parts = norm.split('_');
+		if (parts[0] === 'en') return [];
+		const out = [norm];
+		if (parts.length > 1) out.push(parts[0]);
+		return out;
+	}
+
+	async function loadCatalog() {
+		for (const cand of catalogCandidates(window.cool.lang)) {
+			try {
+				const resp = await fetch(extensionBase() + 'l10n/' + cand + '.json');
+				if (!resp.ok) continue;
+				const obj = await resp.json();
+				if (obj && typeof obj === 'object') return obj;
+			} catch (err) {
+				// try the next candidate
+			}
+		}
+		return null;
+	}
+
+	window.cool._ = function (msgid) {
+		if (catalog && Object.prototype.hasOwnProperty.call(catalog, msgid) && catalog[msgid] !== '') {
+			return catalog[msgid];
+		}
+		return msgid;
+	};
+
+	let pluralRule = null;
+	function pluralIndex(n) {
+		if (pluralRule === null) {
+			pluralRule = false;
+			const rule = catalog && catalog[NUL + 'plural-forms'];
+			const m = rule && /plural\s*=\s*([^;]+)/.exec(rule);
+			if (m) {
+				try {
+					// The catalog is the extension's own data, not user input.
+					pluralRule = new Function('n', 'return Number(' + m[1] + ');');
+				} catch (err) {
+					pluralRule = false;
+				}
+			}
+		}
+		if (pluralRule) return pluralRule(n);
+		return n === 1 ? 0 : 1;
+	}
+
+	window.cool._n = function (one, many, n) {
+		const key = one + NUL + many;
+		if (catalog && Object.prototype.hasOwnProperty.call(catalog, key)) {
+			const forms = catalog[key].split(NUL);
+			const form = forms[Math.min(pluralIndex(n), forms.length - 1)];
+			if (form) return form;
+		}
+		return n === 1 ? one : many;
+	};
+
+	function applyL10n(root) {
+		const scope = root || document;
+		const set = (attr, apply) => {
+			const nodes = scope.querySelectorAll ? scope.querySelectorAll('[' + attr + ']') : [];
+			for (const el of nodes) apply(el, window.cool._(el.getAttribute(attr)));
+			if (scope.getAttribute && scope.hasAttribute(attr)) apply(scope, window.cool._(scope.getAttribute(attr)));
+		};
+		set('data-l10n', (el, text) => { el.textContent = text; });
+		set('data-l10n-title', (el, text) => { el.title = text; });
+		set('data-l10n-placeholder', (el, text) => { el.placeholder = text; });
+		set('data-l10n-aria-label', (el, text) => { el.setAttribute('aria-label', text); });
+	}
+
+	window.cool.l10n = {
+		apply: applyL10n,
+		ready: (async () => {
+			document.documentElement.lang = window.cool.lang;
+			document.documentElement.dir = window.cool.dir;
+			catalog = await loadCatalog();
+			if (document.readyState === 'loading') {
+				await new Promise((resolve) => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+			}
+			if (catalog) applyL10n(document);
+			return catalog !== null;
+		})(),
+	};
+
 	let nextCallId = 0;
 	const pending = Object.create(null);
 
@@ -411,6 +526,9 @@
 	}
 	window.addEventListener('load', postHeight);
 	if (typeof ResizeObserver !== 'undefined') {
-		new ResizeObserver(postHeight).observe(document.body);
+		// This script may be loaded from <head>, before <body> exists.
+		const observeBody = () => new ResizeObserver(postHeight).observe(document.body);
+		if (document.body) observeBody();
+		else document.addEventListener('DOMContentLoaded', observeBody, { once: true });
 	}
 })();

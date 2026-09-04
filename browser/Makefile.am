@@ -1396,6 +1396,13 @@ install-demo-extensions:
 		if test -f "$$dir/manifest.json"; then \
 			mkdir -p $(DIST_FOLDER)/extensions/$$id && \
 			cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/ && \
+			rm -rf $(DIST_FOLDER)/extensions/$$id/po && \
+			for po in "$$dir"po/*.po; do \
+				test -f "$$po" || continue; \
+				lang=$$(basename "$$po" .po) && \
+				mkdir -p $(DIST_FOLDER)/extensions/$$id/l10n && \
+				$(srcdir)/util/po2json.py --quiet "$$po" -o $(DIST_FOLDER)/extensions/$$id/l10n/$$lang.json || exit 1; \
+			done && \
 			ids="$$ids$${ids:+,}\"$$id\""; \
 		elif test -f "$$dir/appsscript.json"; then \
 			mkdir -p $(DIST_FOLDER)/extensions/$$id && \
@@ -1704,6 +1711,10 @@ pot:
 	html2po --pot --input=html/cool-help.html --output=po/templates/cool-help.pot --duplicates=merge
 	html2po --pot --input=descriptions/google-play.html --output=po/templates/descriptions.pot --duplicates=merge --keepcomments
 	html2po --pot --input=welcome/welcome.html --output=po/templates/welcome.pot --duplicates=merge
+	for dir in extensions/*/; do \
+		test -f "$$dir/manifest.json" || continue; \
+		python3 util/extension-pot.py "$$dir" || exit 1; \
+	done
 	$(srcdir)/util/appendwelcome.py po/templates/welcome.pot po/templates/cool-ui.pot
 	rm po/templates/welcome.pot
 	msguniq -w 78 -t UTF-8 po/templates/cool-ui.pot > po/templates/cool-ui.pot.new; mv po/templates/cool-ui.pot.new po/templates/cool-ui.pot
