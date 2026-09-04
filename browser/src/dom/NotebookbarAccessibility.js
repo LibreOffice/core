@@ -303,6 +303,17 @@ var NotebookbarAccessibility = function() {
 	this.onInputKeyDown = function(event) {
 		if (event.ctrlKey) {
 			this.resetState();
+			return;
+		}
+
+		if (event.key === 'Tab' && !event.shiftKey) {
+			const currentSelectedTabPage = this.getCurrentSelectedTabPage();
+			const firstSelectableElement = currentSelectedTabPage ?
+				JSDialog.FindFocusableElement(currentSelectedTabPage, 'next') : null;
+			if (firstSelectableElement) {
+				event.preventDefault();
+				firstSelectableElement.focus();
+			}
 		}
 	};
 
