@@ -1,0 +1,74 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-04 19:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: index.html:36
+msgid "Generate & insert"
+msgstr ""
+
+#: index.html:33
+msgid "Insert width (cm):"
+msgstr ""
+
+#: index.html:30
+msgid "Maximum words:"
+msgstr ""
+
+#: index.html:27
+msgid "Selection"
+msgstr ""
+
+#: index.html:24
+msgid "Source:"
+msgstr ""
+
+#: index.html:26
+msgid "Whole document"
+msgstr ""
+
+#: manifest.json:name
+msgid "Word cloud"
+msgstr ""
+
+#: index.html:173
+msgid "document is empty"
+msgstr ""
+
+#: index.html:161
+msgid "gathering text..."
+msgstr ""
+
+#: index.html:205
+msgid "inserted %1 word"
+msgid_plural "inserted %1 words"
+msgstr[0] ""
+msgstr[1] ""
+
+#: index.html:193
+msgid "inserting %1 / %2 words..."
+msgstr ""
+
+#: index.html:38
+msgid "no cloud yet"
+msgstr ""
+
+#: index.html:172
+msgid "no text selected"
+msgstr ""
+
+#: index.html:180
+msgid "no words left after filtering"
+msgstr ""
+
+#: index.html:187
+msgid "nothing fit on the canvas"
+msgstr ""

@@ -1,0 +1,88 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-commands\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-04 19:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ui.json:commands.makeBold
+msgid "Bold"
+msgstr ""
+
+#: ui.json:commands.clearFormatting
+msgid "Clear Formatting"
+msgstr ""
+
+#: ui.json:notebookbar.tab
+msgid "Commands Demo"
+msgstr ""
+
+#: manifest.json:name
+msgid "Commands demo"
+msgstr ""
+
+#: ui.json:notebookbar.group.dateGroup
+msgid "Date & Time"
+msgstr ""
+
+#: ui.json:notebookbar.menu
+msgid "Formats"
+msgstr ""
+
+#: ui.json:notebookbar.group.formattingGroup
+msgid "Formatting"
+msgstr ""
+
+#: ui.json:notebookbar.menu
+msgid "Heading"
+msgstr ""
+
+#: ui.json:commands.heading1
+msgid "Heading 1"
+msgstr ""
+
+#: ui.json:commands.heading2
+msgid "Heading 2"
+msgstr ""
+
+#: ui.json:commands.heading3
+msgid "Heading 3"
+msgstr ""
+
+#: ui.json:commands.insertIsoDate
+msgid "ISO 8601"
+msgstr ""
+
+#: ui.json:notebookbar.group.infoGroup
+msgid "Info"
+msgstr ""
+
+#: ui.json:commands.insertDate
+msgid "Insert Date"
+msgstr ""
+
+#: ui.json:commands.insertTime
+msgid "Insert Time"
+msgstr ""
+
+#: ui.json:commands.makeItalic
+msgid "Italic"
+msgstr ""
+
+#: ui.json:commands.insertLocaleDate
+msgid "Long Format"
+msgstr ""
+
+#: ui.json:commands.makeUnderline
+msgid "Underline"
+msgstr ""
+
+#: ui.json:commands.insertWordCount
+msgid "Word Count"
+msgstr ""

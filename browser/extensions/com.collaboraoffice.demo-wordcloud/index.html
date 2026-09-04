@@ -21,21 +21,21 @@ button:disabled { background: #a78bfa; cursor: default; }
 </head>
 <body>
 
-<label>Source:</label>
+<label data-l10n="Source:">Source:</label>
 <div class="radio-row">
-    <label><input type="radio" name="source" value="all" checked> Whole document</label>
-    <label><input type="radio" name="source" value="selection"> Selection</label>
+    <label><input type="radio" name="source" value="all" checked> <span data-l10n="Whole document">Whole document</span></label>
+    <label><input type="radio" name="source" value="selection"> <span data-l10n="Selection">Selection</span></label>
 </div>
 
-<label for="maxwords">Maximum words:</label>
+<label for="maxwords" data-l10n="Maximum words:">Maximum words:</label>
 <input id="maxwords" type="number" min="5" max="200" value="40">
 
-<label for="width">Insert width (cm):</label>
+<label for="width" data-l10n="Insert width (cm):">Insert width (cm):</label>
 <input id="width" type="number" min="4" max="30" step="0.5" value="12">
 
-<button id="generate" onclick="generate()">Generate &amp; insert</button>
+<button id="generate" onclick="generate()" data-l10n="Generate &amp; insert">Generate &amp; insert</button>
 
-<div id="result" class="result">no cloud yet</div>
+<div id="result" class="result" data-l10n="no cloud yet">no cloud yet</div>
 <div id="preview" class="preview" hidden></div>
 
 <script>
@@ -158,7 +158,7 @@ async function generate() {
     resultEl.classList.remove('error');
     btn.disabled = true;
     try {
-        resultEl.textContent = 'gathering text...';
+        resultEl.textContent = cool._('gathering text...');
         const text = await cool.callRemote(function (useSelection) {
             const doc = cool.getActiveDocument();
             if (useSelection) {
@@ -169,28 +169,28 @@ async function generate() {
         if (!text || !text.trim()) {
             resultEl.classList.add('error');
             resultEl.textContent = source === 'selection'
-                ? 'no text selected'
-                : 'document is empty';
+                ? cool._('no text selected')
+                : cool._('document is empty');
             return;
         }
         const allWords = extractWords(text);
         const words = allWords.slice(0, maxWords);
         if (words.length === 0) {
             resultEl.classList.add('error');
-            resultEl.textContent = 'no words left after filtering';
+            resultEl.textContent = cool._('no words left after filtering');
             return;
         }
         const W = 600, H = 400;
         const placed = layout(words, W, H);
         if (placed.length === 0) {
             resultEl.classList.add('error');
-            resultEl.textContent = 'nothing fit on the canvas';
+            resultEl.textContent = cool._('nothing fit on the canvas');
             return;
         }
         const svg = buildSvg(placed, W, H);
         previewEl.innerHTML = svg;
         previewEl.hidden = false;
-        resultEl.textContent = 'inserting ' + placed.length + ' / ' + words.length + ' words...';
+        resultEl.textContent = cool._('inserting %1 / %2 words...').replace('%1', placed.length).replace('%2', words.length);
         // Encode the SVG as a UTF-8 byte array on the browser side and ship the
         // bytes; QuickJS in the kit does not have atob/btoa, so encoding here
         // saves the kit from writing a UTF-8 encoder itself.  The array of
@@ -202,7 +202,7 @@ async function generate() {
         await cool.callRemote(function (bytes, widthCm, heightCm) {
             cool.getActiveDocument().insertImage(bytes, { widthCm, heightCm });
         }, svgBytes, widthCm, heightCm);
-        resultEl.textContent = 'inserted ' + placed.length + ' words';
+        resultEl.textContent = cool._n('inserted %1 word', 'inserted %1 words', placed.length).replace('%1', placed.length);
     } catch (err) {
         resultEl.classList.add('error');
         resultEl.textContent = err.message || String(err);

@@ -1,0 +1,92 @@
+# Hungarian translation of the Commands demo extension.
+# Copyright the Collabora Online contributors.
+# SPDX-License-Identifier: MPL-2.0
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-commands\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-04 19:00+0000\n"
+"PO-Revision-Date: 2026-09-04 19:00+0000\n"
+"Last-Translator: Collabora Online contributors\n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: manifest.json:name
+msgid "Commands demo"
+msgstr "Parancsbemutató"
+
+#: ui.json:notebookbar.tab
+msgid "Commands Demo"
+msgstr "Parancsbemutató"
+
+#: ui.json:commands.insertDate
+msgid "Insert Date"
+msgstr "Dátum beszúrása"
+
+#: ui.json:commands.insertTime
+msgid "Insert Time"
+msgstr "Idő beszúrása"
+
+#: ui.json:commands.insertIsoDate
+msgid "ISO 8601"
+msgstr "ISO 8601"
+
+#: ui.json:commands.insertLocaleDate
+msgid "Long Format"
+msgstr "Hosszú formátum"
+
+#: ui.json:commands.makeBold
+msgid "Bold"
+msgstr "Félkövér"
+
+#: ui.json:commands.makeItalic
+msgid "Italic"
+msgstr "Dőlt"
+
+#: ui.json:commands.makeUnderline
+msgid "Underline"
+msgstr "Aláhúzott"
+
+#: ui.json:commands.heading1
+msgid "Heading 1"
+msgstr "Címsor 1"
+
+#: ui.json:commands.heading2
+msgid "Heading 2"
+msgstr "Címsor 2"
+
+#: ui.json:commands.heading3
+msgid "Heading 3"
+msgstr "Címsor 3"
+
+#: ui.json:commands.clearFormatting
+msgid "Clear Formatting"
+msgstr "Formázás törlése"
+
+#: ui.json:commands.insertWordCount
+msgid "Word Count"
+msgstr "Szavak száma"
+
+#: ui.json:notebookbar.group.dateGroup
+msgid "Date & Time"
+msgstr "Dátum és idő"
+
+#: ui.json:notebookbar.menu
+msgid "Formats"
+msgstr "Formátumok"
+
+#: ui.json:notebookbar.group.formatGroup
+msgid "Formatting"
+msgstr "Formázás"
+
+#: ui.json:notebookbar.group.headingGroup
+msgid "Heading"
+msgstr "Címsor"
+
+#: ui.json:notebookbar.group.infoGroup
+msgid "Info"
+msgstr "Információ"

@@ -1,0 +1,78 @@
+# Hungarian translation of the Word cloud demo extension.
+# Copyright the Collabora Online contributors.
+# SPDX-License-Identifier: MPL-2.0
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-04 19:00+0000\n"
+"PO-Revision-Date: 2026-09-04 19:00+0000\n"
+"Last-Translator: Collabora Online contributors\n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: manifest.json:name
+msgid "Word cloud"
+msgstr "Szófelhő"
+
+#: index.html
+msgid "Source:"
+msgstr "Forrás:"
+
+#: index.html
+msgid "Whole document"
+msgstr "Teljes dokumentum"
+
+#: index.html
+msgid "Selection"
+msgstr "Kijelölés"
+
+#: index.html
+msgid "Maximum words:"
+msgstr "Legfeljebb ennyi szó:"
+
+#: index.html
+msgid "Insert width (cm):"
+msgstr "Beszúrási szélesség (cm):"
+
+#: index.html
+msgid "Generate & insert"
+msgstr "Létrehozás és beszúrás"
+
+#: index.html
+msgid "no cloud yet"
+msgstr "még nincs szófelhő"
+
+#: index.html
+msgid "gathering text..."
+msgstr "szöveg összegyűjtése…"
+
+#: index.html
+msgid "no text selected"
+msgstr "nincs kijelölt szöveg"
+
+#: index.html
+msgid "document is empty"
+msgstr "a dokumentum üres"
+
+#: index.html
+msgid "no words left after filtering"
+msgstr "a szűrés után nem maradt szó"
+
+#: index.html
+msgid "nothing fit on the canvas"
+msgstr "semmi nem fért el a vászonra"
+
+#: index.html
+msgid "inserting %1 / %2 words..."
+msgstr "%1 / %2 szó beszúrása…"
+
+#: index.html
+msgid "inserted %1 word"
+msgid_plural "inserted %1 words"
+msgstr[0] "%1 szó beszúrva"
+msgstr[1] "%1 szó beszúrva"
