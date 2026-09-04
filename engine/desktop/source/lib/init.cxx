@@ -1337,8 +1337,8 @@ static std::optional<COKitPixelSize> doc_createSlideRenderer(
 
 static void doc_postSlideshowCleanup(COKitDocument* pThis);
 
-static bool doc_renderNextSlideLayer(
-    COKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, std::string* pJsonMsg);
+static COKitSlideLayer doc_renderNextSlideLayer(
+    COKitDocument* pThis, std::span<unsigned char> aBuffer, double fScale);
 
 static void doc_setViewOption(COKitDocument* pDoc, const char* pOption, const char* pValue);
 
@@ -1856,10 +1856,10 @@ void COKitDocumentImpl::postSlideshowCleanup()
     doc_postSlideshowCleanup(this);
 }
 
-bool COKitDocumentImpl::renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer,
-                                              double* pScale, std::string* pJsonMessage)
+COKitSlideLayer COKitDocumentImpl::renderNextSlideLayer(std::span<unsigned char> aBuffer,
+                                                        double fScale)
 {
-    return doc_renderNextSlideLayer(this, pBuffer, bIsBitmapLayer, pScale, pJsonMessage);
+    return doc_renderNextSlideLayer(this, aBuffer, fScale);
 }
 
 void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
@@ -7051,27 +7051,26 @@ static void doc_postSlideshowCleanup(COKitDocument* pThis)
     }
 }
 
-static bool doc_renderNextSlideLayer(
-    COKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, double* pScale, std::string* pJsonMessage)
+static COKitSlideLayer doc_renderNextSlideLayer(
+    COKitDocument* pThis, std::span<unsigned char> aBuffer, double fScale)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
+
+    COKitSlideLayer aLayer;
+    aLayer.fScale = fScale;
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return true;
+        aLayer.bIsDone = true;
+        return aLayer;
     }
-    std::string sJsonMesssage;
-    bool bIsBitmapLayer = false;
-    bool bDone = pDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, *pScale, sJsonMesssage);
 
-    if (pJsonMessage)
-        *pJsonMessage = std::move(sJsonMesssage);
-    *pIsBitmapLayer = bIsBitmapLayer;
-
-    return bDone;
+    aLayer.bIsDone = pDoc->renderNextSlideLayer(aBuffer.data(), aLayer.bIsBitmapLayer,
+                                                aLayer.fScale, aLayer.aJsonMessage);
+    return aLayer;
 }
 
 static void doc_setViewOption(COKitDocument* pThis, const char* pOption, const char* pValue)

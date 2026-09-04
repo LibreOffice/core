@@ -15,6 +15,7 @@
 #include <functional>
 #include <optional>
 #include <ostream>
+#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -100,6 +101,19 @@ struct COKitDataArea
 {
     int64_t nLastColumn = 1;
     int64_t nLastRow = 1;
+};
+
+/// One layer of a slide. An empty aJsonMessage means no layer was rendered.
+struct COKitSlideLayer
+{
+    /// No further layer follows this one.
+    bool bIsDone = false;
+    /// The layer is a bitmap, rather than a description of what to draw.
+    bool bIsBitmapLayer = false;
+    /// The scale the layer was rendered at.
+    double fScale = 0;
+    /// What the layer holds, as JSON.
+    std::string aJsonMessage;
 };
 
 /// One format on the clipboard: its mime type and the bytes in that format.
@@ -2547,9 +2561,13 @@ struct COKitDocument
     /// Clean-up the slideshow (slide renderer)
     virtual void postSlideshowCleanup() = 0;
 
-    /// Render the slide layer
-    virtual bool renderNextSlideLayer(unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale,
-                                      std::string* pJsonMessage) = 0;
+    /// Render the next layer of the slide into the given buffer, which holds
+    /// four bytes per pixel for the size createSlideRenderer() settled on.
+    ///
+    /// @param aBuffer where the pixels go
+    /// @param fScale the scale to render at
+    virtual COKitSlideLayer renderNextSlideLayer(std::span<unsigned char> aBuffer,
+                                                 double fScale) = 0;
 
     /// Set named view options
     virtual void setViewOption(const char* pOption, const char* pValue) = 0;
