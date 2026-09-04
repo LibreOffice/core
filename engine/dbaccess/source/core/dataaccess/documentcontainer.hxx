@@ -54,12 +54,12 @@ public:
     */
     ODocumentContainer(
           const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-        , const css::uno::Reference< css::uno::XInterface >&  _xParentContainer
+        , const css::uno::Reference< cpo::uno::XInterface >&  _xParentContainer
         ,const TContentPtr& _pImpl
         , bool _bFormsContainer
         );
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     DECLARE_XINTERFACE( )
 
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
@@ -72,8 +72,8 @@ public:
     virtual css::uno::Reference< css::lang::XComponent > loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XCommandProcessor

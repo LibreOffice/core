@@ -6,7 +6,7 @@ excludelist:
     - sal/log.hxx
     test/source/container/xchild.cxx:
     # Actually used
-    - com/sun/star/uno/XInterface.hpp
+    - cpo/uno/XInterface.hpp
     test/source/container/xnamereplace.cxx:
     # Actually used
     - cpo/uno/Any.hxx

@@ -27,7 +27,7 @@ import lib.TestParameters;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Test for object which is represented by service

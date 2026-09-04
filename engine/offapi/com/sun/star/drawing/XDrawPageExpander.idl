@@ -30,7 +30,7 @@
 
     @deprecated
  */
-published interface XDrawPageExpander: com::sun::star::uno::XInterface
+published interface XDrawPageExpander: cpo::uno::XInterface
 {
 
     /** creates a collection of DrawPages from the

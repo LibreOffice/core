@@ -50,7 +50,7 @@ published struct ComplexTypes : SimpleTypes
 {
     sequence< long >           Sequence;
     string                     String;
-    com::sun::star::uno::XInterface Interface;
+    cpo::uno::XInterface Interface;
     any                        Any;
 };
 
@@ -69,7 +69,7 @@ published struct ComplexTypes : SimpleTypes
     <li>raising RuntimeException</li>
     </ul>
 */
-published interface XPerformanceTest : com::sun::star::uno::XInterface
+published interface XPerformanceTest : cpo::uno::XInterface
 {
     void async();
     void sync();
@@ -87,9 +87,9 @@ published interface XPerformanceTest : com::sun::star::uno::XInterface
     [attribute] float                    Float_attr;
     [attribute] double                   Double_attr;
     [attribute] string                   String_attr;
-    [attribute] com::sun::star::uno::XInterface Interface_attr;
+    [attribute] cpo::uno::XInterface Interface_attr;
     [attribute] any                      Any_attr;
-    [attribute] sequence< com::sun::star::uno::XInterface > Sequence_attr;
+    [attribute] sequence< cpo::uno::XInterface > Sequence_attr;
     [attribute] ComplexTypes             Struct_attr;
 
     long                getLong();
@@ -102,12 +102,12 @@ published interface XPerformanceTest : com::sun::star::uno::XInterface
     void                setDouble( [in] double f );
     string              getString();
     void                setString( [in] string s );
-    com::sun::star::uno::XInterface getInterface();
-    void                setInterface( [in] com::sun::star::uno::XInterface x );
+    cpo::uno::XInterface getInterface();
+    void                setInterface( [in] cpo::uno::XInterface x );
     any                 getAny();
     void                setAny( [in] any a );
-    sequence< com::sun::star::uno::XInterface > getSequence();
-    void                setSequence( [in] sequence< com::sun::star::uno::XInterface > seq );
+    sequence< cpo::uno::XInterface > getSequence();
+    void                setSequence( [in] sequence< cpo::uno::XInterface > seq );
     ComplexTypes        getStruct();
     void                setStruct( [in] ComplexTypes c );
 

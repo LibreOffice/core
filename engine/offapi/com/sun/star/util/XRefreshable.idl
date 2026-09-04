@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** is supported by objects with data that can be refreshed from a data source.
  */
-published interface XRefreshable: com::sun::star::uno::XInterface
+published interface XRefreshable: cpo::uno::XInterface
 {
     /** refreshes the data of the object from the connected data source.
      */

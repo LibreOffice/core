@@ -161,7 +161,7 @@ static std::mutex &    GetChartMutex()
 
 static void LaunchModifiedEvent(
         const ::comphelper::OInterfaceContainerHelper4<util::XModifyListener> &rICH,
-        const uno::Reference< uno::XInterface > &rxI )
+        const uno::Reference< cpo::uno::XInterface > &rxI )
 {
     lang::EventObject aEvtObj( rxI );
     std::unique_lock aGuard(GetChartMutex());
@@ -2611,7 +2611,7 @@ void SAL_CALL SwChartLabeledDataSequence::disposing(
         const lang::EventObject& rSource )
 {
     std::unique_lock aGuard( GetChartMutex() );
-    uno::Reference< uno::XInterface > xRef( rSource.Source );
+    uno::Reference< cpo::uno::XInterface > xRef( rSource.Source );
     if (xRef == m_xData)
         m_xData.clear();
     if (xRef == m_xLabels)

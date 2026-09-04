@@ -17,11 +17,11 @@ excludelist:
     configmgr/source/childaccess.cxx:
     # Actually used
     - vector
-    - com/sun/star/uno/XInterface.hpp
+    - cpo/uno/XInterface.hpp
     - cpo/uno/Sequence.hxx
     configmgr/source/configurationprovider.cxx:
     # Actually used
-    - com/sun/star/uno/XInterface.hpp
+    - cpo/uno/XInterface.hpp
     configmgr/source/components.cxx:
     # Actually used
     - cpo/uno/XComponentContext.hpp
@@ -33,7 +33,7 @@ excludelist:
     - com/sun/star/beans/XVetoableChangeListener.hpp
     - com/sun/star/container/XContainerListener.hpp
     - com/sun/star/lang/XEventListener.hpp
-    - com/sun/star/uno/XInterface.hpp
+    - cpo/uno/XInterface.hpp
     # Safer to keep for use in cppu:UnoType template
     - cpo/uno/XWeak.hpp
     configmgr/source/parsemanager.cxx:

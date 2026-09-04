@@ -1138,7 +1138,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                     throw task::ErrorCodeIOException(
                         u"SfxObjectShell::ExecFile_Impl: ERRCODE_IO_CANTWRITE"_ustr,
-                        uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_CANTWRITE));
+                        uno::Reference< cpo::uno::XInterface >(), sal_uInt32(ERRCODE_IO_CANTWRITE));
                 }
 
                 const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( bForceSaveAs ? SID_SAVEASDOC : nId );

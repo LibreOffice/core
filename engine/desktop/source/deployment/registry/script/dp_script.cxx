@@ -470,7 +470,7 @@ void BackendImpl::PackageImpl::processPackage_(
 
 } // namespace dp_registry::backend::script
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_deployment_script_PackageRegistryBackend_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

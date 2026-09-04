@@ -354,7 +354,7 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-static bool IsNonEmptySimpleText(const Reference<XInterface>& xIface)
+static bool IsNonEmptySimpleText(const Reference<cpo::uno::XInterface>& xIface)
 {
     if (Reference<XSimpleText> xText{ xIface, UNO_QUERY })
         return xText->getString().getLength();
@@ -362,7 +362,7 @@ static bool IsNonEmptySimpleText(const Reference<XInterface>& xIface)
     return false;
 }
 
-bool ShapeExport::NonEmptyText( const Reference< XInterface >& xIface )
+bool ShapeExport::NonEmptyText( const Reference< cpo::uno::XInterface >& xIface )
 {
     Reference< XPropertySet > xPropSet( xIface, UNO_QUERY );
 
@@ -2319,7 +2319,7 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
     return *this;
 }
 
-static bool lcl_isTextBox(const Reference<XInterface>& xIface)
+static bool lcl_isTextBox(const Reference<cpo::uno::XInterface>& xIface)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xIface, uno::UNO_QUERY);
     if (!xPropertySet.is())
@@ -2333,7 +2333,7 @@ static bool lcl_isTextBox(const Reference<XInterface>& xIface)
     return aTextBox.get<bool>();
 }
 
-ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles, bool bText )
+ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles, bool bText )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && GetTextExport())

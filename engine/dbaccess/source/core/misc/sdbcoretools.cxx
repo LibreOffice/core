@@ -44,7 +44,7 @@ using namespace cpo::uno;
     using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
-    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject)
+    void notifyDataSourceModified(const css::uno::Reference< cpo::uno::XInterface >& _rxObject)
     {
         Reference< XInterface > xDs = getDataSource( _rxObject );
         Reference<XDocumentDataSource> xDocumentDataSource(xDs,UNO_QUERY);

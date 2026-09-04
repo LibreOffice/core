@@ -135,7 +135,7 @@ void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Referenc
         return;
 
     css::frame::DispatchResultEvent aEvent(
-        css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY),
+        css::uno::Reference< cpo::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY),
         nState,
         aResult);
 

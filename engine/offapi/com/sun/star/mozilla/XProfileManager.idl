@@ -29,7 +29,7 @@
     @see com::sun::star::mozilla::XProfileDiscover
     @see com::sun::star::mozilla::MozillaBootstrap
  */
-published interface XProfileManager: com::sun::star::uno::XInterface
+published interface XProfileManager: cpo::uno::XInterface
 {
     /** attempts to init XPCOM runtime using given profile.
 

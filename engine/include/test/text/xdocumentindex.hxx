@@ -24,7 +24,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XDocumentIndex
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
     virtual css::uno::Reference<css::text::XTextDocument> getTextDocument() = 0;
     virtual ~XDocumentIndex();
     void testUpdate();

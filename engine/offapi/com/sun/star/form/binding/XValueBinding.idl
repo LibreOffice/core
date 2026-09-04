@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module form { module binding {
 
 /** specifies a binding to a value which can be read and written.
 */
-interface XValueBinding : com::sun::star::uno::XInterface
+interface XValueBinding : cpo::uno::XInterface
 {
     /** determines the types which are supported by this binding for value exchange
 

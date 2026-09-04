@@ -409,7 +409,7 @@ void VCLSession::disposing(std::unique_lock<std::mutex>& rGuard) {
 
 // service implementation
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_frame_VCLSessionManagerClient_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -24,7 +24,7 @@
 /** makes it possible to access the TextFrame instances in this
     context (e.g. document).
  */
-published interface XTextFramesSupplier: com::sun::star::uno::XInterface
+published interface XTextFramesSupplier: cpo::uno::XInterface
 {
     /** returns a collection of text frames.
      */

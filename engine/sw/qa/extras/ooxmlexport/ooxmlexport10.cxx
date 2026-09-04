@@ -342,8 +342,8 @@ DECLARE_OOXMLEXPORT_TEST(testLOCrash, "file_crash.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 {
     // The problem was libreoffice confuse when there RTL default style for paragraph
-    uno::Reference<uno::XInterface> xParaLeftRTL(getParagraph( 1, u"RTL LEFT"_ustr));
-    uno::Reference<uno::XInterface> xParaRightLTR(getParagraph( 2, u"LTR RIGHT"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLeftRTL(getParagraph( 1, u"RTL LEFT"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaRightLTR(getParagraph( 2, u"LTR RIGHT"_ustr));
 
     // this will test the text direction and alignment for paragraphs
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaLeftRTL, u"WritingMode"_ustr ));
@@ -356,7 +356,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
 {
     // The problem was libreoffice confuse when RTL was specified in non-default style
-    uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, u"WritingMode"_ustr ));
     CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
 }
@@ -364,7 +364,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
 {
     // The problem was libreoffice confuse when RTL was specified in DocDefaults
-    uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, u"WritingMode"_ustr ));
     CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
 }

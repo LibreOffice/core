@@ -705,7 +705,7 @@ void OOXMLDocPropHandler::characters( const OUString& aChars )
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw xml::sax::SAXException(
             u"Error while setting document property!"_ustr,
-            uno::Reference< uno::XInterface >(),
+            uno::Reference< cpo::uno::XInterface >(),
             anyEx );
     }
 }

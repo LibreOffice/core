@@ -9,7 +9,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <docmodel/theme/ColorSet.hxx>
 
@@ -22,13 +22,13 @@ class Theme;
 class XMLThemeContext final : public SvXMLImportContext
 {
     // Any UNO object that has the "Theme" property - usually XPage (master page) or XModel
-    css::uno::Reference<css::uno::XInterface> m_xObjectWithThemeProperty;
+    css::uno::Reference<cpo::uno::XInterface> m_xObjectWithThemeProperty;
     std::shared_ptr<model::Theme> mpTheme;
 
 public:
     XMLThemeContext(SvXMLImport& rImport,
                     css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    css::uno::Reference<css::uno::XInterface> const& xObjectWithThemeProperty);
+                    css::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty);
     ~XMLThemeContext();
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(

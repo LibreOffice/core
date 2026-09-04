@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module beans {
     property set is changed.  Please use XPropertySet::getPropertyValue()
     etc. in this case. </p>
  */
-published interface XPropertyContainer: com::sun::star::uno::XInterface
+published interface XPropertyContainer: cpo::uno::XInterface
 {
 
     /** adds a property to the object.

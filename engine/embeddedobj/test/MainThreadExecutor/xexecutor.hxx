@@ -43,7 +43,7 @@ public:
 
     static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< css::uno::XInterface >
+    static css::uno::Reference< cpo::uno::XInterface >
         impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 

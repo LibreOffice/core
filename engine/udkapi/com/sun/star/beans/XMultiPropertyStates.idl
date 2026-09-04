@@ -28,7 +28,7 @@ module com { module sun { module star { module beans {
     the value, e.g. the object itself, a default or a stylesheet.
     For more information see PropertyState.
 */
-published interface XMultiPropertyStates: com::sun::star::uno::XInterface
+published interface XMultiPropertyStates: cpo::uno::XInterface
 {
     /** @returns
             a sequence of the states of the properties which are specified

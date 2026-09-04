@@ -24,7 +24,7 @@
 /** gives access to the value and settings of a control which is associated with
     a spinnable value.
  */
-interface XSpinValue : com::sun::star::uno::XInterface
+interface XSpinValue : cpo::uno::XInterface
 {
 
     /** registers an adjustment event listener.

@@ -96,7 +96,7 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_ScSpreadsheetSettings_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -175,7 +175,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             throw css::lang::IllegalArgumentException(
                 (u"LinkUpdateMode property value must be a SHORT with a value in the range of 0--2"
                  " as documented for css::sheet::XGlobalSheetSettings attribute LinkUpdateMode"_ustr),
-                css::uno::Reference<css::uno::XInterface>(), -1);
+                css::uno::Reference<cpo::uno::XInterface>(), -1);
         }
         aAppOpt.SetLinkMode( static_cast<ScLkUpdMode>(n) );
         bSaveApp = true;
@@ -351,7 +351,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ScRecentFunctionsObj_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
@@ -408,7 +408,7 @@ ScFunctionListObj::~ScFunctionListObj()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ScFunctionListObj_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;

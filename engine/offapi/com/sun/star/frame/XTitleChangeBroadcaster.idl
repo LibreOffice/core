@@ -22,7 +22,7 @@
 
 /** Allows to register for title changed events.
  */
-interface XTitleChangeBroadcaster : com::sun::star::uno::XInterface
+interface XTitleChangeBroadcaster : cpo::uno::XInterface
 {
     /** Add a listener
      */

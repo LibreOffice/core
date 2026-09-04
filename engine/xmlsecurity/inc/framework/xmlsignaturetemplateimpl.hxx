@@ -89,7 +89,7 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
 
         //Helper for registry
         /// @throws cpo::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static css::uno::Reference< cpo::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

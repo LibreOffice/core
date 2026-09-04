@@ -33,7 +33,7 @@ module com { module sun { module star { module document {
 
     @see TypeDetection
  */
-published interface XTypeDetection: com::sun::star::uno::XInterface
+published interface XTypeDetection: cpo::uno::XInterface
 {
     /** make a "flat" detection by using the URL of the document
 

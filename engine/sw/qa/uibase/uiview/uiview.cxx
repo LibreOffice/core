@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
     uno::Reference<lang::XMultiServiceFactory> xFactory(comphelper::getProcessServiceFactory());
 
     // Load the copy
-    uno::Reference<uno::XInterface> xInterface
+    uno::Reference<cpo::uno::XInterface> xInterface
         = xFactory->createInstance(u"com.sun.star.frame.Desktop"_ustr);
     uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,

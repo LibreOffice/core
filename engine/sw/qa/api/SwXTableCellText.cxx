@@ -46,7 +46,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -66,7 +66,7 @@ public:
         mxTextContent = Reference<text::XTextContent>(
             xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), UNO_QUERY_THROW);
 
-        return Reference<XInterface>(xCellText->getText(), UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xCellText->getText(), UNO_QUERY_THROW);
     }
 
     Reference<text::XTextContent> getTextContent() override { return mxTextContent; };

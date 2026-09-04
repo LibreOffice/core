@@ -23,7 +23,7 @@ interface XWindow;
 interface XSystem;
 interface XOptions;
 interface XSelection;
-interface XGlobals : com::sun::star::uno::XInterface
+interface XGlobals : cpo::uno::XInterface
 {
     [attribute, readonly] XDocument ActiveDocument;
     [attribute, readonly] XWindow ActiveWindow;

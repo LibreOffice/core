@@ -40,16 +40,16 @@ ContentHandlerFactory::~ContentHandlerFactory()
 }
 
 
-css::uno::Reference< css::uno::XInterface > ContentHandlerFactory::createInstance(const OUString& sHandler)
+css::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstance(const OUString& sHandler)
 {
     return createInstanceWithArguments(sHandler, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< css::uno::XInterface > ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
+css::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
                                                                                                         const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
-    css::uno::Reference< css::uno::XInterface > xHandler;
+    css::uno::Reference< cpo::uno::XInterface > xHandler;
 
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -92,7 +92,7 @@ cpo::uno::Sequence< OUString > ContentHandlerFactory::getAvailableServiceNames()
 
 } // namespace filter::config
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 filter_ContentHandlerFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

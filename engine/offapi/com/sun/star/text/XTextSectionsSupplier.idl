@@ -23,7 +23,7 @@
 
 /** manages the text sections within the context (i.e. the document).
  */
-published interface XTextSectionsSupplier: com::sun::star::uno::XInterface
+published interface XTextSectionsSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the collection of text sections.

@@ -49,7 +49,7 @@
 #include <vector>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 using cpo::uno::Any;
 using com::sun::star::uno::TypeDescription;
 using cpo::uno::Sequence;

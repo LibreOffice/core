@@ -49,7 +49,7 @@ namespace svxform
                             );
 
         static DocumentType classifyHostDocument(
-                                const css::uno::Reference< css::uno::XInterface >& _rxFormComponent
+                                const css::uno::Reference< cpo::uno::XInterface >& _rxFormComponent
                             );
 
         static  DocumentType getDocumentTypeForModuleIdentifier(

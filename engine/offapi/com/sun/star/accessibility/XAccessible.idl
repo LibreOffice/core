@@ -44,7 +44,7 @@ module com { module sun { module star { module accessibility {
 
     @see AccessibleContext
 */
-interface XAccessible : ::com::sun::star::uno::XInterface
+interface XAccessible : ::cpo::uno::XInterface
 {
     /** Returns the AccessibleContext associated with this object.
 

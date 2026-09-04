@@ -32,7 +32,7 @@ import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.lib.uno.typedesc.FieldDescription;
 
 final class Unmarshal {

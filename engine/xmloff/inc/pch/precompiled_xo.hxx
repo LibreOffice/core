@@ -167,7 +167,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>

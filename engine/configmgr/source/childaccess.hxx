@@ -67,11 +67,11 @@ public:
     virtual void acquire() noexcept override;
     virtual void release() noexcept override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     getParent() override;
 
     virtual void setParent(
-        css::uno::Reference< css::uno::XInterface > const &) override;
+        css::uno::Reference< cpo::uno::XInterface > const &) override;
 
     void bind(
         rtl::Reference< RootAccess > const & root,

@@ -42,7 +42,7 @@ public:
     */
     OCommandContainer(
          const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
+        ,const css::uno::Reference< cpo::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,bool _bTables
         );
@@ -53,8 +53,8 @@ public:
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     virtual ~OCommandContainer() override;

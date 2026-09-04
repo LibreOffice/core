@@ -37,7 +37,7 @@
 
     @see XTemplateInstance
  */
-published interface XTemplateContainer: com::sun::star::uno::XInterface
+published interface XTemplateContainer: cpo::uno::XInterface
 {
 
     /** retrieves the name of the template

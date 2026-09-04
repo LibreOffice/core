@@ -262,7 +262,7 @@ void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
 
 IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
 {
-    const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
+    const Reference< cpo::uno::XInterface > xKeepAlive( mrAntiImpl );
 
     SAL_INFO("toolkit.controls", "OnProcessCallbacks grabbing solarmutex");
 
@@ -412,7 +412,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     if (mpImpl->mbDisposing)
         return;
-    css::uno::Reference< css::uno::XInterface > xThis( getXWeak() );
+    css::uno::Reference< cpo::uno::XInterface > xThis( getXWeak() );
 
     switch ( rVclWindowEvent.GetId() )
     {

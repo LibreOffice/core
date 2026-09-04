@@ -56,7 +56,7 @@ information.</p>
 
 @see <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113">Document Object Model (DOM) Level 2 Core Specification</a> </p>
 */
-interface XNode : com::sun::star::uno::XInterface
+interface XNode : cpo::uno::XInterface
 {
 
     /**

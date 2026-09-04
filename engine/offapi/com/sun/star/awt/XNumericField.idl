@@ -24,7 +24,7 @@
 
 /** gives access to the value and formatting of a numeric field.
  */
-published interface XNumericField: com::sun::star::uno::XInterface
+published interface XNumericField: cpo::uno::XInterface
 {
 
     /** sets the value which is displayed in the numeric field.

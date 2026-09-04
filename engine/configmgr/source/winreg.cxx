@@ -16,7 +16,7 @@
 #include <msiquery.h>
 
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/file.h>

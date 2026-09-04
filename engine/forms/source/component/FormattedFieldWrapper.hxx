@@ -62,7 +62,7 @@ public:
     // to read and write the FormattedModel part
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
-    static css::uno::Reference<css::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
+    static css::uno::Reference<cpo::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject)

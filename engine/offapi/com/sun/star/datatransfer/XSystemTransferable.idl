@@ -24,7 +24,7 @@ module com { module sun { module star { module datatransfer {
     for a transfer operation. Those objects usually also implement XTransferable.
 */
 
-published interface XSystemTransferable: com::sun::star::uno::XInterface
+published interface XSystemTransferable: cpo::uno::XInterface
 {
     /** Called by a data consumer to obtain a system specific data object from the
         source.

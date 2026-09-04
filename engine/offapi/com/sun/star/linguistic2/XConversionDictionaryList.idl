@@ -29,7 +29,7 @@ module com { module sun { module star { module linguistic2 {
     If they do those dictionaries have to be flushed upon termination
     of the dictionary list.</p>
 */
-published interface XConversionDictionaryList : com::sun::star::uno::XInterface
+published interface XConversionDictionaryList : cpo::uno::XInterface
 {
     /**
         @returns

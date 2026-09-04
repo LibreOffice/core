@@ -111,12 +111,12 @@ public:
 
     virtual void advise(
         const cpo::uno::Type&                                aType       ,
-        const css::uno::Reference< css::uno::XInterface >&    xListener
+        const css::uno::Reference< cpo::uno::XInterface >&    xListener
     ) override;
 
     virtual void unadvise(
         const cpo::uno::Type&                                aType ,
-        const css::uno::Reference< css::uno::XInterface >&    xListener
+        const css::uno::Reference< cpo::uno::XInterface >&    xListener
     ) override;
 
 private:

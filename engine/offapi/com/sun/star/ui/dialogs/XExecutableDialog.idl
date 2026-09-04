@@ -24,7 +24,7 @@ module com { module sun { module star { module ui { module dialogs {
 */
 
 
-published interface XExecutableDialog: com::sun::star::uno::XInterface
+published interface XExecutableDialog: cpo::uno::XInterface
 {
     /** Sets the title of the dialog.
 

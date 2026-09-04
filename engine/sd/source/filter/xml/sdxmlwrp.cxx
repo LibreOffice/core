@@ -1005,7 +1005,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
+    uno::Reference<cpo::uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
     cpo::uno::Sequence<OUString> aUserData
     {

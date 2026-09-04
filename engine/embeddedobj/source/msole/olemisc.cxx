@@ -462,7 +462,7 @@ void OleEmbeddedObject::close( bool bDeliverOwnership )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >( this ) );
+    uno::Reference< cpo::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >( this ) );
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
 
     if ( m_pInterfaceContainer )
@@ -650,7 +650,7 @@ void OleEmbeddedObject::translateAccelerators(
 
 // XChild
 
-css::uno::Reference< css::uno::XInterface > OleEmbeddedObject::getParent()
+css::uno::Reference< cpo::uno::XInterface > OleEmbeddedObject::getParent()
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -665,7 +665,7 @@ css::uno::Reference< css::uno::XInterface > OleEmbeddedObject::getParent()
 }
 
 
-void OleEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
+void OleEmbeddedObject::setParent( const css::uno::Reference< cpo::uno::XInterface >& xParent )
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );

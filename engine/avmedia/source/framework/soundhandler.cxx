@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 
     // We use m_xSelfHold to let us die ... but we must live till real finishing of this method too!!!
     // So we SHOULD use another "self-holder" temp. to provide that ...
-    css::uno::Reference< css::uno::XInterface > xOperationHold = m_xSelfHold;
+    css::uno::Reference< cpo::uno::XInterface > xOperationHold = m_xSelfHold;
     m_xSelfHold.clear();
 
     // notify might existing listener
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 } // namespace framework
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_framework_SoundHandler_get_implementation(cpo::uno::XComponentContext*,
                                                             cpo::uno::Sequence<cpo::uno::Any> const &)
 {

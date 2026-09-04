@@ -37,7 +37,7 @@ public:
 
 private:
     /// @throws cpo::uno::Exception
-    void addFile( css::uno::Reference< css::uno::XInterface > const & xRootFolder, css::uno::Reference< css::lang::XSingleServiceFactory > const & xFactory, const OUString& rSourceFile );
+    void addFile( css::uno::Reference< cpo::uno::XInterface > const & xRootFolder, css::uno::Reference< css::lang::XSingleServiceFactory > const & xFactory, const OUString& rSourceFile );
 
     static bool copyFile( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xIfc, OUString& rURL, std::u16string_view rTargetURL );
     bool copyFiles( const css::uno::Reference< css::container::XHierarchicalNameAccess >& xIfc, filter_info_impl* pFilter );

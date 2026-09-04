@@ -33,13 +33,13 @@ using namespace ::com::sun::star;
 
 // com.sun.star.comp.Writer.TextDocument
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Writer_SwTextDocument_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell = new SwDocShell(_nCreationFlags);
@@ -49,33 +49,33 @@ Writer_SwTextDocument_get_implementation(
     return xInterface.get();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_WebDocument_get_implementation(cpo::uno::XComponentContext*,
                                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     rtl::Reference<SfxObjectShell> pShell = new SwWebDocShell;
-    uno::Reference< uno::XInterface > model( pShell->GetModel() );
+    uno::Reference< cpo::uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_GlobalDocument_get_implementation(cpo::uno::XComponentContext*,
                                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     rtl::Reference<SfxObjectShell> pShell = new SwGlobalDocShell(SfxObjectCreateMode::STANDARD);
-    uno::Reference< uno::XInterface > model( pShell->GetModel() );
+    uno::Reference< cpo::uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 SwXMailMerge_get_implementation(cpo::uno::XComponentContext*,
                                 cpo::uno::Sequence<cpo::uno::Any> const &)
 {

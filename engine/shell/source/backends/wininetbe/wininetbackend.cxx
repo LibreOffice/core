@@ -327,7 +327,7 @@ cpo::uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
     return { "com.sun.star.configuration.backend.WinInetBackend" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 shell_WinInetBackend_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

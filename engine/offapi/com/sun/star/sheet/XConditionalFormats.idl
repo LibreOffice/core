@@ -9,7 +9,7 @@
 
 module com { module sun { module star { module sheet {
 
-interface XConditionalFormats : com::sun::star::uno::XInterface
+interface XConditionalFormats : cpo::uno::XInterface
 {
     /**
      * adds a conditional format to the existing list

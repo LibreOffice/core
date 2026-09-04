@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module beans {
     @see    PropertySetInfoChangeEvent
     @see    XPropertySetInfoChangeListener
  */
-published interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterface
+published interface XPropertySetInfoChangeNotifier: cpo::uno::XInterface
 {
 
     /** registers a listener for PropertySetInfoChangeEvents.

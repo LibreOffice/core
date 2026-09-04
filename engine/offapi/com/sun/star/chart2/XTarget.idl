@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module chart2 {
 
 // [in] com::sun::star::drawing::XShapes xShapes
 
-interface XTarget : ::com::sun::star::uno::XInterface
+interface XTarget : ::cpo::uno::XInterface
 {
     void addDrawElement(); //(DrawElement);
 

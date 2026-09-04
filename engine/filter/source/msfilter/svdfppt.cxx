@@ -1706,7 +1706,7 @@ bool PPTConvertOCXControls::InsertControl(
             GetServiceFactory();
         if( rServiceFactory.is() )
         {
-            css::uno::Reference< css::uno::XInterface >  xCreate = rServiceFactory
+            css::uno::Reference< cpo::uno::XInterface >  xCreate = rServiceFactory
                 ->createInstance( u"com.sun.star.drawing.ControlShape"_ustr );
             if( xCreate.is() )
             {

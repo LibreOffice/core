@@ -34,7 +34,7 @@ module com { module sun { module star { module graphic
     @see XGraphicProvider
     @see XGraphicRenderer
   */
-published interface XGraphic : ::com::sun::star::uno::XInterface
+published interface XGraphic : ::cpo::uno::XInterface
 {
     /** Get the type of the contained graphic
 

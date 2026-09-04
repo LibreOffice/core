@@ -444,7 +444,7 @@ void UnoGridControl::removeSelectionListener(const css::uno::Reference< css::awt
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_GridControl_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -452,7 +452,7 @@ stardiv_Toolkit_GridControl_get_implementation(
     return cppu::acquire(new toolkit::UnoGridControl());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_GridControlModel_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

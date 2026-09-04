@@ -32,7 +32,7 @@ module com { module sun { module star { module frame {
     </p>
  */
 
-published interface XUIControllerRegistration : com::sun::star::uno::XInterface
+published interface XUIControllerRegistration : cpo::uno::XInterface
 {
     /** function to check if an user interface controller is registered
         for a command URL and optional module.

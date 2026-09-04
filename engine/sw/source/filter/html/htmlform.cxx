@@ -1953,7 +1953,7 @@ void SwHTMLParser::NewTextArea()
         FinishTextArea();
         return;
     }
-    uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
+    uno::Reference< cpo::uno::XInterface >  xInt = rSrvcMgr->createInstance(
         u"com.sun.star.form.component.TextField"_ustr );
     if( !xInt.is() )
     {
@@ -2220,7 +2220,7 @@ void SwHTMLParser::NewSelect()
         FinishTextArea();
         return;
     }
-    uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
+    uno::Reference< cpo::uno::XInterface >  xInt = rSrvcMgr->createInstance(
         u"com.sun.star.form.component.ListBox"_ustr );
     if( !xInt.is() )
     {

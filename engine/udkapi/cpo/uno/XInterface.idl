@@ -18,7 +18,7 @@
  */
 
 
- module com {  module sun {  module star {  module uno {
+module cpo { module uno {
 
 /** base interface of all UNO interfaces
 
@@ -106,6 +106,6 @@ published interface XInterface
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

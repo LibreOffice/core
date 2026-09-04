@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module input {
 
     @internal
 */
-interface XElement : com::sun::star::uno::XInterface
+interface XElement : cpo::uno::XInterface
 {
     /** Gets the parent context.
 

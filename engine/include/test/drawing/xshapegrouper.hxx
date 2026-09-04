@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_DRAWING_XSHAPEGROUPER_HXX
 #define INCLUDED_TEST_DRAWING_XSHAPEGROUPER_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -21,12 +21,12 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XShapeGrouper
 {
 public:
-    void setDrawPage(const css::uno::Reference<css::uno::XInterface>& r_xDrawPage)
+    void setDrawPage(const css::uno::Reference<cpo::uno::XInterface>& r_xDrawPage)
     {
         m_xDrawPage = r_xDrawPage;
     }
 
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGroup();
     void testUngroup();
@@ -35,7 +35,7 @@ protected:
     ~XShapeGrouper() {}
 
 private:
-    css::uno::Reference<css::uno::XInterface> m_xDrawPage;
+    css::uno::Reference<cpo::uno::XInterface> m_xDrawPage;
 };
 } // namespace apitest
 

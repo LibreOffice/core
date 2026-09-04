@@ -110,7 +110,7 @@ namespace comphelper_ifcontainer
                 pContainer->addInterface(xRef);
                 aListeners.push_back(xRef);
             }
-            std::vector< Reference< XInterface > > aElements = pContainer->getElements();
+            std::vector< Reference< cpo::uno::XInterface > > aElements = pContainer->getElements();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("query contents",
                                    nTests, static_cast<int>(aElements.size()));

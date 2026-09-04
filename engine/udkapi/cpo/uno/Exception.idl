@@ -38,7 +38,7 @@ published exception Exception
     /** should contain a reference to the original, which raised the exception.
         <p>May be NULL.</p>
      */
-    com::sun::star::uno::XInterface Context;
+    cpo::uno::XInterface Context;
 
 };
 

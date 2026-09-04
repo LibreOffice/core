@@ -85,7 +85,7 @@ public:
                             StdTabControllerModel();
                             virtual ~StdTabControllerModel() override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        release() noexcept override  { OWeakAggObject::release(); }

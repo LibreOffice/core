@@ -26,7 +26,7 @@
     by its name. A DataSource object is typically registered by a naming service
     provider.
  */
-published interface XDataSource: com::sun::star::uno::XInterface
+published interface XDataSource: cpo::uno::XInterface
 {
 
     /** attempts to establish a database connection.

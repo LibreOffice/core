@@ -190,7 +190,7 @@ namespace dbtools
         document (such as a form)
     */
     OOO_DLLPUBLIC_DBTOOLS bool    isEmbeddedInDatabase(
-                const css::uno::Reference< css::uno::XInterface >& _rxComponent,
+                const css::uno::Reference< cpo::uno::XInterface >& _rxComponent,
                 css::uno::Reference< css::sdbc::XConnection >& _rxActualConnection
             );
 
@@ -302,13 +302,13 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     css::sdbc::SQLException prependErrorInfo(
         const css::sdbc::SQLException& _rChainedException,
-        const css::uno::Reference< css::uno::XInterface >& _rxContext,
+        const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
         const OUString& _rAdditionalError,
         const StandardSQLState _eSQLState = StandardSQLState::ERROR_UNSPECIFIED);
 
     /** search the parent hierarchy for a data source.
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XDataSource> findDataSource(const css::uno::Reference< css::uno::XInterface >& _xParent);
+    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XDataSource> findDataSource(const css::uno::Reference< cpo::uno::XInterface >& _xParent);
 
     /** determines the value of a boolean data source setting, given by ASCII name
 
@@ -332,7 +332,7 @@ namespace dbtools
             instead of spreading this knowledge through all callers.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    bool isDataSourcePropertyEnabled(const css::uno::Reference< css::uno::XInterface>& _xProp,
+    bool isDataSourcePropertyEnabled(const css::uno::Reference< cpo::uno::XInterface>& _xProp,
                                      const OUString& _sProperty,
                                            bool _bDefault);
 
@@ -352,7 +352,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS
     bool    getDataSourceSetting(
-        const css::uno::Reference< css::uno::XInterface >& _rxDataSource,
+        const css::uno::Reference< cpo::uno::XInterface >& _rxDataSource,
         const OUString& _sSettingsName,
         cpo::uno::Any& /* [out] */ _rSettingsValue
     );

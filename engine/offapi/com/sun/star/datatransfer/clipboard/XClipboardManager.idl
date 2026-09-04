@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
     @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
-published interface XClipboardManager: com::sun::star::uno::XInterface
+published interface XClipboardManager: cpo::uno::XInterface
 {
     /** Get a clipboard instance by name.
 

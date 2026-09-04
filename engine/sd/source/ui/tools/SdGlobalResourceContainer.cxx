@@ -76,7 +76,7 @@ private:
     typedef ::std::vector<std::shared_ptr<SdGlobalResource> > SharedResourceList;
     SharedResourceList maSharedResources;
 
-    typedef ::std::vector<Reference<XInterface> > XInterfaceResourceList;
+    typedef ::std::vector<Reference<cpo::uno::XInterface> > XInterfaceResourceList;
     XInterfaceResourceList maXInterfaceResources;
 };
 
@@ -122,7 +122,7 @@ void SdGlobalResourceContainer::AddResource (
     }
 }
 
-void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxResource)
+void SdGlobalResourceContainer::AddResource (const Reference<cpo::uno::XInterface>& rxResource)
 {
     std::unique_lock aGuard (mpImpl->maMutex);
 

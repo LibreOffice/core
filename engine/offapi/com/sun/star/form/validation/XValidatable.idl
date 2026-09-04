@@ -27,7 +27,7 @@ interface XValidator;
 
     @see XValidator
 */
-interface XValidatable : com::sun::star::uno::XInterface
+interface XValidatable : cpo::uno::XInterface
 {
     /** sets an external instance which is able to validate the component
 

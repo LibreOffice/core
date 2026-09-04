@@ -53,7 +53,7 @@ OUString LibraryContainer::get_libname(
 
     if (import.aName.isEmpty()) {
         throw cpo::uno::Exception( StrCannotDetermineLibName(),
-                         Reference<XInterface>() );
+                         Reference<cpo::uno::XInterface>() );
     }
     return import.aName;
 }

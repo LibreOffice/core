@@ -25,7 +25,7 @@
 
 #include "com/sun/star/uno/Reference.h"
 #include "cpo/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
+#include "cpo/uno/XInterface.hpp"
 #include "cpo/uno/Any.hxx"
 #include "cppu/cppudllapi.h"
 
@@ -40,15 +40,15 @@ namespace com::sun::star::uno
 {
 
 
-inline XInterface * BaseReference::iquery(
-    XInterface * pInterface, const cpo::uno::Type & rType )
+inline cpo::uno::XInterface * BaseReference::iquery(
+    cpo::uno::XInterface * pInterface, const cpo::uno::Type & rType )
 {
     if (pInterface)
     {
         cpo::uno::Any aRet( pInterface->queryInterface( rType ) );
         if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
         {
-            XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
+            cpo::uno::XInterface * pRet = static_cast< cpo::uno::XInterface * >( aRet.pReserved );
             aRet.pReserved = NULL;
             return pRet;
         }
@@ -57,26 +57,26 @@ inline XInterface * BaseReference::iquery(
 }
 
 template< class interface_type >
-inline XInterface * Reference< interface_type >::iquery(
-    XInterface * pInterface )
+inline cpo::uno::XInterface * Reference< interface_type >::iquery(
+    cpo::uno::XInterface * pInterface )
 {
     return BaseReference::iquery(pInterface, interface_type::static_type());
 }
 
-inline XInterface * BaseReference::iquery_throw(
-    XInterface * pInterface, const cpo::uno::Type & rType )
+inline cpo::uno::XInterface * BaseReference::iquery_throw(
+    cpo::uno::XInterface * pInterface, const cpo::uno::Type & rType )
 {
-    XInterface * pQueried = iquery( pInterface, rType );
+    cpo::uno::XInterface * pQueried = iquery( pInterface, rType );
     if (pQueried)
         return pQueried;
     throw cpo::uno::RuntimeException(
         ::rtl::OUString( cppu_unsatisfied_iquery_msg( rType.getTypeLibType() ), SAL_NO_ACQUIRE ),
-        Reference< XInterface >( pInterface ) );
+        Reference< cpo::uno::XInterface >( pInterface ) );
 }
 
 template< class interface_type >
-inline XInterface * Reference< interface_type >::iquery_throw(
-    XInterface * pInterface )
+inline cpo::uno::XInterface * Reference< interface_type >::iquery_throw(
+    cpo::uno::XInterface * pInterface )
 {
     return BaseReference::iquery_throw(
         pInterface, interface_type::static_type());
@@ -131,7 +131,7 @@ inline Reference< interface_type >::Reference(
     const Reference< derived_type > & rRef,
     std::enable_if_t<
         std::is_base_of_v<interface_type, derived_type>
-        && !std::is_same_v<interface_type, XInterface>, void *>)
+        && !std::is_same_v<interface_type, cpo::uno::XInterface>, void *>)
 {
     interface_type * p = rRef.get();
     _pInterface = castToXInterface(p);
@@ -160,7 +160,7 @@ inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoRe
 }
 
 template< class interface_type >
-inline Reference< interface_type >::Reference( XInterface * pInterface, UnoReference_Query )
+inline Reference< interface_type >::Reference( cpo::uno::XInterface * pInterface, UnoReference_Query )
 {
     _pInterface = iquery( pInterface );
 }
@@ -169,7 +169,7 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const cpo::uno::Any & rAny, UnoReference_Query )
 {
     _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
-                   ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : NULL);
+                   ? iquery( static_cast< cpo::uno::XInterface * >( rAny.pReserved ) ) : NULL);
 }
 
 template< class interface_type >
@@ -179,7 +179,7 @@ inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoRe
 }
 
 template< class interface_type >
-inline Reference< interface_type >::Reference( XInterface * pInterface, UnoReference_QueryThrow )
+inline Reference< interface_type >::Reference( cpo::uno::XInterface * pInterface, UnoReference_QueryThrow )
 {
     _pInterface = iquery_throw( pInterface );
 }
@@ -188,7 +188,7 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const cpo::uno::Any & rAny, UnoReference_QueryThrow )
 {
     _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
-                                ? static_cast< XInterface * >( rAny.pReserved ) : NULL );
+                                ? static_cast< cpo::uno::XInterface * >( rAny.pReserved ) : NULL );
 }
 
 template< class interface_type >
@@ -209,7 +209,7 @@ inline void Reference< interface_type >::clear()
 {
     if (_pInterface)
     {
-        XInterface * const pOld = _pInterface;
+        cpo::uno::XInterface * const pOld = _pInterface;
         _pInterface = NULL;
         pOld->release();
     }
@@ -221,7 +221,7 @@ inline bool Reference< interface_type >::set(
 {
     if (pInterface)
         castToXInterface(pInterface)->acquire();
-    XInterface * const pOld = _pInterface;
+    cpo::uno::XInterface * const pOld = _pInterface;
     _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
@@ -232,7 +232,7 @@ template< class interface_type >
 inline bool Reference< interface_type >::set(
     interface_type * pInterface, __sal_NoAcquire )
 {
-    XInterface * const pOld = _pInterface;
+    cpo::uno::XInterface * const pOld = _pInterface;
     _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
@@ -248,7 +248,7 @@ inline bool Reference< interface_type >::set(
 
 template< class interface_type >
 inline bool Reference< interface_type >::set(
-    XInterface * pInterface, UnoReference_Query )
+    cpo::uno::XInterface * pInterface, UnoReference_Query )
 {
     return set( castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
 }
@@ -269,14 +269,14 @@ inline bool Reference< interface_type >::set(
         castFromXInterface(
             iquery(
                 rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
-                ? static_cast< XInterface * >( rAny.pReserved ) : NULL )),
+                ? static_cast< cpo::uno::XInterface * >( rAny.pReserved ) : NULL )),
         SAL_NO_ACQUIRE );
 }
 
 
 template< class interface_type >
 inline void Reference< interface_type >::set(
-    XInterface * pInterface, UnoReference_QueryThrow )
+    cpo::uno::XInterface * pInterface, UnoReference_QueryThrow )
 {
     set( castFromXInterface(iquery_throw( pInterface )), SAL_NO_ACQUIRE );
 }
@@ -296,7 +296,7 @@ inline void Reference< interface_type >::set(
     set( castFromXInterface(
              iquery_throw(
                  rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
-                 ? static_cast< XInterface * >( rAny.pReserved ) : NULL )),
+                 ? static_cast< cpo::uno::XInterface * >( rAny.pReserved ) : NULL )),
          SAL_NO_ACQUIRE );
 }
 
@@ -352,7 +352,7 @@ inline Reference< interface_type > Reference< interface_type >::query(
 
 template< class interface_type >
 inline Reference< interface_type > Reference< interface_type >::query(
-    XInterface * pInterface )
+    cpo::uno::XInterface * pInterface )
 {
     return Reference< interface_type >(
         castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
@@ -370,15 +370,15 @@ inline Reference< other_type > Reference< interface_type >::queryThrow() const
     return Reference< other_type >(*this, UNO_QUERY_THROW);
 }
 
-inline bool BaseReference::operator == ( XInterface * pInterface ) const
+inline bool BaseReference::operator == ( cpo::uno::XInterface * pInterface ) const
 {
     if (_pInterface == pInterface)
         return true;
     try
     {
         // only the query to XInterface must return the same pointer if they belong to same objects
-        Reference< XInterface > x1( _pInterface, UNO_QUERY );
-        Reference< XInterface > x2( pInterface, UNO_QUERY );
+        Reference< cpo::uno::XInterface > x1( _pInterface, UNO_QUERY );
+        Reference< cpo::uno::XInterface > x2( pInterface, UNO_QUERY );
         return (x1._pInterface == x2._pInterface);
     }
     catch (cpo::uno::RuntimeException &)
@@ -396,8 +396,8 @@ inline bool BaseReference::operator < (
     try
     {
         // only the query to XInterface must return the same pointer:
-        Reference< XInterface > x1( _pInterface, UNO_QUERY );
-        Reference< XInterface > x2( rRef, UNO_QUERY );
+        Reference< cpo::uno::XInterface > x1( _pInterface, UNO_QUERY );
+        Reference< cpo::uno::XInterface > x2( rRef, UNO_QUERY );
         return (x1._pInterface < x2._pInterface);
     }
     catch (cpo::uno::RuntimeException &)
@@ -407,7 +407,7 @@ inline bool BaseReference::operator < (
 }
 
 
-inline bool BaseReference::operator != ( XInterface * pInterface ) const
+inline bool BaseReference::operator != ( cpo::uno::XInterface * pInterface ) const
 {
     return (! operator == ( pInterface ));
 }

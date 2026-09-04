@@ -133,7 +133,7 @@ pub fn run_example() {
     let string_name = "com.sun.star.awt.XControl".to_string();
     let control_type = Type::from((typelib_TypeClass::typelib_TypeClass_INTERFACE, string_name));
 
-    let oustring_name = OUString::from("com.sun.star.uno.XInterface");
+    let oustring_name = OUString::from("cpo.uno.XInterface");
     let interface_type = Type::new_with_name(
         typelib_TypeClass::typelib_TypeClass_INTERFACE,
         oustring_name,
@@ -280,7 +280,7 @@ pub fn run_example() {
     // Interface hierarchy compatibility
     let xinterface_type = Type::from((
         typelib_TypeClass::typelib_TypeClass_INTERFACE,
-        "com.sun.star.uno.XInterface",
+        "cpo.uno.XInterface",
     ));
     println!(
         "XInterface assignable from XComponent: {}",

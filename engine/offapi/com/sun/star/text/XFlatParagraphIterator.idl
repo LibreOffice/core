@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module text {
 /** provides functionality to ...
  */
 
-interface XFlatParagraphIterator: com::sun::star::uno::XInterface
+interface XFlatParagraphIterator: cpo::uno::XInterface
 {
 
     /** get the first flat paragraph to be checked or an empty reference if

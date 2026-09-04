@@ -95,7 +95,7 @@ using namespace ::connectivity;
 using namespace ::dbtools;
 
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
     FormController_NewInstance_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxORB )
 {
     return *( new ::svxform::FormController( comphelper::getComponentContext(_rxORB) ) );
@@ -115,7 +115,7 @@ namespace svxform
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::container::XIndexAccess;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Reference;

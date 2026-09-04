@@ -25,7 +25,7 @@
     This interface provides user with full control over object creation.
     </p>
  */
-published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
+published interface XEmbedObjectFactory: cpo::uno::XInterface
 {
     /** creates a new object and transport parameters for persistent
         initialization.
@@ -76,7 +76,7 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
         @throws cpo::uno::Exception
             in case of other problems
      */
-    ::com::sun::star::uno::XInterface createInstanceUserInit(
+    ::cpo::uno::XInterface createInstanceUserInit(
             [in] sequence< byte > aClassID,
             [in] string sClassName,
             [in] ::com::sun::star::embed::XStorage xStorage,

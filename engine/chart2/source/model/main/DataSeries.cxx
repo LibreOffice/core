@@ -90,8 +90,8 @@ namespace
 };
 
 void lcl_SetParent(
-    const uno::Reference< uno::XInterface > & xChildInterface,
-    const uno::Reference< uno::XInterface > & xParentInterface )
+    const uno::Reference< cpo::uno::XInterface > & xChildInterface,
+    const uno::Reference< cpo::uno::XInterface > & xParentInterface )
 {
     uno::Reference< container::XChild > xChild( xChildInterface, uno::UNO_QUERY );
     if( xChild.is())
@@ -103,7 +103,7 @@ typedef std::map< sal_Int32, css::uno::Reference< css::beans::XPropertySet > >
 
 void lcl_CloneAttributedDataPoints(
     const lcl_tDataPointMap & rSource, lcl_tDataPointMap & rDestination,
-    const uno::Reference< uno::XInterface > & xSeries )
+    const uno::Reference< cpo::uno::XInterface > & xSeries )
 {
     for (auto const& elem : rSource)
     {
@@ -179,7 +179,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
 // late initialization to call after copy-constructing
 void DataSeries::Init( const DataSeries & rOther )
 {
-    Reference< uno::XInterface > xThisInterface( static_cast< ::cppu::OWeakObject * >( this ));
+    Reference< cpo::uno::XInterface > xThisInterface( static_cast< ::cppu::OWeakObject * >( this ));
     if( ! rOther.m_aAttributedDataPoints.empty())
     {
         lcl_CloneAttributedDataPoints(
@@ -1065,7 +1065,7 @@ void DataSeries::clearCalculatedYSequence()
 
 }  // namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart_DataSeries_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

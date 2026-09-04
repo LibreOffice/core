@@ -115,7 +115,7 @@ public:
 
     virtual rtl::Reference<UnoControlModel> Clone() const = 0;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        acquire() noexcept override;
     void                        release() noexcept override;

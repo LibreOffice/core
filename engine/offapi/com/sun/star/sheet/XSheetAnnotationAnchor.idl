@@ -26,7 +26,7 @@
     @see com::sun::star::sheet::SheetCell
     @see com::sun::star::sheet::CellAnnotation
  */
-published interface XSheetAnnotationAnchor: com::sun::star::uno::XInterface
+published interface XSheetAnnotationAnchor: cpo::uno::XInterface
 {
 
     /** returns the annotation at this anchor.

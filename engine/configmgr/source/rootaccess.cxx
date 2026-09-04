@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <com/sun/star/util/ChangesSet.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
@@ -83,7 +83,7 @@ void RootAccess::initBroadcaster(
     for (auto const& changesListener : changesListeners_)
     {
         cppu::OWeakObject* pSource = this;
-        css::uno::Reference< css::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
+        css::uno::Reference< cpo::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
         broadcaster->addChangesNotification(
             changesListener,
             css::util::ChangesEvent(

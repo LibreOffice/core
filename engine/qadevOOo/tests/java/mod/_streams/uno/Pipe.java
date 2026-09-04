@@ -21,7 +21,7 @@ package mod._streams.uno;
 import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import java.io.PrintWriter;
 

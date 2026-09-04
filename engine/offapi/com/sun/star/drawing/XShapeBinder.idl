@@ -24,7 +24,7 @@
 
 /** connects or breaks the lines of Shapes
  */
-published interface XShapeBinder: com::sun::star::uno::XInterface
+published interface XShapeBinder: cpo::uno::XInterface
 {
 
     /** binds Shapes together.

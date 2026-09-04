@@ -47,7 +47,7 @@ template <typename T> [[nodiscard]] inline T NormAngle360(T angle)
 // get hash from interface
 // TODO: UNIT TEST
 [[nodiscard]] inline
-std::string GetInterfaceHash(const ::css::uno::Reference<::css::uno::XInterface>& xIf)
+std::string GetInterfaceHash(const ::css::uno::Reference<::cpo::uno::XInterface>& xIf)
 {
     if (xIf.is())
     {

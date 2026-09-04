@@ -23,7 +23,7 @@ module com { module sun { module star { module ucb {
 /** compares two `any`s.
 */
 
-published interface XAnyCompare: com::sun::star::uno::XInterface
+published interface XAnyCompare: cpo::uno::XInterface
 {
     /** allows comparison of two `any`s.
 

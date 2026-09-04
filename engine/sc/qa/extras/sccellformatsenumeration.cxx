@@ -16,7 +16,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -30,7 +30,7 @@ class ScCellFormatsEnumeration : public UnoApiTest, public apitest::XEnumeration
 public:
     ScCellFormatsEnumeration();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScCellFormatsEnumeration);
@@ -47,7 +47,7 @@ ScCellFormatsEnumeration::ScCellFormatsEnumeration()
 {
 }
 
-uno::Reference<uno::XInterface> ScCellFormatsEnumeration::init()
+uno::Reference<cpo::uno::XInterface> ScCellFormatsEnumeration::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

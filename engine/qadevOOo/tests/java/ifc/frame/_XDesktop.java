@@ -27,7 +27,7 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.frame.XDesktop</code>

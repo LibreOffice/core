@@ -18,7 +18,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XSearchable.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -37,7 +37,7 @@ class ScCellSearchObj : public UnoApiTest,
 public:
     ScCellSearchObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScCellSearchObj);
@@ -73,7 +73,7 @@ ScCellSearchObj::ScCellSearchObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScCellSearchObj::init()
+uno::Reference<cpo::uno::XInterface> ScCellSearchObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);

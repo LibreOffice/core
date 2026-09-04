@@ -88,7 +88,7 @@ namespace pcr
 
     private:
         // XPropertyHandler overridables
-        virtual void                                                inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
+        virtual void                                                inspect( const css::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
         virtual cpo::uno::Any                                       getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                                setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual cpo::uno::Any                                       convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;

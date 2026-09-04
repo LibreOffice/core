@@ -34,7 +34,7 @@ module com { module sun { module star { module accessibility {
     <p>It depends on the class implementing this interface, whether it
     supports single or multi selection.</p>
 */
-interface XAccessibleSelection : ::com::sun::star::uno::XInterface
+interface XAccessibleSelection : ::cpo::uno::XInterface
 {
     /** Selects the specified Accessible child of the
         object.

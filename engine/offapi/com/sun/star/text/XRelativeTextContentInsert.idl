@@ -27,7 +27,7 @@
 
     @deprecated
  */
-published interface XRelativeTextContentInsert: com::sun::star::uno::XInterface
+published interface XRelativeTextContentInsert: cpo::uno::XInterface
 {
     /** inserts text the new text content before of the successor argument.
 

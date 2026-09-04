@@ -100,8 +100,8 @@ namespace drivermanager
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XNamingService
-        virtual css::uno::Reference< css::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
-        virtual void registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
+        virtual void registerObject( const OUString& Name, const css::uno::Reference< cpo::uno::XInterface >& Object ) override;
         virtual void revokeObject( const OUString& Name ) override;
 
     private:

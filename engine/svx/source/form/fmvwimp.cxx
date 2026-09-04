@@ -89,7 +89,7 @@ using namespace ::dbtools;
 
     using namespace ::com::sun::star;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;

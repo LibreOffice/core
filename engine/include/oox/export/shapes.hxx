@@ -106,7 +106,7 @@ public:
 
     void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
 
-    static bool         NonEmptyText( const css::uno::Reference< css::uno::XInterface >& xIface );
+    static bool         NonEmptyText( const css::uno::Reference< cpo::uno::XInterface >& xIface );
     static bool         IsShapeTypeKnown( const css::uno::Reference< css::drawing::XShape >& xShape );
     static bool IsValidShape(const css::uno::Reference<css::drawing::XShape>& xShape,
                              DocumentType eDocumentType);
@@ -178,7 +178,7 @@ public:
     ShapeExport&       WriteShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     /** @param bText false writes the body properties and an empty paragraph, for a shape whose
         text belongs to the application rather than to the file - a placeholder's prompt. */
-    ShapeExport&       WriteTextBox( const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles = false, bool bText = true );
+    ShapeExport&       WriteTextBox( const css::uno::Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles = false, bool bText = true );
     virtual ShapeExport&
                         WriteTextShape( const css::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 MIDL_INTERFACE("e40a2331-3bc1-11d4-8321-005004526ab4")
 IJScriptValueObject: public IUnknown
@@ -38,8 +38,8 @@ protected:
 MIDL_INTERFACE("7B5C3410-66FA-11d4-832A-005004526AB4")
 IUnoObjectWrapper: public IUnknown
 {
-    STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pInt)=0;
-    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<css::uno::XInterface>* pInt)=0;
+    STDMETHOD( getWrapperXInterface)( css::uno::Reference<cpo::uno::XInterface>* pInt)=0;
+    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<cpo::uno::XInterface>* pInt)=0;
     STDMETHOD( getOriginalUnoStruct)( cpo::uno::Any * pStruct)=0;
 
 protected:

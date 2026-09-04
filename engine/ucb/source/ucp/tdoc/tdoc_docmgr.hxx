@@ -130,7 +130,7 @@ namespace tdoc_ucp {
         void buildDocumentsList();
 
         bool isOfficeDocument(
-            const css::uno::Reference< css::uno::XInterface > & xDoc );
+            const css::uno::Reference< cpo::uno::XInterface > & xDoc );
 
         static bool isDocumentPreview(
             const css::uno::Reference< css::frame::XModel3 > & xModel );

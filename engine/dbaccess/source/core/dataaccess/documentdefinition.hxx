@@ -79,7 +79,7 @@ protected:
 public:
 
     ODocumentDefinition(
-            const css::uno::Reference< css::uno::XInterface >& _rxContainer,
+            const css::uno::Reference< cpo::uno::XInterface >& _rxContainer,
             const css::uno::Reference< cpo::uno::XComponentContext >&,
             const TContentPtr& _pImpl,
             bool _bForm
@@ -94,7 +94,7 @@ public:
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     DECLARE_XINTERFACE( )
 
 // css::beans::XPropertySet

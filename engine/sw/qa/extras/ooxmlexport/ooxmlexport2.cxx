@@ -816,20 +816,20 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkFont, "watermark-font.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
 {
     // The problem was that the alignment are not exchange when the paragraph are RTL.
-    uno::Reference<uno::XInterface> xParaRtlLeft(getParagraph( 1, u"RTL Left"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaRtlLeft(getParagraph( 1, u"RTL Left"_ustr));
     sal_Int32 nRtlLeft = getProperty< sal_Int32 >( xParaRtlLeft, u"ParaAdjust"_ustr );
     // test the text Direction value for the paragraph
     sal_Int16 nRLDir  = getProperty< sal_Int32 >( xParaRtlLeft, u"WritingMode"_ustr );
 
-    uno::Reference<uno::XInterface> xParaRtlRight(getParagraph( 3, u"RTL Right"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaRtlRight(getParagraph( 3, u"RTL Right"_ustr));
     sal_Int32 nRtlRight = getProperty< sal_Int32 >( xParaRtlRight, u"ParaAdjust"_ustr );
     sal_Int16 nRRDir  = getProperty< sal_Int32 >( xParaRtlRight, u"WritingMode"_ustr );
 
-    uno::Reference<uno::XInterface> xParaLtrLeft(getParagraph( 5, u"LTR Left"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLtrLeft(getParagraph( 5, u"LTR Left"_ustr));
     sal_Int32 nLtrLeft = getProperty< sal_Int32 >( xParaLtrLeft, u"ParaAdjust"_ustr );
     sal_Int16 nLLDir  = getProperty< sal_Int32 >( xParaLtrLeft, u"WritingMode"_ustr );
 
-    uno::Reference<uno::XInterface> xParaLtrRight(getParagraph( 7, u"LTR Right"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLtrRight(getParagraph( 7, u"LTR Right"_ustr));
     sal_Int32 nLtrRight = getProperty< sal_Int32 >( xParaLtrRight, u"ParaAdjust"_ustr );
     sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLtrRight, u"WritingMode"_ustr );
 

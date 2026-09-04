@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::LabelRange
  */
-published interface XLabelRange: com::sun::star::uno::XInterface
+published interface XLabelRange: cpo::uno::XInterface
 {
 
     /** returns the cell range address that contains the labels.

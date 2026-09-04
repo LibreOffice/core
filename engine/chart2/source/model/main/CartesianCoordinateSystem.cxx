@@ -143,14 +143,14 @@ cpo::uno::Sequence< OUString > CartesianCoordinateSystem3d::getSupportedServiceN
 
 }  // namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CartesianCoordinateSystem2d);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

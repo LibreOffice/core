@@ -86,7 +86,7 @@ public:
     SC_DLLPUBLIC const std::optional<OUString> & GetLayoutName() const;
     void RemoveLayoutName();
 
-    void WriteToSource( const css::uno::Reference<css::uno::XInterface>& xMember,
+    void WriteToSource( const css::uno::Reference<cpo::uno::XInterface>& xMember,
                             sal_Int32 nPosition );
 
     void dumpAsXml(tools::XmlWriter& rWriter) const;
@@ -223,7 +223,7 @@ public:
 
     void SetMemberPosition( const OUString& rName, sal_Int32 nNewPos );
 
-    void WriteToSource( const css::uno::Reference<css::uno::XInterface>& xDim );
+    void WriteToSource( const css::uno::Reference<cpo::uno::XInterface>& xDim );
 
     void UpdateMemberVisibility(const std::unordered_map< OUString, bool>& rData);
 

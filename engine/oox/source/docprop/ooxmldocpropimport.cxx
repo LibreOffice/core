@@ -220,7 +220,7 @@ cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > DocumentPrope
 
 } // namespace oox::docprop
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_oox_docprop_DocumentPropertiesImporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

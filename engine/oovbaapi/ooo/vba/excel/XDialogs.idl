@@ -21,7 +21,7 @@
 
 module ooo {  module vba {  module excel {
 
-interface XDialogs : com::sun::star::uno::XInterface
+interface XDialogs : cpo::uno::XInterface
 {
 
     any Item( [in] any Index );

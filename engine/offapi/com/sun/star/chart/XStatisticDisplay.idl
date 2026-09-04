@@ -30,7 +30,7 @@
     @see XChartDocument
     @see StockDiagram
  */
-published interface XStatisticDisplay: com::sun::star::uno::XInterface
+published interface XStatisticDisplay: cpo::uno::XInterface
 {
 
     /** @returns

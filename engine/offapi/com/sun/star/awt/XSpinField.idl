@@ -25,7 +25,7 @@
 /** gives access to the value of a spin field and makes it possible to
     register for spin events.
  */
-published interface XSpinField: com::sun::star::uno::XInterface
+published interface XSpinField: cpo::uno::XInterface
 {
 
     /** registers a listener for spin events.

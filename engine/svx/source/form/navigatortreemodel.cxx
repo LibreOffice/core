@@ -159,7 +159,7 @@ using namespace cpo::uno;
     }
 
 
-    void OFormComponentObserver::Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement )
+    void OFormComponentObserver::Remove( const css::uno::Reference< cpo::uno::XInterface >& _rxElement )
     {
         if (IsLocked() || !m_pNavModel)
             return;

@@ -2378,7 +2378,7 @@ SvXMLExport::AddAttributeIdLegacy(
 }
 
 void
-SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
+SvXMLExport::AddAttributeXmlId(uno::Reference<cpo::uno::XInterface> const & i_xIfc)
 {
     // check version >= 1.2
     switch (getSaneDefaultVersion()) {

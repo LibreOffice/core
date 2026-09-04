@@ -78,7 +78,7 @@ cpo::uno::Type SvxUnoTransGradientTable::getElementType()
 /**
  * Create a hatchtable
  */
-uno::Reference<uno::XInterface> SvxUnoTransGradientTable_createInstance(SdrModel* pModel)
+uno::Reference<cpo::uno::XInterface> SvxUnoTransGradientTable_createInstance(SdrModel* pModel)
 {
     return *new SvxUnoTransGradientTable(pModel);
 }

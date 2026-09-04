@@ -26,7 +26,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class TypeConverter extends TestCase {
 

@@ -49,7 +49,7 @@ public:
     {
         if (_type == cppu::UnoType<XInterface>::get())
         {
-            return cpo::uno::Any(css::uno::Reference<css::uno::XInterface>(
+            return cpo::uno::Any(css::uno::Reference<cpo::uno::XInterface>(
                 this));
         }
         if (_type == cppu::UnoType<Interface1>::get())
@@ -83,7 +83,7 @@ private:
 // Check that the up-casting Reference conversion constructor catches the
 // intended cases:
 
-struct Base1: public css::uno::XInterface {
+struct Base1: public cpo::uno::XInterface {
     virtual ~Base1() = delete;
     static ::cpo::uno::Type const & static_type(void * = nullptr) // loplugin:refcounting
     { return ::cppu::UnoType<Base1>::get(); }
@@ -97,7 +97,7 @@ struct Derived: public Base2, public Base3 {
 };
 
 // The special case using the conversion operator instead:
-css::uno::Reference< css::uno::XInterface > testUpcast1(
+css::uno::Reference< cpo::uno::XInterface > testUpcast1(
     css::uno::Reference< Derived > const & ref)
 {
     Base1::static_type(); // prevent loplugin:unreffun firing
@@ -126,7 +126,7 @@ css::uno::Reference< Base2 > testFailingUpcast4(
 // Commenting this in should cause a compiler error due to a down-cast:
 /*
 css::uno::Reference< Base1 > testFailingUpcast5(
-    css::uno::Reference< css::uno::XInterface > const & ref)
+    css::uno::Reference< cpo::uno::XInterface > const & ref)
 { return ref; }
 */
 

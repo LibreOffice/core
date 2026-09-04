@@ -25,7 +25,7 @@
 
 /** @deprecated
  */
-published interface XConfigManager: com::sun::star::uno::XInterface
+published interface XConfigManager: cpo::uno::XInterface
 {
     /** add a listener to notify changes on well known variables
         inside the real implementation

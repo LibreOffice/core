@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module io {
 
 /** makes it possible to write this object to a URL or read it from a URL.
  */
-published interface XPersist: com::sun::star::uno::XInterface
+published interface XPersist: cpo::uno::XInterface
 {
     /** writes all the persistent data of the object to the URL.
      */

@@ -896,7 +896,7 @@ void lcl_clear( STLCONTAINER& i_container )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 org_openoffice_comp_toolkit_SortableGridDataModel_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

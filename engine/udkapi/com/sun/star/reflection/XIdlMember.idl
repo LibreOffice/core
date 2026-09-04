@@ -25,7 +25,7 @@
 
 /** Base interface for XIdlField2s and XIdlMethods.
 */
-published interface XIdlMember: com::sun::star::uno::XInterface
+published interface XIdlMember: cpo::uno::XInterface
 {
     /** Returns the declaring type of this field, i.e. the type having
         the member declared (interface, enum, struct, exception).

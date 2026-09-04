@@ -24,7 +24,7 @@
 
 /** specifies the combine/split functionality.
  */
-published interface XShapeCombiner: com::sun::star::uno::XInterface
+published interface XShapeCombiner: cpo::uno::XInterface
 {
 
     /** combines Shapes

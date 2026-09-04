@@ -24,7 +24,7 @@ module com { module sun { module star { module system {
 */
 
 
-published interface XSystemShellExecute: com::sun::star::uno::XInterface
+published interface XSystemShellExecute: cpo::uno::XInterface
 {
     /** Executes an arbitrary system command.
 

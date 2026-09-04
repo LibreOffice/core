@@ -37,7 +37,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
@@ -65,7 +65,7 @@ public:
 
     static cpo::uno::Sequence< OUString > getSupportedServiceNames();
 
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
+    static css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(
         css::uno::Reference< cpo::uno::XComponentContext > const & context)
         throw (cpo::uno::Exception);
 
@@ -182,17 +182,17 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
     css::uno::Reference< css::reflection::XStructTypeDescription > structure(
         manager->getByHierarchicalName(
             OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
-                    "any,com.sun.star.uno.XInterface>>")),
+                    "any,cpo.uno.XInterface>>")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(cpo::uno::TypeClass_STRUCT, structure->getTypeClass());
     assertEqual(
         OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
-                "any,com.sun.star.uno.XInterface>>"),
+                "any,cpo.uno.XInterface>>"),
         structure->getName());
     assertEqual< bool >(false, structure->getBaseType().is());
     assertEqual< sal_Int32 >(1, structure->getMemberTypes().getLength());
     assertEqual(
-        OUString( "test.tdmanager.Struct<any,com.sun.star.uno.XInterface>"),
+        OUString( "test.tdmanager.Struct<any,cpo.uno.XInterface>"),
         structure->getMemberTypes()[0]->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberNames().getLength());
     assertEqual(
@@ -204,7 +204,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         OUString("boolean"),
         structure->getTypeArguments()[0]->getName());
     assertEqual(
-        OUString( "test.tdmanager.Struct<any,com.sun.star.uno.XInterface>"),
+        OUString( "test.tdmanager.Struct<any,cpo.uno.XInterface>"),
         structure->getTypeArguments()[1]->getName());
 
     css::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >
@@ -271,7 +271,7 @@ cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
     return cpo::uno::Sequence< OUString >();
 }
 
-css::uno::Reference< css::uno::XInterface > Service::createInstance(
+css::uno::Reference< cpo::uno::XInterface > Service::createInstance(
     css::uno::Reference< cpo::uno::XComponentContext > const & context)
     throw (cpo::uno::Exception)
 {

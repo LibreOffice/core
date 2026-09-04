@@ -58,7 +58,7 @@ namespace stringresource
 
 // StringResourceImpl
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 scripting_StringResourcePersistenceImpl_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -1987,7 +1987,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
 
 // StringResourceWithStorageImpl
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 scripting_StringResourceWithStorageImpl_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -2261,7 +2261,7 @@ bool StringResourceWithStorageImpl::implLoadLocale(std::unique_lock<std::mutex>&
 // StringResourceWithLocationImpl
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 scripting_StringResourceWithLocationImpl_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

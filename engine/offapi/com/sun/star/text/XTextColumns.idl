@@ -29,7 +29,7 @@
 
     </p>
  */
-published interface XTextColumns: com::sun::star::uno::XInterface
+published interface XTextColumns: cpo::uno::XInterface
 {
     /** @returns
                 the sum of all values.

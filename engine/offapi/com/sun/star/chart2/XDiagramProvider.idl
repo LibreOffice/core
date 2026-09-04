@@ -29,7 +29,7 @@ module chart2
 /** Gives access to a single diagram.  This interface is needed by the
     wrapper for the old API (namespace com::sun::star::chart).
  */
-interface XDiagramProvider : ::com::sun::star::uno::XInterface
+interface XDiagramProvider : ::cpo::uno::XInterface
 {
     XDiagram getDiagram();
 

@@ -4143,7 +4143,7 @@ public:
         const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
     // XInstanceProvider
-    virtual css::uno::Reference<css::uno::XInterface>
+    virtual css::uno::Reference<cpo::uno::XInterface>
         getInstance(const OUString& aName) override;
 };
 
@@ -10144,7 +10144,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
                 if (!xContext.is())
                     throw cpo::uno::DeploymentException(u"preInit: XComponentContext is not created"_ustr);
 
-                css::uno::Reference< css::uno::XInterface > xService;
+                css::uno::Reference< cpo::uno::XInterface > xService;
                 xContext->getValueByName(u"/singletons/com.sun.star.lang.theServiceManager"_ustr) >>= xService;
                 if (!xService.is())
                     throw cpo::uno::DeploymentException(u"preInit: XMultiComponentFactory is not created"_ustr);

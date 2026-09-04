@@ -62,7 +62,7 @@ public:
     void flushContents();
 
     /// get an XInterface easily.
-    css::uno::Reference<css::uno::XInterface> getXI()
+    css::uno::Reference<cpo::uno::XInterface> getXI()
     {
         return { static_cast<cppu::OWeakObject*>(this) };
     }
@@ -159,11 +159,11 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> createInstance() override
+    css::uno::Reference<cpo::uno::XInterface> createInstance() override
     {
         return createInstanceWithArguments(cpo::uno::Sequence<cpo::uno::Any>());
     }
-    css::uno::Reference<css::uno::XInterface>
+    css::uno::Reference<cpo::uno::XInterface>
     createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& /* rArgs */) override;
 
     /// Fetch clipboard from the global pool.

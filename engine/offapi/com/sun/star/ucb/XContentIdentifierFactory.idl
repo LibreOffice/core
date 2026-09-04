@@ -26,7 +26,7 @@ module com { module sun { module star { module ucb {
     @version  1.0
     @see      XContentIdentifier
 */
-published interface XContentIdentifierFactory: com::sun::star::uno::XInterface
+published interface XContentIdentifierFactory: cpo::uno::XInterface
 {
     /**  creates an identifier.
 

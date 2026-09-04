@@ -3995,7 +3995,7 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
 }
 
 // Output text body properties
-void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >& rXIface,
+void DrawingML::WriteBodyProps(const css::uno::Reference< cpo::uno::XInterface >& rXIface,
         sal_Int32 nXmlNamespace, bool bIsFontworkShape,
         sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight)
 {

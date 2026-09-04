@@ -24,7 +24,7 @@
     normally be used only in offline mode, no connection on the database. This
     should be checked by the driver.
  */
-published interface XDropCatalog: com::sun::star::uno::XInterface
+published interface XDropCatalog: cpo::uno::XInterface
 {
 
     /** drops a catalog identified by its name.

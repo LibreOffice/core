@@ -41,7 +41,7 @@ class ScDataPilotFieldsObj : public UnoApiTest,
 {
 public:
     ScDataPilotFieldsObj();
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldsObj);
@@ -79,7 +79,7 @@ ScDataPilotFieldsObj::ScDataPilotFieldsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotFieldsObj::init()
+uno::Reference<cpo::uno::XInterface> ScDataPilotFieldsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);

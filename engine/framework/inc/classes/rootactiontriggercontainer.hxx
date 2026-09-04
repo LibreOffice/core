@@ -42,8 +42,8 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
         virtual ~RootActionTriggerContainer() override;
 
         // XMultiServiceFactory
-        virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
         virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
         // XIndexContainer

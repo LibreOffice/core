@@ -610,7 +610,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 desktop_SplashScreen_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

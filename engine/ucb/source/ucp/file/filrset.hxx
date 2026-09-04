@@ -314,7 +314,7 @@ class XResultSet_impl :
         rowDeleted() override;
 
 
-        virtual  css::uno::Reference<  css::uno::XInterface > SAL_CALL
+        virtual  css::uno::Reference<  cpo::uno::XInterface > SAL_CALL
         getStatement() override;
 
 

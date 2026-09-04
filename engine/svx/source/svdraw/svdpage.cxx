@@ -1012,7 +1012,7 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
 
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
-            uno::Reference<uno::XInterface> xShape (rxOrder->getByIndex(nIndex), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xShape (rxOrder->getByIndex(nIndex), uno::UNO_QUERY);
             SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
             if (pObject == nullptr)
                 break;

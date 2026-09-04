@@ -83,7 +83,7 @@
     value.
     </p>
  */
-published interface XBlob: com::sun::star::uno::XInterface
+published interface XBlob: cpo::uno::XInterface
 {
 
     /** returns the number of bytes in the

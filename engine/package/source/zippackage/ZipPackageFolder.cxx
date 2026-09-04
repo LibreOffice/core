@@ -154,13 +154,13 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const cpo::
 
     uno::Reference < XInterface > xRef;
     if ( !(aElement >>= xRef) )
-        throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 0 );
+        throw IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 0 );
 
     ZipPackageEntry* pEntry = dynamic_cast<ZipPackageFolder*>(xRef.get());
     if (!pEntry)
         pEntry = dynamic_cast<ZipPackageStream*>(xRef.get());
     if (!pEntry)
-       throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 0 );
+       throw IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 0 );
 
     if (pEntry->getName() != aName )
         pEntry->setName (aName);

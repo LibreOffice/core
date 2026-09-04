@@ -117,7 +117,7 @@ void SwXTextView::Invalidate()
     osl_atomic_increment(&m_refCount); //prevent second d'tor call
 
     {
-        uno::Reference<uno::XInterface> const xInt(static_cast<
+        uno::Reference<cpo::uno::XInterface> const xInt(static_cast<
                 cppu::OWeakObject*>(static_cast<SfxBaseController*>(this)));
         lang::EventObject aEvent(xInt);
         m_SelChangedListeners.disposeAndClear(aEvent);
@@ -131,7 +131,7 @@ bool SwXTextView::select(const cpo::uno::Any& aInterface)
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< uno::XInterface >  xInterface;
+    uno::Reference< cpo::uno::XInterface >  xInterface;
     if (!GetView() || !(aInterface >>= xInterface))
     {
         return false;
@@ -257,7 +257,7 @@ bool SwXTextView::select(const cpo::uno::Any& aInterface)
 cpo::uno::Any SwXTextView::getSelection()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< uno::XInterface >  aRef;
+    uno::Reference< cpo::uno::XInterface >  aRef;
     if(GetView())
     {
         //force immediate shell update
@@ -341,7 +341,7 @@ cpo::uno::Any SwXTextView::getSelection()
             default:;//prevent warning
         }
     }
-    cpo::uno::Any aRet(&aRef, cppu::UnoType<uno::XInterface>::get());
+    cpo::uno::Any aRet(&aRef, cppu::UnoType<cpo::uno::XInterface>::get());
     return aRet;
 }
 

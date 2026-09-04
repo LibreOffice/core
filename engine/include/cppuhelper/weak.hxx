@@ -104,7 +104,7 @@ public:
         { return *this; }
 
     /** Basic queryInterface() implementation supporting cpo::uno::XWeak and
-        com::sun::star::uno::XInterface.
+        cpo::uno::XInterface.
 
         @param rType demanded type
         @return demanded type or empty any
@@ -130,7 +130,7 @@ public:
 
         @return XInterface reference
     */
-    operator css::uno::Reference< css::uno::XInterface > ()
+    operator css::uno::Reference< cpo::uno::XInterface > ()
         { return this; }
 
     cpo::uno::XWeak* getXWeak() { return this; }
@@ -141,14 +141,14 @@ public:
 
     To be used like:
 
-    css::uno::XInterface * FOO_constructor_function(...) {
+    cpo::uno::XInterface * FOO_constructor_function(...) {
         return cppu::acquire(new FOO(...));
     }
 
     @param instance
     Newly created instance that should be acquired.
 */
-static inline css::uno::XInterface * acquire(OWeakObject * instance)
+static inline cpo::uno::XInterface * acquire(OWeakObject * instance)
 {
     assert(instance != NULL);
     instance->acquire();

@@ -36,9 +36,7 @@
 
 namespace cpo::uno { template <typename > class Sequence; }
 
-namespace com::sun::star::uno {
-    class XInterface;
-}
+namespace cpo::uno { class XInterface; }
 
 namespace com::sun::star::awt {
     class XBitmap;
@@ -123,7 +121,7 @@ public:
     static css::awt::MouseEvent
         createMouseEvent(
             const ::MouseEvent& _rVclEvent,
-            const css::uno::Reference< css::uno::XInterface >& _rxContext
+            const css::uno::Reference< cpo::uno::XInterface >& _rxContext
         );
 
     static ::MouseEvent createVCLMouseEvent( const css::awt::MouseEvent& _rAwtEvent );
@@ -131,7 +129,7 @@ public:
     static css::awt::KeyEvent
         createKeyEvent(
             const ::KeyEvent& _rVclEvent,
-            const css::uno::Reference< css::uno::XInterface >& _rxContext
+            const css::uno::Reference< cpo::uno::XInterface >& _rxContext
         );
 
     static ::KeyEvent createVCLKeyEvent( const css::awt::KeyEvent& _rAwtEvent );

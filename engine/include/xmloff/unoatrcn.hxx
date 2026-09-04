@@ -33,7 +33,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
+extern css::uno::Reference< cpo::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
 class XMLOFF_DLLPUBLIC SvUnoAttributeContainer final :
     public ::cppu::WeakImplHelper<

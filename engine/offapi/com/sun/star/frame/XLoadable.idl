@@ -27,7 +27,7 @@
        is already initialized the mentioned methods should throw DoubleInitializationException.
     </p>
  */
-published interface XLoadable: com::sun::star::uno::XInterface
+published interface XLoadable: cpo::uno::XInterface
 {
     /** creates a component from scratch
     */

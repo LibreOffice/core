@@ -26,7 +26,7 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Testing <code>com.sun.star.text.XRelativeTextContentInsert</code>

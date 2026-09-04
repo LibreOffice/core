@@ -45,7 +45,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
 
         // XUIElementSettings
         virtual void updateSettings(  ) override;

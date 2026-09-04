@@ -1691,7 +1691,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89714)
 {
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
-    uno::Reference<uno::XInterface> xInterface(
+    uno::Reference<cpo::uno::XInterface> xInterface(
         xFact->createInstance(u"com.sun.star.text.Defaults"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
     //enabled Paragraph Orphan and Widows by default starting in LO5.1
@@ -1725,7 +1725,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testPropertyDefaults)
 {
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
-    uno::Reference<uno::XInterface> xInterface(
+    uno::Reference<cpo::uno::XInterface> xInterface(
         xFact->createInstance(u"com.sun.star.text.Defaults"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);

@@ -23,7 +23,7 @@
 
 /** must be supported to provide access to a container of GluePoint2.
  */
-published interface XGluePointsSupplier: com::sun::star::uno::XInterface
+published interface XGluePointsSupplier: cpo::uno::XInterface
 {
 
     /**

@@ -91,7 +91,7 @@ void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> co
 } // end anonymous namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT
-css::uno::XInterface* com_sun_star_graphic_GraphicObject_get_implementation(
+cpo::uno::XInterface* com_sun_star_graphic_GraphicObject_get_implementation(
                             SAL_UNUSED_PARAMETER cpo::uno::XComponentContext*,
                             cpo::uno::Sequence<cpo::uno::Any> const & rArguments)
 {

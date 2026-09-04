@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides access to a collection of scenarios.
  */
-published interface XScenariosSupplier: com::sun::star::uno::XInterface
+published interface XScenariosSupplier: cpo::uno::XInterface
 {
 
     /** returns the collection of scenarios.

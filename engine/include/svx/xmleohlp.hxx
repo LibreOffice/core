@@ -115,7 +115,7 @@ public:
 };
 
 namespace svx {
-    SVXCORE_DLLPUBLIC void DropUnusedNamedItems(css::uno::Reference<css::uno::XInterface> const& xModel);
+    SVXCORE_DLLPUBLIC void DropUnusedNamedItems(css::uno::Reference<cpo::uno::XInterface> const& xModel);
 }
 
 #endif // INCLUDED_SVX_XMLEOHLP_HXX

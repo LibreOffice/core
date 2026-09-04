@@ -139,7 +139,7 @@ Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 math_FormatDetector_get_implementation(cpo::uno::XComponentContext* /*pCtx*/,
                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

@@ -72,7 +72,7 @@ Sequence< Type > OColumn::getTypes()
     );
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyContainer )
 
 // css::lang::XServiceInfo

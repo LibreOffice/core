@@ -134,7 +134,7 @@ do { \
     aRet <<= aExcept;\
 } while(false)
 
-cpo::uno::Any convertToException(GError *pError, const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow)
+cpo::uno::Any convertToException(GError *pError, const css::uno::Reference< cpo::uno::XInterface >& rContext, bool bThrow)
 {
     cpo::uno::Any aRet;
 
@@ -268,7 +268,7 @@ cpo::uno::Any convertToException(GError *pError, const css::uno::Reference< css:
     return aRet;
 }
 
-void convertToIOException(GError *pError, const css::uno::Reference< css::uno::XInterface >& rContext)
+void convertToIOException(GError *pError, const css::uno::Reference< cpo::uno::XInterface >& rContext)
 {
     try
     {
@@ -287,7 +287,7 @@ void convertToIOException(GError *pError, const css::uno::Reference< css::uno::X
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
-            css::uno::Reference<css::uno::XInterface>(), a);
+            css::uno::Reference<cpo::uno::XInterface>(), a);
     }
 }
 
@@ -553,7 +553,7 @@ css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
 }
 
 static css::lang::IllegalAccessException
-getReadOnlyException( const css::uno::Reference< css::uno::XInterface >& rContext )
+getReadOnlyException( const css::uno::Reference< cpo::uno::XInterface >& rContext )
 {
     return css::lang::IllegalAccessException (u"Property is read-only!"_ustr, rContext );
 }
@@ -841,7 +841,7 @@ void Content::copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
     xOut->closeOutput();
 }
 
-bool Content::feedSink( const css::uno::Reference< css::uno::XInterface >& xSink )
+bool Content::feedSink( const css::uno::Reference< cpo::uno::XInterface >& xSink )
 {
     if ( !xSink.is() )
         return false;

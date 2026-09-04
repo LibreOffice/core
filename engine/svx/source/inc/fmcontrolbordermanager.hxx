@@ -130,10 +130,10 @@ namespace svxform
         ~ControlBorderManager();
 
     public:
-        void    focusGained( const css::uno::Reference< css::uno::XInterface >& _rxControl );
-        void    focusLost( const css::uno::Reference< css::uno::XInterface >& _rxControl );
-        void    mouseEntered( const css::uno::Reference< css::uno::XInterface >& _rxControl );
-        void    mouseExited( const css::uno::Reference< css::uno::XInterface >& _rxControl );
+        void    focusGained( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    focusLost( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    mouseEntered( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    mouseExited( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
 
         void    validityChanged(
                     const css::uno::Reference< css::awt::XControl >& _rxControl,
@@ -165,7 +165,7 @@ namespace svxform
                 the control's status data, as a reference to our respective member
         */
         void    controlStatusGained(
-                    const css::uno::Reference< css::uno::XInterface >& _rxControl,
+                    const css::uno::Reference< cpo::uno::XInterface >& _rxControl,
                     ControlData& _rControlData
                 );
 
@@ -175,7 +175,7 @@ namespace svxform
             @param _rControlData
                 the control's status data, as a reference to our respective member
         */
-        void    controlStatusLost( const css::uno::Reference< css::uno::XInterface >& _rxControl, ControlData& _rControlData );
+        void    controlStatusLost( const css::uno::Reference< cpo::uno::XInterface >& _rxControl, ControlData& _rControlData );
 
         /** determines whether the border of a given peer can be colored
             @param _rxPeer

@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -39,7 +39,7 @@ public:
     Provider(const Provider&) = delete;
     const Provider& operator=(const Provider&) = delete;
 
-    static css::uno::Reference<css::uno::XInterface>
+    static css::uno::Reference<cpo::uno::XInterface>
     static_create(css::uno::Reference<cpo::uno::XComponentContext> const& xContext)
     {
         return static_cast<cppu::OWeakObject*>(new Provider(xContext));

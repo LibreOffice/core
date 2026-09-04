@@ -24,7 +24,7 @@ import com.sun.star.container.XIndexContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import ifc.ui._XUIConfiguration;
 import java.io.PrintWriter;

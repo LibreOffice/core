@@ -23,7 +23,7 @@
 
 /** represents common functionality for inplace clients.
  */
-interface XInplaceClient: com::sun::star::uno::XInterface
+interface XInplaceClient: cpo::uno::XInterface
 {
     /** checks if the container can activate the object inplace.
 

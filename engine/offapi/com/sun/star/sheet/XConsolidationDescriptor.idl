@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::ConsolidationDescriptor
  */
-published interface XConsolidationDescriptor: com::sun::star::uno::XInterface
+published interface XConsolidationDescriptor: cpo::uno::XInterface
 {
 
     /** returns the function by which the ranges are consolidated.

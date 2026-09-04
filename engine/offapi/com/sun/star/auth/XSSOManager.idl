@@ -22,7 +22,7 @@ module com { module sun { module star { module auth {
 /** supports the creation of security contexts for both
     the initiator/source side and the acceptor/target side.
  */
-published interface XSSOManager : ::com::sun::star::uno::XInterface
+published interface XSSOManager : ::cpo::uno::XInterface
 {
     /** retrieves the mechanism name of all security contexts created using
         this manager.

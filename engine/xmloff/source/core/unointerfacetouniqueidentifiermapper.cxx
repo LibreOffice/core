@@ -26,7 +26,7 @@
 
 using namespace ::com::sun::star;
 using css::uno::Reference;
-using css::uno::XInterface;
+using cpo::uno::XInterface;
 
 namespace comphelper
 {
@@ -36,11 +36,11 @@ UnoInterfaceToUniqueIdentifierMapper::UnoInterfaceToUniqueIdentifierMapper()
 {
 }
 
-const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const Reference< XInterface >& rInterface )
+const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const Reference< cpo::uno::XInterface >& rInterface )
 {
     // Be certain that the references we store in our table are to the
     // leading / primary XInterface - cf. findReference
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
     IdMap_t::const_iterator aIter;
     if( findReference( xRef, aIter ) )
@@ -60,7 +60,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
 
     // Be certain that the references we store in our table are to the
     // leading / primary XInterface - cf. findReference
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
     if( findReference( xRef, aIter ) )
     {
@@ -132,7 +132,7 @@ const Reference< XInterface >& UnoInterfaceToUniqueIdentifierMapper::getReferenc
 
 bool UnoInterfaceToUniqueIdentifierMapper::findReference( const Reference< XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const
 {
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
     const IdMap_t::const_iterator aEnd( maEntries.end() );
     rIter = std::find_if(maEntries.begin(), aEnd, [&xRef](const IdMap_t::value_type& rItem) {
@@ -163,7 +163,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::reserveIdentifier( const OUString& rI
 
 bool UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(
         const OUString& rIdentifier,
-        const css::uno::Reference< css::uno::XInterface >& rInterface )
+        const css::uno::Reference< cpo::uno::XInterface >& rInterface )
 {
     Reserved_t::const_iterator aIt;
     if ( !findReserved( rIdentifier, aIt ) )

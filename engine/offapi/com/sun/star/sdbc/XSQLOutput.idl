@@ -57,7 +57,7 @@
     <code>XSQLOutput</code>
     output stream as the representation of a SQL user-defined type.</p>
  */
-published interface XSQLOutput: com::sun::star::uno::XInterface
+published interface XSQLOutput: cpo::uno::XInterface
 {
 
     /** writes the next attribute to the stream as a string.

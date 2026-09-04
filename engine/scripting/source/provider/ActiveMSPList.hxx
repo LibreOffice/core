@@ -35,7 +35,7 @@ namespace func_provider
 {
 
 //Typedefs
-typedef std::map  <   css::uno::Reference< css::uno::XInterface >
+typedef std::map  <   css::uno::Reference< cpo::uno::XInterface >
                   ,   css::uno::Reference< css::script::provider::XScriptProvider >
                   >   ScriptComponent_map;
 
@@ -66,7 +66,7 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:
-    void addActiveMSP( const css::uno::Reference< css::uno::XInterface >& xComponent,
+    void addActiveMSP( const css::uno::Reference< cpo::uno::XInterface >& xComponent,
                        const css::uno::Reference< css::script::provider::XScriptProvider >& msp );
     css::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const cpo::uno::Any& context );

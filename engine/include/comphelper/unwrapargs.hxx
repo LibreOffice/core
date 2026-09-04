@@ -25,7 +25,7 @@
 #include <optional>
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppu/unotype.hxx>
 
@@ -35,8 +35,8 @@ namespace comphelper {
 namespace detail {
     inline void unwrapArgsError(
         const OUString& str, sal_Int32 nArg,
-        const css::uno::Reference< css::uno::XInterface >& xErrorContext =
-          css::uno::Reference< css::uno::XInterface >() )
+        const css::uno::Reference< cpo::uno::XInterface >& xErrorContext =
+          css::uno::Reference< cpo::uno::XInterface >() )
     {
         throw css::lang::IllegalArgumentException(
             str, xErrorContext, static_cast< sal_Int16 >( nArg ) );
@@ -51,7 +51,7 @@ namespace detail {
     inline void unwrapArgs(
         const cpo::uno::Sequence< cpo::uno::Any >&,
         sal_Int32,
-        const css::uno::Reference< css::uno::XInterface >& )
+        const css::uno::Reference< cpo::uno::XInterface >& )
     {
         return;
     }

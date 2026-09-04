@@ -26,7 +26,7 @@ interface XReferenceResolvedListener;
  * <p>
  * This interface is used to manipulate reference resolved listener.
  */
-interface XReferenceResolvedBroadcaster : com::sun::star::uno::XInterface
+interface XReferenceResolvedBroadcaster : cpo::uno::XInterface
 {
     /**
      * Adds a new reference resolved listener for an element collector.

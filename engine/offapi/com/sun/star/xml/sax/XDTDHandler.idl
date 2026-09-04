@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     and/or notation that corresponds with the attribute value.
     </p>
  */
-published interface XDTDHandler: com::sun::star::uno::XInterface
+published interface XDTDHandler: cpo::uno::XInterface
 {
 
     /** receives notification of a notation declaration event.

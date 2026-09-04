@@ -24,7 +24,7 @@
 
 /** makes it possible to duplicate pages within the same document.
  */
-published interface XDrawPageDuplicator: com::sun::star::uno::XInterface
+published interface XDrawPageDuplicator: cpo::uno::XInterface
 {
 
     /** creates a duplicate of a DrawPage or MasterPage,

@@ -529,7 +529,7 @@ cpo::uno::Sequence< OUString > ConvDicList::getSupportedServiceNames()
     return { u"com.sun.star.linguistic2.ConversionDictionaryList"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 linguistic_ConvDicList_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

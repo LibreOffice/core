@@ -26,7 +26,7 @@ module com { module sun { module star { module system {
     @see com::sun::star::system::XSimpleMailClient
 */
 
-published interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
+published interface XSimpleMailClientSupplier: cpo::uno::XInterface
 {
     /** Allows a client to query for an object that implements
         XSimpleMailClient.

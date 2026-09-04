@@ -75,7 +75,7 @@ cpo::uno::Type SvxUnoGradientTable::getElementType()
 /**
  * Create a gradienttable
  */
-uno::Reference<uno::XInterface> SvxUnoGradientTable_createInstance(SdrModel* pModel)
+uno::Reference<cpo::uno::XInterface> SvxUnoGradientTable_createInstance(SdrModel* pModel)
 {
     return *new SvxUnoGradientTable(pModel);
 }

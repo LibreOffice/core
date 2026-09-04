@@ -24,7 +24,7 @@
 /** handles activation (loading) of a UNO component.
     @see        com::sun::star::registry::XImplementationRegistration
  */
-published interface XImplementationLoader: com::sun::star::uno::XInterface
+published interface XImplementationLoader: cpo::uno::XInterface
 {
 
     /** activates a concrete implementation within a component.
@@ -55,7 +55,7 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
                 XServiceInfo interface informs about the capabilities of the
                 service implementation, not the factory itself.
      */
-    com::sun::star::uno::XInterface activate( [in] string implementationName,
+    cpo::uno::XInterface activate( [in] string implementationName,
              [in] string implementationLoaderUrl,
              [in] string locationUrl,
              [in] com::sun::star::registry::XRegistryKey xKey )

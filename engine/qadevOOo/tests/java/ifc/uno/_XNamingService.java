@@ -21,7 +21,7 @@ package ifc.uno;
 import lib.MultiMethodTest;
 import lib.StatusException;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import cpo.uno.XNamingService;
 
 

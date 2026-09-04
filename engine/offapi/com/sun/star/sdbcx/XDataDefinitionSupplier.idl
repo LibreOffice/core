@@ -28,7 +28,7 @@
 
 /** provides the access to data definition beans from a connected database.
  */
-published interface XDataDefinitionSupplier: com::sun::star::uno::XInterface
+published interface XDataDefinitionSupplier: cpo::uno::XInterface
 {
 
     /** returns at least the container of tables related to the given connection.

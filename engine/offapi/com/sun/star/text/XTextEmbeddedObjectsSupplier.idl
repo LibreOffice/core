@@ -24,7 +24,7 @@
 /** provides the collection of all embedded objects within this context
     (i.e. this document).
  */
-published interface XTextEmbeddedObjectsSupplier: com::sun::star::uno::XInterface
+published interface XTextEmbeddedObjectsSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the collection of embedded objects.

@@ -153,7 +153,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference< uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
+        uno::Reference< cpo::uno::XInterface > xConfig = ::comphelper::ConfigurationHelper::openConfig(
             ::comphelper::getProcessComponentContext(), u"/org.openoffice.Setup"_ustr, ::comphelper::EConfigurationModes::Standard );
 
         OUString aActualFilter;

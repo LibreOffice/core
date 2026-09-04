@@ -71,7 +71,7 @@ inline cpo::uno::Any DbgGetCaughtException()
                                      throw css::lang::IllegalArgumentException( \
                                      __func__ \
                                      + OUString::Concat(u",\n" m), \
-                                     css::uno::Reference< css::uno::XInterface >(), \
+                                     css::uno::Reference< cpo::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
@@ -89,7 +89,7 @@ inline cpo::uno::Any DbgGetCaughtException()
         OSL_ENSURE(c, m); \
         throw cpo::uno::RuntimeException( \
         __func__ + OUString::Concat(u",\n" m), \
-        css::uno::Reference< css::uno::XInterface >() ); }
+        css::uno::Reference< cpo::uno::XInterface >() ); }
 
 #define ENSURE_OR_THROW2(c, m, ifc) \
     if( !(c) ) { \

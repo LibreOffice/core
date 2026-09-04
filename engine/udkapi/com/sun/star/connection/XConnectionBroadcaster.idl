@@ -27,7 +27,7 @@
     <p> Maybe supported by connections returned from XAcceptor::accept()
     or XConnector::connect().
  */
-published interface XConnectionBroadcaster: com::sun::star::uno::XInterface
+published interface XConnectionBroadcaster: cpo::uno::XInterface
 {
 
     /** registers an object to receive events from this connection.

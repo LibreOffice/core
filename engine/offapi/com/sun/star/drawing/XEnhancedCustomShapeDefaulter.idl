@@ -22,7 +22,7 @@
 
 
 
-interface XEnhancedCustomShapeDefaulter: com::sun::star::uno::XInterface
+interface XEnhancedCustomShapeDefaulter: cpo::uno::XInterface
 {
 
     /**

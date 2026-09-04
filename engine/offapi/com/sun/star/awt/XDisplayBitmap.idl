@@ -27,7 +27,7 @@
 
     <p>Drawing of this bitmap is only valid on a compatible device.</p>
  */
-published interface XDisplayBitmap: com::sun::star::uno::XInterface
+published interface XDisplayBitmap: cpo::uno::XInterface
 {
 };
 

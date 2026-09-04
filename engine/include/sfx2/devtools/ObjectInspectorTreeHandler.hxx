@@ -15,7 +15,7 @@
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>
@@ -54,12 +54,12 @@ private:
                                 weld::TreeIter const& rParent);
     static void clearAll(std::unique_ptr<weld::TreeView>& pTreeView);
 
-    void appendInterfaces(css::uno::Reference<css::uno::XInterface> const& xInterface);
-    void appendServices(css::uno::Reference<css::uno::XInterface> const& xInterface);
-    void appendProperties(css::uno::Reference<css::uno::XInterface> const& xInterface);
-    void appendMethods(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void appendInterfaces(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
+    void appendServices(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
+    void appendProperties(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
+    void appendMethods(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
 
-    void inspectObject(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void inspectObject(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
 
     // Object stack handling
     void clearStack();
@@ -93,7 +93,7 @@ public:
 
     DECL_LINK(HeaderBarClick, int, void);
 
-    void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void introspect(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
 
     void dispose();
 };

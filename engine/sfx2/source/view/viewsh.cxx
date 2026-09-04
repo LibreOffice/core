@@ -750,7 +750,7 @@ class KitDocumentFocusListener :
 
     const SfxViewShell* m_pViewShell;
     sal_Int16 m_nDocumentType;
-    std::unordered_set<uno::Reference<uno::XInterface>> m_aRefList;
+    std::unordered_set<uno::Reference<cpo::uno::XInterface>> m_aRefList;
     OUString m_sFocusedParagraph;
     sal_Int32 m_nCaretPosition;
     sal_Int32 m_nSelectionStart;
@@ -1754,7 +1754,7 @@ void KitDocumentFocusListener::attachRecursive(
         return;
     SAL_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
     // If not already done, add the broadcaster to the list and attach as listener.
-    const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
+    const uno::Reference< cpo::uno::XInterface >& xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
         SAL_INFO("kit.a11y", "KitDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");

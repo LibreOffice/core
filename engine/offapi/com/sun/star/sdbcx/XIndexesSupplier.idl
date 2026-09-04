@@ -23,7 +23,7 @@
 /** provides for access to a container of indexes, typically used for a table
     definition object.
  */
-published interface XIndexesSupplier: com::sun::star::uno::XInterface
+published interface XIndexesSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of indexes.

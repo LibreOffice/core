@@ -30,7 +30,7 @@
     depends on your programming language.
     Thus this interface is deprecated, too.
 */
-published interface XProxyFactory: com::sun::star::uno::XInterface
+published interface XProxyFactory: cpo::uno::XInterface
 {
     /** This method creates a new proxy object that acts on behalf of the given
         target object.<br>
@@ -49,7 +49,7 @@ published interface XProxyFactory: com::sun::star::uno::XInterface
                 proxy object
     */
     cpo::uno::XAggregation createProxy(
-        [in] com::sun::star::uno::XInterface xTarget );
+        [in] cpo::uno::XInterface xTarget );
 };
 
 

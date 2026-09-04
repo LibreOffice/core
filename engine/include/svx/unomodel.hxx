@@ -49,12 +49,12 @@ private:
 
     unotools::WeakReference< SvxUnoDrawPagesAccess > mxDrawPagesAccess;
 
-    css::uno::Reference< css::uno::XInterface > mxDashTable;
-    css::uno::Reference< css::uno::XInterface > mxGradientTable;
-    css::uno::Reference< css::uno::XInterface > mxHatchTable;
-    css::uno::Reference< css::uno::XInterface > mxBitmapTable;
-    css::uno::Reference< css::uno::XInterface > mxTransGradientTable;
-    css::uno::Reference< css::uno::XInterface > mxMarkerTable;
+    css::uno::Reference< cpo::uno::XInterface > mxDashTable;
+    css::uno::Reference< cpo::uno::XInterface > mxGradientTable;
+    css::uno::Reference< cpo::uno::XInterface > mxHatchTable;
+    css::uno::Reference< cpo::uno::XInterface > mxBitmapTable;
+    css::uno::Reference< cpo::uno::XInterface > mxTransGradientTable;
+    css::uno::Reference< cpo::uno::XInterface > mxMarkerTable;
 
     cpo::uno::Sequence< cpo::uno::Type > maTypeSequence;
 
@@ -88,7 +88,7 @@ public:
     virtual css::uno::Reference< css::drawing::XDrawPages > getDrawPages(  ) override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XServiceInfo

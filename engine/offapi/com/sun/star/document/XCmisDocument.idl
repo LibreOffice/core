@@ -12,7 +12,7 @@ module com {   module sun {   module star {   module document {
 /** The document can provide access to CMIS properties and versions
     through this interface.
   */
-interface XCmisDocument : com::sun::star::uno::XInterface
+interface XCmisDocument : cpo::uno::XInterface
 {
     /** Check out the document into a private working copy on the
         server, and update the loaded document to reflect this change.

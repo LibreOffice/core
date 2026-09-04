@@ -28,7 +28,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -50,7 +50,7 @@ public:
 
     virtual void setUp() override;
     virtual void tearDown() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual uno::Reference<text::XTextContent> getTextContent() override;
 
     CPPUNIT_TEST_SUITE(ScAnnotationShapeObj);
@@ -109,7 +109,7 @@ void ScAnnotationShapeObj::tearDown()
     UnoApiTest::tearDown();
 }
 
-uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
+uno::Reference<cpo::uno::XInterface> ScAnnotationShapeObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

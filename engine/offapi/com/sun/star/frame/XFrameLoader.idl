@@ -31,7 +31,7 @@
 
     @see XFrame
  */
-published interface XFrameLoader: com::sun::star::uno::XInterface
+published interface XFrameLoader: cpo::uno::XInterface
 {
     /** starts the loading of the specified resource into the specified Frame.
 

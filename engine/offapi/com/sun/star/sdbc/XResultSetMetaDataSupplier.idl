@@ -33,7 +33,7 @@
     method.
     </p>
  */
-published interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
+published interface XResultSetMetaDataSupplier: cpo::uno::XInterface
 {
 
     /** retrieves the number, types, and properties of a ResultSet's columns.

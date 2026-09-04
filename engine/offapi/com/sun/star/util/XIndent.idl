@@ -23,7 +23,7 @@
 
 /** allows indentation of the object to be changed.
  */
-published interface XIndent: com::sun::star::uno::XInterface
+published interface XIndent: cpo::uno::XInterface
 {
     /** shifts the indentation by one default step to the left.
      */

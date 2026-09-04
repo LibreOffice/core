@@ -97,7 +97,7 @@ include/comphelper/interfacecontainer4.hxx:66
 include/comphelper/interfacecontainer4.hxx:100
     comphelper::OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(const comphelper::OInterfaceIteratorHelper4<ListenerT> &)
 include/comphelper/multicontainer2.hxx:94
-    int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const cpo::uno::Type &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+    int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const cpo::uno::Type &,const com::sun::star::uno::Reference<cpo::uno::XInterface> &)
 include/editeng/editview.hxx:290
     ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
 include/editeng/outliner.hxx:337
@@ -237,7 +237,7 @@ include/o3tl/sorted_vector.hxx:202
 include/o3tl/sorted_vector.hxx:202
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
@@ -435,7 +435,7 @@ include/o3tl/sorted_vector.hxx:207
 include/o3tl/sorted_vector.hxx:207
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
@@ -633,7 +633,7 @@ include/o3tl/sorted_vector.hxx:218
 include/o3tl/sorted_vector.hxx:218
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
@@ -807,7 +807,7 @@ include/oox/dump/oledumper.hxx:321
 include/oox/export/shapes.hxx:134
     oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,const char *)
 include/oox/export/shapes.hxx:184
-    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &,int,_Bool,_Bool)
+    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const com::sun::star::uno::Reference<cpo::uno::XInterface> &,int,_Bool,_Bool)
 include/oox/export/ThemeExport.hxx:50
     _Bool oox::ThemeExport::writeColorSet(const model::Theme &)
 include/oox/export/ThemeExport.hxx:51
@@ -875,7 +875,7 @@ include/test/a11y/eventposter.hxx:92
 include/test/helper/shape.hxx:41
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const com::sun::star::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
 include/test/sheet/xnamedrange.hxx:22
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XNamedRange::init()
+    com::sun::star::uno::Reference<cpo::uno::XInterface> apitest::XNamedRange::init()
 include/test/xmltesttools.hxx:61
     rtl::OUString XmlTestTools::getXPath(const std::unique_ptr<struct _xmlDoc, struct xmlDocDeleter> &,const rtl::OString &,int,int,const char *)
 include/tools/config.hxx:37
@@ -979,7 +979,7 @@ include/vcl/texteng.hxx:271
 include/vcl/weld.hxx:2869
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 include/xmloff/unointerfacetouniqueidentifiermapper.hxx:65
-    _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+    _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<cpo::uno::XInterface> &)
 include/xmloff/xmluconv.hxx:278
     _Bool SvXMLUnitConverter::convertNumFormat(short &,const rtl::OUString &,std::basic_string_view<char16_t>,_Bool) const
 linguistic/source/lngsvcmgr.hxx:114

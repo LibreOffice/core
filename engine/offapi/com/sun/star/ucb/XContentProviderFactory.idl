@@ -25,7 +25,7 @@ module com { module sun { module star { module ucb {
      @version  1.0
      @see      XContentProvider
 */
-published interface XContentProviderFactory : com::sun::star::uno::XInterface
+published interface XContentProviderFactory : cpo::uno::XInterface
 {
     /** creates a XContentProvider implementation object.
 

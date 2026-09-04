@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module container {
     @see com::sun::star::container::XHierarchicalNameAccess
     @see com::sun::star::container::XNamed
  */
-published interface XHierarchicalName: com::sun::star::uno::XInterface
+published interface XHierarchicalName: cpo::uno::XInterface
 {
 
     /** @returns

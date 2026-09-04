@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
     wants interaction requests to be handled by other internal error handling
     mechanism.
 */
-published interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
+published interface XInteractionHandlerSupplier: cpo::uno::XInterface
 {
     /** Returns whether an
         com::sun::star::task::XInteractionHandler can be

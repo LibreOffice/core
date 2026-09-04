@@ -24,7 +24,7 @@
 /** makes it possible to access the FootnoteSettings
     with the context (e.g. document).
  */
-published interface XFootnotesSettingsSupplier: com::sun::star::uno::XInterface
+published interface XFootnotesSettingsSupplier: cpo::uno::XInterface
 {
     /** @returns
                      FootnoteSettings of the object.

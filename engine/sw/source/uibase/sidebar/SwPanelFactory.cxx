@@ -231,7 +231,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 org_apache_openoffice_comp_sw_sidebar_SwPanelFactory_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

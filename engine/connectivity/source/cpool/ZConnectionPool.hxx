@@ -109,7 +109,7 @@ namespace connectivity
         ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the connection pool when shot
 
         css::uno::Reference< css::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
-        css::uno::Reference< css::uno::XInterface >           m_xDriverNode;  // config node entry
+        css::uno::Reference< cpo::uno::XInterface >           m_xDriverNode;  // config node entry
         css::uno::Reference< css::reflection::XProxyFactory > m_xProxyFactory;
         sal_Int32               m_nTimeOut;
         sal_Int32               m_nALiveCount;
@@ -126,7 +126,7 @@ namespace connectivity
         virtual ~OConnectionPool() override;
     public:
         OConnectionPool(const css::uno::Reference< css::sdbc::XDriver >& _xDriver,
-                        const css::uno::Reference< css::uno::XInterface >& _xDriverNode,
+                        const css::uno::Reference< cpo::uno::XInterface >& _xDriverNode,
                         const css::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
 
         // delete all refs

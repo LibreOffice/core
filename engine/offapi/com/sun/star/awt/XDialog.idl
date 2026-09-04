@@ -25,7 +25,7 @@
 /** makes it possible to show and hide a dialog and gives access to
     the title of the dialog.
  */
-published interface XDialog: com::sun::star::uno::XInterface
+published interface XDialog: cpo::uno::XInterface
 {
 
     /** sets the title of the dialog.

@@ -85,7 +85,7 @@ static void checkInterface(cpo::uno::Type const& rType)
 
 static bool isXInterface(typelib_TypeDescriptionReference const* pTypeLibType)
 {
-    return OUString::unacquired(&pTypeLibType->pTypeName) == "com.sun.star.uno.XInterface";
+    return OUString::unacquired(&pTypeLibType->pTypeName) == "cpo.uno.XInterface";
 }
 
 static bool td_equals(typelib_TypeDescriptionReference const* pTDR1,

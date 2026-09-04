@@ -31,11 +31,11 @@ canvas/inc/parametricpolypolygon.hxx:138
     enum canvas::ParametricPolyPolygon::GradientType eType
     0
 canvas/inc/verifyinput.hxx:147
-    void verifyInput(const struct com::sun::star::geometry::RealBezierSegment2D &,const char *,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,short)
+    void verifyInput(const struct com::sun::star::geometry::RealBezierSegment2D &,const char *,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,short)
     short nArgPos
     0
 canvas/inc/verifyinput.hxx:279
-    void verifyInput(const struct com::sun::star::rendering::IntegerBitmapLayout &,const char *,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,short)
+    void verifyInput(const struct com::sun::star::rendering::IntegerBitmapLayout &,const char *,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,short)
     short nArgPos
     0
 canvas/inc/verifyinput.hxx:518
@@ -687,7 +687,7 @@ include/comphelper/errcode.hxx:73
     enum WarningFlag 
     0
 include/comphelper/interfacecontainer2.hxx:174
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> comphelper::OInterfaceContainerHelper2::getInterface(int) const
+    class com::sun::star::uno::Reference<class cpo::uno::XInterface> comphelper::OInterfaceContainerHelper2::getInterface(int) const
     int nIndex
     0
 include/comphelper/kit.hxx:70
@@ -727,11 +727,11 @@ include/comphelper/unique_disposing_ptr.hxx:170
     type-parameter-?-? * p
     0
 include/connectivity/dbexception.hxx:319
-    void throwSQLException(const class rtl::OUString &,enum dbtools::StandardSQLState,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const int)
+    void throwSQLException(const class rtl::OUString &,enum dbtools::StandardSQLState,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const int)
     const int _nErrorCode
     0
 include/connectivity/dbtools.hxx:335
-    _Bool isDataSourcePropertyEnabled(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const class rtl::OUString &,_Bool)
+    _Bool isDataSourcePropertyEnabled(const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const class rtl::OUString &,_Bool)
     _Bool _bDefault
     1
 include/connectivity/dbtools.hxx:627
@@ -1507,7 +1507,7 @@ include/test/a11y/eventposter.hxx:42
     int nCharCode
     0
 include/test/sheet/xactivationbroadcaster.hxx:24
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XActivationBroadcaster::getXSpreadsheet(const short)
+    class com::sun::star::uno::Reference<class cpo::uno::XInterface> apitest::XActivationBroadcaster::getXSpreadsheet(const short)
     const short nNumber
     1
 include/test/sheet/xdocumentauditing.hxx:35
@@ -1515,7 +1515,7 @@ include/test/sheet/xdocumentauditing.hxx:35
     int nShapes
     1
 include/test/sheet/xnamedranges.hxx:40
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRanges::getXNamedRanges(int)
+    class com::sun::star::uno::Reference<class cpo::uno::XInterface> apitest::XNamedRanges::getXNamedRanges(int)
     int nSheet
     1
 include/test/text/textcontent.hxx:25

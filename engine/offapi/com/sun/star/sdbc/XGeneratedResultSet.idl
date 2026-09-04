@@ -30,7 +30,7 @@
     @see com::sun::star::sdbc::Statement
     @see com::sun::star::sdbc::PreparedStatement
  */
-published interface XGeneratedResultSet: com::sun::star::uno::XInterface
+published interface XGeneratedResultSet: cpo::uno::XInterface
 {
     /** gives access to automatically generated values after a new row was inserted.
         @returns

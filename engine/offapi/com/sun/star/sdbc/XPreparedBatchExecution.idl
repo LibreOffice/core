@@ -30,7 +30,7 @@
     one batch job.
     </p>
  */
-published interface XPreparedBatchExecution: com::sun::star::uno::XInterface
+published interface XPreparedBatchExecution: cpo::uno::XInterface
 {
 
     /** adds a set of parameters to the batch.

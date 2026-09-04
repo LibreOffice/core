@@ -29,7 +29,7 @@
 
     @deprecated
  */
-published interface XErrorBroadcaster: com::sun::star::uno::XInterface
+published interface XErrorBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener to be notified of errors.

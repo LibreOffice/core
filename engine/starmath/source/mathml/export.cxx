@@ -428,7 +428,7 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 // SmMLExport technical
 /*************************************************************************************************/
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Math_MLExporter_get_implementation(cpo::uno::XComponentContext* context,
                                    cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -436,7 +436,7 @@ Math_MLExporter_get_implementation(cpo::uno::XComponentContext* context,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Math_MLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -445,7 +445,7 @@ Math_MLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Math_MLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
                                                 cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -454,7 +454,7 @@ Math_MLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* con
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Math_MLContentExporter_get_implementation(cpo::uno::XComponentContext* context,
                                           cpo::uno::Sequence<cpo::uno::Any> const&)
 {

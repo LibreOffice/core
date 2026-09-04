@@ -430,7 +430,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
 
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
             comphelper::getProcessServiceFactory());
-        uno::Reference<uno::XInterface> xInterface(
+        uno::Reference<cpo::uno::XInterface> xInterface(
             xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr),
             uno::UNO_QUERY);
 

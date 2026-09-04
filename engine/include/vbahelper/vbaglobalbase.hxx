@@ -30,9 +30,9 @@
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }
-    namespace uno { class XInterface; }
 }
 namespace cpo::uno { class XComponentContext; }
+namespace cpo::uno { class XInterface; }
 
 namespace ooo::vba {
     class XHelperInterface;
@@ -50,8 +50,8 @@ public:
     VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const OUString& sDocCtxName );
     virtual ~VbaGlobalsBase() override;
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 };
 #endif

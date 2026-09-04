@@ -528,7 +528,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         // no internal document configuration, use the one from the module
         uno::Reference< frame::XModuleManager2 > xModuleMan = frame::ModuleManager::create(m_xContext);
         OUString aModuleIdent =
-            xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
+            xModuleMan->identify( uno::Reference< cpo::uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
         if ( !aModuleIdent.isEmpty() )
         {
@@ -1176,7 +1176,7 @@ void DocumentHolder::notifyEvent( const document::EventObject& Event )
 }
 
 
-void DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XInterface >& aObject,
+void DocumentHolder::borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& aObject,
                                                     const frame::BorderWidths& aNewSize )
 {
     // TODO: may require mutex introduction ???

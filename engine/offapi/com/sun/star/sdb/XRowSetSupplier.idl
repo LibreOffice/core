@@ -24,7 +24,7 @@
 
     @see XRowSetChangeBroadcaster
  */
-published interface XRowSetSupplier: com::sun::star::uno::XInterface
+published interface XRowSetSupplier: cpo::uno::XInterface
 {
 
     /** provides access to the data source.

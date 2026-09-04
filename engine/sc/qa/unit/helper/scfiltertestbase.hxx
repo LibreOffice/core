@@ -58,7 +58,7 @@ protected:
 
 private:
     // reference to document interface that we are testing
-    css::uno::Reference<css::uno::XInterface> m_xCalcComponent;
+    css::uno::Reference<cpo::uno::XInterface> m_xCalcComponent;
 
 public:
     virtual void setUp() override;

@@ -83,7 +83,7 @@ static void assign( TestElement & rData,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
                     sal_Int8 nByte2, sal_Int16 nShort2,
-                    const css::uno::Reference< css::uno::XInterface >& xTest,
+                    const css::uno::Reference< cpo::uno::XInterface >& xTest,
                     const cpo::uno::Any& rAny )
 {
     rData.Bool = bBool;
@@ -113,7 +113,7 @@ static void assign( TestData & rData,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
                     sal_Int8 nByte2, sal_Int16 nShort2,
-                    const css::uno::Reference< css::uno::XInterface >& xTest,
+                    const css::uno::Reference< cpo::uno::XInterface >& xTest,
                     const cpo::uno::Any& rAny,
                     const cpo::uno::Sequence< TestElement >& rSequence )
 {
@@ -190,7 +190,7 @@ public:
                                      const OUString& rStr,
                                      sal_Int8 nByte2,
                                      sal_Int16 nShort2,
-                                     const css::uno::Reference< css::uno::XInterface >& xTest,
+                                     const css::uno::Reference< cpo::uno::XInterface >& xTest,
                                      const cpo::uno::Any& rAny,
                                      const cpo::uno::Sequence<TestElement >& rSequence,
                                      const ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
@@ -210,7 +210,7 @@ public:
                                                                                  OUString& rStr,
                                                                                  sal_Int8& nByte2,
                                                                                  sal_Int16& nShort2,
-                                                                                 css::uno::Reference< css::uno::XInterface >& xTest,
+                                                                                 css::uno::Reference< cpo::uno::XInterface >& xTest,
                                                                                  cpo::uno::Any& rAny,
                                                                                  cpo::uno::Sequence<TestElement >& rSequence,
                                                                                  ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
@@ -230,7 +230,7 @@ public:
                                                                                 OUString& rStr,
                                                                                 sal_Int8& nByte2,
                                                                                 sal_Int16& nShort2,
-                                                                                css::uno::Reference< css::uno::XInterface >& xTest,
+                                                                                css::uno::Reference< cpo::uno::XInterface >& xTest,
                                                                                 cpo::uno::Any& rAny,
                                                                                 cpo::uno::Sequence< TestElement >& rSequence,
                                                                                 ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
@@ -290,7 +290,7 @@ public:
         { return _aData.Byte2; }
     virtual sal_Int16 SAL_CALL getShort2() override
         { return _aData.Short2; }
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getInterface(  ) override
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getInterface(  ) override
         { return _aData.Interface; }
     virtual cpo::uno::Any SAL_CALL getAny() override
         { return _aData.Any; }
@@ -329,7 +329,7 @@ public:
         { _aData.Byte2 = _byte; }
     virtual void SAL_CALL setShort2( sal_Int16 _short ) override
         { _aData.Short2 = _short; }
-    virtual void SAL_CALL setInterface( const css::uno::Reference< css::uno::XInterface >& _interface ) override
+    virtual void SAL_CALL setInterface( const css::uno::Reference< cpo::uno::XInterface >& _interface ) override
         { _aData.Interface = _interface; }
     virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) override
         { _aData.Any = _any; }
@@ -408,7 +408,7 @@ public: // XBridgeTest
     virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext ) override;
 
     virtual void SAL_CALL raiseRuntimeExceptionOneway(
-        const OUString& Message, const css::uno::Reference< css::uno::XInterface >& Context ) override;
+        const OUString& Message, const css::uno::Reference< cpo::uno::XInterface >& Context ) override;
 
     virtual sal_Int32 SAL_CALL getRuntimeException() override;
     virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) override;
@@ -597,7 +597,7 @@ void Test_Impl::setValues( bool bBool,
                            const OUString& rStr,
                            sal_Int8 nByte2,
                            sal_Int16 nShort2,
-                           const css::uno::Reference< css::uno::XInterface >& xTest,
+                           const css::uno::Reference< cpo::uno::XInterface >& xTest,
                            const cpo::uno::Any& rAny,
                            const cpo::uno::Sequence<TestElement >& rSequence,
                            const ::test::testtools::bridgetest::TestDataElements& rStruct )
@@ -623,7 +623,7 @@ void Test_Impl::setValues( bool bBool,
                                                                        OUString& rStr,
                                                                        sal_Int8& nByte2,
                                                                        sal_Int16& nShort2,
-                                                                       css::uno::Reference< css::uno::XInterface >& xTest,
+                                                                       css::uno::Reference< cpo::uno::XInterface >& xTest,
                                                                        cpo::uno::Any& rAny,
                                                                        cpo::uno::Sequence<TestElement >& rSequence,
                                                                        ::test::testtools::bridgetest::TestDataElements& rStruct )
@@ -654,7 +654,7 @@ void Test_Impl::setValues( bool bBool,
                                                                       OUString& rStr,
                                                                       sal_Int8& nByte2,
                                                                       sal_Int16& nShort2,
-                                                                      css::uno::Reference< css::uno::XInterface >& xTest,
+                                                                      css::uno::Reference< cpo::uno::XInterface >& xTest,
                                                                       cpo::uno::Any& rAny,
                                                                       cpo::uno::Sequence<TestElement >& rSequence,
                                                                       ::test::testtools::bridgetest::TestDataElements& rStruct )

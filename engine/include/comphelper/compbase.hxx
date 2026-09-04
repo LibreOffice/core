@@ -121,7 +121,7 @@ WeakComponentImplHelper_query(cpo::uno::Type const& rType, cppu::class_data* cd,
     Serves two purposes
     (1) extracts code that doesn't need to be templated
     (2) helps to handle the custom where we have conflicting interfaces
-        e.g. multiple UNO interfaces that extend css::uno::XInterface
+        e.g. multiple UNO interfaces that extend cpo::uno::XInterface
 */
 class COMPHELPER_DLLPUBLIC WeakImplHelperBase : public virtual comphelper::UnoImplBase,
                                                 public cppu::OWeakObject

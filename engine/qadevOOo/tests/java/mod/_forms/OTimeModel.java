@@ -23,7 +23,7 @@ import com.sun.star.form.XBoundComponent;
 import com.sun.star.form.XLoadable;
 import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.io.PrintWriter;
 import ifc.form._XUpdateBroadcaster.UpdateChecker;
 

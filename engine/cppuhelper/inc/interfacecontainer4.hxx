@@ -27,10 +27,7 @@
 #include <mutex>
 #include <vector>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
+namespace cpo::uno { class XInterface; }
 
 /**
 This is a straight copy of the include/comphelper/interfacecontainer4.hxx file, copied here
@@ -371,7 +368,7 @@ sal_Int32 OInterfaceContainerHelper4<ListenerT>::removeInterface(
 
     // It is not valid to compare the pointer directly, but it's faster.
     auto it = std::find_if(maData->begin(), maData->end(),
-                           [&rListener](const css::uno::Reference<css::uno::XInterface>& rItem) {
+                           [&rListener](const css::uno::Reference<cpo::uno::XInterface>& rItem) {
                                return rItem.get() == rListener.get();
                            });
 

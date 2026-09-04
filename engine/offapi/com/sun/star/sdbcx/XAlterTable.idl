@@ -25,7 +25,7 @@
 
 /** is used for creating and appending new objects to a specific container.
  */
-published interface XAlterTable: com::sun::star::uno::XInterface
+published interface XAlterTable: cpo::uno::XInterface
 {
 
     /** is intended to alter an existing column identified by its name.

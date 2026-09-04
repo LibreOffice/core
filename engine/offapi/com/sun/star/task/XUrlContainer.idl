@@ -24,7 +24,7 @@ module com { module sun { module star { module task {
 /** Allows to store and retrieve URLs. URLs can be stored persistently or
     until end of OOo session.
 */
-published interface XUrlContainer : com::sun::star::uno::XInterface
+published interface XUrlContainer : cpo::uno::XInterface
 {
     /** Add a URL to the container.
 

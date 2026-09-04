@@ -39,7 +39,7 @@ module ModuleA
     struct StructC : StructB
     {
         string                              aString;
-        sequence<com::sun::star::uno::XInterface>   aInterfaceSeq;
+        sequence<cpo::uno::XInterface>   aInterfaceSeq;
     };
 
     exception ExceptionB : ExceptionA
@@ -47,7 +47,7 @@ module ModuleA
         StructC aStructC;
     };
 
-    interface XInterface1 : com::sun::star::uno::XInterface
+    interface XInterface1 : cpo::uno::XInterface
     {
     };
 
@@ -75,7 +75,7 @@ module ModuleC
     const double            aConstDouble    = 3.14e-10;
 
 
-    interface XInterfaceA : com::sun::star::uno::XInterface
+    interface XInterfaceA : cpo::uno::XInterface
     {
         void methodA();
         void methodB([in] short aShort);

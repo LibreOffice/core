@@ -183,7 +183,7 @@ published interface XModel: com::sun::star::lang::XComponent
             the current selection in the current controller.
             If there is no current controller, it returns `NULL`.
      */
-    com::sun::star::uno::XInterface getCurrentSelection();
+    cpo::uno::XInterface getCurrentSelection();
 };
 
 

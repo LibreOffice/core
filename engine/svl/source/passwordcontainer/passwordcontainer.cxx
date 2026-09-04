@@ -469,7 +469,7 @@ std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view 
     // problems with decoding
     OSL_FAIL( "Problem with decoding" );
     throw css::task::NoMasterException(
-        u"Can't decode!"_ustr, css::uno::Reference<css::uno::XInterface>(), mode);
+        u"Can't decode!"_ustr, css::uno::Reference<cpo::uno::XInterface>(), mode);
 }
 
 OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, std::u16string_view aMasterPasswd)
@@ -1391,7 +1391,7 @@ Sequence< OUString > PasswordContainer::getSupportedServiceNames(  )
     return { u"com.sun.star.task.PasswordContainer"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 svl_PasswordContainer_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

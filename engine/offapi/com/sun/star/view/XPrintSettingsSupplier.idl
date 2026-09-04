@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module view {
 /** offers printing related settings, which affect document rendering,
     but are not related to the printer itself.
  */
-published interface XPrintSettingsSupplier: com::sun::star::uno::XInterface
+published interface XPrintSettingsSupplier: cpo::uno::XInterface
 {
 
     /** @returns

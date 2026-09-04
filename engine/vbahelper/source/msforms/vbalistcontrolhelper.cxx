@@ -144,7 +144,7 @@ ListControlHelper::removeItem( const cpo::uno::Any& index )
     cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-        throw cpo::uno::RuntimeException( u"Invalid index"_ustr , uno::Reference< uno::XInterface > () );
+        throw cpo::uno::RuntimeException( u"Invalid index"_ustr , uno::Reference< cpo::uno::XInterface > () );
     if( sList.hasElements() )
     {
         if( sList.getLength() == 1 )

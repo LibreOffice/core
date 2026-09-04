@@ -21,7 +21,7 @@
 module com {  module sun {  module star {  module chart2 {
 
 
-interface XScaling : ::com::sun::star::uno::XInterface
+interface XScaling : ::cpo::uno::XInterface
 {
     /**
      * Given a numeric value, return the scaled value that conforms

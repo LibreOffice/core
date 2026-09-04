@@ -78,7 +78,7 @@ public:
     ) override;
 
     virtual void setContext(
-        const css::uno::Reference< css::uno::XInterface >& xContext
+        const css::uno::Reference< cpo::uno::XInterface >& xContext
     ) override;
 
     virtual bool setModel(
@@ -87,7 +87,7 @@ public:
 
     virtual void setDesignMode( bool bOn ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > getContext() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getContext() override;
 
     virtual css::uno::Reference< css::awt::XControlModel > getModel() override = 0;
 
@@ -225,7 +225,7 @@ private:
 
     css::uno::Reference< cpo::uno::XComponentContext >        m_xComponentContext;
     rtl::Reference<OMRCListenerMultiplexerHelper>             m_xMultiplexer;   // multiplex events
-    css::uno::Reference< css::uno::XInterface >               m_xContext;
+    css::uno::Reference< cpo::uno::XInterface >               m_xContext;
     css::uno::Reference< css::awt::XWindowPeer >              m_xPeer;
     css::uno::Reference< css::awt::XWindow >                  m_xPeerWindow;
     css::uno::Reference< css::awt::XGraphics >                m_xGraphicsView;   // graphics for css::awt::XView-operations

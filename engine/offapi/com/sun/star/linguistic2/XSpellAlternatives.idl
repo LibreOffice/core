@@ -32,7 +32,7 @@ module com { module sun { module star { module linguistic2 {
 
     @see    com::sun::star::linguistic2::SpellFailure
 */
-published interface XSpellAlternatives : com::sun::star::uno::XInterface
+published interface XSpellAlternatives : cpo::uno::XInterface
 {
     /**
          @returns

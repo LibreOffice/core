@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** represents something that can recalculate.
  */
-published interface XCalculatable: com::sun::star::uno::XInterface
+published interface XCalculatable: cpo::uno::XInterface
 {
 
     /** recalculates all dirty cells.

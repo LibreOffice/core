@@ -40,13 +40,13 @@ FrameLoaderFactory::~FrameLoaderFactory()
 }
 
 
-css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::createInstance(const OUString& sLoader)
+css::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstance(const OUString& sLoader)
 {
     return createInstanceWithArguments(sLoader, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
+css::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
                                                                                                      const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
@@ -58,7 +58,7 @@ css::uno::Reference< css::uno::XInterface > FrameLoaderFactory::createInstanceWi
     CacheItem aLoader = cache.getItem(m_eType, sLoader);
 
     // create service instance
-    css::uno::Reference< css::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sLoader, m_xContext);
+    css::uno::Reference< cpo::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sLoader, m_xContext);
 
     // initialize filter
     css::uno::Reference< css::lang::XInitialization > xInit(xLoader, css::uno::UNO_QUERY);
@@ -91,7 +91,7 @@ cpo::uno::Sequence< OUString > FrameLoaderFactory::getAvailableServiceNames()
 } // namespace filter::config
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 filter_FrameLoaderFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

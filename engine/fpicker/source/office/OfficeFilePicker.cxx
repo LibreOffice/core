@@ -975,7 +975,7 @@ Sequence< OUString > SvtFilePicker::getSupportedServiceNames()
     return { u"com.sun.star.ui.dialogs.OfficeFilePicker"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 fpicker_SvtFilePicker_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -1021,7 +1021,7 @@ Sequence< OUString > SvtRemoteFilePicker::getSupportedServiceNames()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 fpicker_SvtRemoteFilePicker_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

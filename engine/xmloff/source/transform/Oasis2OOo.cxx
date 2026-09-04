@@ -1883,7 +1883,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 // Service registration
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 xmloff_Oasis2OOoTransformer_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

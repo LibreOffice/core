@@ -37,14 +37,14 @@ SvxShapeCollection::SvxShapeCollection() noexcept
 // XInterface
 void SvxShapeCollection::release() noexcept
 {
-    uno::Reference< uno::XInterface > x( xDelegator );
+    uno::Reference< cpo::uno::XInterface > x( xDelegator );
     if (! x.is())
     {
         if (osl_atomic_decrement( &m_refCount ) == 0)
         {
             if (! bDisposed)
             {
-                uno::Reference< uno::XInterface > xHoldAlive( getXWeak() );
+                uno::Reference< cpo::uno::XInterface > xHoldAlive( getXWeak() );
                 // First dispose
                 try
                 {
@@ -90,7 +90,7 @@ void SvxShapeCollection::dispose()
     try
     {
         document::EventObject aEvt;
-        aEvt.Source = uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) );
+        aEvt.Source = uno::Reference< cpo::uno::XInterface >::query( static_cast<lang::XComponent *>(this) );
         // inform all listeners to release this object
         // The listener container are automatically cleared
         std::unique_lock g(m_aMutex);
@@ -191,7 +191,7 @@ cpo::uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames()
     return { u"com.sun.star.drawing.Shapes"_ustr, u"com.sun.star.drawing.ShapeCollection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_drawing_SvxShapeCollection_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

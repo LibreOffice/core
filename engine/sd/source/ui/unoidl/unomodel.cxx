@@ -1057,7 +1057,7 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
             }
             else if (IsXMLToken(rValue.Name, XML_MASTER_ELEMENT))
             {
-                Reference<XInterface> xMaster;
+                Reference<cpo::uno::XInterface> xMaster;
                 rValue.Value >>= xMaster;
                 if (xMaster.is())
                 {
@@ -1203,7 +1203,7 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue)
 
 void AnimationsExporter::appendTrigger(const cpo::uno::Any& rTarget, const OString& rTriggerHash)
 {
-    css::uno::Reference<css::uno::XInterface> xRef;
+    css::uno::Reference<cpo::uno::XInterface> xRef;
     rTarget >>= xRef;
 
     uno::Reference<drawing::XShape> xShape(xRef, uno::UNO_QUERY);
@@ -3397,7 +3397,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
 
 // XMultiServiceFactory ( SvxFmMSFactory )
 
-css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
+css::uno::Reference<cpo::uno::XInterface> SdXImpressDocument::create(
     OUString const & aServiceSpecifier, OUString const & referer)
 {
     ::SolarMutexGuard aGuard;
@@ -3449,11 +3449,11 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
     if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
-        return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
+        return uno::Reference< cpo::uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
     }
     if( aServiceSpecifier == "com.sun.star.drawing.Background" )
     {
-        return uno::Reference<uno::XInterface>(cppu::getXWeak(new SdUnoPageBackground(mpDoc)));
+        return uno::Reference<cpo::uno::XInterface>(cppu::getXWeak(new SdUnoPageBackground(mpDoc)));
     }
 
     if( aServiceSpecifier == "com.sun.star.drawing.Defaults" )
@@ -3559,7 +3559,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         return cppu::getXWeak(new SvXMLEmbeddedObjectHelper( *pPersist, SvXMLEmbeddedObjectHelperMode::Read ));
     }
 
-    uno::Reference< uno::XInterface > xRet;
+    uno::Reference< cpo::uno::XInterface > xRet;
 
     if (std::u16string_view aType; aServiceSpecifier.startsWith("com.sun.star.presentation.", &aType))
     {
@@ -3673,12 +3673,12 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     return xRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( const OUString& aServiceSpecifier )
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( const OUString& aServiceSpecifier )
 {
     return create(aServiceSpecifier, u""_ustr);
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 SdXImpressDocument::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence<cpo::uno::Any> const & Arguments)
@@ -7285,7 +7285,7 @@ rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocumen
     return xRet;
 }
 
-void NotifyDocumentEvent(SdDrawDocument const & rDocument, const OUString& rEventName, const uno::Reference<uno::XInterface>& xSource)
+void NotifyDocumentEvent(SdDrawDocument const & rDocument, const OUString& rEventName, const uno::Reference<cpo::uno::XInterface>& xSource)
 {
     rtl::Reference<SdXImpressDocument> xModel(SdXImpressDocument::GetModel(rDocument));
 

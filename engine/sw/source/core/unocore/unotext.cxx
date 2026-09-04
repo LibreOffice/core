@@ -299,7 +299,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
             // stupid method not allowed to throw iae
             cpo::uno::Any anyEx = cppu::getCaughtException();
             throw lang::WrappedTargetRuntimeException( iae.Message,
-                            uno::Reference< uno::XInterface >(), anyEx );
+                            uno::Reference< cpo::uno::XInterface >(), anyEx );
         }
     }
     if (bAbsorb)
@@ -1411,7 +1411,7 @@ SwXText::insertTextContentWithProperties(
             cpo::uno::Any anyEx = cppu::getCaughtException();
             m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
             throw lang::WrappedTargetRuntimeException( e.Message,
-                            uno::Reference< uno::XInterface >(), anyEx );
+                            uno::Reference< cpo::uno::XInterface >(), anyEx );
         }
     }
     m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, &aRewriter);
@@ -2510,7 +2510,7 @@ rtl::Reference< SwXTextCursor > SwXBodyText::createXTextCursorByRangeImpl(
 
     if(p1 != p2)
         throw cpo::uno::RuntimeException( u"End of content node doesn't have the proper start node"_ustr,
-               uno::Reference< uno::XInterface >( *this ) );
+               uno::Reference< cpo::uno::XInterface >( *this ) );
 
     rtl::Reference< SwXTextCursor > xRef = new SwXTextCursor(*GetDoc(), this, CursorType::Body,
                     *rPam.GetPoint(), rPam.GetMark());

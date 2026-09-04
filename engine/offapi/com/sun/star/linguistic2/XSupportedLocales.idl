@@ -31,9 +31,9 @@ module com { module sun { module star { module linguistic2 {
     </P>
 
     @see    com::sun::star::lang::Locale
-    @see    com::sun::star::uno::XInterface
+    @see    cpo::uno::XInterface
 */
-published interface XSupportedLocales : com::sun::star::uno::XInterface
+published interface XSupportedLocales : cpo::uno::XInterface
 {
     /**
          @returns

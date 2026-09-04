@@ -22,7 +22,7 @@ module com { module sun { module star { module i18n {
 /** provides locale-sensitive collation algorithms for string comparison.
 
 */
-published interface XCollator: com::sun::star::uno::XInterface
+published interface XCollator: cpo::uno::XInterface
 {
     /** Compare 2 substrings in specific locale and algorithm.
 

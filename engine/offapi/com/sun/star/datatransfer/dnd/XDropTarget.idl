@@ -31,7 +31,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     be a performance issue.</p>
 */
 
-published interface XDropTarget: com::sun::star::uno::XInterface
+published interface XDropTarget: cpo::uno::XInterface
 {
     /** Add a DropTargetListener.
 

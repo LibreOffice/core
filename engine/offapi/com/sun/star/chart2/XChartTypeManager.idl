@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XChartTypeManager : ::com::sun::star::uno::XInterface
+interface XChartTypeManager : ::cpo::uno::XInterface
 {
 };
 

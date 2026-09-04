@@ -24,7 +24,7 @@ interface XXMLSecurityContext;
 /**
  * Interface to manipulate Security Environment
  */
-interface XSEInitializer : com::sun::star::uno::XInterface
+interface XSEInitializer : cpo::uno::XInterface
 {
     /**
        Creates a security context.

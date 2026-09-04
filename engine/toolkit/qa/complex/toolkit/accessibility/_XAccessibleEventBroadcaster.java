@@ -30,7 +30,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Testing <code>

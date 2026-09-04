@@ -143,7 +143,7 @@ bool OEvoabDriver::acceptsURL_Stat( std::u16string_view url )
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 connectivity_OEvoabDriver_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

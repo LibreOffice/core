@@ -24,7 +24,7 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
 import cpo.uno.TypeClass;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Represents the UNO built-in type <code>TYPE</code>.
@@ -251,7 +251,7 @@ public class Type {
      *   <code>false</code>, the chosen UNO type is (a sequence type with
      *   element type) <code>ANY</code>.  If <code>alternative</code> is
      *   <code>true</code>, the chosen UNO type is (a sequence type with element
-     *   type) <code>com.sun.star.uno.XInterface</code>.</li>
+     *   type) <code>cpo.uno.XInterface</code>.</li>
      * </ul>
      * <p>In all other cases, the value of <code>alternative</code> is
      * ignored.</p>

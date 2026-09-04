@@ -433,7 +433,7 @@ cpo::uno::Any SAL_CALL ScVbaBorders::getColor()
             if( color.hasValue() )
             {
                 if( color != xBorder->getColor() )
-                    return cpo::uno::Any( uno::Reference< uno::XInterface >() );
+                    return cpo::uno::Any( uno::Reference< cpo::uno::XInterface >() );
             }
             else
                 color = xBorder->getColor();
@@ -462,7 +462,7 @@ cpo::uno::Any SAL_CALL ScVbaBorders::getColorIndex()
             if( nColorIndex.hasValue() )
             {
                 if( nColorIndex != xBorder->getColorIndex() )
-                    return cpo::uno::Any( uno::Reference< uno::XInterface >() );
+                    return cpo::uno::Any( uno::Reference< cpo::uno::XInterface >() );
             }
             else
                 nColorIndex = xBorder->getColorIndex();
@@ -543,7 +543,7 @@ cpo::uno::Any SAL_CALL ScVbaBorders::getWeight()
             if( weight.hasValue() )
             {
                 if( weight != xBorder->getWeight() )
-                    return cpo::uno::Any( uno::Reference< uno::XInterface >() );
+                    return cpo::uno::Any( uno::Reference< cpo::uno::XInterface >() );
             }
             else
                 weight = xBorder->getWeight();

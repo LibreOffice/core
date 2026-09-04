@@ -86,9 +86,9 @@ public:
         { UnoDialogControl_Base::ControlContainerBase::addEventListener(p1); }
     virtual void removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
         { UnoDialogControl_Base::ControlContainerBase::removeEventListener(p1); }
-    virtual void setContext(const css::uno::Reference<css::uno::XInterface>& p1) override
+    virtual void setContext(const css::uno::Reference<cpo::uno::XInterface>& p1) override
         { UnoDialogControl_Base::ControlContainerBase::setContext(p1); }
-    virtual css::uno::Reference<css::uno::XInterface> getContext() override
+    virtual css::uno::Reference<cpo::uno::XInterface> getContext() override
         { return UnoDialogControl_Base::ControlContainerBase::getContext(); }
     virtual css::uno::Reference<css::awt::XView> getView() override
         { return UnoDialogControl_Base::ControlContainerBase::getView(); }

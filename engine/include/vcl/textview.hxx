@@ -64,7 +64,7 @@ public:
 
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any                               SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }

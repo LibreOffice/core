@@ -115,13 +115,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         void getComponentInfo(
             ComponentBackendDb::Data * data,
-            std::vector< css::uno::Reference< css::uno::XInterface > > *
+            std::vector< css::uno::Reference< cpo::uno::XInterface > > *
                 factories,
             Reference<XComponentContext> const & xContext );
 
         void componentLiveInsertion(
             ComponentBackendDb::Data const & data,
-            std::vector< css::uno::Reference< css::uno::XInterface > > const &
+            std::vector< css::uno::Reference< cpo::uno::XInterface > > const &
                 factories);
 
         void componentLiveRemoval(ComponentBackendDb::Data const & data);
@@ -1102,7 +1102,7 @@ void extractComponentData(
     css::uno::Reference< cpo::uno::XComponentContext > const & context,
     css::uno::Reference< css::registry::XRegistryKey > const & registry,
     ComponentBackendDb::Data * data,
-    std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
+    std::vector< css::uno::Reference< cpo::uno::XInterface > > * factories,
     css::uno::Reference< css::loader::XImplementationLoader > const &
         componentLoader,
     OUString const & componentUrl)
@@ -1144,7 +1144,7 @@ void extractComponentData(
 
 void BackendImpl::ComponentPackageImpl::getComponentInfo(
     ComponentBackendDb::Data * data,
-    std::vector< css::uno::Reference< css::uno::XInterface > > * factories,
+    std::vector< css::uno::Reference< cpo::uno::XInterface > > * factories,
     Reference<XComponentContext> const & xContext )
 {
     const Reference<loader::XImplementationLoader> xLoader(
@@ -1176,14 +1176,14 @@ void BackendImpl::ComponentPackageImpl::getComponentInfo(
 
 void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
     ComponentBackendDb::Data const & data,
-    std::vector< css::uno::Reference< css::uno::XInterface > > const &
+    std::vector< css::uno::Reference< cpo::uno::XInterface > > const &
         factories)
 {
     css::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getMyBackend()->getRootContext());
     css::uno::Reference< css::container::XSet > set(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    std::vector< css::uno::Reference< css::uno::XInterface > >::const_iterator
+    std::vector< css::uno::Reference< cpo::uno::XInterface > >::const_iterator
         factory(factories.begin());
     for (auto const& implementationName : data.implementationNames)
     {
@@ -1374,7 +1374,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             that->addToUnoRc(RCITEM_JAR_TYPELIB, url, xCmdEnv);
             data.javaTypeLibrary = true;
         }
-        std::vector< css::uno::Reference< css::uno::XInterface > > factories;
+        std::vector< css::uno::Reference< cpo::uno::XInterface > > factories;
         getComponentInfo(&data, startup ? nullptr : &factories, context);
         if (!startup) {
             try {
@@ -1703,7 +1703,7 @@ BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
 } // namespace dp_registry
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

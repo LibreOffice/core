@@ -32,8 +32,8 @@ public:
     void testInsertDrillDownSheet();
     virtual ~XDataPilotTable2();
 
-    virtual css::uno::Reference< css::uno::XInterface > initDP2() = 0;
-    virtual css::uno::Reference< css::uno::XInterface > getSheets() = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > initDP2() = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > getSheets() = 0;
 
 protected:
 

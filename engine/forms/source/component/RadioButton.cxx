@@ -384,14 +384,14 @@ bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_ORadioButtonModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ORadioButtonModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_ORadioButtonControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

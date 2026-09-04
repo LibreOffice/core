@@ -43,7 +43,7 @@ import com.sun.star.table.XTableColumns;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Test for object which is represented by accessible component of

@@ -205,7 +205,7 @@ DomainMapper::DomainMapper( const uno::Reference< cpo::uno::XComponentContext >&
         m_pImpl->m_xDocumentStorage = comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
             OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, bRepairStorage);
 
-        uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
+        uno::Reference< cpo::uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
                                 u"com.sun.star.document.OOXMLDocumentPropertiesImporter"_ustr,
                                 xContext);
 

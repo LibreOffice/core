@@ -38,7 +38,7 @@
         </li>
     </ol>
  */
-published interface XStorable: com::sun::star::uno::XInterface
+published interface XStorable: cpo::uno::XInterface
 {
     /** The object may know the location because it was loaded from there,
         or because it is stored there.

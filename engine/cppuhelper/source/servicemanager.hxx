@@ -47,12 +47,12 @@ namespace cppuhelper {
 
 extern "C" {
 
-typedef css::uno::XInterface * ImplementationConstructorFn(
+typedef cpo::uno::XInterface * ImplementationConstructorFn(
     cpo::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const &);
 
 }
 
-typedef std::function<css::uno::XInterface * (cpo::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const&)> WrapperConstructorFn;
+typedef std::function<cpo::uno::XInterface * (cpo::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const&)> WrapperConstructorFn;
 
 typedef WeakComponentImplHelper2<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
@@ -101,12 +101,12 @@ public:
             Implementation(const Implementation&) = delete;
             const Implementation& operator=(const Implementation&) = delete;
 
-            css::uno::Reference<css::uno::XInterface> createInstance(
+            css::uno::Reference<cpo::uno::XInterface> createInstance(
                 css::uno::Reference<cpo::uno::XComponentContext> const &
                     context,
                 bool singletonRequest);
 
-            css::uno::Reference<css::uno::XInterface>
+            css::uno::Reference<cpo::uno::XInterface>
             createInstanceWithArguments(
                 css::uno::Reference<cpo::uno::XComponentContext> const &
                     context,
@@ -146,21 +146,21 @@ public:
             Status status;
 
             std::mutex mutex;
-            css::uno::Reference<css::uno::XInterface> singleInstance;
+            css::uno::Reference<cpo::uno::XInterface> singleInstance;
             css::uno::Reference< css::lang::XComponent > disposeInstance;
             bool dispose;
 
         private:
-            css::uno::Reference<css::uno::XInterface> doCreateInstance(
+            css::uno::Reference<cpo::uno::XInterface> doCreateInstance(
                 css::uno::Reference<cpo::uno::XComponentContext> const & context);
 
-            css::uno::Reference<css::uno::XInterface> doCreateInstanceWithArguments(
+            css::uno::Reference<cpo::uno::XInterface> doCreateInstanceWithArguments(
                 css::uno::Reference<cpo::uno::XComponentContext> const & context,
                 cpo::uno::Sequence<cpo::uno::Any> const & arguments);
 
             void updateDisposeInstance(
                 bool singletonRequest,
-                css::uno::Reference<css::uno::XInterface> const & instance);
+                css::uno::Reference<cpo::uno::XInterface> const & instance);
         };
 
         typedef std::unordered_map< OUString, std::shared_ptr< Implementation > >
@@ -228,10 +228,10 @@ private:
     virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::uno::XInterface > createInstance(
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(
         OUString const & aServiceSpecifier) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
@@ -239,12 +239,12 @@ private:
     virtual cpo::uno::Sequence< OUString >
     getAvailableServiceNames() override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithContext(
         OUString const & aServiceSpecifier,
         css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,

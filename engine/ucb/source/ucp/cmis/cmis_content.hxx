@@ -136,7 +136,7 @@ private:
     cpo::uno::Sequence< css::document::CmisVersion >
         getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink,
+    bool feedSink( const css::uno::Reference< cpo::uno::XInterface>& aSink,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:

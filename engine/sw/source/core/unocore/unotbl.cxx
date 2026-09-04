@@ -142,7 +142,7 @@ namespace
         return pTable;
     }
 
-    chart::ChartDataChangeEvent createChartEvent(uno::Reference<uno::XInterface> const& xSource)
+    chart::ChartDataChangeEvent createChartEvent(uno::Reference<cpo::uno::XInterface> const& xSource)
     {
         //TODO: find appropriate settings of the Event
         chart::ChartDataChangeEvent event;
@@ -156,7 +156,7 @@ namespace
     }
 
     void lcl_SendChartEvent(std::unique_lock<std::mutex>& rGuard,
-            uno::Reference<uno::XInterface> const& xSource,
+            uno::Reference<cpo::uno::XInterface> const& xSource,
             const ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
     {
         if (rListeners.getLength(rGuard))
@@ -166,7 +166,7 @@ namespace
     }
 
     void lcl_SendChartEvent(std::mutex& rMutex,
-            uno::Reference<uno::XInterface> const& xSource,
+            uno::Reference<cpo::uno::XInterface> const& xSource,
             const ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
     {
         std::unique_lock aGuard(rMutex);
@@ -3066,7 +3066,7 @@ void SwXTextTable::Impl::Notify(const SfxHint& rHint)
     std::unique_lock aGuard(m_Mutex);
     if (m_EventListeners.getLength(aGuard) == 0 && m_ChartListeners.getLength(aGuard) == 0)
         return;
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
     // fdo#72695: if UNO object is already dead, don't revive it with event
     if (!xThis)
         return;
@@ -3790,7 +3790,7 @@ const SwUnoCursor* SwXCellRange::GetTableCursor() const
 
 void SwXCellRange::Impl::Notify( const SfxHint& rHint )
 {
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
     if(rHint.GetId() == SfxHintId::Dying)
     {
         m_pFrameFormat = nullptr;
@@ -4034,12 +4034,12 @@ cpo::uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(nIndex < 0 || getCount() <= nIndex)
         throw lang::IndexOutOfBoundsException();
-    return cpo::uno::Any(uno::Reference<uno::XInterface>()); // i#21699 not supported
+    return cpo::uno::Any(uno::Reference<cpo::uno::XInterface>()); // i#21699 not supported
 }
 
 cpo::uno::Type SAL_CALL SwXTableColumns::getElementType()
 {
-    return cppu::UnoType<uno::XInterface>::get();
+    return cppu::UnoType<cpo::uno::XInterface>::get();
 }
 
 bool SwXTableColumns::hasElements()

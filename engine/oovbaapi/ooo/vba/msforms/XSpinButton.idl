@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XSpinButton: com::sun::star::uno::XInterface
+interface XSpinButton: cpo::uno::XInterface
 {
     [attribute] long Max;
     [attribute] long Min;

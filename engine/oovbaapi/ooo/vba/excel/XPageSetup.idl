@@ -24,7 +24,7 @@ module ooo {  module vba {  module excel {
 
 
 
-interface XPageSetup : com::sun::star::uno::XInterface
+interface XPageSetup : cpo::uno::XInterface
 {
 //  interface ::ooo::vba::XHelperInterface;
 

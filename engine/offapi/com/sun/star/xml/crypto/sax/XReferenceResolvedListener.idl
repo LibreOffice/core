@@ -25,7 +25,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * This interface is used to receive the collection completion notification for an element
  * collector.
  */
-interface XReferenceResolvedListener : com::sun::star::uno::XInterface
+interface XReferenceResolvedListener : cpo::uno::XInterface
 {
     /**
      * Notifies an element has been collected by an element collector.

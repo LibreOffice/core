@@ -47,13 +47,13 @@ connectivity/source/drivers/odbc/OResultSet.cxx:90
 connectivity/source/drivers/odbc/OResultSet.cxx:95
      (anonymous namespace)::CharsBindData::CharsBindData(const type-parameter-?-? &)
 connectivity/source/inc/calc/CDriver.hxx:30
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> connectivity::calc::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> connectivity::calc::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 connectivity/source/inc/dbase/DDriver.hxx:29
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> connectivity::dbase::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> connectivity::dbase::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 connectivity/source/inc/dbase/dindexnode.hxx:64
     _Bool connectivity::dbase::ONDXKey::operator<(const connectivity::dbase::ONDXKey &) const
 connectivity/source/inc/flat/EDriver.hxx:29
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> connectivity::flat::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> connectivity::flat::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 connectivity/source/inc/OColumn.hxx:103
     _Bool connectivity::OColumn::isReadOnly() const
 connectivity/source/inc/OColumn.hxx:104
@@ -235,7 +235,7 @@ embeddedobj/source/msole/olecomponent.hxx:130
 extensions/source/scanner/scanner.hxx:73
     void ScannerManager::SetData(void *)
 extensions/source/scanner/scanner.hxx:77
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScannerManager_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> ScannerManager_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 filter/source/svg/svgwriter.hxx:337
     Color SVGActionWriter::ImplGetColorWithIntensity(const Color &,unsigned short)
 hwpfilter/source/hiodev.h:62
@@ -697,7 +697,7 @@ include/comphelper/unique_unlock.hxx:27
 include/comphelper/unique_unlock.hxx:39
     comphelper::unique_unlock<Mutex> comphelper::<deduction guide for unique_unlock>(const comphelper::unique_unlock<Mutex> &)
 include/comphelper/unwrapargs.hxx:51
-    void comphelper::detail::unwrapArgs(const cpo::uno::Sequence<cpo::uno::Any> &,int,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+    void comphelper::detail::unwrapArgs(const cpo::uno::Sequence<cpo::uno::Any> &,int,const com::sun::star::uno::Reference<cpo::uno::XInterface> &)
 include/comphelper/xmlsechelper.hxx:64
     com::sun::star::uno::Reference<com::sun::star::security::XCertificate> comphelper::xmlsec::FindCertInContext(const com::sun::star::uno::Reference<com::sun::star::xml::crypto::XXMLSecurityContext> &,const rtl::OUString &)
 include/connectivity/dbcharset.hxx:137
@@ -1581,11 +1581,11 @@ sc/inc/address.hxx:651
 sc/inc/address.hxx:661
     std::basic_ostream<type-parameter-?-?, type-parameter-?-?> & operator<<(std::basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const ScRange &)
 sc/inc/appluno.hxx:37
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScSpreadsheetSettings_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> ScSpreadsheetSettings_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/appluno.hxx:40
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScRecentFunctionsObj_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> ScRecentFunctionsObj_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/appluno.hxx:43
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScFunctionListObj_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> ScFunctionListObj_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/bigrange.hxx:70
     _Bool ScBigAddress::operator!=(const ScBigAddress &) const
 sc/inc/calcconfig.hxx:80
@@ -1627,7 +1627,7 @@ sc/inc/formulacell.hxx:558
 sc/inc/formulaopt.hxx:78
     _Bool ScFormulaOptions::operator!=(const ScFormulaOptions &) const
 sc/inc/funcuno.hxx:35
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScFunctionAccess_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> ScFunctionAccess_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/kahan.hxx:207
     _Bool KahanSum::operator<(const KahanSum &) const
 sc/inc/kahan.hxx:211
@@ -2385,7 +2385,7 @@ sw/source/uibase/inc/swcont.hxx:81
 sw/source/uibase/inc/swcont.hxx:82
     _Bool SwContent::operator==(const SwContent &) const
 sw/source/uibase/inc/unomod.hxx:38
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SwXModule_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> SwXModule_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sw/source/uibase/sidebar/ThemePanel.hxx:47
     _Bool sw::sidebar::ThemePanel::LinkStubDoubleClickHdl(void *,weld::TreeView &)
 sw/source/writerfilter/dmapper/CellColorHandler.hxx:74
@@ -2559,6 +2559,6 @@ vcl/unx/gtk3/glomenu.cxx:32
 xmlsecurity/inc/framework/signatureverifierimpl.hxx:75
     void SignatureVerifierImpl::updateSignature(const com::sun::star::uno::Reference<com::sun::star::xml::crypto::XXMLSignature> &,const com::sun::star::uno::Reference<com::sun::star::xml::crypto::XXMLSecurityContext> &)
 xmlsecurity/inc/framework/xmlsignaturetemplateimpl.hxx:92
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> XMLSignatureTemplateImpl::impl_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    com::sun::star::uno::Reference<cpo::uno::XInterface> XMLSignatureTemplateImpl::impl_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 xmlsecurity/source/xmlsec/nss/nssinitializer.hxx:45
      ONSSInitializer::ONSSInitializer(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>)

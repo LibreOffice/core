@@ -58,8 +58,8 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener > & aListener ) override;
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const cpo::uno::Sequence<
                                     cpo::uno::Any > & Arguments ) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
@@ -68,7 +68,7 @@ public:
 
 private:
     /// @throws cpo::uno::Exception
-    css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
+    css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
                                  const cpo::uno::Sequence<
                                     cpo::uno::Any > & Arguments,
                                  bool bCheckArgs );

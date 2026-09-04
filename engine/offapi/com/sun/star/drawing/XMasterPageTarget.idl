@@ -27,7 +27,7 @@
 
     @see DrawPage
  */
-published interface XMasterPageTarget: com::sun::star::uno::XInterface
+published interface XMasterPageTarget: cpo::uno::XInterface
 {
 
     /** @returns the MasterPage linked to this object.

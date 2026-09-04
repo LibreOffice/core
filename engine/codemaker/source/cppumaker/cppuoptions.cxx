@@ -298,7 +298,7 @@ OString CppuOptions::prepareHelp()
         "    -T<name>   = name specifies a type or a list of types. The output for this\n"
         "      [t1;...]   type is generated. If no '-T' option is specified,\n"
         "                 then output for all types is generated.\n"
-        "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n"
+        "                 Example: 'cpo.uno.XInterface' is a valid type.\n"
         "    -L         = UNO type functions are generated lightweight, that means only\n"
         "                 the name and typeclass are given and everything else is retrieved\n"
         "                 from the type library dynamically. The default is that UNO type\n"

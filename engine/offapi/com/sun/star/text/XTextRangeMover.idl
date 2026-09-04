@@ -29,7 +29,7 @@
 
     </p>@see Text
  */
-published interface XTextRangeMover: com::sun::star::uno::XInterface
+published interface XTextRangeMover: cpo::uno::XInterface
 {
     /** moves the contents to which <var>xRange</var> refers forward or
         backward.

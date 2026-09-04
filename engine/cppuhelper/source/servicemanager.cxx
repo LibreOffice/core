@@ -509,11 +509,11 @@ public:
 private:
     virtual ~SingletonFactory() override {}
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithContext(
         css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
@@ -523,7 +523,7 @@ private:
         implementation_;
 };
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 SingletonFactory::createInstanceWithContext(
     css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
@@ -531,7 +531,7 @@ SingletonFactory::createInstanceWithContext(
     return implementation_->createInstance(Context, true);
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 SingletonFactory::createInstanceWithArgumentsAndContext(
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< cpo::uno::XComponentContext > const & Context)
@@ -561,19 +561,19 @@ public:
 private:
     virtual ~ImplementationWrapper() override {}
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithContext(
         css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< cpo::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstance() override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArguments(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
@@ -589,7 +589,7 @@ private:
         implementation_;
 };
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 ImplementationWrapper::createInstanceWithContext(
     css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
@@ -599,7 +599,7 @@ ImplementationWrapper::createInstanceWithContext(
     return impl->createInstance(Context, false);
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 ImplementationWrapper::createInstanceWithArgumentsAndContext(
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< cpo::uno::XComponentContext > const & Context)
@@ -611,13 +611,13 @@ ImplementationWrapper::createInstanceWithArgumentsAndContext(
         Context, false, Arguments);
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 ImplementationWrapper::createInstance()
 {
     return createInstanceWithContext(manager_->getContext());
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 ImplementationWrapper::createInstanceWithArguments(
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
@@ -655,12 +655,12 @@ ImplementationWrapper::getSupportedServiceNames()
 
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::createInstance(
     css::uno::Reference<cpo::uno::XComponentContext> const & context,
     bool singletonRequest)
 {
-    css::uno::Reference<css::uno::XInterface> inst;
+    css::uno::Reference<cpo::uno::XInterface> inst;
     if (isSingleInstance) {
         std::unique_lock g(mutex);
         if (!singleInstance.is()) {
@@ -674,12 +674,12 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
     return inst;
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     css::uno::Reference<cpo::uno::XComponentContext> const & context,
     bool singletonRequest, cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
-    css::uno::Reference<css::uno::XInterface> inst;
+    css::uno::Reference<cpo::uno::XInterface> inst;
     if (isSingleInstance) {
         std::unique_lock g(mutex);
         if (!singleInstance.is()) {
@@ -693,12 +693,12 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     return inst;
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
     css::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     if (constructorFn) {
-        return css::uno::Reference<css::uno::XInterface>(
+        return css::uno::Reference<cpo::uno::XInterface>(
             constructorFn(context.get(), cpo::uno::Sequence<cpo::uno::Any>()),
             SAL_NO_ACQUIRE);
     } else if (factory1.is()) {
@@ -709,13 +709,13 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
     }
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::doCreateInstanceWithArguments(
     css::uno::Reference<cpo::uno::XComponentContext> const & context,
     cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     if (constructorFn) {
-        css::uno::Reference<css::uno::XInterface> inst(
+        css::uno::Reference<cpo::uno::XInterface> inst(
             constructorFn(context.get(), arguments), SAL_NO_ACQUIRE);
         //HACK: The constructor will either observe arguments and return inst
         // that does not implement XInitialization (or null), or ignore
@@ -739,7 +739,7 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstanceWithArguments(
 
 void cppuhelper::ServiceManager::Data::Implementation::updateDisposeInstance(
     bool singletonRequest,
-    css::uno::Reference<css::uno::XInterface> const & instance)
+    css::uno::Reference<cpo::uno::XInterface> const & instance)
 {
     // This is an optimization, to only call dispose once (from the component
     // context) on a singleton that is obtained both via the component context
@@ -805,7 +805,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             static_cast< cppu::OWeakObject * >(this));
     }
     cppuhelper::WrapperConstructorFn ctor;
-    css::uno::Reference< css::uno::XInterface > f0;
+    css::uno::Reference< cpo::uno::XInterface > f0;
     // Special handling of SharedLibrary loader, with support for environment,
     // constructor, and prefix arguments:
     if (!implementation->alienContext.is()
@@ -936,7 +936,7 @@ void cppuhelper::ServiceManager::initialize(
     {
         throw css::lang::IllegalArgumentException(
             u"invalid ServiceManager::initialize argument"_ustr,
-            css::uno::Reference<css::uno::XInterface>(), 0);
+            css::uno::Reference<cpo::uno::XInterface>(), 0);
     }
     preloadImplementations();
 }
@@ -959,7 +959,7 @@ cppuhelper::ServiceManager::getSupportedServiceNames()
     return { u"com.sun.star.lang.MultiServiceFactory"_ustr, u"com.sun.star.lang.ServiceManager"_ustr };
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 cppuhelper::ServiceManager::createInstance(
     OUString const & aServiceSpecifier)
 {
@@ -967,7 +967,7 @@ cppuhelper::ServiceManager::createInstance(
     return createInstanceWithContext(aServiceSpecifier, context_);
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
@@ -992,18 +992,18 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
     return comphelper::mapKeysToSequence(data_.services);
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithContext(
     OUString const & aServiceSpecifier,
     css::uno::Reference< cpo::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, aServiceSpecifier));
-    return impl == nullptr ? css::uno::Reference<css::uno::XInterface>()
+    return impl == nullptr ? css::uno::Reference<cpo::uno::XInterface>()
                            : impl->createInstance(Context, false);
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
@@ -1011,7 +1011,7 @@ cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
 {
     std::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, ServiceSpecifier));
-    return impl == nullptr ? css::uno::Reference<css::uno::XInterface>()
+    return impl == nullptr ? css::uno::Reference<cpo::uno::XInterface>()
                            : impl->createInstanceWithArguments(Context, false, Arguments);
 }
 
@@ -1894,7 +1894,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         {
             oslGenericFunction fpFactory;
             css::uno::Environment aTargetEnv;
-            css::uno::Reference<css::uno::XInterface> xFactory;
+            css::uno::Reference<cpo::uno::XInterface> xFactory;
 
             if(rEntry.second->constructorName.isEmpty())
             {
@@ -1913,7 +1913,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 {
                     throw css::loader::CannotActivateFactoryException(
                         ("no factory symbol \"" + aSymFactory + "\" in component library :" + aUri),
-                        css::uno::Reference<css::uno::XInterface>());
+                        css::uno::Reference<cpo::uno::XInterface>());
                 }
 
                 aTargetEnv = cppuhelper::detail::getEnvironment(rEntry.second->environment, rEntry.second->name);
@@ -1923,7 +1923,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 {
                     // invoke function component factory
                     OString aImpl(OUStringToOString(rEntry.second->name, RTL_TEXTENCODING_ASCII_US));
-                    xFactory.set(css::uno::Reference<css::uno::XInterface>(static_cast<css::uno::XInterface *>(
+                    xFactory.set(css::uno::Reference<cpo::uno::XInterface>(static_cast<cpo::uno::XInterface *>(
                         (*fpComponentFactory)(aImpl.getStr(), this, nullptr)), SAL_NO_ACQUIRE));
                 }
             }

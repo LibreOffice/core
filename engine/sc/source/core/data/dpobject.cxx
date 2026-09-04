@@ -1374,7 +1374,7 @@ OUString ScDPObject::GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int3
         tools::Long nDimCount = xDims->getCount();
         if ( nDim < nDimCount )
         {
-            uno::Reference<uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
             uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
             uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
             if ( xDimName.is() && xDimProp.is() )
@@ -1427,7 +1427,7 @@ bool ScDPObject::IsDuplicated( tools::Long nDim )
                 try
                 {
                     cpo::uno::Any aOrigAny = xDimProp->getPropertyValue( SC_UNO_DP_ORIGINAL );
-                    uno::Reference<uno::XInterface> xIntOrig;
+                    uno::Reference<cpo::uno::XInterface> xIntOrig;
                     if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                         bDuplicated = true;
                 }
@@ -1909,7 +1909,7 @@ bool ScDPObject::ParseFilters(
     sal_Int32 nDimCount = xIntDims->getCount();
     for ( sal_Int32 nDim = 0; nDim<nDimCount; nDim++ )
     {
-        uno::Reference<uno::XInterface> xIntDim(xIntDims->getByIndex(nDim), uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xIntDim(xIntDims->getByIndex(nDim), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xDim( xIntDim, uno::UNO_QUERY );
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
@@ -1946,7 +1946,7 @@ bool ScDPObject::ParseFilters(
                     sal_Int32 nLevCount = xLevels->getCount();
                     for (sal_Int32 nLev=0; nLev<nLevCount; nLev++)
                     {
-                        uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLev),
+                        uno::Reference<cpo::uno::XInterface> xLevel(xLevels->getByIndex(nLev),
                                                                uno::UNO_QUERY);
                         uno::Reference<container::XNamed> xLevNam( xLevel, uno::UNO_QUERY );
                         uno::Reference<sheet::XMembersSupplier> xLevSupp( xLevel, uno::UNO_QUERY );
@@ -2196,7 +2196,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
         xHiers = new ScNameToIndexAccess( xHiersName );
         nHierCount = xHiers->getCount();
     }
-    uno::Reference<uno::XInterface> xHier;
+    uno::Reference<cpo::uno::XInterface> xHier;
     if ( rElemDesc.Hierarchy < nHierCount )
         xHier.set(xHiers->getByIndex(rElemDesc.Hierarchy), uno::UNO_QUERY);
     OSL_ENSURE( xHier.is(), "hierarchy not found" );
@@ -2211,7 +2211,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
         xLevels = new ScNameToIndexAccess( xLevsName );
         nLevCount = xLevels->getCount();
     }
-    uno::Reference<uno::XInterface> xLevel;
+    uno::Reference<cpo::uno::XInterface> xLevel;
     if ( rElemDesc.Level < nLevCount )
         xLevel.set(xLevels->getByIndex(rElemDesc.Level), uno::UNO_QUERY);
     OSL_ENSURE( xLevel.is(), "level not found" );
@@ -2277,7 +2277,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
         if ( xHierSupp.is() )
         {
             uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess( xHierSupp->getLevels() );
-            uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xLevel(xLevels->getByIndex(0), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
             if ( xLevProp.is() )
             {
@@ -2549,7 +2549,7 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
 void ScDPObject::FillLabelDataForDimension(
     const uno::Reference<container::XIndexAccess>& xDims, sal_Int32 nDim, ScDPLabelData& rLabelData)
 {
-    uno::Reference<uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
     uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
 
@@ -2664,7 +2664,7 @@ void ScDPObject::GetFieldIdsNames(sheet::DataPilotFieldOrientation nOrient, std:
     tools::Long nDimCount = xDims->getCount();
     for (tools::Long nDim = 0; nDim < nDimCount; ++nDim)
     {
-        uno::Reference<uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xDimName(xIntDim, uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xDimProp(xIntDim, uno::UNO_QUERY);
 
@@ -2973,7 +2973,7 @@ std::vector<OUString> ScDPObject::GetRegisteredSources()
                 cpo::uno::Any aAddInAny = xEnum->nextElement();
 //              if ( aAddInAny.getReflection()->getTypeClass() == TypeClass_INTERFACE )
                 {
-                    uno::Reference<uno::XInterface> xIntFac;
+                    uno::Reference<cpo::uno::XInterface> xIntFac;
                     aAddInAny >>= xIntFac;
                     if ( xIntFac.is() )
                     {
@@ -3010,7 +3010,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     while (xEnum->hasMoreElements() && !xRet.is())
     {
         cpo::uno::Any aAddInAny = xEnum->nextElement();
-        uno::Reference<uno::XInterface> xIntFac;
+        uno::Reference<cpo::uno::XInterface> xIntFac;
         aAddInAny >>= xIntFac;
         if (!xIntFac.is())
             continue;
@@ -3024,7 +3024,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
             // #i113160# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
             // passing the context to the component (see ScUnoAddInCollection::Initialize)
 
-            uno::Reference<uno::XInterface> xInterface;
+            uno::Reference<cpo::uno::XInterface> xInterface;
             uno::Reference<cpo::uno::XComponentContext> xCtx(
                 comphelper::getComponentContext(xManager));
             uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );

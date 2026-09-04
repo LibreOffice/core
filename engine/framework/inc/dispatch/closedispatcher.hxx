@@ -89,7 +89,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
         EOperation m_eOperation;
 
         /** @short  for asynchronous operations we must hold us self alive! */
-        css::uno::Reference< css::uno::XInterface > m_xSelfHold;
+        css::uno::Reference< cpo::uno::XInterface > m_xSelfHold;
 
         /** @short  held alive for internally asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;

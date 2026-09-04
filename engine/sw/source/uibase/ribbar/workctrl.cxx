@@ -787,7 +787,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
     return xItemWindow;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 lo_writer_NavElementToolBoxController_get_implementation(
     cpo::uno::XComponentContext *rxContext,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -875,7 +875,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 lo_writer_PreviousScrollToolboxController_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -883,7 +883,7 @@ lo_writer_PreviousScrollToolboxController_get_implementation(
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::PREVIOUS ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 lo_writer_NextScrollToolboxController_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

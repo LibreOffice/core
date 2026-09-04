@@ -21,7 +21,7 @@ module com {  module sun {  module star {  module bridge {
 
 /** main interface for an interprocess bridge.
  */
-published interface XBridge: com::sun::star::uno::XInterface
+published interface XBridge: cpo::uno::XInterface
 {
     /** tries to get an interface from the remote that is known by this name.
 
@@ -34,7 +34,7 @@ published interface XBridge: com::sun::star::uno::XInterface
                              remote process.
         @see com::sun::star::bridge::XInstanceProvider
      */
-    com::sun::star::uno::XInterface getInstance( [in] string sInstanceName );
+    cpo::uno::XInterface getInstance( [in] string sInstanceName );
 
 
     /** name that the bridge got when it was created.

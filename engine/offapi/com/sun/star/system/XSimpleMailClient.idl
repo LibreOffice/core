@@ -23,7 +23,7 @@ module com { module sun { module star { module system {
 /** Specifies an interface for creating and sending email messages.
 */
 
-published interface XSimpleMailClient: com::sun::star::uno::XInterface
+published interface XSimpleMailClient: cpo::uno::XInterface
 {
     /** Create a simple mail message object that implements the interface
         XSimpleMailMessage.

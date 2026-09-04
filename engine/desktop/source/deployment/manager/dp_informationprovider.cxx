@@ -205,7 +205,7 @@ cpo::uno::Sequence< cpo::uno::Sequence< OUString > > PackageInformationProvider:
 
 } // namespace dp_info
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_deployment_PackageInformationProvider_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

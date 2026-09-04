@@ -216,7 +216,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
 
-    uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.mozilla.MozillaBootstrap"_ustr, rxContext);
+    uno::Reference<cpo::uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.mozilla.MozillaBootstrap"_ustr, rxContext);
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
@@ -257,7 +257,7 @@ cpo::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
 
-    uno::Reference<uno::XInterface> xInstance = m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.mozilla.MozillaBootstrap"_ustr, m_xContext);
+    uno::Reference<cpo::uno::XInterface> xInstance = m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.mozilla.MozillaBootstrap"_ustr, m_xContext);
     OSL_ENSURE(xInstance.is(), "failed to create instance" );
 
     uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
@@ -567,10 +567,10 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
         b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA512_1K );
     }
     else
-        throw css::lang::IllegalArgumentException(u"Unexpected digest requested."_ustr, css::uno::Reference< css::uno::XInterface >(), 1 );
+        throw css::lang::IllegalArgumentException(u"Unexpected digest requested."_ustr, css::uno::Reference< cpo::uno::XInterface >(), 1 );
 
     if ( aParams.hasElements() )
-        throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for digest creation."_ustr, css::uno::Reference< css::uno::XInterface >(), 2 );
+        throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for digest creation."_ustr, css::uno::Reference< cpo::uno::XInterface >(), 2 );
 
     if( !initNSS( m_xContext ) )
         return nullptr;
@@ -596,20 +596,20 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
             nNSSCipherID = CKM_AES_GCM;
             break;
         default:
-            throw css::lang::IllegalArgumentException(u"Unexpected cipher requested."_ustr, css::uno::Reference< css::uno::XInterface >(), 1);
+            throw css::lang::IllegalArgumentException(u"Unexpected cipher requested."_ustr, css::uno::Reference< cpo::uno::XInterface >(), 1);
     }
 
     if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
-        throw css::lang::IllegalArgumentException(u"Unexpected key length."_ustr, css::uno::Reference< css::uno::XInterface >(), 2 );
+        throw css::lang::IllegalArgumentException(u"Unexpected key length."_ustr, css::uno::Reference< cpo::uno::XInterface >(), 2 );
 
     if ( aParams.hasElements() )
-        throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for cipher creation."_ustr, css::uno::Reference< css::uno::XInterface >(), 5 );
+        throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for cipher creation."_ustr, css::uno::Reference< cpo::uno::XInterface >(), 5 );
 
     css::uno::Reference< css::xml::crypto::XCipherContext > xResult;
     if( initNSS( m_xContext ) )
     {
         if ( aInitializationVector.getLength() != PK11_GetIVLength( nNSSCipherID ) )
-            throw css::lang::IllegalArgumentException(u"Unexpected length of initialization vector."_ustr, css::uno::Reference< css::uno::XInterface >(), 3 );
+            throw css::lang::IllegalArgumentException(u"Unexpected length of initialization vector."_ustr, css::uno::Reference< cpo::uno::XInterface >(), 3 );
 
         xResult = OCipherContext::Create( nNSSCipherID, aKey, aInitializationVector, bEncryption, bW3CPadding );
         assert(xResult.is());
@@ -635,7 +635,7 @@ Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
 }
 
 #ifndef XMLSEC_CRYPTO_NSS
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

@@ -23,7 +23,7 @@ module com { module sun { module star { module script { module provider {
 /**
     This interface represents an invocable script or UNO function.
 */
-interface XScript : ::com::sun::star::uno::XInterface {
+interface XScript : ::cpo::uno::XInterface {
 
     /**
         invoke the script or function represented by the implementing

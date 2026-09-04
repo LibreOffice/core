@@ -48,10 +48,10 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
                             getParent() override;
     virtual void SAL_CALL   setParent( const css::uno::Reference<
-                                        css::uno::XInterface >& Parent ) override;
+                                        cpo::uno::XInterface >& Parent ) override;
 
                             /// XSimpleText
     virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL

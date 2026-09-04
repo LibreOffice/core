@@ -12,7 +12,7 @@ module com { module sun { module star { module testuno {
 service ExplicitConstructors: com::sun::star::testuno::XArgumentStore
 {
     multipleArguments([in] long a, [in] string b, [in] float c);
-    interfaceArgument([in] com::sun::star::uno::XInterface a);
+    interfaceArgument([in] cpo::uno::XInterface a);
     restArgument([in] any... rest);
 };
 

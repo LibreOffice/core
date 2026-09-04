@@ -2401,7 +2401,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance(u"com.sun.star.form.component.ComboBox"_ustr);
+    uno::Reference<cpo::uno::XInterface> xCreate = rServiceFactory->createInstance(u"com.sun.star.form.component.ComboBox"_ustr);
     if( !xCreate.is() )
         return false;
 
@@ -2489,7 +2489,7 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(u"com.sun.star.form.component.CheckBox"_ustr);
+    uno::Reference< cpo::uno::XInterface > xCreate = rServiceFactory->createInstance(u"com.sun.star.form.component.CheckBox"_ustr);
     if( !xCreate.is() )
         return false;
 
@@ -2541,7 +2541,7 @@ bool SwMSConvertControls::InsertControl(
     if( !rServiceFactory.is() )
         return false;
 
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
+    uno::Reference< cpo::uno::XInterface > xCreate = rServiceFactory->createInstance(
         u"com.sun.star.drawing.ControlShape"_ustr);
     if( !xCreate.is() )
         return false;

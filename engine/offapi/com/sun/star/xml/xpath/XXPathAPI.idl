@@ -21,7 +21,7 @@
 module com { module sun { module star { module xml { module xpath {
 
 
-interface XXPathAPI : com::sun::star::uno::XInterface
+interface XXPathAPI : cpo::uno::XInterface
 {
 
     void registerNS(

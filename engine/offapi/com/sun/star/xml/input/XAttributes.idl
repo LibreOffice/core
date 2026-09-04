@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module input {
 
     @internal
 */
-interface XAttributes : com::sun::star::uno::XInterface
+interface XAttributes : cpo::uno::XInterface
 {
     /** Gets the number of attributes.
 

@@ -200,7 +200,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     bool m_bTriedConversion;
     OUString m_aFilterName; // if m_bTriedConversion, then the filter detected by that
 
-    css::uno::Reference< css::uno::XInterface > m_xParent;
+    css::uno::Reference< cpo::uno::XInterface > m_xParent;
 
     /// If it is allowed to modify entries in the stream of the OLE storage.
     bool m_bStreamReadOnly = false;
@@ -439,8 +439,8 @@ public:
                     const cpo::uno::Sequence< css::awt::KeyEvent >& aKeys ) override;
 
     // XChild ( only for wrapping scenario here )
-    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XActiveDataStreamer
     void setStream(const css::uno::Reference<css::io::XStream>& xStream) override;

@@ -25,7 +25,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * This interface is used to receive the result information of a
  * signature verification.
  */
-interface XSignatureVerifyResultListener : com::sun::star::uno::XInterface
+interface XSignatureVerifyResultListener : cpo::uno::XInterface
 {
     /**
      * Notifies the signature verify result.

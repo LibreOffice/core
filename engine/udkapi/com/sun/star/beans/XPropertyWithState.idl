@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module beans {
         also implement XProperty.
     </p>
  */
-published interface XPropertyWithState: com::sun::star::uno::XInterface
+published interface XPropertyWithState: cpo::uno::XInterface
 {
 
     /** @returns
@@ -79,7 +79,7 @@ published interface XPropertyWithState: com::sun::star::uno::XInterface
                 In this case the original exception is wrapped into that
                 com::sun::star::lang::WrappedTargetException.
      */
-    com::sun::star::uno::XInterface getDefaultAsProperty( )
+    cpo::uno::XInterface getDefaultAsProperty( )
             raises( com::sun::star::lang::WrappedTargetException );
 };
 

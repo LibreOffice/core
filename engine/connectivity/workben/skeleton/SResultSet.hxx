@@ -128,9 +128,9 @@ namespace connectivity::skeleton
         OResultSet( OStatement_Base* pStmt);
 
 
-        css::uno::Reference< css::uno::XInterface > operator *()
+        css::uno::Reference< cpo::uno::XInterface > operator *()
         {
-            return css::uno::Reference< css::uno::XInterface >(*(OResultSet_BASE*)this);
+            return css::uno::Reference< cpo::uno::XInterface >(*(OResultSet_BASE*)this);
         }
 
         // ::cppu::OComponentHelper
@@ -161,7 +161,7 @@ namespace connectivity::skeleton
         virtual bool rowUpdated(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual bool rowInserted(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual bool rowDeleted(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         // XRow
         virtual bool wasNull(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual OUString getString( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);

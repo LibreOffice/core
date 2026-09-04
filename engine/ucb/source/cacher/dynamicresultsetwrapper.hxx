@@ -131,7 +131,7 @@ public:
     // XSourceInitialization
 
     virtual void SAL_CALL
-    setSource(  const css::uno::Reference< css::uno::XInterface > & Source ) override;
+    setSource(  const css::uno::Reference< cpo::uno::XInterface > & Source ) override;
 
 
     // own methods:

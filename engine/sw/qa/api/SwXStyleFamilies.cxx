@@ -45,7 +45,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -54,7 +54,7 @@ public:
         Reference<style::XStyleFamiliesSupplier> xStyleFamSupp(xTextDocument, UNO_QUERY_THROW);
         Reference<container::XNameAccess> xSF = xStyleFamSupp->getStyleFamilies();
 
-        return Reference<XInterface>(xSF, UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xSF, UNO_QUERY_THROW);
     }
 
     CPPUNIT_TEST_SUITE(SwXStyleFamilies);

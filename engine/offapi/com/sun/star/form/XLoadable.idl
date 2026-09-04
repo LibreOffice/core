@@ -27,7 +27,7 @@
 
     @see XLoadListener
  */
-published interface XLoadable: com::sun::star::uno::XInterface
+published interface XLoadable: cpo::uno::XInterface
 {
 
     /** loads the data.

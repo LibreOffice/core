@@ -169,7 +169,7 @@ awt::Rectangle AccessibleImageBullet::implGetBounds(  )
 void AccessibleImageBullet::grabFocus(  )
 {
     throw cpo::uno::RuntimeException(u"Not focusable"_ustr,
-                                uno::Reference< uno::XInterface >
+                                uno::Reference< cpo::uno::XInterface >
                                 ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 }
 

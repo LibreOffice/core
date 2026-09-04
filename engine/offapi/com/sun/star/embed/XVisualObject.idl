@@ -23,7 +23,7 @@
 
 /** represents common visualization functionality for embedded objects.
  */
-published interface XVisualObject: ::com::sun::star::uno::XInterface
+published interface XVisualObject: ::cpo::uno::XInterface
 {
     /** sets the size of object's visual area.
 

@@ -27,7 +27,7 @@
     </p>
     @see com::sun::star::sdb::DataSource
  */
-published interface XIsolatedConnection: com::sun::star::uno::XInterface
+published interface XIsolatedConnection: cpo::uno::XInterface
 {
     /** attempts to establish a database connection.
         <p>If information is missing, such as

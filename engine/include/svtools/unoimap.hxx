@@ -22,17 +22,17 @@
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 class ImageMap;
 struct SvEventDescription;
 
-SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMapRectangleObject_createInstance( const SvEventDescription* pSupportedMacroItems );
-SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMapCircleObject_createInstance( const SvEventDescription* pSupportedMacroItems );
-SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMapPolygonObject_createInstance( const SvEventDescription* pSupportedMacroItems );
+SVT_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvUnoImageMapRectangleObject_createInstance( const SvEventDescription* pSupportedMacroItems );
+SVT_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvUnoImageMapCircleObject_createInstance( const SvEventDescription* pSupportedMacroItems );
+SVT_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvUnoImageMapPolygonObject_createInstance( const SvEventDescription* pSupportedMacroItems );
 
-SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createInstance();
-SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
-SVT_DLLPUBLIC bool SvUnoImageMap_fillImageMap( const css::uno::Reference< css::uno::XInterface >& xImageMap, ImageMap& rMap );
+SVT_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvUnoImageMap_createInstance();
+SVT_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
+SVT_DLLPUBLIC bool SvUnoImageMap_fillImageMap( const css::uno::Reference< cpo::uno::XInterface >& xImageMap, ImageMap& rMap );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,7 @@ module com { module sun { module star { module xml { module crypto {
  * <p>In some cases, the contents to be signed need to be clearly pointed out by
  * the signature template.</p>
  */
-interface XXMLSignature : com::sun::star::uno::XInterface
+interface XXMLSignature : cpo::uno::XInterface
 {
     /**
      * Perform signature in the environment of signature template and context.

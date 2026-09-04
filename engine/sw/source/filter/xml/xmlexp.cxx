@@ -581,7 +581,7 @@ const SwDoc* SwXMLExport::getDoc() const
     return const_cast< SwXMLExport* >( this )->getDoc();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -589,7 +589,7 @@ com_sun_star_comp_Writer_XMLExporter_get_implementation(cpo::uno::XComponentCont
                 SvXMLExportFlags::ALL));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -598,7 +598,7 @@ com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(cpo::uno::XCompone
                 SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLContentExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -607,7 +607,7 @@ com_sun_star_comp_Writer_XMLContentExporter_get_implementation(cpo::uno::XCompon
                 SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -615,7 +615,7 @@ com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(cpo::uno::XComponent
                 SvXMLExportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -623,7 +623,7 @@ com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(cpo::uno::XCompo
                 SvXMLExportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -631,7 +631,7 @@ com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(cpo::uno::XComponen
                 SvXMLExportFlags::ALL | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -640,7 +640,7 @@ com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(cpo::uno::XCo
                 SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -649,7 +649,7 @@ com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(cpo::uno::XC
                 SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -657,7 +657,7 @@ com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(cpo::uno::XComp
                 SvXMLExportFlags::META | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

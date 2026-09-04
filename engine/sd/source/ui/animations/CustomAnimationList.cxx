@@ -58,7 +58,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XShapes;

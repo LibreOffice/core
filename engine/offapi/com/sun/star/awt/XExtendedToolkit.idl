@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module awt {
         This interface was only implemented in an intermediate developer
         release anyway.
 */
-published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
+published interface XExtendedToolkit : ::cpo::uno::XInterface
 {
 
     /** This function returns the number of currently existing top-level
@@ -163,7 +163,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
             com::sun::star::accessibility::XAccessible.
     */
     void fireFocusGained (
-        [in] ::com::sun::star::uno::XInterface source);
+        [in] ::cpo::uno::XInterface source);
 
 
     /** Broadcasts the a focusGained on all registered focus listeners
@@ -172,7 +172,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
             com::sun::star::accessibility::XAccessible.
     */
     void fireFocusLost (
-        [in] ::com::sun::star::uno::XInterface source);
+        [in] ::cpo::uno::XInterface source);
 
 };
 

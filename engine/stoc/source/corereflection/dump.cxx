@@ -40,10 +40,7 @@
 #include <typelib/typedescription.hxx>
 #include <uno/sequence2.h>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
+namespace cpo::uno { class XInterface; }
 
 namespace
 {
@@ -347,7 +344,7 @@ private:
 };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_stoc_Dump_get_implementation(cpo::uno::XComponentContext* context,
                                                cpo::uno::Sequence<cpo::uno::Any> const& arguments)
 {

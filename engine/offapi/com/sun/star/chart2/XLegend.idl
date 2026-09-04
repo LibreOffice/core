@@ -28,7 +28,7 @@ module chart2
 
 /** interface for the legend of a diagram
  */
-interface XLegend : ::com::sun::star::uno::XInterface
+interface XLegend : ::cpo::uno::XInterface
 {
 };
 

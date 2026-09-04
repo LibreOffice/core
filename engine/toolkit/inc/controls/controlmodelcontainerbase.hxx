@@ -128,8 +128,8 @@ public:
     css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XMultiServiceFactory
-    css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XComponent

@@ -13,7 +13,7 @@ module com {  module sun {  module star {  module chart2 {
 /** Provides access to chart2 data providers for a given document
 
  */
-interface XDataProviderAccess : com::sun::star::uno::XInterface
+interface XDataProviderAccess : cpo::uno::XInterface
 {
 
     /** creates a data provider for chart2, if possible

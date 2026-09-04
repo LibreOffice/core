@@ -31,7 +31,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -51,7 +51,7 @@ class ScDataPilotFieldGroupObj : public UnoApiTest,
 public:
     ScDataPilotFieldGroupObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupObj);
@@ -97,7 +97,7 @@ ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotFieldGroupObj::init()
+uno::Reference<cpo::uno::XInterface> ScDataPilotFieldGroupObj::init()
 {
     table::CellRangeAddress aCellRangeAddress(0, 1, 0, m_nMaxFieldIndex - 1, m_nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);

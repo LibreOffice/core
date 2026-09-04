@@ -23,7 +23,7 @@
 
 /** provides the collection of com::sun::star::drawing::TextShapes.
  */
-published interface XTextShapesSupplier: com::sun::star::uno::XInterface
+published interface XTextShapesSupplier: cpo::uno::XInterface
 {
     /** returns the collection of shapes.
 

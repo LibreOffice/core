@@ -34,7 +34,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { class XComponentContext; }
 
 namespace {
@@ -177,7 +177,7 @@ OUString Translator::translateToExternal(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation(cpo::uno::XComponentContext* ,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

@@ -393,7 +393,7 @@ include/basegfx/utils/gradienttools.hxx:54
 include/basic/sbxvar.hxx:74
     SbxValues::(anonymous union at /home/noel/online-plugin/engine/include/basic/sbxvar.hxx:42:5) pData void *
 include/basic/sbxvar.hxx:246
-    SbxVariable m_xComListener css::uno::Reference<css::uno::XInterface>
+    SbxVariable m_xComListener css::uno::Reference<cpo::uno::XInterface>
 include/basic/sbxvar.hxx:247
     SbxVariable m_pComListenerParentBasic StarBASIC *
 include/COKit/COKit.h:50
@@ -501,7 +501,7 @@ include/framework/addonsoptions.hxx:78
 include/framework/addonsoptions.hxx:79
     framework::MergeNotebookBarInstruction aMergeContext OUString
 include/framework/dispatchhelper.hxx:64
-    framework::DispatchHelper m_xBroadcaster css::uno::Reference<css::uno::XInterface>
+    framework::DispatchHelper m_xBroadcaster css::uno::Reference<cpo::uno::XInterface>
 include/framework/framelistanalyzer.hxx:121
     framework::FrameListAnalyzer m_xHelp css::uno::Reference<css::frame::XFrame>
 include/oox/core/fragmenthandler.hxx:53

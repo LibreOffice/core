@@ -29,7 +29,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class TypeDescriptionManager extends TestCase {
 

@@ -75,14 +75,14 @@ public:
     FmUndoContainerAction(FmFormModel& rMod,
                           Action _eAction,
                           const css::uno::Reference< css::container::XIndexContainer >& xCont,
-                          const css::uno::Reference< css::uno::XInterface >& xElem,
+                          const css::uno::Reference< cpo::uno::XInterface >& xElem,
                           sal_Int32 nIdx);
     virtual ~FmUndoContainerAction() override;
 
     virtual void Undo() override;
     virtual void Redo() override;
 
-    static void DisposeElement( const css::uno::Reference< css::uno::XInterface >& xElem );
+    static void DisposeElement( const css::uno::Reference< cpo::uno::XInterface >& xElem );
 
 private:
     void    implReInsert( );
@@ -90,9 +90,9 @@ private:
 
     css::uno::Reference< css::container::XIndexContainer >
                     m_xContainer;   // container which the action applies to
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
                     m_xElement;     // object not owned by the action
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
                     m_xOwnElement;  // object owned by the action
     sal_Int32       m_nIndex;       // index of the object within its container
     cpo::uno::Sequence< css::script::ScriptEventDescriptor >
@@ -132,7 +132,7 @@ public:
 
     // UNO binding
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
-    //  virtual bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
+    //  virtual bool queryInterface(UsrUik, css::uno::Reference< cpo::uno::XInterface>&);
     //  virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
 
     void Lock() { osl_atomic_increment( &m_Locks ); }
@@ -178,14 +178,14 @@ private:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);
-    void RemoveElement(const css::uno::Reference< css::uno::XInterface>& Element);
-    void TogglePropertyListening(const css::uno::Reference< css::uno::XInterface>& Element);
+    void AddElement(const css::uno::Reference< cpo::uno::XInterface>& Element);
+    void RemoveElement(const css::uno::Reference< cpo::uno::XInterface>& Element);
+    void TogglePropertyListening(const css::uno::Reference< cpo::uno::XInterface>& Element);
 
     void    implSetModified();
 
     void    switchListening( const css::uno::Reference< css::container::XIndexContainer >& _rxContainer, bool _bStartListening );
-    void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
+    void    switchListening( const css::uno::Reference< cpo::uno::XInterface >& _rxObject, bool _bStartListening );
 
     FmFormModel&                            rModel;
     std::unique_ptr<PropertySetInfoCache>   m_pPropertySetCache;

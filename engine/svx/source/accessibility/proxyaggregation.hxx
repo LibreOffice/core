@@ -95,7 +95,7 @@ namespace accessibility
 
         /// to be called from within your ctor
         void baseAggregateProxyFor(
-            const css::uno::Reference< css::uno::XInterface >& _rxComponent,
+            const css::uno::Reference< cpo::uno::XInterface >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
         );

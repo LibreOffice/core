@@ -28,7 +28,7 @@
 
     </p>
  */
-published interface XReferenceMarksSupplier: com::sun::star::uno::XInterface
+published interface XReferenceMarksSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the collection of reference marks.

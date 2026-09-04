@@ -34,7 +34,7 @@ void loadSharedLibComponentFactory(
     OUString const & constructor,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
     WrapperConstructorFn * constructorFunction,
-    css::uno::Reference<css::uno::XInterface> * factory);
+    css::uno::Reference<cpo::uno::XInterface> * factory);
 
 }
 

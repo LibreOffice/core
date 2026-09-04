@@ -81,7 +81,7 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XChild
 
-uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
+uno::Reference<cpo::uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
 {
     SolarMutexGuard aGuard;
 
@@ -94,7 +94,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
     return nullptr;
 }
 
-void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
+void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<cpo::uno::XInterface>& /* Parent */ )
 {
     //  ain't there
     //! exception or what ??!

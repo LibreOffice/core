@@ -70,7 +70,7 @@ module cpo {  module uno {
     </dl>
     </p>
  */
-published interface XWeak: com::sun::star::uno::XInterface
+published interface XWeak: cpo::uno::XInterface
 {
     /** queries the weak adapter.
 

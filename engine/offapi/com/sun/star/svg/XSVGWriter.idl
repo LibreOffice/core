@@ -22,7 +22,7 @@
 
 /** @deprecated
 */
-published interface XSVGWriter: com::sun::star::uno::XInterface
+published interface XSVGWriter: cpo::uno::XInterface
 {
     void        write(  [in] com::sun::star::xml::sax::XDocumentHandler aHandler,
                         [in] sequence< byte > aMtf );

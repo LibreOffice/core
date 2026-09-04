@@ -915,7 +915,7 @@ std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
                 && !pImport->IsODFVersionConsistent(*pImport->mpImpl->mxODFVersion))
             {
                 throw xml::sax::SAXException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr,
-                        uno::Reference< uno::XInterface >(),
+                        uno::Reference< cpo::uno::XInterface >(),
                         cpo::uno::Any(
                             packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
@@ -987,7 +987,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
             if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( *mpImpl->mxODFVersion ) )
             {
                 throw xml::sax::SAXException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr,
-                        uno::Reference< uno::XInterface >(),
+                        uno::Reference< cpo::uno::XInterface >(),
                         cpo::uno::Any(
                             packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
@@ -2141,7 +2141,7 @@ bool SvXMLImport::IsMSO() const
 }
 
 // xml:id for RDF metadata
-void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
+void SvXMLImport::SetXmlId(uno::Reference<cpo::uno::XInterface> const & i_xIfc,
     OUString const & i_rXmlId)
 {
     if (i_rXmlId.isEmpty())

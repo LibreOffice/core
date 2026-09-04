@@ -162,7 +162,7 @@ Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames()
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr, u"com.sun.star.text.FormatDetector"_ustr, u"com.sun.star.text.W4WFormatDetector"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_writer_FormatDetector_get_implementation(cpo::uno::XComponentContext*,
                                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {

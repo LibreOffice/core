@@ -23,7 +23,7 @@ module com { module sun { module star { module xml { module dom {
 interface XDocument;
 interface XDocumentType;
 
-interface XDOMImplementation : com::sun::star::uno::XInterface
+interface XDOMImplementation : cpo::uno::XInterface
 {
     /**
     Creates a DOM Document object of the specified type with its document element.

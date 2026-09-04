@@ -87,7 +87,7 @@ using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Exception;
 using ::cpo::uno::RuntimeException;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;

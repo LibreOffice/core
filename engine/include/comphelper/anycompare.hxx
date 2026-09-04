@@ -180,8 +180,8 @@ namespace comphelper
                 )
                 throw css::lang::IllegalArgumentException();
 
-            css::uno::Reference< css::uno::XInterface > lhs( _lhs, css::uno::UNO_QUERY );
-            css::uno::Reference< css::uno::XInterface > rhs( _rhs, css::uno::UNO_QUERY );
+            css::uno::Reference< cpo::uno::XInterface > lhs( _lhs, css::uno::UNO_QUERY );
+            css::uno::Reference< cpo::uno::XInterface > rhs( _rhs, css::uno::UNO_QUERY );
             return lhs.get() < rhs.get();
         }
     };

@@ -26,7 +26,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -44,7 +44,7 @@ class ScDataPilotFieldGroupItemObj : public UnoApiTest,
 public:
     ScDataPilotFieldGroupItemObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotFieldGroupItemObj);
@@ -72,7 +72,7 @@ ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
+uno::Reference<cpo::uno::XInterface> ScDataPilotFieldGroupItemObj::init()
 {
     table::CellRangeAddress aCellRangeAddress(0, 1, 0, m_nMaxFieldIndex - 1, m_nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);
@@ -166,7 +166,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
     uno::Reference<container::XIndexAccess> xIA_GI(aDPFGI.Groups, uno::UNO_QUERY_THROW);
     uno::Reference<container::XNameAccess> xNA_GN(xIA_GI->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<uno::XInterface> xReturn(xNA_GN->getByName(u"aName"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<cpo::uno::XInterface> xReturn(xNA_GN->getByName(u"aName"_ustr), uno::UNO_QUERY_THROW);
     return xReturn;
 }
 

@@ -32,7 +32,7 @@ struct SwXTextTable final : public UnoApiTest, public apitest::XComponent
 {
     SwXTextTable();
 
-    Reference<XInterface> init() override;
+    Reference<cpo::uno::XInterface> init() override;
     void triggerDesktopTerminate() override;
 
     CPPUNIT_TEST_SUITE(SwXTextTable);
@@ -48,7 +48,7 @@ SwXTextTable::SwXTextTable()
 
 void SwXTextTable::triggerDesktopTerminate() { mxDesktop->terminate(); }
 
-Reference<XInterface> SwXTextTable::init()
+Reference<cpo::uno::XInterface> SwXTextTable::init()
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -60,7 +60,7 @@ Reference<XInterface> SwXTextTable::init()
     xTable->initialize(4, 3);
     xText->insertTextContent(xCursor, xTable, false);
     CPPUNIT_ASSERT(xCursor.is());
-    return Reference<XInterface>(xTable, UNO_QUERY_THROW);
+    return Reference<cpo::uno::XInterface>(xTable, UNO_QUERY_THROW);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXTextTable);

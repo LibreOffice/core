@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
+uno::Reference< cpo::uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 {
     return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow ));
 }
@@ -229,7 +229,7 @@ void SAL_CALL SdXCustomPresentation::dispose()
 
     bDisposing = true;
 
-    uno::Reference< uno::XInterface > xSource( static_cast<cppu::OWeakObject*>(this) );
+    uno::Reference< cpo::uno::XInterface > xSource( static_cast<cppu::OWeakObject*>(this) );
 
     std::unique_lock aGuard2(aDisposeContainerMutex);
     lang::EventObject aEvt;
@@ -288,13 +288,13 @@ cpo::uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupporte
 }
 
 // XSingleServiceFactory
-uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstance()
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstance()
 {
-    uno::Reference< uno::XInterface >  xRef( static_cast<cppu::OWeakObject*>(new SdXCustomPresentation()) );
+    uno::Reference< cpo::uno::XInterface >  xRef( static_cast<cppu::OWeakObject*>(new SdXCustomPresentation()) );
     return xRef;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& )
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     return createInstance();
 }

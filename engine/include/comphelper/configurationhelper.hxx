@@ -27,7 +27,7 @@
 namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace comphelper
 {
@@ -86,7 +86,7 @@ public:
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. cpo::uno::Exception if the configuration could not be opened.
      */
-    static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+    static css::uno::Reference< cpo::uno::XInterface > openConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                   const OUString&                                           sPackage,
                                                                         EConfigurationModes                                 eMode   );
 
@@ -115,7 +115,7 @@ public:
      *          E.g. css::container::NoSuchElementException if the specified
      *          key does not exists.
      */
-    static cpo::uno::Any readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
+    static cpo::uno::Any readRelativeKey(const css::uno::Reference< cpo::uno::XInterface >& xCFG    ,
                                          const OUString&                            sRelPath,
                                          const OUString&                            sKey    );
 
@@ -145,7 +145,7 @@ public:
      *          key does not exists or cpo::uno::Exception if the provided configuration
      *          access does not allow writing for this key.
      */
-    static void writeRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
+    static void writeRelativeKey(const css::uno::Reference< cpo::uno::XInterface >& xCFG    ,
                                  const OUString&                            sRelPath,
                                  const OUString&                            sKey    ,
                                  const cpo::uno::Any&                              aValue  );
@@ -179,7 +179,7 @@ public:
      *          E.g. cpo::uno::Exception if the provided configuration
      *          access does not allow writing for this set.
      */
-    static css::uno::Reference< css::uno::XInterface > makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface >& xCFG         ,
+    static css::uno::Reference< cpo::uno::XInterface > makeSureSetNodeExists(const css::uno::Reference< cpo::uno::XInterface >& xCFG         ,
                                                                              const OUString&                            sRelPathToSet,
                                                                              const OUString&                            sSetNode     );
 
@@ -196,7 +196,7 @@ public:
      *          E.g. cpo::uno::Exception if the provided configuration
      *          access does not allow writing for this set.
      */
-    static void flush(const css::uno::Reference< css::uno::XInterface >& xCFG);
+    static void flush(const css::uno::Reference< cpo::uno::XInterface >& xCFG);
 
 
     /** does the same then openConfig() & readRelativeKey() together.

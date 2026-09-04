@@ -24,7 +24,7 @@
 /** provides access to the collection of all embedded and linked graphics
     within this context (i.e. within this document).
  */
-published interface XTextGraphicObjectsSupplier: com::sun::star::uno::XInterface
+published interface XTextGraphicObjectsSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the collection of graphic objects in this object (document).

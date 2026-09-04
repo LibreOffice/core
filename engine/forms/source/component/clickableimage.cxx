@@ -687,7 +687,7 @@ using namespace cpo::uno;
         // changed in a document that is already loaded. There's no way
         // we can get to the Model during loading.
         Reference< XModel >  xModel;
-        css::uno::Reference<css::uno::XInterface>  xIfc( *this );
+        css::uno::Reference<cpo::uno::XInterface>  xIfc( *this );
         while( !xModel.is() && xIfc.is() )
         {
             Reference<XChild>  xChild( xIfc, UNO_QUERY );

@@ -189,9 +189,9 @@ include/canvas/base/graphicdevicebase.hxx:229
 include/canvas/base/graphicdevicebase.hxx:234
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
 include/canvas/base/graphicdevicebase.hxx:240
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
+    class com::sun::star::uno::Reference<class cpo::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
 include/canvas/base/graphicdevicebase.hxx:248
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class cpo::uno::Sequence<class cpo::uno::Any> &,)
+    class com::sun::star::uno::Reference<class cpo::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class cpo::uno::Sequence<class cpo::uno::Any> &,)
 include/canvas/base/graphicdevicebase.hxx:256
     class cpo::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
 include/canvas/base/graphicdevicebase.hxx:263

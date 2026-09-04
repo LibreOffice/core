@@ -441,7 +441,7 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
     return eMode;
 }
 
-awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
+awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, const uno::Reference< cpo::uno::XInterface >& _rxContext )
 {
     awt::MouseEvent aMouseEvent;
     aMouseEvent.Source = _rxContext;
@@ -478,7 +478,7 @@ awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, 
     return aMouseEvent;
 }
 
-awt::KeyEvent VCLUnoHelper::createKeyEvent( const ::KeyEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
+awt::KeyEvent VCLUnoHelper::createKeyEvent( const ::KeyEvent& _rVclEvent, const uno::Reference< cpo::uno::XInterface >& _rxContext )
 {
     awt::KeyEvent aKeyEvent;
     aKeyEvent.Source = _rxContext;

@@ -112,7 +112,7 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
     if (comphelper::IsFuzzing())
         return false;
-    uno::Reference< uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
+    uno::Reference< cpo::uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
     maXShape.set( xNewShape, uno::UNO_QUERY );
     maXPropSet.set( xNewShape, uno::UNO_QUERY );
     if ( maXShape.is() && maXPropSet.is() )

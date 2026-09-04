@@ -3799,11 +3799,11 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
     return xRet;
 }
 
-uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
+uno::Reference<cpo::uno::XInterface> ScCellRangesBase::Find_Impl(
                                     const uno::Reference<util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos )
 {
-    uno::Reference<uno::XInterface> xRet;
+    uno::Reference<cpo::uno::XInterface> xRet;
     if ( pDocShell && xDesc.is() )
     {
         ScCellSearchObj* pSearch = dynamic_cast<ScCellSearchObj*>( xDesc.get() );
@@ -3846,15 +3846,15 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
     return xRet;
 }
 
-uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findFirst(
+uno::Reference<cpo::uno::XInterface> SAL_CALL ScCellRangesBase::findFirst(
                         const uno::Reference<util::XSearchDescriptor>& xDesc )
 {
     SolarMutexGuard aGuard;
     return Find_Impl( xDesc, nullptr );
 }
 
-uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
-                        const uno::Reference<uno::XInterface>& xStartAt,
+uno::Reference<cpo::uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
+                        const uno::Reference<cpo::uno::XInterface>& xStartAt,
                         const uno::Reference<util::XSearchDescriptor >& xDesc )
 {
     SolarMutexGuard aGuard;
@@ -4163,7 +4163,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const cpo::u
 
     //! Type of aElement can be some specific interface instead of XInterface
 
-    uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
     if ( pDocSh && xInterface.is() )
     {
         ScCellRangesBase* pRangesImp = dynamic_cast<ScCellRangesBase*>( xInterface.get() );

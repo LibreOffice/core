@@ -52,7 +52,7 @@ namespace basic
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::Desktop;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::script::XStorageBasedLibraryContainer;

@@ -14,7 +14,7 @@ module com { module sun { module star { module sheet {
  *
  * Is extended by any conditional format entry, e.g. color scale, data bar, icon set, date formats, condition formats
  */
-interface XConditionEntry : com::sun::star::uno::XInterface
+interface XConditionEntry : cpo::uno::XInterface
 {
     long getType();
 };

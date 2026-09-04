@@ -30,7 +30,7 @@ module cpo {  module uno {
     In general, do not spread the current context across different tasks.
     Values of the current context are destined for that task only.
 */
-published interface XCurrentContext : com::sun::star::uno::XInterface
+published interface XCurrentContext : cpo::uno::XInterface
 {
     /** Gets a value from the context.
 

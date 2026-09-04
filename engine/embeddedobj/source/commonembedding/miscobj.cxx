@@ -607,7 +607,7 @@ void OCommonEmbeddedObject::close( bool bDeliverOwnership )
     if ( m_bClosed )
         throw lang::DisposedException(); // TODO
 
-    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >( this ) );
+    uno::Reference< cpo::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >( this ) );
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
 
     if ( m_pInterfaceContainer )

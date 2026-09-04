@@ -108,7 +108,7 @@ void NetProxy_dispatch(uno_Interface* pUnoI, const typelib_TypeDescription* pMem
         SAL_WARN("bridges", ".NET bridge error: " << err.m_message);
 
         cpo::uno::RuntimeException exc("[net_uno bridge error] " + err.m_message,
-                                       css::uno::Reference<css::uno::XInterface>());
+                                       css::uno::Reference<cpo::uno::XInterface>());
         uno_type_any_construct(*pUnoExc, &exc,
                                cppu::UnoType<cpo::uno::RuntimeException>::get().getTypeLibType(),
                                nullptr);

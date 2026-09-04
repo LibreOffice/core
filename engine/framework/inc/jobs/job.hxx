@@ -79,7 +79,7 @@ class Job final : public  ::cppu::WeakImplHelper<
         /**
             Hold the (may asynchronous) job alive.
          */
-        css::uno::Reference< css::uno::XInterface > m_xJob;
+        css::uno::Reference< cpo::uno::XInterface > m_xJob;
 
         /**
             Used to wait for finishing of asynchronous started jobs.
@@ -125,7 +125,7 @@ class Job final : public  ::cppu::WeakImplHelper<
             where it was registered. This original instance is the user of this class.
             It must be set explicitly and will be used to fake the source of the event!
          */
-        css::uno::Reference< css::uno::XInterface > m_xResultSourceFake;
+        css::uno::Reference< cpo::uno::XInterface > m_xResultSourceFake;
 
         /**
             Holds the state, if we are listen for desktop/frame or model closing events or not.
@@ -164,7 +164,7 @@ class Job final : public  ::cppu::WeakImplHelper<
         virtual ~Job(                                                                      ) override;
 
         void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
-                                        const css::uno::Reference< css::uno::XInterface >&                xSourceFake  );
+                                        const css::uno::Reference< cpo::uno::XInterface >&                xSourceFake  );
         void     setJobData           ( const JobData&                                                    aData        );
         void     execute              ( const cpo::uno::Sequence< css::beans::NamedValue >&               lDynamicArgs );
         void     die                  (                                                                                );

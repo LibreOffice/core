@@ -28,7 +28,7 @@
     com::sun::star::container::XEnumerationAccess.
     </p>
  */
-published interface XInvocation: com::sun::star::uno::XInterface
+published interface XInvocation: cpo::uno::XInterface
 {
     /** returns the introspection from this object or `NULL`
         if the object does not provide this information.

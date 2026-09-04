@@ -30,7 +30,7 @@ module com { module sun { module star { module document {
     saved.
     </p>
  */
-published interface XViewDataSupplier: com::sun::star::uno::XInterface
+published interface XViewDataSupplier: cpo::uno::XInterface
 {
     /** retrieve information about currently opened view to restore it later
 

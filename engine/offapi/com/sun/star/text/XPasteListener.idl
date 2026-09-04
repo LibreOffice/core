@@ -12,7 +12,7 @@ module com { module sun { module star { module text {
 
 /**  used to notify listeners about paste events.
 */
-interface XPasteListener : com::sun::star::uno::XInterface
+interface XPasteListener : cpo::uno::XInterface
 {
     /** Notifies the listener about paste events.
 

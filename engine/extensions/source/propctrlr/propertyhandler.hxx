@@ -88,7 +88,7 @@ namespace pcr
         virtual ~PropertyHandler() override;
 
         // default implementations for XPropertyHandler
-        virtual void inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
+        virtual void inspect( const css::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
         virtual cpo::uno::Sequence< css::beans::Property > getSupportedProperties() override;
         virtual cpo::uno::Sequence< OUString > getSupersededProperties( ) override;
         virtual cpo::uno::Sequence< OUString > getActuatingProperties( ) override;

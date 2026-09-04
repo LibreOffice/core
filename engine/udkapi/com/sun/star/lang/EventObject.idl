@@ -28,7 +28,7 @@ published struct EventObject
 {
     /** refers to the object that fired the event.
      */
-    com::sun::star::uno::XInterface Source;
+    cpo::uno::XInterface Source;
 
 };
 

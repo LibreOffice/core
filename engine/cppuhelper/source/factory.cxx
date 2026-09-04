@@ -111,7 +111,7 @@ public:
     void disposing() override;
 
 private:
-    css::uno::Reference<css::uno::XInterface> createInstanceWithArgumentsEveryTime(
+    css::uno::Reference<cpo::uno::XInterface> createInstanceWithArgumentsEveryTime(
         cpo::uno::Sequence<cpo::uno::Any> const & rArguments,
         css::uno::Reference<cpo::uno::XComponentContext> const & xContext);
 
@@ -248,7 +248,7 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndC
     return createInstanceWithArgumentsEveryTime( rArguments, xContext );
 }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 OFactoryComponentHelper::createInstanceWithArgumentsEveryTime(
     cpo::uno::Sequence<cpo::uno::Any> const & rArguments,
     css::uno::Reference<cpo::uno::XComponentContext> const & xContext)

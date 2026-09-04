@@ -726,7 +726,7 @@ void NewToolbarController::updateImage()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &args)
@@ -734,7 +734,7 @@ com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
     return cppu::acquire(new GenericPopupToolbarController(context, args));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_SaveToolbarController_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -742,7 +742,7 @@ com_sun_star_comp_framework_SaveToolbarController_get_implementation(
     return cppu::acquire(new SaveToolbarController(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 org_apache_openoffice_comp_framework_NewToolbarController_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

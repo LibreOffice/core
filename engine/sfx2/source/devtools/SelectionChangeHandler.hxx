@@ -52,7 +52,7 @@ public:
         if (xSupplier.is())
         {
             cpo::uno::Any aAny = xSupplier->getSelection();
-            auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
+            auto xInterface = aAny.get<css::uno::Reference<cpo::uno::XInterface>>();
             mpDockingWindow->selectionChanged(xInterface);
         }
     }

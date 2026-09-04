@@ -23,7 +23,7 @@ module com { module sun { module star { module ucb {
 /** provides the initialization of a component with any source object.
 */
 
-published interface XSourceInitialization: com::sun::star::uno::XInterface
+published interface XSourceInitialization: cpo::uno::XInterface
 {
     /** provides the initialization of a component with any source object.
 
@@ -45,7 +45,7 @@ published interface XSourceInitialization: com::sun::star::uno::XInterface
         object implementing this interface.
 
     */
-    void setSource( [in] com::sun::star::uno::XInterface Source )
+    void setSource( [in] cpo::uno::XInterface Source )
          raises (AlreadyInitializedException);
 };
 

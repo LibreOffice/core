@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XViewPane.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -44,8 +44,8 @@ class ScViewPaneObj : public UnoApiTest,
 public:
     ScViewPaneObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXComponent() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXComponent() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScViewPaneObj);
@@ -80,9 +80,9 @@ ScViewPaneObj::ScViewPaneObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScViewPaneObj::getXComponent() { return mxComponent; }
+uno::Reference<cpo::uno::XInterface> ScViewPaneObj::getXComponent() { return mxComponent; }
 
-uno::Reference<uno::XInterface> ScViewPaneObj::init()
+uno::Reference<cpo::uno::XInterface> ScViewPaneObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

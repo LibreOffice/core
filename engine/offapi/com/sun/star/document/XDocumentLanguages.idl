@@ -20,7 +20,7 @@
 
 module com {   module sun {   module star {   module document {
 
-interface XDocumentLanguages: com::sun::star::uno::XInterface
+interface XDocumentLanguages: cpo::uno::XInterface
 {
     /** retrieve the list of languages already used in current document
 

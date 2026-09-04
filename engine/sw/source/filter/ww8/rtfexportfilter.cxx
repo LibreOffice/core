@@ -48,7 +48,7 @@ bool RtfExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& aDe
     m_aWriter.SetStream(pStream.get());
 
     // get SwDoc*
-    uno::Reference<uno::XInterface> xIfc(m_xSrcDoc, uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xIfc(m_xSrcDoc, uno::UNO_QUERY);
     auto pTextDoc = dynamic_cast<SwXTextDocument*>(xIfc.get());
     if (!pTextDoc)
     {
@@ -114,7 +114,7 @@ cpo::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
 
 // UNO helpers
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_RtfExport_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

@@ -12,7 +12,7 @@
 #include <memory>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <tools/ref.hxx>
@@ -61,14 +61,14 @@ void function6b(std::shared_ptr<Struct1> x)
     x.get()->x = 1; // expected-error-re {{'get()' followed by '->' operating on '{{.*}}shared_ptr{{.*}}', just use '->' [loplugin:redundantpointerops]}}
 }
 
-void function7(rtl::Reference<css::uno::XInterface> x)
+void function7(rtl::Reference<cpo::uno::XInterface> x)
 {
-    (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'rtl::Reference<css::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
+    (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'rtl::Reference<cpo::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
 }
 
-void function8(css::uno::Reference<css::uno::XInterface> x)
+void function8(css::uno::Reference<cpo::uno::XInterface> x)
 {
-    (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'css::uno::Reference<css::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
+    (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'css::uno::Reference<cpo::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
 }
 
 void function9(tools::SvRef<SvRefBase> x)
@@ -76,14 +76,14 @@ void function9(tools::SvRef<SvRefBase> x)
     (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'tools::SvRef<SvRefBase>', just use '*' [loplugin:redundantpointerops]}}
 }
 
-struct DerivedRtlReference: public rtl::Reference<css::uno::XInterface> {};
+struct DerivedRtlReference: public rtl::Reference<cpo::uno::XInterface> {};
 
 void function10(DerivedRtlReference x)
 {
     (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'DerivedRtlReference', just use '*' [loplugin:redundantpointerops]}}
 }
 
-struct DerivedUnoReference: public css::uno::Reference<css::uno::XInterface> {};
+struct DerivedUnoReference: public css::uno::Reference<cpo::uno::XInterface> {};
 
 void function11(DerivedUnoReference x)
 {

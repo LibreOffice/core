@@ -31,7 +31,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     be a performance issue.</p>
 */
 
-published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
+published interface XDragGestureRecognizer: cpo::uno::XInterface
 {
     /** Registers a new XDragGestureListener.
 

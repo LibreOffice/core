@@ -22,7 +22,7 @@
 
 /** allows to convert filesystem folder tree into a package.
  */
-published interface XPackageStructureCreator: com::sun::star::uno::XInterface
+published interface XPackageStructureCreator: cpo::uno::XInterface
 {
     /** converts filesystem folder tree into a package.
 

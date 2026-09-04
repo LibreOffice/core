@@ -23,7 +23,7 @@
 /** provides for access to a container of tables, typically used for a database
     definition object.
  */
-published interface XTablesSupplier: com::sun::star::uno::XInterface
+published interface XTablesSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of tables.

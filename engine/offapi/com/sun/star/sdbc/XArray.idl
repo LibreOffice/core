@@ -32,7 +32,7 @@
     reference to an SQL array. By default, an <code>Array</code>
     is implemented using a SQL LOCATOR(array) internally.
  */
-published interface XArray: com::sun::star::uno::XInterface
+published interface XArray: cpo::uno::XInterface
 {
 
     /** returns the SQL type name of the elements in

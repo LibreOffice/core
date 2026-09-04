@@ -59,13 +59,13 @@ using namespace ::com::sun::star;
 using namespace i18npool;
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
-    static uno::Reference< uno::XInterface >   \
+    static uno::Reference< cpo::uno::XInterface >   \
         ImplName##_CreateInstance(               \
             SAL_UNUSED_PARAMETER const uno::Reference<    \
                     lang::XMultiServiceFactory >& )       \
 {                                                         \
     return uno::Reference <                               \
-            uno::XInterface >( static_cast<cppu::OWeakObject*>(   \
+            cpo::uno::XInterface >( static_cast<cppu::OWeakObject*>(   \
                                     new ImplName) );       \
 }
 
@@ -75,7 +75,7 @@ using namespace i18npool;
         &implName##_CreateInstance }
 
 #define IMPL_UNO_CONSTRUCTOR( ImplName ) \
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
     cpo::uno::XComponentContext *, \
     cpo::uno::Sequence<cpo::uno::Any> const &) \
@@ -84,7 +84,7 @@ i18npool_##ImplName##_get_implementation( \
 }
 
 #define IMPL_UNO_CONSTRUCTOR_CTX( ImplName ) \
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
     cpo::uno::XComponentContext * context, \
     cpo::uno::Sequence<cpo::uno::Any> const &) \
@@ -253,7 +253,7 @@ IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_TW )
 
 namespace {
 
-typedef uno::Reference< uno::XInterface > (*FN_CreateInstance)(
+typedef uno::Reference< cpo::uno::XInterface > (*FN_CreateInstance)(
                 const uno::Reference< lang::XMultiServiceFactory >& );
 
 struct InstancesArray {

@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module lang {
     loader.  This is an application to run components passing the command
     line arguments.
 */
-published interface XMain: com::sun::star::uno::XInterface
+published interface XMain: cpo::uno::XInterface
 {
     /** This method is called to run the component.
 

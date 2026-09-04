@@ -21,7 +21,7 @@
 
 /** factory to create interprocess bridges.
  */
-published interface XBridgeFactory: com::sun::star::uno::XInterface
+published interface XBridgeFactory: cpo::uno::XInterface
 {
     /** tries to create a UNO interprocess bridge.
 

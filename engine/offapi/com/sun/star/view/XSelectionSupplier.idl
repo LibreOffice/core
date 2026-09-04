@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module view {
 
     @see OfficeDocumentView
  */
-published interface XSelectionSupplier: com::sun::star::uno::XInterface
+published interface XSelectionSupplier: cpo::uno::XInterface
 {
     /** selects the object represented by <var>xSelection</var> if it is
         known and selectable in this object.

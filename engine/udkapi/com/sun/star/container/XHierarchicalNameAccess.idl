@@ -24,14 +24,14 @@ module com {  module sun {  module star {  module container {
 /** is used to have hierarchical access to elements within a container.
 
     <p>You address an object of a specific level in the hierarchy by giving its
-    fully qualified name, e.g., "com.sun.star.uno.XInterface". </p>
+    fully qualified name, e.g., "cpo.uno.XInterface". </p>
 
     <p>To implement inaccurate name access, support the
     com::sun::star::beans::XExactName interface.  </p>
 
     @see com::sun::star::beans::XExactName
  */
-published interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
+published interface XHierarchicalNameAccess: cpo::uno::XInterface
 {
 
     /** @returns

@@ -49,7 +49,7 @@ namespace frm
     struct ElementDescription
     {
     public:
-        css::uno::Reference< css::uno::XInterface >       xInterface;
+        css::uno::Reference< cpo::uno::XInterface >       xInterface;
         css::uno::Reference< css::beans::XPropertySet >   xPropertySet;
         css::uno::Reference< css::container::XChild >     xChild;
         cpo::uno::Any                                     aElementTypeInterface;
@@ -62,8 +62,8 @@ namespace frm
         ElementDescription& operator=( const ElementDescription& ) = delete;
     };
 
-typedef std::vector<css::uno::Reference<css::uno::XInterface>> OInterfaceArray;
-typedef std::unordered_multimap< OUString, css::uno::Reference<css::uno::XInterface> > OInterfaceMap;
+typedef std::vector<css::uno::Reference<cpo::uno::XInterface>> OInterfaceArray;
+typedef std::unordered_multimap< OUString, css::uno::Reference<cpo::uno::XInterface> > OInterfaceMap;
 
 
 // OInterfaceContainer
@@ -165,8 +165,8 @@ public:
     virtual void insertEntry( sal_Int32 nIndex ) override;
     virtual void removeEntry( sal_Int32 nIndex ) override;
     virtual cpo::uno::Sequence< css::script::ScriptEventDescriptor > getScriptEvents( sal_Int32 Index ) override;
-    virtual void attach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
-    virtual void detach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject ) override;
+    virtual void attach( sal_Int32 nIndex, const css::uno::Reference< cpo::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
+    virtual void detach( sal_Int32 nIndex, const css::uno::Reference< cpo::uno::XInterface >& xObject ) override;
     virtual void addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
     virtual void removeScriptListener( const css::uno::Reference< css::script::XScriptListener >& Listener ) override;
 
@@ -211,7 +211,7 @@ protected:
     // called after the object is inserted, but before the "real listeners" are notified
     virtual void implInserted( const ElementDescription* _pElement );
     // called after the object is removed, but before the "real listeners" are notified
-    virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject);
+    virtual void implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject);
 
     /** called after an object was replaced. The default implementation notifies our listeners, after releasing
         the instance lock.
@@ -269,7 +269,7 @@ class OFormComponents   :public ::cppu::OComponentHelper
 {
 protected:
     ::osl::Mutex                               m_aMutex;
-    css::uno::Reference<css::uno::XInterface>  m_xParent;
+    css::uno::Reference<cpo::uno::XInterface>  m_xParent;
 
 public:
     OFormComponents(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
@@ -285,8 +285,8 @@ public:
     virtual void disposing() override;
 
 // css::form::XFormComponent
-    virtual css::uno::Reference<css::uno::XInterface> getParent() override;
-    virtual void setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual css::uno::Reference<cpo::uno::XInterface> getParent() override;
+    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // XEventListener
     using OInterfaceContainer::disposing;

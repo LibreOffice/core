@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 // also the XDialog is a XControl ( to access the model above
 
 ScVbaUserForm::ScVbaUserForm( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& xContext )
-    :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), nullptr ),
+    :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< cpo::uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), nullptr ),
        mbDispose( true )
 {
     m_xDialog.set( m_xControl, uno::UNO_QUERY_THROW );
@@ -304,7 +304,7 @@ ScVbaUserForm::hasProperty( const OUString& aName )
     return false;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ScVbaUserForm_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

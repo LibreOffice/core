@@ -122,7 +122,7 @@ namespace connectivity::odbc
                                         SQLRETURN _rRetCode,
                                         SQLHANDLE _pContext,
                                         SQLSMALLINT _nHandleType,
-                                        const css::uno::Reference< css::uno::XInterface >& _xInterface,
+                                        const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
                                         bool _bNoFound=true);
 
             /// @throws css::sdbc::SQLException
@@ -131,7 +131,7 @@ namespace connectivity::odbc
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 OUString &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface,
+                                const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
                                 rtl_TextEncoding _nTextEncoding);
 
             /// @throws css::sdbc::SQLException
@@ -140,7 +140,7 @@ namespace connectivity::odbc
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 sal_Int32 &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface);
+                                const css::uno::Reference< cpo::uno::XInterface >& _xInterface);
 
             /// @throws css::sdbc::SQLException
             /// @throws cpo::uno::RuntimeException
@@ -148,7 +148,7 @@ namespace connectivity::odbc
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUSMALLINT &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface);
+                                const css::uno::Reference< cpo::uno::XInterface >& _xInterface);
 
             /// @throws css::sdbc::SQLException
             /// @throws cpo::uno::RuntimeException
@@ -156,7 +156,7 @@ namespace connectivity::odbc
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUINTEGER &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface);
+                                const css::uno::Reference< cpo::uno::XInterface >& _xInterface);
 
             static sal_Int32 MapOdbcType2Jdbc(SQLSMALLINT _nType);
             static SQLSMALLINT jdbcTypeToOdbc(sal_Int32 jdbcType);
@@ -208,7 +208,7 @@ namespace connectivity::odbc
                                                     sal_Int32 columnIndex,
                                                     SQLSMALLINT _fSqlType,
                                                     bool &_bWasNull,
-                                                    const css::uno::Reference< css::uno::XInterface >& _xInterface,
+                                                    const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
                                                     rtl_TextEncoding _nTextEncoding);
 
             /// @throws css::sdbc::SQLException
@@ -218,7 +218,7 @@ namespace connectivity::odbc
                                                                             sal_Int32 columnIndex,
                                                                             SQLSMALLINT _fSqlType,
                                                                             bool &_bWasNull,
-                                                                            const css::uno::Reference< css::uno::XInterface >& _xInterface);
+                                                                            const css::uno::Reference< cpo::uno::XInterface >& _xInterface);
             /// @throws css::sdbc::SQLException
             /// @throws cpo::uno::RuntimeException
             static void getValue(   OConnection const * _pConnection,
@@ -226,7 +226,7 @@ namespace connectivity::odbc
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,
                                     bool &_bWasNull,
-                                    const css::uno::Reference< css::uno::XInterface >& _xInterface,
+                                    const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
                                     void* _pValue,
                                     SQLLEN _nSize);
         };
@@ -238,7 +238,7 @@ namespace connectivity::odbc
                                             sal_Int32 columnIndex,
                                             SQLSMALLINT _nType,
                                             bool &_bWasNull,
-                                            const css::uno::Reference< css::uno::XInterface >& _xInterface,
+                                            const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
                                             T& _rValue)
         {
             OTools::getValue(_pConnection,_aStatementHandle,columnIndex,_nType,_bWasNull,_xInterface,&_rValue,sizeof _rValue);

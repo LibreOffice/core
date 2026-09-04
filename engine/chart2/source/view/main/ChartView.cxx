@@ -243,7 +243,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
         comphelper::makePropertyValue(u"ExportOnlyBackground"_ustr, false),
         comphelper::makePropertyValue(u"HighContrast"_ustr, bUseHighContrast),
         comphelper::makePropertyValue(u"Version"_ustr, sal_Int32(SOFFICE_FILEFORMAT_50)),
-        comphelper::makePropertyValue(u"CurrentPage"_ustr, uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY )),
+        comphelper::makePropertyValue(u"CurrentPage"_ustr, uno::Reference< cpo::uno::XInterface >( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY )),
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         comphelper::makePropertyValue(u"ScaleXNumerator"_ustr, m_nScaleXNumerator),
         comphelper::makePropertyValue(u"ScaleXDenominator"_ustr, m_nScaleXDenominator),
@@ -1758,7 +1758,7 @@ void ChartView::removeVetoableChangeListener( const OUString& /* PropertyName */
 
 // ____ XMultiServiceFactory ____
 
-Reference< uno::XInterface > ChartView::createInstance( const OUString& aServiceSpecifier )
+Reference< cpo::uno::XInterface > ChartView::createInstance( const OUString& aServiceSpecifier )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1818,7 +1818,7 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
     return nullptr;
 }
 
-Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
+Reference< cpo::uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "ChartView::createInstanceWithArguments: arguments are ignored" );
     return createInstance( ServiceSpecifier );
@@ -2234,7 +2234,7 @@ awt::Rectangle ChartView::AddSubtractAxisTitleSizes(
 
 } //namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_ChartView_get_implementation(cpo::uno::XComponentContext *context,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {

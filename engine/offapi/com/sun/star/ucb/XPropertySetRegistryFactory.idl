@@ -24,7 +24,7 @@ module com { module sun { module star { module ucb {
 
      @version  1.0
   */
-published interface XPropertySetRegistryFactory : com::sun::star::uno::XInterface
+published interface XPropertySetRegistryFactory : cpo::uno::XInterface
 {
     /** creates a property set registry.
 

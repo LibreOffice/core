@@ -32,6 +32,7 @@
 
 using namespace osl;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
 namespace comphelper
@@ -214,7 +215,7 @@ sal_Int32 OInterfaceContainerHelper2::removeInterface( const Reference<XInterfac
     {
         // It is not valid to compare the pointer directly, but it's faster.
         auto it = std::find_if(aData.pAsVector->begin(), aData.pAsVector->end(),
-            [&rListener](const css::uno::Reference<css::uno::XInterface>& rItem) {
+            [&rListener](const css::uno::Reference<cpo::uno::XInterface>& rItem) {
                 return rItem.get() == rListener.get(); });
 
         // interface not found, use the correct compare method

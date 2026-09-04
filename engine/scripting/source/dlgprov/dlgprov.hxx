@@ -87,11 +87,11 @@ namespace dlgprov
             const css::uno::Reference< css::awt::XWindowPeer >& xParent );
 
         void attachControlEvents( const css::uno::Reference< css::awt::XControl >& rxControlContainer,
-            const css::uno::Reference< css::uno::XInterface >& rxHandler,
+            const css::uno::Reference< cpo::uno::XInterface >& rxHandler,
             const css::uno::Reference< css::beans::XIntrospectionAccess >& rxIntrospectionAccess,
             bool bDialogProviderMode );
         css::uno::Reference< css::beans::XIntrospectionAccess > inspectHandler(
-            const css::uno::Reference< css::uno::XInterface >& rxHandler );
+            const css::uno::Reference< cpo::uno::XInterface >& rxHandler );
     // helper methods
             /// @throws cpo::uno::Exception
             css::uno::Reference< css::container::XNameContainer > createDialogModel(
@@ -106,7 +106,7 @@ namespace dlgprov
         /// @throws cpo::uno::RuntimeException
         css::uno::Reference < css::awt::XControl > createDialogImpl(
             const OUString& URL,
-            const css::uno::Reference< css::uno::XInterface >& xHandler,
+            const css::uno::Reference< cpo::uno::XInterface >& xHandler,
             const css::uno::Reference< css::awt::XWindowPeer >& xParent,
             bool bDialogProviderMode );
 
@@ -130,7 +130,7 @@ namespace dlgprov
         // XDialogProvider2
         virtual css::uno::Reference < css::awt::XDialog > SAL_CALL createDialogWithHandler(
             const OUString& URL,
-            const css::uno::Reference< css::uno::XInterface >& xHandler ) override;
+            const css::uno::Reference< cpo::uno::XInterface >& xHandler ) override;
 
         virtual css::uno::Reference < css::awt::XDialog > SAL_CALL createDialogWithArguments(
             const OUString& URL,
@@ -139,7 +139,7 @@ namespace dlgprov
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createContainerWindow(
             const OUString& URL, const OUString& WindowType,
             const css::uno::Reference< css::awt::XWindowPeer >& xParent,
-            const css::uno::Reference< css::uno::XInterface >& xHandler ) override;
+            const css::uno::Reference< cpo::uno::XInterface >& xHandler ) override;
      };
 
 

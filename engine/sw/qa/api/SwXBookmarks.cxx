@@ -42,7 +42,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -58,7 +58,7 @@ public:
         Reference<text::XBookmarksSupplier> xSupplier(xTextDocument, UNO_QUERY_THROW);
         Reference<container::XNameAccess> xNameAccess = xSupplier->getBookmarks();
 
-        return Reference<XInterface>(xNameAccess, UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xNameAccess, UNO_QUERY_THROW);
     }
 
     CPPUNIT_TEST_SUITE(SwXBookmarks);

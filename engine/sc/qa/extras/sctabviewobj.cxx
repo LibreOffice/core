@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XViewPane.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -48,8 +48,8 @@ class ScTabViewObj : public UnoApiTest,
 public:
     ScTabViewObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0) override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0) override;
 
     virtual void setUp() override;
 
@@ -95,7 +95,7 @@ ScTabViewObj::ScTabViewObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScTabViewObj::init()
+uno::Reference<cpo::uno::XInterface> ScTabViewObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
@@ -105,7 +105,7 @@ uno::Reference<uno::XInterface> ScTabViewObj::init()
     return xModel->getCurrentController();
 }
 
-uno::Reference<uno::XInterface> ScTabViewObj::getXSpreadsheet(const sal_Int16 nNumber)
+uno::Reference<cpo::uno::XInterface> ScTabViewObj::getXSpreadsheet(const sal_Int16 nNumber)
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 

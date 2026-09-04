@@ -25,7 +25,7 @@ module com { module sun { module star { module mail {
    An implementation of this interface may for instance show a
    dialog to query the user for the necessary data.
  */
-interface XAuthenticator: ::com::sun::star::uno::XInterface {
+interface XAuthenticator: ::cpo::uno::XInterface {
 
     /**
         Will be called when the user name is needed.

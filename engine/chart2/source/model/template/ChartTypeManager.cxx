@@ -256,7 +256,7 @@ ChartTypeManager::~ChartTypeManager()
 {}
 
 // ____ XMultiServiceFactory ____
-uno::Reference< uno::XInterface > ChartTypeManager::createInstance(
+uno::Reference< cpo::uno::XInterface > ChartTypeManager::createInstance(
     const OUString& aServiceSpecifier )
 {
     return static_cast<cppu::OWeakObject*>(createTemplate(aServiceSpecifier).get());
@@ -611,7 +611,7 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
     return xTemplate;
 }
 
-uno::Reference< uno::XInterface > ChartTypeManager::createInstanceWithArguments(
+uno::Reference< cpo::uno::XInterface > ChartTypeManager::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
     const cpo::uno::Sequence< cpo::uno::Any >& /* Arguments */ )
 {
@@ -638,7 +638,7 @@ cpo::uno::Sequence< OUString > ChartTypeManager::getAvailableServiceNames()
             xEnumAcc->createContentEnumeration( u"com.sun.star.chart2.ChartTypeTemplate"_ustr ));
         if( xEnum.is())
         {
-            uno::Reference< uno::XInterface > xFactIntf;
+            uno::Reference< cpo::uno::XInterface > xFactIntf;
 
             while( xEnum->hasMoreElements())
             {
@@ -675,7 +675,7 @@ cpo::uno::Sequence< OUString > ChartTypeManager::getSupportedServiceNames()
 
 } //  namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart_ChartTypeManager_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

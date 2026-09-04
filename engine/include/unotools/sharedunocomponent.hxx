@@ -52,7 +52,7 @@ namespace utl
         @param _rxComponent
             the component whose life time should be controlled by the instance. Must not be <NULL/>.
         */
-        DisposableComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+        DisposableComponent( const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
         /** disposes the component represented by the instance
 
@@ -88,7 +88,7 @@ namespace utl
         @param _rxComponent
             the component whose life time should be controlled by the instance. Must not be <NULL/>.
         */
-        CloseableComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+        CloseableComponent( const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
         /** destroys resources associated with this instance, and disposes the component
 

@@ -130,7 +130,7 @@ ScVbaControlListener::disposing( const lang::EventObject& )
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< ::uno::XInterface > xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< ::cpo::uno::XInterface > xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : ControlImpl_BASE( xParent, xContext ), m_xControl(std::move( xControl )), m_xModel(std::move( xModel ))
 {
     //add listener
@@ -265,7 +265,7 @@ ScVbaControl::setTop( double _top )
     mpGeometryHelper->setTop( _top );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 ScVbaControl::getObject()
 {
     uno::Reference< msforms::XControl > xRet( this );
@@ -345,7 +345,7 @@ ScVbaControl::setControlSource( const OUString& _controlsource )
             sal_Int32 nCntrls = xFormControls->getCount();
             for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
             {
-                uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                uno::Reference< cpo::uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
                 bMatched = ( m_xProps == xControl );
                 if ( bMatched )
                 {
@@ -539,7 +539,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
             // Set up proper scriptcode
             uno::Reference< lang::XMultiServiceFactory > xDocFac(  m_xModel, uno::UNO_QUERY_THROW );
             uno::Reference< document::XCodeNameQuery > xNameQuery(  xDocFac->createInstance( u"ooo.vba.VBACodeNameProvider"_ustr ), uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+            uno::Reference< cpo::uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
             evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
             // handle if we passed in our own arguments
             if ( !rEvt.Arguments.hasElements() )
@@ -732,7 +732,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor )
 bool ScVbaControl::getAutoSize() const
 {
     bool bIsResizeEnabled = false;
-    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );
+    uno::Reference< cpo::uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
     if ( pObj )
         bIsResizeEnabled = !pObj->IsResizeProtect();
@@ -742,7 +742,7 @@ bool ScVbaControl::getAutoSize() const
 // currently no implementation for this
 void ScVbaControl::setAutoSize( bool bAutoSize )
 {
-    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );
+    uno::Reference< cpo::uno::XInterface > xIf( m_xControl, uno::UNO_SET_THROW );
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
     if ( pObj )
         pObj->SetResizeProtect( !bAutoSize );
@@ -801,7 +801,7 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ControlProviderImpl_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

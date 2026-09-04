@@ -429,7 +429,7 @@ JNI_type_info const * JNI_info::get_type_info(
 JNI_type_info const * JNI_info::get_type_info(
     JNI_context const & jni, OUString const & uno_name ) const
 {
-    if ( uno_name == "com.sun.star.uno.XInterface" )
+    if ( uno_name == "cpo.uno.XInterface" )
     {
         return m_XInterface_type_info;
     }
@@ -466,7 +466,7 @@ JNI_info::JNI_info(
       m_XInterface_queryInterface_td(
         (reinterpret_cast< typelib_InterfaceTypeDescription * >(
             css::uno::TypeDescription(
-                cppu::UnoType<css::uno::XInterface>::get())
+                cppu::UnoType<cpo::uno::XInterface>::get())
             .get())->ppMembers[ 0 ] ) ),
       m_Exception_type(cppu::UnoType<cpo::uno::Exception>::get()),
       m_RuntimeException_type(cppu::UnoType<cpo::uno::RuntimeException>::get()),
@@ -843,7 +843,7 @@ JNI_info::JNI_info(
     try
     {
         css::uno::TypeDescription XInterface_td(
-            cppu::UnoType<css::uno::XInterface>::get());
+            cppu::UnoType<cpo::uno::XInterface>::get());
         // coverity[ctor_dtor_leak] - on purpose
         m_XInterface_type_info =
             new JNI_interface_type_info( jni, XInterface_td.get() );

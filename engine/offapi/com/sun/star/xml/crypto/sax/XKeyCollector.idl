@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * <p>
  * This interface is used to manipulate key materials.
  */
-interface XKeyCollector : com::sun::star::uno::XInterface
+interface XKeyCollector : cpo::uno::XInterface
 {
     /**
      * Set the keeper id of the key element.

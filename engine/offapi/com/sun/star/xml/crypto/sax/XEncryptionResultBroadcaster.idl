@@ -26,7 +26,7 @@ interface XEncryptionResultListener;
  * <p>
  * This interface is used to manipulate encryption result listener.
  */
-interface XEncryptionResultBroadcaster : com::sun::star::uno::XInterface
+interface XEncryptionResultBroadcaster : cpo::uno::XInterface
 {
     /**
      * Adds a new encryption result listener.

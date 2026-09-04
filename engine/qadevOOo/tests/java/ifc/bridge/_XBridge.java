@@ -26,7 +26,7 @@ import com.sun.star.bridge.XBridge;
 import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 
 /**

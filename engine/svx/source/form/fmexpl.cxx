@@ -144,7 +144,7 @@ void FmEntryDataList::clear()
 }
 
 
-FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
+FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< cpo::uno::XInterface >& _rxIFace )
     :pParent( pParentData )
 {
     pChildList.reset( new FmEntryDataList() );
@@ -159,7 +159,7 @@ FmEntryData::~FmEntryData()
 }
 
 
-void FmEntryData::newObject( const css::uno::Reference< css::uno::XInterface >& _rxIFace )
+void FmEntryData::newObject( const css::uno::Reference< cpo::uno::XInterface >& _rxIFace )
 {
     // do not just copy, normalize it
     m_xNormalizedIFace.set( _rxIFace, UNO_QUERY );

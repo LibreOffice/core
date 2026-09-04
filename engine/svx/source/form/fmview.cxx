@@ -522,7 +522,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     return bDone;
 }
 
-bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
+bool FmFormView::checkUnMarkAll(const Reference< cpo::uno::XInterface >& _xSource)
 {
     Reference< css::awt::XControl> xControl(m_pImpl->m_xWindow,UNO_QUERY);
     bool bRet = !xControl.is() || !_xSource.is() || _xSource != xControl->getModel();

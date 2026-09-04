@@ -35,7 +35,7 @@ module com { module sun { module star { module ui {
     </p>
 */
 
-interface XUIElement : com::sun::star::uno::XInterface
+interface XUIElement : cpo::uno::XInterface
 {
     /** returns an interface to get access to user interface type specific functions.
 
@@ -43,7 +43,7 @@ interface XUIElement : com::sun::star::uno::XInterface
             a special purpose interface which depends on the type of the user
             interface element.
     */
-    ::com::sun::star::uno::XInterface getRealInterface();
+    ::cpo::uno::XInterface getRealInterface();
 
     /** determines the document frame to which this element is bound to.
 

@@ -77,7 +77,7 @@ namespace vcl::unohelper {
         }
     }
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any TextDataObject::queryInterface( const cpo::uno::Type & rType )
     {
         cpo::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< datatransfer::XTransferable* >(this) );

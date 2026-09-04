@@ -141,14 +141,14 @@ cpo::uno::Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames
 
 }  // namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_PolarCoordinateSystem2d_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::PolarCoordinateSystem2d);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_PolarCoordinateSystem3d_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

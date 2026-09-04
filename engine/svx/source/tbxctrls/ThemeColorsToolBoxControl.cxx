@@ -74,7 +74,7 @@ cpo::uno::Sequence<OUString> ThemeColorsToolBoxControl::getSupportedServiceNames
 }
 
 // Export function for service registration
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation(
     cpo::uno::XComponentContext* /*rxContext*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -18,7 +18,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -42,7 +42,7 @@ class ScFunctionListObj : public UnoApiTest,
 public:
     ScFunctionListObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScFunctionListObj);
@@ -84,7 +84,7 @@ ScFunctionListObj::ScFunctionListObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScFunctionListObj::init()
+uno::Reference<cpo::uno::XInterface> ScFunctionListObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);

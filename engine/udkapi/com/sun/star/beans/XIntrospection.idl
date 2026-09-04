@@ -31,7 +31,7 @@
 
     @see XIntrospectionAccess
  */
-published interface XIntrospection: com::sun::star::uno::XInterface
+published interface XIntrospection: cpo::uno::XInterface
 {
     /** inspects the given object.
 

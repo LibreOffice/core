@@ -25,7 +25,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -48,8 +48,8 @@ class ScDataPilotTablesObj : public UnoApiTest,
 public:
     ScDataPilotTablesObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXSpreadsheet() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotTablesObj);
@@ -90,7 +90,7 @@ ScDataPilotTablesObj::ScDataPilotTablesObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotTablesObj::init()
+uno::Reference<cpo::uno::XInterface> ScDataPilotTablesObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
@@ -114,7 +114,7 @@ uno::Reference<uno::XInterface> ScDataPilotTablesObj::init()
     return xDPT;
 }
 
-uno::Reference<uno::XInterface> ScDataPilotTablesObj::getXSpreadsheet()
+uno::Reference<cpo::uno::XInterface> ScDataPilotTablesObj::getXSpreadsheet()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 

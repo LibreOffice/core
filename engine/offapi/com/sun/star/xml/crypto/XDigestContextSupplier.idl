@@ -23,7 +23,7 @@
 /** This interface allows to get an object to generate a digest of a specified
     format.
  */
-interface XDigestContextSupplier : com::sun::star::uno::XInterface
+interface XDigestContextSupplier : cpo::uno::XInterface
 {
     /** returns an object that allows to generate the specified digest.
 

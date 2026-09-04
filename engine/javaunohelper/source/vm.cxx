@@ -50,9 +50,9 @@ public:
         {}
 
     // XSingleComponentFactory impl
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext(
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithContext(
         css::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
 };
 
@@ -61,7 +61,7 @@ void SingletonFactory::disposing()
     m_vm_access.clear();
 }
 
-css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWithContext(
+css::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWithContext(
     css::uno::Reference< cpo::uno::XComponentContext > const & xContext )
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
@@ -71,7 +71,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
         cpo::uno::Sequence< cpo::uno::Any >( &arg, 1 ), xContext );
 }
 
-css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
+css::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
     cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< cpo::uno::XComponentContext > const & xContext )
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(

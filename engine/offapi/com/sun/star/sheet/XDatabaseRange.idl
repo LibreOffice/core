@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DatabaseRange
  */
-published interface XDatabaseRange: com::sun::star::uno::XInterface
+published interface XDatabaseRange: cpo::uno::XInterface
 {
 
     /** returns the data area of the database range in the

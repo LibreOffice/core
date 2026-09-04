@@ -418,7 +418,7 @@ public:
     SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion = false);
     virtual ~SvxUnoTextRange() noexcept override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
     virtual void acquire() noexcept override;
@@ -455,7 +455,7 @@ public:
 
     css::uno::Reference< css::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     /// @throws cpo::uno::RuntimeException
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType );
 
@@ -522,7 +522,7 @@ public:
     static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept;
     virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override final;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override final;
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override final;
     virtual void acquire() noexcept override final;
@@ -560,7 +560,7 @@ public:
     SvxUnoTextContent( const SvxUnoTextContent& rContent ) noexcept;
     virtual ~SvxUnoTextContent() noexcept override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
     virtual void acquire() noexcept override;
@@ -657,7 +657,7 @@ public:
     SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) noexcept;
     virtual ~SvxUnoTextCursor() noexcept override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override final;
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override final;
     virtual void acquire() noexcept override final;

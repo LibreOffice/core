@@ -18,7 +18,7 @@
 
 package util;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.container.XIndexAccess;
 
 public interface XInstCreator {

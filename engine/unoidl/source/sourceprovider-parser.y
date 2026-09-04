@@ -1573,9 +1573,9 @@ interfaceDefn:
               ent->pad.get());
       assert(pad != nullptr);
       if (pad->directMandatoryBases.empty()
-          && data->currentName != "com.sun.star.uno.XInterface")
+          && data->currentName != "cpo.uno.XInterface")
       {
-          OUString base(u".com.sun.star.uno.XInterface"_ustr);
+          OUString base(u".cpo.uno.XInterface"_ustr);
           unoidl::detail::SourceProviderEntity const * p;
           if (findEntity(@4, yyscanner, data, true, &base, &p, nullptr, nullptr)
               == FOUND_ERROR)

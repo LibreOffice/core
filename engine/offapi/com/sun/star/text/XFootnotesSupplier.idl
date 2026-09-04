@@ -24,7 +24,7 @@
 /** makes it possible to access the footnotes within
     the context (e.g. document).
  */
-published interface XFootnotesSupplier: com::sun::star::uno::XInterface
+published interface XFootnotesSupplier: cpo::uno::XInterface
 {
     /** returns a collection of footnotes.
      */

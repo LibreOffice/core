@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 
 // Interface implementation
 
-uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
+uno::Reference< cpo::uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 {
     return *(new SvUnoAttributeContainer);
 }

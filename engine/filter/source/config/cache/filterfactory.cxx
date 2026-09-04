@@ -68,13 +68,13 @@ FilterFactory::~FilterFactory()
 }
 
 
-css::uno::Reference< css::uno::XInterface > FilterFactory::createInstance(const OUString& sFilter)
+css::uno::Reference< cpo::uno::XInterface > FilterFactory::createInstance(const OUString& sFilter)
 {
     return createInstanceWithArguments(sFilter, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< css::uno::XInterface > FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
+css::uno::Reference< cpo::uno::XInterface > FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                 const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
@@ -88,7 +88,7 @@ css::uno::Reference< css::uno::XInterface > FilterFactory::createInstanceWithArg
     aFilter[PROPNAME_FILTERSERVICE] >>= sFilterService;
 
     // create service instance
-    css::uno::Reference< css::uno::XInterface > xFilter;
+    css::uno::Reference< cpo::uno::XInterface > xFilter;
     if (!sFilterService.isEmpty())
         xFilter = m_xContext->getServiceManager()->createInstanceWithContext(sFilterService, m_xContext);
 
@@ -486,7 +486,7 @@ std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const O
 
 } // namespace filter
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 filter_FilterFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

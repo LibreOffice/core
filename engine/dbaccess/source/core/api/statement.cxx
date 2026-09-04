@@ -82,7 +82,7 @@ Sequence< Type > OStatementBase::getTypes()
     return aTypes.getTypes();
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any OStatementBase::queryInterface( const Type & rType )
 {
     Any aIface = ::cppu::WeakComponentImplHelper<>::queryInterface( rType );

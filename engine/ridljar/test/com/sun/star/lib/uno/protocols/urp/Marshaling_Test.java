@@ -22,7 +22,7 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -116,8 +116,8 @@ public final class Marshaling_Test {
             new Type("[][][]char", TypeClass.SEQUENCE),
             new Type("[][][][]short", TypeClass.SEQUENCE),
             new Type("[][][][][]any", TypeClass.SEQUENCE),
-            new Type("com.sun.star.uno.XInterface", TypeClass.INTERFACE),
-            new Type("[]com.sun.star.uno.XInterface", TypeClass.SEQUENCE),
+            new Type("cpo.uno.XInterface", TypeClass.INTERFACE),
+            new Type("[]cpo.uno.XInterface", TypeClass.SEQUENCE),
             testObject,
             testObject,
             new TestInterfaceStruct(testObject, null)

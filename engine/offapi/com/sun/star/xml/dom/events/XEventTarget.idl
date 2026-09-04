@@ -23,7 +23,7 @@ module com { module sun { module star { module xml { module dom { module events 
 interface XEvent;
 
 // Introduced in DOM Level 2:
-interface XEventTarget : com::sun::star::uno::XInterface {
+interface XEventTarget : cpo::uno::XInterface {
     void addEventListener([in] string eventType,
                           [in] XEventListener listener,
                           [in] boolean useCapture);

@@ -37,7 +37,7 @@ import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -48,7 +48,7 @@
 #include "cpo/uno/RuntimeException.hpp"
 #include "cpo/uno/Sequence.hxx"
 #include "cpo/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
+#include "cpo/uno/XInterface.hpp"
 #include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp"
@@ -122,7 +122,7 @@ private:
     };
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
         ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
-        css::uno::Reference< css::uno::XInterface > instance;
+        css::uno::Reference< cpo::uno::XInterface > instance;
         try {
             instance = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
@@ -166,7 +166,7 @@ private:
         "com.sun.star.reflection.theTypeDescriptionManager"
     };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(singletons); ++i) {
-        css::uno::Reference< css::uno::XInterface > instance(
+        css::uno::Reference< cpo::uno::XInterface > instance(
             context_->getValueByName(
                 "/singletons/" + rtl::OUString::createFromAscii(singletons[i])),
             css::uno::UNO_QUERY_THROW);
@@ -201,7 +201,7 @@ void Service::test(
 
 namespace CppMain {
 
-css::uno::Reference< css::uno::XInterface > create(
+css::uno::Reference< cpo::uno::XInterface > create(
     css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return static_cast< ::cppu::OWeakObject * >(new Service(context));

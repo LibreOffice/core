@@ -24,7 +24,7 @@
 
 /** Print several pages on one printer page.
  */
-published interface XPagePrintable: com::sun::star::uno::XInterface
+published interface XPagePrintable: cpo::uno::XInterface
 {
 
     /** @returns the settings of printing of pages.

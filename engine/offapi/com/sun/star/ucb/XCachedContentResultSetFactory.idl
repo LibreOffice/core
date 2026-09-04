@@ -23,7 +23,7 @@ module com { module sun { module star { module ucb {
 /** creates a CachedContentResultSet.
 */
 
-published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterface
+published interface XCachedContentResultSetFactory: cpo::uno::XInterface
 {
     /** creates a remote optimized
         com::sun::star::sdbc::XResultSet.

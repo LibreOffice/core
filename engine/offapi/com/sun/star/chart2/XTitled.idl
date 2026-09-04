@@ -29,7 +29,7 @@ module chart2
 /** Interface to be implemented by objects that support having a title of type
     XTitle.
  */
-interface XTitled : ::com::sun::star::uno::XInterface
+interface XTitled : ::cpo::uno::XInterface
 {
     /** get the object holding the title's content and formatting
      */

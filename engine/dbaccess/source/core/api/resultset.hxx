@@ -62,7 +62,7 @@ namespace dbaccess
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OResultSet >
     {
-        css::uno::Reference< css::uno::XInterface>            m_aStatement;
+        css::uno::Reference< cpo::uno::XInterface>            m_aStatement;
 
         css::uno::Reference< css::sdbc::XResultSet >          m_xDelegatorResultSet;
         css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xDelegatorResultSetUpdate;
@@ -76,7 +76,7 @@ namespace dbaccess
 
     public:
         OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
-                   const css::uno::Reference< css::uno::XInterface >& _xStatement,
+                   const css::uno::Reference< cpo::uno::XInterface >& _xStatement,
                    bool _bCaseSensitive);
         virtual ~OResultSet() override;
 
@@ -84,7 +84,7 @@ namespace dbaccess
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
         virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         virtual void acquire() noexcept override;
         virtual void release() noexcept override;
@@ -173,7 +173,7 @@ namespace dbaccess
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
 
     // css::sdbcx::XRowLocate
         virtual cpo::uno::Any getBookmark(  ) override;

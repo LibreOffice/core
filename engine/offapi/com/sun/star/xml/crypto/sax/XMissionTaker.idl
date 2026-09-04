@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * <p>
  * This interface is used to control a mission.
  */
-interface XMissionTaker : com::sun::star::uno::XInterface
+interface XMissionTaker : cpo::uno::XInterface
 {
     /**
      * Forces a mission to make an end.

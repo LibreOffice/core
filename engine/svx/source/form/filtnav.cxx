@@ -79,7 +79,7 @@ namespace svxform
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::sdb::SQLContext;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;

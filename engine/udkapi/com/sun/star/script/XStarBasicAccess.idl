@@ -25,7 +25,7 @@
 
     @deprecated
  */
-published interface XStarBasicAccess: com::sun::star::uno::XInterface
+published interface XStarBasicAccess: cpo::uno::XInterface
 {
     /** returns
         the library container giving access to the libraries stored in a document

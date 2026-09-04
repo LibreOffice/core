@@ -120,18 +120,18 @@ void OFormsCollection::disposing()
 
 //XChild
 
-void OFormsCollection::setParent(const css::uno::Reference<css::uno::XInterface>& Parent)
+void OFormsCollection::setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
-css::uno::Reference<css::uno::XInterface>  OFormsCollection::getParent()
+css::uno::Reference<cpo::uno::XInterface>  OFormsCollection::getParent()
 {
     return m_xParent;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OFormsCollection_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

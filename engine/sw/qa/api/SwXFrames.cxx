@@ -43,7 +43,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -63,7 +63,7 @@ public:
         // Sequence<OUString> aNames = xNA->getElementNames();
         // std::cout << aNames[0] << std::endl;
 
-        return Reference<XInterface>(xSupplier->getTextFrames(), UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xSupplier->getTextFrames(), UNO_QUERY_THROW);
     }
 
     CPPUNIT_TEST_SUITE(SwXFramesText);

@@ -1710,7 +1710,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 
         // get document service name
         uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
-        const OUString sDocServiceName {xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) )};
+        const OUString sDocServiceName {xModuleManager->identify( uno::Reference< cpo::uno::XInterface >( rStorable, uno::UNO_QUERY ) )};
         if ( sDocServiceName.isEmpty() )
             throw cpo::uno::RuntimeException();
 
@@ -2608,7 +2608,7 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( OUString & rURL )
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

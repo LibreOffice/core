@@ -38,7 +38,7 @@ HtmlTransferable::HtmlTransferable(OString sData)
 
 HtmlTransferable::~HtmlTransferable() {}
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 cpo::uno::Any HtmlTransferable::queryInterface(const cpo::uno::Type& rType)
 {
     cpo::uno::Any aRet

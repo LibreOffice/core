@@ -458,7 +458,7 @@ BaseContent::addProperty(
 {
     if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name.isEmpty() )
     {
-        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), 0 );
     }
 
     m_pMyShell->associate( m_aUncPath,Name,DefaultValue,Attributes );
@@ -768,7 +768,7 @@ BaseContent::setPropertyValues(
             }
             else if( NewTitle.isEmpty() )
             {
-                retRange[i] <<= lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
+                retRange[i] <<= lang::IllegalArgumentException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), 0 );
                 break;
             }
 

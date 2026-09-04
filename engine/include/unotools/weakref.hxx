@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
@@ -115,10 +115,10 @@ public:
         requires(!cppu::detail::isUnoInterfaceType<interface_type>)
 #endif
     {
-        css::uno::Reference<css::uno::XInterface> xInterface = WeakReferenceHelper::get();
+        css::uno::Reference<cpo::uno::XInterface> xInterface = WeakReferenceHelper::get();
         // If XInterface is an ambiguous base of interface_type, we have to use dynamic_cast,
         // otherwise we can use the faster static_cast.
-        if constexpr (std::is_convertible_v<interface_type*, css::uno::XInterface*>)
+        if constexpr (std::is_convertible_v<interface_type*, cpo::uno::XInterface*>)
             return static_cast<interface_type*>(xInterface.get());
         else
             return dynamic_cast<interface_type*>(xInterface.get());

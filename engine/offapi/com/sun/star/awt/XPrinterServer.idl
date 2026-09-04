@@ -24,7 +24,7 @@
 
 /** manages several printers on one machine.
  */
-published interface XPrinterServer: com::sun::star::uno::XInterface
+published interface XPrinterServer: cpo::uno::XInterface
 {
 
     /** returns a list of all available printer names.

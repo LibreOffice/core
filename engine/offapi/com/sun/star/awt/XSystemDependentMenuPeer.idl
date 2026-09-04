@@ -28,7 +28,7 @@
     @see WindowAttribute
     @see WindowAttribute::SYSTEMDEPENDENT
  */
-interface XSystemDependentMenuPeer: com::sun::star::uno::XInterface
+interface XSystemDependentMenuPeer: cpo::uno::XInterface
 {
 
     /** returns a system-specific window handle.

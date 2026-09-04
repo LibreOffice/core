@@ -29,7 +29,7 @@
 
     @see XDiagram
  */
-published interface XAxisXSupplier: com::sun::star::uno::XInterface
+published interface XAxisXSupplier: cpo::uno::XInterface
 {
 
     /** @returns

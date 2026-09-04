@@ -45,7 +45,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XCurrentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
@@ -164,7 +164,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
                             const css::uno::Reference<cpo::uno::XComponentContext> &xCtx )
 {
-    css::uno::Reference<css::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
+    css::uno::Reference<cpo::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
             u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
             xCtx );
     if(!xConfRegistry.is()) throw cpo::uno::RuntimeException(u"javavm.cxx: couldn't get ConfigurationRegistry"_ustr, nullptr);
@@ -228,7 +228,7 @@ void getDefaultLocaleFromConfig(
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
     const css::uno::Reference<cpo::uno::XComponentContext> &xCtx )
 {
-    css::uno::Reference<css::uno::XInterface> xConfRegistry =
+    css::uno::Reference<cpo::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext( u"com.sun.star.configuration.ConfigurationRegistry"_ustr, xCtx );
     if(!xConfRegistry.is())
         throw cpo::uno::RuntimeException(
@@ -1316,7 +1316,7 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 stoc_JavaVM_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

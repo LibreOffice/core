@@ -93,7 +93,7 @@ protected:
     /*
      * the result listener, which will receives the security operation result.
      */
-    css::uno::Reference< css::uno::XInterface > m_xResultListener;
+    css::uno::Reference< cpo::uno::XInterface > m_xResultListener;
 
 protected:
     explicit SecurityEngine();

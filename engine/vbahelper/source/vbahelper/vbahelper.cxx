@@ -114,7 +114,7 @@ getTypeConverter( const uno::Reference< cpo::uno::XComponentContext >& xContext 
 const cpo::uno::Any&
 aNULL()
 {
-    static  cpo::uno::Any aNULLL{ uno::Reference< uno::XInterface >() };
+    static  cpo::uno::Any aNULLL{ uno::Reference< cpo::uno::XInterface >() };
     return aNULLL;
 }
 
@@ -1000,7 +1000,7 @@ void ShapeHelper::setTop(double _fTop)
 void DebugHelper::basicexception( const cpo::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::script::BasicErrorException( ex.Message, css::uno::Reference< css::uno::XInterface >(), sal_uInt32(err), OUString() );
+    throw css::script::BasicErrorException( ex.Message, css::uno::Reference< cpo::uno::XInterface >(), sal_uInt32(err), OUString() );
 }
 
 void DebugHelper::basicexception( ErrCode err,  std::u16string_view additionalArgument )
@@ -1017,7 +1017,7 @@ void DebugHelper::runtimeexception( ErrCode err )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw cpo::uno::RuntimeException( cpo::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
-                                      css::uno::Reference< css::uno::XInterface >() );
+                                      css::uno::Reference< cpo::uno::XInterface >() );
 }
 
 Millimeter::Millimeter():m_nMillimeter(0) {}

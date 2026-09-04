@@ -35,7 +35,7 @@ public:
 
     virtual void setUp() override;
 
-    uno::Reference<uno::XInterface> init() override;
+    uno::Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(CheckDataPilotField);
 
@@ -54,7 +54,7 @@ protected:
     virtual bool isPropertyIgnored(const OUString& rName) override;
 
 private:
-    uno::Reference<uno::XInterface> mxObject;
+    uno::Reference<cpo::uno::XInterface> mxObject;
     int mMaxFieldIndex = 6;
 };
 
@@ -70,7 +70,7 @@ CheckDataPilotField::CheckDataPilotField()
 {
 }
 
-uno::Reference<uno::XInterface> CheckDataPilotField::init()
+uno::Reference<cpo::uno::XInterface> CheckDataPilotField::init()
 {
     // create a calc document
     if (!mxComponent.is())
@@ -158,7 +158,7 @@ uno::Reference<uno::XInterface> CheckDataPilotField::init()
     DPT->insertNewByName(u"DataPilotTField"_ustr, sCellAddress, DPDsc);
 
     uno::Reference<container::XIndexAccess> IA = DPDsc->getDataPilotFields();
-    uno::Reference<uno::XInterface> xDataPilotFieldObject;
+    uno::Reference<cpo::uno::XInterface> xDataPilotFieldObject;
     data = IA->getByIndex(0);
     CPPUNIT_ASSERT(data >>= xDataPilotFieldObject);
     mxObject = xDataPilotFieldObject;

@@ -38,7 +38,7 @@ namespace sfx2
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::document::XUndoAction;
     using ::com::sun::star::lang::NotInitializedException;

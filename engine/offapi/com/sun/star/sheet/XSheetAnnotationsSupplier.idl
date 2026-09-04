@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides access to a collection of cell annotations.
  */
-published interface XSheetAnnotationsSupplier: com::sun::star::uno::XInterface
+published interface XSheetAnnotationsSupplier: cpo::uno::XInterface
 {
 
     /** returns the collection of cell annotations.

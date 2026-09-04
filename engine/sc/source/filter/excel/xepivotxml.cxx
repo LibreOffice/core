@@ -1040,7 +1040,7 @@ public:
         return eOrientation == sheet::DataPilotFieldOrientation_HIDDEN;
     }
 
-    void startDimension(sal_Int32 /*nDimensionIndex*/, uno::Reference<uno::XInterface> const& /*xDimension*/, sheet::DataPilotFieldOrientation eOrientation) override
+    void startDimension(sal_Int32 /*nDimensionIndex*/, uno::Reference<cpo::uno::XInterface> const& /*xDimension*/, sheet::DataPilotFieldOrientation eOrientation) override
     {
         meCurrentOrientation = eOrientation;
     }
@@ -1050,7 +1050,7 @@ public:
         meCurrentOrientation = sheet::DataPilotFieldOrientation_HIDDEN;
     }
 
-    void startLevel(sal_Int32 /*nLevelIndex*/, uno::Reference<uno::XInterface> const& /*xLevel*/, OUString const& rLevelName) override
+    void startLevel(sal_Int32 /*nLevelIndex*/, uno::Reference<cpo::uno::XInterface> const& /*xLevel*/, OUString const& rLevelName) override
     {
         maLevelName = rLevelName;
     }

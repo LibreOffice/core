@@ -17,7 +17,7 @@
  */
 
 package lib;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import java.util.HashMap;
 

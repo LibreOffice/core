@@ -106,7 +106,7 @@ namespace toolkit
         return u"ScrollBar"_ustr;
     }
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any UnoScrollBarControl::queryAggregation( const cpo::uno::Type & rType )
     {
         cpo::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -305,7 +305,7 @@ namespace toolkit
 }  // namespace toolkit
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -313,7 +313,7 @@ stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
     return cppu::acquire(new toolkit::UnoControlScrollBarModel(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoScrollBarControl_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

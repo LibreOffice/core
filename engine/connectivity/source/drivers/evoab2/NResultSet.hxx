@@ -142,7 +142,7 @@ namespace connectivity::evoab
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
         // XRow
         virtual bool wasNull(  ) override;
         virtual OUString getString( sal_Int32 columnIndex ) override;

@@ -421,10 +421,10 @@ void SvtViewOptions::SetUserItem( const OUString& sItemName  ,
 
     @param          "sNode", name of new entry
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::uno::XInterface > SvtViewOptions::impl_getSetNode( const OUString& sNode           ,
+css::uno::Reference< cpo::uno::XInterface > SvtViewOptions::impl_getSetNode( const OUString& sNode           ,
                                                                                             bool         bCreateIfMissing) const
 {
-    css::uno::Reference< css::uno::XInterface > xNode;
+    css::uno::Reference< cpo::uno::XInterface > xNode;
 
     try
     {

@@ -27,7 +27,7 @@ public:
 
     virtual void setUp() override;
 
-    uno::Reference<uno::XInterface> init();
+    uno::Reference<cpo::uno::XInterface> init();
     void checkEmptyCell();
     void checkFilledCell();
 
@@ -50,7 +50,7 @@ CheckXCellRangesQuery::CheckXCellRangesQuery()
 {
 }
 
-uno::Reference<uno::XInterface> CheckXCellRangesQuery::init()
+uno::Reference<cpo::uno::XInterface> CheckXCellRangesQuery::init()
 {
     // create a calc document
     if (!mxComponent.is())
@@ -70,7 +70,7 @@ uno::Reference<uno::XInterface> CheckXCellRangesQuery::init()
     // get the cell
     uno::Reference<sheet::XSpreadsheet> xSpreadSheet;
     CPPUNIT_ASSERT(aAny >>= xSpreadSheet);
-    uno::Reference<uno::XInterface> oObj = xSpreadSheet->getCellByPosition(2, 3);
+    uno::Reference<cpo::uno::XInterface> oObj = xSpreadSheet->getCellByPosition(2, 3);
     m_xCell = uno::Reference<sheet::XCellRangesQuery>(oObj, uno::UNO_QUERY_THROW);
 
     // set one value for comparison.

@@ -37,7 +37,7 @@ using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using cpo::uno::Sequence;
 using cpo::uno::RuntimeException;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 using cpo::uno::Type;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::lang::IllegalArgumentException;

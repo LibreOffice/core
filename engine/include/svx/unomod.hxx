@@ -47,13 +47,13 @@ protected:
 public:
     SvxUnoDrawMSFactory() noexcept {};
 
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     /// @throws cpo::uno::Exception
     /// @throws cpo::uno::RuntimeException
-    static css::uno::Reference< css::uno::XInterface > createTextField( std::u16string_view aServiceSpecifier );
+    static css::uno::Reference< cpo::uno::XInterface > createTextField( std::u16string_view aServiceSpecifier );
 
     /** fills the given EventObject from the given SdrHint.
         @returns

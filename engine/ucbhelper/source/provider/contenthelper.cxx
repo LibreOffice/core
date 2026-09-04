@@ -583,9 +583,9 @@ void SAL_CALL ContentImplHelper::removePropertySetInfoChangeListener(
 }
 
 // virtual
-uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
+uno::Reference< cpo::uno::XInterface > SAL_CALL ContentImplHelper::getParent()
 {
-    uno::Reference< uno::XInterface > xParent;
+    uno::Reference< cpo::uno::XInterface > xParent;
     OUString aURL = getParentURL();
 
     if ( !aURL.isEmpty() )
@@ -606,7 +606,7 @@ uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
 
 // virtual
 void SAL_CALL ContentImplHelper::setParent(
-                                    const uno::Reference< uno::XInterface >& )
+                                    const uno::Reference< cpo::uno::XInterface >& )
 {
     throw lang::NoSupportException();
 }

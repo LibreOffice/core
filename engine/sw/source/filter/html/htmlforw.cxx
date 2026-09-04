@@ -83,7 +83,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent >& rFormComp,
                          bool bCfgStarBasic )
 {
-    uno::Reference< uno::XInterface > xParentIfc = rFormComp->getParent();
+    uno::Reference< cpo::uno::XInterface > xParentIfc = rFormComp->getParent();
     OSL_ENSURE( xParentIfc.is(), "lcl_html_outEvents: no parent interface" );
     if( !xParentIfc.is() )
         return;
@@ -1262,7 +1262,7 @@ static void AddControl( HTMLControls& rControls,
         return;
 
     uno::Reference< form::XFormComponent >  xFormComp( xControlModel, uno::UNO_QUERY );
-    uno::Reference< uno::XInterface >  xIfc = xFormComp->getParent();
+    uno::Reference< cpo::uno::XInterface >  xIfc = xFormComp->getParent();
     uno::Reference< form::XForm >  xForm(xIfc, uno::UNO_QUERY);
 
     OSL_ENSURE( xForm.is(), "Where is the form?" );

@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module document {
 /** interface to load or store a list of document revisions from or to a document
     using the packed XML file format
  */
-interface XDocumentRevisionListPersistence: com::sun::star::uno::XInterface
+interface XDocumentRevisionListPersistence: cpo::uno::XInterface
 {
      /** Loads a list of available revisions from a storage
         <p>

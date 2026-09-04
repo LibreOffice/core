@@ -57,7 +57,7 @@
     methods in its implementation for reading the attributes from the input stream.
     </p>
  */
-published interface XSQLInput: com::sun::star::uno::XInterface
+published interface XSQLInput: cpo::uno::XInterface
 {
 
     /** reads the next attribute in the stream as string.

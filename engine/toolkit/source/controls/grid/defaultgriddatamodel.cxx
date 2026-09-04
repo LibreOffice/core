@@ -503,7 +503,7 @@ private:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_DefaultGridDataModel_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

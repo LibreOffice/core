@@ -571,7 +571,7 @@ public:
             sal_uInt16 const nLegacyPrefix, OUString const& rValue);
 
     /// add xml:id attribute (for RDF metadata)
-    void AddAttributeXmlId(css::uno::Reference<css::uno::XInterface> const & i_xIfc);
+    void AddAttributeXmlId(css::uno::Reference<cpo::uno::XInterface> const & i_xIfc);
 
     /// add RDFa attributes for a metadatable text content
     void AddAttributesRDFa( css::uno::Reference<css::text::XTextContent> const & i_xTextContent);

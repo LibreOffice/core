@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module chart {
 /** Allows easier access to the different subelements of an axis.
 */
 
-interface XAxis : ::com::sun::star::uno::XInterface
+interface XAxis : ::cpo::uno::XInterface
 {
     /** @returns
             the title of the axis. The returned object supports the properties described in service ChartTitle.

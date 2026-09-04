@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XCELLSERIES_HXX
 #define INCLUDED_TEST_SHEET_XCELLSERIES_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <test/testdllapi.hxx>
 
 namespace apitest {
@@ -19,7 +19,7 @@ class OOO_DLLPUBLIC_TEST XCellSeries
 {
 public:
     XCellSeries(sal_Int32 aStartX, sal_Int32 aStartY) : maStartX(aStartX), maStartY(aStartY){}
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
     virtual ~XCellSeries(){}
 
     void testFillAuto();

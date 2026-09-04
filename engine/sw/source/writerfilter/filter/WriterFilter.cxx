@@ -133,7 +133,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
     {
         uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
                                                         uno::UNO_QUERY_THROW);
-        uno::Reference<uno::XInterface> xIfc;
+        uno::Reference<cpo::uno::XInterface> xIfc;
         try
         {
             xIfc.set(xMSF->createInstance(u"com.sun.star.comp.Writer.DocxExport"_ustr),
@@ -148,7 +148,7 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": "
                                                           + e.Message,
-                                                      uno::Reference<uno::XInterface>(), a);
+                                                      uno::Reference<cpo::uno::XInterface>(), a);
         }
 
         uno::Reference<lang::XInitialization> xInit(xIfc, uno::UNO_QUERY_THROW);
@@ -372,7 +372,7 @@ cpo::uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_WriterFilter_get_implementation(
     cpo::uno::XComponentContext* component, cpo::uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {

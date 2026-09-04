@@ -31,7 +31,7 @@ module data
 /** An application that provides data for a chart must implement this
     interface.
  */
-interface XDataProvider  : ::com::sun::star::uno::XInterface
+interface XDataProvider  : ::cpo::uno::XInterface
 {
     /** If `TRUE` is returned, a call to createDataSource with the
         same arguments must return a valid XDataSequence object.  If

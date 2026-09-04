@@ -9,7 +9,7 @@
 
 module com {  module sun {  module star {  module beans {
 
-interface XPropertySetOption: com::sun::star::uno::XInterface
+interface XPropertySetOption: cpo::uno::XInterface
 {
     /**
      * Turn on or off notifying change listeners on property value change.

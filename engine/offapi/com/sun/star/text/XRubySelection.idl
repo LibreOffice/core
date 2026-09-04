@@ -26,7 +26,7 @@
 /** This interface enables the object to handle list of ruby lines (aka Furigana lines).
 
  */
-published interface XRubySelection : com::sun::star::uno::XInterface
+published interface XRubySelection : cpo::uno::XInterface
 {
     /** returns a sequence of ruby elements.
     <p>Each element contains at least a string that contains the selected text and the ruby text.

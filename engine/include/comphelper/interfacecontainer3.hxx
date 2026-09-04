@@ -24,10 +24,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
+namespace cpo::uno { class XInterface; }
 namespace com::sun::star::lang
 {
 struct EventObject;
@@ -329,7 +326,7 @@ sal_Int32 OInterfaceContainerHelper3<ListenerT>::removeInterface(
 
     // It is not valid to compare the pointer directly, but it's faster.
     auto it = std::find_if(maData->begin(), maData->end(),
-                           [&rListener](const css::uno::Reference<css::uno::XInterface>& rItem) {
+                           [&rListener](const css::uno::Reference<cpo::uno::XInterface>& rItem) {
                                return rItem.get() == rListener.get();
                            });
 

@@ -575,8 +575,8 @@ void UnoControlContainer::addingControl( const uno::Reference< awt::XControl >& 
 {
     if ( _rxControl.is() )
     {
-        uno::Reference< uno::XInterface > xThis;
-        OWeakAggObject::queryInterface( cppu::UnoType<uno::XInterface>::get() ) >>= xThis;
+        uno::Reference< cpo::uno::XInterface > xThis;
+        OWeakAggObject::queryInterface( cppu::UnoType<cpo::uno::XInterface>::get() ) >>= xThis;
 
         _rxControl->setContext( xThis );
         _rxControl->addEventListener( this );
@@ -817,7 +817,7 @@ void UnoControlContainer::PrepareWindowDescriptor( css::awt::WindowDescriptor& r
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoControlContainer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

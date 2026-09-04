@@ -82,7 +82,7 @@ bool MediaTypeDetectionHelper::mapStrings(cpo::uno::Sequence< OUString >& rSeq)
 }   // namespace framework
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 framework_MediaTypeDetectionHelper_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {

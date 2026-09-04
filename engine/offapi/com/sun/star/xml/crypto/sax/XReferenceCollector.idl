@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * <p>
  * This interface is used to control collecting a signature.
  */
-interface XReferenceCollector : com::sun::star::uno::XInterface
+interface XReferenceCollector : cpo::uno::XInterface
 {
     /**
      * Sets the reference count of the signature.

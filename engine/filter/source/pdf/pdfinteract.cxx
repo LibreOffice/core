@@ -87,7 +87,7 @@ cpo::uno::Sequence< OUString > PDFInteractionHandler::getSupportedServiceNames( 
     return { u"com.sun.star.filter.pdfexport.PDFExportInteractionHandler"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 filter_PDFExportInteractionHandler_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module beans {
     <p>The specification only describes the properties, it does not contain
     any values.</p>
  */
-published interface XPropertySetInfo: com::sun::star::uno::XInterface
+published interface XPropertySetInfo: cpo::uno::XInterface
 {
 
     /** @returns

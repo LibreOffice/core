@@ -12,7 +12,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -23,7 +23,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XTableColumns
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void setXSpreadsheet(const css::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
     {

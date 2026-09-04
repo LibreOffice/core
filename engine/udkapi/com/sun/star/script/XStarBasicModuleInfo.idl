@@ -25,7 +25,7 @@
 /** Script Module containing some scripting code in a certain scripting language
     @deprecated
  */
-published interface XStarBasicModuleInfo: com::sun::star::uno::XInterface
+published interface XStarBasicModuleInfo: cpo::uno::XInterface
 {
     /** returns the name of the module
      */

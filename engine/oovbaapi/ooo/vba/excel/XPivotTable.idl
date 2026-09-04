@@ -23,7 +23,7 @@ module ooo {  module vba {  module excel {
 
 
 
-//interface XPivotTable: com::sun::star::uno::XInterface
+//interface XPivotTable: cpo::uno::XInterface
 interface XPivotTable
 {
     interface ooo::vba::XHelperInterface;

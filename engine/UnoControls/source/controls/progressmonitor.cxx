@@ -741,7 +741,7 @@ bool ProgressMonitor::impl_debug_checkParameter ( std::u16string_view rTopic )
 
 }   // namespace unocontrols
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 stardiv_UnoControls_ProgressMonitor_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

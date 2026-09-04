@@ -31,14 +31,14 @@ module com {  module sun {  module star {  module lang {
 
     @see XInitialization
 */
-published interface XSingleServiceFactory: com::sun::star::uno::XInterface
+published interface XSingleServiceFactory: cpo::uno::XInterface
 {
     /** Creates an instance of a service implementation.
 
         @return
                 service instance
     */
-    com::sun::star::uno::XInterface createInstance()
+    cpo::uno::XInterface createInstance()
         raises( cpo::uno::Exception );
 
     /** Creates an instance of a service implementation initialized with
@@ -49,7 +49,7 @@ published interface XSingleServiceFactory: com::sun::star::uno::XInterface
         @return
                 service instance
     */
-    com::sun::star::uno::XInterface createInstanceWithArguments( [in] sequence<any> aArguments )
+    cpo::uno::XInterface createInstanceWithArguments( [in] sequence<any> aArguments )
         raises( cpo::uno::Exception );
 };
 

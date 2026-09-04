@@ -34,7 +34,7 @@
 
 using namespace css;
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_WriterModule_get_implementation(cpo::uno::XComponentContext* /*pCtx*/,
                                                          cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -48,7 +48,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     // there is no guarantee, that we are held alive during this method!
     // May the outside dispatch container will be updated by a CONTEXT_CHANGED
     // asynchronous ...
-    uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
+    uno::Reference< cpo::uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
 
     SolarMutexGuard aGuard;
     SwGlobals::ensure();

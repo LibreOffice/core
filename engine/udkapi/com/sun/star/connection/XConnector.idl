@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module connection {
 /**
    allows to actively establish an interprocess connection.
  */
-published interface XConnector: com::sun::star::uno::XInterface
+published interface XConnector: cpo::uno::XInterface
 {
     /** creates a new connection interprocess connection.
         <p>

@@ -26,7 +26,7 @@
     <P>Different sub-interfaces of this interface specify different ways of
     continuing.</P>
  */
-published interface XInteractionContinuation: com::sun::star::uno::XInterface
+published interface XInteractionContinuation: cpo::uno::XInterface
 {
     /** Select this way of continuing from an
         com::sun::star::task::XInteractionRequest (given a

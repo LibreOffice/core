@@ -30,7 +30,7 @@ public:
 
     virtual void setUp() override;
 
-    uno::Reference< uno::XInterface > init(sal_Int32 nIndex = 0);
+    uno::Reference< cpo::uno::XInterface > init(sal_Int32 nIndex = 0);
     void testRequestCondFormatListFromSheet();
     void testCondFormatListProperties();
     void testCondFormatListFormats();
@@ -55,7 +55,7 @@ ScConditionalFormatTest::ScConditionalFormatTest()
 {
 }
 
-uno::Reference< uno::XInterface > ScConditionalFormatTest::init(sal_Int32 nIndex)
+uno::Reference< cpo::uno::XInterface > ScConditionalFormatTest::init(sal_Int32 nIndex)
 {
     // get the first sheet
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -77,7 +77,7 @@ void ScConditionalFormatTest::testRequestCondFormatListFromSheet()
 
 namespace {
 
-uno::Reference<sheet::XConditionalFormats> getConditionalFormatList(uno::Reference<uno::XInterface> const & xInterface)
+uno::Reference<sheet::XConditionalFormats> getConditionalFormatList(uno::Reference<cpo::uno::XInterface> const & xInterface)
 {
     uno::Reference<sheet::XSpreadsheet> xSheet(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);

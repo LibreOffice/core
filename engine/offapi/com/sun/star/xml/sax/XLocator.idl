@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     <p>This interface is an IDL version of the Java interface
     <em>org.xml.sax.Locator</em>.</p>
  */
-published interface XLocator: com::sun::star::uno::XInterface
+published interface XLocator: cpo::uno::XInterface
 {
     /** @returns
                     the column number where the current document event ends.

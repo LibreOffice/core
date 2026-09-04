@@ -23,7 +23,7 @@
 
 /** @deprecated
  */
-published interface XWindowArranger: com::sun::star::uno::XInterface
+published interface XWindowArranger: cpo::uno::XInterface
 {
     /** @deprecated
      */

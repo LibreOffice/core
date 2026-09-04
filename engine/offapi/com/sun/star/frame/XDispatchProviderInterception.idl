@@ -34,7 +34,7 @@
     @see XDispatch
     @see XInterceptorInfo
  */
-published interface XDispatchProviderInterception: com::sun::star::uno::XInterface
+published interface XDispatchProviderInterception: cpo::uno::XInterface
 {
     /** registers an XDispatchProviderInterceptor, which will become
         the first interceptor in the chain of registered interceptors.

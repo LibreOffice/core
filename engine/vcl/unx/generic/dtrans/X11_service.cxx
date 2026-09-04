@@ -65,7 +65,7 @@ X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
             u"bad X11SalInstance::CreateClipboard arguments"_ustr,
-            css::uno::Reference<css::uno::XInterface>(), -1);
+            css::uno::Reference<cpo::uno::XInterface>(), -1);
     }
     Atom nSelection = rManager.getAtom(sel);
 

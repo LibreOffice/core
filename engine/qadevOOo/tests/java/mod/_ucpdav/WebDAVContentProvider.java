@@ -27,7 +27,7 @@ import lib.TestParameters;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Creates a <code>com.sun.star.ucb.WebDAVContentProvider</code> instance.

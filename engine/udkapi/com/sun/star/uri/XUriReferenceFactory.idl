@@ -25,7 +25,7 @@ module com { module sun { module star { module uri {
    <p>See <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC&nbsp;3986</a> for a
    description of URI references and related terms.</p>
  */
-published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
+published interface XUriReferenceFactory: cpo::uno::XInterface {
     /**
        parses the textual representation of a URI reference.
 

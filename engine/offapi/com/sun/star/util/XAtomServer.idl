@@ -46,7 +46,7 @@ module util
    case to handle overflows.</p>
 */
 
-published interface XAtomServer : com::sun::star::uno::XInterface
+published interface XAtomServer : cpo::uno::XInterface
 {
     /** returns a whole atom class
 

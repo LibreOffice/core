@@ -27,7 +27,7 @@ import lib.StatusException;
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XDataOutputStream;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.io.XDataInputStream</code>

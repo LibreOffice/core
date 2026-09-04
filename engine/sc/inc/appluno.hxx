@@ -33,13 +33,13 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
     ScSpreadsheetSettings_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<cpo::uno::XInterface> SAL_CALL
     ScRecentFunctionsObj_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
-css::uno::Reference<css::uno::XInterface> SAL_CALL
+css::uno::Reference<cpo::uno::XInterface> SAL_CALL
     ScFunctionListObj_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
 

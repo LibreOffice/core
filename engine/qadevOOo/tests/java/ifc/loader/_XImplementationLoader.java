@@ -29,7 +29,7 @@ import com.sun.star.registry.CannotRegisterImplementationException;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Testing <code>com.sun.star.loader.XImplementationLoader</code>

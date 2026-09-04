@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XACTIVATIONBROADCASTER_HXX
 #define INCLUDED_TEST_SHEET_XACTIVATIONBROADCASTER_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
@@ -20,8 +20,8 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XActivationBroadcaster
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<css::uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0)
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0)
         = 0;
 
     void testAddRemoveActivationEventListener();

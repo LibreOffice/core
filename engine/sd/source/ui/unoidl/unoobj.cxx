@@ -621,7 +621,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if( pDoc )
                     {
                         ImageMap aImageMap;
-                        uno::Reference< uno::XInterface > xImageMap;
+                        uno::Reference< cpo::uno::XInterface > xImageMap;
                         aValue >>= xImageMap;
 
                         if( !xImageMap.is() || !SvUnoImageMap_fillImageMap( xImageMap, aImageMap ) )
@@ -770,7 +770,7 @@ cpo::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
             break;
         case WID_IMAGEMAP:
             {
-                uno::Reference< uno::XInterface > xImageMap;
+                uno::Reference< cpo::uno::XInterface > xImageMap;
 
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():nullptr;
                 if( pDoc )

@@ -46,7 +46,7 @@ public:
                                       const   cpo::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
 
     // XModel
-    virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getCurrentSelection() override;
 };
 
 } // namespace basctl

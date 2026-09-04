@@ -34,7 +34,7 @@ published struct VclContainerEvent: com::sun::star::lang::EventObject
 
     /** returns the child component that was added or removed.
      */
-    com::sun::star::uno::XInterface Child;
+    cpo::uno::XInterface Child;
 
 };
 

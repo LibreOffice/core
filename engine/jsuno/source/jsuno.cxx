@@ -51,7 +51,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <comphelper/json.hxx>
 #include <comphelper/legacyunoapinotice.hxx>
@@ -460,7 +460,7 @@ JSValue enumerationIteratorNext(JSContext* ctx, JSValueConst, int, JSValueConst*
 {
     return callFromJs(ctx, [ctx, func_data] {
         css::uno::Reference<css::container::XEnumeration> en(
-            static_cast<css::uno::XInterface*>(
+            static_cast<cpo::uno::XInterface*>(
                 JS_GetOpaque(func_data[0], getRuntimeData(ctx)->wrapperClassId)),
             css::uno::UNO_QUERY_THROW);
         ValueRef val(ctx, JS_NewObject(ctx));
@@ -496,7 +496,7 @@ int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueCon
         if (atom == getRuntimeData(ctx)->symbolIteratorAtom)
         {
             css::uno::Reference<css::container::XEnumeration> en(
-                static_cast<css::uno::XInterface*>(
+                static_cast<cpo::uno::XInterface*>(
                     JS_GetOpaque(obj, getRuntimeData(ctx)->wrapperClassId)),
                 css::uno::UNO_QUERY);
             if (!en.is())
@@ -520,7 +520,7 @@ int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueCon
         css::uno::Reference<css::script::XInvocation2> invoke(
             css::script::Invocation::create(comphelper::getProcessComponentContext())
                 ->createInstanceWithArguments(
-                    { cpo::uno::Any(css::uno::Reference(static_cast<css::uno::XInterface*>(
+                    { cpo::uno::Any(css::uno::Reference(static_cast<cpo::uno::XInterface*>(
                         JS_GetOpaque(obj, getRuntimeData(ctx)->wrapperClassId)))) }),
             css::uno::UNO_QUERY_THROW);
         css::script::InvocationInfo info;
@@ -594,7 +594,7 @@ int wrapperSetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValueCon
             css::uno::Reference<css::script::XInvocation2> invoke(
                 css::script::Invocation::create(comphelper::getProcessComponentContext())
                     ->createInstanceWithArguments(
-                        { cpo::uno::Any(css::uno::Reference(static_cast<css::uno::XInterface*>(
+                        { cpo::uno::Any(css::uno::Reference(static_cast<cpo::uno::XInterface*>(
                             JS_GetOpaque(obj, getRuntimeData(ctx)->wrapperClassId)))) }),
                 css::uno::UNO_QUERY_THROW);
             css::script::InvocationInfo info;
@@ -641,7 +641,7 @@ void wrapperFinalizer(JSRuntime* rt, JSValueConst val)
 #if defined DBG_UTIL
     getRuntimeData(rt)->toFinalize.dec();
 #endif
-    static_cast<css::uno::XInterface*>(JS_GetOpaque(val, getRuntimeData(rt)->wrapperClassId))
+    static_cast<cpo::uno::XInterface*>(JS_GetOpaque(val, getRuntimeData(rt)->wrapperClassId))
         ->release();
 }
 
@@ -649,13 +649,13 @@ JSValue wrapperToString(JSContext* ctx, JSValueConst this_val, int, JSValueConst
 {
     return callFromJs(ctx, [ctx, this_val] {
         std::ostringstream s;
-        s << css::uno::Reference(static_cast<css::uno::XInterface*>(
+        s << css::uno::Reference(static_cast<cpo::uno::XInterface*>(
             JS_GetOpaque(this_val, getRuntimeData(ctx)->wrapperClassId)));
         return JS_NewString(ctx, s.str().c_str());
     });
 }
 
-JSValue wrapUnoObject(JSContext* ctx, css::uno::Reference<css::uno::XInterface> const& obj)
+JSValue wrapUnoObject(JSContext* ctx, css::uno::Reference<cpo::uno::XInterface> const& obj)
 {
     if (!obj.is())
     {
@@ -1253,7 +1253,7 @@ JSValue createService(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
                                             argv[i + 1]);
             }
         }
-        css::uno::Reference<css::uno::XInterface> ifc(
+        css::uno::Reference<cpo::uno::XInterface> ifc(
             data->ctor->isDefaultConstructor()
                 ? context->getServiceManager()->createInstanceWithContext(data->service, context)
                 : context->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -1282,7 +1282,7 @@ JSValue getSingleton(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JS
         css::uno::Reference<cpo::uno::XComponentContext> context(
             fromJs(ctx, cppu::UnoType<cpo::uno::XComponentContext>::get(), argv[0]),
             css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::uno::XInterface> ifc(
+        css::uno::Reference<cpo::uno::XInterface> ifc(
             context->getValueByName("/singletons/" + OUString::unacquired(&s)),
             css::uno::UNO_QUERY_THROW);
         return toJs(ctx, cpo::uno::Any(ifc)).release();
@@ -1752,7 +1752,7 @@ cpo::uno::Any fromJsInterface(JSContext* ctx, cpo::uno::Type const& type, JSValu
         JS_ThrowTypeError(ctx, "TODO: BAD UNO ENUM VALUE");
         throw JsException();
     }
-    auto const a = css::uno::Reference(static_cast<css::uno::XInterface*>(
+    auto const a = css::uno::Reference(static_cast<cpo::uno::XInterface*>(
                                            JS_GetOpaque(val, getRuntimeData(ctx)->wrapperClassId)))
                        ->queryInterface(type);
     if (!a.hasValue())
@@ -2029,13 +2029,13 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
             }
             if (JS_IsNull(val))
             {
-                return cpo::uno::Any(css::uno::Reference<css::uno::XInterface>());
+                return cpo::uno::Any(css::uno::Reference<cpo::uno::XInterface>());
             }
             if (JS_IsObject(val))
             {
                 if (JS_GetClassID(val) == getRuntimeData(ctx)->wrapperClassId)
                 {
-                    return fromJsInterface(ctx, cppu::UnoType<css::uno::XInterface>::get(), val);
+                    return fromJsInterface(ctx, cppu::UnoType<cpo::uno::XInterface>::get(), val);
                 }
                 if (JS_GetClassID(val) == getRuntimeData(ctx)->enumeratorClassId)
                 {
@@ -2467,7 +2467,7 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
         }
         case cpo::uno::TypeClass_INTERFACE:
             return ValueRef(ctx,
-                            wrapUnoObject(ctx, *static_cast<css::uno::XInterface* const*>(value)));
+                            wrapUnoObject(ctx, *static_cast<cpo::uno::XInterface* const*>(value)));
         default:
             O3TL_UNREACHABLE;
     }
@@ -2484,10 +2484,10 @@ JSValue sameUnoObject(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, J
     return callFromJs(ctx, [ctx, argv] {
         return JS_NewBool(
             ctx,
-            *o3tl::forceAccess<css::uno::Reference<css::uno::XInterface>>(
-                fromJsInterface(ctx, cppu::UnoType<css::uno::XInterface>::get(), argv[0]))
-                == *o3tl::forceAccess<css::uno::Reference<css::uno::XInterface>>(
-                       fromJsInterface(ctx, cppu::UnoType<css::uno::XInterface>::get(), argv[1])));
+            *o3tl::forceAccess<css::uno::Reference<cpo::uno::XInterface>>(
+                fromJsInterface(ctx, cppu::UnoType<cpo::uno::XInterface>::get(), argv[0]))
+                == *o3tl::forceAccess<css::uno::Reference<cpo::uno::XInterface>>(
+                       fromJsInterface(ctx, cppu::UnoType<cpo::uno::XInterface>::get(), argv[1])));
     });
 }
 
@@ -2495,7 +2495,7 @@ JSValue sameUnoObject(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, J
 // same C++ adapter UNO was originally handed (each jsuno::execute uses a fresh JSRuntime, so
 // JS-side identity does not survive):
 std::mutex g_proxyMapMutex;
-std::map<OUString, css::uno::Reference<css::uno::XInterface>> g_proxyMap;
+std::map<OUString, css::uno::Reference<cpo::uno::XInterface>> g_proxyMap;
 
 // Per-callId rendezvous between ProxyInvocation::invoke (spinning Application::Yield) and
 // jsuno::deliverProxyResult:
@@ -2710,7 +2710,7 @@ JSValue internalCreateProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int a
                 comphelper::getProcessComponentContext());
         //TODO: Ideally, XInvocationAdapterFactory2::createAdapter would automatically add
         // XTypeProvider support:
-        css::uno::Reference<css::uno::XInterface> adapter(
+        css::uno::Reference<cpo::uno::XInterface> adapter(
             factory->createAdapter(
                 invocation, { cppu::UnoType<css::lang::XTypeProvider>::get(), interfaceType }),
             css::uno::UNO_SET_THROW);
@@ -2743,7 +2743,7 @@ JSValue internalTakeProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int arg
             throw JsException();
         }
         OUString const id(idStr.get(), idLen);
-        css::uno::Reference<css::uno::XInterface> adapter;
+        css::uno::Reference<cpo::uno::XInterface> adapter;
         {
             std::lock_guard lock(g_proxyMapMutex);
             auto const it = g_proxyMap.find(id);
@@ -2857,7 +2857,7 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
                 css::uno::Reference<css::script::XInvocation>(
                     css::script::Invocation::create(comphelper::getProcessComponentContext())
                         ->createInstanceWithArguments(
-                            { cpo::uno::Any(css::uno::Reference(static_cast<css::uno::XInterface*>(
+                            { cpo::uno::Any(css::uno::Reference(static_cast<cpo::uno::XInterface*>(
                                 JS_GetOpaque(this_val, getRuntimeData(ctx)->wrapperClassId)))) }),
                     css::uno::UNO_QUERY_THROW)
                     ->invoke(info->aName, args, outParamIndex, outParam));

@@ -36,8 +36,8 @@ public:
     {
     }
 
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<css::uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) = 0;
 
     // XNamedRanges
     void testAddNewByName();

@@ -26,7 +26,7 @@ using namespace xmloff::token;
 
 XMLThemeContext::XMLThemeContext(
     SvXMLImport& rImport, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-    css::uno::Reference<css::uno::XInterface> const& xObjectWithThemeProperty)
+    css::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty)
     : SvXMLImportContext(rImport)
     , m_xObjectWithThemeProperty(xObjectWithThemeProperty)
     , mpTheme(new model::Theme)

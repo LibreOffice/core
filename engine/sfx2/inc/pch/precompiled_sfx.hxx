@@ -254,7 +254,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>

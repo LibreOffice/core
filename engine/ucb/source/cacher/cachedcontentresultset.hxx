@@ -272,7 +272,7 @@ public:
     virtual bool SAL_CALL
     rowDeleted() override;
     virtual css::uno::Reference<
-                css::uno::XInterface > SAL_CALL
+                cpo::uno::XInterface > SAL_CALL
     getStatement() override;
 
 

@@ -933,7 +933,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
 
     // prevent object being deleted from under us
     rtl::Reference<SdrObject> xSdrSelf(mxSdrObject);
-    uno::Reference< uno::XInterface > xSelf( mxSdrObject->getWeakUnoShape() );
+    uno::Reference< cpo::uno::XInterface > xSelf( mxSdrObject->getWeakUnoShape() );
     if( !xSelf.is() )
     {
         mxSdrObject->RemoveListener(*this);
@@ -3668,7 +3668,7 @@ uno::Reference< container::XIndexContainer > SvxShape::getGluePoints()
 }
 
 // XChild
-uno::Reference<uno::XInterface> SvxShape::getParent()
+uno::Reference<cpo::uno::XInterface> SvxShape::getParent()
 {
     ::SolarMutexGuard aGuard;
     const SdrObject* pSdrObject(GetSdrObject());
@@ -3712,10 +3712,10 @@ uno::Reference<uno::XInterface> SvxShape::getParent()
     }
 
     // no SdrObject, no parent
-    return uno::Reference<uno::XInterface>();
+    return uno::Reference<cpo::uno::XInterface>();
 }
 
-void SvxShape::setParent( const css::uno::Reference< css::uno::XInterface >& )
+void SvxShape::setParent( const css::uno::Reference< cpo::uno::XInterface >& )
 {
     throw lang::NoSupportException();
 }
@@ -4055,7 +4055,7 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexc
 }
 
 
-SdrObject* SdrObject::getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt )
+SdrObject* SdrObject::getSdrObjectFromXShape( const css::uno::Reference< cpo::uno::XInterface >& xInt )
 {
     SvxShape* pSvxShape = comphelper::getFromUnoTunnel<SvxShape>( xInt );
     return pSvxShape ? pSvxShape->GetSdrObject() : nullptr;

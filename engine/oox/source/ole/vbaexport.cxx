@@ -66,7 +66,7 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
-bool isWorkbook(const css::uno::Reference<css::uno::XInterface>& xInterface)
+bool isWorkbook(const css::uno::Reference<cpo::uno::XInterface>& xInterface)
 {
     css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, css::uno::UNO_QUERY);
     return xWorkbook.is();

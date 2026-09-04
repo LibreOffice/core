@@ -394,7 +394,7 @@ ScVbaShape::TextFrame()
     if( xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
     {
         const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-        uno::Reference< uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.excel.TextFrame"_ustr , { cpo::uno::Any(getParent()), cpo::uno::Any(m_xShape) }, xContext );
+        uno::Reference< cpo::uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.excel.TextFrame"_ustr , { cpo::uno::Any(getParent()), cpo::uno::Any(m_xShape) }, xContext );
         return cpo::uno::Any( xTextFrame );
     }
 
@@ -728,7 +728,7 @@ ScVbaShape::WrapFormat()
     if( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ))
     {
         const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-        uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.word.WrapFormat"_ustr ,{ cpo::uno::Any(getParent()), cpo::uno::Any(m_xShape) }, xContext );
+        uno::Reference< cpo::uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.word.WrapFormat"_ustr ,{ cpo::uno::Any(getParent()), cpo::uno::Any(m_xShape) }, xContext );
         return cpo::uno::Any( xWrapFormat );
     }
     throw cpo::uno::RuntimeException( u"Not implemented"_ustr );

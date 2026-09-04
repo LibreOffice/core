@@ -152,13 +152,13 @@ ODocumentCloser::ODocumentCloser(const cpo::uno::Sequence< cpo::uno::Any >& aArg
     if ( nLen != 1 )
         throw lang::IllegalArgumentException(
                         u"Wrong count of parameters!"_ustr,
-                        uno::Reference< uno::XInterface >(),
+                        uno::Reference< cpo::uno::XInterface >(),
                         0 );
 
     if ( !( aArguments[0] >>= m_xFrame ) || !m_xFrame.is() )
         throw lang::IllegalArgumentException(
                 u"Nonempty reference is expected as the first argument!"_ustr,
-                uno::Reference< uno::XInterface >(),
+                uno::Reference< cpo::uno::XInterface >(),
                 0 );
 }
 
@@ -221,7 +221,7 @@ cpo::uno::Sequence< OUString > ODocumentCloser::getSupportedServiceNames()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_embed_DocumentCloser_get_implementation(
     SAL_UNUSED_PARAMETER cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)

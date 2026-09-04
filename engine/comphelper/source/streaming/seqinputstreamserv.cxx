@@ -212,7 +212,7 @@ void SequenceInputStreamService::initialize( const cpo::uno::Sequence< cpo::uno:
 
 } // anonymous namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_SequenceInputStreamService(
                                              cpo::uno::XComponentContext *,
                                              cpo::uno::Sequence<cpo::uno::Any> const &)

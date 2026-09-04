@@ -786,7 +786,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
 
 void GrammarCheckingIterator::startProofreading(
-    const uno::Reference< ::uno::XInterface > & xDoc,
+    const uno::Reference< cpo::uno::XInterface > & xDoc,
     const uno::Reference< text::XFlatParagraphIteratorProvider > & xIteratorProvider )
 {
     // get paragraph to start checking with
@@ -810,7 +810,7 @@ void GrammarCheckingIterator::startProofreading(
 
 
 linguistic2::ProofreadingResult GrammarCheckingIterator::checkSentenceAtPosition(
-    const uno::Reference< uno::XInterface >& xDoc,
+    const uno::Reference< cpo::uno::XInterface >& xDoc,
     const uno::Reference< text::XFlatParagraph >& xFlatPara,
     const OUString& rText,
     const lang::Locale&,
@@ -960,7 +960,7 @@ void GrammarCheckingIterator::resetIgnoreRules(  )
 
 
 bool GrammarCheckingIterator::isProofreading(
-    const uno::Reference< uno::XInterface >& xDoc )
+    const uno::Reference< cpo::uno::XInterface >& xDoc )
 {
     // ---- THREAD SAFE START ----
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
@@ -1012,7 +1012,7 @@ void GrammarCheckingIterator::processLinguServiceEvent(
 
     try
     {
-         uno::Reference< uno::XInterface > xThis( getXWeak() );
+         uno::Reference< cpo::uno::XInterface > xThis( getXWeak() );
          linguistic2::LinguServiceEvent aEvent( xThis, linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
          m_aNotifyListeners.notifyEach(
                 &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
@@ -1253,7 +1253,7 @@ cpo::uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 linguistic_GrammarCheckingIterator_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

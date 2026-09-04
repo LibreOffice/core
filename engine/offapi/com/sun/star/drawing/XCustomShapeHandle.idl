@@ -23,7 +23,7 @@
 
 /** The XCustomShapeHandle
  */
-interface XCustomShapeHandle: com::sun::star::uno::XInterface
+interface XCustomShapeHandle: cpo::uno::XInterface
 {
 
     /** is getting the actual handle position

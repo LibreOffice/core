@@ -314,7 +314,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComp
 }
 
 void impl_addWindowListeners(
-    const css::uno::Reference< css::uno::XInterface >& xThis,
+    const css::uno::Reference< cpo::uno::XInterface >& xThis,
     const css::uno::Reference< css::ui::XUIElement >& xUIElement )
 {
     css::uno::Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), css::uno::UNO_QUERY );

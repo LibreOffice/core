@@ -205,7 +205,7 @@ ScVbaApplication::invoke( const OUString& FunctionName, const cpo::uno::Sequence
     }
     catch (const cpo::uno::Exception&)
     {
-        aAny <<= script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), 1000, OUString() );
+        aAny <<= script::BasicErrorException( OUString(), uno::Reference< cpo::uno::XInterface >(), 1000, OUString() );
     }
     return aAny;
 }
@@ -276,7 +276,7 @@ ScVbaApplication::getSelection()
     cpo::uno::Any any;
     any <<= false;
     xPropSet->setPropertyValue( aPropName, any );
-    uno::Reference<uno::XInterface> aSelection(xSelSupp->getSelection(), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> aSelection(xSelSupp->getSelection(), uno::UNO_QUERY);
     xPropSet->setPropertyValue( aPropName, aOldVal );
 
     if (!aSelection.is())
@@ -1554,7 +1554,7 @@ ScVbaApplication::getServiceNames()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_ScVbaApplication_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

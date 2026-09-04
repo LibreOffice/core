@@ -36,9 +36,9 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC IndexAccessIterator
 {
 protected:
-    css::uno::Reference< css::uno::XInterface>    m_xStartingPoint;
+    css::uno::Reference< cpo::uno::XInterface>    m_xStartingPoint;
 
-    css::uno::Reference< css::uno::XInterface>    m_xCurrentObject;
+    css::uno::Reference< cpo::uno::XInterface>    m_xCurrentObject;
         // The current object
     ::std::vector<sal_Int32>                      m_arrChildIndizies;
 
@@ -47,23 +47,23 @@ protected:
         // That is the path from the root node to m_xCurrentObject
 
 public:
-    IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint);
+    IndexAccessIterator(css::uno::Reference< cpo::uno::XInterface> xStartingPoint);
 
     virtual ~IndexAccessIterator();
 
-    css::uno::Reference< css::uno::XInterface> const &    Next();
+    css::uno::Reference< cpo::uno::XInterface> const &    Next();
 
     virtual void Invalidate() { m_xCurrentObject = nullptr; }
 
 protected:
-    virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& /*rElement*/) { return true; }
+    virtual bool ShouldHandleElement(const css::uno::Reference< cpo::uno::XInterface>& /*rElement*/) { return true; }
 
         // This can be used to exclude certain elements; elements for which
         // this function returns true will be simply skipped.
         // If this element is returned from Next(), then one can get
         // here get a little more information on the element.
         // That's why this method is not const.
-    virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& /*xContainer*/) const { return true; }
+    virtual bool ShouldStepInto(const css::uno::Reference< cpo::uno::XInterface>& /*xContainer*/) const { return true; }
 };
 
 

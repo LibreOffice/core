@@ -165,7 +165,7 @@ public:
         {}
     virtual Reference< XInterface > SAL_CALL getInterface() throw(cpo::uno::RuntimeException)
         { return Reference< XInterface >(); }
-    virtual void SAL_CALL setInterface( const css::uno::Reference< css::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
+    virtual void SAL_CALL setInterface( const css::uno::Reference< cpo::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
         {}
     virtual Any SAL_CALL getAny() throw(cpo::uno::RuntimeException)
         { return _aDummyAny; }

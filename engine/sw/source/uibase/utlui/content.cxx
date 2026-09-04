@@ -3113,7 +3113,7 @@ IMPL_LINK(SwContentTree, EditedEntryHdl, const IterString&, rIterString, bool)
         }
 
         cpo::uno::Any aObj = xNameAccess->getByName(pCnt->GetName());
-        uno::Reference<uno::XInterface>  xTmp;
+        uno::Reference<cpo::uno::XInterface>  xTmp;
         aObj >>= xTmp;
         uno::Reference<container::XNamed>  xNamed(xTmp, uno::UNO_QUERY);
 

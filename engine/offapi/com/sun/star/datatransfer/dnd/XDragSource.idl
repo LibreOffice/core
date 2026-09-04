@@ -33,7 +33,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     be a real performance issue.</p>
 */
 
-published interface XDragSource: com::sun::star::uno::XInterface
+published interface XDragSource: cpo::uno::XInterface
 {
 
     /** In order to query if drag image support is available.

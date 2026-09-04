@@ -18,7 +18,7 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -39,7 +39,7 @@ class ScLabelRangesObj : public UnoApiTest,
 public:
     ScLabelRangesObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScLabelRangesObj);
@@ -69,7 +69,7 @@ ScLabelRangesObj::ScLabelRangesObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScLabelRangesObj::init()
+uno::Reference<cpo::uno::XInterface> ScLabelRangesObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

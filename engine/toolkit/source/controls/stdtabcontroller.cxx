@@ -388,7 +388,7 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
 {
     if (!rxCtrlModel.is())
         throw lang::IllegalArgumentException(u"No valid XControlModel"_ustr,
-                                             uno::Reference<uno::XInterface>(), 0);
+                                             uno::Reference<cpo::uno::XInterface>(), 0);
 
     auto pCtrl = std::find_if(std::cbegin(rCtrls), std::cend(rCtrls),
         [&rxCtrlModel](const Reference< XControl >& rCtrl) {
@@ -405,7 +405,7 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
     return Reference< XControl > ();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_StdTabController_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

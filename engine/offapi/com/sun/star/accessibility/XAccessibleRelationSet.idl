@@ -31,7 +31,7 @@ module com { module sun { module star { module accessibility {
     remove().  The other methods have been renamed to achieve
     a greater conformance with the other accessibility interfaces.</p>
 */
-interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
+interface XAccessibleRelationSet : ::cpo::uno::XInterface
 {
     /** Returns the number of relations in this relation set.
 

@@ -48,7 +48,7 @@ using namespace css::frame;
 namespace framework{
 
 TitleHelper::TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xContext,
-                        const css::uno::Reference< css::uno::XInterface >& xOwner,
+                        const css::uno::Reference< cpo::uno::XInterface >& xOwner,
                         const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
     :
       m_xContext        (std::move(xContext))
@@ -199,7 +199,7 @@ void TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
 
 void TitleHelper::disposing(const css::lang::EventObject& aEvent)
 {
-    css::uno::Reference< css::uno::XInterface >         xOwner;
+    css::uno::Reference< cpo::uno::XInterface >         xOwner;
     css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
     ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
@@ -241,7 +241,7 @@ void TitleHelper::disposing(const css::lang::EventObject& aEvent)
 
 void TitleHelper::impl_sendTitleChangedEvent ()
 {
-    css::uno::Reference<css::uno::XInterface> xOwner;
+    css::uno::Reference<cpo::uno::XInterface> xOwner;
     OUString sTitle;
     // SYNCHRONIZED ->
     {
@@ -280,7 +280,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 
 void TitleHelper::impl_updateTitle (bool init)
 {
-    css::uno::Reference<css::uno::XInterface> xOwner;
+    css::uno::Reference<cpo::uno::XInterface> xOwner;
 
     // SYNCHRONIZED ->
     {
@@ -314,7 +314,7 @@ static OUString getURLFromModel(const css::uno::Reference< css::frame::XModel3 >
 
 void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init)
 {
-    css::uno::Reference< css::uno::XInterface >         xOwner;
+    css::uno::Reference< cpo::uno::XInterface >         xOwner;
     css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
     ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
@@ -396,7 +396,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
 
 void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init)
 {
-    css::uno::Reference< css::uno::XInterface >         xOwner;
+    css::uno::Reference< cpo::uno::XInterface >         xOwner;
     css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
     ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
@@ -490,7 +490,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     }
     // <- SYNCHRONIZED
 
-    css::uno::Reference< css::uno::XInterface > xComponent = xFrame->getController ();
+    css::uno::Reference< cpo::uno::XInterface > xComponent = xFrame->getController ();
     if ( ! xComponent.is ())
         xComponent = xFrame->getComponentWindow ();
 
@@ -525,7 +525,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
 
 // static
 void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
-                                             const css::uno::Reference< css::uno::XInterface >& xComponent)
+                                             const css::uno::Reference< cpo::uno::XInterface >& xComponent)
 {
     css::uno::Reference< css::frame::XTitle > xTitle(xComponent, css::uno::UNO_QUERY);
 
@@ -551,7 +551,7 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 
 void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 {
-    css::uno::Reference< css::uno::XInterface >        xOwner;
+    css::uno::Reference< cpo::uno::XInterface >        xOwner;
     css::uno::Reference< cpo::uno::XComponentContext > xContext;
     // SYNCHRONIZED ->
     {

@@ -45,7 +45,7 @@ class CacheUpdateListener : public ::cppu::WeakImplHelper< css::util::XChangesLi
         FilterCache &m_rCache;
 
         /** @short  holds the configuration access, where we listen alive. */
-        css::uno::Reference< css::uno::XInterface > m_xConfig;
+        css::uno::Reference< cpo::uno::XInterface > m_xConfig;
 
         /** @short  every instance of this update listener listen on
                     a special sub set of the filter configuration.
@@ -75,7 +75,7 @@ class CacheUpdateListener : public ::cppu::WeakImplHelper< css::util::XChangesLi
                     specify the type of configuration.
          */
         CacheUpdateListener(FilterCache &rFilterCache,
-                            css::uno::Reference< css::uno::XInterface > xConfigAccess,
+                            css::uno::Reference< cpo::uno::XInterface > xConfigAccess,
                             FilterCache::EItemType eConfigType);
 
 

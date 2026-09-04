@@ -30,7 +30,7 @@
     can be compared.
     </p>
  */
-published interface XTextRangeCompare: com::sun::star::uno::XInterface
+published interface XTextRangeCompare: cpo::uno::XInterface
 {
     /** @returns
                     1 if <var>xR1</var> starts before <var>xR2</var>,

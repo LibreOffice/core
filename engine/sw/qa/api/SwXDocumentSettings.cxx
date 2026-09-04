@@ -18,7 +18,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 using namespace css;
 
@@ -38,7 +38,7 @@ public:
         : UnoApiTest(u""_ustr)
         , apitest::XServiceInfo(u"SwXDocumentSettings"_ustr,
                                 u"com.sun.star.text.DocumentSettings"_ustr){};
-    uno::Reference<uno::XInterface> init() override;
+    uno::Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(SwXDocumentSettings);
     CPPUNIT_TEST(testGetImplementationName);
@@ -50,13 +50,13 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-uno::Reference<uno::XInterface> SwXDocumentSettings::init()
+uno::Reference<cpo::uno::XInterface> SwXDocumentSettings::init()
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xFactory(xTextDocument, uno::UNO_QUERY_THROW);
 
-    uno::Reference<uno::XInterface> xDocumentSettings(
+    uno::Reference<cpo::uno::XInterface> xDocumentSettings(
         xFactory->createInstance(u"com.sun.star.text.DocumentSettings"_ustr), uno::UNO_SET_THROW);
 
     return xDocumentSettings;

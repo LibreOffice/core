@@ -161,14 +161,14 @@ void ButtonToolbarController::update()
 void ButtonToolbarController::disposing(
     const css::lang::EventObject& Source )
 {
-    uno::Reference< uno::XInterface > xSource( Source.Source );
+    uno::Reference< cpo::uno::XInterface > xSource( Source.Source );
 
     SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
 
-    uno::Reference< uno::XInterface > xIfac( m_xFrame, uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xIfac( m_xFrame, uno::UNO_QUERY );
     if ( xIfac == xSource )
         m_xFrame.clear();
 }

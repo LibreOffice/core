@@ -252,7 +252,7 @@ VbaDocumentBase::setSaved( bool bSave )
         cpo::uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
                 u"Can't change modified state of model!"_ustr,
-                uno::Reference< uno::XInterface >(),
+                uno::Reference< cpo::uno::XInterface >(),
                 aCaught );
     }
 }

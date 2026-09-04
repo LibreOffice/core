@@ -571,7 +571,7 @@ OUString FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq )
 
 } // namespace oox::core
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_oox_FormatDetector_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                         cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

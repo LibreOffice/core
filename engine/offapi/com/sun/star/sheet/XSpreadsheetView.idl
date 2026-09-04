@@ -25,7 +25,7 @@
 /** is the main interface of a SpreadsheetView. It
     manages the active sheet within this view.
  */
-published interface XSpreadsheetView: com::sun::star::uno::XInterface
+published interface XSpreadsheetView: cpo::uno::XInterface
 {
 
     /** returns the sheet that is shown in the view.

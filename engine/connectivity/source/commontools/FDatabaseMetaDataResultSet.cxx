@@ -761,7 +761,7 @@ void ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aArguments 
         return Sequence<OUString>{ u"com.sun.star.sdbc.ResultSet"_ustr };
     }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 connectivity_dbtools_ODatabaseMetaDataResultSet_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

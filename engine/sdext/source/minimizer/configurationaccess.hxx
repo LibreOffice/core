@@ -24,7 +24,7 @@
 #include "pppoptimizertoken.hxx"
 #include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -101,9 +101,9 @@ class ConfigurationAccess
         std::vector< OptimizerSettings > maSettings;
 
         void LoadConfiguration();
-        css::uno::Reference< css::uno::XInterface > OpenConfiguration( bool bReadOnly );
-        static css::uno::Reference< css::uno::XInterface > GetConfigurationNode(
-            const css::uno::Reference< css::uno::XInterface >& xRoot, const OUString& sPathToNode );
+        css::uno::Reference< cpo::uno::XInterface > OpenConfiguration( bool bReadOnly );
+        static css::uno::Reference< cpo::uno::XInterface > GetConfigurationNode(
+            const css::uno::Reference< cpo::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX

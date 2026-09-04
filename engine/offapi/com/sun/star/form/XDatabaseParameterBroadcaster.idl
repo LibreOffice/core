@@ -31,7 +31,7 @@
     One method to gather these values is calling the XDatabaseParameterListener listeners, which
     can fill them in.</p>
  */
-published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterface
+published interface XDatabaseParameterBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener, to allow it to fill in necessary parameter values.

@@ -75,7 +75,7 @@ PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) 
     m_aRequest(
         cpo::uno::Any(
             task::DocumentPasswordRequest2(
-                OUString(), uno::Reference< uno::XInterface >(),
+                OUString(), uno::Reference< cpo::uno::XInterface >(),
                 task::InteractionClassification_QUERY,
                 (bFirstTry
                  ? task::PasswordRequestMode_PASSWORD_ENTER

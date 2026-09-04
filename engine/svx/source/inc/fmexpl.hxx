@@ -126,7 +126,7 @@ class FmEntryDataList;
 class FmEntryData
 {
 private:
-    css::uno::Reference< css::uno::XInterface >       m_xNormalizedIFace;
+    css::uno::Reference< cpo::uno::XInterface >       m_xNormalizedIFace;
     css::uno::Reference< css::beans::XPropertySet >   m_xProperties;
     css::uno::Reference< css::container::XChild >     m_xChild;
 
@@ -139,11 +139,11 @@ protected:
     FmEntryData*        pParent;
 
 protected:
-    void    newObject( const css::uno::Reference< css::uno::XInterface >& _rxIFace );
+    void    newObject( const css::uno::Reference< cpo::uno::XInterface >& _rxIFace );
 
 public:
 
-    FmEntryData( FmEntryData* pParentData, const css::uno::Reference< css::uno::XInterface >& _rIFace );
+    FmEntryData( FmEntryData* pParentData, const css::uno::Reference< cpo::uno::XInterface >& _rIFace );
     virtual ~FmEntryData();
 
     void    SetText( const OUString& rText ){ aText = rText; }
@@ -159,7 +159,7 @@ public:
 
     // note that the interface returned is normalized, i.e. querying the given XInterface of the object
     // for XInterface must return the interface itself.
-    const css::uno::Reference< css::uno::XInterface >& GetElement() const
+    const css::uno::Reference< cpo::uno::XInterface >& GetElement() const
     {
         return m_xNormalizedIFace;
     }
@@ -289,8 +289,8 @@ namespace svxform
         bool CanUndo() const { return m_bCanUndo; }
         void ReleaseModel() { m_pNavModel = nullptr; }
     private:
-        void Insert(const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nIndex);
-        void Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement );
+        void Insert(const css::uno::Reference< cpo::uno::XInterface >& xIface, sal_Int32 nIndex);
+        void Remove( const css::uno::Reference< cpo::uno::XInterface >& _rxElement );
     };
 
     class NavigatorTreeModel final : public SfxBroadcaster
@@ -343,7 +343,7 @@ namespace svxform
         css::uno::Reference< css::form::XForms >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
-        FmEntryData*        FindData( const css::uno::Reference< css::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
+        FmEntryData*        FindData( const css::uno::Reference< cpo::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
         FmEntryData*        FindData( const OUString& rText, FmFormData const * pParentData, bool bRecurs );
         FmEntryDataList*    GetRootList() const { return m_pRootList.get(); }
         static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData const * pParentFormData );

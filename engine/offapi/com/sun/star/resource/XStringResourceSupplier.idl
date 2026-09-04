@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module resource {
     Provides access to a string resource represented by a
     com::sun::star::resource::XStringResourceResolver.
  */
-interface XStringResourceSupplier: com::sun::star::uno::XInterface
+interface XStringResourceSupplier: cpo::uno::XInterface
 {
 
     /**

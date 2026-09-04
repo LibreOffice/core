@@ -1205,7 +1205,7 @@ void SdrOle2Obj::Connect_Impl(SvxOle2Shape* pCreator)
             uno::Reference< container::XChild > xChild( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
             if( xChild.is() )
             {
-                uno::Reference< uno::XInterface > xParent( getSdrModelFromSdrObject().getUnoModel());
+                uno::Reference< cpo::uno::XInterface > xParent( getSdrModelFromSdrObject().getUnoModel());
                 if( xParent.is())
                     xChild->setParent( getSdrModelFromSdrObject().getUnoModel() );
             }

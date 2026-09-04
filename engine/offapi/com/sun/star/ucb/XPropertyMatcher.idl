@@ -24,7 +24,7 @@ module com { module sun { module star { module ucb {
 
     @see  XPropertyMatcherFactory.
 */
-published interface XPropertyMatcher : com::sun::star::uno::XInterface
+published interface XPropertyMatcher : cpo::uno::XInterface
 {
     /** Checks whether a set of properties matches the given search criteria.
 

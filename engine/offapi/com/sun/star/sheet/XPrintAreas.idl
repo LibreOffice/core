@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** represents a sheet which has print areas.
  */
-published interface XPrintAreas: com::sun::star::uno::XInterface
+published interface XPrintAreas: cpo::uno::XInterface
 {
 
     /** returns a sequence containing all print areas of the sheet.

@@ -25,7 +25,7 @@ interface XSubmissionVetoListener;
 
 /** is implemented by components which support submitting data.
 */
-interface XSubmission : com::sun::star::uno::XInterface
+interface XSubmission : cpo::uno::XInterface
 {
     /** tells the component to submit data
 

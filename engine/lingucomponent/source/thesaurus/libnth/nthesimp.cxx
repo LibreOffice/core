@@ -558,7 +558,7 @@ Sequence< OUString > SAL_CALL Thesaurus::getSupportedServiceNames()
     return { SN_THESAURUS };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 lingucomponent_Thesaurus_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides seeking a goal value for a cell.
  */
-published interface XGoalSeek: com::sun::star::uno::XInterface
+published interface XGoalSeek: cpo::uno::XInterface
 {
 
     /** calculates a value which gives a specified result in a formula.

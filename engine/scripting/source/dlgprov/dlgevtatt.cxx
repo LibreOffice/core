@@ -427,7 +427,7 @@ namespace dlgprov
     DialogUnoScriptListenerImpl::DialogUnoScriptListenerImpl( const Reference< XComponentContext >& rxContext,
             const Reference< css::frame::XModel >& rxModel,
             const Reference< css::awt::XControl >& rxControl,
-            const Reference< css::uno::XInterface >& rxHandler,
+            const Reference< cpo::uno::XInterface >& rxHandler,
             const Reference< css::beans::XIntrospectionAccess >& rxIntrospectionAccess,
             bool bDialogProviderMode )
         : DialogSFScriptListenerImpl( rxContext, rxModel )

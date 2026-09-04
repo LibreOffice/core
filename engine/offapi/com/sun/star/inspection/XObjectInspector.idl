@@ -93,7 +93,7 @@ interface XObjectInspector
         @see XPropertyHandler::onInteractivePropertySelection
         @see XPropertyHandler::suspend
     */
-    void inspect( [in] sequence< com::sun::star::uno::XInterface > Objects )
+    void inspect( [in] sequence< cpo::uno::XInterface > Objects )
         raises (com::sun::star::util::VetoException);
 };
 

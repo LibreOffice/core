@@ -22,7 +22,7 @@ import lib.MultiPropertyTest;
 import util.utils;
 
 import com.sun.star.form.XLoadable;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.form.DataAwareControlModel</code>
@@ -36,7 +36,7 @@ import com.sun.star.uno.XInterface;
 * <ul>
 *  <li> <code>'FL'</code> as <code>com.sun.star.form.XLoadable</code>
 *    implementation : used to connect control to data source. </li>
-*  <li> <code>'LC'</code> as <code>com.sun.star.uno.XInterface</code>
+*  <li> <code>'LC'</code> as <code>cpo.uno.XInterface</code>
 *    implementation : as value for LabelControl property (see property
 *    documentation). </li>
 *  <li> <code>'DataAwareControlModel.NewFieldName'</code> :

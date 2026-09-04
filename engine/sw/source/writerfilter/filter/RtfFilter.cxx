@@ -88,7 +88,7 @@ bool RtfFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescript
     {
         uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
                                                         uno::UNO_QUERY_THROW);
-        uno::Reference<uno::XInterface> xIfc(
+        uno::Reference<cpo::uno::XInterface> xIfc(
             xMSF->createInstance(u"com.sun.star.comp.Writer.RtfExport"_ustr), uno::UNO_SET_THROW);
         uno::Reference<document::XExporter> xExporter(xIfc, uno::UNO_QUERY_THROW);
         uno::Reference<document::XFilter> xFilter(xIfc, uno::UNO_QUERY_THROW);
@@ -213,7 +213,7 @@ cpo::uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_RtfFilter_get_implementation(
     cpo::uno::XComponentContext* pComponent, cpo::uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {

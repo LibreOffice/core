@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module beans {
     </p>
 
  */
-published interface XProperty: com::sun::star::uno::XInterface
+published interface XProperty: cpo::uno::XInterface
 {
     /** @returns
                 the specification of this object as Property.

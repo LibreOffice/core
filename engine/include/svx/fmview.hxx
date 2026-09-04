@@ -128,7 +128,7 @@ public:
         sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return mpActualOutDev;}
-    SVX_DLLPRIVATE bool checkUnMarkAll(const css::uno::Reference< css::uno::XInterface >& _xSource);
+    SVX_DLLPRIVATE bool checkUnMarkAll(const css::uno::Reference< cpo::uno::XInterface >& _xSource);
 
 private:
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;

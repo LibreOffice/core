@@ -34,7 +34,7 @@
 
     @see
  */
-published interface XCloseBroadcaster: com::sun::star::uno::XInterface
+published interface XCloseBroadcaster: cpo::uno::XInterface
 {
     /** adds the specified listener to receive or have a veto for "close" events
 

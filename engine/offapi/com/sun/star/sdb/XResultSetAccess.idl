@@ -31,7 +31,7 @@
     com::sun::star::sdbc::ResultSet
     based on the object providing the interface.
  */
-published interface XResultSetAccess: com::sun::star::uno::XInterface
+published interface XResultSetAccess: cpo::uno::XInterface
 {
 
     /** returns a new

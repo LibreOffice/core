@@ -24,7 +24,7 @@ module com { module sun { module star { module io {
     storage.
 */
 
-published interface XXMLExtractor : com::sun::star::uno::XInterface
+published interface XXMLExtractor : cpo::uno::XInterface
 {
     /** extracts the XML stream from the document storage.
 

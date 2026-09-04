@@ -45,7 +45,7 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
     aName = rShow.GetName();
 }
 
-SdCustomShow::SdCustomShow(css::uno::Reference< css::uno::XInterface > const & xShow )
+SdCustomShow::SdCustomShow(css::uno::Reference< cpo::uno::XInterface > const & xShow )
   : mxUnoCustomShow( xShow )
 {
 }
@@ -57,16 +57,16 @@ SdCustomShow::SdCustomShow(css::uno::Reference< css::uno::XInterface > const & x
 \************************************************************************/
 SdCustomShow::~SdCustomShow()
 {
-    uno::Reference< uno::XInterface > xShow( mxUnoCustomShow );
+    uno::Reference< cpo::uno::XInterface > xShow( mxUnoCustomShow );
     uno::Reference< lang::XComponent > xComponent( xShow, uno::UNO_QUERY );
     if( xComponent.is() )
         xComponent->dispose();
 }
 
-uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
+uno::Reference< cpo::uno::XInterface > SdCustomShow::getUnoCustomShow()
 {
     // try weak reference first
-    uno::Reference< uno::XInterface > xShow( mxUnoCustomShow );
+    uno::Reference< cpo::uno::XInterface > xShow( mxUnoCustomShow );
 
     if( !xShow.is() )
     {

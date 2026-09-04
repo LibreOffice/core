@@ -59,7 +59,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <cppu/cppudllapi.h>

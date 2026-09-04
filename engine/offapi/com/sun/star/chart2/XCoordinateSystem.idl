@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XCoordinateSystem : ::com::sun::star::uno::XInterface
+interface XCoordinateSystem : ::cpo::uno::XInterface
 {
     /** the dimension of the coordinate-system.
      */

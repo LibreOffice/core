@@ -69,7 +69,7 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     if ( mpParent )
         mpParent->doInsertByName ( this, false );
 }
-uno::Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
+uno::Reference< cpo::uno::XInterface > SAL_CALL ZipPackageEntry::getParent(  )
 {
     // return uno::Reference< XInterface >( xParent, UNO_QUERY );
     return cppu::getXWeak( mpParent );

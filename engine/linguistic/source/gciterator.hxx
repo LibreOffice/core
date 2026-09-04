@@ -164,10 +164,10 @@ public:
     virtual ~GrammarCheckingIterator() override;
 
     // XProofreadingIterator
-    virtual void startProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraphIteratorProvider >& xIteratorProvider ) override;
-    virtual css::linguistic2::ProofreadingResult checkSentenceAtPosition( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraph >& xFlatParagraph, const OUString& aText, const css::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePosition, ::sal_Int32 nSuggestedBehindEndOfSentencePosition, ::sal_Int32 nErrorPositionInParagraph ) override;
+    virtual void startProofreading( const css::uno::Reference< cpo::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraphIteratorProvider >& xIteratorProvider ) override;
+    virtual css::linguistic2::ProofreadingResult checkSentenceAtPosition( const css::uno::Reference< cpo::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraph >& xFlatParagraph, const OUString& aText, const css::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePosition, ::sal_Int32 nSuggestedBehindEndOfSentencePosition, ::sal_Int32 nErrorPositionInParagraph ) override;
     virtual void resetIgnoreRules(  ) override;
-    virtual bool isProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument ) override;
+    virtual bool isProofreading( const css::uno::Reference< cpo::uno::XInterface >& xDocument ) override;
 
     // XLinguServiceEventListener
     virtual void processLinguServiceEvent( const css::linguistic2::LinguServiceEvent& aLngSvcEvent ) override;

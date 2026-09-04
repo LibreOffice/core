@@ -41,7 +41,7 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.task.XJob;
 import cpo.uno.Type;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * The main class, will call ClParser and CfgParser to <br>

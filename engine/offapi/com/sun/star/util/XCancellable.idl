@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module util {
 
     <p>This is supported by objects which represent a job.
  */
-published interface XCancellable: com::sun::star::uno::XInterface
+published interface XCancellable: cpo::uno::XInterface
 {
     /** cancels the current job of the object.
      */

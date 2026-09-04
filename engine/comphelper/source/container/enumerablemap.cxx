@@ -47,7 +47,7 @@ namespace comphelper
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
@@ -701,7 +701,7 @@ namespace comphelper
 } // namespace comphelper
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_openoffice_comp_comphelper_EnumerableMap(
     cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

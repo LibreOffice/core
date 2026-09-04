@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module io {
     stream.
     @see XActiveDataControl.
  */
-published interface XActiveDataSource: com::sun::star::uno::XInterface
+published interface XActiveDataSource: cpo::uno::XInterface
 {
     /** plugs the output stream.
 

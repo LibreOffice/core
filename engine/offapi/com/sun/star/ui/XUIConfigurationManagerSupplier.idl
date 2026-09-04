@@ -23,7 +23,7 @@ module com { module sun { module star { module ui {
     an object.
 */
 
-interface XUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
+interface XUIConfigurationManagerSupplier : ::cpo::uno::XInterface
 {
     /** returns the user interface configuration manager related to the
         object.

@@ -756,7 +756,7 @@ atk_object_wrapper_get_type()
 }
 
 static bool
-isOfType( uno::XInterface *pInterface, const cpo::uno::Type & rType )
+isOfType( cpo::uno::XInterface *pInterface, const cpo::uno::Type & rType )
 {
     g_return_val_if_fail( pInterface != nullptr, false );
 
@@ -774,7 +774,7 @@ isOfType( uno::XInterface *pInterface, const cpo::uno::Type & rType )
 // Whether AtkTableCell can be supported for the interface.
 // Returns true if the corresponding XAccessible has role TABLE_CELL
 // and an XAccessibleTable as parent.
-static bool isTableCell(uno::XInterface* pInterface)
+static bool isTableCell(cpo::uno::XInterface* pInterface)
 {
     g_return_val_if_fail(pInterface != nullptr, false);
 
@@ -877,7 +877,7 @@ constexpr struct {
 const int aTypeTableSize = G_N_ELEMENTS( aTypeTable );
 
 static GType
-ensureTypeFor( uno::XInterface *pAccessible )
+ensureTypeFor( cpo::uno::XInterface *pAccessible )
 {
     int i;
     bool bTypes[ aTypeTableSize ] = { false, };

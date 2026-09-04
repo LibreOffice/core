@@ -455,18 +455,18 @@ MethodMode SAL_CALL IdlInterfaceMethodImpl::getMode()
 
 Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > & rArgs )
 {
-    if (auto ifc = o3tl::tryAccess<css::uno::Reference<css::uno::XInterface>>(
+    if (auto ifc = o3tl::tryAccess<css::uno::Reference<cpo::uno::XInterface>>(
             rObj))
     {
         // acquire()/ release()
         if (rtl_ustr_ascii_compare( getTypeDescr()->pTypeName->buffer,
-                                    "com.sun.star.uno.XInterface::acquire" ) == 0)
+                                    "cpo.uno.XInterface::acquire" ) == 0)
         {
             (*ifc)->acquire();
             return Any();
         }
         else if (rtl_ustr_ascii_compare( getTypeDescr()->pTypeName->buffer,
-                                         "com.sun.star.uno.XInterface::release" ) == 0)
+                                         "cpo.uno.XInterface::release" ) == 0)
         {
             (*ifc)->release();
             return Any();

@@ -506,7 +506,7 @@ protected:
 
     /** returns the component itself
     */
-    virtual css::uno::Reference< css::uno::XInterface > getThis() const = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > getThis() const = 0;
 
     ::osl::Mutex& getMutex()
     {

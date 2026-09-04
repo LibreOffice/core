@@ -34,7 +34,7 @@ interface XXMLElementWrapper;
  * In another word, this interface wraps language dependent methods,
  * then other component can manipulate DOM data through UNO methods.
  */
-interface XXMLDocumentWrapper : com::sun::star::uno::XInterface
+interface XXMLDocumentWrapper : cpo::uno::XInterface
 {
     /**
      * Gets the current element.

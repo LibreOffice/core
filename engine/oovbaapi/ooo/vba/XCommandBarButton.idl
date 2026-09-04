@@ -21,7 +21,7 @@
 module ooo {  module vba {
 
 
-interface XCommandBarButton: com::sun::star::uno::XInterface
+interface XCommandBarButton: cpo::uno::XInterface
 {
 };
 

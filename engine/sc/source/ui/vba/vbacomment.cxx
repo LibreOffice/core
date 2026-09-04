@@ -50,7 +50,7 @@ ScVbaComment::ScVbaComment(
     mxRange( xRange )
 {
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException(u"range is not set "_ustr, uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException(u"range is not set "_ustr, uno::Reference< cpo::uno::XInterface >() , 1 );
     getAnnotation();
 }
 

@@ -81,9 +81,9 @@ class Impl1: public Interface1, private Base {
 public:
     virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override
     {
-        if (type == cppu::UnoType<css::uno::XInterface>::get()) {
-            css::uno::Reference< css::uno::XInterface > ref(
-                static_cast< css::uno::XInterface * >(this));
+        if (type == cppu::UnoType<cpo::uno::XInterface>::get()) {
+            css::uno::Reference< cpo::uno::XInterface > ref(
+                static_cast< cpo::uno::XInterface * >(this));
             return cpo::uno::Any(&ref, type);
         }
         if (type == cppu::UnoType<Interface1>::get()) {
@@ -106,9 +106,9 @@ class Impl2: public Interface2a, public Interface3, private Base {
 public:
     virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override
     {
-        if (type == cppu::UnoType<css::uno::XInterface>::get()) {
-            css::uno::Reference< css::uno::XInterface > ref(
-                static_cast< css::uno::XInterface * >(
+        if (type == cppu::UnoType<cpo::uno::XInterface>::get()) {
+            css::uno::Reference< cpo::uno::XInterface > ref(
+                static_cast< cpo::uno::XInterface * >(
                     static_cast< Interface2a * >(this)));
             return cpo::uno::Any(&ref, type);
         }
@@ -140,9 +140,9 @@ class Impl2b: public Interface2b, private Base {
 public:
     virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override
     {
-        if (type == cppu::UnoType<css::uno::XInterface>::get()) {
-            css::uno::Reference< css::uno::XInterface > ref(
-                static_cast< css::uno::XInterface * >(
+        if (type == cppu::UnoType<cpo::uno::XInterface>::get()) {
+            css::uno::Reference< cpo::uno::XInterface > ref(
+                static_cast< cpo::uno::XInterface * >(
                     static_cast< Interface2a * >(this)));
             return cpo::uno::Any(&ref, type);
         }
@@ -310,7 +310,7 @@ void Test::testVoid() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -415,7 +415,7 @@ void Test::testBoolean() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -520,7 +520,7 @@ void Test::testByte() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -625,7 +625,7 @@ void Test::testShort() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -732,7 +732,7 @@ void Test::testUnsignedShort() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -837,7 +837,7 @@ void Test::testLong() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -942,7 +942,7 @@ void Test::testUnsignedLong() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1047,7 +1047,7 @@ void Test::testHyper() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1152,7 +1152,7 @@ void Test::testUnsignedHyper() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1257,7 +1257,7 @@ void Test::testFloat() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1362,7 +1362,7 @@ void Test::testDouble() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1468,7 +1468,7 @@ void Test::testChar() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1573,7 +1573,7 @@ void Test::testString() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1676,7 +1676,7 @@ void Test::testType() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1796,7 +1796,7 @@ void Test::testSequence() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -1913,7 +1913,7 @@ void Test::testEnum() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -2037,7 +2037,7 @@ void Test::testStruct() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -2061,7 +2061,7 @@ void Test::testPoly() {
 void Test::testException() {
     cpo::uno::Any a(
         Exception2a(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 1,
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 1,
             3));
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<Exception2a>::get()));
     {
@@ -2154,19 +2154,19 @@ void Test::testException() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
     {
         Exception2 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception2", (a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception2", sal_Int32(1), b.member);
     }
     {
         Exception2a b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2,
             2);
         CPPUNIT_ASSERT_MESSAGE(
             "Exception2a", (a >>= b));
@@ -2177,7 +2177,7 @@ void Test::testException() {
     }
     {
         Exception2b b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2,
             2);
         CPPUNIT_ASSERT_MESSAGE("Exception2b", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception2b", sal_Int32(2), b.member);
@@ -2284,7 +2284,7 @@ void Test::testInterface() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
@@ -2410,7 +2410,7 @@ void Test::testNull() {
     }
     {
         Exception1 b(
-            OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
+            OUString(), css::uno::Reference< cpo::uno::XInterface >(), 2);
         CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }

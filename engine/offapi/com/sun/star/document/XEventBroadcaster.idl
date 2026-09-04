@@ -26,7 +26,7 @@ module com {   module sun {   module star {   module document {
     @deprecated
     @see XDocumentEventBroadcaster
  */
-published interface XEventBroadcaster: com::sun::star::uno::XInterface
+published interface XEventBroadcaster: cpo::uno::XInterface
 {
     /** registers the given listener
 

@@ -23,7 +23,7 @@
 
 /** enables the object to import styles from documents.
  */
-published interface XStyleLoader: com::sun::star::uno::XInterface
+published interface XStyleLoader: cpo::uno::XInterface
 {
     /** loads styles from a document at the given URL.
         <p>

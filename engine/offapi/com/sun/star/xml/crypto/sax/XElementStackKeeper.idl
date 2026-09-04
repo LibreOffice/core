@@ -22,7 +22,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
 /**
  * Manipulate the "key SAX events" in a SAX event stream.
  */
-interface XElementStackKeeper : com::sun::star::uno::XInterface
+interface XElementStackKeeper : cpo::uno::XInterface
 {
     /**
      * Starts to buffer key SAX events.

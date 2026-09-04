@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module task {
 
     @see theJobExecutor
  */
-published interface XJobExecutor : com::sun::star::uno::XInterface
+published interface XJobExecutor : cpo::uno::XInterface
 {
     /** trigger event to start registered jobs
 

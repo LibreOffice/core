@@ -24,7 +24,7 @@
     @see com::sun::star::sdbcx::PrivilegeObject
     @see com::sun::star::sdbcx::Privilege
  */
-published interface XAuthorizable: com::sun::star::uno::XInterface
+published interface XAuthorizable: cpo::uno::XInterface
 {
 
     /** retrieves the permissions for a specific object.

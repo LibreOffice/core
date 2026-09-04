@@ -25,7 +25,7 @@ module com { module sun { module star { module ucb {
     <p>This is an additional interface the XContent representing the trash
     can (URL: "vnd.sun.staroffice.trashcan:///") should support.
 */
-published interface XRecycler : com::sun::star::uno::XInterface
+published interface XRecycler : cpo::uno::XInterface
 {
     /** Notify the trash can that an XContent is deleting itself
         into it.

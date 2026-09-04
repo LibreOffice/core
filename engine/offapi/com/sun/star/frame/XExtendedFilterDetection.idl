@@ -26,7 +26,7 @@
 /** use com::sun::star::document::XExtendedFilterDetection instead of this
     @deprecated
  */
-published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
+published interface XExtendedFilterDetection: cpo::uno::XInterface
 {
     /** use com::sun::star::document::XExtendedFilterDetection::detect() instead of this
         @deprecated

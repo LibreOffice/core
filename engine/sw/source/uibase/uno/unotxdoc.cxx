@@ -1613,7 +1613,7 @@ void    SwXTextDocument::InitNewDoc()
     }
 }
 
-css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
+css::uno::Reference<cpo::uno::XInterface> SwXTextDocument::create(
     OUString const & rServiceName,
     cpo::uno::Sequence<cpo::uno::Any> const * arguments)
 {
@@ -1717,7 +1717,7 @@ rtl::Reference<SwXTextField> SwXTextDocument::createTextField(
 
     const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
     assert(nType != SwServiceType::Invalid);
-    uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    uno::Reference<cpo::uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
     rtl::Reference<SwXTextField> xTextField = dynamic_cast<SwXTextField*>(xTmp.get());
     assert(xTextField);
     return xTextField;
@@ -1731,7 +1731,7 @@ rtl::Reference<SwXFieldmark> SwXTextDocument::createFieldmark(
 
     const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
     assert(nType != SwServiceType::Invalid);
-    uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    uno::Reference<cpo::uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
     rtl::Reference<SwXFieldmark> xTextField = dynamic_cast<SwXFieldmark*>(xTmp.get());
     assert(xTextField);
     return xTextField;
@@ -1767,7 +1767,7 @@ rtl::Reference<SwXFieldMaster> SwXTextDocument::createFieldMaster(
 
     const SwServiceType nType = SwXServiceProvider::GetProviderType(rServiceName);
     assert(nType != SwServiceType::Invalid);
-    uno::Reference<uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
+    uno::Reference<cpo::uno::XInterface> xTmp = SwXServiceProvider::MakeInstance(nType, GetDocOrThrow());
     rtl::Reference<SwXFieldMaster> xTextField = dynamic_cast<SwXFieldMaster*>(xTmp.get());
     assert(xTextField);
     return xTextField;

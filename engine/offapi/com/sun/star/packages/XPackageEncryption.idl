@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module packages {
 
 /** Allows to transparently plug-in crypto for PackageStreams.
  */
-interface XPackageEncryption: com::sun::star::uno::XInterface
+interface XPackageEncryption: cpo::uno::XInterface
 {
     /** Read package crypto information
 

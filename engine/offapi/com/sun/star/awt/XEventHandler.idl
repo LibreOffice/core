@@ -24,7 +24,7 @@ module com { module sun { module star { module awt {
 /** This interface can be implemented by clients that need access to the
     toolkits window message loop.
 */
-published interface XEventHandler: com::sun::star::uno::XInterface
+published interface XEventHandler: cpo::uno::XInterface
 {
 
 

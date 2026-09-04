@@ -146,7 +146,7 @@ cpo::uno::Sequence< OUString > OOfficeRestartManager::getSupportedServiceNames()
 } // namespace comphelper
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_task_OfficeRestartManager(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

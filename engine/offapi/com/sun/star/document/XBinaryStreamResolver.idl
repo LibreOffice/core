@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module document {
     be used to transform the binary data, represented through the
     com::sun::star::io::XOutputStream interface, to a URL.</p>
  */
-published interface XBinaryStreamResolver: com::sun::star::uno::XInterface
+published interface XBinaryStreamResolver: cpo::uno::XInterface
 {
     /** converts the given URL from the source URL namespace to an input stream,
         from which binary data can be read

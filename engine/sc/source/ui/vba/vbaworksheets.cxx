@@ -466,7 +466,7 @@ ScVbaWorksheets::getServiceNames()
 bool ScVbaWorksheets::nameExists( const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, std::u16string_view name, SCTAB& nTab )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( u"nameExists() xSpreadDoc is null"_ustr, uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( u"nameExists() xSpreadDoc is null"_ustr, uno::Reference< cpo::uno::XInterface  >(), 1 );
     uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
     if ( xIndex.is() )
     {

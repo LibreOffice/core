@@ -33,7 +33,7 @@ module com { module sun { module star { module util {
 
     @see XStringWidth
  */
-published interface XStringAbbreviation: com::sun::star::uno::XInterface
+published interface XStringAbbreviation: cpo::uno::XInterface
 {
     /** Abbreviate a string, so that the resulting abbreviated string is not
         wider than some given width.

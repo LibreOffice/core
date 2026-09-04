@@ -59,7 +59,7 @@
     @see XDispatchRecorderSupplier
     @see XDispatch
  */
-published interface XRecordableDispatch: com::sun::star::uno::XInterface
+published interface XRecordableDispatch: cpo::uno::XInterface
 {
     /** dispatch and record it
 

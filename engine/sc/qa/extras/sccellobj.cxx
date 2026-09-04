@@ -48,8 +48,8 @@ class ScCellObj : public UnoApiTest,
 public:
     ScCellObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXSpreadsheet() override;
     virtual void setUp() override;
 
     void testInsertVarious_ScCellObj();
@@ -104,7 +104,7 @@ ScCellObj::ScCellObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScCellObj::init()
+uno::Reference<cpo::uno::XInterface> ScCellObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -120,7 +120,7 @@ uno::Reference<uno::XInterface> ScCellObj::init()
     return xSheet->getCellByPosition(2, 3);
 }
 
-uno::Reference<uno::XInterface> ScCellObj::getXSpreadsheet()
+uno::Reference<cpo::uno::XInterface> ScCellObj::getXSpreadsheet()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 

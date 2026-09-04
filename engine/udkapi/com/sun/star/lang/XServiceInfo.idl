@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module lang {
 /** Provides information regarding the implementation: which services
     are implemented and the name of the implementation.
 */
-published interface XServiceInfo: com::sun::star::uno::XInterface
+published interface XServiceInfo: cpo::uno::XInterface
 {
     /** Provides the implementation name of the service implementation.
 

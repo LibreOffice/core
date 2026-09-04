@@ -267,7 +267,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                     cpo::uno::Sequence< cpo::uno::Any > aArguments {
                         cpo::uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
                         cpo::uno::Any(comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)) };
-                    uno::Reference< uno::XInterface > xInterface(
+                    uno::Reference< cpo::uno::XInterface > xInterface(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.drawing.EnhancedCustomShapeEngine"_ustr, aArguments, xContext) );
                     assert( xInterface && "should never fail" );
                     uno::Reference< drawing::XCustomShapeEngine > xCustomShapeEngine(
@@ -524,7 +524,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     {
         case XmlShapeType::DrawConnectorShape:
         {
-            uno::Reference< uno::XInterface > xConnection;
+            uno::Reference< cpo::uno::XInterface > xConnection;
 
             // create shape ids for export later
             xPropSet->getPropertyValue( u"StartShape"_ustr ) >>= xConnection;
@@ -729,7 +729,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     // export shapes id if needed
     {
-        uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
+        uno::Reference< cpo::uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
         if( !rShapeId.isEmpty() )
         {
@@ -2919,8 +2919,8 @@ void XMLShapeExport::ImpExportConnectorShape(
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
     // #i39320#
-    uno::Reference< uno::XInterface > xRefS;
-    uno::Reference< uno::XInterface > xRefE;
+    uno::Reference< cpo::uno::XInterface > xRefS;
+    uno::Reference< cpo::uno::XInterface > xRefE;
 
     // export start connection
     xProps->getPropertyValue(u"StartShape"_ustr) >>= xRefS;

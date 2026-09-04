@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module beans {
             (multi selection with multiple values).</li>
     </ul>
  */
-published interface XPropertyState: com::sun::star::uno::XInterface
+published interface XPropertyState: cpo::uno::XInterface
 {
 
     /** @returns

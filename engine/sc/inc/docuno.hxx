@@ -98,14 +98,14 @@ private:
     std::unique_ptr<ScPrintUIOptions> pPrinterOptions;
     std::unique_ptr<ScPrintState> m_pPrintState;
     css::uno::Reference<cpo::uno::XAggregation> xNumberAgg;
-    css::uno::Reference<css::uno::XInterface> xDrawGradTab;
-    css::uno::Reference<css::uno::XInterface> xDrawHatchTab;
-    css::uno::Reference<css::uno::XInterface> xDrawBitmapTab;
-    css::uno::Reference<css::uno::XInterface> xDrawTrGradTab;
-    css::uno::Reference<css::uno::XInterface> xDrawMarkerTab;
-    css::uno::Reference<css::uno::XInterface> xDrawDashTab;
-    css::uno::Reference<css::uno::XInterface> xChartDataProv;
-    css::uno::Reference<css::uno::XInterface> xObjProvider;
+    css::uno::Reference<cpo::uno::XInterface> xDrawGradTab;
+    css::uno::Reference<cpo::uno::XInterface> xDrawHatchTab;
+    css::uno::Reference<cpo::uno::XInterface> xDrawBitmapTab;
+    css::uno::Reference<cpo::uno::XInterface> xDrawTrGradTab;
+    css::uno::Reference<cpo::uno::XInterface> xDrawMarkerTab;
+    css::uno::Reference<cpo::uno::XInterface> xDrawDashTab;
+    css::uno::Reference<cpo::uno::XInterface> xChartDataProv;
+    css::uno::Reference<cpo::uno::XInterface> xObjProvider;
 
     ::comphelper::OInterfaceContainerHelper3<css::util::XChangesListener> maChangesListeners;
 
@@ -116,7 +116,7 @@ private:
     css::uno::Reference<cpo::uno::XAggregation> const & GetFormatter();
     void                    HandleCalculateEvents();
 
-    css::uno::Reference<css::uno::XInterface> create(
+    css::uno::Reference<cpo::uno::XInterface> create(
         OUString const & aServiceSpecifier,
         cpo::uno::Sequence<cpo::uno::Any> const * arguments);
 
@@ -245,9 +245,9 @@ public:
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             /// XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
                             createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
                             createInstanceWithArguments( const OUString& ServiceSpecifier,
                                 const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;

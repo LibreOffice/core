@@ -20,7 +20,7 @@ module qa
  * Dumps the content into a string.
  * This is an internal interface and should not be used outside of Libreoffice source code
  */
-interface XDumper : com::sun::star::uno::XInterface
+interface XDumper : cpo::uno::XInterface
 {
     /**
      * dump the content into a string

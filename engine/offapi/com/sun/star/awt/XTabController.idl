@@ -24,7 +24,7 @@
 
 /** specifies the basic operations for a tab controller.
  */
-published interface XTabController: com::sun::star::uno::XInterface
+published interface XTabController: cpo::uno::XInterface
 {
 
     /** sets the tab controller model.

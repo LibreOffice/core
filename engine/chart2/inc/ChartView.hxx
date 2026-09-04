@@ -175,8 +175,8 @@ public:
     virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments(
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(
         const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
@@ -237,12 +237,12 @@ private: //member
     rtl::Reference<SvxShapeGroupAnyD>
             mxRootShape;
 
-    css::uno::Reference< css::uno::XInterface > m_xDashTable;
-    css::uno::Reference< css::uno::XInterface > m_xGradientTable;
-    css::uno::Reference< css::uno::XInterface > m_xHatchTable;
-    css::uno::Reference< css::uno::XInterface > m_xBitmapTable;
-    css::uno::Reference< css::uno::XInterface > m_xTransGradientTable;
-    css::uno::Reference< css::uno::XInterface > m_xMarkerTable;
+    css::uno::Reference< cpo::uno::XInterface > m_xDashTable;
+    css::uno::Reference< cpo::uno::XInterface > m_xGradientTable;
+    css::uno::Reference< cpo::uno::XInterface > m_xHatchTable;
+    css::uno::Reference< cpo::uno::XInterface > m_xBitmapTable;
+    css::uno::Reference< cpo::uno::XInterface > m_xTransGradientTable;
+    css::uno::Reference< cpo::uno::XInterface > m_xMarkerTable;
 
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
 

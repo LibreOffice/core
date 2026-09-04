@@ -38,7 +38,7 @@
     com::sun::star::sdbc::SQLException
     if a database access error occurs.
  */
-published interface XRow: com::sun::star::uno::XInterface
+published interface XRow: cpo::uno::XInterface
 {
 
     /** reports whether the last column read had a value of SQL NULL.

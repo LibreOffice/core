@@ -34,7 +34,7 @@
     @see com::sun::star::awt::XWindowPeer
     @see com::sun::star::form::component::GridControl
  */
-published interface XGridPeer: com::sun::star::uno::XInterface
+published interface XGridPeer: cpo::uno::XInterface
 {
 
     /** retrieves the currently used column definitions of the peer.

@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module io {
 
     <p>Importer objects are registered for specific components and data types.</p>
  */
-published interface XDataImporter: com::sun::star::uno::XInterface
+published interface XDataImporter: cpo::uno::XInterface
 {
     /** imports data for a component from an active data source.
      */

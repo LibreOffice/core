@@ -25,7 +25,7 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import lib.StatusException;
 
 /**

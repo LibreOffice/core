@@ -32,7 +32,7 @@ namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace chart
 {
@@ -102,7 +102,7 @@ public:
     bool operator<( const ObjectIdentifier& rOID ) const;
 
     static OUString createClassifiedIdentifierForObject(
-          const css::uno::Reference< css::uno::XInterface >& xObject
+          const css::uno::Reference< cpo::uno::XInterface >& xObject
         , const rtl::Reference<::chart::ChartModel>& xChartModel );
     static OUString createClassifiedIdentifierForObject(
           const rtl::Reference< ::chart::Title >& xObject

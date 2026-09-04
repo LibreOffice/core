@@ -94,7 +94,7 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
                                             cpo::uno::Any&           aConvertedValue );
 
         /// @throws css::lang::IllegalArgumentException
-        static bool impl_tryToChangeProperty(  const   css::uno::Reference< css::uno::XInterface >& xInterface,
+        static bool impl_tryToChangeProperty(  const   css::uno::Reference< cpo::uno::XInterface >& xInterface,
                                         const   cpo::uno::Any&   aNewValue       ,
                                             cpo::uno::Any&           aOldValue       ,
                                             cpo::uno::Any&           aConvertedValue );
@@ -105,7 +105,7 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
         OUString                                    m_aHelpURL;
         OUString                                    m_aText;
         css::uno::Reference< css::awt::XBitmap >    m_xBitmap;
-        css::uno::Reference< css::uno::XInterface > m_xActionTriggerContainer;
+        css::uno::Reference< cpo::uno::XInterface > m_xActionTriggerContainer;
 };
 
 }

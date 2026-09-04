@@ -25,7 +25,7 @@
 /** Provides access to the controls within an
     UnoControlContainer.
  */
-published interface XControlContainer: com::sun::star::uno::XInterface
+published interface XControlContainer: cpo::uno::XInterface
 {
 
     /** sets the status text in the status bar of the container.

@@ -22,7 +22,7 @@
 
 /** provides for the releasing of resources acquired by the implementing object.
  */
-published interface XCloseable: com::sun::star::uno::XInterface
+published interface XCloseable: cpo::uno::XInterface
 {
 
     /** releases all resources connected to an object.

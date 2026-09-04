@@ -23,7 +23,7 @@
 
 /** offers an easy way to insert bookmarks by name.@see Text
  */
-published interface XBookmarkInsertTool: com::sun::star::uno::XInterface
+published interface XBookmarkInsertTool: cpo::uno::XInterface
 {
     /** inserts a bookmark at the specified text position.
      */

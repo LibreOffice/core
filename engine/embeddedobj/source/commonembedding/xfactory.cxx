@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
+uno::Reference< cpo::uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
                                                                     const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -61,7 +61,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFr
     if ( !xNameAccess->hasByName( sEntName ) )
         throw container::NoSuchElementException();
 
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
     if ( !xStorage->isStorageElement( sEntName ) )
     {
         // the object must be OOo embedded object, if it is not an exception must be thrown
@@ -116,7 +116,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFr
     return xResult;
 }
 
-uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
+uno::Reference< cpo::uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -139,7 +139,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFr
     // check if there is FilterName
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, false );
 
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
 
     // find document service name
     if ( aFilterName.isEmpty() )
@@ -168,7 +168,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFr
     return xResult;
 }
 
-uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitNew(
+uno::Reference< cpo::uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& /*aClassName*/,
                                             const uno::Reference< embed::XStorage >& xStorage,
@@ -177,16 +177,16 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitNe
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< cpo::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
     if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< cpo::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
     cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
@@ -210,7 +210,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitNe
     return xResult;
 }
 
-uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceUserInit(
+uno::Reference< cpo::uno::XInterface > OOoEmbeddedObjectFactory::createInstanceUserInit(
             const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& xStorage,
@@ -224,12 +224,12 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceUserIn
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< cpo::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( u"Empty element name is provided!"_ustr,
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            uno::Reference< cpo::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
     cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
@@ -245,7 +245,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceUserIn
             throw io::IOException(); // TODO:
     }
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xContext,
                                                 aObject ) ),
@@ -261,7 +261,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceUserIn
     return xResult;
 }
 
-uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceLink(
+uno::Reference< cpo::uno::XInterface > OOoEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& /*xStorage*/,
                                             const OUString& /*sEntName*/,
                                             const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -269,7 +269,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceLink(
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
 
     cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
@@ -281,7 +281,7 @@ uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceLink(
 
     if ( aURL.isEmpty() )
         throw lang::IllegalArgumentException( u"No URL for the link is provided!"_ustr,
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                        uno::Reference< cpo::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, false );
@@ -321,7 +321,7 @@ cpo::uno::Sequence< OUString > OOoEmbeddedObjectFactory::getSupportedServiceName
     return { u"com.sun.star.embed.OOoEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -329,7 +329,7 @@ embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
 }
 
 
-uno::Reference< uno::XInterface > OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
+uno::Reference< cpo::uno::XInterface > OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
             const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& /*xStorage*/,
@@ -344,7 +344,7 @@ uno::Reference< uno::XInterface > OOoSpecialEmbeddedObjectFactory::createInstanc
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OSpecialEmbeddedObject(
                                                 m_xContext,
                                                 aObject ) ),
@@ -367,7 +367,7 @@ cpo::uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::getSupportedServ
     return { u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

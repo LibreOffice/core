@@ -291,7 +291,7 @@ public:
     virtual void
         setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
         getCurrentSelection() override;
 
     // css::lang::XComponent (base of XModel)
@@ -440,9 +440,9 @@ public:
         ::sal_Int64 nAspect ) override;
 
     // ____ XMultiServiceFactory ____
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
         createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
         createInstanceWithArguments( const OUString& ServiceSpecifier
                                    , const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString >
@@ -472,9 +472,9 @@ public:
     virtual css::uno::Reference< css::util::XNumberFormats > getNumberFormats() override;
 
     // ____ XChild ____
-    virtual css::uno::Reference< css::uno::XInterface > getParent() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent() override;
     virtual void setParent(
-        const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // ____ XDataSource ____ allows access to the currently used data and data ranges
     virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;

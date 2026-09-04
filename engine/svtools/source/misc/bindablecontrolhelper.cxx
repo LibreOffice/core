@@ -67,7 +67,7 @@ static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< fr
 
 
 void
-BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab )
+BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< cpo::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab )
 {
 // XBindable etc.
     uno::Reference< lang::XMultiServiceFactory > xFac;

@@ -81,8 +81,8 @@ public:
     SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
-    SAL_DLLPRIVATE static css::uno::Reference< css::uno::XInterface> ensureModelEnv(
-                  const css::uno::Reference< css::uno::XInterface>& _rSourceContainer,
+    SAL_DLLPRIVATE static css::uno::Reference< cpo::uno::XInterface> ensureModelEnv(
+                  const css::uno::Reference< cpo::uno::XInterface>& _rSourceContainer,
                   const css::uno::Reference< css::form::XForms>& _rTopLevelDestContainer);
 
     /** returns the FmFormObj behind the given SdrObject

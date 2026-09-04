@@ -163,7 +163,7 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 
 namespace {
 
-css::uno::Reference<css::uno::XInterface> create(
+css::uno::Reference<cpo::uno::XInterface> create(
     OUString const & rServiceSpecifier, OUString const & referer)
 {
     if( rServiceSpecifier.startsWith("com.sun.star.drawing.") )
@@ -190,7 +190,7 @@ css::uno::Reference<css::uno::XInterface> create(
         return SvxXTextColumns_createInstance();
     }
 
-    uno::Reference< uno::XInterface > xRet( SvxUnoDrawMSFactory::createTextField( rServiceSpecifier ) );
+    uno::Reference< cpo::uno::XInterface > xRet( SvxUnoDrawMSFactory::createTextField( rServiceSpecifier ) );
     if( !xRet.is() )
         throw lang::ServiceNotRegisteredException("unknown service: " + rServiceSpecifier);
 
@@ -199,17 +199,17 @@ css::uno::Reference<css::uno::XInterface> create(
 
 }
 
-uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
+uno::Reference< cpo::uno::XInterface > SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
 {
     return create(rServiceSpecifier, u""_ustr);
 }
 
-uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createTextField( std::u16string_view ServiceSpecifier )
+uno::Reference< cpo::uno::XInterface > SvxUnoDrawMSFactory::createTextField( std::u16string_view ServiceSpecifier )
 {
     return SvxUnoTextCreateTextField( ServiceSpecifier );
 }
 
-uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
+uno::Reference< cpo::uno::XInterface > SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OUString arg;
     if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
@@ -314,7 +314,7 @@ uno::Reference< drawing::XDrawPages > SvxUnoDrawingModel::getDrawPages()
 }
 
 // XMultiServiceFactory ( SvxFmMSFactory )
-uno::Reference< uno::XInterface > SvxUnoDrawingModel::createInstance( const OUString& aServiceSpecifier )
+uno::Reference< cpo::uno::XInterface > SvxUnoDrawingModel::createInstance( const OUString& aServiceSpecifier )
 {
     ::SolarMutexGuard aGuard;
 
@@ -356,7 +356,7 @@ uno::Reference< uno::XInterface > SvxUnoDrawingModel::createInstance( const OUSt
     }
     if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
-        return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
+        return uno::Reference< cpo::uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
     }
 
     if ( aServiceSpecifier == "com.sun.star.image.ImageMapRectangleObject" )
@@ -379,7 +379,7 @@ uno::Reference< uno::XInterface > SvxUnoDrawingModel::createInstance( const OUSt
         return cppu::getXWeak(new SvxUnoTextField(text::textfield::Type::DATE));
     }
 
-    uno::Reference< uno::XInterface > xRet;
+    uno::Reference< cpo::uno::XInterface > xRet;
 
     static constexpr OUString aPackagePrefix( u"com.sun.star.presentation."_ustr );
     if( aServiceSpecifier.startsWith( aPackagePrefix ) )
@@ -566,7 +566,7 @@ cpo::uno::Any SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
                 pPage->mxUnoPage = xPage;
             }
 
-            aAny <<= uno::Reference< uno::XInterface >(cppu::getXWeak(xPage.get()));
+            aAny <<= uno::Reference< cpo::uno::XInterface >(cppu::getXWeak(xPage.get()));
         }
     }
     return aAny;

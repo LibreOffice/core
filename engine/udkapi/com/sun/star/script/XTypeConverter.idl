@@ -26,7 +26,7 @@
 
     @see Converter
 */
-published interface XTypeConverter: com::sun::star::uno::XInterface
+published interface XTypeConverter: cpo::uno::XInterface
 {
     /** Converts the value <code>aFrom</code> to the specified type
         <code>xDestinationType</code>.

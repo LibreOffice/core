@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module beans {
 
     @see XHierarchicalPropertySet
  */
-published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterface
+published interface XMultiHierarchicalPropertySet: cpo::uno::XInterface
 {
 
     /** retrieve information about the hierarchy of properties

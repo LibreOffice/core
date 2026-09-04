@@ -13,7 +13,7 @@ module scriptinterop {
 
 interface XBase
 {
-    [attribute, readonly] com::sun::star::uno::XInterface uno;
+    [attribute, readonly] cpo::uno::XInterface uno;
 };
 
 };

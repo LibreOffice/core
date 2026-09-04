@@ -298,12 +298,12 @@ void ProgressBarWrapper::dispose()
 }
 
 // XUIElement
-uno::Reference< uno::XInterface > ProgressBarWrapper::getRealInterface()
+uno::Reference< cpo::uno::XInterface > ProgressBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return uno::Reference< uno::XInterface >();
+        return uno::Reference< cpo::uno::XInterface >();
     else
     {
         rtl::Reference< StatusIndicatorInterfaceWrapper > pWrapper( m_xProgressBarIfacWrapper );

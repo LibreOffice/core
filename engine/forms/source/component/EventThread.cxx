@@ -137,7 +137,7 @@ void OComponentEventThread::run()
     acquire( );
 
     // Hold on to ourselves, so that we're not deleted if a dispose is called at some point in time
-    css::uno::Reference<css::uno::XInterface> xThis(static_cast<XWeak*>(this));
+    css::uno::Reference<cpo::uno::XInterface> xThis(static_cast<XWeak*>(this));
 
     do
     {

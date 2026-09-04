@@ -251,7 +251,7 @@ OGridColumn::~OGridColumn()
     // Free the aggregate
     if (m_xAggregate.is())
     {
-        css::uno::Reference<css::uno::XInterface>  xIface;
+        css::uno::Reference<cpo::uno::XInterface>  xIface;
         m_xAggregate->setDelegator(xIface);
     }
 

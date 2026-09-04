@@ -27,12 +27,12 @@ module com {  module sun {  module star {  module container {
     <p>This interface normally is only supported if the objects all have
     exactly one dedicated parent container.</p>
  */
-published interface XChild: com::sun::star::uno::XInterface
+published interface XChild: cpo::uno::XInterface
 {
 
     /** grants access to the object containing this content.
      */
-    com::sun::star::uno::XInterface getParent();
+    cpo::uno::XInterface getParent();
 
 
     /** sets the parent to this object.
@@ -40,7 +40,7 @@ published interface XChild: com::sun::star::uno::XInterface
         @throws com::sun::star::lang::NoSupportException
             if the name of this object cannot be changed.
      */
-    void setParent( [in] com::sun::star::uno::XInterface Parent )
+    void setParent( [in] cpo::uno::XInterface Parent )
             raises( com::sun::star::lang::NoSupportException );
 
 };

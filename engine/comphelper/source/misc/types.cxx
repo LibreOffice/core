@@ -97,7 +97,7 @@ sal_Int32 getEnumAsINT32(const Any& _rAny)
     sal_Int32 nReturn = 0;
     if (!::cppu::enum2int(nReturn, _rAny))
         throw IllegalArgumentException(u"enum2int failed"_ustr,
-                                       css::uno::Reference<css::uno::XInterface>(), -1);
+                                       css::uno::Reference<cpo::uno::XInterface>(), -1);
     return nReturn;
 }
 

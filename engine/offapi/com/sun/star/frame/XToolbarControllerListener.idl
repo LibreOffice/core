@@ -24,7 +24,7 @@
 
     @see com::sun::star::frame::ToolbarController
  */
-interface XToolbarControllerListener : com::sun::star::uno::XInterface
+interface XToolbarControllerListener : cpo::uno::XInterface
 {
     /** gets called to notify a controller that a toolbar function has been selected.
 

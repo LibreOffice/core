@@ -24,7 +24,7 @@ module com { module sun { module star { module awt {
 /** provides container windows implementing the
     com::sun::star::awt::XWindow interface.
  */
-interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
+interface XContainerWindowProvider : ::cpo::uno::XInterface {
 
 
     /** creates a window for the given URL
@@ -96,7 +96,7 @@ interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
     com::sun::star::awt::XWindow createContainerWindow
         ( [in] string URL, [in] string WindowType,
           [in] com::sun::star::awt::XWindowPeer xParent,
-          [in] com::sun::star::uno::XInterface xHandler )
+          [in] cpo::uno::XInterface xHandler )
             raises ( com::sun::star::lang::IllegalArgumentException );
 };
 

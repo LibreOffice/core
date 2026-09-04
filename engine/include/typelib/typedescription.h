@@ -773,7 +773,7 @@ CPPU_DLLPUBLIC bool typelib_typedescriptionreference_isAssignableFrom(
 
 /** Gets static type reference of standard types by type class.
     ADDITIONAL OPT: provides Type cpo.uno.Exception for typelib_TypeClass_EXCEPTION
-                    and com.sun.star.uno.XInterface for typelib_TypeClass_INTERFACE.
+                    and cpo.uno.XInterface for typelib_TypeClass_INTERFACE.
 
     Thread synchronizes on typelib mutex.
 

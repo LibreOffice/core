@@ -207,7 +207,7 @@ void CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference<css::ui:
     weld::DialogController::runAsync(m_xDialog, [xListener, xThat](sal_Int32 nResult){
             if( xListener.is() )
             {
-                ::css::uno::Reference< ::css::uno::XInterface > xSource;
+                ::css::uno::Reference< ::cpo::uno::XInterface > xSource;
                 // Notify UNO listener to perform correct action depending on the result
                 css::ui::dialogs::DialogClosedEvent aEvent( xSource, nResult );
                 xListener->dialogClosed( aEvent );
@@ -351,7 +351,7 @@ void CreationWizardUnoDlg::removeVetoableChangeListener( const OUString& /* Prop
 
 } //namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_WizardDialog_get_implementation(cpo::uno::XComponentContext *context,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {

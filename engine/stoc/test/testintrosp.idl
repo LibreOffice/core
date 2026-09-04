@@ -35,7 +35,7 @@ module ModuleA
 
     @deprecated
 */
-interface XIntroTest: com::sun::star::uno::XInterface
+interface XIntroTest: cpo::uno::XInterface
 {
 
     /** contains the ID-String of the implementation.

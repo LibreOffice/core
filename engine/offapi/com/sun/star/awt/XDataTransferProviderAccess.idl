@@ -38,7 +38,7 @@ module com { module sun { module star { module awt {
 /** This interface extends the XToolkit interface with clipboard and
     drag-and-drop support.
 */
-published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
+published interface XDataTransferProviderAccess: cpo::uno::XInterface
 {
 
     /** returns the drag gesture recognizer of the specified window.

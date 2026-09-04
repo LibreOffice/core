@@ -75,7 +75,7 @@ namespace frm
     };
 
     css::uno::Reference< css::frame::XModel >  getXModel(
-        const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+        const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
 
 } // namespace frm

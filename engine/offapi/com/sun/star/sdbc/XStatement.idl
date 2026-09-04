@@ -36,7 +36,7 @@
     close a statement's current ResultSet if an open one exists.
     </p>
  */
-published interface XStatement: com::sun::star::uno::XInterface
+published interface XStatement: cpo::uno::XInterface
 {
 
     /** executes a SQL statement that returns a single ResultSet.

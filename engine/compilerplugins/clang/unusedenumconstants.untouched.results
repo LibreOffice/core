@@ -313,7 +313,7 @@ include/unotools/sharedunocomponent.hxx:150
 include/unotools/sharedunocomponent.hxx:150
     enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:150
-    enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface>::AssignmentMode NoTakeOwnership
+    enum utl::SharedUNOComponent<class cpo::uno::XInterface>::AssignmentMode NoTakeOwnership
 include/vcl/pdf/PDFAnnotationMarker.hxx:71
     enum vcl::pdf::PDFTextMarkerType Underline
 include/vcl/pdf/PDFAnnotationMarker.hxx:72

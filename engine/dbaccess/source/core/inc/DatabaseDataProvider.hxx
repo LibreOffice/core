@@ -52,7 +52,7 @@ public:
     explicit DatabaseDataProvider(css::uno::Reference< cpo::uno::XComponentContext > const & context);
 
 private:
-    // css::uno::XInterface:
+    // cpo::uno::XInterface:
     virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override;
     virtual void acquire() noexcept override
         { TDatabaseDataProvider::acquire(); }
@@ -169,11 +169,11 @@ private:
     virtual bool rowUpdated() override;
     virtual bool rowInserted() override;
     virtual bool rowDeleted() override;
-    virtual css::uno::Reference< css::uno::XInterface > getStatement() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getStatement() override;
 
     // container::XChild
-    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // ____ XComplexDescriptionAccess ____
     virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > >        getComplexRowDescriptions() override;
@@ -241,7 +241,7 @@ private:
     // the object doin' most of the work - an SDB-rowset
     css::uno::Reference< cpo::uno::XAggregation>                  m_xAggregate;
     css::uno::Reference< css::beans::XPropertySet>                m_xAggregateSet;
-    css::uno::Reference< css::uno::XInterface>                    m_xParent;
+    css::uno::Reference< cpo::uno::XInterface>                    m_xParent;
     cpo::uno::Sequence< OUString >                                m_MasterFields;
     cpo::uno::Sequence< OUString >                                m_DetailFields;
 

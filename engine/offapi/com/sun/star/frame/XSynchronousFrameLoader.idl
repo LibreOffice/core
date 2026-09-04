@@ -28,7 +28,7 @@
 
     @see XFrameLoader
  */
-published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
+published interface XSynchronousFrameLoader: cpo::uno::XInterface
 {
     /** starts the loading of the specified resource into the specified Frame.
 

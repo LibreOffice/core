@@ -114,7 +114,7 @@ Job::~Job()
                 our user, which got the registration request for this listener
 */
 void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener   ,
-                                 /*IN*/ const css::uno::Reference< css::uno::XInterface >&                xSourceFake )
+                                 /*IN*/ const css::uno::Reference< cpo::uno::XInterface >&                xSourceFake )
 {
     SolarMutexGuard g;
 
@@ -699,7 +699,7 @@ void Job::queryTermination( /*IN*/ const css::lang::EventObject& )
 
     if (m_eRunState != E_STOPPED_OR_FINISHED)
     {
-        css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         throw css::frame::TerminationVetoException(u"job still in progress"_ustr, xThis);
     }
 }
@@ -791,7 +791,7 @@ void Job::queryClosing( const css::lang::EventObject& aEvent         ,
         m_bPendingCloseModel = (m_xModel.is() && aEvent.Source == m_xModel);
 
         // throw suitable veto exception - because the internal job could not be cancelled.
-        css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         throw css::util::CloseVetoException(u"job still in progress"_ustr, xThis);
     }
 

@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module container {
 
     <p>The name is generally unique in the container of the object.</p>
  */
-published interface XNamed: com::sun::star::uno::XInterface
+published interface XNamed: cpo::uno::XInterface
 {
 
     /** @returns

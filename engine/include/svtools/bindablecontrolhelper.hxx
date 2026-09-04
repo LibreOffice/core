@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace svt
 {
@@ -37,7 +37,7 @@ namespace svt
     */
     namespace BindableControlHelper
     {
-        SVT_DLLPUBLIC void ApplyListSourceAndBindableData( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
+        SVT_DLLPUBLIC void ApplyListSourceAndBindableData( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< cpo::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
     }
 
 

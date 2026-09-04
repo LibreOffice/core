@@ -26,7 +26,7 @@
 
     @deprecated
  */
-published interface XDrawPageSummarizer: com::sun::star::uno::XInterface
+published interface XDrawPageSummarizer: cpo::uno::XInterface
 {
     /** creates a new DrawPage with a summary of all
         DrawPages in the given collection.

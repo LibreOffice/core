@@ -3161,7 +3161,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
 
 void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShape )
 {
-    const uno::Reference< uno::XInterface> xOldUnoShape( maWeakUnoShape );
+    const uno::Reference< cpo::uno::XInterface> xOldUnoShape( maWeakUnoShape );
     // the UNO shape would be gutted by the following code; return early
     if ( _rxUnoShape == xOldUnoShape )
     {
@@ -3193,7 +3193,7 @@ SvxShape* SdrObject::getSvxShape()
         // retrieving the impl pointer and subsequently using it is not thread-safe, of course, so it needs to be
         // guarded by the SolarMutex
 
-    uno::Reference< uno::XInterface > xShape( maWeakUnoShape );
+    uno::Reference< cpo::uno::XInterface > xShape( maWeakUnoShape );
     //#113608#, make sure mpSvxShape is always synchronized with maWeakUnoShape
     if ( mpSvxShape && !xShape )
         mpSvxShape = nullptr;

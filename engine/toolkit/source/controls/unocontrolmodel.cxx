@@ -412,7 +412,7 @@ void UnoControlModel::ImplRegisterProperties( const std::vector< sal_uInt16 > &r
     }
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 cpo::uno::Any UnoControlModel::queryAggregation( const cpo::uno::Type & rType )
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );

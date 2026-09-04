@@ -394,7 +394,7 @@ CacheItem& FilterCache::impl_getItem(      EItemType        eType,
         {
             OUString sMsg("The requested filter '" + sItem +
                           "' exists ... but it should not; because the corresponding LibreOffice module was not installed.");
-            throw css::container::NoSuchElementException(sMsg, css::uno::Reference< css::uno::XInterface >());
+            throw css::container::NoSuchElementException(sMsg, css::uno::Reference< cpo::uno::XInterface >());
         }
     }
 
@@ -630,7 +630,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
                     throw cpo::uno::Exception(u"Can not add item. Set is finalized or mandatory!"_ustr,
-                                              css::uno::Reference< css::uno::XInterface >());
+                                              css::uno::Reference< cpo::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
                 impl_saveItem(xItem, eType, pItem->second);
@@ -647,7 +647,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
                     throw cpo::uno::Exception(u"Can not change item. It's finalized or mandatory!"_ustr,
-                                              css::uno::Reference< css::uno::XInterface >());
+                                              css::uno::Reference< cpo::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
                 impl_saveItem(xItem, eType, pItem->second);
@@ -733,7 +733,7 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
     }
 
     throw cpo::uno::RuntimeException(u"unknown sub container requested."_ustr,
-                                            css::uno::Reference< css::uno::XInterface >());
+                                            css::uno::Reference< cpo::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
 
@@ -752,17 +752,17 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
     }
 
     throw cpo::uno::RuntimeException(u"unknown sub container requested."_ustr,
-                                            css::uno::Reference< css::uno::XInterface >());
+                                            css::uno::Reference< cpo::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
 
-css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
+css::uno::Reference< cpo::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
 {
     osl::MutexGuard aLock(m_aMutex);
 
     OUString                              sPath      ;
-    css::uno::Reference< css::uno::XInterface >* pConfig = nullptr;
-    css::uno::Reference< css::uno::XInterface >  xOld       ;
+    css::uno::Reference< cpo::uno::XInterface >* pConfig = nullptr;
+    css::uno::Reference< cpo::uno::XInterface >  xOld       ;
     OString                               sRtlLog    ;
 
     switch(eProvider)
@@ -852,7 +852,7 @@ cpo::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
        )
         return cpo::uno::Any();
 
-    css::uno::Reference< css::uno::XInterface > xCfg = impl_createConfigAccess(sRoot    ,
+    css::uno::Reference< cpo::uno::XInterface > xCfg = impl_createConfigAccess(sRoot    ,
                                                                                true ,  // bReadOnly
                                                                                false); // bLocalesMode
     if (!xCfg.is())
@@ -879,14 +879,14 @@ cpo::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
 }
 
 
-css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess(const OUString& sRoot       ,
+css::uno::Reference< cpo::uno::XInterface > FilterCache::impl_createConfigAccess(const OUString& sRoot       ,
                                                                                        bool         bReadOnly   ,
                                                                                        bool         bLocalesMode)
 {
     // SAFE ->
     osl::MutexGuard aLock(m_aMutex);
 
-    css::uno::Reference< css::uno::XInterface > xCfg;
+    css::uno::Reference< cpo::uno::XInterface > xCfg;
 
     if (!comphelper::IsFuzzing())
     {
@@ -925,13 +925,13 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             if (! xCfg.is())
                 throw cpo::uno::Exception(
                         u"Got NULL reference on opening configuration file ... but no exception."_ustr,
-                        css::uno::Reference< css::uno::XInterface >());
+                        css::uno::Reference< cpo::uno::XInterface >());
         }
         catch(const cpo::uno::Exception& ex)
         {
             throw css::document::CorruptedFilterConfigurationException(
                     "filter configuration, caught: " + ex.Message,
-                    css::uno::Reference< css::uno::XInterface >(),
+                    css::uno::Reference< cpo::uno::XInterface >(),
                     ex.Message);
         }
     }
@@ -971,7 +971,7 @@ void FilterCache::impl_validateAndOptimize()
     {
         throw css::document::CorruptedFilterConfigurationException(
                 u"filter configuration: the list of types or filters is empty"_ustr,
-                css::uno::Reference< css::uno::XInterface >(),
+                css::uno::Reference< cpo::uno::XInterface >(),
                 u"The list of types or filters is empty."_ustr );
     }
 
@@ -1203,7 +1203,7 @@ void FilterCache::impl_validateAndOptimize()
     if (nErrors>0)
         throw css::document::CorruptedFilterConfigurationException(
                 "filter configuration: " + sLogOut,
-                css::uno::Reference< css::uno::XInterface >(),
+                css::uno::Reference< cpo::uno::XInterface >(),
                 sLogOut);
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(!nWarnings, OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
@@ -1403,7 +1403,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
         if (!(aVal >>= xSet) || !xSet.is())
         {
             OUString sMsg("Could not open configuration set \"" + sSetName + "\".");
-            throw cpo::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
+            throw cpo::uno::Exception(sMsg, css::uno::Reference< cpo::uno::XInterface >());
         }
         lItems = xSet->getElementNames();
     }
@@ -1411,7 +1411,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     {
         throw css::document::CorruptedFilterConfigurationException(
                 "filter configuration, caught: " + ex.Message,
-                css::uno::Reference< css::uno::XInterface >(),
+                css::uno::Reference< cpo::uno::XInterface >(),
                 ex.Message);
     }
 
@@ -1438,7 +1438,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 {
                     throw css::document::CorruptedFilterConfigurationException(
                             "filter configuration, caught: " + ex.Message,
-                            css::uno::Reference< css::uno::XInterface >(),
+                            css::uno::Reference< cpo::uno::XInterface >(),
                             ex.Message);
                 }
             }
@@ -1452,7 +1452,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 if (pItem == pCache->end())
                 {
                     OUString sMsg("item \"" + rItem + "\" not found for update!");
-                    throw cpo::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
+                    throw cpo::uno::Exception(sMsg, css::uno::Reference< cpo::uno::XInterface >());
                 }
                 try
                 {
@@ -1463,7 +1463,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 {
                     throw css::document::CorruptedFilterConfigurationException(
                             "filter configuration, caught: " + ex.Message,
-                            css::uno::Reference< css::uno::XInterface >(),
+                            css::uno::Reference< cpo::uno::XInterface >(),
                             ex.Message);
                 }
             }
@@ -1562,7 +1562,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     if (!(aVal >>= xItem) || !xItem.is())
     {
         throw cpo::uno::RuntimeException("found corrupted item \"" + sItem + "\".",
-                                         css::uno::Reference< css::uno::XInterface >());
+                                         css::uno::Reference< cpo::uno::XInterface >());
     }
 
     // set too. Of course it's already used as key into the e.g. outside
@@ -1648,7 +1648,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
                                                            const OUString& sItem)
 {
     CacheItemList*                              pList   = nullptr;
-    css::uno::Reference< css::uno::XInterface > xConfig    ;
+    css::uno::Reference< cpo::uno::XInterface > xConfig    ;
     OUString                             sSet       ;
 
     switch(eType)
@@ -1964,7 +1964,7 @@ void FilterCache::impl_readOldFormat()
     // E.g. we must check, if the package exists...
     try
     {
-        css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
+        css::uno::Reference< cpo::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
         css::uno::Reference< css::container::XNameAccess > xCfg(xInt, css::uno::UNO_QUERY_THROW);
 
         OUString TYPES_SET(u"Types"_ustr);
@@ -2006,7 +2006,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     css::uno::Reference< css::container::XNameAccess > xItem;
     xSet->getByName(sItem) >>= xItem;
     if (!xItem.is())
-        throw cpo::uno::Exception(u"Can not read old item."_ustr, css::uno::Reference< css::uno::XInterface >());
+        throw cpo::uno::Exception(u"Can not read old item."_ustr, css::uno::Reference< cpo::uno::XInterface >());
 
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
@@ -2027,7 +2027,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
         (lData.empty()    )
        )
     {
-        throw cpo::uno::Exception( u"Can not read old item property DATA."_ustr, css::uno::Reference< css::uno::XInterface >());
+        throw cpo::uno::Exception( u"Can not read old item property DATA."_ustr, css::uno::Reference< cpo::uno::XInterface >());
     }
 
     sal_Int32 nProp = 0;

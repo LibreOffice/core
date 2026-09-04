@@ -19,7 +19,7 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleTextSelection : ::com::sun::star::uno::XInterface
+interface XAccessibleTextSelection : ::cpo::uno::XInterface
 {
     boolean scrollToPosition ([in] ::com::sun::star::awt::Point aPoint, [in] boolean isLeftTop) raises (::com::sun::star::lang::IllegalArgumentException);
 

@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cppu/unotype.hxx>
 
@@ -47,7 +47,7 @@ class ScScenariosObj : public UnoApiTest,
 public:
     ScScenariosObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScScenariosObj);
@@ -89,7 +89,7 @@ ScScenariosObj::ScScenariosObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScScenariosObj::init()
+uno::Reference<cpo::uno::XInterface> ScScenariosObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

@@ -16,7 +16,7 @@ module ooo {  module vba {
 
 // An interface that has an IID.
 
-interface XInterfaceWithIID : com::sun::star::uno::XInterface
+interface XInterfaceWithIID : cpo::uno::XInterface
 {
     // The IID of the interface, in the string form with braces, as
     // accepted by IIDFromString, for instance

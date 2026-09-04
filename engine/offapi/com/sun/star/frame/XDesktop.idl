@@ -32,7 +32,7 @@
 
     @see Desktop
  */
-published interface XDesktop: com::sun::star::uno::XInterface
+published interface XDesktop: cpo::uno::XInterface
 {
     /** tries to terminate the desktop.
 

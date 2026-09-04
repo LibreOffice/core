@@ -25,7 +25,7 @@
 /** supplies the collection of NumberFormats (for example, in a
     document) and the settings belonging to these formats.
  */
-published interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
+published interface XNumberFormatsSupplier: cpo::uno::XInterface
 {
 
     /** @returns

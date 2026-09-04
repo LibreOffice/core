@@ -42,10 +42,10 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 ScVbaOLEObject::getObject()
 {
-    return uno::Reference< uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
+    return uno::Reference< cpo::uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
 }
 
 bool SAL_CALL

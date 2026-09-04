@@ -43,7 +43,7 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                 Actions::PREVENT_CLOSE and
                 Actions::PREVENT_TERMINATION.
      */
-    InstanceLockerCtor1( [in] com::sun::star::uno::XInterface xInstance,
+    InstanceLockerCtor1( [in] cpo::uno::XInterface xInstance,
                          [in] long nActions )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::frame::DoubleInitializationException,
@@ -72,7 +72,7 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                 specified using string and can take following
                 values in this case: "PreventClose", "PreventTermination" ).
      */
-    InstanceLockerCtor2( [in] com::sun::star::uno::XInterface xInstance,
+    InstanceLockerCtor2( [in] cpo::uno::XInterface xInstance,
                          [in] long nActions,
                          [in] XActionsApproval xApprove )
         raises( ::com::sun::star::lang::IllegalArgumentException,

@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 /** provides methods to add and remove XActivationEventListener
 
  */
-published interface XActivationBroadcaster: com::sun::star::uno::XInterface
+published interface XActivationBroadcaster: cpo::uno::XInterface
 {
 
     /** allows a component supporting the

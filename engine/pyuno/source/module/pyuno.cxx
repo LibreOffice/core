@@ -46,7 +46,7 @@
 
 using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::Type;
@@ -1516,7 +1516,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
             }
         }
         else if (PyObject_IsInstance(
-                     that, getClass(u"com.sun.star.uno.XInterface"_ustr, runtime).get()))
+                     that, getClass(u"cpo.uno.XInterface"_ustr, runtime).get()))
         {
             // `self` could be an Adapter of `that`:
             if (css::uno::Reference<css::lang::XUnoTunnel> tunnel;

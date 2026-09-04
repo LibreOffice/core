@@ -1624,7 +1624,7 @@ UIElement ToolbarLayoutManager::implts_findToolbar( std::u16string_view aName )
     return impl_findToolbar( aName );
 }
 
-UIElement ToolbarLayoutManager::implts_findToolbar( const uno::Reference< uno::XInterface >& xToolbar )
+UIElement ToolbarLayoutManager::implts_findToolbar( const uno::Reference< cpo::uno::XInterface >& xToolbar )
 {
     UIElement                       aToolbar;
 
@@ -1633,7 +1633,7 @@ UIElement ToolbarLayoutManager::implts_findToolbar( const uno::Reference< uno::X
     {
         if ( elem.m_xUIElement.is() )
         {
-            uno::Reference< uno::XInterface > xIfac( elem.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+            uno::Reference< cpo::uno::XInterface > xIfac( elem.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
             if ( xIfac == xToolbar )
             {
                 aToolbar = elem;
@@ -3730,7 +3730,7 @@ void ToolbarLayoutManager::closed( const lang::EventObject& e )
             uno::Reference<ui::XUIElement> xUIElement(elem.m_xUIElement);
             if (xUIElement.is())
             {
-                uno::Reference<uno::XInterface> xIfac(xUIElement->getRealInterface(),
+                uno::Reference<cpo::uno::XInterface> xIfac(xUIElement->getRealInterface(),
                                                       uno::UNO_QUERY);
                 if (xIfac == e.Source)
                 {
@@ -3781,7 +3781,7 @@ void ToolbarLayoutManager::elementInserted( const ui::ConfigurationEvent& rEvent
         uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
-            if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
+            if ( rEvent.Source == uno::Reference< cpo::uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
                 xPropSet->setPropertyValue( u"ConfigurationSource"_ustr, cpo::uno::Any( m_xDocCfgMgr ));
         }
         xElementSettings->updateSettings();
@@ -3848,7 +3848,7 @@ void ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent& rEvent 
 
     bool                                  bNoSettings( false );
     OUString                       aConfigSourcePropName( u"ConfigurationSource"_ustr );
-    uno::Reference< uno::XInterface >     xElementCfgMgr;
+    uno::Reference< cpo::uno::XInterface >     xElementCfgMgr;
     uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
 
     if ( xPropSet.is() )
@@ -3861,7 +3861,7 @@ void ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent& rEvent 
     if ( rEvent.Source == xElementCfgMgr )
     {
         // Same UI configuration manager where our element has its settings
-        if ( rEvent.Source == uno::Reference< uno::XInterface >( xDocCfgMgr, uno::UNO_QUERY ))
+        if ( rEvent.Source == uno::Reference< cpo::uno::XInterface >( xDocCfgMgr, uno::UNO_QUERY ))
         {
             // document settings removed
             if ( xModuleCfgMgr->hasSettings( rEvent.ResourceURL ))
@@ -3888,7 +3888,7 @@ void ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEvent& rEvent
     if ( !xElementSettings.is() )
         return;
 
-    uno::Reference< uno::XInterface >     xElementCfgMgr;
+    uno::Reference< cpo::uno::XInterface >     xElementCfgMgr;
     uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
 
     if ( xPropSet.is() )

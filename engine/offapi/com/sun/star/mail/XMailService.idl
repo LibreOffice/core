@@ -23,7 +23,7 @@ module com { module sun { module star { module mail {
 /**
    Represents a mail server abstraction.
  */
-interface XMailService: ::com::sun::star::uno::XInterface {
+interface XMailService: ::cpo::uno::XInterface {
 
     /**
         Returns all connection types which are supported to

@@ -153,7 +153,7 @@ protected:
     // tdf#141529 hold a cc of a linked OLE
     css::uno::Reference < css::io::XTempFile > m_aLinkTempFile;
 
-    css::uno::Reference< css::uno::XInterface > m_xParent;
+    css::uno::Reference< cpo::uno::XInterface > m_xParent;
 
     bool m_bHasClonedSize; // the object has cached size
     css::awt::Size m_aClonedSize;
@@ -415,8 +415,8 @@ public:
                 const css::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     // XChild
-    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XDefaultSizeTransmitter
     //#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method

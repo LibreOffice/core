@@ -24,7 +24,7 @@
 /** offers a registry for implementation objects and provides information
     about the registered implementations.
  */
-published interface XImplementationRegistration: com::sun::star::uno::XInterface
+published interface XImplementationRegistration: cpo::uno::XInterface
 {
     /** registers a component which provides one or more implementations.
 

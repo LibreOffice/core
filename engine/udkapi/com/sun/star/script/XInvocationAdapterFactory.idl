@@ -28,7 +28,7 @@
     This interface is deprecated.  Use XInvocationAdapterFactory2.
     @deprecated
 */
-published interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
+published interface XInvocationAdapterFactory: cpo::uno::XInterface
 {
     /** Creates an adapter interface of given type for calling the given
         XInvocation interface.
@@ -42,7 +42,7 @@ published interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
                  adapter interface; this interface can be queried for
                  XInterface and given type
     */
-    com::sun::star::uno::XInterface createAdapter( [in]XInvocation Invocation, [in]type aType );
+    cpo::uno::XInterface createAdapter( [in]XInvocation Invocation, [in]type aType );
 };
 
 }; }; }; };

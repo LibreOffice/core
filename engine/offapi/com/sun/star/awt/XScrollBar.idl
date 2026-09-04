@@ -25,7 +25,7 @@
 /** gives access to the value and settings of a scroll bar and makes it possible
     to register adjustment event listeners.
  */
-published interface XScrollBar: com::sun::star::uno::XInterface
+published interface XScrollBar: cpo::uno::XInterface
 {
 
     /** registers an adjustment event listener.

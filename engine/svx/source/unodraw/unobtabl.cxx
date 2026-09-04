@@ -94,7 +94,7 @@ cpo::uno::Type SvxUnoBitmapTable::getElementType(  )
 /**
  * Create a bitmaptable
  */
-uno::Reference< uno::XInterface > SvxUnoBitmapTable_createInstance( SdrModel* pModel )
+uno::Reference< cpo::uno::XInterface > SvxUnoBitmapTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoBitmapTable(pModel);
 }

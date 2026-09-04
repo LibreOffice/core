@@ -382,7 +382,7 @@ public:
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
-css::uno::Reference< css::uno::XInterface > createComListener( const cpo::uno::Any& aControlAny,
+css::uno::Reference< cpo::uno::XInterface > createComListener( const cpo::uno::Any& aControlAny,
                                                                const OUString& aVBAType,
                                                                std::u16string_view aPrefix,
                                                                const SbxObjectRef& xScopeObj );

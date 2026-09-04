@@ -30,7 +30,7 @@
 
     @deprecated
  */
-published interface XDrawPageSupplier: com::sun::star::uno::XInterface
+published interface XDrawPageSupplier: cpo::uno::XInterface
 {
     /** returns the DrawPage.
      */

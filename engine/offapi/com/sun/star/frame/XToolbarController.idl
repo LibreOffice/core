@@ -33,7 +33,7 @@
 
     @see com::sun::star::frame::XDispatchProvider
  */
-interface XToolbarController : com::sun::star::uno::XInterface
+interface XToolbarController : cpo::uno::XInterface
 {
     /** provides a function to execute the command which is bound to the toolbar controller.
 

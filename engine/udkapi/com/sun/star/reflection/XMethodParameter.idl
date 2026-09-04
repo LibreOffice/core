@@ -30,7 +30,7 @@
 
     @see XInterfaceMethodTypeDescription
 */
-published interface XMethodParameter: com::sun::star::uno::XInterface
+published interface XMethodParameter: cpo::uno::XInterface
 {
     /** Returns the name of the parameter
 

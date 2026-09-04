@@ -23,7 +23,7 @@
 
 /** The description of an interaction request.
  */
-published interface XInteractionRequest: com::sun::star::uno::XInterface
+published interface XInteractionRequest: cpo::uno::XInterface
 {
     /** Get information about the request itself.
 

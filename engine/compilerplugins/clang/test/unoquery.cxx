@@ -10,7 +10,7 @@
 #include "sal/config.h"
 #include "com/sun/star/beans/XProperty.hpp"
 
-void foo(css::uno::Reference<css::uno::XInterface> model)
+void foo(css::uno::Reference<cpo::uno::XInterface> model)
 {
     css::uno::Reference<css::beans::XProperty>(model, css::uno::UNO_QUERY)->getAsProperty();
     // expected-error@-1 {{calling UNO_QUERY followed by unconditional method call might result in SIGSEGV, rather use UNO_QUERY_THROW [loplugin:unoquery]}}

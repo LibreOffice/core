@@ -26,7 +26,7 @@ module com { module sun { module star { module datatransfer {
     @see com::sun::star::datatransfer::DataFlavor
 */
 
-published interface XTransferable: com::sun::star::uno::XInterface
+published interface XTransferable: cpo::uno::XInterface
 {
     /** Called by a data consumer to obtain data from the source in a specified
         format.

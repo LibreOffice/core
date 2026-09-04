@@ -26,7 +26,7 @@ import com.sun.star.form.XLoadable;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import ifc.form._XUpdateBroadcaster.UpdateChecker;
 import java.io.PrintWriter;
 import lib.TestEnvironment;

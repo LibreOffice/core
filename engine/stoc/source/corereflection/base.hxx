@@ -331,7 +331,7 @@ public:
 // ## type to XidlClass coercion possible
 inline bool extract(
     const cpo::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo,
-    css::uno::Reference< css::uno::XInterface > & rDest,
+    css::uno::Reference< cpo::uno::XInterface > & rDest,
     IdlReflectionServiceImpl * pRefl )
 {
     rDest.clear();
@@ -363,14 +363,14 @@ inline bool coerce_assign(
 {
     if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
     {
-        css::uno::Reference< css::uno::XInterface > xVal;
+        css::uno::Reference< cpo::uno::XInterface > xVal;
         if (extract( rSource, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD), xVal, pRefl ))
         {
-            if (*static_cast<css::uno::XInterface **>(pDest))
-                (*static_cast<css::uno::XInterface **>(pDest))->release();
-            *static_cast<css::uno::XInterface **>(pDest) = xVal.get();
-            if (*static_cast<css::uno::XInterface **>(pDest))
-                (*static_cast<css::uno::XInterface **>(pDest))->acquire();
+            if (*static_cast<cpo::uno::XInterface **>(pDest))
+                (*static_cast<cpo::uno::XInterface **>(pDest))->release();
+            *static_cast<cpo::uno::XInterface **>(pDest) = xVal.get();
+            if (*static_cast<cpo::uno::XInterface **>(pDest))
+                (*static_cast<cpo::uno::XInterface **>(pDest))->acquire();
             return true;
         }
         return false;

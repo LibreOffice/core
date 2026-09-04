@@ -25,14 +25,13 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
-    namespace uno {
-        class XInterface; }
     namespace lang {
         class XComponent; }
 }
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace cpo::uno { template <class E> class Sequence; }
+namespace cpo::uno { class XInterface; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
@@ -49,7 +48,7 @@ namespace comphelper
     {
     public:
         static COMPHELPER_DLLPUBLIC css::uno::Reference< css::lang::XComponent > dispatch(
-            const css::uno::Reference< css::uno::XInterface > &xStartPoint,
+            const css::uno::Reference< cpo::uno::XInterface > &xStartPoint,
             const OUString &sURL,
             const OUString &sTarget,
             const cpo::uno::Sequence< css::beans::PropertyValue > &lArguments );

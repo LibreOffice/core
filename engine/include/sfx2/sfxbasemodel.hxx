@@ -253,9 +253,9 @@ public:
     //  XChild
 
 
-    virtual css::uno::Reference< css::uno::XInterface > getParent() override ;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent() override ;
 
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& xParent ) override;
 
 
     //  XComponent
@@ -302,7 +302,7 @@ public:
 
     virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getCurrentSelection() override;
 
 
     //  XModel2
@@ -547,13 +547,13 @@ public:
     virtual void removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // css.frame.XUntitledNumbers
-    virtual ::sal_Int32 leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+    virtual ::sal_Int32 leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
 
     // css.frame.XUntitledNumbers
     virtual void releaseNumber( ::sal_Int32 nNumber ) override;
 
     // css.frame.XUntitledNumbers
-    virtual void releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+    virtual void releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
 
     // css.frame.XUntitledNumbers
     virtual OUString getUntitledPrefix() override;

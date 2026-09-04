@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module frame {
 /** additional interfaces for dispatch objects: allow to execute with return value
     @see XDispatch
  */
-published interface XSynchronousDispatch: com::sun::star::uno::XInterface
+published interface XSynchronousDispatch: cpo::uno::XInterface
 {
     /** dispatches a URL synchronously and offers a return values
 

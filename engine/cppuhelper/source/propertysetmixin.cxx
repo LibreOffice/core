@@ -65,7 +65,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -95,7 +95,7 @@ struct Data: public salhelper::SimpleReferenceObject {
     PropertyMap properties;
 
     PropertyMap::const_iterator get(
-        css::uno::Reference< css::uno::XInterface > const & object,
+        css::uno::Reference< cpo::uno::XInterface > const & object,
         OUString const & name) const;
 
 protected:
@@ -120,7 +120,7 @@ private:
 };
 
 Data::PropertyMap::const_iterator Data::get(
-    css::uno::Reference< css::uno::XInterface > const & object,
+    css::uno::Reference< cpo::uno::XInterface > const & object,
     OUString const & name) const
 {
     PropertyMap::const_iterator i(properties.find(name));
@@ -359,17 +359,17 @@ public:
         cpo::uno::Type const & type);
 
     OUString const & translateHandle(
-        css::uno::Reference< css::uno::XInterface > const & object,
+        css::uno::Reference< cpo::uno::XInterface > const & object,
         sal_Int32 handle) const;
 
     void setProperty(
-        css::uno::Reference< css::uno::XInterface > const & object,
+        css::uno::Reference< cpo::uno::XInterface > const & object,
         OUString const & name, cpo::uno::Any const & value,
         bool isAmbiguous, bool isDefaulted, sal_Int16 illegalArgumentPosition)
         const;
 
     cpo::uno::Any getProperty(
-        css::uno::Reference< css::uno::XInterface > const & object,
+        css::uno::Reference< cpo::uno::XInterface > const & object,
         OUString const & name, css::beans::PropertyState * state) const;
 
     PropertySetMixinImpl::Implements implements;
@@ -393,7 +393,7 @@ private:
         OUString const & typeName) const;
 
     static cpo::uno::Any wrapValue(
-        css::uno::Reference< css::uno::XInterface > const & object,
+        css::uno::Reference< cpo::uno::XInterface > const & object,
         cpo::uno::Any const & value,
         css::uno::Reference< css::reflection::XIdlClass > const & type,
         bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted,
@@ -445,7 +445,7 @@ PropertySetMixinImpl::Impl::Impl(
 }
 
 OUString const & PropertySetMixinImpl::Impl::translateHandle(
-    css::uno::Reference< css::uno::XInterface > const & object,
+    css::uno::Reference< cpo::uno::XInterface > const & object,
     sal_Int32 handle) const
 {
     if (handle < 0 || handle >= handleMap.getLength()) {
@@ -456,7 +456,7 @@ OUString const & PropertySetMixinImpl::Impl::translateHandle(
 }
 
 void PropertySetMixinImpl::Impl::setProperty(
-    css::uno::Reference< css::uno::XInterface > const & object,
+    css::uno::Reference< cpo::uno::XInterface > const & object,
     OUString const & name, cpo::uno::Any const & value, bool isAmbiguous,
     bool isDefaulted, sal_Int16 illegalArgumentPosition) const
 {
@@ -548,7 +548,7 @@ void PropertySetMixinImpl::Impl::setProperty(
 }
 
 cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
-    css::uno::Reference< css::uno::XInterface > const & object,
+    css::uno::Reference< cpo::uno::XInterface > const & object,
     OUString const & name, css::beans::PropertyState * state) const
 {
     PropertyMap::const_iterator i(properties.find(name));
@@ -714,7 +714,7 @@ PropertySetMixinImpl::Impl::getReflection(OUString const & typeName) const
 }
 
 cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
-    css::uno::Reference< css::uno::XInterface > const & object,
+    css::uno::Reference< cpo::uno::XInterface > const & object,
     cpo::uno::Any const & value,
     css::uno::Reference< css::reflection::XIdlClass > const & type,
     bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted, bool isDefaulted,
@@ -952,21 +952,21 @@ cpo::uno::Any PropertySetMixinImpl::queryInterface(cpo::uno::Type const & type)
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
          && type == cppu::UnoType<css::beans::XPropertySet>::get())
     {
-        css::uno::Reference< css::uno::XInterface > ifc(
+        css::uno::Reference< cpo::uno::XInterface > ifc(
             static_cast< css::beans::XPropertySet * >(this));
         return cpo::uno::Any(&ifc, type);
     }
     if ((m_impl->implements & IMPLEMENTS_FAST_PROPERTY_SET) != 0
                && type == cppu::UnoType<css::beans::XFastPropertySet>::get())
     {
-        css::uno::Reference< css::uno::XInterface > ifc(
+        css::uno::Reference< cpo::uno::XInterface > ifc(
             static_cast< css::beans::XFastPropertySet * >(this));
         return cpo::uno::Any(&ifc, type);
     }
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_ACCESS) != 0
                && type == cppu::UnoType<css::beans::XPropertyAccess>::get())
     {
-        css::uno::Reference< css::uno::XInterface > ifc(
+        css::uno::Reference< cpo::uno::XInterface > ifc(
             static_cast< css::beans::XPropertyAccess * >(this));
         return cpo::uno::Any(&ifc, type);
     }

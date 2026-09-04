@@ -24,6 +24,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <drawdoc.hxx>
 
-css::uno::Reference<css::uno::XInterface> SdUnoCreatePool(SdDrawDocument* pDrawModel);
+css::uno::Reference<cpo::uno::XInterface> SdUnoCreatePool(SdDrawDocument* pDrawModel);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

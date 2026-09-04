@@ -26,7 +26,7 @@ import com.sun.star.drawing.XLayer;
 import com.sun.star.drawing.XLayerManager;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.drawing.XLayerManager</code>

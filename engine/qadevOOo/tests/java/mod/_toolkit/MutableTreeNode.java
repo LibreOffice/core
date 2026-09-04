@@ -23,7 +23,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import ifc.awt.tree._XMutableTreeNode.XMutableTreeNodeCreator;
 

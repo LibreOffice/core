@@ -25,7 +25,7 @@
     passing it as a parameter to a SQL statement and executing the
     statement.
  */
-published interface XRef: com::sun::star::uno::XInterface
+published interface XRef: cpo::uno::XInterface
 {
 
     /** gets the fully-qualified SQL structured type name of the referenced item.

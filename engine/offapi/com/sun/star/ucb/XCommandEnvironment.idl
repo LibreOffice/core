@@ -25,7 +25,7 @@ module com { module sun { module star { module ucb {
     @version  1.0
     @see XCommandProcessor
 */
-published interface XCommandEnvironment : com::sun::star::uno::XInterface
+published interface XCommandEnvironment : cpo::uno::XInterface
 {
     /** returns the command's interaction handler.
 

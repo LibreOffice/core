@@ -31,7 +31,7 @@
 
     @see XUpdateListener
  */
-published interface XUpdateBroadcaster: com::sun::star::uno::XInterface
+published interface XUpdateBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener to receive the events "approveUpdate"

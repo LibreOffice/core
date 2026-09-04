@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module task {
 
     @see XJob
 */
-published interface XAsyncJob : com::sun::star::uno::XInterface
+published interface XAsyncJob : cpo::uno::XInterface
 {
     /** executes the job asynchronously
 

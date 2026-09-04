@@ -168,7 +168,7 @@ struct DispatchParams
 public:
      DispatchParams();
      DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
-                    const css::uno::Reference< css::uno::XInterface >& xOwner);
+                    const css::uno::Reference< cpo::uno::XInterface >& xOwner);
 
      void forget();
 
@@ -200,7 +200,7 @@ public:
                 our instance live if the event callback reach us.
                 So we hold a uno reference to ourself.
      */
-    css::uno::Reference< css::uno::XInterface > m_xHoldRefForAsyncOpAlive;
+    css::uno::Reference< cpo::uno::XInterface > m_xHoldRefForAsyncOpAlive;
 };
 
 /** These values are used as flags and represent the current state of a document.
@@ -1112,7 +1112,7 @@ class CacheLockGuard
 
         // holds the outside caller alive, so it's shared resources
         // are valid every time
-        css::uno::Reference< css::uno::XInterface > m_xOwner;
+        css::uno::Reference< cpo::uno::XInterface > m_xOwner;
 
         // mutex shared with outside caller!
         osl::Mutex& m_rSharedMutex;
@@ -1212,7 +1212,7 @@ DispatchParams::DispatchParams()
 };
 
 DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
-                               const css::uno::Reference< css::uno::XInterface >& xOwner)
+                               const css::uno::Reference< cpo::uno::XInterface >& xOwner)
 {
     m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(u"EntryID"_ustr, sal_Int32(-1)                                       );
     m_xProgress               = lArgs.getUnpackedValueOrDefault(u"StatusIndicator"_ustr, css::uno::Reference< css::task::XStatusIndicator >());
@@ -2289,7 +2289,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
         // But we must be aware that we can be destroyed hardly
         // if our uno reference will be gone!
         // => Hold this object alive till this method finish its work.
-        css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XTypeProvider* >(this));
+        css::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XTypeProvider* >(this));
 
         // Needed! Otherwise every reschedule request allow a new triggered timer event :-(
         implts_stopTimer();
@@ -2383,7 +2383,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
     /* SAFE */ {
         osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         aParams = m_aDispatchParams;
-        css::uno::Reference< css::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
+        css::uno::Reference< cpo::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
         m_aDispatchParams.forget(); // clears all members ... including the ref-hold object .-)
     } /* SAFE */
 
@@ -4292,7 +4292,7 @@ void AutoRecovery::st_impl_removeLockFile()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_AutoRecovery_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

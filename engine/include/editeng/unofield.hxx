@@ -36,7 +36,7 @@ class SvxFieldData;
 
 /// @throws cpo::uno::Exception
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
+css::uno::Reference< cpo::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
     std::u16string_view ServiceSpecifier );
 
 class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
@@ -59,7 +59,7 @@ public:
     // Internal
     std::unique_ptr<SvxFieldData> CreateFieldData() const noexcept;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
     virtual void acquire() noexcept override;

@@ -142,7 +142,7 @@ cpo::uno::Sequence<OUString> OGroupBoxControl::getSupportedServiceNames()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OGroupBoxModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -150,7 +150,7 @@ com_sun_star_form_OGroupBoxModel_get_implementation(cpo::uno::XComponentContext*
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OGroupBoxControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

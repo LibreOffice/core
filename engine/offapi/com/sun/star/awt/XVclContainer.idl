@@ -26,7 +26,7 @@
 
     @deprecated
  */
-published interface XVclContainer: com::sun::star::uno::XInterface
+published interface XVclContainer: cpo::uno::XInterface
 {
 
     /** adds the specified container listener to receive

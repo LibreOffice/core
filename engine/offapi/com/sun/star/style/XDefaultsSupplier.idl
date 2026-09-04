@@ -26,7 +26,7 @@
     either be the parent of an XPropertySet or the global property defaults
     for a document.
  */
-published interface XDefaultsSupplier: com::sun::star::uno::XInterface
+published interface XDefaultsSupplier: cpo::uno::XInterface
 {
     /** This method returns an XPropertySet of defaults.
      */

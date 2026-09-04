@@ -24,7 +24,7 @@ module com { module sun { module star { module graphic
     content. It is used to load graphics, store graphics and
     to get information about unloaded graphics
   */
-published interface XGraphicProvider : ::com::sun::star::uno::XInterface
+published interface XGraphicProvider : ::cpo::uno::XInterface
 {
     /** Calling this method returns a
         com::sun::star::beans::XPropertySet

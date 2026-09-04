@@ -54,7 +54,7 @@ protected:
 
 // global functions to support the component
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 XMLMetaImportComponent_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -91,7 +91,7 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
     if( !mxDocProps.is() )
         throw lang::IllegalArgumentException(
             u"XMLMetaImportComponent::setTargetDocument: argument is no "
-            "XDocumentProperties"_ustr, uno::Reference<uno::XInterface>(*this), 0);
+            "XDocumentProperties"_ustr, uno::Reference<cpo::uno::XInterface>(*this), 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

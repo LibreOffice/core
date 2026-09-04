@@ -33,7 +33,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.XContextMenuInterception;
 import com.sun.star.ui.XContextMenuInterceptor;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import helper.ContextMenuInterceptor;
 import java.awt.Robot;
 import java.awt.event.InputEvent;

@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module document {
     Use GraphicStorageHandler or GraphicProvider to load an XGraphic instead
     as converting to internal GraphicObject URL is not possible anymore.
  */
-published interface XGraphicObjectResolver: com::sun::star::uno::XInterface
+published interface XGraphicObjectResolver: cpo::uno::XInterface
 {
     /** converts the given URL from the source URL namespace to the destination
         URL space of this instance.

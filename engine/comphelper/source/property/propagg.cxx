@@ -434,7 +434,7 @@ void OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyCha
 }
 
 
-void OPropertySetAggregationHelper::setAggregation(const css::uno::Reference<  css::uno::XInterface >& _rxDelegate)
+void OPropertySetAggregationHelper::setAggregation(const css::uno::Reference<  cpo::uno::XInterface >& _rxDelegate)
 {
     osl::MutexGuard aGuard(rBHelper.rMutex);
 

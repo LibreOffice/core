@@ -29,11 +29,10 @@
 namespace cpo::uno { class Any; }
 namespace cpo::uno { class RuntimeException; }
 namespace cpo::uno { class Type; }
+namespace cpo::uno { class XInterface; }
 
 namespace com::sun::star::uno
 {
-
-class XInterface;
 
 /** This base class serves as a base class for all template reference classes and
     has been introduced due to compiler problems with templated operators ==, =!.
@@ -43,7 +42,7 @@ class BaseReference
 protected:
     /** the interface pointer
     */
-    XInterface * _pInterface;
+    cpo::uno::XInterface * _pInterface;
 
     /** Queries given interface for type rType.
 
@@ -51,7 +50,7 @@ protected:
         @param rType interface type
         @return interface of demanded type (may be null)
     */
-    inline static XInterface * iquery( XInterface * pInterface, const cpo::uno::Type & rType );
+    inline static cpo::uno::XInterface * iquery( cpo::uno::XInterface * pInterface, const cpo::uno::Type & rType );
     /** Queries given interface for type rType.
         Throws a RuntimeException if the demanded interface cannot be queried.
 
@@ -59,14 +58,14 @@ protected:
         @param rType interface type
         @return interface of demanded type
     */
-    inline static XInterface * iquery_throw( XInterface * pInterface, const cpo::uno::Type & rType );
+    inline static cpo::uno::XInterface * iquery_throw( cpo::uno::XInterface * pInterface, const cpo::uno::Type & rType );
 
 public:
     /** Gets interface pointer. This call does not acquire the interface.
 
         @return UNacquired interface pointer
     */
-    XInterface * get() const
+    cpo::uno::XInterface * get() const
         { return _pInterface; }
 
     /** Checks if reference is null.
@@ -89,14 +88,14 @@ public:
         @param pInterface another interface
         @return true if both references are null or refer to the same object, false otherwise
     */
-    inline bool operator == ( XInterface * pInterface ) const;
+    inline bool operator == ( cpo::uno::XInterface * pInterface ) const;
     /** Inequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
         @param pInterface another interface
         @return false if both references are null or refer to the same object, true otherwise
     */
-    inline bool operator != ( XInterface * pInterface ) const;
+    inline bool operator != ( cpo::uno::XInterface * pInterface ) const;
 
     /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
@@ -158,14 +157,14 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
         @param pInterface interface pointer
         @return interface of demanded type (may be null)
     */
-    inline static XInterface * iquery( XInterface * pInterface );
+    inline static cpo::uno::XInterface * iquery( cpo::uno::XInterface * pInterface );
     /** Queries given interface for type interface_type.
         Throws a RuntimeException if the demanded interface cannot be queried.
 
         @param pInterface interface pointer
         @return interface of demanded type
     */
-    inline static XInterface * iquery_throw( XInterface * pInterface );
+    inline static cpo::uno::XInterface * iquery_throw( cpo::uno::XInterface * pInterface );
     /** Returns the given interface if it is not <NULL/>, throws a RuntimeException otherwise.
 
         @param pInterface interface pointer
@@ -184,7 +183,7 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
         principle, this is not guaranteed to work.  In practice, it seems to
         work on all supported platforms.
     */
-    static interface_type * castFromXInterface(XInterface * p) {
+    static interface_type * castFromXInterface(cpo::uno::XInterface * p) {
         return static_cast< interface_type * >(static_cast< void * >(p));
     }
 
@@ -199,8 +198,8 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
         principle, this is not guaranteed to work.  In practice, it seems to
         work on all supported platforms.
     */
-    static XInterface * castToXInterface(interface_type * p) {
-        return static_cast< XInterface * >(static_cast< void * >(p));
+    static cpo::uno::XInterface * castToXInterface(interface_type * p) {
+        return static_cast< cpo::uno::XInterface * >(static_cast< void * >(p));
     }
 
 public:
@@ -239,7 +238,7 @@ public:
         const Reference< derived_type > & rRef,
         std::enable_if_t<
             std::is_base_of_v<interface_type, derived_type>
-            && !std::is_same_v<interface_type, XInterface>, void *> = nullptr);
+            && !std::is_same_v<interface_type, cpo::uno::XInterface>, void *> = nullptr);
 
     /** Constructor: Sets given interface pointer.
 
@@ -265,7 +264,7 @@ public:
         @param pInterface an interface pointer
         @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
-    inline Reference( XInterface * pInterface, UnoReference_Query dummy);
+    inline Reference( cpo::uno::XInterface * pInterface, UnoReference_Query dummy);
     /** Constructor: Queries given any for reference interface type (interface_type).
 
         @param rAny an any
@@ -291,7 +290,7 @@ public:
         @param dummy UNO_QUERY_THROW to force obvious distinction
                      to other constructors
     */
-    inline Reference( XInterface * pInterface, UnoReference_QueryThrow dummy );
+    inline Reference( cpo::uno::XInterface * pInterface, UnoReference_QueryThrow dummy );
     /** Constructor: Queries given any for reference interface type (interface_type).
         Throws a RuntimeException if the demanded interface cannot be queried.
 
@@ -316,11 +315,11 @@ public:
     inline Reference( interface_type * pInterface, UnoReference_SetThrow dummy );
 
     /** Cast operator to Reference< XInterface >: Reference objects are binary compatible and
-        any interface must be derived from com.sun.star.uno.XInterface.
+        any interface must be derived from cpo.uno.XInterface.
         This a useful direct cast possibility.
     */
-    operator const Reference< XInterface > & () const
-        { return * reinterpret_cast< const Reference< XInterface > * >( this ); }
+    operator const Reference< cpo::uno::XInterface > & () const
+        { return * reinterpret_cast< const Reference< cpo::uno::XInterface > * >( this ); }
 
     /** Dereference operator: Used to call interface methods.
 
@@ -379,7 +378,7 @@ public:
         @param dummy UNO_QUERY to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
-    inline bool set( XInterface * pInterface, UnoReference_Query dummy );
+    inline bool set( cpo::uno::XInterface * pInterface, UnoReference_Query dummy );
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
 
@@ -410,7 +409,7 @@ public:
         @param dummy UNO_QUERY_THROW to force obvious distinction
                      to set methods
     */
-    inline void set( XInterface * pInterface, UnoReference_QueryThrow dummy );
+    inline void set( cpo::uno::XInterface * pInterface, UnoReference_QueryThrow dummy );
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
         Throws a RuntimeException if the demanded interface cannot be set.
@@ -485,7 +484,7 @@ public:
         @param pInterface interface pointer
         @return interface reference of demanded type (may be null)
     */
-    SAL_WARN_UNUSED_RESULT inline static Reference< interface_type > query( XInterface * pInterface );
+    SAL_WARN_UNUSED_RESULT inline static Reference< interface_type > query( cpo::uno::XInterface * pInterface );
     /** Queries this for the required interface, and returns the requested reference, possibly empty.
         A syntactic sugar for 'Reference< other_type > xOther(xThis, UNO_QUERY)' that avoids some
         verbocity.

@@ -77,7 +77,7 @@ public:
     virtual css::uno::Reference<css::frame::XFrame> getFrame() override;
     virtual OUString getResourceURL() override;
     virtual sal_Int16 getType() override;
-    virtual css::uno::Reference<css::uno::XInterface> getRealInterface() override;
+    virtual css::uno::Reference<cpo::uno::XInterface> getRealInterface() override;
 
     // XToolPanel
     virtual css::uno::Reference<css::accessibility::XAccessible> createAccessible(

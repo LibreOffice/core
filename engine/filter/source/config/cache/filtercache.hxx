@@ -24,7 +24,7 @@
 #include "cacheitem.hxx"
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -164,18 +164,18 @@ class FilterCache : public cppu::BaseMutex
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of types. */
-        mutable css::uno::Reference< css::uno::XInterface > m_xConfigTypes;
+        mutable css::uno::Reference< cpo::uno::XInterface > m_xConfigTypes;
 
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of filters. */
-        mutable css::uno::Reference< css::uno::XInterface > m_xConfigFilters;
+        mutable css::uno::Reference< cpo::uno::XInterface > m_xConfigFilters;
 
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of other values needed
                     by our type detection framework. */
-        mutable css::uno::Reference< css::uno::XInterface > m_xConfigOthers;
+        mutable css::uno::Reference< cpo::uno::XInterface > m_xConfigOthers;
 
 
         /** @short  contains all loaded types with its properties. */
@@ -620,7 +620,7 @@ class FilterCache : public cppu::BaseMutex
                         all necessary listener connections will be established
                         too. So this cache will be informed about outside updates.
          */
-        css::uno::Reference< css::uno::XInterface > impl_openConfig(EConfigProvider eProvide);
+        css::uno::Reference< cpo::uno::XInterface > impl_openConfig(EConfigProvider eProvide);
 
 
         /** @short      tries to open the requested configuration root
@@ -641,7 +641,7 @@ class FilterCache : public cppu::BaseMutex
                         and initialized within the requested modes successfully;
                         a NULL reference otherwise.
          */
-        css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
+        css::uno::Reference< cpo::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
                                                                                   bool         bReadOnly   ,
                                                                                   bool         bLocalesMode);
 

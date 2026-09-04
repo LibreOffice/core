@@ -693,7 +693,7 @@ static bool FindControl(const ScriptEvent& evt, void const * pPara)
 {
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
-    uno::Reference< uno::XInterface > xInterface( aEvent.Source, uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xInterface( aEvent.Source, uno::UNO_QUERY );
 
     TypeList const * pTypeListInfo = static_cast<TypeList const *>(pPara);
     Type const * pType = pTypeListInfo->pTypeList;
@@ -924,7 +924,7 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
     return xSupplier;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ooo_vba_EventListener_get_implementation(cpo::uno::XComponentContext*,
                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -932,7 +932,7 @@ ooo_vba_EventListener_get_implementation(cpo::uno::XComponentContext*,
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ooo_vba_VBAToOOEventDesc_get_implementation(cpo::uno::XComponentContext*,
                                             cpo::uno::Sequence<cpo::uno::Any> const &)
 {

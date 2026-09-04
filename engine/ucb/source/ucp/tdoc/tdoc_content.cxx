@@ -2632,7 +2632,7 @@ static OUString obtainPassword(
                 {
                     throw ucb::CommandFailedException(
                         u"Abort requested by Interaction Handler."_ustr,
-                        uno::Reference< uno::XInterface >(),
+                        uno::Reference< cpo::uno::XInterface >(),
                         xRequest->getRequest() );
                 }
 
@@ -2646,7 +2646,7 @@ static OUString obtainPassword(
                 // Unknown selection. Should never happen.
                 throw ucb::CommandFailedException(
                     u"Interaction Handler selected unknown continuation!"_ustr,
-                    uno::Reference< uno::XInterface >(),
+                    uno::Reference< cpo::uno::XInterface >(),
                     xRequest->getRequest() );
             }
         }

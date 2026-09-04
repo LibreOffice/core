@@ -171,7 +171,7 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     if (!KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(sIdentifier, nCode))
         throw css::lang::IllegalArgumentException(
                 u"Can not map given identifier to a valid key code value."_ustr,
-                css::uno::Reference< css::uno::XInterface >(),
+                css::uno::Reference< cpo::uno::XInterface >(),
                 0);
 
     return nCode;

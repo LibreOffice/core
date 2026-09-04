@@ -416,7 +416,7 @@ std::vector< Reference< drawing::XCustomShapeHandle > > EnhancedCustomShapeEngin
     return aVec;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const & args)

@@ -88,7 +88,7 @@ interface XTableUIProvider
         @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs while creating the table editor component.
     */
-    com::sun::star::uno::XInterface getTableEditor(
+    cpo::uno::XInterface getTableEditor(
         [in] XDatabaseDocumentUI DocumentUI,
         [in] string TableName )
         raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);

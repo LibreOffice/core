@@ -82,7 +82,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             produce(
                 u"cpo.uno.TypeClass"_ustr, typeMgr, generated, options);
             produce(
-                u"com.sun.star.uno.XInterface"_ustr, typeMgr, generated, options);
+                u"cpo.uno.XInterface"_ustr, typeMgr, generated, options);
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << '\n';

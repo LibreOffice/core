@@ -172,7 +172,7 @@ void ConfigAccess::closeImpl()
 
     @return A c++(!) reference to the uno instance of the configuration access point.
  */
-const css::uno::Reference< css::uno::XInterface >& ConfigAccess::cfg()
+const css::uno::Reference< cpo::uno::XInterface >& ConfigAccess::cfg()
 {
     // must be synchronized from outside!
     // => no lock here ...

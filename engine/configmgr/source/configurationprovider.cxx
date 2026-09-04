@@ -33,7 +33,7 @@
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XRefreshListener.hpp>
@@ -125,10 +125,10 @@ private:
             : cpo::uno::Sequence<OUString> { u"com.sun.star.configuration.ConfigurationProvider"_ustr };
     }
 
-    virtual css::uno::Reference< css::uno::XInterface > createInstance(
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(
         OUString const & aServiceSpecifier) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
@@ -166,14 +166,14 @@ private:
     comphelper::OInterfaceContainerHelper4<css::util::XFlushListener> maFlushListeners;
 };
 
-css::uno::Reference< css::uno::XInterface > Service::createInstance(
+css::uno::Reference< cpo::uno::XInterface > Service::createInstance(
     OUString const & aServiceSpecifier)
 {
     return createInstanceWithArguments(
         aServiceSpecifier, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
 Service::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
@@ -344,7 +344,7 @@ void Service::flushModifications() const {
     components->flushModifications();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
     cpo::uno::XComponentContext* Context, cpo::uno::Sequence<cpo::uno::Any> const& Arguments)
 {
@@ -396,7 +396,7 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
 
 }
 
-css::uno::Reference< css::uno::XInterface > createDefault(
+css::uno::Reference< cpo::uno::XInterface > createDefault(
     css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return getXWeak(new Service(context));

@@ -529,14 +529,14 @@ cpo::uno::Sequence< OUString > VistaFilePicker::getSupportedServiceNames()
 } // namespace win32
 } // namespace fpicker
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 fpicker_win32_FilePicker_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::fpicker::win32::vista::VistaFilePicker(false));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 fpicker_win32_FolderPicker_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

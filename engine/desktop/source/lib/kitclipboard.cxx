@@ -176,7 +176,7 @@ void KitClipboardFactory::flushSharedClipboard()
         xShared->flushContents();
 }
 
-uno::Reference<uno::XInterface>
+uno::Reference<cpo::uno::XInterface>
     KitClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
 {
     return { static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()) };
@@ -568,7 +568,7 @@ KitProviderTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& r
                        { return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType; });
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 desktop_KitClipboard_get_implementation(cpo::uno::XComponentContext*,
                                         cpo::uno::Sequence<cpo::uno::Any> const& /*args*/)
 {

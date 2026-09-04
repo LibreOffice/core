@@ -43,7 +43,7 @@ using namespace css;
 namespace
 {
 // returns a name of the object, if available
-OUString lclGetNamed(uno::Reference<uno::XInterface> const& xObject)
+OUString lclGetNamed(uno::Reference<cpo::uno::XInterface> const& xObject)
 {
     uno::Reference<container::XNamed> xNamed(xObject, uno::UNO_QUERY);
     if (!xNamed.is())
@@ -61,10 +61,10 @@ class DocumentModelTreeEntry
 {
 protected:
     OUString maString;
-    css::uno::Reference<css::uno::XInterface> mxObject;
+    css::uno::Reference<cpo::uno::XInterface> mxObject;
 
 public:
-    DocumentModelTreeEntry(OUString aString, css::uno::Reference<css::uno::XInterface> xObject)
+    DocumentModelTreeEntry(OUString aString, css::uno::Reference<cpo::uno::XInterface> xObject)
         : maString(std::move(aString))
         , mxObject(std::move(xObject))
     {
@@ -79,7 +79,7 @@ public:
     virtual bool shouldShowExpander() { return false; }
 
     /// The main UNO object for this entry
-    virtual css::uno::Reference<css::uno::XInterface> getMainObject() { return mxObject; }
+    virtual css::uno::Reference<cpo::uno::XInterface> getMainObject() { return mxObject; }
 
     /// Create and fill the children to the parent tree view node.
     virtual void fill(std::unique_ptr<weld::TreeView>& /*pDocumentModelTree*/,
@@ -111,7 +111,7 @@ void lclAppend(const std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEn
 class NameAccessTreeEntry : public DocumentModelTreeEntry
 {
 protected:
-    NameAccessTreeEntry(OUString const& rString, uno::Reference<uno::XInterface> const& xObject)
+    NameAccessTreeEntry(OUString const& rString, uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
@@ -134,7 +134,7 @@ protected:
         const cpo::uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
         for (auto const& rName : aNames)
         {
-            uno::Reference<uno::XInterface> xObject(xNameAccess->getByName(rName), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xObject(xNameAccess->getByName(rName), uno::UNO_QUERY);
             auto pEntry = std::make_unique<DocumentModelTreeEntry>(rName, xObject);
             lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
@@ -145,7 +145,7 @@ protected:
 class DocumentRootEntry : public DocumentModelTreeEntry
 {
 public:
-    DocumentRootEntry(OUString const& rString, uno::Reference<uno::XInterface> const& xObject)
+    DocumentRootEntry(OUString const& rString, uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
@@ -158,7 +158,7 @@ class ParagraphEntry : public DocumentModelTreeEntry
 {
 public:
     ParagraphEntry(OUString const& rString,
-                   css::uno::Reference<css::uno::XInterface> const& xObject)
+                   css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
@@ -207,12 +207,12 @@ class ParagraphsEntry : public DocumentModelTreeEntry
 {
 public:
     ParagraphsEntry(OUString const& rString,
-                    css::uno::Reference<css::uno::XInterface> const& xObject)
+                    css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<text::XTextDocument> xDocument(mxObject, uno::UNO_QUERY);
         if (!xDocument.is())
@@ -264,12 +264,12 @@ public:
 class ShapesEntry : public DocumentModelTreeEntry
 {
 public:
-    ShapesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    ShapesEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<drawing::XDrawPageSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -291,7 +291,7 @@ public:
             return;
         for (sal_Int32 nIndexShapes = 0; nIndexShapes < xShapes->getCount(); ++nIndexShapes)
         {
-            uno::Reference<uno::XInterface> xShape(xShapes->getByIndex(nIndexShapes),
+            uno::Reference<cpo::uno::XInterface> xShape(xShapes->getByIndex(nIndexShapes),
                                                    uno::UNO_QUERY);
             OUString aShapeName = lclGetNamed(xShape);
             if (aShapeName.isEmpty())
@@ -310,12 +310,12 @@ public:
 class TablesEntry : public NameAccessTreeEntry
 {
 public:
-    TablesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    TablesEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<text::XTextTablesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -328,12 +328,12 @@ public:
 class FramesEntry : public NameAccessTreeEntry
 {
 public:
-    FramesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    FramesEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<text::XTextFramesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -347,12 +347,12 @@ class WriterGraphicObjectsEntry : public NameAccessTreeEntry
 {
 public:
     WriterGraphicObjectsEntry(OUString const& rString,
-                              css::uno::Reference<css::uno::XInterface> const& xObject)
+                              css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -366,12 +366,12 @@ class EmbeddedObjectsEntry : public NameAccessTreeEntry
 {
 public:
     EmbeddedObjectsEntry(OUString const& rString,
-                         css::uno::Reference<css::uno::XInterface> const& xObject)
+                         css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -385,7 +385,7 @@ class StylesFamilyEntry : public NameAccessTreeEntry
 {
 public:
     StylesFamilyEntry(OUString const& rString,
-                      css::uno::Reference<css::uno::XInterface> const& xObject)
+                      css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
@@ -396,12 +396,12 @@ class StylesFamiliesEntry : public DocumentModelTreeEntry
 {
 public:
     StylesFamiliesEntry(OUString const& rString,
-                        css::uno::Reference<css::uno::XInterface> const& xObject)
+                        css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -425,7 +425,7 @@ public:
         const cpo::uno::Sequence<OUString> aNames = xStyleFamilies->getElementNames();
         for (auto const& rFamilyName : aNames)
         {
-            uno::Reference<uno::XInterface> xStyleFamily(xStyleFamilies->getByName(rFamilyName),
+            uno::Reference<cpo::uno::XInterface> xStyleFamily(xStyleFamilies->getByName(rFamilyName),
                                                          uno::UNO_QUERY);
 
             auto pStylesFamilyEntry
@@ -439,12 +439,12 @@ public:
 class PagesEntry : public DocumentModelTreeEntry
 {
 public:
-    PagesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    PagesEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -482,12 +482,12 @@ public:
 class SlidesEntry : public DocumentModelTreeEntry
 {
 public:
-    SlidesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    SlidesEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -526,12 +526,12 @@ class MasterSlidesEntry : public DocumentModelTreeEntry
 {
 public:
     MasterSlidesEntry(OUString const& rString,
-                      css::uno::Reference<css::uno::XInterface> const& xObject)
+                      css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -572,12 +572,12 @@ public:
 class ChartsEntry : public NameAccessTreeEntry
 {
 public:
-    ChartsEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    ChartsEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<table::XTableChartsSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -600,14 +600,14 @@ class PivotTablesEntry : public NameAccessTreeEntry
 {
 public:
     PivotTablesEntry(OUString const& rString,
-                     css::uno::Reference<css::uno::XInterface> const& xObject)
+                     css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : NameAccessTreeEntry(rString, xObject)
     {
     }
 
     bool shouldShowExpander() override { return true; }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<sheet::XDataPilotTablesSupplier> xSupplier(mxObject, uno::UNO_QUERY);
         if (!xSupplier.is())
@@ -629,7 +629,7 @@ public:
 class SheetEntry : public DocumentModelTreeEntry
 {
 public:
-    SheetEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    SheetEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
@@ -657,12 +657,12 @@ public:
 class SheetsEntry : public DocumentModelTreeEntry
 {
 public:
-    SheetsEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+    SheetsEntry(OUString const& rString, css::uno::Reference<cpo::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> getMainObject() override
+    css::uno::Reference<cpo::uno::XInterface> getMainObject() override
     {
         uno::Reference<sheet::XSpreadsheetDocument> xSheetDocument(mxObject, uno::UNO_QUERY);
         if (!xSheetDocument.is())
@@ -700,16 +700,16 @@ public:
 
 DocumentModelTreeHandler::DocumentModelTreeHandler(
     std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-    css::uno::Reference<css::uno::XInterface> xDocument)
+    css::uno::Reference<cpo::uno::XInterface> xDocument)
     : mpDocumentModelTree(pDocumentModelTree)
     , mxDocument(std::move(xDocument))
 {
     mpDocumentModelTree->connect_expanding(LINK(this, DocumentModelTreeHandler, ExpandingHandler));
 }
 
-uno::Reference<uno::XInterface> DocumentModelTreeHandler::getObjectByID(OUString const& rID)
+uno::Reference<cpo::uno::XInterface> DocumentModelTreeHandler::getObjectByID(OUString const& rID)
 {
-    uno::Reference<uno::XInterface> xObject;
+    uno::Reference<cpo::uno::XInterface> xObject;
     if (rID.isEmpty())
         return xObject;
     auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(rID);
@@ -774,7 +774,7 @@ IMPL_LINK(DocumentModelTreeHandler, ExpandingHandler, weld::TreeIter const&, rPa
 }
 
 void DocumentModelTreeHandler::selectObject(
-    css::uno::Reference<css::uno::XInterface> const& xInterface)
+    css::uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     mpDocumentModelTree->unselect_all();
 

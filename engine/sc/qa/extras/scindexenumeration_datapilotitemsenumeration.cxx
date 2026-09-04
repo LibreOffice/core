@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -39,7 +39,7 @@ class ScIndexEnumeration_DataPilotItemsEnumeration : public UnoApiTest, public a
 public:
     ScIndexEnumeration_DataPilotItemsEnumeration();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_DataPilotItemsEnumeration);
@@ -59,7 +59,7 @@ ScIndexEnumeration_DataPilotItemsEnumeration::ScIndexEnumeration_DataPilotItemsE
 {
 }
 
-uno::Reference<uno::XInterface> ScIndexEnumeration_DataPilotItemsEnumeration::init()
+uno::Reference<cpo::uno::XInterface> ScIndexEnumeration_DataPilotItemsEnumeration::init()
 {
     table::CellRangeAddress aCellRangeAddress(0, 1, 0, m_nMaxFieldIndex - 1, m_nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);

@@ -60,7 +60,7 @@ namespace dbaccess
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
-        // css::uno::XInterface
+        // cpo::uno::XInterface
         virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         virtual void acquire() noexcept override;
         virtual void release() noexcept override;

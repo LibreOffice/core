@@ -33,7 +33,7 @@ module com { module sun { module star { module frame {
 
     @see XModuleManager
  */
-interface XModule : com::sun::star::uno::XInterface
+interface XModule : cpo::uno::XInterface
 {
     /** @param  Identifier
                 a new "name" for this module.

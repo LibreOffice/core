@@ -183,7 +183,7 @@
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>

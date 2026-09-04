@@ -31,7 +31,7 @@
 namespace utl
 {
 
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::uno::Reference;
     using ::cpo::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;

@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 */
 
 
-published interface XFlushableClipboard: com::sun::star::uno::XInterface
+published interface XFlushableClipboard: cpo::uno::XInterface
 {
     /** Renders the current content of the clipboard to the system so that it
         is available even if the source application no longer exist.

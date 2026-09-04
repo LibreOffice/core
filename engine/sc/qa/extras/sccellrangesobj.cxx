@@ -45,8 +45,8 @@ public:
 
     virtual void setUp() override;
 
-    virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXSpreadsheet() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(ScCellRangesObj);
 
@@ -87,7 +87,7 @@ ScCellRangesObj::ScCellRangesObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScCellRangesObj::init()
+uno::Reference<cpo::uno::XInterface> ScCellRangesObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -118,7 +118,7 @@ uno::Reference<uno::XInterface> ScCellRangesObj::init()
     return xRanges;
 }
 
-uno::Reference<uno::XInterface> ScCellRangesObj::getXSpreadsheet()
+uno::Reference<cpo::uno::XInterface> ScCellRangesObj::getXSpreadsheet()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 

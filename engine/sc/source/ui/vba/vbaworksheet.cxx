@@ -88,7 +88,7 @@ using namespace ooo::vba;
 static void getNewSpreadsheetName (OUString &aNewName, std::u16string_view aOldName, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( u"getNewSpreadsheetName() xSpreadDoc is null"_ustr, uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( u"getNewSpreadsheetName() xSpreadDoc is null"_ustr, uno::Reference< cpo::uno::XInterface  >(), 1 );
     static const char aUnderScore[] =  "_";
     int currentNum =2;
     aNewName = OUString::Concat(aOldName) + aUnderScore + OUString::number(currentNum) ;
@@ -102,7 +102,7 @@ static void getNewSpreadsheetName (OUString &aNewName, std::u16string_view aOldN
 static void removeAllSheets( const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString& aSheetName)
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( u"removeAllSheets() xSpreadDoc is null"_ustr, uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( u"removeAllSheets() xSpreadDoc is null"_ustr, uno::Reference< cpo::uno::XInterface  >(), 1 );
     uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
     uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
 
@@ -1062,7 +1062,7 @@ ScVbaWorksheet::getSomething(const cpo::uno::Sequence<sal_Int8 > & rId)
     return comphelper::getSomethingImpl(rId, this);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_ScVbaWorksheet_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

@@ -268,11 +268,11 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ) const;
 
     // ModelDependentComponent overridables
-    virtual css::uno::Reference< css::uno::XInterface > getThis() const override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getThis() const override;
 
     rtl::Reference< ::framework::TitleHelper> const &     impl_getTitleHelper_throw();
     css::uno::Reference< css::frame::XUntitledNumbers >   impl_getUntitledHelper_throw(
-        const css::uno::Reference< css::uno::XInterface >& _xComponent = css::uno::Reference< css::uno::XInterface >());
+        const css::uno::Reference< cpo::uno::XInterface >& _xComponent = css::uno::Reference< cpo::uno::XInterface >());
 
 private:
     explicit ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
@@ -321,7 +321,7 @@ public:
     virtual bool hasControllersLocked(  ) override ;
     virtual css::uno::Reference< css::frame::XController > getCurrentController(  ) override ;
     virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
-    virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection(  ) override ;
+    virtual css::uno::Reference< cpo::uno::XInterface > getCurrentSelection(  ) override ;
 
     // XModel2
     virtual css::uno::Reference< css::container::XEnumeration > getControllers(  ) override ;
@@ -424,9 +424,9 @@ public:
     virtual void removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // XUntitledNumbers
-    virtual ::sal_Int32 leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+    virtual ::sal_Int32 leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
     virtual void releaseNumber( ::sal_Int32 nNumber ) override;
-    virtual void releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+    virtual void releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
     virtual OUString getUntitledPrefix(  ) override;
 
     /** clears the given object container
@@ -535,7 +535,7 @@ private:
     static void
             impl_import_nolck_throw(
                 const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
-                const css::uno::Reference< css::uno::XInterface >& _rxTargetComponent,
+                const css::uno::Reference< cpo::uno::XInterface >& _rxTargetComponent,
                 const ::comphelper::NamedValueCollection& _rResource
             );
 

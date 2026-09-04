@@ -56,7 +56,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/errcode.hxx>
 #include <comphelper/processfactory.hxx>

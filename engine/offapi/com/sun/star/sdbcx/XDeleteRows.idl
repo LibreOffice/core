@@ -22,7 +22,7 @@
 
 /** provides for the deletion of more than one row at a time.
  */
-published interface XDeleteRows: com::sun::star::uno::XInterface
+published interface XDeleteRows: cpo::uno::XInterface
 {
 
     /** deletes one or more rows identified by their bookmarks.

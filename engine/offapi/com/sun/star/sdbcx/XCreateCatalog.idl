@@ -22,7 +22,7 @@
 
 /** may be implemented to hide the complexity of creating a database catalog.
  */
-published interface XCreateCatalog: com::sun::star::uno::XInterface
+published interface XCreateCatalog: cpo::uno::XInterface
 {
 
     /** creates the catalog by using a sequence of property values. The kind

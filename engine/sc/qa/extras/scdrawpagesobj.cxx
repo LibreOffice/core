@@ -17,7 +17,7 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -37,7 +37,7 @@ class ScDrawPagesObj : public UnoApiTest,
 public:
     ScDrawPagesObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScDrawPagesObj);
@@ -70,7 +70,7 @@ ScDrawPagesObj::ScDrawPagesObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDrawPagesObj::init()
+uno::Reference<cpo::uno::XInterface> ScDrawPagesObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

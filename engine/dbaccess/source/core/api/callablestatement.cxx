@@ -44,7 +44,7 @@ Sequence< sal_Int8 > OCallableStatement::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any OCallableStatement::queryInterface( const Type & rType )
 {
     Any aIface = OPreparedStatement::queryInterface( rType );

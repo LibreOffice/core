@@ -26,7 +26,7 @@
     it will be detected.
     </p>
  */
-published interface XLinkCreator: com::sun::star::uno::XInterface
+published interface XLinkCreator: cpo::uno::XInterface
 {
     /** creates a new object based on
         com::sun::star::document::MediaDescriptor
@@ -61,7 +61,7 @@ published interface XLinkCreator: com::sun::star::uno::XInterface
         @throws cpo::uno::Exception
             in case of other problems
      */
-    ::com::sun::star::uno::XInterface createInstanceLink(
+    ::cpo::uno::XInterface createInstanceLink(
             [in] ::com::sun::star::embed::XStorage xStorage,
              [in] string sEntryName,
              [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs,

@@ -35,7 +35,7 @@ namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_comphelper_OPropertyBag (
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

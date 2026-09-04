@@ -76,8 +76,8 @@ class ChartModel;
         virtual bool isLocked(  ) override;
 
         // XChild (base of XUndoManager)
-        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         // XModifyBroadcaster
         virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;

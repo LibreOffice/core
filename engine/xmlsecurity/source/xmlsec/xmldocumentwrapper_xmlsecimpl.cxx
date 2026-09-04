@@ -890,7 +890,7 @@ cpo::uno::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSuppor
     return { u"com.sun.star.xml.wrapper.XMLDocumentWrapper"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_xml_wrapper_XMLDocumentWrapper_get_implementation(
     cpo::uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

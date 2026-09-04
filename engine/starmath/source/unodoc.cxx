@@ -26,13 +26,13 @@
 
 using namespace ::com::sun::star;
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Math_FormulaDocument_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     SmGlobals::ensure();
-    css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell = new SmDocShell(_nCreationFlags);

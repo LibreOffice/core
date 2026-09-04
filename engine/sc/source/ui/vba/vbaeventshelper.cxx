@@ -146,7 +146,7 @@ public:
     virtual void SAL_CALL windowHidden( const lang::EventObject& rEvent ) override;
 
     // XBorderResizeListener
-    virtual void SAL_CALL borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) override;
+    virtual void SAL_CALL borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) override;
 
     // XChangesListener
     virtual void SAL_CALL changesOccurred( const util::ChangesEvent& rEvent ) override;
@@ -335,7 +335,7 @@ void SAL_CALL ScVbaEventListener::windowHidden( const lang::EventObject& /*rEven
 {
 }
 
-void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& /*aNewSize*/ )
+void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& rSource, const frame::BorderWidths& /*aNewSize*/ )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -830,8 +830,8 @@ bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 
 bool ScVbaEventsHelper::isSelectionChanged( const cpo::uno::Sequence< cpo::uno::Any >& rArgs, sal_Int32 nIndex )
 {
-    uno::Reference< uno::XInterface > xOldSelection( maOldSelection, uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xNewSelection = getXSomethingFromArgs< uno::XInterface >( rArgs, nIndex, false );
+    uno::Reference< cpo::uno::XInterface > xOldSelection( maOldSelection, uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xNewSelection = getXSomethingFromArgs< cpo::uno::XInterface >( rArgs, nIndex, false );
     ScCellRangesBase* pOldCellRanges = dynamic_cast<ScCellRangesBase*>( xOldSelection.get() );
     ScCellRangesBase* pNewCellRanges = dynamic_cast<ScCellRangesBase*>( xNewSelection.get() );
     bool bChanged = !pOldCellRanges || !pNewCellRanges || lclSelectionChanged( pOldCellRanges->GetRangeList(), pNewCellRanges->GetRangeList() );
@@ -876,7 +876,7 @@ cpo::uno::Any ScVbaEventsHelper::createHyperlink( const cpo::uno::Sequence< cpo:
     uno::Reference< table::XCell > xCell = getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
     cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(excel::getUnoSheetModuleObj( xCell )),
                                      cpo::uno::Any(xCell) };
-    uno::Reference< uno::XInterface > xHyperlink( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Hyperlink", aArgs ), uno::UNO_SET_THROW );
+    uno::Reference< cpo::uno::XInterface > xHyperlink( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Hyperlink", aArgs ), uno::UNO_SET_THROW );
     return cpo::uno::Any( xHyperlink );
 }
 
@@ -885,11 +885,11 @@ cpo::uno::Any ScVbaEventsHelper::createWindow( const cpo::uno::Sequence< cpo::un
     cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(getVBADocument( mxModel )),
                                      cpo::uno::Any(mxModel),
                                      cpo::uno::Any(getXSomethingFromArgs< frame::XController >( rArgs, nIndex, false )) };
-    uno::Reference< uno::XInterface > xWindow( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Window", aArgs ), uno::UNO_SET_THROW );
+    uno::Reference< cpo::uno::XInterface > xWindow( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Window", aArgs ), uno::UNO_SET_THROW );
     return cpo::uno::Any( xWindow );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 ScVbaEventsHelper_get_implementation(
     cpo::uno::XComponentContext * /*context*/,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)

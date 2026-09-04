@@ -24,14 +24,14 @@
 /** makes it possible to attach script events given by a sequence of
     ScriptEventDescriptor structures to a given interface.
  */
-published interface XEventAttacher: com::sun::star::uno::XInterface
+published interface XEventAttacher: cpo::uno::XInterface
 {
     /** registers the given "AllListener" object as a listener at the
         given interface by creating a suitable listener adapter and
         calling the "addListener" method corresponding to the
         "ListenerType".
      */
-    com::sun::star::lang::XEventListener attachListener( [in] com::sun::star::uno::XInterface xTarget,
+    com::sun::star::lang::XEventListener attachListener( [in] cpo::uno::XInterface xTarget,
              [in] com::sun::star::script::XAllListener xAllListener,
              [in] any aHelper,
              [in] string aListenerType,
@@ -48,7 +48,7 @@ published interface XEventAttacher: com::sun::star::uno::XInterface
         <p>Only the event corresponding to the given event method
         will be delegated to <var>xAllListener</var>.</p>
      */
-    com::sun::star::lang::XEventListener attachSingleEventListener( [in] com::sun::star::uno::XInterface xTarget,
+    com::sun::star::lang::XEventListener attachSingleEventListener( [in] cpo::uno::XInterface xTarget,
              [in] com::sun::star::script::XAllListener xAllListener,
              [in] any aHelper,
              [in] string aListenerType,
@@ -64,7 +64,7 @@ published interface XEventAttacher: com::sun::star::uno::XInterface
         <p> This method can and should be used as a contrary method
         to the two attach methods.</p>
      */
-    void removeListener( [in] com::sun::star::uno::XInterface xTarget,
+    void removeListener( [in] cpo::uno::XInterface xTarget,
              [in] string aListenerType,
              [in] string aRemoveListenerParam,
              [in] com::sun::star::lang::XEventListener xToRemoveListener )

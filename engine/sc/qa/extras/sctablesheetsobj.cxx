@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -49,7 +49,7 @@ public:
     ScTableSheetsObj();
 
     virtual void setUp() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
 
@@ -125,10 +125,10 @@ uno::Reference<lang::XComponent> ScTableSheetsObj::loadFromDesktop(const OUStrin
     return UnoApiTest::loadFromDesktop(aString);
 }
 
-uno::Reference<uno::XInterface> ScTableSheetsObj::init()
+uno::Reference<cpo::uno::XInterface> ScTableSheetsObj::init()
 {
     xDocument.set(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xReturn(xDocument->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<cpo::uno::XInterface> xReturn(xDocument->getSheets(), UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
     XNameContainer::setElement(

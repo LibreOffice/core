@@ -68,7 +68,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>

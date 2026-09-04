@@ -21,10 +21,10 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 class SdCustomShow;
 
-css::uno::Reference<css::uno::XInterface> createUnoCustomShow(
+css::uno::Reference<cpo::uno::XInterface> createUnoCustomShow(
     SdCustomShow * pShow);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

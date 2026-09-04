@@ -35,9 +35,9 @@ namespace com::sun::star {
     namespace frame { class XModel; }
     namespace script { class XLibraryContainer; }
     namespace script::vba { class XVBAMacroResolver; }
-    namespace uno { class XInterface; }
     namespace io { class XInputStream; }
 }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { class XComponentContext; }
 
 namespace oox {
@@ -65,7 +65,7 @@ public:
     bool                isExportVba() const;
 
 private:
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
                         mxConfigAccess;
 };
 

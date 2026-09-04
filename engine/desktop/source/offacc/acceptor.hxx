@@ -86,7 +86,7 @@ public:
     virtual ~AccInstanceProvider() override;
 
     // XInstanceProvider
-    virtual css::uno::Reference<css::uno::XInterface> getInstance (const OUString& aName ) override;
+    virtual css::uno::Reference<cpo::uno::XInterface> getInstance (const OUString& aName ) override;
 };
 
 

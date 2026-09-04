@@ -48,7 +48,7 @@ namespace framework
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::cpo::uno::Exception;
     using ::cpo::uno::RuntimeException;

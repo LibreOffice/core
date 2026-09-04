@@ -180,7 +180,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             throw css::lang::IllegalArgumentException(
                 (u"LinkUpdateMode property value must be a SHORT with a value in"
                  " the range of the css::document::LinkUpdateModes constants"_ustr),
-                css::uno::Reference<css::uno::XInterface>(), -1);
+                css::uno::Reference<cpo::uno::XInterface>(), -1);
         }
         ScLkUpdMode eMode;
         switch (n)
@@ -337,7 +337,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         if ( !( aValue >>= aInfo ) )
             throw lang::IllegalArgumentException(
                 u"Value of type Sequence<PropertyValue> expected!"_ustr,
-                uno::Reference< uno::XInterface >(),
+                uno::Reference< cpo::uno::XInterface >(),
                 2 );
 
         if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
@@ -349,7 +349,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         sal_Int32 nHash;
         if (!(aValue >>= nHash))
             throw lang::IllegalArgumentException(u"Value of type sal_Int32 expected!"_ustr,
-                                                 uno::Reference<uno::XInterface>(), 2);
+                                                 uno::Reference<cpo::uno::XInterface>(), 2);
 
         if (!pDocShell->SetModifyPasswordHash(nHash))
             throw beans::PropertyVetoException(u"The hash is not allowed to be changed now!"_ustr);

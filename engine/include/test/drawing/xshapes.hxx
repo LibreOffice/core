@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_DRAWING_XSHAPES_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -22,7 +22,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XShapes
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
     void setShape(const css::uno::Reference<css::drawing::XShape>& r_xShape)
     {
         m_xShape = r_xShape;

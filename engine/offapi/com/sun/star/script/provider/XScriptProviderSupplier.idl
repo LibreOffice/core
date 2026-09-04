@@ -23,7 +23,7 @@ module com { module sun { module star { module script { module provider {
 /**
     This interface allows to get the scripting provider related to the object.
 */
-interface XScriptProviderSupplier : ::com::sun::star::uno::XInterface {
+interface XScriptProviderSupplier : ::cpo::uno::XInterface {
 
     /** returns scripting provider related to the object.
 

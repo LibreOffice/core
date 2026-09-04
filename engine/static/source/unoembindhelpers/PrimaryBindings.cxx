@@ -18,7 +18,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
@@ -391,9 +391,9 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 }
                 case cpo::uno::TypeClass_INTERFACE:
                 {
-                    auto const ifc = *static_cast<css::uno::XInterface* const*>(self.getValue());
-                    auto const copy = std::malloc(sizeof(css::uno::XInterface*));
-                    *static_cast<css::uno::XInterface**>(copy) = ifc;
+                    auto const ifc = *static_cast<cpo::uno::XInterface* const*>(self.getValue());
+                    auto const copy = std::malloc(sizeof(cpo::uno::XInterface*));
+                    *static_cast<cpo::uno::XInterface**>(copy) = ifc;
                     if (ifc != nullptr)
                     {
                         ifc->acquire();
@@ -420,8 +420,8 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         cppu::throwException(any);
     });
     function("sameUnoObject",
-             +[](css::uno::Reference<css::uno::XInterface> const& ref1,
-                 css::uno::Reference<css::uno::XInterface> const& ref2) { return ref1 == ref2; });
+             +[](css::uno::Reference<cpo::uno::XInterface> const& ref1,
+                 css::uno::Reference<cpo::uno::XInterface> const& ref2) { return ref1 == ref2; });
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
     function("getUnoExceptionFromCxaException", +[](std::uintptr_t ptr) {

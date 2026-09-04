@@ -23,7 +23,7 @@
 /** provides the access to a container of columns, typically used for tables and
     indexes.
  */
-published interface XColumnsSupplier: com::sun::star::uno::XInterface
+published interface XColumnsSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of columns.

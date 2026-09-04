@@ -355,7 +355,7 @@ private:
                             xFrame;
     css::uno::Reference< css::i18n::XBreakIterator >
                             xBreakIterator;
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
                             xConfiguration;
     bool                    bIsDebug;
     bool                    bIsIndexOn;

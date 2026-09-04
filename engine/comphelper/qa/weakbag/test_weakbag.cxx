@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <comphelper/weakbag.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -34,11 +34,11 @@ class WeakBagTest : public CppUnit::TestFixture
 public:
     void test()
     {
-        css::uno::Reference<css::uno::XInterface> ref1(new cppu::OWeakObject);
-        css::uno::Reference<css::uno::XInterface> ref2(new cppu::OWeakObject);
-        css::uno::Reference<css::uno::XInterface> ref3(new cppu::OWeakObject);
+        css::uno::Reference<cpo::uno::XInterface> ref1(new cppu::OWeakObject);
+        css::uno::Reference<cpo::uno::XInterface> ref2(new cppu::OWeakObject);
+        css::uno::Reference<cpo::uno::XInterface> ref3(new cppu::OWeakObject);
 
-        comphelper::WeakBag<css::uno::XInterface> bag;
+        comphelper::WeakBag<cpo::uno::XInterface> bag;
 
         bag.add(ref1);
         bag.add(ref1);

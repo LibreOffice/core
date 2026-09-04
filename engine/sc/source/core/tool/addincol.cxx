@@ -281,14 +281,14 @@ void ScUnoAddInCollection::Initialize()
 
                 try
                 {
-                    uno::Reference<uno::XInterface> xIntFac;
+                    uno::Reference<cpo::uno::XInterface> xIntFac;
                     aAddInAny >>= xIntFac;
                     if ( xIntFac.is() )
                     {
                         // #i59984# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
                         // passing the context to the component
 
-                        uno::Reference<uno::XInterface> xInterface;
+                        uno::Reference<cpo::uno::XInterface> xInterface;
                         uno::Reference<cpo::uno::XComponentContext> xCtx(
                             comphelper::getComponentContext(xManager));
                         uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
@@ -622,7 +622,7 @@ void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
     try
     {
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-        uno::Reference<uno::XInterface> xInterface( xServiceFactory->createInstance( aServiceName ) );
+        uno::Reference<cpo::uno::XInterface> xInterface( xServiceFactory->createInstance( aServiceName ) );
 
         if (xInterface.is())
             UpdateFromAddIn( xInterface, aServiceName );
@@ -707,7 +707,7 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
                 OUString sName = xClass->getName();
                 return (
                     IsTypeName( sName, cppu::UnoType<sheet::XVolatileResult>::get()) ||
-                    IsTypeName( sName, cppu::UnoType<uno::XInterface>::get()) );
+                    IsTypeName( sName, cppu::UnoType<cpo::uno::XInterface>::get()) );
             }
 
         default:
@@ -771,7 +771,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     return SC_ADDINARG_NONE;
 }
 
-void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>& xInterface )
+void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<cpo::uno::XInterface>& xInterface )
 {
     uno::Reference<sheet::XAddIn> xAddIn( xInterface, uno::UNO_QUERY );
     uno::Reference<lang::XServiceName> xName( xInterface, uno::UNO_QUERY );
@@ -853,7 +853,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 OUString sName = xClass->getName();
                 bSkip = (
                     IsTypeName( sName,
-                        cppu::UnoType<uno::XInterface>::get()) ||
+                        cppu::UnoType<cpo::uno::XInterface>::get()) ||
                     IsTypeName( sName,
                         cppu::UnoType<lang::XServiceName>::get()) ||
                     IsTypeName( sName,
@@ -1064,7 +1064,7 @@ static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncDat
     return nullptr;
 }
 
-void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface>& xInterface,
+void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<cpo::uno::XInterface>& xInterface,
                                             std::u16string_view rServiceName )
 {
     const bool bEnglishFunctionNames = ScModule::get()->GetFormulaOptions().GetUseEnglishFuncName();
@@ -1418,7 +1418,7 @@ bool ScUnoAddInCall::NeedsCaller() const
     return pFuncData && pFuncData->GetCallerPos() != SC_CALLERPOS_NONE;
 }
 
-void ScUnoAddInCall::SetCaller( const uno::Reference<uno::XInterface>& rInterface )
+void ScUnoAddInCall::SetCaller( const uno::Reference<cpo::uno::XInterface>& rInterface )
 {
     xCaller = rInterface;
 }
@@ -1427,7 +1427,7 @@ void ScUnoAddInCall::SetCallerFromObjectShell( const SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {
-        uno::Reference<uno::XInterface> xInt( pObjSh->GetBaseModel(), uno::UNO_QUERY );
+        uno::Reference<cpo::uno::XInterface> xInt( pObjSh->GetBaseModel(), uno::UNO_QUERY );
         SetCaller( xInt );
     }
 }
@@ -1600,7 +1600,7 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
         case cpo::uno::TypeClass_INTERFACE:
             {
                 //TODO: directly extract XVolatileResult from any?
-                uno::Reference<uno::XInterface> xInterface;
+                uno::Reference<cpo::uno::XInterface> xInterface;
                 rNewRes >>= xInterface;
                 if ( xInterface.is() )
                     xVarRes.set( xInterface, uno::UNO_QUERY );

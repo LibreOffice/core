@@ -23,7 +23,7 @@
 
 /** allows inserting and appending text content.
  */
-interface XTextContentAppend : com::sun::star::uno::XInterface
+interface XTextContentAppend : cpo::uno::XInterface
 {
 
         /** appends a text content at the end of the text.

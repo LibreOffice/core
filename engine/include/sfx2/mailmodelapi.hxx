@@ -30,7 +30,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { template <class E> class Sequence; }
 
 // class AddressList_Impl ------------------------------------------------
@@ -49,7 +49,7 @@ protected:
     };
     ::std::vector< OUString > maAttachedDocuments;
     static SaveResult   SaveDocumentAsFormat( const OUString& aSaveFileName,
-                                              const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
+                                              const css::uno::Reference< cpo::uno::XInterface >& xFrameOrModel,
                                               const OUString& rType,
                                               OUString& rFileNamePath );
 

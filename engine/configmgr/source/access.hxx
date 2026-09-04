@@ -296,10 +296,10 @@ public:
 
     virtual void removeByName(OUString const & aName) override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstance() override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArguments(
         cpo::uno::Sequence< cpo::uno::Any > const &
             aArguments) override;

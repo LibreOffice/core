@@ -1087,7 +1087,7 @@ void SAL_CALL SmModel::render(
     }
 }
 
-void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
+void SAL_CALL SmModel::setParent( const uno::Reference< cpo::uno::XInterface >& xParent)
 {
     SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );

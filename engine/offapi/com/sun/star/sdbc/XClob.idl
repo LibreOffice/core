@@ -78,7 +78,7 @@
     allow a programmer to access the SQL <code>CLOB</code>.
     </p>
  */
-published interface XClob: com::sun::star::uno::XInterface
+published interface XClob: cpo::uno::XInterface
 {
 
     /** returns the number of characters in the

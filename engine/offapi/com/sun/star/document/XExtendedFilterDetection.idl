@@ -32,7 +32,7 @@ module com { module sun { module star { module document {
     @see TypeDetection
     @see FilterFactory
  */
-published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
+published interface XExtendedFilterDetection: cpo::uno::XInterface
 {
     /** controls agreement of a "flat" TypeDetection
         with given URL or arguments

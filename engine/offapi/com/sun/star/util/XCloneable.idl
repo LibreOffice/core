@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** makes it possible to create a copy of the object which supports this interface.
  */
-published interface XCloneable: com::sun::star::uno::XInterface
+published interface XCloneable: cpo::uno::XInterface
 {
     /** creates a copy of the object.
      */

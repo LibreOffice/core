@@ -13,7 +13,7 @@ module com {  module sun {  module star {  module document {
 /** interface for loading, saving and serializing of XGraphic objects to
     a document storage
  */
-interface XGraphicStorageHandler : com::sun::star::uno::XInterface
+interface XGraphicStorageHandler : cpo::uno::XInterface
 {
     /** load a graphic defined by the URL from the storage
     */

@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace utl
 {
@@ -40,7 +40,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC CloseVeto
     {
     public:
-        CloseVeto( const css::uno::Reference< css::uno::XInterface >& i_closeable,
+        CloseVeto( const css::uno::Reference< cpo::uno::XInterface >& i_closeable,
                 bool bHasOwnership = false);
         ~CloseVeto();
 

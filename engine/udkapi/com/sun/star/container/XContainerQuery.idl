@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module container {
     which serve specified search criterion.
     <p>
  */
-published interface XContainerQuery: com::sun::star::uno::XInterface
+published interface XContainerQuery: cpo::uno::XInterface
 {
     /** creates a sub set of container items which match given query command
 

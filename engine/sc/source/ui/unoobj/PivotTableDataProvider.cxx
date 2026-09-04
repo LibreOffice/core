@@ -90,7 +90,7 @@ OUString lcl_identifierForCategories()
     return "PT@" + u"categories"_ustr;
 }
 
-std::vector<OUString> lcl_getVisiblePageMembers(const uno::Reference<uno::XInterface> & xLevel)
+std::vector<OUString> lcl_getVisiblePageMembers(const uno::Reference<cpo::uno::XInterface> & xLevel)
 {
     std::vector<OUString> aResult;
     if (!xLevel.is())
@@ -335,7 +335,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
     for (sal_Int32 nDim = 0; nDim < xDims->getCount(); nDim++)
     {
-        uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xDimProp(xDim, uno::UNO_QUERY);
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp(xDim, uno::UNO_QUERY);
 
@@ -364,7 +364,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
         for (tools::Long nLevel = 0; nLevel < xLevels->getCount(); nLevel++)
         {
-            uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLevel), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xLevel(xLevels->getByIndex(nLevel), uno::UNO_QUERY);
             uno::Reference<container::XNamed> xLevelName(xLevel, uno::UNO_QUERY);
             uno::Reference<sheet::XDataPilotMemberResults> xLevelResult(xLevel, uno::UNO_QUERY );
 

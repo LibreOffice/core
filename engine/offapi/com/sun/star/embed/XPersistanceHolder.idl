@@ -22,7 +22,7 @@
 
 /** allows to disconnect an object from its persistence.
  */
-published interface XPersistanceHolder: com::sun::star::uno::XInterface
+published interface XPersistanceHolder: cpo::uno::XInterface
 {
     /** disconnects the object from the persistence.
 

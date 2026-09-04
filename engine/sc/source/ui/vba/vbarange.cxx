@@ -361,7 +361,7 @@ ScVbaRangeAreas::createCollectionObject( const cpo::uno::Any& aSource )
 // assume that xIf is in fact a ScCellRangesBase
 /// @throws uno::RuntimeException
 static ScDocShell*
-getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf )
+getDocShellFromIf( const uno::Reference< cpo::uno::XInterface >& xIf )
 {
     ScCellRangesBase* pUno = dynamic_cast<ScCellRangesBase*>( xIf.get() );
     if ( !pUno )
@@ -374,7 +374,7 @@ static ScDocShell*
 getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
     // need the ScCellRangesBase to get docshell
-    uno::Reference< uno::XInterface > xIf( xRange );
+    uno::Reference< cpo::uno::XInterface > xIf( xRange );
     return getDocShellFromIf(xIf );
 }
 
@@ -383,12 +383,12 @@ static ScDocShell*
 getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges )
 {
     // need the ScCellRangesBase to get docshell
-    uno::Reference< uno::XInterface > xIf( xRanges );
+    uno::Reference< cpo::uno::XInterface > xIf( xRanges );
     return getDocShellFromIf(xIf );
 }
 
 /// @throws uno::RuntimeException
-static rtl::Reference< ScModelObj > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf )
+static rtl::Reference< ScModelObj > getModelFromXIf( const uno::Reference< cpo::uno::XInterface >& xIf )
 {
     ScDocShell* pDocShell = getDocShellFromIf(xIf );
     return pDocShell->GetModel();
@@ -398,7 +398,7 @@ static rtl::Reference< ScModelObj > getModelFromXIf( const uno::Reference< uno::
 static rtl::Reference< ScModelObj > getModelFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
     // the XInterface for getImplementation can be any derived interface, no need for queryInterface
-    uno::Reference< uno::XInterface > xIf( xRange );
+    uno::Reference< cpo::uno::XInterface > xIf( xRange );
     return getModelFromXIf( xIf );
 }
 
@@ -509,7 +509,7 @@ public:
 
     OUString getNumberFormatString()
     {
-        uno::Reference< uno::XInterface > xIf( mxRangeProps, uno::UNO_QUERY_THROW );
+        uno::Reference< cpo::uno::XInterface > xIf( mxRangeProps, uno::UNO_QUERY_THROW );
         ScCellRangesBase* pUnoCellRange = dynamic_cast<ScCellRangesBase*>( xIf.get() );
         if ( pUnoCellRange )
         {
@@ -858,7 +858,7 @@ protected:
             // pass formula tokens when that API stabilizes.
             if ( m_eGrammar != formula::FormulaGrammar::GRAM_API && ( o3tl::starts_with(o3tl::trim(sFormula), u"=") ) )
             {
-                uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
+                uno::Reference< cpo::uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase
                     = dynamic_cast< ScCellRangesBase* >( xIf.get() );
                 if ( pUnoRangesBase )
@@ -907,7 +907,7 @@ public:
         if ((xCell->getType() == table::CellContentType_FORMULA)
                 && m_eGrammar != formula::FormulaGrammar::GRAM_API)
         {
-            uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
+            uno::Reference< cpo::uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
             ScCellRangesBase* pUnoRangesBase
                 = dynamic_cast< ScCellRangesBase* >( xIf.get() );
             if (pUnoRangesBase)
@@ -1422,7 +1422,7 @@ ScVbaRange::ScVbaRange( cpo::uno::Sequence< cpo::uno::Any> const & args,
     : ScVbaRange_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ),
                        xContext,
                        getXSomethingFromArgs< beans::XPropertySet >( args, 1, false ),
-                       getModelFromXIf( getXSomethingFromArgs< uno::XInterface >( args, 1 ) ),
+                       getModelFromXIf( getXSomethingFromArgs< cpo::uno::XInterface >( args, 1 ) ),
                        true ),
       mbIsRows( false ),
       mbIsColumns( false )
@@ -1447,9 +1447,9 @@ ScVbaRange::ScVbaRange( const uno::Reference< XHelperInterface >& xParent, const
                 mbIsColumns( bIsColumns )
 {
     if  ( !xContext.is() )
-        throw lang::IllegalArgumentException(u"context is not set "_ustr, uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException(u"context is not set "_ustr, uno::Reference< cpo::uno::XInterface >() , 1 );
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException(u"range is not set "_ustr, uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException(u"range is not set "_ustr, uno::Reference< cpo::uno::XInterface >() , 1 );
 
     uno::Reference< container::XIndexAccess > xIndex( new SingleRangeIndexAccess( xRange ) );
     m_Areas = new ScVbaRangeAreas( mxParent, mxContext, xIndex, mbIsRows, mbIsColumns );
@@ -1457,7 +1457,7 @@ ScVbaRange::ScVbaRange( const uno::Reference< XHelperInterface >& xParent, const
 }
 
 ScVbaRange::ScVbaRange(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows, bool bIsColumns)
-: ScVbaRange_BASE( xParent, xContext, uno::Reference< beans::XPropertySet >( xRanges, uno::UNO_QUERY_THROW ), getModelFromXIf( uno::Reference< uno::XInterface >( xRanges, uno::UNO_QUERY_THROW ) ), true ), mxRanges( xRanges ),mbIsRows( bIsRows ), mbIsColumns( bIsColumns )
+: ScVbaRange_BASE( xParent, xContext, uno::Reference< beans::XPropertySet >( xRanges, uno::UNO_QUERY_THROW ), getModelFromXIf( uno::Reference< cpo::uno::XInterface >( xRanges, uno::UNO_QUERY_THROW ) ), true ), mxRanges( xRanges ),mbIsRows( bIsRows ), mbIsColumns( bIsColumns )
 
 {
     uno::Reference< container::XIndexAccess >  xIndex( mxRanges, uno::UNO_QUERY_THROW );
@@ -1825,11 +1825,11 @@ ScVbaRange::HasFormula()
         }
         return aResult;
     }
-    uno::Reference< uno::XInterface > xIf( mxRange, uno::UNO_QUERY_THROW );
+    uno::Reference< cpo::uno::XInterface > xIf( mxRange, uno::UNO_QUERY_THROW );
     ScCellRangesBase* pThisRanges = dynamic_cast< ScCellRangesBase* > ( xIf.get() );
     if ( pThisRanges )
     {
-        uno::Reference<uno::XInterface>  xRanges( pThisRanges->queryFormulaCells( sheet::FormulaResult::ERROR | sheet::FormulaResult::VALUE | sheet::FormulaResult::STRING ), uno::UNO_QUERY_THROW );
+        uno::Reference<cpo::uno::XInterface>  xRanges( pThisRanges->queryFormulaCells( sheet::FormulaResult::ERROR | sheet::FormulaResult::VALUE | sheet::FormulaResult::STRING ), uno::UNO_QUERY_THROW );
         ScCellRangesBase* pFormulaRanges
             = dynamic_cast< ScCellRangesBase* > ( xRanges.get() );
         assert(pFormulaRanges);
@@ -3321,7 +3321,7 @@ ScVbaRange::Find( const cpo::uno::Any& What, const cpo::uno::Any& After, const c
 
         ScGlobal::SetSearchItem( newOptions );
 
-        uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xDescriptor) : xSearch->findFirst( xDescriptor );
+        uno::Reference< cpo::uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xDescriptor) : xSearch->findFirst( xDescriptor );
         uno::Reference< table::XCellRange > xCellRange( xInterface, uno::UNO_QUERY );
         // if we are searching from a starting cell and failed to find a match
         // then try from the beginning
@@ -4178,7 +4178,7 @@ ScVbaRange::getTop()
     return cpo::uno::Any(o3tl::convert<double>(aPoint.Y, o3tl::Length::mm100, o3tl::Length::pt));
 }
 
-static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
+static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< cpo::uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
 {
     uno::Reference< beans::XPropertySet > xProps( xIf, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( u"NamedRanges"_ustr ), uno::UNO_QUERY_THROW );
@@ -5761,7 +5761,7 @@ ScVbaRange::hasError()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_ScVbaRange_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
      @see      XContentIdentifier
      @see      XContentEventListener
 */
-published interface XContent: com::sun::star::uno::XInterface
+published interface XContent: cpo::uno::XInterface
 {
     /** returns the identifier of the content.
 

@@ -38,12 +38,12 @@ published interface XControl: com::sun::star::lang::XComponent
 
     /** sets the context of the control.
      */
-    void setContext( [in] com::sun::star::uno::XInterface Context );
+    void setContext( [in] cpo::uno::XInterface Context );
 
 
     /** gets the context of the control.
      */
-    com::sun::star::uno::XInterface getContext();
+    cpo::uno::XInterface getContext();
 
 
     /** creates a "child" window on the screen.

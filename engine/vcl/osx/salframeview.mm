@@ -342,7 +342,7 @@ static NSString* getCurrentSelection()
     if (!xModel)
         return nil;
 
-    css::uno::Reference<css::uno::XInterface> xSelection(xModel->getCurrentSelection(), css::uno::UNO_QUERY);
+    css::uno::Reference<cpo::uno::XInterface> xSelection(xModel->getCurrentSelection(), css::uno::UNO_QUERY);
     if (!xSelection)
         return nil;
 

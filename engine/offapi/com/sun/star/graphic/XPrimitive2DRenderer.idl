@@ -26,7 +26,7 @@ interface XPrimitive2D;
     This interface allows to convert from a sequence of XPrimitive2Ds
     to a vcl Bitmap pointer, which the caller then owns.
  */
-interface XPrimitive2DRenderer : ::com::sun::star::uno::XInterface
+interface XPrimitive2DRenderer : ::cpo::uno::XInterface
 {
     /** return rasterized version of given XPrimitive2D
 

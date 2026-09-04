@@ -296,7 +296,7 @@ OUString const & CachedContentResultSet::CCRS_Cache
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                        css::uno::Reference< css::uno::XInterface >(),
+                        css::uno::Reference< cpo::uno::XInterface >(),
                         anyEx );
     }
 }
@@ -320,7 +320,7 @@ Reference< XContentIdentifier > CachedContentResultSet::CCRS_Cache
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                        css::uno::Reference< css::uno::XInterface >(),
+                        css::uno::Reference< cpo::uno::XInterface >(),
                         anyEx );
     }
 }
@@ -344,7 +344,7 @@ Reference< XContent > CachedContentResultSet::CCRS_Cache
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                        css::uno::Reference< css::uno::XInterface >(),
+                        css::uno::Reference< cpo::uno::XInterface >(),
                         anyEx );
     }
 }
@@ -2006,7 +2006,7 @@ cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSuppor
 
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ucb_CachedContentResultSetFactory_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

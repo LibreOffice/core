@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module view {
     @see com::sun::star::text::TextCursor
     @see com::sun::star::view::XLineCursor
  */
-published interface XViewCursor: com::sun::star::uno::XInterface
+published interface XViewCursor: cpo::uno::XInterface
 {
     /** moves the cursor the specified number of lines down.
 

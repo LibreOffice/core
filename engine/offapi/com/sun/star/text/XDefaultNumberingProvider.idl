@@ -27,7 +27,7 @@ module com { module sun { module star { module text {
     @see com::sun::star::lang::Locale
     @version    1.0
 */
-published interface XDefaultNumberingProvider : com::sun::star::uno::XInterface
+published interface XDefaultNumberingProvider : cpo::uno::XInterface
 {
     /**
         provides access to outline numberings according to

@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module chart {
 /** Easier access to the different axes within a chart.
 */
 
-interface XAxisSupplier : ::com::sun::star::uno::XInterface
+interface XAxisSupplier : ::cpo::uno::XInterface
 {
     /** @returns
             the primary axis of the specified dimension. The returned object supports service ChartAxis.

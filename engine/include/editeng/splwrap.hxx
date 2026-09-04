@@ -51,7 +51,7 @@ private:
     weld::Widget* pWin;
     std::unique_ptr<weld::WaitObject> xWait;
     css::uno::Reference<
-        css::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
+        cpo::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
     css::uno::Reference<
         css::linguistic2::XHyphenator >    xHyph;
     bool        bOtherCntnt : 1; // set => Check special sections initially
@@ -93,9 +93,9 @@ public:
     bool     IsAllRight() const { return bAllRight; }
 
 protected:
-    const css::uno::Reference< css::uno::XInterface >&
+    const css::uno::Reference< cpo::uno::XInterface >&
                      GetLast() const { return xLast; }
-    void             SetLast(const css::uno::Reference< css::uno::XInterface >  &xNewLast)
+    void             SetLast(const css::uno::Reference< cpo::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
     virtual bool SpellMore();               // examine further documents?
     virtual void SpellStart( SvxSpellArea eSpell ); // Preparing the area

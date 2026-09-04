@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
@@ -135,7 +135,7 @@ void ChildAccess::release() noexcept {
     Access::release();
 }
 
-css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
+css::uno::Reference< cpo::uno::XInterface > ChildAccess::getParent()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -143,7 +143,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     return cppu::getXWeak(parent_.get());
 }
 
-void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
+void ChildAccess::setParent(css::uno::Reference< cpo::uno::XInterface > const &)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -244,7 +244,7 @@ cpo::uno::Any ChildAccess::asValue()
                 return child.is() ? child->asValue() : cpo::uno::Any();
             }
         }
-        value <<= css::uno::Reference< css::uno::XInterface >(getXWeak());
+        value <<= css::uno::Reference< cpo::uno::XInterface >(getXWeak());
     }
     return value;
 }

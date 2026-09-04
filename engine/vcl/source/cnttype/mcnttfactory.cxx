@@ -57,7 +57,7 @@ Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames(
 
 // returns a factory to create XFilePicker-Services
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 dtrans_CMimeContentTypeFactory_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

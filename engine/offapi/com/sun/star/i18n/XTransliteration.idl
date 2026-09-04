@@ -83,7 +83,7 @@ module com { module sun { module star { module i18n {
  */
 
 
-published interface XTransliteration: com::sun::star::uno::XInterface
+published interface XTransliteration: cpo::uno::XInterface
 {
 
     /** Unique ASCII name to identify a module. This name is used

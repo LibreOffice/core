@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module beans {
 
     @see com::sun::star::beans::XExactName
  */
-published interface XPropertySet: com::sun::star::uno::XInterface
+published interface XPropertySet: cpo::uno::XInterface
 {
 
     /** @returns

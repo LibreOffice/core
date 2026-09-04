@@ -24,7 +24,7 @@
 
 #include "cpo/uno/genfunc.h"
 #include "cpo/uno/Any.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
+#include "cpo/uno/XInterface.hpp"
 
 
 namespace cpo::uno
@@ -33,12 +33,12 @@ namespace cpo::uno
 
 inline void cpp_acquire( void * pCppI )
 {
-    static_cast< css::uno::XInterface * >( pCppI )->acquire();
+    static_cast< cpo::uno::XInterface * >( pCppI )->acquire();
 }
 
 inline void cpp_release( void * pCppI )
 {
-    static_cast< css::uno::XInterface * >( pCppI )->release();
+    static_cast< cpo::uno::XInterface * >( pCppI )->release();
 }
 
 inline void * cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
@@ -47,11 +47,11 @@ inline void * cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference
     {
         try
         {
-            cpo::uno::Any aRet( static_cast< css::uno::XInterface * >( pCppI )->queryInterface(
+            cpo::uno::Any aRet( static_cast< cpo::uno::XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const cpo::uno::Type * >( &pType ) ) );
             if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
             {
-                css::uno::XInterface * pRet = static_cast< css::uno::XInterface * >( aRet.pReserved );
+                cpo::uno::XInterface * pRet = static_cast< cpo::uno::XInterface * >( aRet.pReserved );
                 aRet.pReserved = NULL;
                 return pRet;
             }

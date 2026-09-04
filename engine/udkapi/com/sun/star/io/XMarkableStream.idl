@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module io {
 
 /** makes it possible to set and remove seekable marks to a stream.
  */
-published interface XMarkableStream: com::sun::star::uno::XInterface
+published interface XMarkableStream: cpo::uno::XInterface
 {
     /** creates a mark of the current position and returns an identifier to it.
      */

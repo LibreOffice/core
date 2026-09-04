@@ -21,6 +21,7 @@ package com.sun.star.uno;
 
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
+import cpo.uno.XInterface;
 
 /**
  * This class provides static methods which aim at exploring the contents of an

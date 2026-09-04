@@ -97,13 +97,13 @@ public:
     explicit SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
         // XCodeNameQuery
 
-    OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) override
+    OUString SAL_CALL getCodeNameForContainer( const uno::Reference< cpo::uno::XInterface >& /*xIf*/ ) override
     {
         // #FIXME not implemented...
         return OUString();
     }
 
-    OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) override
+    OUString SAL_CALL getCodeNameForObject( const uno::Reference< cpo::uno::XInterface >& xIf ) override
     {
         // Initialise the code name
         if ( msThisDocumentCodeName.isEmpty() )
@@ -147,7 +147,7 @@ public:
                 sal_Int32 nCntrls = xFormControls->getCount();
                 for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
                 {
-                    uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                    uno::Reference< cpo::uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
                     bool bMatched = ( xControl == xIf );
                     if ( bMatched )
                     {
@@ -250,9 +250,9 @@ public:
     {
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
-        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< uno::XInterface >()),
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< cpo::uno::XInterface >()),
                                          cpo::uno::Any(mpDocShell->GetModel()) };
-        uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
+        uno::Reference< cpo::uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
         SAL_INFO("sw.uno",
             "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());
         return  cpo::uno::Any( xDocObj );
@@ -516,11 +516,11 @@ SwServiceType  SwXServiceProvider::GetProviderType(std::u16string_view rServiceN
     return SwServiceType::Invalid;
 }
 
-uno::Reference<uno::XInterface>
+uno::Reference<cpo::uno::XInterface>
 SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< uno::XInterface >  xRet;
+    uno::Reference< cpo::uno::XInterface >  xRet;
     switch(nObjectType)
     {
         case  SwServiceType::TypeTextTable:

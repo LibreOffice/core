@@ -106,7 +106,7 @@ void SwXFootnote::Impl::Invalidate()
     EndListeningAll();
     m_pFormatFootnote = nullptr;
     m_rThis.SetDoc(nullptr);
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         return;

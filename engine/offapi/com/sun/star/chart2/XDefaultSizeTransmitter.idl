@@ -28,7 +28,7 @@ module chart2
 
 /** Allows to set a default size. This size will be used in case no further information si available.
  */
-interface XDefaultSizeTransmitter : ::com::sun::star::uno::XInterface
+interface XDefaultSizeTransmitter : ::cpo::uno::XInterface
 {
     /** set a default size
         @param aSize100ThMm

@@ -221,7 +221,7 @@ private:
 
     void                    GetNumberFormatter();
 
-    css::uno::Reference<css::uno::XInterface> create(
+    css::uno::Reference<cpo::uno::XInterface> create(
         OUString const & rServiceName,
         cpo::uno::Sequence<cpo::uno::Any> const * arguments);
 
@@ -282,7 +282,7 @@ public:
     virtual bool SAL_CALL hasControllersLocked(  ) override;
     virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override;
     virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getCurrentSelection(  ) override;
 
     //XComponent
     virtual void SAL_CALL dispose() override;
@@ -319,8 +319,8 @@ public:
     //XSearchable
     virtual css::uno::Reference< css::util::XSearchDescriptor >  SAL_CALL createSearchDescriptor() override;
     virtual css::uno::Reference< css::container::XIndexAccess >  SAL_CALL findAll(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL findFirst(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL findNext(const css::uno::Reference< css::uno::XInterface > & xStartAt, const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
+    virtual css::uno::Reference< cpo::uno::XInterface >  SAL_CALL findFirst(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
+    virtual css::uno::Reference< cpo::uno::XInterface >  SAL_CALL findNext(const css::uno::Reference< cpo::uno::XInterface > & xStartAt, const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
 
     //XPagePrintable
     virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPagePrintSettings() override;
@@ -359,8 +359,8 @@ public:
     virtual css::uno::Reference< css::style::XAutoStyles > SAL_CALL getAutoStyles(  ) override;
 
     //XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier,
+    virtual css::uno::Reference< cpo::uno::XInterface >  SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
+    virtual css::uno::Reference< cpo::uno::XInterface >  SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier,
                 const cpo::uno::Sequence< cpo::uno::Any >& Arguments) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
@@ -523,7 +523,7 @@ public:
     SwUnoCursor* FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
                                             css::uno::Reference< css::text::XTextCursor > & xCursor, bool bAll,
                                             sal_Int32& nResult,
-                                            css::uno::Reference< css::uno::XInterface > const & xLastResult);
+                                            css::uno::Reference< cpo::uno::XInterface > const & xLastResult);
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
 
@@ -719,19 +719,19 @@ enum class SwCreateDrawTable {
 
 class SwXDocumentPropertyHelper final : public SvxUnoForbiddenCharsTable
 {
-    css::uno::Reference < css::uno::XInterface > m_xDashTable;
-    css::uno::Reference < css::uno::XInterface > m_xGradientTable;
-    css::uno::Reference < css::uno::XInterface > m_xHatchTable;
-    css::uno::Reference < css::uno::XInterface > m_xBitmapTable;
-    css::uno::Reference < css::uno::XInterface > m_xTransGradientTable;
-    css::uno::Reference < css::uno::XInterface > m_xMarkerTable;
-    css::uno::Reference < css::uno::XInterface > m_xDrawDefaults;
+    css::uno::Reference < cpo::uno::XInterface > m_xDashTable;
+    css::uno::Reference < cpo::uno::XInterface > m_xGradientTable;
+    css::uno::Reference < cpo::uno::XInterface > m_xHatchTable;
+    css::uno::Reference < cpo::uno::XInterface > m_xBitmapTable;
+    css::uno::Reference < cpo::uno::XInterface > m_xTransGradientTable;
+    css::uno::Reference < cpo::uno::XInterface > m_xMarkerTable;
+    css::uno::Reference < cpo::uno::XInterface > m_xDrawDefaults;
 
     SwDoc*  m_pDoc;
 public:
     SwXDocumentPropertyHelper(SwDoc& rDoc);
     virtual ~SwXDocumentPropertyHelper() override;
-    css::uno::Reference<css::uno::XInterface> GetDrawTable(SwCreateDrawTable nWhich);
+    css::uno::Reference<cpo::uno::XInterface> GetDrawTable(SwCreateDrawTable nWhich);
     void Invalidate();
 
     virtual void onChange() override;

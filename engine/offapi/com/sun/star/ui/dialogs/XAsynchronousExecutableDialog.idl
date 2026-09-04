@@ -22,7 +22,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 /** Specifies an interface for an executable dialog in asynchronous mode.
 */
-interface XAsynchronousExecutableDialog: com::sun::star::uno::XInterface
+interface XAsynchronousExecutableDialog: cpo::uno::XInterface
 {
     /** Sets the title of the dialog.
 

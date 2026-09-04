@@ -110,7 +110,7 @@ sal_Int16 SAL_CALL ColorPicker::execute()
     return nRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_cui_ColorPicker_get_implementation(cpo::uno::XComponentContext*,
                                                 const cpo::uno::Sequence<cpo::uno::Any>&)
 {

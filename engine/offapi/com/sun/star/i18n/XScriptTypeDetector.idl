@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module i18n {
     ScriptDirection</p>
 */
 
-published interface XScriptTypeDetector : ::com::sun::star::uno::XInterface
+published interface XScriptTypeDetector : ::cpo::uno::XInterface
 {
 
     /** @returns the position where the specified Script Direction starts.

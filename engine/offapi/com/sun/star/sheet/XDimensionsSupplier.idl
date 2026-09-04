@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DataPilotSource
  */
-interface XDimensionsSupplier: com::sun::star::uno::XInterface
+interface XDimensionsSupplier: cpo::uno::XInterface
 {
 
     /** returns the collection of dimensions.

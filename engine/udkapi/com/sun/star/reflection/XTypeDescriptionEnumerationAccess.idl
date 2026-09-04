@@ -24,7 +24,7 @@
 /** Defines an interface for creating enumerations for type descriptions.
 
   */
-published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
+published interface XTypeDescriptionEnumerationAccess : cpo::uno::XInterface
 {
     /** Creates an enumeration for type descriptions.
 

@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module view {
 
     @see XPrintJobListener
  */
-published interface XPrintJob : com::sun::star::uno::XInterface
+published interface XPrintJob : cpo::uno::XInterface
 {
     /** returns the PrintOptions used for the print job
      */

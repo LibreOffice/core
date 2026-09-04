@@ -23,7 +23,7 @@
 /** provides for access to a container of groups, typically used for a database
     definition object.
  */
-published interface XGroupsSupplier: com::sun::star::uno::XInterface
+published interface XGroupsSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of groups.

@@ -552,7 +552,7 @@ void SdPage::addAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xA
     NotifyDocumentEvent(
         static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()),
         u"OnAnnotationInserted"_ustr,
-        uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
+        uno::Reference<cpo::uno::XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
 }
 
 void SdPage::addAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, int nIndex)
@@ -586,7 +586,7 @@ void SdPage::removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const&
     NotifyDocumentEvent(
         static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()),
         u"OnAnnotationRemoved"_ustr,
-        uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
+        uno::Reference<cpo::uno::XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
 }
 
 void SdPage::removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)

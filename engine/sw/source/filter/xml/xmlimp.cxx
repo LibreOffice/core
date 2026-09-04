@@ -1736,7 +1736,7 @@ const SwDoc* SwXMLImport::getDoc() const
     return const_cast< SwXMLImport* >( this )->getDoc();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -1745,7 +1745,7 @@ com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(cpo::uno::XComponen
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -1755,7 +1755,7 @@ com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(cpo::uno::XCo
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -1764,7 +1764,7 @@ com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(cpo::uno::XC
                 SvXMLImportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -1773,7 +1773,7 @@ com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(cpo::uno::XComp
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
@@ -1791,7 +1791,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
+    uno::Reference<cpo::uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
     cpo::uno::Sequence<OUString> aUserData
     {
@@ -1881,7 +1881,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
+    uno::Reference<cpo::uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
     cpo::uno::Sequence<OUString> aUserData
     {

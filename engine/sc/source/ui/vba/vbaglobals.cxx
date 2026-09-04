@@ -205,7 +205,7 @@ ScVbaGlobals::getDebug()
     try // return empty object on error
     {
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(
+        uno::Reference< cpo::uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(
             u"ooo.vba.Debug"_ustr, mxContext );
         return cpo::uno::Any( xVBADebug );
     }
@@ -255,7 +255,7 @@ ScVbaGlobals::getServiceNames()
         return aServiceNames;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 ScVbaGlobals_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &arguments)

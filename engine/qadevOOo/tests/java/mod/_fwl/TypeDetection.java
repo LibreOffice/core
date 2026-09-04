@@ -28,7 +28,7 @@ import lib.TestParameters;
 import util.utils;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
 import com.sun.star.text.XTextContent;

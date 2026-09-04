@@ -458,7 +458,7 @@ using namespace cpo::uno;
 }   // namespace toolkit
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -466,7 +466,7 @@ stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(
     return cppu::acquire(new toolkit::UnoControlFormattedFieldModel(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoFormattedFieldControl_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

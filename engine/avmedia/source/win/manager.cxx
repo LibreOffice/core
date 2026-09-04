@@ -69,7 +69,7 @@ cpo::uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 
 } // namespace avmedia::win
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 avmedia_Manager_DirectX_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

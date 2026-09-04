@@ -22,7 +22,7 @@ module com {  module sun {  module star {   module packages {  module zip {
 
 /** allows to get reading access to non-encrypted entries inside zip file.
  */
-interface XZipFileAccess: ::com::sun::star::uno::XInterface
+interface XZipFileAccess: ::cpo::uno::XInterface
 {
     /** allows to get stream by specifying a pattern.
 

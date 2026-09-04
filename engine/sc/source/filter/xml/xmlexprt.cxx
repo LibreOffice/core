@@ -242,61 +242,61 @@ OUString lcl_GetFormattedString(ScDocument& rDoc, const ScRefCellValue& rCell, c
 
 } // anonymous namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLExporter"_ustr, SvXMLExportFlags::ALL));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLMetaExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLMetaExporter"_ustr, SvXMLExportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLStylesExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLStylesExporter"_ustr, SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLContentExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLContentExporter"_ustr, SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLSettingsExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLOasisExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisExporter"_ustr, SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLOasisMetaExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisMetaExporter"_ustr, SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLOasisStylesExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisStylesExporter"_ustr, SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLOasisContentExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisContentExporter"_ustr, SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_XMLOasisSettingsExporter_get_implementation(cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));

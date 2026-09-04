@@ -70,7 +70,7 @@
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
@@ -1755,7 +1755,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
 
                             if( xActiveDataSource.is() )
                             {
-                                const css::uno::Reference< css::uno::XInterface > xStmIf(
+                                const css::uno::Reference< cpo::uno::XInterface > xStmIf(
                                     getXWeak( new ImpFilterOutputStream( *rTempStm ) ) );
 
                                 SvMemoryStream aMemStm( 65535, 65535 );

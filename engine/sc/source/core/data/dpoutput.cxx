@@ -108,7 +108,7 @@ void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, sal_Int32& 
     sal_Int32 nDim = 0;
     for ( ; nDim < nDimCount ; nDim++)
     {
-        uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
         if ( xDimProp.is() && xDimName.is() )
@@ -205,7 +205,7 @@ bool lcl_MemberEmpty( const cpo::uno::Sequence<sheet::MemberResult>& rSeq )
  * Get visible page dimension members as results, except that, if all
  * members are visible, then this function returns empty result.
  */
-cpo::uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Reference<uno::XInterface>& xLevel )
+cpo::uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Reference<cpo::uno::XInterface>& xLevel )
 {
     if (!xLevel.is())
         return cpo::uno::Sequence<sheet::MemberResult>();
@@ -286,7 +286,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
         tools::Long nDimCount = xDims->getCount();
         for (tools::Long nDim=0; nDim<nDimCount; nDim++)
         {
-            uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
             uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
             if ( xDimProp.is() && xDimSupp.is() )
@@ -330,7 +330,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                         tools::Long nLevCount = xLevels->getCount();
                         for (tools::Long nLev=0; nLev<nLevCount; nLev++)
                         {
-                            uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLev),
+                            uno::Reference<cpo::uno::XInterface> xLevel(xLevels->getByIndex(nLev),
                                                                    uno::UNO_QUERY);
                             uno::Reference<container::XNamed> xLevNam( xLevel, uno::UNO_QUERY );
                             uno::Reference<sheet::XDataPilotMemberResults> xLevRes(
@@ -1141,7 +1141,7 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
     tools::Long nDimCount = xDims->getCount();
     for (tools::Long nDim=0; nDim<nDimCount; nDim++)
     {
-        uno::Reference<uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         if ( xDimProp.is() )
         {
@@ -1501,7 +1501,7 @@ OUString lcl_GetDataFieldName( std::u16string_view rSourceName, sal_Int16 eFunc 
 }
 
 void ScDPOutput::GetDataDimensionNames(
-    OUString& rSourceName, OUString& rGivenName, const uno::Reference<uno::XInterface>& xDim )
+    OUString& rSourceName, OUString& rGivenName, const uno::Reference<cpo::uno::XInterface>& xDim )
 {
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );

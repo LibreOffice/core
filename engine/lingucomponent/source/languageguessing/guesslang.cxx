@@ -310,7 +310,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
     return { u"com.sun.star.linguistic2.LanguageGuessing"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 lingucomponent_LangGuess_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

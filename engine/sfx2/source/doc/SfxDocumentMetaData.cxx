@@ -727,7 +727,7 @@ SfxDocumentMetaData::setMetaText(std::unique_lock<std::mutex>& rGuard, const OUS
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::setMetaText: DOM exception"_ustr,
-                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
+                css::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
     }
 }
 
@@ -854,7 +854,7 @@ SfxDocumentMetaData::setMetaList(std::unique_lock<std::mutex>& rGuard, const OUS
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::setMetaList: DOM exception"_ustr,
-                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
+                css::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
     }
 }
 
@@ -992,7 +992,7 @@ SfxDocumentMetaData::updateElement(std::unique_lock<std::mutex>& /*rGuard*/, con
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::updateElement: DOM exception"_ustr,
-                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
+                css::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
     }
 }
 
@@ -1203,7 +1203,7 @@ void SfxDocumentMetaData::init(
             cpo::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
                     u"SfxDocumentMetaData::init: DOM exception"_ustr,
-                    css::uno::Reference<css::uno::XInterface>(*this), anyEx);
+                    css::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
         }
     }
 
@@ -2073,7 +2073,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetException(
                 u"SfxDocumentMetaData::loadFromMedium: exception"_ustr,
-                css::uno::Reference<css::uno::XInterface>(*this),
+                css::uno::Reference<cpo::uno::XInterface>(*this),
                 anyEx);
     }
     if (!xStorage.is()) {
@@ -2124,7 +2124,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 
         throw css::task::ErrorCodeIOException(
             "SfxDocumentMetaData::storeToMedium <" + URL + "> Commit failed: " + nError.toString(),
-            css::uno::Reference< css::uno::XInterface >(), sal_uInt32(nError.GetCode()));
+            css::uno::Reference< cpo::uno::XInterface >(), sal_uInt32(nError.GetCode()));
 
     }
 }
@@ -2190,7 +2190,7 @@ SfxDocumentMetaData::createClone()
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
                 u"SfxDocumentMetaData::createClone: exception"_ustr,
-                css::uno::Reference<css::uno::XInterface>(*this), anyEx);
+                css::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
     }
     return css::uno::Reference<css::util::XCloneable> (pNew);
 }
@@ -2221,7 +2221,7 @@ void SfxDocumentMetaData::setModified( bool bModified )
     }
     if (bModified) {
         try {
-            css::uno::Reference<css::uno::XInterface> xThis(*this);
+            css::uno::Reference<cpo::uno::XInterface> xThis(*this);
             css::lang::EventObject event(xThis);
             std::unique_lock g(m_aMutex);
             m_NotifyListeners.notifyEach(g, &css::util::XModifyListener::modified,
@@ -2321,7 +2321,7 @@ void SfxDocumentMetaData::createUserDefined(std::unique_lock<std::mutex>& g)
 
 } // closing anonymous implementation namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 CompatWriterDocPropsImpl_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -2329,7 +2329,7 @@ CompatWriterDocPropsImpl_get_implementation(
     return cppu::acquire(new CompatWriterDocPropsImpl(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 SfxDocumentMetaData_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

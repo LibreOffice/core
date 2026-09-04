@@ -233,7 +233,7 @@ OString PythonOptions::prepareHelp()
           + programName
           + " -O ./stubs -T \"org.company.widgets.*\" ./acme_api.rdb\n\n"
             "  3. Generate a specific interface, using 'core_types.rdb' for dependencies\n"
-            "     (like com.sun.star.uno.XInterface), without generating 'core_types.rdb' itself:\n"
+            "     (like cpo.uno.XInterface), without generating 'core_types.rdb' itself:\n"
             "     "
           + programName
           + " -O ./stubs -T org.company.widgets.XButton -X ./core_types.rdb ./acme_api.rdb\n"

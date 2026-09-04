@@ -192,7 +192,7 @@ namespace connectivity::evoab
         // other methods
         OEvoabConnection* getOwnConnection() const { return m_xConnection.get(); }
 
-        using OCommonStatement_IBase::operator css::uno::Reference< css::uno::XInterface >;
+        using OCommonStatement_IBase::operator css::uno::Reference< cpo::uno::XInterface >;
 
     protected:
         explicit OCommonStatement( OEvoabConnection* _pConnection );

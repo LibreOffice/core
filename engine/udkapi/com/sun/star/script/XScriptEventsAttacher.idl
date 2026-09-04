@@ -27,7 +27,7 @@
     objects that give access to the definition of events that should
     be attached to them, e.g., by supporting XEventsSupplier
 */
-published interface XScriptEventsAttacher: com::sun::star::uno::XInterface
+published interface XScriptEventsAttacher: cpo::uno::XInterface
 {
     /**
         Attaches the events defined by XScriptEventsSupplier to the
@@ -48,7 +48,7 @@ published interface XScriptEventsAttacher: com::sun::star::uno::XInterface
                             passed to the XScriptListener as Helper property in the
                             ScriptEvent.
     */
-    void attachEvents(  [in] sequence< com::sun::star::uno::XInterface > Objects,
+    void attachEvents(  [in] sequence< cpo::uno::XInterface > Objects,
                         [in] com::sun::star::script::XScriptListener xListener,
                         [in] any Helper )
             raises( com::sun::star::lang::IllegalArgumentException,

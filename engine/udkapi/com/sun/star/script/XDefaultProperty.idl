@@ -33,7 +33,7 @@ module com { module sun { module star { module script {
     which would be equivalent to writing
     <p>bar = ExampleObject.Value</p>
 */
-interface XDefaultProperty : ::com::sun::star::uno::XInterface
+interface XDefaultProperty : ::cpo::uno::XInterface
 {
   /**
     Returns the name of the default property

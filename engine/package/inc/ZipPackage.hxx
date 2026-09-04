@@ -139,8 +139,8 @@ public:
     virtual cpo::uno::Any SAL_CALL getByHierarchicalName( const OUString& aName ) override;
     virtual bool SAL_CALL hasByHierarchicalName( const OUString& aName ) override;
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     // XChangesBatch
     virtual void SAL_CALL commitChanges(  ) override;
     virtual bool SAL_CALL hasPendingChanges(  ) override;

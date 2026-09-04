@@ -33,7 +33,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 import com.sun.star.accessibility.AccessibleRole;

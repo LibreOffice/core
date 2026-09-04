@@ -27,7 +27,7 @@
     @see com::sun::star::sdbc::XDriverManager
     @see com::sun::star::sdbc::XDriver
  */
-published interface XDriverAccess: com::sun::star::uno::XInterface
+published interface XDriverAccess: cpo::uno::XInterface
 {
 
     /** get a driver which accepts a given url.@see com::sun::star::sdbc::XDriver::acceptsURL

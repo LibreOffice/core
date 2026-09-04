@@ -20,7 +20,7 @@
 module com { module sun { module star { module xml { module xpath {
 
 
-interface XXPathObject : com::sun::star::uno::XInterface
+interface XXPathObject : cpo::uno::XInterface
 {
     /**
         get object type

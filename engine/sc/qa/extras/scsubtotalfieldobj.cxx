@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -34,7 +34,7 @@ class ScSubTotalFieldObj : public UnoApiTest, public apitest::XSubTotalField
 public:
     ScSubTotalFieldObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScSubTotalFieldObj);
@@ -51,7 +51,7 @@ ScSubTotalFieldObj::ScSubTotalFieldObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScSubTotalFieldObj::init()
+uno::Reference<cpo::uno::XInterface> ScSubTotalFieldObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

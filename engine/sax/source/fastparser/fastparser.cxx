@@ -920,14 +920,14 @@ void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& x
 void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
 {
     if( NamespaceToken < FastToken::NAMESPACE )
-        throw IllegalArgumentException("Invalid namespace token " + OUString::number(NamespaceToken), css::uno::Reference<css::uno::XInterface >(), 0);
+        throw IllegalArgumentException("Invalid namespace token " + OUString::number(NamespaceToken), css::uno::Reference<cpo::uno::XInterface >(), 0);
 
     if( GetNamespaceToken( NamespaceURL ) == FastToken::DONTKNOW )
     {
         maNamespaceMap[ NamespaceURL ] = NamespaceToken;
         return;
     }
-    throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, css::uno::Reference<css::uno::XInterface >(), 0);
+    throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, css::uno::Reference<cpo::uno::XInterface >(), 0);
 }
 
 OUString const & FastSaxParserImpl::getNamespaceURL( std::u16string_view rPrefix )
@@ -1556,7 +1556,7 @@ cpo::uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 
 } // namespace sax_fastparser
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

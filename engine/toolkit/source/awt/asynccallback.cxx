@@ -111,7 +111,7 @@ IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, p, void )
 
 } // closing anonymous implementation namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_awt_comp_AsyncCallback_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

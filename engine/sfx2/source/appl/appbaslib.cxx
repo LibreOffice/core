@@ -155,25 +155,25 @@ bool SfxBasicManagerHolder::ImgVersion12PsswdBinaryLimitExceeded( std::vector< O
 }
 
 // Service for application library container
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
-    css::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetDialogContainer());
+    cpo::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetDialogContainer());
     pRet->acquire();
     return pRet;
 }
 
 // Service for application library container
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
-    css::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetBasicContainer());
+    cpo::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetBasicContainer());
     pRet->acquire();
     return pRet;
 }

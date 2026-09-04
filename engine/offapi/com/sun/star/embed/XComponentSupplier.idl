@@ -22,7 +22,7 @@
 
 /** provides access to a component.
  */
-published interface XComponentSupplier: com::sun::star::uno::XInterface
+published interface XComponentSupplier: cpo::uno::XInterface
 {
     /** allows to get access to a component.
         <p>

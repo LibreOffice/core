@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module io {
 
 /** offers read and write access to the same stream.
  */
-published interface XStream: com::sun::star::uno::XInterface
+published interface XStream: cpo::uno::XInterface
 {
     /** @returns
             the XInputStream part of the stream.  Closing the returned

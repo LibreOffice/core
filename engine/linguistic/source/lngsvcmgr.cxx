@@ -233,7 +233,7 @@ void LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSource )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Reference< uno::XInterface > xRef( rSource.Source );
+    uno::Reference< cpo::uno::XInterface > xRef( rSource.Source );
     if ( xRef.is() )
     {
         aLngSvcMgrListeners   .removeInterface( xRef );
@@ -1822,7 +1822,7 @@ cpo::uno::Sequence< OUString >
     return { u"com.sun.star.linguistic2.LinguServiceManager"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 linguistic_LngSvcMgr_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

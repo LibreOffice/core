@@ -98,11 +98,11 @@ namespace weld {
 class FmXBoundFormFieldIterator final : public ::comphelper::IndexAccessIterator
 {
 public:
-    FmXBoundFormFieldIterator(const css::uno::Reference< css::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
+    FmXBoundFormFieldIterator(const css::uno::Reference< cpo::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
 
 private:
-    virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& _rElement) override;
-    virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& _rContainer) const override;
+    virtual bool ShouldHandleElement(const css::uno::Reference< cpo::uno::XInterface>& _rElement) override;
+    virtual bool ShouldStepInto(const css::uno::Reference< cpo::uno::XInterface>& _rContainer) const override;
 };
 
 class FmFormPage;
@@ -298,8 +298,8 @@ public:
     );
 
     // stuff
-    SAL_DLLPRIVATE void AddElement_Lock(const css::uno::Reference< css::uno::XInterface>& Element);
-    SAL_DLLPRIVATE void RemoveElement_Lock(const css::uno::Reference< css::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void AddElement_Lock(const css::uno::Reference< cpo::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void RemoveElement_Lock(const css::uno::Reference< cpo::uno::XInterface>& Element);
 
     /** updates m_xForms, to be either <NULL/>, if we're in alive mode, or our current page's forms collection,
         if in design mode
@@ -330,7 +330,7 @@ private:
 
     // collects in strNames the names of all forms
     SAL_DLLPRIVATE static void impl_collectFormSearchContexts_nothrow_Lock(
-        const css::uno::Reference< css::uno::XInterface>& _rxStartingPoint,
+        const css::uno::Reference< cpo::uno::XInterface>& _rxStartingPoint,
         std::u16string_view _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
         ::std::vector< OUString >& _out_rNames );
@@ -382,7 +382,7 @@ public:
 
     /// determines whether the current selection consists of exactly the given object
     SAL_DLLPRIVATE bool isSolelySelected_Lock(
-                const css::uno::Reference< css::uno::XInterface >& _rxObject
+                const css::uno::Reference< cpo::uno::XInterface >& _rxObject
             );
 
     /// handles a MouseButtonDown event of the FmFormView
@@ -497,11 +497,11 @@ private:
 
     /** add an element
     */
-    SAL_DLLPRIVATE void    impl_AddElement_nothrow(const css::uno::Reference< css::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void    impl_AddElement_nothrow(const css::uno::Reference< cpo::uno::XInterface>& Element);
 
     /** remove an element
     */
-    SAL_DLLPRIVATE void    impl_RemoveElement_nothrow_Lock(const css::uno::Reference< css::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void    impl_RemoveElement_nothrow_Lock(const css::uno::Reference< cpo::uno::XInterface>& Element);
 
     SAL_DLLPRIVATE virtual void ImplCommit() override;
 
@@ -550,10 +550,10 @@ class SearchableControlIterator final : public ::comphelper::IndexAccessIterator
 public:
     const OUString& getCurrentValue() const { return m_sCurrentValue; }
 
-    SearchableControlIterator(css::uno::Reference< css::uno::XInterface> const & xStartingPoint);
+    SearchableControlIterator(css::uno::Reference< cpo::uno::XInterface> const & xStartingPoint);
 
-    virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& rElement) override;
-    virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& xContainer) const override;
+    virtual bool ShouldHandleElement(const css::uno::Reference< cpo::uno::XInterface>& rElement) override;
+    virtual bool ShouldStepInto(const css::uno::Reference< cpo::uno::XInterface>& xContainer) const override;
     virtual void Invalidate() override { IndexAccessIterator::Invalidate(); m_sCurrentValue.clear(); }
 };
 

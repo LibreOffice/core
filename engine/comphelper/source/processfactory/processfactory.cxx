@@ -91,14 +91,14 @@ Reference< cpo::uno::XComponentContext > getComponentContext(
         catch (beans::UnknownPropertyException & e) {
             throw cpo::uno::DeploymentException(
                 "unknown service factory DefaultContext property: " + e.Message,
-                Reference<XInterface>(factory, UNO_QUERY) );
+                Reference<cpo::uno::XInterface>(factory, UNO_QUERY) );
         }
     }
     if ( !xRet.is() )
     {
         throw cpo::uno::DeploymentException(
             u"no service factory DefaultContext"_ustr,
-            Reference<XInterface>(factory, UNO_QUERY) );
+            Reference<cpo::uno::XInterface>(factory, UNO_QUERY) );
     }
     return xRet;
 }

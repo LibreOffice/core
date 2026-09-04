@@ -68,7 +68,7 @@ namespace connectivity::ado
 
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        static void ThrowException(ADOConnection* _pAdoCon,const css::uno::Reference< css::uno::XInterface >& _xInterface);
+        static void ThrowException(ADOConnection* _pAdoCon,const css::uno::Reference< cpo::uno::XInterface >& _xInterface);
         static sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
         static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine);
         static bool isJetEngine(sal_Int32 _nEngineType);

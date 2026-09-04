@@ -297,7 +297,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierForObject(
-          const Reference< uno::XInterface >& xObject
+          const Reference< cpo::uno::XInterface >& xObject
         , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     OUString aRet;

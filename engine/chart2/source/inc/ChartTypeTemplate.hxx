@@ -100,7 +100,7 @@ public:
     virtual bool matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         bool bAdaptProperties ) override final;
-    virtual css::uno::Reference< css::uno::XInterface > getDataInterpreter() override final;
+    virtual css::uno::Reference< cpo::uno::XInterface > getDataInterpreter() override final;
     virtual css::uno::Reference< ::css::chart2::XChartType > getChartTypeForNewSeries(
         const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
     virtual void applyStyle(

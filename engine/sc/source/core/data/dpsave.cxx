@@ -133,7 +133,7 @@ void ScDPSaveMember::RemoveLayoutName()
     mpLayoutName.reset();
 }
 
-void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember, sal_Int32 nPosition )
+void ScDPSaveMember::WriteToSource( const uno::Reference<cpo::uno::XInterface>& xMember, sal_Int32 nPosition )
 {
     uno::Reference<beans::XPropertySet> xMembProp( xMember, uno::UNO_QUERY );
     OSL_ENSURE( xMembProp.is(), "no properties at member" );
@@ -493,7 +493,7 @@ void ScDPSaveDimension::SetMemberPosition( const OUString& rName, sal_Int32 nNew
     maMemberList.insert( maMemberList.begin() + nNewPos, pMember );
 }
 
-void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xDim )
+void ScDPSaveDimension::WriteToSource( const uno::Reference<cpo::uno::XInterface>& xDim )
 {
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     OSL_ENSURE( xDimProp.is(), "no properties at dimension" );
@@ -556,7 +556,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         for (tools::Long nLev=0; nLev<nLevCount; nLev++)
         {
-            uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLev), uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xLevel(xLevels->getByIndex(nLev), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
             OSL_ENSURE( xLevProp.is(), "no properties at level" );
             if ( xLevProp.is() )
@@ -606,7 +606,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                             OUString aMemberName = pMember->GetName();
                             if ( xMembers->hasByName( aMemberName ) )
                             {
-                                uno::Reference<uno::XInterface> xMemberInt(
+                                uno::Reference<cpo::uno::XInterface> xMemberInt(
                                     xMembers->getByName(aMemberName), uno::UNO_QUERY);
                                 pMember->WriteToSource( xMemberInt, nPosition );
 
@@ -1158,7 +1158,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             bool bFound = false;
             for (tools::Long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
             {
-                uno::Reference<uno::XInterface> xIntDim(xIntDims->getByIndex(nIntDim),
+                uno::Reference<cpo::uno::XInterface> xIntDim(xIntDims->getByIndex(nIntDim),
                                                         uno::UNO_QUERY);
                 if ( bData )
                 {

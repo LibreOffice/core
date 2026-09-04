@@ -89,7 +89,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
          ( eMode != READ_WRITE_CREATE ) )
         throw lang::IllegalArgumentException(
             u"Invalid open mode!"_ustr,
-            uno::Reference< uno::XInterface >(),
+            uno::Reference< cpo::uno::XInterface >(),
             sal_Int16( 2 ) );
 
     Uri aUri( rUri );
@@ -97,7 +97,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
     {
         throw lang::IllegalArgumentException(
             u"Root never has a storage!"_ustr,
-            uno::Reference< uno::XInterface >(),
+            uno::Reference< cpo::uno::XInterface >(),
             sal_Int16( 1 ) );
     }
 
@@ -368,12 +368,12 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             if ( eMode == READ_WRITE_CREATE )
                 throw lang::IllegalArgumentException(
                     u"Invalid open mode: document storages cannot be created!"_ustr,
-                    uno::Reference< uno::XInterface >(),
+                    uno::Reference< cpo::uno::XInterface >(),
                     sal_Int16( 2 ) );
             else
                 throw embed::InvalidStorageException(
                     u"Invalid document id!"_ustr,
-                    uno::Reference< uno::XInterface >() );
+                    uno::Reference< cpo::uno::XInterface >() );
         }
 
         // match xStorage's open mode against requested open mode
@@ -430,7 +430,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
 
             throw embed::StorageWrappedTargetException(
                     u"Bug! Value of property OpenMode has wrong type!"_ustr,
-                    uno::Reference< uno::XInterface >(),
+                    uno::Reference< cpo::uno::XInterface >(),
                     anyEx );
         }
         catch ( lang::WrappedTargetException const & )
@@ -440,7 +440,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
 
             throw embed::StorageWrappedTargetException(
                     u"WrappedTargetException during getPropertyValue!"_ustr,
-                    uno::Reference< uno::XInterface >(),
+                    uno::Reference< cpo::uno::XInterface >(),
                     anyEx );
         }
     }
@@ -497,7 +497,7 @@ StorageElementFactory::queryStream(
     {
         throw lang::IllegalArgumentException(
             u"No parent storage!"_ustr,
-            uno::Reference< uno::XInterface >(),
+            uno::Reference< cpo::uno::XInterface >(),
             sal_Int16( 2 ) );
     }
 
@@ -506,14 +506,14 @@ StorageElementFactory::queryStream(
     {
         throw lang::IllegalArgumentException(
             u"Root never is a stream!"_ustr,
-            uno::Reference< uno::XInterface >(),
+            uno::Reference< cpo::uno::XInterface >(),
             sal_Int16( 2 ) );
     }
     else if ( aUri.isDocument() )
     {
         throw lang::IllegalArgumentException(
             u"A document never is a stream!"_ustr,
-            uno::Reference< uno::XInterface >(),
+            uno::Reference< cpo::uno::XInterface >(),
             sal_Int16( 2 ) );
     }
 
@@ -550,7 +550,7 @@ StorageElementFactory::queryStream(
 
             throw embed::InvalidStorageException(
                 u"Unknown open mode!"_ustr,
-                uno::Reference< uno::XInterface >() );
+                uno::Reference< cpo::uno::XInterface >() );
     }
 
     // No object re-usage mechanism; streams are seekable => not stateless.
@@ -606,7 +606,7 @@ StorageElementFactory::queryStream(
     {
         throw embed::InvalidStorageException(
             u"No stream!"_ustr,
-            uno::Reference< uno::XInterface >() );
+            uno::Reference< cpo::uno::XInterface >() );
     }
 
     return xStream;

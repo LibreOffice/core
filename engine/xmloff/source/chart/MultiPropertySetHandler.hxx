@@ -126,7 +126,7 @@ public:
             is casted later to one of the two of them.
     */
     explicit MultiPropertySetHandler (css::uno::Reference<
-        css::uno::XInterface> xObject);
+        cpo::uno::XInterface> xObject);
     /** @descr  Add a property to handle.  The type given implicitly by the
             reference to a variable is used to create an instance of
             the PropertyWrapper template class.
@@ -174,11 +174,11 @@ private:
     ::std::map< OUString, std::unique_ptr<PropertyWrapperBase>, OUStringComparison> aPropertyList;
 
     /// The object from which to get the property values.
-    css::uno::Reference< css::uno::XInterface>    mxObject;
+    css::uno::Reference< cpo::uno::XInterface>    mxObject;
 };
 
 MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
-    css::uno::XInterface> xObject)
+    cpo::uno::XInterface> xObject)
         :   mxObject (std::move(xObject))
 {
 }

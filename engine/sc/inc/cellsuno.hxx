@@ -213,7 +213,7 @@ private:
     css::uno::Reference<css::sheet::XSheetCellRanges>
                             QueryDifferences_Impl(const css::table::CellAddress& aCompare,
                                                     bool bColumnDiff);
-    css::uno::Reference<css::uno::XInterface>
+    css::uno::Reference<cpo::uno::XInterface>
                             Find_Impl(const css::uno::Reference<css::util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos);
 
@@ -362,10 +362,10 @@ public:
                             createSearchDescriptor() override;
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL
                             findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
                             findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-                            findNext( const css::uno::Reference< css::uno::XInterface >& xStartAt,
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
+                            findNext( const css::uno::Reference< cpo::uno::XInterface >& xStartAt,
                                       const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 
                             // XReplaceable

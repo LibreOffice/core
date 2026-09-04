@@ -28,7 +28,7 @@
 
     @see com::sun::star::sheet::SpreadsheetView
  */
-published interface XRangeSelection: com::sun::star::uno::XInterface
+published interface XRangeSelection: cpo::uno::XInterface
 {
     /** starts the range selection.
 

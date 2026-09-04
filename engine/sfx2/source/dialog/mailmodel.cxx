@@ -230,7 +230,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
 SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     const OUString& aSaveFileName,
-    const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
+    const css::uno::Reference< cpo::uno::XInterface >& xFrameOrModel,
     const OUString& rType,
     OUString& rFileNamePath )
 {

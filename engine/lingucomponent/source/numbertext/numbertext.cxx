@@ -159,7 +159,7 @@ Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
     return { u"com.sun.star.linguistic2.NumberText"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 lingucomponent_NumberText_get_implementation(cpo::uno::XComponentContext*,
                                              cpo::uno::Sequence<cpo::uno::Any> const&)
 {

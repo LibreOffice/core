@@ -88,7 +88,7 @@ public:
     virtual ~FmRecordCountListener() override;
 
     //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject)
-    //  virtual bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);
+    //  virtual bool queryInterface(css::uno::Uik aUik, css::uno::Reference< cpo::uno::XInterface >& rOut);
 
     // css::lang::XEventListener
     virtual void disposing(const css::lang::EventObject& Source) override;
@@ -113,12 +113,12 @@ namespace svxform {
     class SAL_WARN_UNUSED ControlTextWrapper
     {
         // attributes
-        css::uno::Reference< css::uno::XInterface >   m_xControl;
+        css::uno::Reference< cpo::uno::XInterface >   m_xControl;
         // attribute access
     public:
-        const css::uno::Reference< css::uno::XInterface >&  getControl() const{ return m_xControl; }
+        const css::uno::Reference< cpo::uno::XInterface >&  getControl() const{ return m_xControl; }
     public:
-        ControlTextWrapper(const css::uno::Reference< css::uno::XInterface >& _xControl) { m_xControl = _xControl; }
+        ControlTextWrapper(const css::uno::Reference< cpo::uno::XInterface >& _xControl) { m_xControl = _xControl; }
         virtual ~ControlTextWrapper() { }
 
         virtual OUString getCurrentText() const = 0;
@@ -149,7 +149,7 @@ namespace svxform {
     };
 }
 
-typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
+typedef std::vector< css::uno::Reference< cpo::uno::XInterface> > InterfaceArray;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
 {

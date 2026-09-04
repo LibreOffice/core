@@ -66,7 +66,7 @@ using pyuno::Runtime;
 using pyuno::PyThreadAttach;
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 using cpo::uno::Sequence;
 using cpo::uno::XComponentContext;
 using cpo::uno::RuntimeException;
@@ -276,7 +276,7 @@ void pythonInit() {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 pyuno_Loader_get_implementation(
     cpo::uno::XComponentContext* ctx , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -28,7 +28,7 @@ import lib.TestParameters;
 import util.DBTools;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 
 /**

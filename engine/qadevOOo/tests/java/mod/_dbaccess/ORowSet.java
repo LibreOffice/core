@@ -55,7 +55,7 @@ import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.ucb.AuthenticationRequest;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
 /**

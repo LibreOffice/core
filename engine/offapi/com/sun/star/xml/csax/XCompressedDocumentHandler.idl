@@ -30,7 +30,7 @@ module com { module sun { module star { module xml { module csax {
  * performance than using the XDocumentHandler interface, in case of
  * when UNO C++/Java bridge is involved.
  */
-interface XCompressedDocumentHandler: com::sun::star::uno::XInterface
+interface XCompressedDocumentHandler: cpo::uno::XInterface
 {
     void compressedStartDocument()
         raises( com::sun::star::xml::sax::SAXException );

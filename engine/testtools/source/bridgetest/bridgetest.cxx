@@ -196,7 +196,7 @@ static void assign( TestElement & rData,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
                     sal_Int8 nByte2, sal_Int16 nShort2,
-                    const css::uno::Reference< css::uno::XInterface >& xTest,
+                    const css::uno::Reference< cpo::uno::XInterface >& xTest,
                     const cpo::uno::Any& rAny )
 {
     rData.Bool = bBool;

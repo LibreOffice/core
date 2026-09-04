@@ -147,7 +147,7 @@ void ServiceHandler::dispatchWithNotification( const css::util::URL&            
     // Another reason: We can use this reference as source of sending event at the end too.
     css::uno::Reference< css::frame::XNotifyingDispatch > xThis(this);
 
-    css::uno::Reference< css::uno::XInterface > xService = implts_dispatch(aURL);
+    css::uno::Reference< cpo::uno::XInterface > xService = implts_dispatch(aURL);
     if (xListener.is())
     {
         css::frame::DispatchResultEvent aEvent;
@@ -175,7 +175,7 @@ void ServiceHandler::dispatchWithNotification( const css::util::URL&            
                 a valid reference otherwise. This return value can be used to indicate,
                 if dispatch was successful.
 */
-css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL& aURL )
+css::uno::Reference< cpo::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL& aURL )
 {
     // extract service name and may optional given parameters from given URL
     // and use it to create and start the component
@@ -196,13 +196,13 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     }
 
     if (sServiceName.isEmpty())
-        return css::uno::Reference< css::uno::XInterface >();
+        return css::uno::Reference< cpo::uno::XInterface >();
 
     // If a service doesn't support an optional job executor interface - he can't get
     // any given parameters!
     // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
 
-    css::uno::Reference< css::uno::XInterface > xService;
+    css::uno::Reference< cpo::uno::XInterface > xService;
     try
     {
         // => a) a service starts running inside his own ctor and we create it only
@@ -250,7 +250,7 @@ void ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame
 }       //  namespace framework
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 framework_ServiceHandler_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

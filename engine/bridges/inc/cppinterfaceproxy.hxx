@@ -31,7 +31,7 @@
 #include <uno/environment.h>
 #include "vtablefactory.hxx"
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace bridges::cpp_uno::shared {
 
@@ -47,7 +47,7 @@ class CppInterfaceProxy {
 public:
     // Interface for Bridge:
 
-    static css::uno::XInterface * create(
+    static cpo::uno::XInterface * create(
         Bridge * pBridge, uno_Interface * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr,
         OUString const & rOId);
@@ -76,7 +76,7 @@ private:
 
     ~CppInterfaceProxy();
 
-    static css::uno::XInterface * castProxyToInterface(
+    static cpo::uno::XInterface * castProxyToInterface(
         CppInterfaceProxy * pProxy);
 
     std::atomic<std::size_t> nRef;

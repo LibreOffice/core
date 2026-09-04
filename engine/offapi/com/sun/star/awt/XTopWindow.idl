@@ -24,7 +24,7 @@
 
 /** manages the functionality specific for a top window.
  */
-published interface XTopWindow: com::sun::star::uno::XInterface
+published interface XTopWindow: cpo::uno::XInterface
 {
 
     /** adds the specified top window listener to receive window events from

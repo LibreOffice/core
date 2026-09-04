@@ -27,7 +27,7 @@
     @deprecated
         replaced by com::sun::star::lang::XServiceName
  */
-published interface XShapeDescriptor: com::sun::star::uno::XInterface
+published interface XShapeDescriptor: cpo::uno::XInterface
 {
     /**
         @returns

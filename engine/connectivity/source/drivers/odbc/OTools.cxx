@@ -129,7 +129,7 @@ void OTools::getValue(  OConnection const * _pConnection,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
                         bool &_bWasNull,
-                        const css::uno::Reference< css::uno::XInterface >& _xInterface,
+                        const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
                         void* _pValue,
                         SQLLEN _nSize)
 {

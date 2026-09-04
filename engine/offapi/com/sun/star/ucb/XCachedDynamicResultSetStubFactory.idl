@@ -39,7 +39,7 @@ module com { module sun { module star { module ucb {
     XCachedDynamicResultSetFactory.
 */
 
-published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
+published interface XCachedDynamicResultSetStubFactory: cpo::uno::XInterface
 {
     /** creates a remote optimizes XDynamicResultSet.
 

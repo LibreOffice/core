@@ -35,7 +35,7 @@ import com.sun.star.style.XStyle;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class SvxShapeDimensioning extends TestCase {
 

@@ -127,7 +127,7 @@ namespace svxform
         css::uno::Reference< css::awt::XControl>                  m_xActiveControl, m_xCurrentControl;
         css::uno::Reference< css::container::XIndexAccess>        m_xModelAsIndex;
         css::uno::Reference< css::script::XEventAttacherManager>  m_xModelAsManager;
-        css::uno::Reference< css::uno::XInterface>                m_xParent;
+        css::uno::Reference< cpo::uno::XInterface>                m_xParent;
         css::uno::Reference< cpo::uno::XComponentContext>         m_xComponentContext;
         // Composer used for checking filter conditions
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >       m_xComposer;
@@ -222,8 +222,8 @@ namespace svxform
         virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxListener, const css::util::URL& _rURL ) override;
 
     // css::container::XChild
-        virtual css::uno::Reference< css::uno::XInterface> getParent() override;
-        virtual void setParent(const css::uno::Reference< css::uno::XInterface>& Parent) override;
+        virtual css::uno::Reference< cpo::uno::XInterface> getParent() override;
+        virtual void setParent(const css::uno::Reference< cpo::uno::XInterface>& Parent) override;
 
     // css::lang::XEventListener
         virtual void disposing(const css::lang::EventObject& Source) override;

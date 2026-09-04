@@ -33,7 +33,7 @@
     directly.
     </p>
  */
-published interface XSQLData: com::sun::star::uno::XInterface
+published interface XSQLData: cpo::uno::XInterface
 {
 
     /** returns the fully-qualified name of the SQL user-defined type

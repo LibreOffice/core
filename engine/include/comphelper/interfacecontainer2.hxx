@@ -27,7 +27,7 @@
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::lang { struct EventObject; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace osl { class Mutex; }
 
 namespace comphelper
@@ -41,8 +41,8 @@ namespace detail {
     */
     union element_alias2
     {
-        std::vector< css::uno::Reference< css::uno::XInterface > > *pAsVector;
-        css::uno::XInterface * pAsInterface;
+        std::vector< css::uno::Reference< cpo::uno::XInterface > > *pAsVector;
+        cpo::uno::XInterface * pAsInterface;
         element_alias2() : pAsInterface(nullptr) {}
     };
 
@@ -87,7 +87,7 @@ public:
         hasMoreElements() has returned false, is an error. Cast the
         returned pointer to the
      */
-    css::uno::XInterface * next();
+    cpo::uno::XInterface * next();
 
     /** Removes the current element (the last one returned by next())
         from the underlying container. Calling this method before
@@ -142,7 +142,7 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    std::vector< css::uno::Reference< css::uno::XInterface > > getElements() const;
+    std::vector< css::uno::Reference< cpo::uno::XInterface > > getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -160,7 +160,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 addInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    sal_Int32 addInterface( const css::uno::Reference< cpo::uno::XInterface > & rxIFace );
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -168,9 +168,9 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    sal_Int32 removeInterface( const css::uno::Reference< cpo::uno::XInterface > & rxIFace );
     /** Return an interface by index */
-    css::uno::Reference< css::uno::XInterface > getInterface(sal_Int32 nIndex) const;
+    css::uno::Reference< cpo::uno::XInterface > getInterface(sal_Int32 nIndex) const;
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.

@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -40,7 +40,7 @@ class ScIndexEnumeration_TableConditionalEntryEnumeration : public UnoApiTest,
 public:
     ScIndexEnumeration_TableConditionalEntryEnumeration();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_TableConditionalEntryEnumeration);
@@ -58,7 +58,7 @@ ScIndexEnumeration_TableConditionalEntryEnumeration::
 {
 }
 
-uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumeration::init()
+uno::Reference<cpo::uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumeration::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

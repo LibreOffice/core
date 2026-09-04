@@ -337,7 +337,7 @@ cpo::uno::Sequence<OUString> SvxUndoRedoControl::getSupportedServiceNames()
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_svx_UndoRedoToolBoxControl_get_implementation(
     cpo::uno::XComponentContext* rContext,
     cpo::uno::Sequence<cpo::uno::Any> const & )

@@ -1137,7 +1137,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             aInfo = aData[LockFileComponent::EDITTIME];
 
             xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( cpo::uno::Any(
-                document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
+                document::OwnLockOnDocumentRequest( OUString(), uno::Reference< cpo::uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
         }
         else
         {
@@ -1162,13 +1162,13 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             if (!bIsLoading) // so, !bHandleSysLocked
             {
                 xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(cpo::uno::Any(
-                    document::LockedOnSavingRequest(OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo)));
+                    document::LockedOnSavingRequest(OUString(), uno::Reference< cpo::uno::XInterface >(), aDocumentURL, aInfo)));
                 // Currently, only the last "Retry" continuation (meaning ignore the lock and try overwriting) can be returned.
             }
             else /*logically therefore bIsLoading is set */
             {
                 xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( cpo::uno::Any(
-                    document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+                    document::LockedDocumentRequest( OUString(), uno::Reference< cpo::uno::XInterface >(), aDocumentURL, aInfo ) ) );
             }
         }
 
@@ -5038,7 +5038,7 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
             = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
         ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl
             = new ::ucbhelper::InteractionRequest(cpo::uno::Any(document::ReloadEditableRequest(
-                OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
+                OUString(), uno::Reference<cpo::uno::XInterface>(), aDocumentURL)));
         if (xInteractionRequestImpl != nullptr)
         {
             cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{

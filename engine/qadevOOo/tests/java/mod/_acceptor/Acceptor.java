@@ -25,7 +25,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Here <code>com.sun.star.connection.Acceptor</code> service is tested.<p>

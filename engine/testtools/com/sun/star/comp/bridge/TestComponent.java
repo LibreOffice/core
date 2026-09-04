@@ -62,7 +62,7 @@ import com.sun.star.uno.Any;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 @SuppressWarnings("unchecked")
 public class TestComponent {

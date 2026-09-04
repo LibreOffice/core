@@ -71,7 +71,7 @@ namespace pcr
     {
     private:
         typedef std::multimap< sal_Int32, css::beans::Property >  OrderedPropertyMap;
-        typedef std::vector< css::uno::Reference< css::uno::XInterface > >
+        typedef std::vector< css::uno::Reference< cpo::uno::XInterface > >
                                                                             InterfaceArray;
 
         css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
@@ -193,7 +193,7 @@ namespace pcr
         virtual css::uno::Reference< css::inspection::XObjectInspectorModel > getInspectorModel() override;
         virtual void setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) override;
         virtual css::uno::Reference< css::inspection::XObjectInspectorUI > getInspectorUI() override;
-        virtual void inspect( const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) override;
+        virtual void inspect( const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >& Objects ) override;
 
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) override;

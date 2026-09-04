@@ -35,7 +35,7 @@ module com { module sun { module star { module util {
      timestamps, depend on the implementation.
   </p>
   */
-published interface XTimeStamped : ::com::sun::star::uno::XInterface
+published interface XTimeStamped : ::cpo::uno::XInterface
 {
 
     /**

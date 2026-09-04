@@ -20,7 +20,7 @@
 
 module cppuhelper { module detail {
 
-interface XExceptionThrower : com::sun::star::uno::XInterface
+interface XExceptionThrower : cpo::uno::XInterface
 {
     void throwException( [in] any exc )
         raises (cpo::uno::Exception);

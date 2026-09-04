@@ -1399,7 +1399,7 @@ void AccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const cpo::
             aEvent = AccessibleEventObject(mpFrontEnd->getAccessibleContext(), nEventId, rNewValue,
                                            rOldValue, -1);
         else
-            aEvent = AccessibleEventObject(uno::Reference<uno::XInterface>(), nEventId,
+            aEvent = AccessibleEventObject(uno::Reference<cpo::uno::XInterface>(), nEventId,
                                            rNewValue, rOldValue, -1);
 
         // no locking necessary, FireEvent internally copies listeners

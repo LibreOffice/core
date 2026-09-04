@@ -13,7 +13,7 @@ module com {  module sun {  module star {  module table {
 /** provides a method to access a collection of pivot charts in a table
     or spreadsheet.
  */
-interface XTablePivotChartsSupplier: com::sun::star::uno::XInterface
+interface XTablePivotChartsSupplier: cpo::uno::XInterface
 {
 
     /** returns the collection of pivot charts.

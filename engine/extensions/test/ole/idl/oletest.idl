@@ -21,7 +21,7 @@
 module oletest
 {
 
-interface XTestSequence: com::sun::star::uno::XInterface
+interface XTestSequence: cpo::uno::XInterface
 {
     sequence<byte> methodByte( [in] sequence<byte> aSeq );
     sequence<float> methodFloat( [in] sequence<float> aSeq);
@@ -35,7 +35,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     sequence<char> methodChar( [in] sequence<char> aSeq);
     sequence<any> methodAny ( [in] sequence<any> aSeq);
     sequence<type> methodType   ( [in] sequence<type> aSeq);
-    sequence<com::sun::star::uno::XInterface> methodXInterface ( [in] sequence<com::sun::star::uno::XInterface> aSeq);
+    sequence<cpo::uno::XInterface> methodXInterface ( [in] sequence<cpo::uno::XInterface> aSeq);
     sequence< sequence <long> > methodSequence( [in] sequence< sequence< long > > aSeq);
     sequence< sequence <sequence <long> > > methodSequence2( [in] sequence< sequence< sequence<long> > > aSeq);
     sequence< com::sun::star::lang::XEventListener > methodXEventListeners( [in] sequence<com::sun::star::lang::XEventListener> aSeq);
@@ -55,7 +55,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     [attribute] sequence<type> AttrType;
     [attribute] sequence< sequence<long> > AttrSequence;
     [attribute] sequence< sequence< sequence <long> > > AttrSequence2;
-    [attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface;
+    [attribute] sequence< cpo::uno::XInterface > AttrXInterface;
 
     [attribute] byte AByte;
     [attribute] float AFloat;
@@ -69,7 +69,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     [attribute] char AChar;
     [attribute] any AAny;
     [attribute] type AType;
-    [attribute] com::sun::star::uno::XInterface  AXInterface;
+    [attribute] cpo::uno::XInterface  AXInterface;
     [attribute] com::sun::star::script::XInvocation  AXInvocation;
 
     void testout_methodByte( [out] byte rOut );
@@ -88,7 +88,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testout_methodType ( [out] type rOut);
     void testout_methodSequence( [out] sequence< long > rOut);
     void testout_methodSequence2( [out] sequence < sequence< long > > rOut);
-    void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut);
+    void testout_methodXInterface( [out] cpo::uno::XInterface rOut);
 
     void testout_methodMulParams1( [out] long rout1, [out] long rout2);
     void testout_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3);
@@ -112,13 +112,13 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testinout_methodSequence( [inout] sequence< long > rOut);
     void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut);
     void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut);
-    void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut);
+    void testinout_methodXInterface2( [inout] cpo::uno::XInterface rOut);
 
     any methodAnyTest1( [in] any rIn);
     [attribute]  any AttrAny2;
 
 };
-interface XTestStruct: com::sun::star::uno::XInterface
+interface XTestStruct: cpo::uno::XInterface
 {
 // Method taking structs as arguments
     void methodStruct( [in] com::sun::star::beans::Property aProp);
@@ -136,7 +136,7 @@ struct SimpleStruct
     string message;
 };
 
-interface XTestInParameters: com::sun::star::uno::XInterface
+interface XTestInParameters: cpo::uno::XInterface
 {
     byte in_methodByte( [in] byte rIn );
     float in_methodFloat( [in] float rIn);
@@ -152,7 +152,7 @@ interface XTestInParameters: com::sun::star::uno::XInterface
     char in_methodChar( [in] char rIn);
     any in_methodAny    ( [in] any rIn);
     type in_methodType  ( [in] type rIn);
-    com::sun::star::uno::XInterface in_methodXInterface([in] com::sun::star::uno::XInterface rIn);
+    cpo::uno::XInterface in_methodXInterface([in] cpo::uno::XInterface rIn);
     com::sun::star::script::XInvocation in_methodInvocation( [in] com::sun::star::script::XInvocation inv);
     SimpleStruct in_methodStruct( [in] SimpleStruct aStruct);
     void in_methodAll( [in] byte b, [in] float f, [in] double d, [in] boolean abool, [in]short sh,
@@ -168,7 +168,7 @@ enum SimpleEnum
     C
 };
 
-interface XTestOther: com::sun::star::uno::XInterface
+interface XTestOther: cpo::uno::XInterface
 {
     // Any test
     void other_methodAnyIn( [in] any rAny);
@@ -181,26 +181,26 @@ interface XTestOther: com::sun::star::uno::XInterface
 };
 
 
-interface XSimple: com::sun::star::uno::XInterface
+interface XSimple: cpo::uno::XInterface
 {
     void func( [in] string message);
     string getName();
 };
 
-interface XSimple2: com::sun::star::uno::XInterface
+interface XSimple2: cpo::uno::XInterface
 {
     void func2( [in] string message);
     string getName2();
 };
 
-interface XSimple3: com::sun::star::uno::XInterface
+interface XSimple3: cpo::uno::XInterface
 {
     void func3( [in] string message);
     string getName3();
 };
 
 
-interface XCallback: com::sun::star::uno::XInterface
+interface XCallback: cpo::uno::XInterface
 {
     void func1();
     oletest::XSimple returnInterface();
@@ -276,19 +276,19 @@ interface XCallback: com::sun::star::uno::XInterface
 
 };
 
-interface XTestInterfaces: com::sun::star::uno::XInterface
+interface XTestInterfaces: cpo::uno::XInterface
 {
     // Any test
     void testInterface( [in] oletest::XCallback xCallback, [in] long mode);
     void testInterface2( [in] oletest::XSimple xSimple, [in] long mode);
 };
 
-interface XIdentity: com::sun::star::uno::XInterface
+interface XIdentity: cpo::uno::XInterface
 {
-    void setObject([in] com::sun::star::uno::XInterface val);
-    boolean isSame( [in] com::sun::star::uno::XInterface val);
+    void setObject([in] cpo::uno::XInterface val);
+    boolean isSame( [in] cpo::uno::XInterface val);
 
-    com::sun::star::uno::XInterface getThis();
+    cpo::uno::XInterface getThis();
 };
 
 }; // oletest

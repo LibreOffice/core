@@ -52,7 +52,7 @@ namespace logging
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::XSingleServiceFactory;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::util::XChangesBatch;
     using ::com::sun::star::lang::NullPointerException;
     using ::cpo::uno::Exception;

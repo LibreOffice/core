@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module document {
     </p>
  */
 published service OleEmbeddedServerRegistration
-    : com::sun::star::uno::XInterface;
+    : cpo::uno::XInterface;
 
 
 }; }; }; };

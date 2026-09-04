@@ -64,9 +64,9 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< css::uno::XInterface > createInstance(const OUString& sFilter) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > createInstance(const OUString& sFilter) override;
 
-        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments(const OUString&                     sFilter   ,
+        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                  const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;

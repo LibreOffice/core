@@ -84,13 +84,11 @@ namespace text {
 namespace io {
     class XOutputStream;
 }
-namespace uno {
-    class XInterface;
-}
 namespace frame {
     class XModel;
 }
 }
+namespace cpo::uno { class XInterface; }
 
 struct EscherConnectorListEntry;
 class OutlinerParaObject;
@@ -498,13 +496,13 @@ public:
     void WriteTransformation(const css::uno::Reference< css::drawing::XShape >& xShape, const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
-    void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
+    void WriteText( const css::uno::Reference< cpo::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
 
     /** Writes a paragraph with no text, carrying the properties text put in it would get. */
-    void WriteTextlessParagraph(const css::uno::Reference<css::uno::XInterface>& rXIface);
+    void WriteTextlessParagraph(const css::uno::Reference<cpo::uno::XInterface>& rXIface);
 
     void WriteBodyProps(
-            const css::uno::Reference< css::uno::XInterface >& rXIface,
+            const css::uno::Reference< cpo::uno::XInterface >& rXIface,
             sal_Int32 nXmlNamespace, bool bIsFontworkShape,
             sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight);
 

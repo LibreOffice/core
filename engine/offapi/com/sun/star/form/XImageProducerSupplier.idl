@@ -26,7 +26,7 @@
 
     @see com::sun::star::awt::XImageProducer
  */
-published interface XImageProducerSupplier: com::sun::star::uno::XInterface
+published interface XImageProducerSupplier: cpo::uno::XInterface
 {
 
     /** accesses the image producer.

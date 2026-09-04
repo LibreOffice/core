@@ -23,7 +23,7 @@
 
 /** @deprecated
  */
-published interface XBrowseHistoryRegistry: com::sun::star::uno::XInterface
+published interface XBrowseHistoryRegistry: cpo::uno::XInterface
 {
     /** @deprecated
     */

@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module input {
 
     @internal
 */
-interface XNamespaceMapping : com::sun::star::uno::XInterface
+interface XNamespaceMapping : cpo::uno::XInterface
 {
     /** Creates a unique ordinal passing an XML namespace URI.
 

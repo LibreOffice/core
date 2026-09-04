@@ -32,7 +32,7 @@
 namespace filter::config{
 
 CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
-                                         css::uno::Reference< css::uno::XInterface > xConfigAccess,
+                                         css::uno::Reference< cpo::uno::XInterface > xConfigAccess,
                                          FilterCache::EItemType eConfigType)
     : m_rCache(rFilterCache)
     , m_xConfig(std::move(xConfigAccess))

@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module presentation {
     Note: To control a running slide show inside a presentation, please
     use XPresentation2 and XSlideShowController.
  */
-interface XSlideShow : ::com::sun::star::uno::XInterface
+interface XSlideShow : ::cpo::uno::XInterface
 {
     /** Trigger the next effect of the slide show.<p>
 

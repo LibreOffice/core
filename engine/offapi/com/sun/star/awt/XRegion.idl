@@ -24,7 +24,7 @@
 
 /** manages multiple rectangles which make up a region.
  */
-published interface XRegion: com::sun::star::uno::XInterface
+published interface XRegion: cpo::uno::XInterface
 {
 
     /** returns the bounding box of the shape.

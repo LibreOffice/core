@@ -41,7 +41,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -50,7 +50,7 @@ public:
         Reference<text::XText> xText = xTextDocument->getText();
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
-        Reference<XInterface> xRefMark
+        Reference<cpo::uno::XInterface> xRefMark
             = xMSF->createInstance(u"com.sun.star.text.ReferenceMark"_ustr);
         Reference<container::XNamed> xNamed(xRefMark, UNO_QUERY_THROW);
         xNamed->setName(u"SwXReferenceMark"_ustr);

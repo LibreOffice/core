@@ -42,7 +42,7 @@
         @see XPropertySet
         @see com::sun::star::beans::XExactName
  */
-published interface XIntrospectionAccess: com::sun::star::uno::XInterface
+published interface XIntrospectionAccess: cpo::uno::XInterface
 {
     /** returns information about which method concepts described in
         the MethodConcept constants group are supported
@@ -249,7 +249,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @see com::sun::star::beans::XExactName
      */
-    com::sun::star::uno::XInterface queryAdapter( [in] type aInterfaceType )
+    cpo::uno::XInterface queryAdapter( [in] type aInterfaceType )
             raises( com::sun::star::beans::IllegalTypeException );
 
 };

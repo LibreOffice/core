@@ -861,7 +861,7 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( static_cast<Menu *>(pM
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_VCLXMenuBar_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -881,7 +881,7 @@ VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( static_cast<Menu
 
 VCLXPopupMenu::~VCLXPopupMenu() = default;
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_VCLXPopupMenu_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

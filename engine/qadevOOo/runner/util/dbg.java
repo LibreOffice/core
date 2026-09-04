@@ -18,7 +18,7 @@
 
 package util;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.Type;
 import com.sun.star.beans.XPropertySet;
@@ -43,7 +43,7 @@ public class dbg {
      * Prints information about the supported interfaces of an implementation
      * to standard out.
      * @param xTarget The implementation which should be analysed.
-     * @see com.sun.star.uno.XInterface
+     * @see cpo.uno.XInterface
      */
     public static void printInterfaces(XInterface xTarget) {
         printInterfaces(xTarget, false);
@@ -54,7 +54,7 @@ public class dbg {
      * to standard out. Extended information can be printed.
      * @param xTarget The implementation which should be analysed.
      * @param extendedInfo Should extended information be printed?
-     * @see com.sun.star.uno.XInterface
+     * @see cpo.uno.XInterface
      */
     private static void printInterfaces(XInterface xTarget,
                                                     boolean extendedInfo){
@@ -75,7 +75,7 @@ public class dbg {
      * Returns all interface types of an implementation as a type array.
      * @param xTarget The implementation which should be analyzed.
      * @return An array with all interface types; null if there are none.
-     * @see com.sun.star.uno.XInterface
+     * @see cpo.uno.XInterface
      */
     private static Type[] getInterfaceTypes(XInterface xTarget) {
         Type[] types = null;

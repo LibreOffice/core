@@ -659,14 +659,14 @@ bool SAL_CALL ResultSet::rowDeleted()
 
 
 // virtual
-uno::Reference< uno::XInterface > SAL_CALL ResultSet::getStatement()
+uno::Reference< cpo::uno::XInterface > SAL_CALL ResultSet::getStatement()
 {
 /*
     returns the Statement that produced this ResultSet object. If the
     result set was generated some other way, ... this method returns null.
 */
     m_pImpl->m_xDataSupplier->validate();
-    return uno::Reference< uno::XInterface >();
+    return uno::Reference< cpo::uno::XInterface >();
 }
 
 

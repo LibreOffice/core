@@ -193,7 +193,7 @@ static bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xRefl->forName("[]ModuleA.StructA")->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 48");
     OSL_ENSURE(xRefl->forName("[]ModuleA.StructA")->getComponentType().is(), "test_RegCoreReflection(): error 49");
     OSL_ENSURE(xRefl->forName("[][]ModuleA.StructA")->getComponentType()->getComponentType()->getName() == "ModuleA.StructA", "test_RegCoreReflection(): error 50");
-    OSL_ENSURE(xRefl->forName("[]com.sun.star.uno.XInterface") == xRefl->forName("ModuleA.StructC")->getField(OUString("aInterfaceSeq"))->getType(), "test_RegCoreReflection(): error 51");
+    OSL_ENSURE(xRefl->forName("[]cpo.uno.XInterface") == xRefl->forName("ModuleA.StructC")->getField(OUString("aInterfaceSeq"))->getType(), "test_RegCoreReflection(): error 51");
 
     StructC aStructC;
     aStructC.aLong = aConstLong;

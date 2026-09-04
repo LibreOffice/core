@@ -831,7 +831,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
         comphelper::copyProperties( xSource, xNewChartType );
 }
 
-css::uno::Reference< css::uno::XInterface > ChartTypeTemplate::getDataInterpreter()
+css::uno::Reference< cpo::uno::XInterface > ChartTypeTemplate::getDataInterpreter()
 {
     return static_cast<cppu::OWeakObject*>(getDataInterpreter2().get());
 }

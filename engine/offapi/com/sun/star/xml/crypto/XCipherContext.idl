@@ -27,7 +27,7 @@
 
     @see XCipherContextSupplier
  */
-interface XCipherContext : com::sun::star::uno::XInterface
+interface XCipherContext : cpo::uno::XInterface
 {
     /** encrypts/decrypts the data using the cipher.
         <p>

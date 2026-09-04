@@ -29,7 +29,7 @@ module com { module sun { module star { module datatransfer {
     X11 uses so called Atoms etc.</p>
 */
 
-published interface XDataFormatTranslator : com::sun::star::uno::XInterface
+published interface XDataFormatTranslator : cpo::uno::XInterface
 {
     /** Converts a DataFlavor to system dependent data type.
 

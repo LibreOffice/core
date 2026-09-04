@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::TableConditionalEntry
     @see com::sun::star::sheet::TableValidation
  */
-published interface XSheetCondition: com::sun::star::uno::XInterface
+published interface XSheetCondition: cpo::uno::XInterface
 {
 
     /** returns the operator in the condition.

@@ -30,7 +30,7 @@ namespace com::sun::star::sdbc { class SQLException; }
 namespace com::sun::star::sdbc { class SQLWarning; }
 namespace com::sun::star::sdbc { class XWarningsSupplier; }
 namespace com::sun::star::sdb { class SQLContext; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace dbtools
 {
@@ -66,7 +66,7 @@ namespace dbtools
         void appendWarning(
             const OUString& _rWarning,
             const char* _pAsciiSQLState,
-            const css::uno::Reference< css::uno::XInterface >& _rxContext );
+            const css::uno::Reference< cpo::uno::XInterface >& _rxContext );
 
         void appendWarning(const css::sdbc::SQLException& _rWarning);
         void appendWarning(const css::sdbc::SQLWarning& _rWarning);

@@ -47,7 +47,7 @@ using namespace ::svt::uno;
 namespace {
 
     using css::uno::Reference;
-    using css::uno::XInterface;
+    using cpo::uno::XInterface;
     using css::uno::UNO_QUERY;
     using cpo::uno::Any;
     using cpo::uno::Sequence;
@@ -439,7 +439,7 @@ namespace {
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_svtools_uno_Wizard_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

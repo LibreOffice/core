@@ -22,7 +22,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <ooo/vba/XDocumentBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -45,7 +45,7 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XDocumentBase > VbaDocumentB
 class VBAHELPER_DLLPUBLIC VbaDocumentBase : public VbaDocumentBase_BASE
 {
 protected:
-    css::uno::Reference< css::uno::XInterface > mxVBProject;
+    css::uno::Reference< cpo::uno::XInterface > mxVBProject;
 protected:
     virtual css::frame::XModel* getModel() const = 0;
 public:

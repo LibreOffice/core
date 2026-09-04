@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module lang {
 
 /** makes it possible to set a Locale to be used by the object.
  */
-published interface XLocalizable: com::sun::star::uno::XInterface
+published interface XLocalizable: cpo::uno::XInterface
 {
     /** sets the locale to be used by this object.
      */

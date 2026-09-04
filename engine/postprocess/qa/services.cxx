@@ -288,7 +288,7 @@ void Test::createInstance(
     std::vector<css::uno::Reference<css::lang::XComponent>> * components)
 {
     assert(components != nullptr);
-    css::uno::Reference<css::uno::XInterface> inst;
+    css::uno::Reference<cpo::uno::XInterface> inst;
     try {
         if (withArguments) {
             inst = m_xContext->getServiceManager()

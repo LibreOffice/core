@@ -32,7 +32,7 @@ module com { module sun { module star { module accessibility {
     pressing one or more keys after each other.  Each individual sequence of
     key strokes </p>
 */
-interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
+interface XAccessibleKeyBinding : ::cpo::uno::XInterface
 {
     /** Return the number of available key bindings.
         @return

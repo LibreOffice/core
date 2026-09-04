@@ -23,7 +23,7 @@ import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.MappingException;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import cpo.uno.XNamingService;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

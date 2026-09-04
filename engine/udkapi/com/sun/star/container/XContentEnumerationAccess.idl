@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module container {
         wend
     @endcode
  */
-published interface XContentEnumerationAccess: com::sun::star::uno::XInterface
+published interface XContentEnumerationAccess: cpo::uno::XInterface
 {
 
     /** @returns

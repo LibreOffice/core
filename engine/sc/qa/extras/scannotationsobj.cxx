@@ -19,7 +19,7 @@
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -40,7 +40,7 @@ public:
 
     virtual void setUp() override;
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< cpo::uno::XInterface > init() override;
     virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(tools::Long nIndex) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationsObj);
@@ -88,7 +88,7 @@ uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(tool
     return xSheetAnnotations;
 }
 
-uno::Reference< uno::XInterface > ScAnnontationsObj::init()
+uno::Reference< cpo::uno::XInterface > ScAnnontationsObj::init()
 {
     return getAnnotations(0);
 }

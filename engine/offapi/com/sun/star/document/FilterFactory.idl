@@ -49,7 +49,7 @@ published service FilterFactory
         See the following example:
 
         @code{.java}
-        private com.sun.star.uno.XInterface createFilterDirect( com.sun.star.lang.XMultiServiceFactory xFilterFactory      ,
+        private cpo.uno.XInterface createFilterDirect( com.sun.star.lang.XMultiServiceFactory xFilterFactory      ,
                                                                 java.lang.String                       sInternalFilterName )
         {
             com.sun.star.beans.PropertyValue aFilterProp = new com.sun.star.beans.PropertyValue();
@@ -60,7 +60,7 @@ published service FilterFactory
             lProps[0] = aFilterProp;
 
             java.lang.Object aFilter = xFilterFactory.createInstanceWithArguments("", lProps);
-            return (com.sun.star.uno.XInterface)UnoRuntime.queryInterface(com.sun.star.uno.XInterface.class, aFilter);
+            return (cpo.uno.XInterface)UnoRuntime.queryInterface(cpo.uno.XInterface.class, aFilter);
         }
         @endcode
         </p>

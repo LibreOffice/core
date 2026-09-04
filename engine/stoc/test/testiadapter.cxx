@@ -118,7 +118,7 @@ void assign( test::TestElement & rData,
              sal_Int64 nHyper, sal_uInt64 nUHyper,
              float fFloat, double fDouble,
              test::TestEnum eEnum, const OUString& rStr,
-             const css::uno::Reference< css::uno::XInterface >& xTest,
+             const css::uno::Reference< cpo::uno::XInterface >& xTest,
              const cpo::uno::Any& rAny )
 {
     rData.Bool = bBool;
@@ -145,7 +145,7 @@ void assign( test::TestData & rData,
              sal_Int64 nHyper, sal_uInt64 nUHyper,
              float fFloat, double fDouble,
              test::TestEnum eEnum, const OUString& rStr,
-             const css::uno::Reference< css::uno::XInterface >& xTest,
+             const css::uno::Reference< cpo::uno::XInterface >& xTest,
              const cpo::uno::Any& rAny,
              const cpo::uno::Sequence< test::TestElement >& rSequence )
 {
@@ -171,7 +171,7 @@ public:
                                      sal_Int64 nHyper, sal_uInt64 nUHyper,
                                      float fFloat, double fDouble,
                                      test::TestEnum eEnum, const OUString& rStr,
-                                     const css::uno::Reference< css::uno::XInterface >& xTest,
+                                     const css::uno::Reference< cpo::uno::XInterface >& xTest,
                                      const cpo::uno::Any& rAny,
                                      const cpo::uno::Sequence<test::TestElement >& rSequence,
                                      const test::TestData& rStruct )
@@ -183,7 +183,7 @@ public:
                                                 sal_Int64& nHyper, sal_uInt64& nUHyper,
                                                 float& fFloat, double& fDouble,
                                                 test::TestEnum& eEnum, OUString& rStr,
-                                                css::uno::Reference< css::uno::XInterface >& xTest,
+                                                css::uno::Reference< cpo::uno::XInterface >& xTest,
                                                 cpo::uno::Any& rAny,
                                                 cpo::uno::Sequence<test::TestElement >& rSequence,
                                                 test::TestData& rStruct )
@@ -195,7 +195,7 @@ public:
                                                sal_Int64& nHyper, sal_uInt64& nUHyper,
                                                float& fFloat, double& fDouble,
                                                test::TestEnum& eEnum, OUString& rStr,
-                                               css::uno::Reference< css::uno::XInterface >& xTest,
+                                               css::uno::Reference< cpo::uno::XInterface >& xTest,
                                                cpo::uno::Any& rAny,
                                                cpo::uno::Sequence< test::TestElement >& rSequence,
                                                test::TestData& rStruct )
@@ -227,7 +227,7 @@ public:
         { return _aData.Enum; }
     virtual OUString SAL_CALL getString() throw(cpo::uno::RuntimeException)
         { return _aData.String; }
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getInterface(  ) throw(cpo::uno::RuntimeException)
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getInterface(  ) throw(cpo::uno::RuntimeException)
         { return _aData.Interface; }
     virtual cpo::uno::Any SAL_CALL getAny() throw(cpo::uno::RuntimeException)
         { return _aData.Any; }
@@ -262,7 +262,7 @@ public:
         { _aData.Enum = _enum; }
     virtual void SAL_CALL setString( const OUString& _string ) throw(cpo::uno::RuntimeException)
         { _aData.String = _string; }
-    virtual void SAL_CALL setInterface( const css::uno::Reference< css::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
+    virtual void SAL_CALL setInterface( const css::uno::Reference< cpo::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
         { _aData.Interface = _interface; }
     virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) throw(cpo::uno::RuntimeException)
         { _aData.Any = _any; }
@@ -272,7 +272,7 @@ public:
         { _aStructData = _struct; }
 
     // XLanguageBindingTest
-    virtual test::TestData SAL_CALL raiseException( bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, OUString& aString, css::uno::Reference< css::uno::XInterface >& xInterface, cpo::uno::Any& aAny, cpo::uno::Sequence<test::TestElement >& aSequence,test::TestData& aStruct )
+    virtual test::TestData SAL_CALL raiseException( bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, OUString& aString, css::uno::Reference< cpo::uno::XInterface >& xInterface, cpo::uno::Any& aAny, cpo::uno::Sequence<test::TestElement >& aSequence,test::TestData& aStruct )
         throw(css::lang::IllegalArgumentException, cpo::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getRuntimeException() throw(cpo::uno::RuntimeException);
@@ -673,7 +673,7 @@ void Test_Impl::setValues( bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            sal_Int64 nHyper, sal_uInt64 nUHyper,
                            float fFloat, double fDouble,
                            test::TestEnum eEnum, const OUString& rStr,
-                           const css::uno::Reference< css::uno::XInterface >& xTest,
+                           const css::uno::Reference< cpo::uno::XInterface >& xTest,
                            const cpo::uno::Any& rAny,
                            const cpo::uno::Sequence<test::TestElement >& rSequence,
                            const test::TestData& rStruct )
@@ -691,7 +691,7 @@ test::TestData Test_Impl::setValues2( bool& bBool, sal_Unicode& cChar, sal_Int8&
                                       sal_Int64& nHyper, sal_uInt64& nUHyper,
                                       float& fFloat, double& fDouble,
                                       test::TestEnum& eEnum, OUString& rStr,
-                                      css::uno::Reference< css::uno::XInterface >& xTest,
+                                      css::uno::Reference< cpo::uno::XInterface >& xTest,
                                       cpo::uno::Any& rAny,
                                       cpo::uno::Sequence<test::TestElement >& rSequence,
                                       test::TestData& rStruct )
@@ -710,7 +710,7 @@ test::TestData Test_Impl::getValues( bool& bBool, sal_Unicode& cChar, sal_Int8& 
                                      sal_Int64& nHyper, sal_uInt64& nUHyper,
                                      float& fFloat, double& fDouble,
                                      test::TestEnum& eEnum, OUString& rStr,
-                                     css::uno::Reference< css::uno::XInterface >& xTest,
+                                     css::uno::Reference< cpo::uno::XInterface >& xTest,
                                      cpo::uno::Any& rAny,
                                      cpo::uno::Sequence<test::TestElement >& rSequence,
                                      test::TestData& rStruct )
@@ -849,7 +849,7 @@ bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 }
 
 
-test::TestData Test_Impl::raiseException( bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, OUString& /*aString*/, css::uno::Reference< css::uno::XInterface >& /*xInterface*/, cpo::uno::Any& /*aAny*/, cpo::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
+test::TestData Test_Impl::raiseException( bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, OUString& /*aString*/, css::uno::Reference< cpo::uno::XInterface >& /*xInterface*/, cpo::uno::Any& /*aAny*/, cpo::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
     throw(css::lang::IllegalArgumentException, cpo::uno::RuntimeException)
 {
     IllegalArgumentException aExc;

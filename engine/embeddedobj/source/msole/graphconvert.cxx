@@ -106,7 +106,7 @@ void MainThreadNotificationRequest::notify (const cpo::uno::Any& )
     {
         try
         {
-            uno::Reference< uno::XInterface > xLock = m_xObject.get();
+            uno::Reference< cpo::uno::XInterface > xLock = m_xObject.get();
             if ( xLock.is() )
             {
                 // this is the main thread, the solar mutex must be locked

@@ -34,7 +34,7 @@
     the intended columns.
     </p>
  */
-published interface XColumnLocate: com::sun::star::uno::XInterface
+published interface XColumnLocate: cpo::uno::XInterface
 {
 
     /** maps the given ResultSet column name to its ResultSet column index.

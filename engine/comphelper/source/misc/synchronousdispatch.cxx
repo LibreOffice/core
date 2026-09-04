@@ -34,7 +34,7 @@ namespace comphelper
 using namespace ::com::sun::star;
 
 uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
-        const uno::Reference< uno::XInterface > &xStartPoint,
+        const uno::Reference< cpo::uno::XInterface > &xStartPoint,
         const OUString &sURL,
         const OUString &sTarget,
         const cpo::uno::Sequence< beans::PropertyValue > &lArguments )

@@ -25,7 +25,7 @@ import com.sun.star.frame.XStorable;
 
 import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import cpo.uno.XNamingService;
 import java.io.PrintWriter;
 import lib.StatusException;

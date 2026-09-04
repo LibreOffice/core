@@ -24,7 +24,7 @@
 
 /** provides access to the collection of all bookmarks associated with a data source.
  */
-published interface XBookmarksSupplier: com::sun::star::uno::XInterface
+published interface XBookmarksSupplier: cpo::uno::XInterface
 {
 
     /** @returns    the collection of all bookmarks associated with a data source

@@ -29,7 +29,7 @@ public:
 
     virtual ~SvxFmMSFactory() {}
 
-    virtual css::uno::Reference<css::uno::XInterface>
+    virtual css::uno::Reference<cpo::uno::XInterface>
         createInstance(const OUString& ServiceSpecifier) override;
     virtual cpo::uno::Sequence<OUString> getAvailableServiceNames() override;
 };

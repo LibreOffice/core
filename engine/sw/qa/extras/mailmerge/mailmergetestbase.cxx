@@ -123,7 +123,7 @@ public:
                                                         const OUString& aDBName)
     {
         uno::Reference<sdbc::XRowSet> xCurResultSet;
-        uno::Reference<uno::XInterface> xInstance
+        uno::Reference<cpo::uno::XInterface> xInstance
             = getMultiServiceFactory()->createInstance(u"com.sun.star.sdb.RowSet"_ustr);
         uno::Reference<beans::XPropertySet> xRowSetPropSet(xInstance, uno::UNO_QUERY);
         assert(xRowSetPropSet.is() && "failed to get XPropertySet interface from RowSet");

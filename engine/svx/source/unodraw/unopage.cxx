@@ -117,7 +117,7 @@ void SvxDrawPage::dispose()
 
     // Create an event with this as sender
     css::document::EventObject aEvt;
-    aEvt.Source.set(uno::Reference<uno::XInterface>::query( static_cast<lang::XComponent *>(this) ));
+    aEvt.Source.set(uno::Reference<cpo::uno::XInterface>::query( static_cast<lang::XComponent *>(this) ));
     // inform all listeners to release this object
     // The listener container are automatically cleared
     {

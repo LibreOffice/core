@@ -239,7 +239,7 @@ void SAL_CALL
 XStream_impl::seek( sal_Int64 location )
 {
     if( location < 0 )
-        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), 0 );
     if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
         throw io::IOException();
 }

@@ -426,7 +426,7 @@ static OUString NestedTextContentToText(const cpo::uno::Any& rVal)
 }
 
 // List metadata associated to the paragraph or character range
-static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& rSource,
+static void MetadataToTreeNode(const css::uno::Reference<cpo::uno::XInterface>& rSource,
                                svx::sidebar::TreeNode& rNode)
 {
     uno::Reference<rdf::XMetadatable> xMeta(rSource, uno::UNO_QUERY_THROW);
@@ -502,7 +502,7 @@ PropertyToTreeNode(const css::beans::Property& rProperty,
     return aCurNode;
 }
 
-static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSource,
+static void InsertValues(const css::uno::Reference<cpo::uno::XInterface>& rSource,
                          std::unordered_map<OUString, bool>& rIsDefined,
                          svx::sidebar::TreeNode& rNode, const bool isRoot,
                          const std::vector<OUString>& rHiddenProperty,

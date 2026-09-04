@@ -42,7 +42,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.util.XCloneable;
 import complex.toolkit.awtgrid.DummyColumn;
 import complex.toolkit.awtgrid.TMutableGridDataModel;

@@ -128,13 +128,13 @@ uno::Reference< util::XCloneable > DataPoint::createClone()
 }
 
 // ____ XChild ____
-Reference< uno::XInterface > DataPoint::getParent()
+Reference< cpo::uno::XInterface > DataPoint::getParent()
 {
-    return Reference< uno::XInterface >( m_xParentProperties.get(), uno::UNO_QUERY );
+    return Reference< cpo::uno::XInterface >( m_xParentProperties.get(), uno::UNO_QUERY );
 }
 
 void DataPoint::setParent(
-    const Reference< uno::XInterface >& Parent )
+    const Reference< cpo::uno::XInterface >& Parent )
 {
     m_xParentProperties = Reference< beans::XPropertySet >( Parent, uno::UNO_QUERY );
 }

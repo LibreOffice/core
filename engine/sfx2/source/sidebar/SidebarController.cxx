@@ -190,7 +190,7 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
         framework::GetFirstListenerWith(
             ::comphelper::getProcessComponentContext(),
             xController,
-            [] (uno::Reference<uno::XInterface> const& xRef)
+            [] (uno::Reference<cpo::uno::XInterface> const& xRef)
             { return nullptr != dynamic_cast<SidebarController*>(xRef.get()); }
         ));
 

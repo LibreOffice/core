@@ -25,7 +25,7 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Test for object that implements the following interfaces :

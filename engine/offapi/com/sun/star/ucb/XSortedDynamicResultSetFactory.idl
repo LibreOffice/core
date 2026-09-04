@@ -24,7 +24,7 @@ module com { module sun { module star { module ucb {
     will be sorted according to the given sorting options.
 */
 
-published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterface
+published interface XSortedDynamicResultSetFactory: cpo::uno::XInterface
 {
     /** creates a sorted XDynamicResultSet depending on internal
         data, an (unsorted) XDynamicResultSet and the sorting info.

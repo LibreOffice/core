@@ -24,7 +24,7 @@ module cpo {  module uno {
 
     @deprecated Do not use.
 */
-published interface XUnloadingPreference: com::sun::star::uno::XInterface
+published interface XUnloadingPreference: cpo::uno::XInterface
 {
     boolean releaseOnNotification();
 };

@@ -175,7 +175,7 @@ void SwXTextSection::Impl::Notify(const SfxHint& rHint)
     if(rHint.GetId() == SfxHintId::Dying)
     {
         m_pFormat = nullptr;
-        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
         if (!xThis.is())
         {   // fdo#72695: if UNO object is already dead, don't revive it with event
             return;

@@ -23,7 +23,7 @@ module com { module sun { module star { module ui {
     OpenOffice.org modules.
 */
 
-interface XModuleUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterface
+interface XModuleUIConfigurationManagerSupplier : ::cpo::uno::XInterface
 {
     /** returns the requested module based user interface configuration manager.
 

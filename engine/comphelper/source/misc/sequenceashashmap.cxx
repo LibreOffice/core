@@ -150,7 +150,7 @@ void SequenceAsHashMap::operator<<(const cpo::uno::Any& aSource)
     }
 
     throw css::lang::IllegalArgumentException(
-        u"Any contains wrong type."_ustr, css::uno::Reference<css::uno::XInterface>(),
+        u"Any contains wrong type."_ustr, css::uno::Reference<cpo::uno::XInterface>(),
         -1);
 }
 
@@ -172,7 +172,7 @@ void SequenceAsHashMap::operator<<(const cpo::uno::Sequence< cpo::uno::Any >& lS
                )
                 throw css::lang::IllegalArgumentException(
                     u"PropertyValue struct contains no useful information."_ustr,
-                    css::uno::Reference<css::uno::XInterface>(), -1);
+                    css::uno::Reference<cpo::uno::XInterface>(), -1);
             (*this)[lP.Name] = lP.Value;
             continue;
         }
@@ -186,7 +186,7 @@ void SequenceAsHashMap::operator<<(const cpo::uno::Sequence< cpo::uno::Any >& lS
                )
                 throw css::lang::IllegalArgumentException(
                     u"NamedValue struct contains no useful information."_ustr,
-                    css::uno::Reference<css::uno::XInterface>(), -1);
+                    css::uno::Reference<cpo::uno::XInterface>(), -1);
             (*this)[lN.Name] = lN.Value;
             continue;
         }
@@ -195,7 +195,7 @@ void SequenceAsHashMap::operator<<(const cpo::uno::Sequence< cpo::uno::Any >& lS
         if (lSource[i].hasValue())
             throw css::lang::IllegalArgumentException(
                 u"Any contains wrong type."_ustr,
-                css::uno::Reference<css::uno::XInterface>(), -1);
+                css::uno::Reference<cpo::uno::XInterface>(), -1);
     }
 }
 

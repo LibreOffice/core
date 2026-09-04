@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides handling of array formulas in a cell range.
  */
-published interface XArrayFormulaRange: com::sun::star::uno::XInterface
+published interface XArrayFormulaRange: cpo::uno::XInterface
 {
 
     /** returns the array formula of the range or an empty string, if the

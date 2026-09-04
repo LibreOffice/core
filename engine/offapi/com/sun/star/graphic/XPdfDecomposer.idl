@@ -15,7 +15,7 @@ interface XPrimitive2D;
 
     This renders a PDF data into a bitmap and returns it as a primitive.
  */
-interface XPdfDecomposer : ::com::sun::star::uno::XInterface
+interface XPdfDecomposer : ::cpo::uno::XInterface
 {
     /** Retrieve decomposed list - in this case a bitmap with the rendered PDF.
 

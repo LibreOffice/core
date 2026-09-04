@@ -20,7 +20,7 @@ module PackageKit
  * https://git.gnome.org/browse/gnome-software/tree/src/org.freedesktop.PackageKit.xml
  * for documentation of the corresponding D-Bus interface
  */
-interface XQuery : com::sun::star::uno::XInterface
+interface XQuery : cpo::uno::XInterface
 {
     /**
      * Installs local package files or service packs.

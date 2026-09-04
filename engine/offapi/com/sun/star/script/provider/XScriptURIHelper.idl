@@ -25,7 +25,7 @@ module com { module sun { module star { module script { module provider {
     This interface is used to help transform Scripting Framework storage
     locations to Scripting Framework script URIs and vice versa.
 */
-interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
+interface XScriptURIHelper : ::cpo::uno::XInterface {
 
     /**
         Obtain the root storage URI for this ScriptURIHelper. The

@@ -14,7 +14,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -32,7 +32,7 @@ class ScSpreadsheetSettings : public UnoApiTest,
 public:
     ScSpreadsheetSettings();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScSpreadsheetSettings);
@@ -63,7 +63,7 @@ ScSpreadsheetSettings::ScSpreadsheetSettings()
 {
 }
 
-uno::Reference<uno::XInterface> ScSpreadsheetSettings::init()
+uno::Reference<cpo::uno::XInterface> ScSpreadsheetSettings::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, UNO_QUERY_THROW);

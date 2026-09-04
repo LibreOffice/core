@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module view {
 
 /** provides access to the view settings of the object.
  */
-published interface XViewSettingsSupplier: com::sun::star::uno::XInterface
+published interface XViewSettingsSupplier: cpo::uno::XInterface
 {
 
     /** @returns

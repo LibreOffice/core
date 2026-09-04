@@ -253,7 +253,7 @@ cpo::uno::Any Default::getPropertyValue(OUString const & PropertyName)
         PropertyName, getXWeak());
 }
 
-css::uno::Reference< css::uno::XInterface > createBackend(
+css::uno::Reference< cpo::uno::XInterface > createBackend(
     css::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & name)
 {
@@ -267,16 +267,16 @@ css::uno::Reference< css::uno::XInterface > createBackend(
     } catch (const cpo::uno::Exception &) {
         // Assuming these exceptions indicate that the service is not installed:
         TOOLS_WARN_EXCEPTION("shell", "createInstance(" << name << ") failed");
-        return css::uno::Reference< css::uno::XInterface >();
+        return css::uno::Reference< cpo::uno::XInterface >();
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 shell_DesktopBackend_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     // Fall back to the default if the specific backend is not available:
-    css::uno::Reference< css::uno::XInterface > backend;
+    css::uno::Reference< cpo::uno::XInterface > backend;
     if (Application::GetDesktopEnvironment() == u"PLASMA5")
         backend = createBackend(context,
             u"com.sun.star.configuration.backend.KF5Backend"_ustr);

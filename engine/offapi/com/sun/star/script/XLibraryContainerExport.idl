@@ -26,7 +26,7 @@
     Extension of XLibraryContainer to provide functionality to
     store a library to a location represented by a URL.
  */
-interface XLibraryContainerExport : com::sun::star::uno::XInterface
+interface XLibraryContainerExport : cpo::uno::XInterface
 {
     /**
         Exports a library specified by Name to the location

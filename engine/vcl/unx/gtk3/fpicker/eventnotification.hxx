@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 // encapsulate a filepicker event
@@ -34,7 +34,7 @@ class CEventNotification
 public:
     virtual ~CEventNotification(){};
 
-    virtual void SAL_CALL notifyEventListener(css::uno::Reference<css::uno::XInterface> xListener)
+    virtual void SAL_CALL notifyEventListener(css::uno::Reference<cpo::uno::XInterface> xListener)
         = 0;
 };
 

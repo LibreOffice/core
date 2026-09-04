@@ -32,7 +32,7 @@ namespace pcr
 
 
     OUString GetUIHeadlineName(sal_Int16 _nClassId, const cpo::uno::Any& _rUnoObject);
-    sal_Int16 classifyComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+    sal_Int16 classifyComponent( const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
 
     struct FindPropertyByHandle

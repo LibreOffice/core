@@ -123,7 +123,7 @@ bool SdPageObjsTLV::SdPageObjsTransferable::GetData( const css::datatransfer::Da
     }
 }
 
-SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )
+SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< cpo::uno::XInterface >& rxData )
     noexcept
 {
     return dynamic_cast<SdPageObjsTLV::SdPageObjsTransferable*>(rxData.get());

@@ -31,7 +31,7 @@
 
 class ScDocOptions;
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< cpo::uno::XInterface > SAL_CALL
     ScFunctionAccess_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 

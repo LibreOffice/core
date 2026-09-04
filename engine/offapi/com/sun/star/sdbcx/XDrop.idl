@@ -22,7 +22,7 @@
 /** provides methods to remove an element of its container and to drop it from
     the related database.
  */
-published interface XDrop: com::sun::star::uno::XInterface
+published interface XDrop: cpo::uno::XInterface
 {
 
     /** drops an object of the related container identified by its name.

@@ -324,12 +324,12 @@ void SvxXTextColumns::removeVetoableChangeListener(
 }
 }
 
-css::uno::Reference<css::uno::XInterface> SvxXTextColumns_createInstance() noexcept
+css::uno::Reference<cpo::uno::XInterface> SvxXTextColumns_createInstance() noexcept
 {
     return getXWeak(new SvxXTextColumns);
 }
 
-extern "C" SVXCORE_DLLPUBLIC css::uno::XInterface*
+extern "C" SVXCORE_DLLPUBLIC cpo::uno::XInterface*
 com_sun_star_comp_svx_TextColumns_get_implementation(cpo::uno::XComponentContext*,
                                                      cpo::uno::Sequence<cpo::uno::Any> const&)
 {

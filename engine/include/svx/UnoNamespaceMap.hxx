@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SVX_UNONAMESPACEMAP_HXX
 #define INCLUDED_SVX_UNONAMESPACEMAP_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <svx/svxdllapi.h>
 
 class SfxItemPool;
 
 namespace svx
 {
-SVX_DLLPUBLIC css::uno::Reference<css::uno::XInterface>
+SVX_DLLPUBLIC css::uno::Reference<cpo::uno::XInterface>
 NamespaceMap_createInstance(const sal_uInt16* pWhichIds, SfxItemPool* pPool);
 }
 

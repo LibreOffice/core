@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module view {
 
     @see XPrintJobListener
  */
-published interface XPrintJobBroadcaster : com::sun::star::uno::XInterface
+published interface XPrintJobBroadcaster : cpo::uno::XInterface
 {
     /** adds an XPrintJobListener to be notified about print progress.
      */

@@ -89,7 +89,7 @@ GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet )
     return xDataBaseRange;
 }
 
-ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRange )
+ScDocShell* GetDocShellFromRange( const uno::Reference< cpo::uno::XInterface >& xRange )
 {
     ScCellRangesBase* pScCellRangesBase = dynamic_cast<ScCellRangesBase*>( xRange.get() );
     if ( !pScCellRangesBase )
@@ -246,7 +246,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
 ScDocShell*
 getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 {
-    uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< cpo::uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = comphelper::getFromUnoTunnel< ScModelObj >( xIf );
     ScDocShell* pDocShell = nullptr;
     if ( pModel )

@@ -80,7 +80,7 @@ namespace svxform
 {
     SVXCORE_DLLPUBLIC void ImplSmartRegisterUnoServices();
 
-    css::uno::Reference<css::uno::XInterface>
+    css::uno::Reference<cpo::uno::XInterface>
     OAddConditionDialog_Create(
         css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
@@ -91,17 +91,17 @@ namespace svxform
 }
 
 /// @throws cpo::uno::Exception
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 FmXGridControl_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws cpo::uno::Exception
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 FormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws cpo::uno::Exception
-css::uno::Reference<css::uno::XInterface>
+css::uno::Reference<cpo::uno::XInterface>
 LegacyFormController_NewInstance_Impl(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 

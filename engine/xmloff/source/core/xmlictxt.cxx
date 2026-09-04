@@ -74,7 +74,7 @@ cpo::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const cpo::uno::Type&
                 aType,
                 static_cast< XFastContextHandler* >(this),
                 static_cast< XTypeProvider* >(this),
-                static_cast< css::uno::XInterface* >(static_cast< XFastContextHandler* >(this)));
+                static_cast< cpo::uno::XInterface* >(static_cast< XFastContextHandler* >(this)));
 
     return a;
 }

@@ -105,7 +105,7 @@ private:
 
     virtual cpo::uno::Any   getDefaultForReset() const override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
     virtual bool            approveDbColumnType( sal_Int32 _nColumnType ) override;

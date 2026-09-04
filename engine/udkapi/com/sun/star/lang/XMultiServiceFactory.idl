@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module lang {
     This interface can be used for all kinds
     of factories for all kinds of instances, not only UNO services.
 */
-published interface XMultiServiceFactory: com::sun::star::uno::XInterface
+published interface XMultiServiceFactory: cpo::uno::XInterface
 {
     /** Creates an instance classified by the specified name.
 
@@ -39,7 +39,7 @@ published interface XMultiServiceFactory: com::sun::star::uno::XInterface
         @return
                 instance
     */
-    com::sun::star::uno::XInterface createInstance( [in] string aServiceSpecifier )
+    cpo::uno::XInterface createInstance( [in] string aServiceSpecifier )
         raises( cpo::uno::Exception );
 
     /** Creates an instance classified by the specified name and passes the arguments
@@ -52,7 +52,7 @@ published interface XMultiServiceFactory: com::sun::star::uno::XInterface
         @return
                 instance
     */
-    com::sun::star::uno::XInterface createInstanceWithArguments(
+    cpo::uno::XInterface createInstanceWithArguments(
         [in] string ServiceSpecifier,
         [in] sequence<any> Arguments )
         raises( cpo::uno::Exception );

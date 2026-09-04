@@ -34,7 +34,7 @@
     @see XDispatchProviderInterception
     @see XDispatchProviderInterceptor
  */
-published interface XInterceptorInfo: com::sun::star::uno::XInterface
+published interface XInterceptorInfo: cpo::uno::XInterface
 {
     /** returns the URL list for interception.
 

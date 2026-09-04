@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module util {
 /** allows initiating an update of linked parts of a document.
 
  */
-published interface XLinkUpdate: com::sun::star::uno::XInterface
+published interface XLinkUpdate: cpo::uno::XInterface
 {
     /** initiates the reloading of all linked document content like linked graphics,
         linked text sections.

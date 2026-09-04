@@ -25,7 +25,7 @@
 /** makes it possible to register for action events of an image button
     and sets the action command.
  */
-published interface XImageButton: com::sun::star::uno::XInterface
+published interface XImageButton: cpo::uno::XInterface
 {
 
     /** registers a listener for action events.

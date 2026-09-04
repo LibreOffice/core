@@ -24,7 +24,7 @@
 /** makes it possible to access the endnotes within the
     context (e.g. document).
  */
-published interface XEndnotesSupplier: com::sun::star::uno::XInterface
+published interface XEndnotesSupplier: cpo::uno::XInterface
 {
     /** @returns
                 a collection of endnotes.

@@ -972,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellGridSpan)
 DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
 {
     // The problem was after save file created by MS the direction changed to RTL.
-    uno::Reference<uno::XInterface> xParaLTRLeft(getParagraph( 1, u"LTR LEFT"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLTRLeft(getParagraph( 1, u"LTR LEFT"_ustr));
     sal_Int32 nLTRLeft = getProperty< sal_Int32 >( xParaLTRLeft, u"ParaAdjust"_ustr );
     // test the text Direction value for the paragraph
     sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLTRLeft, u"WritingMode"_ustr );

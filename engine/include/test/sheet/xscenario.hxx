@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XSCENARIO_HXX
 #define INCLUDED_TEST_SHEET_XSCENARIO_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
@@ -20,7 +20,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XScenario
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> getScenarioSpreadsheet() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> getScenarioSpreadsheet() = 0;
 
     void testScenario();
 

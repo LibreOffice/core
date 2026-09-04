@@ -69,9 +69,6 @@ namespace com::sun::star {
         class XVclWindowPeer;
         class XWindow;
     }
-    namespace uno {
-        class XInterface;
-    }
     namespace datatransfer {
         namespace clipboard {
             class XClipboard;
@@ -85,6 +82,7 @@ namespace com::sun::star {
     }
 }
 namespace cpo::uno { class Any; }
+namespace cpo::uno { class XInterface; }
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 

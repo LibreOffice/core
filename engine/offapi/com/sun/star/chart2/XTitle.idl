@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XTitle : ::com::sun::star::uno::XInterface
+interface XTitle : ::cpo::uno::XInterface
 {
     sequence< XFormattedString > getText();
 

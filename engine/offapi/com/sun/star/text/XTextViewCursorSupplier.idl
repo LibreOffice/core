@@ -28,7 +28,7 @@
 
     </p>@see TextDocumentView
  */
-published interface XTextViewCursorSupplier: com::sun::star::uno::XInterface
+published interface XTextViewCursorSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the cursor of the document view.

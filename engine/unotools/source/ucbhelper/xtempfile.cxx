@@ -439,7 +439,7 @@ cpo::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
     return { u"com.sun.star.io.TempFile"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 unotools_OTempFileService_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

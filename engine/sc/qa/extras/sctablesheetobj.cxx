@@ -98,11 +98,11 @@ public:
 
     virtual OUString getFileURL() override;
 
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
-    virtual uno::Reference< uno::XInterface > getXSpreadsheetDocument() override;
-    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
-    virtual uno::Reference< uno::XInterface > getScenarioSpreadsheet() override;
+    virtual uno::Reference< cpo::uno::XInterface > init() override;
+    virtual uno::Reference< cpo::uno::XInterface > getXCellRangeData() override;
+    virtual uno::Reference< cpo::uno::XInterface > getXSpreadsheetDocument() override;
+    virtual uno::Reference< cpo::uno::XInterface > getXSpreadsheet() override;
+    virtual uno::Reference< cpo::uno::XInterface > getScenarioSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
 
@@ -257,7 +257,7 @@ ScTableSheetObj::ScTableSheetObj():
 {
 }
 
-uno::Reference< uno::XInterface > ScTableSheetObj::init()
+uno::Reference< cpo::uno::XInterface > ScTableSheetObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
@@ -283,18 +283,18 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     return xSheet;
 }
 
-uno::Reference< uno::XInterface > ScTableSheetObj::getXCellRangeData()
+uno::Reference< cpo::uno::XInterface > ScTableSheetObj::getXCellRangeData()
 {
     return init();
 }
 
-uno::Reference<uno::XInterface> ScTableSheetObj::getXSpreadsheetDocument()
+uno::Reference<cpo::uno::XInterface> ScTableSheetObj::getXSpreadsheetDocument()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     return xDoc;
 }
 
-uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
+uno::Reference<cpo::uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
@@ -320,7 +320,7 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
     return sSheet;
 }
 
-uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
+uno::Reference< cpo::uno::XInterface > ScTableSheetObj::getXSpreadsheet()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 

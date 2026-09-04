@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::SheetRangesQuery
     @see com::sun::star::sheet::SheetCellRanges
  */
-published interface XCellRangesQuery: com::sun::star::uno::XInterface
+published interface XCellRangesQuery: cpo::uno::XInterface
 {
 
     /** queries all visible cells.

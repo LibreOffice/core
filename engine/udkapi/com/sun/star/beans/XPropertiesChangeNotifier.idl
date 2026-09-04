@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module beans {
 
 /** specifies a notifier for changed property values@see      XPropertiesChangeListener
  */
-published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
+published interface XPropertiesChangeNotifier: cpo::uno::XInterface
 {
 
     /** adds an XPropertiesChangeListener to the

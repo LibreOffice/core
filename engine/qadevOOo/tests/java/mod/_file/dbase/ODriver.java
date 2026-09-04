@@ -27,7 +27,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Here <code>com.sun.star.sdbc.Driver</code> service is tested.<p>

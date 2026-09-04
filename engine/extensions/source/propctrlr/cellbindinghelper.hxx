@@ -215,7 +215,7 @@ namespace pcr
         /** checks whether a given component supports a given service
         */
         static bool     doesComponentSupport(
-                            const css::uno::Reference< css::uno::XInterface >& _rxComponent,
+                            const css::uno::Reference< cpo::uno::XInterface >& _rxComponent,
                             const OUString& _rService
                         );
 
@@ -229,7 +229,7 @@ namespace pcr
                 the value of the instantiation argument. Not evaluated if <arg>_rArgumentName</arg>
                 is empty.
         */
-        css::uno::Reference< css::uno::XInterface >
+        css::uno::Reference< cpo::uno::XInterface >
                         createDocumentDependentInstance(
                             const OUString& _rService,
                             const OUString& _rArgumentName,

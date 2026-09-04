@@ -100,7 +100,7 @@ Interceptor::~Interceptor()
     delete m_pStatCL;
 
     DocumentHolder* pTmpDocH = nullptr;
-    uno::Reference< uno::XInterface > xLock;
+    uno::Reference< cpo::uno::XInterface > xLock;
     {
         osl::MutexGuard aGuard(m_aMutex);
         xLock = m_xDocHLocker.get();
@@ -183,7 +183,7 @@ void Interceptor::generateFeatureStateEvent()
     if( m_pStatCL )
     {
         DocumentHolder* pTmpDocH = nullptr;
-        uno::Reference< uno::XInterface > xLock;
+        uno::Reference< cpo::uno::XInterface > xLock;
         {
             osl::MutexGuard aGuard(m_aMutex);
             xLock = m_xDocHLocker.get();
@@ -252,7 +252,7 @@ Interceptor::addStatusListener(
     if( !m_bLink && URL.Complete == m_aInterceptedURL[0] )
     {   // Save
         DocumentHolder* pTmpDocH = nullptr;
-        uno::Reference< uno::XInterface > xLock;
+        uno::Reference< cpo::uno::XInterface > xLock;
         {
             osl::MutexGuard aGuard(m_aMutex);
             xLock = m_xDocHLocker.get();
@@ -290,7 +290,7 @@ Interceptor::addStatusListener(
            URL.Complete == m_aInterceptedURL[++i] ) )
     {   // Close and return
         DocumentHolder* pTmpDocH = nullptr;
-        uno::Reference< uno::XInterface > xLock;
+        uno::Reference< cpo::uno::XInterface > xLock;
         {
             osl::MutexGuard aGuard(m_aMutex);
             xLock = m_xDocHLocker.get();

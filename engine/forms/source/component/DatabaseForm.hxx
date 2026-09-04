@@ -265,8 +265,8 @@ public:
     virtual void removeSubmitListener(const css::uno::Reference< css::form::XSubmitListener>& _rxListener) override;
 
     // css::container::XChild
-    virtual css::uno::Reference<css::uno::XInterface> getParent() override { return OFormComponents::getParent(); }
-    virtual void setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual css::uno::Reference<cpo::uno::XInterface> getParent() override { return OFormComponents::getParent(); }
+    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // css::container::XNamed
     virtual OUString getName() override;
@@ -351,7 +351,7 @@ public:
     virtual bool rowUpdated() override;
     virtual bool rowInserted() override;
     virtual bool rowDeleted() override;
-    virtual css::uno::Reference<css::uno::XInterface> getStatement() override;
+    virtual css::uno::Reference<cpo::uno::XInterface> getStatement() override;
 
     // css::sdbc::XResultSetUpdate
     virtual void insertRow() override;
@@ -428,7 +428,7 @@ protected:
 
     // OInterfaceContainer overridables
     virtual void implInserted( const ElementDescription* _pElement ) override;
-    virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) override;
+    virtual void implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject) override;
 
     // OPropertyChangeListener
     virtual void _propertyChanged( const css::beans::PropertyChangeEvent& ) override;

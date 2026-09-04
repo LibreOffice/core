@@ -61,9 +61,9 @@ public:
     */
     template <typename T>
         // Disallow things like
-        // Reference<css::uno::XInterface> x(...);
+        // Reference<cpo::uno::XInterface> x(...);
         // Any a(*x);
-        requires (!std::is_base_of_v<css::uno::XInterface, T>)
+        requires (!std::is_base_of_v<cpo::uno::XInterface, T>)
     explicit inline Any( T const & value );
     /// Ctor support for C++ bool.
     explicit inline Any( bool value );

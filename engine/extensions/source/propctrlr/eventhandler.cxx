@@ -90,7 +90,7 @@ namespace pcr
     using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::beans::XIntrospection;
     using ::com::sun::star::beans::XIntrospectionAccess;
     using ::com::sun::star::container::XNameContainer;
@@ -1096,7 +1096,7 @@ namespace pcr
 
 } // namespace pcr
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 extensions_propctrlr_EventHandler_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

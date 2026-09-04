@@ -27,7 +27,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
 import com.sun.star.sheet.XEnhancedMouseClickBroadcaster;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import lib.MultiMethodTest;
 import util.AccessibilityTools;

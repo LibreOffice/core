@@ -60,8 +60,8 @@ public:
     // XSearchable
     virtual css::uno::Reference< css::util::XSearchDescriptor > SAL_CALL createSearchDescriptor(  ) override;
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL findNext( const css::uno::Reference< css::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL findNext( const css::uno::Reference< cpo::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 };
 
 /* ================================================================= */
@@ -112,10 +112,10 @@ public:
     lets people access it through the XIndexAccess Interface. */
 class SdUnoFindAllAccess final : public ::cppu::WeakImplHelper< css::container::XIndexAccess > // public css::container::XElementAccess
 {
-    cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > maSequence;
+    cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface >  > maSequence;
 
 public:
-    SdUnoFindAllAccess( cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > const & rSequence ) noexcept;
+    SdUnoFindAllAccess( cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface >  > const & rSequence ) noexcept;
     virtual ~SdUnoFindAllAccess() noexcept override;
 
     // XIndexAccess

@@ -73,7 +73,7 @@ void ItemHolder1::holdConfigItem(EItem eItem)
 
 void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
 {
-    css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
     impl_releaseAllItems();
 }
 

@@ -57,7 +57,7 @@ void cancelCommandExecution( const cpo::uno::Any & rException,
             if ( xSelection.is() )
                 throw ucb::CommandFailedException(
                                     OUString(),
-                                    uno::Reference< uno::XInterface >(),
+                                    uno::Reference< cpo::uno::XInterface >(),
                                     rException );
         }
     }

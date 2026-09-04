@@ -24,7 +24,7 @@
 /** Obtains human readable strings from an XInteractionRequest.
  */
 /* published */
-interface XInteractionRequestStringResolver : com::sun::star::uno::XInterface
+interface XInteractionRequestStringResolver : cpo::uno::XInterface
 {
 
     /** Obtains a string containing a human readable message from an

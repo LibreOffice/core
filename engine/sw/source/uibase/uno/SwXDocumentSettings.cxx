@@ -844,13 +844,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             if ( !( rValue >>= aInfo ) )
                 throw lang::IllegalArgumentException(
                     u"Value of type Sequence<PropertyValue> expected!"_ustr,
-                    uno::Reference< uno::XInterface >(),
+                    uno::Reference< cpo::uno::XInterface >(),
                     2 );
 
             if ( !mpDocSh->SetModifyPasswordInfo( aInfo ) )
                 throw beans::PropertyVetoException(
                     u"The hash is not allowed to be changed now!"_ustr,
-                    uno::Reference< uno::XInterface >() );
+                    uno::Reference< cpo::uno::XInterface >() );
         }
         break;
         case HANDLE_MATH_BASELINE_ALIGNMENT:

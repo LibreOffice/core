@@ -26,7 +26,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.TextSegment;
 import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 
 /**

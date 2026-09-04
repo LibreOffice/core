@@ -344,7 +344,7 @@ cpo::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_calc_FormatDetector_get_implementation(cpo::uno::XComponentContext* /*context*/,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {

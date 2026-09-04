@@ -18,7 +18,7 @@
 package mod._sw;
 
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import lib.TestCase;
 import lib.TestEnvironment;

@@ -28,7 +28,7 @@ import util.utils;
 
 import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Test for object which is represented by service

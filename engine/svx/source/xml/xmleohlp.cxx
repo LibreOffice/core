@@ -677,7 +677,7 @@ bool SvXMLEmbeddedObjectHelper::hasElements()
 
 namespace svx {
 
-    void DropUnusedNamedItems(css::uno::Reference<css::uno::XInterface> const& xModel)
+    void DropUnusedNamedItems(css::uno::Reference<cpo::uno::XInterface> const& xModel)
     {
         uno::Reference<lang::XMultiServiceFactory> const xModelFactory(xModel, uno::UNO_QUERY);
         assert(xModelFactory.is());

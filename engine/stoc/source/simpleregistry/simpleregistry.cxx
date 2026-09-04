@@ -33,7 +33,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -921,7 +921,7 @@ void SimpleRegistry::mergeKey(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_stoc_SimpleRegistry_get_implementation(
     SAL_UNUSED_PARAMETER cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

@@ -46,19 +46,19 @@ namespace comphelper
     class OWeakListenerAdapterBase
     {
     private:
-        cpo::uno::WeakReference< css::uno::XInterface >
+        cpo::uno::WeakReference< cpo::uno::XInterface >
                 m_aListener;
-        css::uno::Reference< css::uno::XInterface >
+        css::uno::Reference< cpo::uno::XInterface >
                 m_xBroadcaster;
 
     protected:
-        css::uno::Reference< css::uno::XInterface >
+        css::uno::Reference< cpo::uno::XInterface >
                 getListener( ) const
         {
             return m_aListener.get();
         }
 
-        const css::uno::Reference< css::uno::XInterface >&
+        const css::uno::Reference< cpo::uno::XInterface >&
                 getBroadcaster( ) const
         {
             return m_xBroadcaster;
@@ -73,7 +73,7 @@ namespace comphelper
     protected:
         OWeakListenerAdapterBase(
             const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
-            css::uno::Reference< css::uno::XInterface > _xBroadcaster
+            css::uno::Reference< cpo::uno::XInterface > _xBroadcaster
         )
             :m_aListener    (  _rxListener )
             ,m_xBroadcaster (std::move( _xBroadcaster ))

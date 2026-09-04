@@ -84,7 +84,7 @@ namespace toolkit
 
         /** updates our images with the ones from the given XAnimatedImages component
         */
-        void    impl_updateImages_nolck( const css::uno::Reference< css::uno::XInterface >& i_animatedImages );
+        void    impl_updateImages_nolck( const css::uno::Reference< cpo::uno::XInterface >& i_animatedImages );
 
         AnimatedImagesPeer(const AnimatedImagesPeer&) = delete;
         AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) = delete;

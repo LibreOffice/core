@@ -25,7 +25,7 @@
     @see ::com::sun::star::frame::LayoutManager
  */
 
-interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface
+interface XLayoutManagerEventBroadcaster : cpo::uno::XInterface
 {
     /** adds a layout manager event listener to the object's listener list.
 

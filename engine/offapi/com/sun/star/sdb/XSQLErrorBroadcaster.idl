@@ -25,7 +25,7 @@
     com::sun::star::sdbc::SQLException
     s posted by any database object.
  */
-published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
+published interface XSQLErrorBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener to receive the event "errorOccurred"

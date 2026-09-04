@@ -110,8 +110,8 @@ Module.unoObject = function(interfaces, obj) {
         ifc.delete();
     })
     tdm.delete();
-    return Module.uno.com.sun.star.uno.XInterface.reference(
-        obj.impl_interfaces[obj.impl_typemap['com.sun.star.uno.XInterface']]);
+    return Module.uno.cpo.uno.XInterface.reference(
+        obj.impl_interfaces[obj.impl_typemap['cpo.uno.XInterface']]);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -32,7 +32,7 @@ module com { module sun { module star { module ucb {
     @see      XCommandEnvironment
     @see      XContent
 */
-published interface XCommandProcessor : com::sun::star::uno::XInterface
+published interface XCommandProcessor : cpo::uno::XInterface
 {
     /** creates a unique identifier for a command.
 

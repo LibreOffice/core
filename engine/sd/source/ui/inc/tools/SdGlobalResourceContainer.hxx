@@ -27,7 +27,7 @@ namespace com::sun::star::uno
 {
 template <class interface_type> class Reference;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class XInterface;
 }
@@ -87,7 +87,7 @@ public:
         (when the sd modules is unloaded) is done by a) calling dispose()
         when the XComponent is supported and by b) releasing the reference.
     */
-    void AddResource(const css::uno::Reference<css::uno::XInterface>& rxResource);
+    void AddResource(const css::uno::Reference<cpo::uno::XInterface>& rxResource);
 
 private:
     friend class SdGlobalResourceContainerInstance;

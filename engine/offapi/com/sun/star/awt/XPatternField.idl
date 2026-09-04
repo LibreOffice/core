@@ -24,7 +24,7 @@
 
 /** gives access to the value and formatting of a pattern field.
  */
-published interface XPatternField: com::sun::star::uno::XInterface
+published interface XPatternField: cpo::uno::XInterface
 {
 
     /** sets the pattern mask.

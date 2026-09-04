@@ -561,7 +561,7 @@ private:
 
     //sets the model member to null if it equals the parameter
     //returns true if successful
-    bool impl_releaseThisModel( const css::uno::Reference< css::uno::XInterface > & xModel );
+    bool impl_releaseThisModel( const css::uno::Reference< cpo::uno::XInterface > & xModel );
 
     enum eMoveOrResizeType
     {

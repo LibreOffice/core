@@ -22,7 +22,7 @@ import lib.MultiMethodTest;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.lang.XMultiComponentFactory</code>

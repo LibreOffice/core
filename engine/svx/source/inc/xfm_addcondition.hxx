@@ -35,7 +35,7 @@ namespace svxform
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddConditionDialog >
     {
     public:
-        static css::uno::Reference< css::uno::XInterface >
+        static css::uno::Reference< cpo::uno::XInterface >
             Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
     private:

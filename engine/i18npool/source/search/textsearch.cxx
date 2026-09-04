@@ -1582,7 +1582,7 @@ TextSearch::getSupportedServiceNames()
     return { u"com.sun.star.util.TextSearch"_ustr, u"com.sun.star.util.TextSearch2"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 i18npool_TextSearch_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -55,7 +55,7 @@ struct TestSimple
 struct TestElement : test::TestSimple
 {
     string                     String;
-    com::sun::star::uno::XInterface   Interface;
+    cpo::uno::XInterface   Interface;
     any                        Any;
 };
 struct TestDataElements : test::TestElement
@@ -66,7 +66,7 @@ struct TestDataElements : test::TestElement
 typedef TestDataElements TestData;
 
 /** Monster test interface to test language binding calls. */
-interface XLBTestBase : com::sun::star::uno::XInterface
+interface XLBTestBase : cpo::uno::XInterface
 {
     /**
      * in parameter test, tests by calls reference also (complex types)
@@ -77,7 +77,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
                              [in] hyper nHyper, [in] unsigned hyper nUHyper,
                              [in] float fFloat, [in] double fDouble,
                              [in] test::TestEnum eEnum, [in] string aString,
-                             [in] com::sun::star::uno::XInterface xInterface, [in] any aAny,
+                             [in] cpo::uno::XInterface xInterface, [in] any aAny,
                              [in] sequence<test::TestElement > aSequence,
                              [in] test::TestData aStruct );
     /**
@@ -89,7 +89,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
                                [inout] hyper nHyper, [inout] unsigned hyper nUHyper,
                                [inout] float fFloat, [inout] double fDouble,
                                [inout] test::TestEnum eEnum, [inout] string aString,
-                               [inout] com::sun::star::uno::XInterface xInterface, [inout] any aAny,
+                               [inout] cpo::uno::XInterface xInterface, [inout] any aAny,
                                [inout] sequence<test::TestElement > aSequence,
                                [inout] test::TestData aStruct );
 
@@ -102,7 +102,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
                               [out] hyper nHyper, [out] unsigned hyper nUHyper,
                               [out] float fFloat, [out] double fDouble,
                               [out] test::TestEnum eEnum, [out] string aString,
-                              [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
+                              [out] cpo::uno::XInterface xInterface, [out] any aAny,
                               [out] sequence<test::TestElement > aSequence,
                               [out] test::TestData aStruct );
 
@@ -119,7 +119,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
     [attribute] double                   Double;
     [attribute] test::TestEnum           Enum;
     [attribute] string                   String;
-    [attribute] com::sun::star::uno::XInterface Interface;
+    [attribute] cpo::uno::XInterface Interface;
     [attribute] any                      Any;
     [attribute] sequence<test::TestElement > Sequence;
     [attribute] test::TestData           Struct;
@@ -138,7 +138,7 @@ interface XLanguageBindingTest : test::XLBTestBase
                                    [out] hyper nHyper, [out] unsigned hyper nUHyper,
                                    [out] float fFloat, [out] double fDouble,
                                    [out] test::TestEnum eEnum, [out] string aString,
-                                   [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
+                                   [out] cpo::uno::XInterface xInterface, [out] any aAny,
                                    [out] sequence<test::TestElement > aSequence,
                                    [out] test::TestData aStruct )
         raises( com::sun::star::lang::IllegalArgumentException );

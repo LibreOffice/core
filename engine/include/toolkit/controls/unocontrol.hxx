@@ -88,7 +88,7 @@ protected:
     PaintListenerMultiplexer            maPaintListeners;
     ::comphelper::OInterfaceContainerHelper3<css::util::XModeChangeListener> maModeChangeListeners;
 
-    css::uno::Reference< css::uno::XInterface >       mxContext;
+    css::uno::Reference< cpo::uno::XInterface >       mxContext;
     css::uno::Reference< css::awt::XControlModel >    mxModel;
     css::uno::Reference< css::awt::XGraphics >        mxGraphics;
 
@@ -182,8 +182,8 @@ public:
     void setZoom( float fZoomX, float fZoomY ) override;
 
     // css::awt::XControl
-    void setContext( const css::uno::Reference< css::uno::XInterface >& Context ) override;
-    css::uno::Reference< css::uno::XInterface > getContext(  ) override;
+    void setContext( const css::uno::Reference< cpo::uno::XInterface >& Context ) override;
+    css::uno::Reference< cpo::uno::XInterface > getContext(  ) override;
     void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     css::uno::Reference< css::awt::XWindowPeer > getPeer(  ) override;
     bool setModel( const css::uno::Reference< css::awt::XControlModel >& Model ) override;

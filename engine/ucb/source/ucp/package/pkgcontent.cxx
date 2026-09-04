@@ -2378,7 +2378,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
             cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(isFolder()) };
 
-            uno::Reference< uno::XInterface > xNew
+            uno::Reference< cpo::uno::XInterface > xNew
                 = xFac->createInstanceWithArguments( aArgs );
 
             if ( !xNew.is() )

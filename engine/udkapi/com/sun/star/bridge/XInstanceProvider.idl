@@ -24,7 +24,7 @@
 
     @see XBridge
  */
-published interface XInstanceProvider: com::sun::star::uno::XInterface
+published interface XInstanceProvider: cpo::uno::XInterface
 {
 
     /** gets called, when an initial object is requested from a remote process.
@@ -43,7 +43,7 @@ published interface XInstanceProvider: com::sun::star::uno::XInterface
             name. Due to a specification bug, this exception will appear as a RuntimeException
             at the XBridge.getInstance() method.
      */
-    com::sun::star::uno::XInterface getInstance( [in] string sInstanceName )
+    cpo::uno::XInterface getInstance( [in] string sInstanceName )
             raises ( com::sun::star::container::NoSuchElementException );
 };
 

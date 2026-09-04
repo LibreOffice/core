@@ -36,7 +36,7 @@ import com.sun.star.table.XCell;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import ifc.sheet._XCellRangesQuery;
 
 /**

@@ -118,7 +118,7 @@ Storage::Storage( const uno::Reference< cpo::uno::XComponentContext > & rxContex
 Storage::~Storage()
 {
     if ( m_xAggProxy.is() )
-        m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
+        m_xAggProxy->setDelegator( uno::Reference< cpo::uno::XInterface >() );
 
     // Never dispose a document storage. Not owner!
     if ( m_bIsDocumentStorage )
@@ -508,7 +508,7 @@ OutputStream::OutputStream(
 OutputStream::~OutputStream()
 {
     if ( m_xAggProxy.is() )
-        m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
+        m_xAggProxy->setDelegator( uno::Reference< cpo::uno::XInterface >() );
 }
 
 
@@ -676,7 +676,7 @@ Stream::Stream(
 Stream::~Stream()
 {
     if ( m_xAggProxy.is() )
-        m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
+        m_xAggProxy->setDelegator( uno::Reference< cpo::uno::XInterface >() );
 }
 
 

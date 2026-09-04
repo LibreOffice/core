@@ -26,7 +26,7 @@ import com.sun.star.connection.XConnector;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;

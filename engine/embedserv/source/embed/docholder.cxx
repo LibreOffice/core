@@ -119,7 +119,7 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
         pSeq[0] = beans::PropertyValue(
             "Model",
             -1,
-            cpo::uno::Any(uno::Reference<uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
+            cpo::uno::Any(uno::Reference<cpo::uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
             beans::PropertyState_DIRECT_VALUE);
 
         pSeq[1] = beans::PropertyValue(

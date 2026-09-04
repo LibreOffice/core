@@ -42,7 +42,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -65,7 +65,7 @@ public:
     Provider(const Provider&) = delete;
     const Provider& operator=(const Provider&) = delete;
 
-    static css::uno::Reference< css::uno::XInterface > static_create(
+    static css::uno::Reference< cpo::uno::XInterface > static_create(
         css::uno::Reference< cpo::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
 
@@ -153,7 +153,7 @@ public:
     Dispatch(const Dispatch&) = delete;
     const Dispatch& operator=(const Dispatch&) = delete;
 
-    static css::uno::Reference< css::uno::XInterface > static_create(
+    static css::uno::Reference< cpo::uno::XInterface > static_create(
         css::uno::Reference< cpo::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }
 

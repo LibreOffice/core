@@ -55,7 +55,7 @@ public:
 
     static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< css::uno::XInterface > impl_staticCreateSelfInstance(
+    static css::uno::Reference< cpo::uno::XInterface > impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     DECL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, void );

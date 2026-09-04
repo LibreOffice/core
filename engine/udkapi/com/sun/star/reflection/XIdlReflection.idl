@@ -27,7 +27,7 @@
     @see CoreReflection
     @see XIdlClass
 */
-published interface XIdlReflection: com::sun::star::uno::XInterface
+published interface XIdlReflection: cpo::uno::XInterface
 {
     /** Obtaining a reflection interface for a type.  You specify the type by
         its name.

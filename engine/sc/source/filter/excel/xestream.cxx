@@ -80,7 +80,7 @@
 
 #define DEBUG_XL_ENCRYPTION 0
 
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::beans;

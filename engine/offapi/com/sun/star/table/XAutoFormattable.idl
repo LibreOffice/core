@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module table {
 
 /** provides a method to apply TableAutoFormats to a cell range.
  */
-published interface XAutoFormattable: com::sun::star::uno::XInterface
+published interface XAutoFormattable: cpo::uno::XInterface
 {
 
     /** applies an AutoFormat to the cell range of the current context.

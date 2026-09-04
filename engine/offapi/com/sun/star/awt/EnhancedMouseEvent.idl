@@ -33,7 +33,7 @@ published struct EnhancedMouseEvent: com::sun::star::awt::MouseEvent
     /** contains the object on the location of the mouse.
      */
 
-    com::sun::star::uno::XInterface Target;
+    cpo::uno::XInterface Target;
 
 
 };

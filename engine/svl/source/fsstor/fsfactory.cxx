@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Reference< uno::XInterface > FSStorageFactory::createInstance()
+uno::Reference< cpo::uno::XInterface > FSStorageFactory::createInstance()
 {
     OUString aTempURL = ::utl::CreateTempURL( nullptr, true );
     if ( aTempURL.isEmpty() )
@@ -57,7 +57,7 @@ uno::Reference< uno::XInterface > FSStorageFactory::createInstance()
  * The second value is a mode the storage should be open in.
  * The third value is a media descriptor.
  */
-uno::Reference< uno::XInterface > FSStorageFactory::createInstanceWithArguments(
+uno::Reference< cpo::uno::XInterface > FSStorageFactory::createInstanceWithArguments(
             const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     sal_Int32 nArgNum = aArguments.getLength();
@@ -145,7 +145,7 @@ cpo::uno::Sequence< OUString > FSStorageFactory::getSupportedServiceNames()
 
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 svl_FSStorageFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

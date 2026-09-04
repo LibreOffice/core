@@ -64,13 +64,13 @@ protected:
 
 public:
     OStatementBase(const rtl::Reference< ::dbaccess::OConnection > & _xConn,
-                   const css::uno::Reference< css::uno::XInterface > & _xStatement);
+                   const css::uno::Reference< cpo::uno::XInterface > & _xStatement);
 
 
 // css::lang::XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
     virtual void acquire() noexcept override;
     virtual void release() noexcept override;
@@ -144,7 +144,7 @@ private:
 
 public:
     OStatement(const rtl::Reference< ::dbaccess::OConnection > & _xConn,
-               const css::uno::Reference< css::uno::XInterface > & _xStatement);
+               const css::uno::Reference< cpo::uno::XInterface > & _xStatement);
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()

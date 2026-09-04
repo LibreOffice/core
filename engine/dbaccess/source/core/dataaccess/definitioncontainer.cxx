@@ -235,7 +235,7 @@ void ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aEl
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetException(
           "wrapped Exception " + e.Message,
-          css::uno::Reference<css::uno::XInterface>(), a);
+          css::uno::Reference<cpo::uno::XInterface>(), a);
     }
 }
 

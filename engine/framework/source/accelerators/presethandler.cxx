@@ -171,7 +171,7 @@ void lcl_throwCorruptedUIConfigurationException(
     OSL_ASSERT(ok);
     throw css::configuration::CorruptedUIConfigurationException(
         lcl_getLocalizedMessage(id),
-        css::uno::Reference< css::uno::XInterface >(),
+        css::uno::Reference< cpo::uno::XInterface >(),
         exception.getValueTypeName() + ": \"" + e.Message + "\"");
 }
 

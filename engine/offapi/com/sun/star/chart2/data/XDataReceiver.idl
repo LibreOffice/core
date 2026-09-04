@@ -28,7 +28,7 @@ module chart2
 module data
 {
 
-interface XDataReceiver : ::com::sun::star::uno::XInterface
+interface XDataReceiver : ::cpo::uno::XInterface
 {
     /** attaches a component that provides data for the document.
 

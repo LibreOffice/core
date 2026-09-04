@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 using namespace cpo::uno;
 using namespace xmloff::token;
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_sdb_DBExportFilter_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -72,7 +72,7 @@ com_sun_star_comp_sdb_DBExportFilter_get_implementation(
         u"com.sun.star.comp.sdb.DBExportFilter"_ustr));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -81,7 +81,7 @@ com_sun_star_comp_sdb_XMLSettingsExporter_get_implementation(
         SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_sdb_XMLFullExporter_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

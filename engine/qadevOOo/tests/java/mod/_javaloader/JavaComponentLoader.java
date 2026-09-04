@@ -26,7 +26,7 @@ import lib.TestParameters;
 import util.utils;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Test for <code>com.sun.star.comp.stoc.Java2</code> service <p>

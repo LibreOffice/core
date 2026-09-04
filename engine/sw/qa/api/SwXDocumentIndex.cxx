@@ -55,7 +55,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         mxTextDocument = Reference<text::XTextDocument>(mxComponent, UNO_QUERY_THROW);

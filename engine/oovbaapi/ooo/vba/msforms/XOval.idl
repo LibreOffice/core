@@ -24,7 +24,7 @@ module ooo {  module vba { module msforms {
  * return true. It is determined using XTypeProvider::getTypes(), which is
  * implemented automatically based on the name of the class.
  */
-interface XOval: com::sun::star::uno::XInterface
+interface XOval: cpo::uno::XInterface
 {
 
 

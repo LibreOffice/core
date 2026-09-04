@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -547,11 +547,11 @@ public:
 
     virtual void fireFocusGained(
         css::uno::Reference<
-        css::uno::XInterface > const & source) override;
+        cpo::uno::XInterface > const & source) override;
 
     virtual void fireFocusLost(
         css::uno::Reference<
-        css::uno::XInterface > const & source) override;
+        cpo::uno::XInterface > const & source) override;
 
     // css::awt::XReschedule:
     virtual void reschedule() override;
@@ -1128,7 +1128,7 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     if ( !pField )
         return;
 
-    css::uno::Reference< css::uno::XInterface > xRoadmapItem = evt.Source;
+    css::uno::Reference< cpo::uno::XInterface > xRoadmapItem = evt.Source;
     sal_Int32 nID = 0;
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
     cpo::uno::Any aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
@@ -1171,7 +1171,7 @@ void SVTXRoadmap::removeItemListener( const css::uno::Reference< css::awt::XItem
 RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rEvent )
 {
     RMItemData aCurRMItemData;
-    css::uno::Reference< css::uno::XInterface > xRoadmapItem;
+    css::uno::Reference< cpo::uno::XInterface > xRoadmapItem;
     _rEvent.Element >>= xRoadmapItem;
     css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
     if ( xPropertySet.is() )
@@ -2230,14 +2230,14 @@ void VCLXToolkit::removeFocusListener(
 // virtual
 void VCLXToolkit::fireFocusGained(
     css::uno::Reference<
-    css::uno::XInterface > const &)
+    cpo::uno::XInterface > const &)
 {
 }
 
 // virtual
 void VCLXToolkit::fireFocusLost(
     css::uno::Reference<
-    css::uno::XInterface > const &)
+    cpo::uno::XInterface > const &)
 {
 }
 
@@ -2387,7 +2387,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
     // Ignore the interior of compound controls when determining the
     // window that gets the focus next (see implementation in
     // vclxwindow.cxx for mapping between VCL and UNO AWT event):
-    css::uno::Reference< css::uno::XInterface > xNext;
+    css::uno::Reference< cpo::uno::XInterface > xNext;
     vcl::Window * pFocus = ::Application::GetFocusWindow();
     for (vcl::Window * p = pFocus; p != nullptr; p = p->GetParent())
         if (!p->IsCompoundControl())
@@ -2549,7 +2549,7 @@ void VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 
 } // end anonymous namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_VCLXToolkit_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

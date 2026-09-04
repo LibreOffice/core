@@ -29,7 +29,7 @@ cpo::uno::Type SAL_CALL
 ScVbaPages::getElementType()
 {
     // return cppu::UnoType<msforms::XPage>::get();
-    return cppu::UnoType<uno::XInterface>::get();
+    return cppu::UnoType<cpo::uno::XInterface>::get();
 }
 
 cpo::uno::Any

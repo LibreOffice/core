@@ -33,7 +33,7 @@ module data
     <p>The data that is stored in this container may contain different
     types.</p>
  */
-interface XDataSequence : ::com::sun::star::uno::XInterface
+interface XDataSequence : ::cpo::uno::XInterface
 {
     /** retrieves the data stored in this component.
 

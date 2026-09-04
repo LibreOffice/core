@@ -25,7 +25,7 @@ module com { module sun { module star { module xml { module crypto {
  * <p>This interface specifies a certain signature context. By signature
  * context, the signer or verifier retrieves key specification.</p>
  */
-interface XXMLSecurityContext : com::sun::star::uno::XInterface
+interface XXMLSecurityContext : cpo::uno::XInterface
 {
     /**
      * Add personal security environment , and return the index of the added environment.

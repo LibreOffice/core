@@ -198,7 +198,7 @@ private:
                        std::unordered_map<VectorPartKey, sal_uInt64, VectorPartKey::Hash>>
         maVectorPushedVersions;
 
-    css::uno::Reference<css::uno::XInterface> create(
+    css::uno::Reference<cpo::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
     /// @throws cpo::uno::RuntimeException
@@ -214,13 +214,13 @@ private:
     unotools::WeakReference< SdUnoForbiddenCharsTable > mxForbiddenCharacters;
     unotools::WeakReference< SdDocLinkTargets > mxLinks;
 
-    css::uno::Reference< css::uno::XInterface > mxDashTable;
-    css::uno::Reference< css::uno::XInterface > mxGradientTable;
-    css::uno::Reference< css::uno::XInterface > mxHatchTable;
-    css::uno::Reference< css::uno::XInterface > mxBitmapTable;
-    css::uno::Reference< css::uno::XInterface > mxTransGradientTable;
-    css::uno::Reference< css::uno::XInterface > mxMarkerTable;
-    css::uno::Reference< css::uno::XInterface > mxDrawingPool;
+    css::uno::Reference< cpo::uno::XInterface > mxDashTable;
+    css::uno::Reference< cpo::uno::XInterface > mxGradientTable;
+    css::uno::Reference< cpo::uno::XInterface > mxHatchTable;
+    css::uno::Reference< cpo::uno::XInterface > mxBitmapTable;
+    css::uno::Reference< cpo::uno::XInterface > mxTransGradientTable;
+    css::uno::Reference< cpo::uno::XInterface > mxMarkerTable;
+    css::uno::Reference< cpo::uno::XInterface > mxDrawingPool;
 
     const SvxItemPropertySet*   mpPropSet;
 
@@ -302,8 +302,8 @@ public:
     virtual css::uno::Reference< css::presentation::XPresentation > SAL_CALL getPresentation(  ) override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
-    SD_DLLPUBLIC virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
+    SD_DLLPUBLIC virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference<cpo::uno::XInterface> SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence<cpo::uno::Any> const & Arguments) override;

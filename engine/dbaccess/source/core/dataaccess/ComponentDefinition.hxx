@@ -98,12 +98,12 @@ protected:
 public:
     OComponentDefinition(
         const css::uno::Reference< cpo::uno::XComponentContext >&,
-        const css::uno::Reference< css::uno::XInterface >& _xParentContainer,
+        const css::uno::Reference< cpo::uno::XInterface >& _xParentContainer,
         const TContentPtr& _pImpl,
         bool _bTable = true);
 
     OComponentDefinition(
-             const css::uno::Reference< css::uno::XInterface >& _rxContainer
+             const css::uno::Reference< cpo::uno::XInterface >& _rxContainer
             ,const OUString& _rElementName
             ,const css::uno::Reference< cpo::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
@@ -113,7 +113,7 @@ public:
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     DECLARE_XINTERFACE( )
 
     // css::lang::XServiceInfo

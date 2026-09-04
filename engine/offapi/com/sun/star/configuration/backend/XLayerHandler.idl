@@ -24,7 +24,7 @@ module com { module sun { module star { module configuration { module backend {
 /** receives a description of a configuration layer
     as a sequence of events.
  */
-published interface XLayerHandler: ::com::sun::star::uno::XInterface
+published interface XLayerHandler: ::cpo::uno::XInterface
 {
 
     /** receives notification that a layer description is started

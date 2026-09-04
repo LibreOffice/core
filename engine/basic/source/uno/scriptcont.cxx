@@ -890,7 +890,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             ("utl::UcbStreamHelper::CreateStream failed for \""
                              + aCodeStreamName + "\": 0x"
                              + OUString::number(nError, 16)),
-                            uno::Reference< uno::XInterface >(), nError);
+                            uno::Reference< cpo::uno::XInterface >(), nError);
                     }
 
                     /*bool bRet = */pMod->LoadBinaryData( *pStream );
@@ -1000,7 +1000,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                     ("utl::UcbStreamHelper::CreateStream failed"
                                      " for code.bin: 0x"
                                      + OUString::number(nError, 16)),
-                                    uno::Reference< uno::XInterface >(),
+                                    uno::Reference< cpo::uno::XInterface >(),
                                     nError);
                             }
 
@@ -1201,7 +1201,7 @@ void SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 }   // namespace basic
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(cpo::uno::XComponentContext*,
                                                                  cpo::uno::Sequence<cpo::uno::Any> const &)
 {

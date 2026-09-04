@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XButton: com::sun::star::uno::XInterface
+interface XButton: cpo::uno::XInterface
 {
     [attribute] string Caption;
 };

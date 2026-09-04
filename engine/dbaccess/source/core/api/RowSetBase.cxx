@@ -116,7 +116,7 @@ Sequence< Type > ORowSetBase::getTypes()
     return ::comphelper::concatSequences(ORowSetBase_BASE::getTypes(),OPropertyStateContainer::getTypes());
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any ORowSetBase::queryInterface( const Type & rType )
 {
     Any aRet = ORowSetBase_BASE::queryInterface(rType);

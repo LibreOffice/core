@@ -49,7 +49,7 @@ void CommandDispatch::initialize()
 /// is called when this is disposed
 void CommandDispatch::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    Reference< uno::XInterface > xEventSource(static_cast< cppu::OWeakObject* >( this ));
+    Reference< cpo::uno::XInterface > xEventSource(static_cast< cppu::OWeakObject* >( this ));
     for( auto& rElement : m_aListeners )
         rElement.second.disposeAndClear( rGuard, xEventSource );
     m_aListeners.clear();

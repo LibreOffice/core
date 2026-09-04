@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module util {
     When calling the sort method however properties from different
     descriptors must not be mixed.</p>
  */
-published interface XSortable: com::sun::star::uno::XInterface
+published interface XSortable: cpo::uno::XInterface
 {
     /** @returns
             a sequence of properties which allows to specify/modify the

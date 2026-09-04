@@ -114,7 +114,7 @@ static void lcl_createPamCopy(std::optional<SwPaM>& o_rpPam, const SwPaM& rPam)
     ::sw::DeepCopyPaM(rPam, *o_rpPam);
 }
 
-void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
+void GetSelectableFromAny(uno::Reference<cpo::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         std::optional<SwPaM>& o_rpPaM, std::pair<UIName, FlyCntType> & o_rFrame,
         UIName & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,

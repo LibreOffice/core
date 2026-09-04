@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module util {
     Strings that already conform to the naming conventions should be left
     unchanged or minimally modified.</p>
  */
-published interface XStringEscape: com::sun::star::uno::XInterface
+published interface XStringEscape: cpo::uno::XInterface
 {
     /** encodes an arbitrary string into an escaped form compatible with some naming rules.
      */

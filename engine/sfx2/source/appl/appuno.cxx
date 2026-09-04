@@ -1693,7 +1693,7 @@ cpo::uno::Sequence< beans::PropertyValue >
 RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > const & rModel,
                               const cpo::uno::Sequence< beans::PropertyValue >& rProperties )
 {
-    uno::Reference< uno::XInterface > temp2;
+    uno::Reference< cpo::uno::XInterface > temp2;
     document::FilterOptionsRequest aOptionsRequest( OUString(),
                                                     temp2,
                                                     rModel,
@@ -1732,7 +1732,7 @@ public:
 
 RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aName )
 {
-    uno::Reference< uno::XInterface > temp2;
+    uno::Reference< cpo::uno::XInterface > temp2;
     document::BrokenPackageRequest aBrokenPackageRequest( OUString(), temp2, aName );
     m_aRequest <<= aBrokenPackageRequest;
     m_xApprove = new comphelper::OInteractionApprove;
@@ -1788,7 +1788,7 @@ public:
 
 NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
 {
-    uno::Reference< uno::XInterface > temp2;
+    uno::Reference< cpo::uno::XInterface > temp2;
     document::BrokenPackageRequest aBrokenPackageRequest( OUString(), temp2, aName );
     m_aRequest <<= aBrokenPackageRequest;
     m_xAbort = new comphelper::OInteractionAbort;

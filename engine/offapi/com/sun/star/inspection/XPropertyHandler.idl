@@ -49,7 +49,7 @@ interface XPropertyHandler
         @throws com::sun::star::lang::NullPointerException
             if the component is `NULL`
     */
-    void inspect( [in] com::sun::star::uno::XInterface Component )
+    void inspect( [in] cpo::uno::XInterface Component )
         raises( com::sun::star::lang::NullPointerException );
 
     /** retrieves the current value of a property

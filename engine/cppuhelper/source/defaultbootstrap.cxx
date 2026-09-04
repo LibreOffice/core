@@ -62,13 +62,13 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
         cppu::ContextEntry_Init(
             u"/singletons/com.sun.star.lang.theServiceManager"_ustr,
             cpo::uno::Any(
-                css::uno::Reference< css::uno::XInterface >(
+                css::uno::Reference< cpo::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
             false),
         cppu::ContextEntry_Init(
             u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr,
             cpo::uno::Any(
-                css::uno::Reference< css::uno::XInterface >(
+                css::uno::Reference< cpo::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false),
         cppu::ContextEntry_Init( //TODO: from services.rdb?

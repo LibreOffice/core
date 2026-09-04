@@ -54,12 +54,12 @@ private:
     SdrView*        pView;
     virtual bool Close() override;
 
-    typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
+    typedef std::vector< css::uno::Reference< cpo::uno::XInterface> > InterfaceArray;
 
-    static cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
+    static cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >
         CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );
     void implSetNewObjectSequence( const cpo::uno::Sequence
-        < css::uno::Reference< css::uno::XInterface > >& _rObjectSeq );
+        < css::uno::Reference< cpo::uno::XInterface > >& _rObjectSeq );
 
     void implSetNewObject( const css::uno::Reference< css::beans::XPropertySet >& _rxObject);
 

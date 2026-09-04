@@ -60,7 +60,7 @@ css::uno::Reference< css::frame::XModel > impl_getModelFromFrame( const css::uno
 bool implts_isPreviewModel( const css::uno::Reference< css::frame::XModel >& xModel );
 bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame::XFrame >& xFrame );
 void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible );
-void impl_addWindowListeners( const css::uno::Reference< css::uno::XInterface >& xThis, const css::uno::Reference< css::ui::XUIElement >& xUIElement );
+void impl_addWindowListeners( const css::uno::Reference< cpo::uno::XInterface >& xThis, const css::uno::Reference< css::ui::XUIElement >& xUIElement );
 
 }
 

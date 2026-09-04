@@ -432,7 +432,7 @@ Sequence< OUString > SAL_CALL CDataFormatTranslatorUNO::getSupportedServiceNames
     return { "com.sun.star.datatransfer.DataFormatTranslator" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 dtrans_CDataFormatTranslatorUNO_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

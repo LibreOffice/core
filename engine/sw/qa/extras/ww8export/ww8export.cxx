@@ -122,8 +122,8 @@ xray para2.PageStyleName
     // go to 1st paragraph
     (void) paraEnum->nextElement();
     // get the 2nd and 3rd paragraph
-    uno::Reference<uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( u"one"_ustr, text1->getString());
@@ -158,9 +158,9 @@ xray para2.PageStyleName
     uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
     // get the 2nd and 4th paragraph
     (void) paraEnum->nextElement();
-    uno::Reference<uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
     (void) paraEnum->nextElement();
-    uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( u"text1"_ustr, text1->getString());
@@ -235,7 +235,7 @@ DECLARE_WW8EXPORT_TEST(testI120158, "i120158.doc")
     // list of paragraphs
     uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
     // get contents of 1st paragraph as text
-    uno::Reference<uno::XInterface> paragraph0(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> paragraph0(paraEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> text0(paragraph0, uno::UNO_QUERY);
     OUString sFieldResult = text0->getString();
     CPPUNIT_ASSERT(sFieldResult.endsWith("AM") || sFieldResult.endsWith("PM"));

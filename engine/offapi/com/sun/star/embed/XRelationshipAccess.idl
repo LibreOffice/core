@@ -30,7 +30,7 @@
     this tag is used as a unique identifier of an entry.
     </p>
  */
-published interface XRelationshipAccess : ::com::sun::star::uno::XInterface
+published interface XRelationshipAccess : ::cpo::uno::XInterface
 {
     /** allows to detect whether there is an entry with specified value of
         "Id" tag.

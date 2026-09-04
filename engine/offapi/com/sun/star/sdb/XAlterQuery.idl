@@ -21,7 +21,7 @@
 
 /** is used to alter the command of a query.
  */
-published interface XAlterQuery: com::sun::star::uno::XInterface
+published interface XAlterQuery: cpo::uno::XInterface
 {
 
     /** is intended to alter the command of a query object.

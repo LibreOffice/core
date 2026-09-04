@@ -359,7 +359,7 @@ void ClassificationControl::setCategoryStateFromPolicy(const SfxClassificationHe
 
 } // namespace sfx2
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(cpo::uno::XComponentContext* pContext, const cpo::uno::Sequence<cpo::uno::Any>&)
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(cpo::uno::XComponentContext* pContext, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new sfx2::ClassificationCategoriesController(pContext));
 }

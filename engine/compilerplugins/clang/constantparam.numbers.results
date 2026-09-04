@@ -27,7 +27,7 @@ basic/source/runtime/methods.cxx:3128
     const unsigned int i
     3
 canvas/inc/verifyinput.hxx:103
-    void verifyInput(const struct com::sun::star::geometry::Matrix2D &,const char *,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,short)
+    void verifyInput(const struct com::sun::star::geometry::Matrix2D &,const char *,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,short)
     short nArgPos
     2
 chart2/qa/extras/chart2export.cxx:125
@@ -75,7 +75,7 @@ codemaker/source/javamaker/classfile.cxx:86
     unsigned int data
     3405691582
 comphelper/qa/unit/variadictemplates.cxx:63
-    void extract(const class cpo::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
+    void extract(const class cpo::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &)
     int nArg
     4
 connectivity/source/inc/java/sql/ConnectionLog.hxx:105
@@ -271,7 +271,7 @@ connectivity/source/inc/odbc/OPreparedStatement.hxx:75
     int _nType
     -2
 connectivity/source/inc/odbc/OTools.hxx:216
-    class cpo::uno::Sequence<signed char> connectivity::odbc::OTools::getBytesValue(const class connectivity::odbc::OConnection *,void *,int,short,_Bool &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
+    class cpo::uno::Sequence<signed char> connectivity::odbc::OTools::getBytesValue(const class connectivity::odbc::OConnection *,void *,int,short,_Bool &,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &)
     short _fSqlType
     -2
 cppcanvas/source/inc/implrenderer.hxx:183
@@ -535,7 +535,7 @@ include/comphelper/traceevent.hxx:100
     unsigned long bufferSize
     100
 include/connectivity/dbtools.hxx:303
-    class com::sun::star::sdbc::SQLException prependErrorInfo(const class com::sun::star::sdbc::SQLException &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const class rtl::OUString &,const enum dbtools::StandardSQLState)
+    class com::sun::star::sdbc::SQLException prependErrorInfo(const class com::sun::star::sdbc::SQLException &,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const class rtl::OUString &,const enum dbtools::StandardSQLState)
     const enum dbtools::StandardSQLState _eSQLState
     2147483647
 include/connectivity/sqlerror.hxx:83
@@ -551,7 +551,7 @@ include/connectivity/sqlerror.hxx:162
     const int _eCondition
     200
 include/connectivity/sqlerror.hxx:187
-    void connectivity::SQLError::raiseTypedException(const int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const class cpo::uno::Type &) const
+    void connectivity::SQLError::raiseTypedException(const int,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const class cpo::uno::Type &) const
     const int _eCondition
     100
 include/dbaccess/genericcontroller.hxx:294

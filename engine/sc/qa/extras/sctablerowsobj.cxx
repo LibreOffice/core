@@ -21,7 +21,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -44,8 +44,8 @@ class ScTableRowsObj : public UnoApiTest,
 public:
     ScTableRowsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXCellRange() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXCellRange() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScTableRowsObj);
@@ -81,7 +81,7 @@ ScTableRowsObj::ScTableRowsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScTableRowsObj::init()
+uno::Reference<cpo::uno::XInterface> ScTableRowsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
@@ -97,7 +97,7 @@ uno::Reference<uno::XInterface> ScTableRowsObj::init()
     return xTR;
 }
 
-uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
+uno::Reference<cpo::uno::XInterface> ScTableRowsObj::getXCellRange()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

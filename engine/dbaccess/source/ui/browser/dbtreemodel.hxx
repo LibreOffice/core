@@ -37,7 +37,7 @@ namespace dbaui
         css::uno::Reference< css::beans::XPropertySet >
                                         xObjectProperties;
         /// if the entry denotes an object container, this is the UNO interface for this container
-        css::uno::Reference< css::uno::XInterface >
+        css::uno::Reference< cpo::uno::XInterface >
                                         xContainer;
         /// if the entry denotes a data source, this is the connection for this data source (if already connection)
         SharedConnection                xConnection;

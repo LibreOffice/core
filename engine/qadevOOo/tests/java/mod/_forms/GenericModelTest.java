@@ -43,7 +43,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import java.util.ArrayList;
 import lib.Status;

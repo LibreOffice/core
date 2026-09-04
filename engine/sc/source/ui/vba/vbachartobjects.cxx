@@ -102,7 +102,7 @@ ScVbaChartObjects::getChartObjectNames() const
     try
     {
         // c++ hackery
-        uno::Reference< uno::XInterface > xIf( xDrawPageSupplier, uno::UNO_QUERY_THROW );
+        uno::Reference< cpo::uno::XInterface > xIf( xDrawPageSupplier, uno::UNO_QUERY_THROW );
         ScCellRangesBase* pUno = dynamic_cast< ScCellRangesBase* >( xIf.get() );
         ScDocShell* pDocShell = nullptr;
         if ( !pUno )
@@ -125,7 +125,7 @@ ScVbaChartObjects::getChartObjectNames() const
     }
     catch (cpo::uno::Exception& )
     {
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
+        throw script::BasicErrorException( OUString(), uno::Reference< cpo::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
     }
     return sChartNames;
 }

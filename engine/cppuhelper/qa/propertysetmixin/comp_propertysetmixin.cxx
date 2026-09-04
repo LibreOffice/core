@@ -42,7 +42,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -373,7 +373,7 @@ private:
     css::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
-css::uno::Reference< css::uno::XInterface > create(
+css::uno::Reference< cpo::uno::XInterface > create(
     css::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return static_cast< cppu::OWeakObject * >(new Supplier(context));

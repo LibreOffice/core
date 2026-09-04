@@ -1333,7 +1333,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
     else if (pGrid && m_xColumns.is() && m_xColumns->hasElements())
     {
         // next find which column has changed
-        css::uno::Reference<css::uno::XInterface> xCurrent;
+        css::uno::Reference<cpo::uno::XInterface> xCurrent;
         sal_Int32 i;
 
         for ( i = 0; i < m_xColumns->getCount(); i++)

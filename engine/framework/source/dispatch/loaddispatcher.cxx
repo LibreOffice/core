@@ -77,7 +77,7 @@ cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     // Attention: May be nobody outside hold such temp. dispatch object alive (because
     // the container in which we resist isn't implemented threadsafe but updated by a timer
     // and clear our reference...) we should hold us self alive!
-    css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
 
     osl::MutexGuard g(m_mutex);
 

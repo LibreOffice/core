@@ -30,7 +30,7 @@ module com { module sun { module star { module i18n {
     change without notice and should not be used outside the OOo core.
  */
 
-interface XOrdinalSuffix : com::sun::star::uno::XInterface
+interface XOrdinalSuffix : cpo::uno::XInterface
 {
     /** Returns all the possible ordinal suffixes for the number.
 

@@ -21,7 +21,7 @@
 module com {  module sun {  module star {  module chart2 {
 
 
-interface XChartShapeContainer : ::com::sun::star::uno::XInterface
+interface XChartShapeContainer : ::cpo::uno::XInterface
 {
     /** a renderer creates ChartShapes and adds it to this container
     */

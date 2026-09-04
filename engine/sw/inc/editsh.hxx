@@ -725,7 +725,7 @@ public:
 
     /// restore selections.
     void HyphEnd();
-    css::uno::Reference< css::uno::XInterface>
+    css::uno::Reference< cpo::uno::XInterface>
                 HyphContinue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     void HyphIgnore();

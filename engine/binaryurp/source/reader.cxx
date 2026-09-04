@@ -33,7 +33,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/XCurrentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/byteseq.h>
@@ -298,7 +298,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                           css::uno::TypeDescription(
                               cppu::UnoType<
                                   css::uno::Reference<
-                                      css::uno::XInterface > >::get()))
+                                      cpo::uno::XInterface > >::get()))
                       && (css::uno::TypeDescription(
                               *static_cast<
                                   typelib_TypeDescriptionReference ** >(
@@ -307,7 +307,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                               css::uno::TypeDescription(
                                   cppu::UnoType<
                                       css::uno::Reference<
-                                          css::uno::XInterface > >::get())))))
+                                          cpo::uno::XInterface > >::get())))))
                 {
                     throw cpo::uno::RuntimeException(
                         "URP: queryInterface request message with unknown OID '"

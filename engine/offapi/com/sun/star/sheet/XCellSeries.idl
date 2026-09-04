@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::SheetCellRange
  */
-published interface XCellSeries: com::sun::star::uno::XInterface
+published interface XCellSeries: cpo::uno::XInterface
 {
 
     /** fills all cells in the range based on the specified settings.

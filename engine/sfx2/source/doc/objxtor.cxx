@@ -1073,7 +1073,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     return xComp;
 }
 
-SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<uno::XInterface>& xComp)
+SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<cpo::uno::XInterface>& xComp)
 {
     try
     {
@@ -1090,7 +1090,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<uno::XInte
     return nullptr;
 }
 
-SfxObjectShell* SfxObjectShell::GetParentShell(const css::uno::Reference<css::uno::XInterface>& xChild)
+SfxObjectShell* SfxObjectShell::GetParentShell(const css::uno::Reference<cpo::uno::XInterface>& xChild)
 {
     SfxObjectShell* pResult = nullptr;
 

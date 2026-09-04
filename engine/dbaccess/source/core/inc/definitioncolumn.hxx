@@ -44,7 +44,7 @@ namespace dbaccess
                                   ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumnDescriptor >
                                   ,public TXChild
     {
-        css::uno::Reference< css::uno::XInterface >   m_xParent;
+        css::uno::Reference< cpo::uno::XInterface >   m_xParent;
         const bool                                    m_bActAsDescriptor;
 
     protected:
@@ -87,8 +87,8 @@ namespace dbaccess
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;

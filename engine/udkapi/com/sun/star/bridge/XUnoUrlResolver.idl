@@ -23,7 +23,7 @@
 
 /** allows to resolve an object using the uno-url.
  */
-published interface XUnoUrlResolver: com::sun::star::uno::XInterface
+published interface XUnoUrlResolver: cpo::uno::XInterface
 {
 
     /** resolves an object using the given uno-url.
@@ -33,7 +33,7 @@ published interface XUnoUrlResolver: com::sun::star::uno::XInterface
         @returns the resolved object, in general a proxy for a remote object.
                  You can use it the same way as you use local references.
      */
-    com::sun::star::uno::XInterface resolve( [in] string sUnoUrl )
+    cpo::uno::XInterface resolve( [in] string sUnoUrl )
         raises (com::sun::star::connection::NoConnectException,
                 com::sun::star::connection::ConnectionSetupException,
                 com::sun::star::lang::IllegalArgumentException);

@@ -20,7 +20,7 @@ package mod._configmgr;
 
 import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;

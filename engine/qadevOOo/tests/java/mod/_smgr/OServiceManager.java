@@ -32,7 +32,7 @@ import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Test for object which is represented by service

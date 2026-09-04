@@ -35,7 +35,7 @@ import com.sun.star.uno.Any;
 import cpo.uno.Exception;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.xml.sax.XDocumentHandler;
 
 /**

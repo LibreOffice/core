@@ -54,7 +54,7 @@ import com.sun.star.uno.IEnvironment;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * This class implements a remote bridge.

@@ -42,7 +42,7 @@ module com { module sun { module star { module accessibility {
     selection.  An empty selection is used for example to express the
     current cursor position.</p>
 */
-interface XAccessibleText : ::com::sun::star::uno::XInterface
+interface XAccessibleText : ::cpo::uno::XInterface
 {
     /** Return the position of the caret.
 

@@ -2718,7 +2718,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         while (xDBContext->hasByName(sFind))
             sFind = sNewName + OUString::number(++nIndex);
 
-        uno::Reference<uno::XInterface> xNewInstance;
+        uno::Reference<cpo::uno::XInterface> xNewInstance;
         if (!bStore)
         {
             //odb-file
@@ -2914,7 +2914,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
         rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE),
         m_sEmbeddedName);
 
-    uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
     xDatabaseContext->registerObject( sDataSource, xDataSource );
 
     // temp file - don't remember connection
@@ -3125,7 +3125,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
         uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if( xMgr.is() )
         {
-            uno::Reference<uno::XInterface> xInstance = xMgr->createInstance(u"com.sun.star.sdb.RowSet"_ustr);
+            uno::Reference<cpo::uno::XInterface> xInstance = xMgr->createInstance(u"com.sun.star.sdb.RowSet"_ustr);
             uno::Reference<beans::XPropertySet> xRowSetPropSet(xInstance, uno::UNO_QUERY);
             if(xRowSetPropSet.is())
             {

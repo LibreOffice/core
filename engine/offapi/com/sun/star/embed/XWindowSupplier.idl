@@ -22,7 +22,7 @@
 
 /** provides access to a VCL window implementation.
  */
-published interface XWindowSupplier: com::sun::star::uno::XInterface
+published interface XWindowSupplier: cpo::uno::XInterface
 {
     /** allows to get access to a VCL window implementation.
 

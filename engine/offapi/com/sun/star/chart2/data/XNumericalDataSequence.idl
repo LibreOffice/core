@@ -31,7 +31,7 @@ module data
 /** allows access to a one-dimensional sequence of double precision
     floating-point numbers.
  */
-interface XNumericalDataSequence : ::com::sun::star::uno::XInterface
+interface XNumericalDataSequence : ::cpo::uno::XInterface
 {
     /** retrieves data as `double` values.
      */

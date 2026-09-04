@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module text {
 /** provides functionality to ...
  */
 
-interface XFlatParagraphIteratorProvider: com::sun::star::uno::XInterface
+interface XFlatParagraphIteratorProvider: cpo::uno::XInterface
 {
     /** get XFlatParagraphIterator
 

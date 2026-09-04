@@ -23,7 +23,7 @@ module com { module sun { module star { module util {
 
     @see XStringAbbreviation
  */
-published interface XStringWidth: com::sun::star::uno::XInterface
+published interface XStringWidth: cpo::uno::XInterface
 {
     /** compute the width of a given string.
 

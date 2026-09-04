@@ -21,7 +21,7 @@ namespace apitest
 void XTextContent::testGetAnchor()
 {
     uno::Reference<text::XTextContent> xTextContent(init(), UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xAnchor(xTextContent->getAnchor());
+    uno::Reference<cpo::uno::XInterface> xAnchor(xTextContent->getAnchor());
     CPPUNIT_ASSERT(xAnchor.is());
 }
 

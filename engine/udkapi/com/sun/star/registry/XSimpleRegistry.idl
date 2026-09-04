@@ -27,7 +27,7 @@ module com { module sun { module star { module registry {
 
     @see XRegistryKey
 */
-published interface XSimpleRegistry: com::sun::star::uno::XInterface
+published interface XSimpleRegistry: cpo::uno::XInterface
 {
     /** returns the URL of the current data source of the registry.
      */

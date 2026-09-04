@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module frame {
     @see Frame
     @see FeatureStateEvent
  */
-published interface XDispatch: com::sun::star::uno::XInterface
+published interface XDispatch: cpo::uno::XInterface
 {
     /** dispatches (executes) a URL
 

@@ -416,7 +416,7 @@ cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cp
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( u"Can not create AXControl!"_ustr,
-                uno::Reference< uno::XInterface >(),
+                uno::Reference< cpo::uno::XInterface >(),
                 anyEx );
     }
 

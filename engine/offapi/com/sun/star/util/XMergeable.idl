@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** represents a range of cells that can be merged.
  */
-published interface XMergeable: com::sun::star::uno::XInterface
+published interface XMergeable: cpo::uno::XInterface
 {
     /** merges/unmerges the area specified by this object.
      */

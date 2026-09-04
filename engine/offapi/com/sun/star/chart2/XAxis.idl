@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XAxis : ::com::sun::star::uno::XInterface
+interface XAxis : ::cpo::uno::XInterface
 {
     void setScaleData( [in] ScaleData aScale );
 

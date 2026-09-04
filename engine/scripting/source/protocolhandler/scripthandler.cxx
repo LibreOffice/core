@@ -416,7 +416,7 @@ Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
     return {u"com.sun.star.frame.ProtocolHandler"_ustr};
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 scripting_ScriptProtocolHandler_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

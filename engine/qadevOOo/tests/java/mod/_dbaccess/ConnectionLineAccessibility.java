@@ -46,7 +46,7 @@ import com.sun.star.sdbc.XIsolatedConnection;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import util.DesktopTools;
 import util.utils;
 

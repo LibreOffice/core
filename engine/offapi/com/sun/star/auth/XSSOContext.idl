@@ -21,7 +21,7 @@ module com { module sun { module star { module auth {
 
 /** Base SSO security context representation
  */
-published interface XSSOContext : ::com::sun::star::uno::XInterface
+published interface XSSOContext : ::cpo::uno::XInterface
 {
     /** retrieves the principal name of the source/initiator of the context.
         <P>

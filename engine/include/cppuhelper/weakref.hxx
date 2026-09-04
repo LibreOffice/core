@@ -25,7 +25,7 @@
 #include <cstddef>
 
 #include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
+#include "cpo/uno/XInterface.hpp"
 #include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cpo::uno
@@ -65,7 +65,7 @@ public:
 
         @param xInt another hard interface reference
     */
-    WeakReferenceHelper( const css::uno::Reference< css::uno::XInterface > & xInt );
+    WeakReferenceHelper( const css::uno::Reference< cpo::uno::XInterface > & xInt );
 
     /** Initialize this reference with the hard interface reference xWeak. This
          is faster than the XInterface constructor because we can skip doing an
@@ -94,7 +94,7 @@ public:
         @param xInt another hard reference
     */
     WeakReferenceHelper & operator = (
-            const css::uno::Reference< css::uno::XInterface > & xInt );
+            const css::uno::Reference< cpo::uno::XInterface > & xInt );
 
     /** Releases this reference and takes over hard reference xWeak. This
          is faster than the XInterface constructor because we can skip doing an
@@ -117,13 +117,13 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    css::uno::Reference< css::uno::XInterface > get() const;
+    css::uno::Reference< cpo::uno::XInterface > get() const;
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    operator css::uno::Reference< css::uno::XInterface > () const
+    operator css::uno::Reference< cpo::uno::XInterface > () const
         { return get(); }
 
     /** Releases this reference.

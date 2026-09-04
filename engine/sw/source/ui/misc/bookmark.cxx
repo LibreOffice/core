@@ -208,7 +208,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
     rtl::Reference<SwXTextDocument> xModel = m_rSh.GetView().GetDocShell()->GetBaseModel();
     uno::Reference<container::XNameAccess> xNameAccess = xModel->getBookmarks();
     cpo::uno::Any aObj = xNameAccess->getByName(pBookmark->GetName().toString());
-    uno::Reference<uno::XInterface> xTmp;
+    uno::Reference<cpo::uno::XInterface> xTmp;
     aObj >>= xTmp;
     uno::Reference<container::XNamed> xNamed(xTmp, uno::UNO_QUERY);
     SwAbstractDialogFactory& rFact = swui::GetFactory();

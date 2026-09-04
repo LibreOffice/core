@@ -17,7 +17,7 @@ namespace com::sun::star::lang
 {
 class XInitialization;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class XInterface;
 }

@@ -18,7 +18,7 @@
 #include <sfx2/devtools/DocumentModelTreeHandler.hxx>
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -36,9 +36,9 @@ private:
     std::unique_ptr<weld::Toolbar> mpDomToolbar;
 
     // Reference to the root object for the current document
-    css::uno::Reference<css::uno::XInterface> mxRoot;
+    css::uno::Reference<cpo::uno::XInterface> mxRoot;
     // Stores the current selected object in the document
-    css::uno::Reference<css::uno::XInterface> mxCurrentSelection;
+    css::uno::Reference<cpo::uno::XInterface> mxCurrentSelection;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
     css::uno::Reference<css::view::XSelectionSupplier> mxSelectionSupplier;
 
@@ -63,7 +63,7 @@ public:
     void ToggleFloatingMode() override;
 
     // Signals that the selected object in the document changes
-    void selectionChanged(css::uno::Reference<css::uno::XInterface> const& xInterface);
+    void selectionChanged(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
 
     // Signals to change to the current selected object in the object inspector
     void changeToCurrentSelection();

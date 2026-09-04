@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::SheetRangesQuery
     @see com::sun::star::sheet::SheetCellRanges
  */
-published interface XFormulaQuery: com::sun::star::uno::XInterface
+published interface XFormulaQuery: cpo::uno::XInterface
 {
 
     /** queries all dependent formula cells.

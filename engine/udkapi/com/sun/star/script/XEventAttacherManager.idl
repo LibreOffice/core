@@ -23,7 +23,7 @@
 
 /** registers listeners for specified events.
  */
-published interface XEventAttacherManager: com::sun::star::uno::XInterface
+published interface XEventAttacherManager: cpo::uno::XInterface
 {
     /** registers one event for an object identified by its index.
 
@@ -137,7 +137,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         and ignored.</p>
      */
     void attach( [in] long nIndex,
-             [in] com::sun::star::uno::XInterface xObject,
+             [in] cpo::uno::XInterface xObject,
              [in] any aHelper )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::ServiceNotRegisteredException );
@@ -152,7 +152,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         and ignored.</p>
      */
     void detach( [in] long nIndex,
-             [in] com::sun::star::uno::XInterface xObject )
+             [in] cpo::uno::XInterface xObject )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     /** adds an XScriptListener that will be notified when an

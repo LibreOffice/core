@@ -70,7 +70,7 @@ public:
     Printer*                    GetPrinter() const { return mxPrinter.get(); }
     rtl::Reference< VCLXDevice > const &  GetDevice();
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     DECLARE_XINTERFACE();
 
     // css::lang::XTypeProvider

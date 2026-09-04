@@ -21,7 +21,7 @@ module com { module sun { module star { module awt {
 
 /** specifies a factory interface for creating message boxes.
  */
-published interface XMessageBoxFactory : com::sun::star::uno::XInterface
+published interface XMessageBoxFactory : cpo::uno::XInterface
 {
     /** creates a message box.
 

@@ -117,7 +117,7 @@ void OfficeDocumentsManager::destroy()
 
 
 static OUString
-getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
+getDocumentId( const uno::Reference< cpo::uno::XInterface > & xDoc )
 {
     OUString aId;
 
@@ -146,7 +146,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         // normalize the interface pointer first. Else, calls with different
         // interfaces to the same object (say, XFoo and XBar) will produce
         // different IDs
-        uno::Reference< uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
+        uno::Reference< cpo::uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
         sal_Int64 nId = reinterpret_cast< sal_Int64 >( xNormalizedIFace.get() );
         aId = OUString::number( nId );
     }
@@ -664,7 +664,7 @@ bool OfficeDocumentsManager::isBasicIDE(
 
 
 bool OfficeDocumentsManager::isOfficeDocument(
-        const uno::Reference< uno::XInterface > & xDoc )
+        const uno::Reference< cpo::uno::XInterface > & xDoc )
 {
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument >

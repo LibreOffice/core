@@ -24,7 +24,7 @@
 
 /** identifies a control model.
  */
-published interface XControlModel: com::sun::star::uno::XInterface
+published interface XControlModel: cpo::uno::XInterface
 {
 };
 

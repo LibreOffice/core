@@ -11,7 +11,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sal/config.h>
 #include <scriptinterop/XDrawing.hpp>
@@ -28,7 +28,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return model_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
 
 private:
     css::uno::Reference<css::frame::XModel> model_;

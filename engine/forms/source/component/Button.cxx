@@ -759,14 +759,14 @@ void OButtonControl::releaseDispatchProviderInterceptor( const Reference< XDispa
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OButtonModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OButtonModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OButtonControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

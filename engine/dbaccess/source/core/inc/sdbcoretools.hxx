@@ -25,10 +25,10 @@
 namespace dbaccess
 {
 
-    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject);
+    void notifyDataSourceModified(const css::uno::Reference< cpo::uno::XInterface >& _rxObject);
 
-    css::uno::Reference< css::uno::XInterface >
-        getDataSource( const css::uno::Reference< css::uno::XInterface >& _rxDependentObject );
+    css::uno::Reference< cpo::uno::XInterface >
+        getDataSource( const css::uno::Reference< cpo::uno::XInterface >& _rxDependentObject );
 
     /** retrieves a to-be-displayed string for a given caught exception;
     */

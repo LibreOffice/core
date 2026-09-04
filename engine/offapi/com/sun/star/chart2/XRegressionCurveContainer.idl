@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XRegressionCurveContainer : com::sun::star::uno::XInterface
+interface XRegressionCurveContainer : cpo::uno::XInterface
 {
     /** add a regression curve to the container
 

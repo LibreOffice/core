@@ -76,9 +76,9 @@ private:
     virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XChild ____
-    virtual css::uno::Reference< css::uno::XInterface > getParent() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent() override;
     virtual void setParent(
-        const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(

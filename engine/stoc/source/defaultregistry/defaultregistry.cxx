@@ -1176,7 +1176,7 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
 
 } // namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_stoc_NestedRegistry_get_implementation(
     SAL_UNUSED_PARAMETER cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

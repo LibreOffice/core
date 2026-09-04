@@ -289,7 +289,7 @@ Sequence<OUString> SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames()
     return { u"com.sun.star.xml.crypto.XMLSignature"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_xml_crypto_XMLSignature_get_implementation(cpo::uno::XComponentContext* /*pCtx*/,
                                                         cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

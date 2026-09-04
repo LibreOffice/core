@@ -300,7 +300,7 @@ OUString TitleWrapper::getShapeType()
 void TitleWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
-    Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    Reference< cpo::uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
     clearWrappedPropertySet(g);

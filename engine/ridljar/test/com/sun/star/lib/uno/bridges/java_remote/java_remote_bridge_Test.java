@@ -29,7 +29,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.IQueryInterface;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import org.junit.Test;
 import util.WaitUnreachable;
 import static org.junit.Assert.*;

@@ -230,7 +230,7 @@ SpecialType translateUnoTypeToDescriptor(
             return simpleTypeSpecials[static_cast<int>(sort)];
         }
     case codemaker::UnoType::Sort::Interface:
-        if (nucleus == "com.sun.star.uno.XInterface") {
+        if (nucleus == "cpo.uno.XInterface") {
             if (descriptor != nullptr) {
                 descriptor->append("Ljava/lang/Object;");
             }
@@ -1209,7 +1209,7 @@ sal_uInt16 addLoadLocal(
                 size = 1;
                 break;
             case codemaker::UnoType::Sort::Interface:
-                if (any && nucleus != "com.sun.star.uno.XInterface") {
+                if (any && nucleus != "cpo.uno.XInterface") {
                     code->instrNew("com/sun/star/uno/Any"_ostr);
                     code->instrDup();
                     code->instrNew("cpo/uno/Type"_ostr);
@@ -1592,7 +1592,7 @@ void handleExceptionType(
     if (baseRuntimeException) {
         addField(
             manager, dependencies, cf.get(), &typeInfo, -1,
-            u"com.sun.star.uno.XInterface"_ustr, u"Context"_ustr, index++);
+            u"cpo.uno.XInterface"_ustr, u"Context"_ustr, index++);
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1615,7 +1615,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
-                u"com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"cpo.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1647,7 +1647,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
-                u"com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"cpo.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1685,7 +1685,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
-                u"com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"cpo.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1716,7 +1716,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, u"Context"_ustr, false,
-                u"com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"cpo.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1756,7 +1756,7 @@ void handleExceptionType(
             maxSize,
             addDirectArgument(
                 manager, dependencies, &desc1, code.get(), &index2, className,
-                "Context"_ostr, false, u"com.sun.star.uno.XInterface"_ustr));
+                "Context"_ostr, false, u"cpo.uno.XInterface"_ustr));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1803,7 +1803,7 @@ void handleExceptionType(
             maxSize2,
             addDirectArgument(
                 manager, dependencies, &desc2, code.get(), &index3, className,
-                "Context"_ostr, false, u"com.sun.star.uno.XInterface"_ustr));
+                "Context"_ostr, false, u"cpo.uno.XInterface"_ustr));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1873,7 +1873,7 @@ void handleInterfaceType(
         cf->addInterface("java/util/EventListener"_ostr);
     }
     std::vector< TypeInfo > typeInfo;
-    if (className != "com/sun/star/uno/XInterface") {
+    if (className != "cpo/uno/XInterface") {
         sal_Int32 index = 0;
         for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity->getDirectAttributes())
         {

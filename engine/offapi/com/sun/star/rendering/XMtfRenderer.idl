@@ -22,7 +22,7 @@ module com { module sun { module star { module rendering {
     /**
      * This interface exists only to deal with a circular dependency between the canvas/ and vcl/ modules.
      */
-    interface XMtfRenderer : ::com::sun::star::uno::XInterface
+    interface XMtfRenderer : ::cpo::uno::XInterface
     {
         /**
          * Render a metafile to a bitmap.

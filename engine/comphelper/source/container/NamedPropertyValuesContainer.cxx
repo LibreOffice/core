@@ -157,7 +157,7 @@ cpo::uno::Sequence< OUString > NamedPropertyValuesContainer::getSupportedService
     return { u"com.sun.star.document.NamedPropertyValues"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 NamedPropertyValuesContainer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

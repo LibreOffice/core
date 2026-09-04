@@ -18,7 +18,7 @@
  */
 
 module ooo {  module vba {  module excel {
-interface XTextFrame : com::sun::star::uno::XInterface
+interface XTextFrame : cpo::uno::XInterface
 {
 };
 }; }; };

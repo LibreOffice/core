@@ -55,7 +55,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
-        { SC_UNONAME_ANCHOR, 0, cppu::UnoType<uno::XInterface>::get(), 0, 0 },
+        { SC_UNONAME_ANCHOR, 0, cppu::UnoType<cpo::uno::XInterface>::get(), 0, 0 },
         { SC_UNONAME_RESIZE_WITH_CELL, 0, cppu::UnoType<bool>::get(), 0, 0 },
         { SC_UNONAME_HORIPOS, 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { SC_UNONAME_IMAGEMAP, 0, cppu::UnoType<container::XIndexContainer>::get(), 0, 0 },
@@ -510,7 +510,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
         if ( pObj )
         {
             ImageMap aImageMap;
-            uno::Reference< uno::XInterface > xImageMapInt(aValue, uno::UNO_QUERY);
+            uno::Reference< cpo::uno::XInterface > xImageMapInt(aValue, uno::UNO_QUERY);
 
             if( !xImageMapInt.is() || !SvUnoImageMap_fillImageMap( xImageMapInt, aImageMap ) )
                 throw lang::IllegalArgumentException();
@@ -761,7 +761,7 @@ cpo::uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyNa
                     {
                         if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
                         {
-                            uno::Reference< uno::XInterface > xAnchor;
+                            uno::Reference< cpo::uno::XInterface > xAnchor;
                             if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
                                 xAnchor.set(cppu::getXWeak(new ScCellObj( pDocSh, pAnchor->maStart)));
                             else
@@ -786,7 +786,7 @@ cpo::uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyNa
     }
     else if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
-        uno::Reference< uno::XInterface > xImageMap;
+        uno::Reference< cpo::uno::XInterface > xImageMap;
         SdrObject* pObj = GetSdrObject();
         if ( pObj )
         {
@@ -1071,7 +1071,7 @@ cpo::uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aProperty
     if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
         //  default: empty ImageMap
-        uno::Reference< uno::XInterface > xImageMap(SvUnoImageMap_createInstance());
+        uno::Reference< cpo::uno::XInterface > xImageMap(SvUnoImageMap_createInstance());
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
     else
@@ -1330,7 +1330,7 @@ void SAL_CALL ScShapeObj::setString( const OUString& aText )
 
 // XChild
 
-uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
+uno::Reference< cpo::uno::XInterface > SAL_CALL ScShapeObj::getParent()
 {
     SolarMutexGuard aGuard;
 
@@ -1360,7 +1360,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
     return nullptr;
 }
 
-void SAL_CALL ScShapeObj::setParent( const uno::Reference< uno::XInterface >& )
+void SAL_CALL ScShapeObj::setParent( const uno::Reference< cpo::uno::XInterface >& )
 {
     throw lang::NoSupportException();
 }

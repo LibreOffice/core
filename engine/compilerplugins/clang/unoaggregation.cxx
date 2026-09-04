@@ -59,7 +59,7 @@ bool derivesFromXAggregation(CXXRecordDecl const* decl, bool checkSelf)
                                    checkSelf);
 }
 
-// Return true if decl is an implementation of css::uno::XInterface::queryInterface in a class
+// Return true if decl is an implementation of cpo::uno::XInterface::queryInterface in a class
 // derived from cpo::uno::XAggregation:
 bool isXAggregationQueryInterface(CXXMethodDecl const* decl)
 {

@@ -25,7 +25,7 @@ module com { module sun { module star { module awt {
 /** provides dialogs implementing the
     com::sun::star::awt::XDialog interface.
  */
-interface XDialogProvider : ::com::sun::star::uno::XInterface {
+interface XDialogProvider : ::cpo::uno::XInterface {
 
 
     /** creates a dialog for the given URL.

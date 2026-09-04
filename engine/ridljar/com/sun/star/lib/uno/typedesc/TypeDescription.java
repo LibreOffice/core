@@ -506,7 +506,7 @@ public final class TypeDescription {
         if (methodDescriptions != null || typeClass != TypeClass.INTERFACE) {
             return;
         }
-        if (superTypes.length == 0) { // com.sun.star.uno.XInterface
+        if (superTypes.length == 0) { // cpo.uno.XInterface
             superMethodDescriptions = new MethodDescription[0];
             methodDescriptions = new MethodDescription[] {
                 new MethodDescription(

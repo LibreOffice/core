@@ -219,7 +219,7 @@ Sequence< frame::DispatchInformation > SfxAppDispatchProvider::getConfigurableDi
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

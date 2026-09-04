@@ -25,7 +25,7 @@
 #include <vector>
 #include <memory>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 class SvxMacroTableDtor;
 class SvxMacroItem;
@@ -159,11 +159,11 @@ protected:
 class SVT_DLLPUBLIC SvEventDescriptor : public SvBaseEventDescriptor
 {
     /// keep reference to parent to prevent it from being destroyed
-    css::uno::Reference< css::uno::XInterface > xParentRef;
+    css::uno::Reference< cpo::uno::XInterface > xParentRef;
 
 public:
 
-     SvEventDescriptor(css::uno::XInterface& rParent,
+     SvEventDescriptor(cpo::uno::XInterface& rParent,
                       const SvEventDescription* pSupportedMacroItems);
 
     virtual ~SvEventDescriptor() override;

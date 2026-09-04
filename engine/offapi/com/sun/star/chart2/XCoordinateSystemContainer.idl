@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XCoordinateSystemContainer : com::sun::star::uno::XInterface
+interface XCoordinateSystemContainer : cpo::uno::XInterface
 {
     /** add a coordinate system to the coordinate system container
 

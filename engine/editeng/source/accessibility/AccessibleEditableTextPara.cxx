@@ -2103,7 +2103,7 @@ cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getDefaul
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if (!xPropSetInfo.is())
         throw cpo::uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,
-                    uno::Reference< uno::XInterface >
+                    uno::Reference< cpo::uno::XInterface >
                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
     // build sequence of available properties to check
@@ -2189,7 +2189,7 @@ cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getRunAtt
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if (!xPropSetInfo.is())
         throw cpo::uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,
-                                    uno::Reference< uno::XInterface >
+                                    uno::Reference< cpo::uno::XInterface >
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
     // build sequence of available properties to check

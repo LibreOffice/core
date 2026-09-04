@@ -205,7 +205,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         // lookup/container methods
 
         UIElement        implts_findToolbar( std::u16string_view aName );
-        UIElement        implts_findToolbar( const css::uno::Reference< css::uno::XInterface >& xToolbar );
+        UIElement        implts_findToolbar( const css::uno::Reference< cpo::uno::XInterface >& xToolbar );
         UIElement&       impl_findToolbar( std::u16string_view aName );
         css::uno::Reference< css::awt::XWindow > implts_getXWindow( std::u16string_view aName );
         vcl::Window*     implts_getWindow( std::u16string_view aName );

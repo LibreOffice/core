@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module document {
 
 /** provides information regarding which MIME types are supported by a filter.
  */
-published interface XMimeTypeInfo: com::sun::star::uno::XInterface
+published interface XMimeTypeInfo: cpo::uno::XInterface
 {
 
     /** asks whether a MIME type is supported or not.

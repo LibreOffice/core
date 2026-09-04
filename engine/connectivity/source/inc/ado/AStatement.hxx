@@ -164,7 +164,7 @@ namespace connectivity::ado
     public:
         OStatement_Base(OConnection* _pConnection );
 
-        using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
+        using OStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
         // OComponentHelper
         virtual void disposing() override;
         // XInterface

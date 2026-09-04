@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module beans {
 
 /** provides access to multiple properties with a single call.
  */
-published interface XMultiPropertySet: com::sun::star::uno::XInterface
+published interface XMultiPropertySet: cpo::uno::XInterface
 {
 
     /** @returns

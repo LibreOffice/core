@@ -25,7 +25,7 @@ module ooo { module vba { module excel {
 
 interface XRange;
 
-interface XPane : com::sun::star::uno::XInterface
+interface XPane : cpo::uno::XInterface
 {
     [attribute] long ScrollColumn;
     [attribute] long ScrollRow;

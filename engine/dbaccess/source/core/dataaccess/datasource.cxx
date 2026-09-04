@@ -436,7 +436,7 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any ODatabaseSource::queryInterface( const Type & rType )
 {
     Any aIface = ODatabaseSource_Base::queryInterface( rType );
@@ -1083,7 +1083,7 @@ Reference< XNameAccess > ODatabaseSource::getQueryDefinitions( )
     if ( !xContainer.is() )
     {
         Any aValue;
-        css::uno::Reference< css::uno::XInterface > xMy(*this);
+        css::uno::Reference< cpo::uno::XInterface > xMy(*this);
         if (dbtools::getDataSourceSetting(xMy, u"CommandDefinitions"_ustr, aValue))
         {
             OUString sSupportService;
@@ -1233,7 +1233,7 @@ Reference< XInterface > ODatabaseSource::getThis() const
 
 }   // namespace dbaccess
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseSource(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

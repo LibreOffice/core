@@ -23,7 +23,7 @@
 
 /** gives access to the value and formatting of a metric field.
  */
-interface XMetricField: com::sun::star::uno::XInterface
+interface XMetricField: cpo::uno::XInterface
 {
 
     /** sets the value which is displayed in the metric field.

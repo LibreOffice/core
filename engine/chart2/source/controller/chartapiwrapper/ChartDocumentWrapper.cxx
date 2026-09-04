@@ -944,7 +944,7 @@ void ChartDocumentWrapper::setCurrentController(
         xModel->setCurrentController( Controller );
 }
 
-Reference< uno::XInterface > ChartDocumentWrapper::getCurrentSelection()
+Reference< cpo::uno::XInterface > ChartDocumentWrapper::getCurrentSelection()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -1163,10 +1163,10 @@ uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const rtl::Referenc
 }
 
 // ____ XMultiServiceFactory ____
-uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
+uno::Reference< cpo::uno::XInterface > ChartDocumentWrapper::createInstance(
     const OUString& aServiceSpecifier )
 {
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
 
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( !xChartDoc.is() )
@@ -1425,7 +1425,7 @@ uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
     return xResult;
 }
 
-uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstanceWithArguments(
+uno::Reference< cpo::uno::XInterface > ChartDocumentWrapper::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
     const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
@@ -1441,7 +1441,7 @@ cpo::uno::Sequence< OUString > ChartDocumentWrapper::getAvailableServiceNames()
 
 // ____ XAggregation ____
 void ChartDocumentWrapper::setDelegator(
-    const uno::Reference< uno::XInterface >& rDelegator )
+    const uno::Reference< cpo::uno::XInterface >& rDelegator )
 {
     if( m_bIsDisposed )
     {
@@ -1564,7 +1564,7 @@ cpo::uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames()
 
 } //  namespace chart::wrapper
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation(cpo::uno::XComponentContext *context,
                                                                 cpo::uno::Sequence<cpo::uno::Any> const &)
 {

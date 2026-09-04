@@ -421,7 +421,7 @@ void unoInterfaceProxyDispatch(
     {
         ::cpo::uno::RuntimeException aExc(
             u"illegal member type description!"_ustr,
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+            ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >() );
 
         cpo::uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference

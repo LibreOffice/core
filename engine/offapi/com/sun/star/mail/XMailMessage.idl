@@ -24,7 +24,7 @@ module com { module sun { module star { module mail {
 
    @see com::sun::star::mail::XMailService
  */
-interface XMailMessage: ::com::sun::star::uno::XInterface {
+interface XMailMessage: ::cpo::uno::XInterface {
 
      /**
         The display name of the sender of this mail message.

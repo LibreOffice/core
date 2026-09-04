@@ -935,12 +935,12 @@ void ChartController::notifyClosing(
 }
 
 bool ChartController::impl_releaseThisModel(
-    const uno::Reference< uno::XInterface > & xModel )
+    const uno::Reference< cpo::uno::XInterface > & xModel )
 {
     bool bReleaseModel = false;
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_aModelMutex );
-        if( m_aModel.is() && uno::Reference< uno::XInterface >(static_cast<cppu::OWeakObject*>(m_aModel->getModel().get())) == xModel )
+        if( m_aModel.is() && uno::Reference< cpo::uno::XInterface >(static_cast<cppu::OWeakObject*>(m_aModel->getModel().get())) == xModel )
         {
             m_aModel = nullptr;
             m_xUndoManager.clear();

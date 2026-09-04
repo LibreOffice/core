@@ -45,7 +45,7 @@ class SwXFootnoteText final : public UnoApiTest,
 public:
     SwXFootnoteText();
 
-    Reference<XInterface> init() override;
+    Reference<cpo::uno::XInterface> init() override;
     Reference<text::XTextContent> getTextContent() override { return mxTextContent; };
 
     CPPUNIT_TEST_SUITE(SwXFootnoteText);
@@ -75,7 +75,7 @@ SwXFootnoteText::SwXFootnoteText()
 {
 }
 
-Reference<XInterface> SwXFootnoteText::init()
+Reference<cpo::uno::XInterface> SwXFootnoteText::init()
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -94,7 +94,7 @@ Reference<XInterface> SwXFootnoteText::init()
     mxTextContent = Reference<text::XTextContent>(
         xMSF->createInstance(u"com.sun.star.text.Footnote"_ustr), UNO_QUERY_THROW);
 
-    return Reference<XInterface>(xFootText->getText(), UNO_QUERY_THROW);
+    return Reference<cpo::uno::XInterface>(xFootText->getText(), UNO_QUERY_THROW);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXFootnoteText);

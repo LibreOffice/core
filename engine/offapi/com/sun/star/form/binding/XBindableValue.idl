@@ -27,7 +27,7 @@ interface XValueBinding;
 
     @see XValueBinding
 */
-interface XBindableValue : com::sun::star::uno::XInterface
+interface XBindableValue : cpo::uno::XInterface
 {
     /** sets an external instance which controls the value of the component
 

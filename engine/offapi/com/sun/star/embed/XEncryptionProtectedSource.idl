@@ -22,7 +22,7 @@
 
 /** This interface allows to set a password for an object.
  */
-published interface XEncryptionProtectedSource: com::sun::star::uno::XInterface
+published interface XEncryptionProtectedSource: cpo::uno::XInterface
 {
     /** sets a password for the object.
 

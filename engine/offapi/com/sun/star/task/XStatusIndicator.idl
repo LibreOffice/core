@@ -29,7 +29,7 @@
 
     @see XStatusIndicatorFactory
  */
-published interface XStatusIndicator: com::sun::star::uno::XInterface
+published interface XStatusIndicator: cpo::uno::XInterface
 {
     /** initialize and start the progress
 

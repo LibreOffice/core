@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPilotSourceDimension
     @see com::sun::star::sheet::DataPilotSource
  */
-interface XHierarchiesSupplier: com::sun::star::uno::XInterface
+interface XHierarchiesSupplier: cpo::uno::XInterface
 {
 
     /** returns the collection of hierarchies.

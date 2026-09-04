@@ -279,7 +279,7 @@ bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XContr
 {
     try
     {
-        std::vector< uno::Reference<uno::XInterface> > aSeq = m_aControllers.getElements();
+        std::vector< uno::Reference<cpo::uno::XInterface> > aSeq = m_aControllers.getElements();
         for( const auto & r : aSeq )
         {
             if( r == xController )
@@ -303,7 +303,7 @@ uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
     // get the first controller of this model
     if( m_aControllers.getLength() )
     {
-        uno::Reference<uno::XInterface> xI = m_aControllers.getInterface(0);
+        uno::Reference<cpo::uno::XInterface> xI = m_aControllers.getInterface(0);
         return uno::Reference<frame::XController>( xI, uno::UNO_QUERY );
     }
 
@@ -552,7 +552,7 @@ void ChartModel::setCurrentController( const uno::Reference< frame::XController 
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
-uno::Reference< uno::XInterface > ChartModel::getCurrentSelection()
+uno::Reference< cpo::uno::XInterface > ChartModel::getCurrentSelection()
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
@@ -560,7 +560,7 @@ uno::Reference< uno::XInterface > ChartModel::getCurrentSelection()
                 u"getCurrentSelection was called on an already disposed or closed model"_ustr,
                 static_cast< ::cppu::OWeakObject* >(this) );
 
-    uno::Reference< uno::XInterface > xReturn;
+    uno::Reference< cpo::uno::XInterface > xReturn;
     uno::Reference< frame::XController > xController = impl_getCurrentController();
 
     aGuard.clear();
@@ -687,7 +687,7 @@ void ChartModel::close( bool bDeliverOwnership )
     // At the end of this method may we must dispose ourself ...
     // and may nobody from outside hold a reference to us ...
     // then it's a good idea to do that by ourself.
-    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+    uno::Reference< cpo::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
 
     //the listeners have had no veto
     //check whether we self can close
@@ -1220,7 +1220,7 @@ const tServiceNameMap & lcl_getStaticServiceNameMap()
 }
 }
 // ____ XMultiServiceFactory ____
-Reference< uno::XInterface > ChartModel::createInstance( const OUString& rServiceSpecifier )
+Reference< cpo::uno::XInterface > ChartModel::createInstance( const OUString& rServiceSpecifier )
 {
     const tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
 
@@ -1273,7 +1273,7 @@ const rtl::Reference<ChartView>& ChartModel::createChartView()
     return mxChartView;
 }
 
-Reference< uno::XInterface > ChartModel::createInstanceWithArguments(
+Reference< cpo::uno::XInterface > ChartModel::createInstanceWithArguments(
             const OUString& rServiceSpecifier , const Sequence< Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "createInstanceWithArguments: Warning: Arguments are ignored" );
@@ -1345,12 +1345,12 @@ uno::Reference< util::XNumberFormats > ChartModel::getNumberFormats()
 }
 
 // ____ XChild ____
-Reference< uno::XInterface > ChartModel::getParent()
+Reference< cpo::uno::XInterface > ChartModel::getParent()
 {
-    return Reference< uno::XInterface >(m_xParent,uno::UNO_QUERY);
+    return Reference< cpo::uno::XInterface >(m_xParent,uno::UNO_QUERY);
 }
 
-void ChartModel::setParent( const Reference< uno::XInterface >& Parent )
+void ChartModel::setParent( const Reference< cpo::uno::XInterface >& Parent )
 {
     if( Parent != m_xParent )
     {
@@ -1764,7 +1764,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
 
 }  // namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_ChartModel_get_implementation(cpo::uno::XComponentContext *context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

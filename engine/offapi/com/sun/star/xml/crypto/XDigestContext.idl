@@ -27,7 +27,7 @@
 
     @see XDigestContextSupplier
  */
-interface XDigestContext : com::sun::star::uno::XInterface
+interface XDigestContext : cpo::uno::XInterface
 {
     /** update the digest with the given data.
 

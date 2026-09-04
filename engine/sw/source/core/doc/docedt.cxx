@@ -628,7 +628,7 @@ cpo::uno::Any SwDoc::Spell( SwPaM& rPaM,
                             {
                                 if (const SwDocShell* pShell = GetDocShell())
                                 {
-                                    uno::Reference<uno::XInterface> xDoc = pShell->GetModel();
+                                    uno::Reference<cpo::uno::XInterface> xDoc = pShell->GetModel();
                                     // Expand the string:
                                     const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
                                     const OUString& aExpandText = aConversionMap.getViewText();

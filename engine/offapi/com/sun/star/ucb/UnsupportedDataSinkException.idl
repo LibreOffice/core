@@ -33,7 +33,7 @@ published exception UnsupportedDataSinkException : cpo::uno::Exception
 {
     /** contains the data sink that is not supported.
      */
-    com::sun::star::uno::XInterface Sink;
+    cpo::uno::XInterface Sink;
 };
 
 

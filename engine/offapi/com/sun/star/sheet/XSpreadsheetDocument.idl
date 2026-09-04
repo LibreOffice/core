@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::SpreadsheetDocument
  */
-published interface XSpreadsheetDocument: com::sun::star::uno::XInterface
+published interface XSpreadsheetDocument: cpo::uno::XInterface
 {
 
     /** returns the collection of sheets in the document.

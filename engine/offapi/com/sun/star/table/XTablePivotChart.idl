@@ -12,7 +12,7 @@ module com {  module sun {  module star {  module table {
 /** provides access to the settings of a pivot chart object in a
     table or spreadsheet.
  */
-interface XTablePivotChart: com::sun::star::uno::XInterface
+interface XTablePivotChart: cpo::uno::XInterface
 {
     /** returns the pivot table name of the associated pivot table
      */

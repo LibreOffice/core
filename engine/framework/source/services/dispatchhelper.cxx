@@ -127,7 +127,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
                                 const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     comphelper::ProfileZone aZone("executeDispatch");
-    css::uno::Reference<css::uno::XInterface> xTHIS(static_cast<::cppu::OWeakObject*>(this),
+    css::uno::Reference<cpo::uno::XInterface> xTHIS(static_cast<::cppu::OWeakObject*>(this),
                                                     css::uno::UNO_QUERY);
     m_aResult.clear();
 
@@ -209,7 +209,7 @@ void DispatchHelper::disposing(const css::lang::EventObject&)
 }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 framework_DispatchHelper_get_implementation(cpo::uno::XComponentContext* context,
                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {

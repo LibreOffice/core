@@ -41,7 +41,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     resumes its motion. </p>
 */
 
-published interface XAutoscroll: com::sun::star::uno::XInterface
+published interface XAutoscroll: cpo::uno::XInterface
 {
     /** Notify the component to autoscroll.
 

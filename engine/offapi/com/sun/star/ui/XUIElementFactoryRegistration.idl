@@ -44,7 +44,7 @@ module com { module sun { module star { module ui {
     </p>
  */
 
-interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
+interface XUIElementFactoryRegistration : cpo::uno::XInterface
 {
     /** function to retrieve a list of all registered user interface element factories
 

@@ -1026,17 +1026,17 @@ bool DatabaseDataProvider::rowDeleted()
     return m_xRowSet->rowDeleted();
 }
 
-uno::Reference< uno::XInterface > DatabaseDataProvider::getStatement()
+uno::Reference< cpo::uno::XInterface > DatabaseDataProvider::getStatement()
 {
     return m_xRowSet->getStatement();
 }
 
-uno::Reference< uno::XInterface > DatabaseDataProvider::getParent(  )
+uno::Reference< cpo::uno::XInterface > DatabaseDataProvider::getParent(  )
 {
     return m_xParent;
 }
 
-void DatabaseDataProvider::setParent( const uno::Reference< uno::XInterface >& _xParent )
+void DatabaseDataProvider::setParent( const uno::Reference< cpo::uno::XInterface >& _xParent )
 {
     osl::MutexGuard g(m_aMutex);
     m_xParent = _xParent;
@@ -1051,7 +1051,7 @@ void DatabaseDataProvider::impl_invalidateParameter_nothrow()
 } // namespace dbaccess
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_dbaccess_DatabaseDataProvider_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

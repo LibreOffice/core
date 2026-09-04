@@ -24,7 +24,7 @@ module ooo {  module vba {  module word {
 
 
 
-interface XPageSetup : com::sun::star::uno::XInterface
+interface XPageSetup : cpo::uno::XInterface
 {
     [attribute] double Gutter;
     [attribute] double HeaderDistance;

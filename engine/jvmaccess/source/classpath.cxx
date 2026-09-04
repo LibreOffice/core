@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
@@ -83,7 +83,7 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
             {
                 throw css::lang::IllegalArgumentException(
                     "non-local Java class path entry: " + url,
-                    css::uno::Reference< css::uno::XInterface >(), 0);
+                    css::uno::Reference< cpo::uno::XInterface >(), 0);
             }
             jvalue arg;
             arg.l = environment->NewString(

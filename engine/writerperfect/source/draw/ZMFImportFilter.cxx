@@ -15,7 +15,7 @@
 
 using cpo::uno::Sequence;
 using cpo::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 
 bool ZMFImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                        OdgGenerator& rGenerator, comphelper::SequenceAsHashMap&)
@@ -51,7 +51,7 @@ Sequence<OUString> SAL_CALL ZMFImportFilter::getSupportedServiceNames()
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_libreoffice_comp_Draw_ZMFImportFilter_get_implementation(
     cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {

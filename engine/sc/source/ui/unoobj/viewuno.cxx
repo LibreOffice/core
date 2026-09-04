@@ -668,7 +668,7 @@ bool SAL_CALL ScTabViewObj::select( const cpo::uno::Any& aSelection )
     //! Type of aSelection can be some specific interface instead of XInterface
 
     bool bRet = false;
-    uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( !xInterface.is() )  //clear all selections
     {
         ScDrawView* pDrawView = pViewSh->GetScDrawView();
@@ -869,7 +869,7 @@ cpo::uno::Any SAL_CALL ScTabViewObj::getSelection()
     if (pViewSh)
     {
         //  is something selected in drawing layer?
-        uno::Reference<uno::XInterface> xRet(pViewSh->getSelectedXShapes());
+        uno::Reference<cpo::uno::XInterface> xRet(pViewSh->getSelectedXShapes());
         if (xRet.is())
             return cpo::uno::Any(xRet);
 
@@ -981,7 +981,7 @@ cpo::uno::Any SAL_CALL ScTabViewObj::getSelectionFromString( const OUString& aSt
     // SetCursorOnly tells the range the specific cells selected are irrelevant - maybe could rename?
     pObj->SetCursorOnly(true);
 
-    return cpo::uno::Any(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
+    return cpo::uno::Any(uno::Reference<cpo::uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
 }
 
 // XEnumerationAccess
@@ -1124,9 +1124,9 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
     }
 }
 
-uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rPoint) const
+uno::Reference< cpo::uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rPoint) const
 {
-    uno::Reference< uno::XInterface > xTarget;
+    uno::Reference< cpo::uno::XInterface > xTarget;
     if (GetViewShell())
     {
         SCCOL nX;
@@ -1193,7 +1193,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
     if ( e.Buttons == css::awt::MouseButton::LEFT )
         mbLeftMousePressed = true;
 
-    uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
+    uno::Reference< cpo::uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
     if (!aMouseClickHandlers.empty() && xTarget.is())
     {
         awt::EnhancedMouseEvent aMouseEvent;
@@ -1299,7 +1299,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
 
     if (!aMouseClickHandlers.empty())
     {
-        uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
+        uno::Reference< cpo::uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
 
         if (xTarget.is())
         {

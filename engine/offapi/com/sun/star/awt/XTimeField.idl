@@ -24,7 +24,7 @@
 
 /** gives access to the value and settings of a time field.
  */
-published interface XTimeField: com::sun::star::uno::XInterface
+published interface XTimeField: cpo::uno::XInterface
 {
 
     /** sets the time value which is displayed in the time field.

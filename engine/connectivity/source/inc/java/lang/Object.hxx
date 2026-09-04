@@ -88,13 +88,13 @@ namespace connectivity
 
         OUString toString() const;
 
-        static void ThrowSQLException(JNIEnv * pEnv,const css::uno::Reference< css::uno::XInterface> & _rContext);
+        static void ThrowSQLException(JNIEnv * pEnv,const css::uno::Reference< cpo::uno::XInterface> & _rContext);
         static void ThrowLoggedSQLException(
             const ::comphelper::EventLogger& _rLogger,
             JNIEnv* pEnvironment,
-            const css::uno::Reference< css::uno::XInterface >& _rxContext
+            const css::uno::Reference< cpo::uno::XInterface >& _rxContext
         );
-        static void ThrowRuntimeException(JNIEnv * pEnv,const css::uno::Reference< css::uno::XInterface> & _rContext);
+        static void ThrowRuntimeException(JNIEnv * pEnv,const css::uno::Reference< cpo::uno::XInterface> & _rContext);
 
         static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext=nullptr);
 

@@ -1011,7 +1011,7 @@ void Desktop::disposing()
 
     // First we have to kill all listener connections.
     // They might rely on our member and can hinder us on releasing them.
-    css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< cpo::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject                      aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
@@ -1212,7 +1212,7 @@ void Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest 
     }
 }
 
-::sal_Int32 Desktop::leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
+::sal_Int32 Desktop::leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     return m_xTitleNumberGenerator->leaseNumber (xComponent);
@@ -1224,7 +1224,7 @@ void Desktop::releaseNumber( ::sal_Int32 nNumber )
     m_xTitleNumberGenerator->releaseNumber (nNumber);
 }
 
-void Desktop::releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
+void Desktop::releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     m_xTitleNumberGenerator->releaseNumberForComponent (xComponent);
@@ -1705,7 +1705,7 @@ const rtl::Reference<framework::Desktop> & framework::getDesktop(
     return instance;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_Desktop_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

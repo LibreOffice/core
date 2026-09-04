@@ -24,7 +24,7 @@ module com { module sun { module star { module ui {
     elements.
 */
 
-interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
+interface XUIConfigurationManager : ::cpo::uno::XInterface
 {
     /** resets the configuration manager to the default user interface
         configuration data.
@@ -187,7 +187,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
         @return
             the image manager of the user interface configuration manager.
     */
-    com::sun::star::uno::XInterface getImageManager();
+    cpo::uno::XInterface getImageManager();
 
     /** retrieves the keyboard short cut manager from the user interface
         configuration manager.
@@ -214,7 +214,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
             the events manager of the user interface configuration
             manager, if one exists.
     */
-    com::sun::star::uno::XInterface getEventsManager();
+    cpo::uno::XInterface getEventsManager();
 };
 
 

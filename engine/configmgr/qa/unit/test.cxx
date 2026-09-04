@@ -37,7 +37,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -80,10 +80,10 @@ public:
 
     bool resetKey(OUString const & path, OUString const & name) const;
 
-    css::uno::Reference< css::uno::XInterface > createViewAccess(
+    css::uno::Reference< cpo::uno::XInterface > createViewAccess(
         OUString const & path) const;
 
-    css::uno::Reference< css::uno::XInterface > createUpdateAccess(
+    css::uno::Reference< cpo::uno::XInterface > createUpdateAccess(
         OUString const & path) const;
 
     CPPUNIT_TEST_SUITE(Test);
@@ -161,7 +161,7 @@ void RecursiveTest::disposing(css::lang::EventObject const & Source)
 {
     CPPUNIT_ASSERT(properties_.is());
     CPPUNIT_ASSERT_EQUAL(
-        css::uno::Reference<css::uno::XInterface>(
+        css::uno::Reference<cpo::uno::XInterface>(
             properties_, css::uno::UNO_QUERY_THROW),
         Source.Source);
     properties_.clear();
@@ -170,7 +170,7 @@ void RecursiveTest::disposing(css::lang::EventObject const & Source)
 void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
 {
     CPPUNIT_ASSERT_EQUAL(
-        css::uno::Reference<css::uno::XInterface>(
+        css::uno::Reference<cpo::uno::XInterface>(
             properties_, css::uno::UNO_QUERY_THROW),
         evt.Source);
     CPPUNIT_ASSERT_EQUAL( u"Label"_ustr, evt.PropertyName );
@@ -294,7 +294,7 @@ void Test::testInsertSetMember() {
         createUpdateAccess(
             u"/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands"_ustr),
         css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::uno::XInterface> member;
+    css::uno::Reference<cpo::uno::XInterface> member;
     member.set(
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
@@ -496,7 +496,7 @@ bool Test::resetKey(OUString const & path, OUString const & name)
     return true;
 }
 
-css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
+css::uno::Reference< cpo::uno::XInterface > Test::createViewAccess(
     OUString const & path) const
 {
     cpo::uno::Any arg(
@@ -508,7 +508,7 @@ css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
         cpo::uno::Sequence< cpo::uno::Any >(&arg, 1));
 }
 
-css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
+css::uno::Reference< cpo::uno::XInterface > Test::createUpdateAccess(
     OUString const & path) const
 {
     cpo::uno::Any arg(

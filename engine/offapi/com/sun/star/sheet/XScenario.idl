@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::Spreadsheet
  */
-published interface XScenario: com::sun::star::uno::XInterface
+published interface XScenario: cpo::uno::XInterface
 {
 
     /** returns `TRUE` if the current object is a scenario.

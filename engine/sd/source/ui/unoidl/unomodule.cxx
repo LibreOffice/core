@@ -36,7 +36,7 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     // there is no guarantee, that we are held alive during this method!
     // May the outside dispatch container will be updated by a CONTEXT_CHANGED
     // asynchronous ...
-    uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
+    uno::Reference< cpo::uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
 
     SolarMutexGuard aGuard;
     SdDLL::Init();
@@ -120,7 +120,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_DrawingModule_get_implementation(cpo::uno::XComponentContext* ,
                                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

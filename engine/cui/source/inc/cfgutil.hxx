@@ -167,7 +167,7 @@ class CuiConfigGroupListBox
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
-    static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
+    static css::uno::Reference< cpo::uno::XInterface  > getDocumentModel(
         css::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
         std::u16string_view docName);
 

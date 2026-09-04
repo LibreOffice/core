@@ -25,7 +25,7 @@ module com { module sun { module star { module ucb {
 
     @version    1.0
 */
-published interface XFileIdentifierConverter : com::sun::star::uno::XInterface
+published interface XFileIdentifierConverter : cpo::uno::XInterface
 {
     /** Get information about the "locality" of a file content provider.
 

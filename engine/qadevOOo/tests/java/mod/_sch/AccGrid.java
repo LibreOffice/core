@@ -34,7 +34,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.chart.XChartDocument;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class AccGrid extends TestCase {
 

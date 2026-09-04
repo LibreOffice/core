@@ -28,7 +28,7 @@ module cpo { module uno {
     <p>
     Example:
     A type reflecting the interface XInterface is of type class
-    INTERFACE and its name is "com.sun.star.uno.XInterface".
+    INTERFACE and its name is "cpo.uno.XInterface".
     </p>
 */
 published enum TypeClass

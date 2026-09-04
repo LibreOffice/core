@@ -23,7 +23,7 @@
 /** provides the access to a container of users, typically used for a database
     definition object.
  */
-published interface XUsersSupplier: com::sun::star::uno::XInterface
+published interface XUsersSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of users.

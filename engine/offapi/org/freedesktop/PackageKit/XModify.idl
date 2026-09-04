@@ -20,7 +20,7 @@ module PackageKit
  * https://git.gnome.org/browse/gnome-software/tree/src/org.freedesktop.PackageKit.Modify2.xml
  * for documentation of the corresponding D-Bus interface
  */
-interface XModify : com::sun::star::uno::XInterface
+interface XModify : cpo::uno::XInterface
 {
     /**
      * Installs local package sequence< string > files or service packs.

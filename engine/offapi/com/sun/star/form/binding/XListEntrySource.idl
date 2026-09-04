@@ -30,7 +30,7 @@ interface XListEntryListener;
 
     @see XListEntrySink
 */
-interface XListEntrySource : com::sun::star::uno::XInterface
+interface XListEntrySource : cpo::uno::XInterface
 {
     /** retrieves the number of entries in the list
     */

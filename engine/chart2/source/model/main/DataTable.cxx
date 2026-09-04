@@ -193,7 +193,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(DataTable, DataTable_Base, ::property::OPropert
 
 } //  namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_chart2_DataTable_get_implementation(
     cpo::uno::XComponentContext* /*pComponentContext*/,
     cpo::uno::Sequence<cpo::uno::Any> const& /*rAny*/)

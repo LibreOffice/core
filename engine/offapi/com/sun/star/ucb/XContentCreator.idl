@@ -42,7 +42,7 @@ module com { module sun { module star { module ucb {
     @see      XContent
     @see      XCommandProcessor
 */
-published interface XContentCreator: com::sun::star::uno::XInterface
+published interface XContentCreator: cpo::uno::XInterface
 {
     /** returns a list with information about the creatable contents.
 

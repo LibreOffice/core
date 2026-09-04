@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module beans {
     @see com::sun::star::beans::XPropertySet
     @see com::sun::star::beans::XMultiPropertySet
  */
-published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
+published interface XTolerantMultiPropertySet : cpo::uno::XInterface
 {
 
     /** sets the values to the properties with the specified names.

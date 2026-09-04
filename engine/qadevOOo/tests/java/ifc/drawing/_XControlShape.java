@@ -25,7 +25,7 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.drawing.XControlShape</code>

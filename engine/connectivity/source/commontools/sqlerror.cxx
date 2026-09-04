@@ -38,7 +38,7 @@ namespace connectivity
 
     using ::com::sun::star::uno::Reference;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::sdbc::SQLException;
     using ::cpo::uno::Type;
 

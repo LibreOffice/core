@@ -60,7 +60,7 @@ OString translateUnoToJavaType(
             { "java/lang/Object"_ostr, "java/lang/Object"_ostr } };
         buf.append(javaTypes[static_cast<int>(sort)][referenceType]);
     } else {
-        if (nucleus == "com/sun/star/uno/XInterface") {
+        if (nucleus == "cpo/uno/XInterface") {
             buf.append("java/lang/Object");
         } else {
             //TODO: check that nucleus is a valid (Java-modified UTF-8)

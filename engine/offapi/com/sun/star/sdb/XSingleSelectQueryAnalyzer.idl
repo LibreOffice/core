@@ -31,7 +31,7 @@ published interface XIndexAccess;
     structure of the used query.
     </p>
  */
-interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
+interface XSingleSelectQueryAnalyzer : cpo::uno::XInterface
 {
 
     /** returns the query.

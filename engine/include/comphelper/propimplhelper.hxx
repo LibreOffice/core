@@ -583,7 +583,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::firePropertiesChangeEvent(
         cpo::uno::Sequence<css::beans::PropertyChangeEvent> aChanges(nFireLen);
         css::beans::PropertyChangeEvent* pChanges = aChanges.getArray();
         std::unique_lock aGuard(this->m_aMutex);
-        css::uno::Reference<css::uno::XInterface> xSource(
+        css::uno::Reference<cpo::uno::XInterface> xSource(
             static_cast<css::beans::XPropertySet*>(this), css::uno::UNO_QUERY);
         sal_Int32 nFirePos = 0;
         for (sal_Int32 i = 0; i < nLen; i++)
@@ -704,7 +704,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::fire(std::unique_lock<std::mutex>& 
 
     cpo::uno::Sequence<css::beans::PropertyChangeEvent> aEvts(nHandles);
     css::beans::PropertyChangeEvent* pEvts = aEvts.getArray();
-    css::uno::Reference<css::uno::XInterface> xSource(static_cast<css::beans::XPropertySet*>(this),
+    css::uno::Reference<cpo::uno::XInterface> xSource(static_cast<css::beans::XPropertySet*>(this),
                                                       css::uno::UNO_QUERY);
 
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();

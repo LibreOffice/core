@@ -20,7 +20,7 @@
 #include "XMLAutoTextEventImport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "XMLAutoTextContainerEventImport.hxx"
 #include <xmloff/xmlnamespace.hxx>
@@ -33,7 +33,7 @@ using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Type;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
@@ -78,7 +78,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
     return nullptr;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

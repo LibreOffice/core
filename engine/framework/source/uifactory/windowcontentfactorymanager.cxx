@@ -67,8 +67,8 @@ public:
     }
 
     // XSingleComponentFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithContext( const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithContext( const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
 
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -93,17 +93,17 @@ void WindowContentFactoryManager::disposing(std::unique_lock<std::mutex>&)
 }
 
 // XSingleComponentFactory
-uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWithContext(
+uno::Reference< cpo::uno::XInterface > WindowContentFactoryManager::createInstanceWithContext(
     const uno::Reference< cpo::uno::XComponentContext >& /*xContext*/ )
 {
-    uno::Reference< uno::XInterface > xWindow;
+    uno::Reference< cpo::uno::XInterface > xWindow;
     return xWindow;
 }
 
-uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
+uno::Reference< cpo::uno::XInterface > WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
     const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const uno::Reference< cpo::uno::XComponentContext >& Context )
 {
-    uno::Reference< uno::XInterface > xWindow;
+    uno::Reference< cpo::uno::XInterface > xWindow;
     uno::Reference< frame::XFrame >   xFrame;
     OUString                   aResourceURL;
 
@@ -128,7 +128,7 @@ uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWit
     try
     {
         if ( xFrame.is() && xModuleManager.is() )
-            aModuleId = xModuleManager->identify( uno::Reference< uno::XInterface >( xFrame, uno::UNO_QUERY ) );
+            aModuleId = xModuleManager->identify( uno::Reference< cpo::uno::XInterface >( xFrame, uno::UNO_QUERY ) );
     }
     catch ( const frame::UnknownModuleException& )
     {
@@ -140,7 +140,7 @@ uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWit
          !aModuleId.isEmpty() )
     {
         OUString                   aImplementationName;
-        uno::Reference< uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
+        uno::Reference< cpo::uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
 
         // Determine the implementation name of the window content factory dependent on the
         // module identifier, user interface element type and name
@@ -193,7 +193,7 @@ uno::Reference< uno::XInterface > WindowContentFactoryManager::createInstanceWit
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

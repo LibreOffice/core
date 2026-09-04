@@ -132,7 +132,7 @@ bool isBootstrapType(OUString const & name)
         "cpo.uno.XAggregation",
         "cpo.uno.XComponentContext",
         "cpo.uno.XCurrentContext",
-        "com.sun.star.uno.XInterface",
+        "cpo.uno.XInterface",
         "cpo.uno.XReference",
         "cpo.uno.XUnloadingPreference",
         "cpo.uno.XWeak",
@@ -291,7 +291,7 @@ CppuType::CppuType(
 void CppuType::addGetCppuTypeIncludes(codemaker::cppumaker::Includes & includes)
 const
 {
-    if (name_ == "com.sun.star.uno.XInterface"
+    if (name_ == "cpo.uno.XInterface"
         || name_ == "cpo.uno.Exception") {
         includes.addType();
         includes.addCppuUnotypeHxx();
@@ -551,7 +551,7 @@ void CppuType::dumpHFileContent(
         out << "\n";
     }
     dumpDeclaration(out);
-    if (!(name_ == "com.sun.star.uno.XInterface"
+    if (!(name_ == "cpo.uno.XInterface"
           || name_ == "cpo.uno.Exception"
           || isPolymorphic())) {
         out << "\n" << indent()
@@ -568,7 +568,7 @@ void CppuType::dumpHFileContent(
 
 void CppuType::dumpGetCppuType(FileStream & out)
 {
-    if (name_ == "com.sun.star.uno.XInterface") {
+    if (name_ == "cpo.uno.XInterface") {
     } else if (name_ == "cpo.uno.Exception") {
     } else if (m_cppuTypeLeak) {
         dumpLightGetCppuType(out);
@@ -1155,7 +1155,7 @@ void InterfaceType::dumpHppFile(
     out << " >::get();\n";
     dec();
     out << "}\n\nnamespace cppu::detail {\n";
-    if (name_ == "com.sun.star.uno.XInterface") {
+    if (name_ == "cpo.uno.XInterface") {
         out << "template<typename> struct IsUnoInterfaceType: ::std::false_type {};\n"
                "template<typename T> inline constexpr auto isUnoInterfaceType ="
                    " sizeof (T) && IsUnoInterfaceType<T>::value;\n";
@@ -1239,7 +1239,7 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out)
         entity_->getDirectMandatoryBases().size());
     if (bases == 1
         && (entity_->getDirectMandatoryBases()[0].name
-            == "com.sun.star.uno.XInterface")) {
+            == "cpo.uno.XInterface")) {
         bases = 0;
     }
     if (bases != 0) {
@@ -3115,8 +3115,8 @@ bool ExceptionType::dumpBaseMembers(
             && base == "cpo.uno.Exception"
             && memberCount == 1
             && member.name == "Context"
-            && member.type == "com.sun.star.uno.XInterface") {
-            out << " = ::css::uno::Reference< ::css::uno::XInterface >()";
+            && member.type == "cpo.uno.XInterface") {
+            out << " = ::css::uno::Reference< ::cpo::uno::XInterface >()";
         }
         hasMember = true;
         ++memberCount;
@@ -3494,7 +3494,7 @@ void ServiceType::dumpHppFile(
           << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
           << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "\nextern \"C\" ::css::uno::XInterface * LO_URE_CTOR_FUN_"
+          << "\nextern \"C\" ::cpo::uno::XInterface * LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
           << "(::cpo::uno::XComponentContext *, ::cpo::uno::Sequence< "
           "::cpo::uno::Any > const &);\n#endif\n";
@@ -3532,8 +3532,8 @@ void ServiceType::dumpHppFile(
                   << ") && defined LO_URE_CTOR_FUN_"
                   << name_.replaceAll(".", "_dot_") << "\n" << indent()
                   << "the_instance = ::css::uno::Reference< " << scopedBaseName
-                  << (" >(::css::uno::Reference< ::css::uno::XInterface >("
-                      "static_cast< ::css::uno::XInterface * >((*"
+                  << (" >(::css::uno::Reference< ::cpo::uno::XInterface >("
+                      "static_cast< ::cpo::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << (")(the_context.get(), ::cpo::uno::Sequence<"
@@ -3654,8 +3654,8 @@ void ServiceType::dumpHppFile(
                   << ") && defined LO_URE_CTOR_FUN_"
                   << name_.replaceAll(".", "_dot_") << "\n" << indent()
                   << "the_instance = ::css::uno::Reference< " << scopedBaseName
-                  << (" >(::css::uno::Reference< ::css::uno::XInterface >("
-                      "static_cast< ::css::uno::XInterface * >((*"
+                  << (" >(::css::uno::Reference< ::cpo::uno::XInterface >("
+                      "static_cast< ::cpo::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << ")(the_context.get(), ";
@@ -3800,7 +3800,7 @@ void SingletonType::dumpHppFile(
       << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
       << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
-      << "\nextern \"C\" ::css::uno::XInterface * LO_URE_CTOR_FUN_"
+      << "\nextern \"C\" ::cpo::uno::XInterface * LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
       << "(::cpo::uno::XComponentContext *, ::cpo::uno::Sequence< "
       "::cpo::uno::Any > const &);\n#endif\n";
@@ -3828,8 +3828,8 @@ void SingletonType::dumpHppFile(
       << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_") << "\n" << indent()
       << "instance = ::css::uno::Reference< " << scopedBaseName
-      << (" >(::css::uno::Reference< ::css::uno::XInterface >("
-          "static_cast< ::css::uno::XInterface * >((*"
+      << (" >(::css::uno::Reference< ::cpo::uno::XInterface >("
+          "static_cast< ::cpo::uno::XInterface * >((*"
           "LO_URE_CTOR_FUN_")
       << name_.replaceAll(".", "_dot_")
       << (")(the_context.get(), ::cpo::uno::Sequence<"

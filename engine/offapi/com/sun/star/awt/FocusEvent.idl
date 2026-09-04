@@ -51,7 +51,7 @@ published struct FocusEvent: com::sun::star::lang::EventObject
 
     /** contains the window which gets the focus on a lose focus event.
      */
-    com::sun::star::uno::XInterface NextFocus;
+    cpo::uno::XInterface NextFocus;
 
 
     /** specifies if this focus change event is a temporary change.

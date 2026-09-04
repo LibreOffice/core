@@ -31,7 +31,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -159,7 +159,7 @@ bool checkAnyEnum(cpo::uno::Any const& value)
 }
 
 bool checkAnyStruct(cpo::uno::Any const& value,
-                    css::uno::Reference<css::uno::XInterface> const& object)
+                    css::uno::Reference<cpo::uno::XInterface> const& object)
 {
     return value.getValueType() == cppu::UnoType<css::testuno::Struct>::get()
            && *o3tl::forceAccess<css::testuno::Struct>(value)
@@ -1446,7 +1446,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         }
     }
 
-    void SAL_CALL passInterface(css::uno::Reference<css::uno::XInterface> const& object) override
+    void SAL_CALL passInterface(css::uno::Reference<cpo::uno::XInterface> const& object) override
     {
         css::uno::Reference<css::task::XJob>(object, css::uno::UNO_QUERY_THROW)
             ->execute({ { u"name"_ustr, cpo::uno::Any(u"queried job"_ustr) } });
@@ -1552,14 +1552,14 @@ private:
 };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_testuno_BridgeTest_get_implementation(cpo::uno::XComponentContext* context,
                                                         cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new BridgeTest(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_testuno_Test_get_implementation(cpo::uno::XComponentContext*,
                                                   cpo::uno::Sequence<cpo::uno::Any> const&)
 {

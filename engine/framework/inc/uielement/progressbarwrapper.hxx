@@ -64,7 +64,7 @@ class ProgressBarWrapper final : public UIElementWrapperBase
         virtual void update() override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > getRealInterface() override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
 
     //  variables
     //  (should be private everyway!)

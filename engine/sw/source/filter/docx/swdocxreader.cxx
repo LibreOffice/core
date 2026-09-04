@@ -56,7 +56,7 @@ ErrCodeMsg SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM
     rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false));
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.WriterFilter"_ustr), uno::UNO_SET_THROW);
+    uno::Reference<cpo::uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.WriterFilter"_ustr), uno::UNO_SET_THROW);
 
     ErrCode ret = ERRCODE_NONE;
     SwDocShell* pDocShell(rDoc.GetDocShell());
@@ -114,7 +114,7 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
                 comphelper::getProcessServiceFactory() );
 
-    uno::Reference<uno::XInterface> xInterface(
+    uno::Reference<cpo::uno::XInterface> xInterface(
                 xMultiServiceFactory->createInstance( u"com.sun.star.comp.Writer.WriterFilter"_ustr ),
                 uno::UNO_SET_THROW );
 

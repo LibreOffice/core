@@ -28,7 +28,7 @@ struct Struct {
     Enum m16;
     StructLong m17;
     Template<any, StructString> m18;
-    com::sun::star::uno::XInterface m19;
+    cpo::uno::XInterface m19;
 };
 
 }; }; }; };

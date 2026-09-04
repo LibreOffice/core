@@ -365,7 +365,7 @@ cpo::uno::Sequence<OUString> VCLXPrinterServer::getSupportedServiceNames()
         u"com.sun.star.awt.PrinterServer"_ustr, u"stardiv.vcl.PrinterServer"_ustr};
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_VCLXPrinterServer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

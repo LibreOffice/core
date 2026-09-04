@@ -9,7 +9,7 @@
 
 module com { module sun { module star { module chart2 {
 
-interface XTimeBased : com::sun::star::uno::XInterface
+interface XTimeBased : cpo::uno::XInterface
 {
 
     /**

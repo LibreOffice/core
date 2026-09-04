@@ -26,7 +26,7 @@ import lib.TestParameters;
 
 import com.sun.star.ucb.XRemoteContentProviderAcceptor;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class ProviderAcceptor extends TestCase {
 

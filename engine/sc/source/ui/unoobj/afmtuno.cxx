@@ -153,7 +153,7 @@ ScAutoFormatsObj::~ScAutoFormatsObj()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ScAutoFormatsObj_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
@@ -187,7 +187,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const cpo::
     SolarMutexGuard aGuard;
     bool bDone = false;
     //  Reflection need not be uno::XInterface, can be any interface...
-    uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
+    uno::Reference< cpo::uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScAutoFormatObj* pFormatObj = dynamic_cast<ScAutoFormatObj*>( xInterface.get() );

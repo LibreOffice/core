@@ -21,7 +21,7 @@
 
 #include <bridge.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <utility>
 #include <typelib/typedescription.h>
 #include <uno/dispatcher.h>
@@ -84,7 +84,7 @@ void releaseProxy(uno_Interface * pUnoI)
 
 UnoInterfaceProxy * UnoInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge,
-    css::uno::XInterface * pCppI,
+    cpo::uno::XInterface * pCppI,
     typelib_InterfaceTypeDescription * pTypeDescr,
     OUString const & rOId)
 {
@@ -93,7 +93,7 @@ UnoInterfaceProxy * UnoInterfaceProxy::create(
 
 UnoInterfaceProxy::UnoInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_,
-    css::uno::XInterface * pCppI_,
+    cpo::uno::XInterface * pCppI_,
     typelib_InterfaceTypeDescription * pTypeDescr_, OUString aOId_)
     : nRef( 1 )
     , pBridge( pBridge_ )

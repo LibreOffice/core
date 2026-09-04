@@ -36,7 +36,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -163,7 +163,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override
     {
         if (range_.is())
         {
@@ -236,7 +236,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override
     {
         return range_->getuno();
     }
@@ -265,7 +265,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override
     {
         if (range_.is())
         {
@@ -398,7 +398,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return shape_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return shape_; }
 
     css::uno::Reference<scriptinterop::XTextRange> SAL_CALL getText() override
     {
@@ -471,7 +471,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return page_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return page_; }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XShape>> SAL_CALL getShapes() override
     {
@@ -580,7 +580,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return page_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return page_; }
 
     css::uno::Reference<scriptinterop::XSlide> SAL_CALL asSlide() override
     {
@@ -606,7 +606,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override
     {
         auto const controller = model_->getCurrentController();
         if (!controller.is())
@@ -642,7 +642,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return model_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XSlide>> SAL_CALL getSlides() override
     {

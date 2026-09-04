@@ -26,7 +26,7 @@
 
 
 using cpo::uno::RuntimeException;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 using com::sun::star::uno::TypeDescription;
 
 namespace pyuno

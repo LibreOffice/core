@@ -28,7 +28,7 @@
     possible actions must be documented in documentation of the object.
     </p>
  */
-published interface XActionsApproval: com::sun::star::uno::XInterface
+published interface XActionsApproval: cpo::uno::XInterface
 {
     /** requests an approval for the specified action.
 

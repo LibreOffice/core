@@ -369,7 +369,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         if(!pShape)
         {
             xShapeTunnel = nullptr;
-            uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
+            uno::Reference< cpo::uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = nullptr;
             if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || DynCastE3dScene(pObj)) )
                 pShape = new SwXGroupShape(xCreate, nullptr);
@@ -907,7 +907,7 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const cpo::uno::Sequence< sal_Int8 >&
 }
 
 SwXShape::SwXShape(
-        uno::Reference<uno::XInterface> & xShape,
+        uno::Reference<cpo::uno::XInterface> & xShape,
         SwDoc const*const pDoc)
     : m_pPage(nullptr)
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE))
@@ -971,7 +971,7 @@ SwXShape::~SwXShape()
 
     if (m_xShapeAgg.is())
     {
-        uno::Reference< uno::XInterface >  xRef;
+        uno::Reference< cpo::uno::XInterface >  xRef;
         m_xShapeAgg->setDelegator(xRef);
     }
     m_pImpl.reset();

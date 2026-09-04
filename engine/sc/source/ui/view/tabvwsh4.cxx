@@ -1867,11 +1867,11 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
     beans::NamedValue aColorSchemeProperty{ u"nodepath"_ustr,
                                  cpo::uno::Any(u"/org.openoffice.Office.UI/ColorScheme"_ustr) };
 
-    uno::Reference<uno::XInterface> xViewConfigurationAccess
+    uno::Reference<cpo::uno::XInterface> xViewConfigurationAccess
         = xConfigurationProvider->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationAccess"_ustr, { cpo::uno::Any(aViewProperty) });
 
-    uno::Reference<uno::XInterface> xColorSchemeConfigurationAccess
+    uno::Reference<cpo::uno::XInterface> xColorSchemeConfigurationAccess
         = xConfigurationProvider->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationAccess"_ustr, { cpo::uno::Any(aColorSchemeProperty) });
 

@@ -144,8 +144,8 @@ public:
     virtual void setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
 
     // XChild, base of XFormController
-    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XComponent, base of XFormController
     virtual void dispose(  ) override;

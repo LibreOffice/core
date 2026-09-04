@@ -20,7 +20,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xcomponent.hxx>
@@ -33,7 +33,7 @@ class TerminateTest final : public test::BootstrapFixture,
 public:
     void setUp() override;
 
-    css::uno::Reference<css::uno::XInterface> init() override;
+    css::uno::Reference<cpo::uno::XInterface> init() override;
 
     void triggerDesktopTerminate() override;
 
@@ -49,7 +49,7 @@ void TerminateTest::setUp()
         css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
-css::uno::Reference<css::uno::XInterface> TerminateTest::init()
+css::uno::Reference<cpo::uno::XInterface> TerminateTest::init()
 {
     auto const component
         = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
@@ -63,7 +63,7 @@ css::uno::Reference<css::uno::XInterface> TerminateTest::init()
     xTable->initialize(4, 3);
     xText->insertTextContent(xCursor, xTable, false);
     CPPUNIT_ASSERT(xCursor.is());
-    return css::uno::Reference<css::uno::XInterface>(xTable, css::uno::UNO_QUERY_THROW);
+    return css::uno::Reference<cpo::uno::XInterface>(xTable, css::uno::UNO_QUERY_THROW);
 }
 
 void TerminateTest::triggerDesktopTerminate() { mxDesktop->terminate(); }

@@ -326,7 +326,7 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
 
 } // namespace dp_registry::backend::executable
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_deployment_executable_PackageRegistryBackend_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

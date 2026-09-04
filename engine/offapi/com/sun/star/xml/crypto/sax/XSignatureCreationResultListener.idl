@@ -25,7 +25,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * This interface is used to receive the result information of a
  * signature creation.
  */
-interface XSignatureCreationResultListener : com::sun::star::uno::XInterface
+interface XSignatureCreationResultListener : cpo::uno::XInterface
 {
     /**
      * Notifies the signature creation result.

@@ -331,7 +331,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 if ( aEmbedFactory.isEmpty() )
                     throw cpo::uno::RuntimeException(u"Failed to get OLE embedded object factory"_ustr);
 
-                uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext( aEmbedFactory, m_xContext );
+                uno::Reference< cpo::uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext( aEmbedFactory, m_xContext );
 
                 uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY_THROW );
 
@@ -474,7 +474,7 @@ void OleEmbeddedObject::changeState( sal_Int32 nNewState )
         {
             // means that the object is currently trying to reach the target state
             throw embed::StateChangeInProgressException( OUString(),
-                                                        uno::Reference< uno::XInterface >(),
+                                                        uno::Reference< cpo::uno::XInterface >(),
                                                         m_nTargetState );
         }
 

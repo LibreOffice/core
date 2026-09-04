@@ -29,7 +29,7 @@ service Shape
     /** contains the object where this shape is anchored on.
         <p> Possible objects are XSpreadsheet and XCell.</p>
     */
-    [property] com::sun::star::uno::XInterface Anchor;
+    [property] cpo::uno::XInterface Anchor;
 
     /** If set, the shape will resize with the cell.
         Only works when shape is anchored to a cell.

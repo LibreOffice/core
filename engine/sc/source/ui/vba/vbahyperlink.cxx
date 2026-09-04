@@ -225,7 +225,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp )
     mxTextField->setPropertyValue(u"URL"_ustr, cpo::uno::Any( aUrl.makeStringAndClear() ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_ScVbaHyperlink_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

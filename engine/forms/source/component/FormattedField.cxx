@@ -189,7 +189,7 @@ void OFormattedControl::keyPressed(const css::awt::KeyEvent& e)
     if( !xSet.is() )
         return;
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
-    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
+    css::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
     Reference<css::beans::XPropertySet>  xFormSet(xParent, UNO_QUERY);
@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed, void*, void)
 {
     m_nKeyEvent = nullptr;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
-    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
+    css::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl> (), css::awt::MouseEvent() );
@@ -1009,7 +1009,7 @@ void OFormattedModel::resetNoBroadcast()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OFormattedControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

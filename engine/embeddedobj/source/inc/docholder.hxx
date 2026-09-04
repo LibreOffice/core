@@ -191,7 +191,7 @@ public:
     virtual void notifyEvent( const css::document::EventObject& Event ) override;
 
 // XBorderResizeListener
-    virtual void borderWidthsChanged( const css::uno::Reference< css::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) override;
+    virtual void borderWidthsChanged( const css::uno::Reference< cpo::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) override;
 
 // XHatchWindowController
     virtual void requestPositioning( const css::awt::Rectangle& aRect ) override;

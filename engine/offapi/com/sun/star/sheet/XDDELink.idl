@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DDELink
  */
-published interface XDDELink: com::sun::star::uno::XInterface
+published interface XDDELink: cpo::uno::XInterface
 {
 
     /** returns the application from which data are requested

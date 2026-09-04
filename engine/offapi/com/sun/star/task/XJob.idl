@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module task {
 
     @see XAsyncJob
 */
-published interface XJob : com::sun::star::uno::XInterface
+published interface XJob : cpo::uno::XInterface
 {
     /** executes the job synchronously
 

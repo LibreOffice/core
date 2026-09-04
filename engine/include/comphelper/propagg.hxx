@@ -310,7 +310,7 @@ protected:
     /// must be called before aggregation, if aggregation is used
     ///
     /// @throws css::lang::IllegalArgumentException
-    void setAggregation(const css::uno::Reference< css::uno::XInterface >&);
+    void setAggregation(const css::uno::Reference< cpo::uno::XInterface >&);
     void startListening();
 };
 

@@ -22,7 +22,7 @@ package com.sun.star.lib.uno.environments.remote;
 
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public interface TestIWorkAt extends XInterface {
     void syncCall() throws Throwable ;

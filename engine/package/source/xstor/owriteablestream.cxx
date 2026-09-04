@@ -300,7 +300,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
     if ( m_bFlushed )
     {
         SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!" );
-        uno::Reference< uno::XInterface > xTmp( m_xPackageStream, uno::UNO_QUERY_THROW );
+        uno::Reference< cpo::uno::XInterface > xTmp( m_xPackageStream, uno::UNO_QUERY_THROW );
         xParentPackageFolder->insertByName( aName, cpo::uno::Any( xTmp ) );
 
         m_bFlushed = false;

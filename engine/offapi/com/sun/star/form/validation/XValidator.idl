@@ -34,7 +34,7 @@ interface XValidityConstraintListener;
 
     @see XValidatable
 */
-interface XValidator : com::sun::star::uno::XInterface
+interface XValidator : cpo::uno::XInterface
 {
     /** determines whether the given value is valid
 

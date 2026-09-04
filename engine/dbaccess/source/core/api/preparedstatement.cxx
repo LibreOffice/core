@@ -77,7 +77,7 @@ Sequence< sal_Int8 > OPreparedStatement::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any OPreparedStatement::queryInterface( const Type & rType )
 {
     Any aIface = OStatementBase::queryInterface( rType );

@@ -26,7 +26,7 @@
 
 /** is used to update data which is collected in a row.
  */
-published interface XRowUpdate: com::sun::star::uno::XInterface
+published interface XRowUpdate: cpo::uno::XInterface
 {
 
     /** gives a nullable column a null value.

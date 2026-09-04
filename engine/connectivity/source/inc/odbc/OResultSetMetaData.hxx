@@ -72,7 +72,7 @@ namespace connectivity::odbc
         /// @throws cpo::uno::RuntimeException
         static SQLLEN getNumColAttrib(OConnection const * _pConnection
                                           ,SQLHANDLE _aStatementHandle
-                                          ,const css::uno::Reference< css::uno::XInterface >& _xInterface
+                                          ,const css::uno::Reference< cpo::uno::XInterface >& _xInterface
                                           ,sal_Int32 _column
                                           ,sal_Int32 ident);
 
@@ -80,7 +80,7 @@ namespace connectivity::odbc
         /// @throws cpo::uno::RuntimeException
         static SQLSMALLINT getColumnODBCType(OConnection const * _pConnection
                                           ,SQLHANDLE _aStatementHandle
-                                          ,const css::uno::Reference< css::uno::XInterface >& _xInterface
+                                          ,const css::uno::Reference< cpo::uno::XInterface >& _xInterface
                                           ,sal_Int32 column);
 
         const Functions& functions() const { return m_pConnection->functions(); }

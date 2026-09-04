@@ -77,7 +77,7 @@ public:
     getSupportedServiceNames() override;
 
     // XModuleManager
-    virtual OUString identify(const css::uno::Reference< css::uno::XInterface >& xModule) override;
+    virtual OUString identify(const css::uno::Reference< cpo::uno::XInterface >& xModule) override;
 
     // XNameReplace
     virtual void replaceByName(const OUString& sName ,
@@ -122,7 +122,7 @@ private:
 
         @threadsafe
      */
-    OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
+    OUString implts_identify(const css::uno::Reference< cpo::uno::XInterface >& xComponent);
 };
 
 ModuleManager::ModuleManager(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
@@ -152,7 +152,7 @@ cpo::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
     return { u"com.sun.star.frame.ModuleManager"_ustr };
 }
 
-OUString ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
+OUString ModuleManager::identify(const css::uno::Reference< cpo::uno::XInterface >& xModule)
 {
     // valid parameter?
     css::uno::Reference< css::frame::XFrame >      xFrame     (xModule, css::uno::UNO_QUERY);
@@ -219,7 +219,7 @@ void ModuleManager::replaceByName(const OUString& sName ,
     // it cache it as a member of this module manager instance. If we change some props there ... but don't
     // flush changes (because an error occurred) we will read them later. If we use a different config access
     // we can close it without a flush... and our read data won't be affected .-)
-    css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
+    css::uno::Reference< cpo::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         m_xContext,
                                                                         u"/org.openoffice.Setup/Office/Factories"_ustr,
                                                                         ::comphelper::EConfigurationModes::Standard);
@@ -317,7 +317,7 @@ css::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetE
     return new ::comphelper::OAnyEnumeration(comphelper::containerToSequence(lResult));
 }
 
-OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
+OUString ModuleManager::implts_identify(const css::uno::Reference< cpo::uno::XInterface >& xComponent)
 {
     // Search for an optional (!) interface XModule first.
     // It's used to overrule an existing service name. Used e.g. by our database form designer
@@ -344,7 +344,7 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_ModuleManager_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

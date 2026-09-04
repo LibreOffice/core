@@ -20,7 +20,7 @@ package util;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.text.XTextTablesSupplier;
 import com.sun.star.text.XTextFramesSupplier;
 import com.sun.star.text.XTextSectionsSupplier;

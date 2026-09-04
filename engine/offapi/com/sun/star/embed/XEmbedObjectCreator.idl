@@ -27,7 +27,7 @@
     an embedded object.
     </p>
  */
-published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
+published interface XEmbedObjectCreator: cpo::uno::XInterface
 {
     /** creates a new object and initializes it as a new one.
 
@@ -61,7 +61,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @throws cpo::uno::Exception
             in case of other problems
      */
-    ::com::sun::star::uno::XInterface createInstanceInitNew(
+    ::cpo::uno::XInterface createInstanceInitNew(
             [in] sequence< byte > aClassID,
             [in] string sClassName,
             [in] ::com::sun::star::embed::XStorage xStorage,
@@ -108,7 +108,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @throws cpo::uno::Exception
             in case of other problems
      */
-    ::com::sun::star::uno::XInterface createInstanceInitFromEntry(
+    ::cpo::uno::XInterface createInstanceInitFromEntry(
             [in] ::com::sun::star::embed::XStorage xStorage,
             [in] string sEntryName,
             [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor,
@@ -149,7 +149,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @throws cpo::uno::Exception
             in case of other problems
      */
-    ::com::sun::star::uno::XInterface createInstanceInitFromMediaDescriptor(
+    ::cpo::uno::XInterface createInstanceInitFromMediaDescriptor(
             [in] ::com::sun::star::embed::XStorage xStorage,
             [in] string sEntryName,
              [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor,

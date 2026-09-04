@@ -25,7 +25,7 @@
 /** gives access to the state of a check box and makes it possible
     to register for events.
  */
-published interface XCheckBox: com::sun::star::uno::XInterface
+published interface XCheckBox: cpo::uno::XInterface
 {
 
     /** registers a listener for item events.

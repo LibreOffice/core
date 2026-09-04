@@ -40,8 +40,8 @@ public:
     }
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance() override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module util {
     <p>The modified object must post the modification events immediately
     after the modification is performed.</p>
  */
-published interface XModifyBroadcaster: com::sun::star::uno::XInterface
+published interface XModifyBroadcaster: cpo::uno::XInterface
 {
     /** adds the specified listener to receive events "modified."
      */

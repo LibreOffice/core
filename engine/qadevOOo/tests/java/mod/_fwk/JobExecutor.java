@@ -38,7 +38,7 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.task.XJob;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.util.XChangesBatch;
 import com.sun.star.uno.AnyConverter;
 

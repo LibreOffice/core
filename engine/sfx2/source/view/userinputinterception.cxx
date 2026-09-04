@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XKeyHandler.hpp>
 #include <com/sun/star/awt/XMouseClickHandler.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weak.hxx>
@@ -41,7 +41,7 @@ namespace sfx2
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::cpo::uno::Exception;
     using ::cpo::uno::RuntimeException;
     using ::com::sun::star::awt::MouseEvent;

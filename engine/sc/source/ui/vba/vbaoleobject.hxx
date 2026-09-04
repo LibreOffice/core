@@ -36,7 +36,7 @@ public:
             css::uno::Reference< css::drawing::XControlShape > const & xControlShape );
 
     // XOLEObject Attributes
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getObject() override;
     virtual bool SAL_CALL getEnabled() override;
     virtual void SAL_CALL setEnabled( bool _enabled ) override;
     virtual bool SAL_CALL getVisible() override;

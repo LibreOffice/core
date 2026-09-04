@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module document {
 
 /** this interface converts embedded object URLs from one URL space to another.
  */
-published interface XEmbeddedObjectResolver: com::sun::star::uno::XInterface
+published interface XEmbeddedObjectResolver: cpo::uno::XInterface
 {
     /** converts the given URL from the source URL namespace to the destination
         URL space of this instance.

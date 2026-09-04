@@ -101,7 +101,7 @@ namespace connectivity::macab
         using MacabCommonStatement_BASE::rBHelper;
 
         explicit MacabCommonStatement(MacabConnection *_pConnection);
-        using MacabCommonStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
+        using MacabCommonStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
 
         // OComponentHelper
         using MacabCommonStatement_BASE::disposing;

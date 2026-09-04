@@ -25,7 +25,7 @@
 /** With this interface you can control any object that implements
     a Presentation.
 */
-published interface XPresentation: com::sun::star::uno::XInterface
+published interface XPresentation: cpo::uno::XInterface
 {
 };
 

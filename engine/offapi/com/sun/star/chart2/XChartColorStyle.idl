@@ -13,7 +13,7 @@ module com {  module sun {  module star {  module chart2 {
 /** Interface for chart colors
 */
 
-interface XChartColorStyle : com::sun::star::uno::XInterface
+interface XChartColorStyle : cpo::uno::XInterface
 {
 };
 

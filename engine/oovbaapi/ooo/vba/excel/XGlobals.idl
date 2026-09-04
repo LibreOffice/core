@@ -21,7 +21,7 @@
 module ooo {  module vba {  module excel {
 interface XRange;
 interface XWindow;
-interface XGlobals: com::sun::star::uno::XInterface
+interface XGlobals: cpo::uno::XInterface
 {
     [attribute, readonly] ooo::vba::excel::XWorkbook ActiveWorkbook;
     [attribute, readonly] ooo::vba::excel::XWorksheet ActiveSheet;

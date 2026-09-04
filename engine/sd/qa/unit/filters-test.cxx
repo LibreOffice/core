@@ -44,7 +44,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XInterface> m_xDrawComponent;
+    uno::Reference<cpo::uno::XInterface> m_xDrawComponent;
 };
 
 bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,

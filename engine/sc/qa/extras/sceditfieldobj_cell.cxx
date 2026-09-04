@@ -26,7 +26,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -46,7 +46,7 @@ public:
 
     virtual void setUp() override;
     virtual void tearDown() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual uno::Reference<text::XTextContent> getTextContent() override;
     virtual uno::Reference<text::XTextRange> getTextRange() override;
     virtual bool isAttachSupported() override { return true; }
@@ -112,7 +112,7 @@ void ScEditFieldObj_Cell::tearDown()
 
 namespace
 {
-uno::Reference<text::XTextField> getNewField(const uno::Reference<uno::XInterface>& xComponent)
+uno::Reference<text::XTextField> getNewField(const uno::Reference<cpo::uno::XInterface>& xComponent)
 {
     uno::Reference<lang::XMultiServiceFactory> xSM(xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextField> xField(
@@ -125,7 +125,7 @@ uno::Reference<text::XTextField> getNewField(const uno::Reference<uno::XInterfac
 
 } // namespace
 
-uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
+uno::Reference<cpo::uno::XInterface> ScEditFieldObj_Cell::init()
 {
     // Return a field that's already in the cell.
     if (!mxField.is())

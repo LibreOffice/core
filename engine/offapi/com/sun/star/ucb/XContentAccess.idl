@@ -37,7 +37,7 @@ module com { module sun { module star { module ucb {
     @see        XContentIdentifier
 */
 
-published interface XContentAccess : com::sun::star::uno::XInterface
+published interface XContentAccess : cpo::uno::XInterface
 {
     /** returns the identifier string of the content ( "cheap method" ).
 

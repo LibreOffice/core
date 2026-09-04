@@ -71,7 +71,7 @@ public:
 
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
-    virtual void setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator ) SAL_OVERRIDE;
+    virtual void setDelegator( const css::uno::Reference< cpo::uno::XInterface > & Delegator ) SAL_OVERRIDE;
     /** Called by the delegator or queryInterface. Re-implement this method instead of
         queryInterface.
 

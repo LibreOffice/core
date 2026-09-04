@@ -438,7 +438,7 @@ ScModelObj::~ScModelObj()
         pDocShell->GetDocument().RemoveUnoObject(*this);
 
     if (xNumberAgg.is())
-        xNumberAgg->setDelegator(uno::Reference<uno::XInterface>());
+        xNumberAgg->setDelegator(uno::Reference<cpo::uno::XInterface>());
 
     pPrintFuncCache.reset();
     pPrinterOptions.reset();
@@ -2149,7 +2149,7 @@ bool ScModelObj::FillRenderMarkData( const cpo::uno::Any& aSelection,
     if ( bHasPrintContent )
         bSelectedSheetsOnly = ( nPrintContent != 0 );
 
-    uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScCellRangesBase* pSelObj = dynamic_cast<ScCellRangesBase*>( xInterface.get() );
@@ -3907,13 +3907,13 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScModelObj )
 
 // XMultiServiceFactory
 
-css::uno::Reference<css::uno::XInterface> ScModelObj::create(
+css::uno::Reference<cpo::uno::XInterface> ScModelObj::create(
     OUString const & aServiceSpecifier,
     cpo::uno::Sequence<cpo::uno::Any> const * arguments)
 {
     using ServiceType = ScServiceProvider::Type;
 
-    uno::Reference<uno::XInterface> xRet;
+    uno::Reference<cpo::uno::XInterface> xRet;
     ServiceType nType = ScServiceProvider::GetProviderType(aServiceSpecifier);
     if ( nType != ServiceType::INVALID )
     {
@@ -3991,21 +3991,21 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
     return xRet;
 }
 
-uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
+uno::Reference<cpo::uno::XInterface> SAL_CALL ScModelObj::createInstance(
                                 const OUString& aServiceSpecifier )
 {
     SolarMutexGuard aGuard;
     return create(aServiceSpecifier, nullptr);
 }
 
-uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments(
+uno::Reference<cpo::uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments(
                                 const OUString& ServiceSpecifier,
                                 const cpo::uno::Sequence<cpo::uno::Any>& aArgs )
 {
     //! distinguish between own services and those of drawing layer?
 
     SolarMutexGuard aGuard;
-    uno::Reference<uno::XInterface> xInt(create(ServiceSpecifier, &aArgs));
+    uno::Reference<cpo::uno::XInterface> xInt(create(ServiceSpecifier, &aArgs));
 
     if ( aArgs.hasElements() )
     {
@@ -4247,7 +4247,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                 size_t nTabRangeCount = aTabRanges.size();
                 if ( nTabRangeCount > 0 )
                 {
-                    uno::Reference<uno::XInterface> xTarget;
+                    uno::Reference<cpo::uno::XInterface> xTarget;
                     if ( nTabRangeCount == 1 )
                     {
                         ScRange const & rRange = aTabRanges[ 0 ];
@@ -4702,7 +4702,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const cpo::
 
     if ( pDocShell )
     {
-        uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
             ScTableSheetObj* pSheetObj = dynamic_cast<ScTableSheetObj*>( xInterface.get() );
@@ -4748,7 +4748,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const cpo:
 
     if ( pDocShell )
     {
-        uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
             ScTableSheetObj* pSheetObj = dynamic_cast<ScTableSheetObj*>( xInterface.get() );

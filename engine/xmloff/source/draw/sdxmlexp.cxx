@@ -2735,7 +2735,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2747,7 +2747,7 @@ com_sun_star_comp_Impress_XMLOasisExporter_get_implementation(
             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2757,7 +2757,7 @@ com_sun_star_comp_Impress_XMLOasisStylesExporter_get_implementation(
             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisContentExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2767,7 +2767,7 @@ com_sun_star_comp_Impress_XMLOasisContentExporter_get_implementation(
                                              | SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2775,7 +2775,7 @@ com_sun_star_comp_Impress_XMLOasisMetaExporter_get_implementation(
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2783,7 +2783,7 @@ com_sun_star_comp_Impress_XMLOasisSettingsExporter_get_implementation(
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLExporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                          cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2795,7 +2795,7 @@ com_sun_star_comp_Impress_XMLExporter_get_implementation(cpo::uno::XComponentCon
             | SvXMLExportFlags::EMBEDDED));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_XMLExporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                       cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2807,7 +2807,7 @@ com_sun_star_comp_Draw_XMLExporter_get_implementation(cpo::uno::XComponentContex
             | SvXMLExportFlags::EMBEDDED));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2815,7 +2815,7 @@ com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation(
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2823,7 +2823,7 @@ com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation(
                                          SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2833,7 +2833,7 @@ com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation(
                                              | SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisStylesExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2843,7 +2843,7 @@ com_sun_star_comp_Draw_XMLOasisStylesExporter_get_implementation(
             | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Draw_XMLOasisExporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                            cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2855,7 +2855,7 @@ com_sun_star_comp_Draw_XMLOasisExporter_get_implementation(cpo::uno::XComponentC
             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -2866,7 +2866,7 @@ com_sun_star_comp_DrawingLayer_XMLExporter_get_implementation(
                             | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::EMBEDDED));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

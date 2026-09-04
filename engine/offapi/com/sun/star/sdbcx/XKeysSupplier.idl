@@ -23,7 +23,7 @@
 /** provides for access to a container of keys, typically used for a table
     definition object.
  */
-published interface XKeysSupplier: com::sun::star::uno::XInterface
+published interface XKeysSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of keys.

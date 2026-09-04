@@ -3166,7 +3166,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 else
                                 {
                                     // if the password is changed a special error should be used in case of shared document
-                                    throw task::ErrorCodeIOException(u"Can not change password for shared document."_ustr, uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_SFX_SHARED_NOPASSWORDCHANGE) );
+                                    throw task::ErrorCodeIOException(u"Can not change password for shared document."_ustr, uno::Reference< cpo::uno::XInterface >(), sal_uInt32(ERRCODE_SFX_SHARED_NOPASSWORDCHANGE) );
                                 }
                             }
 #endif

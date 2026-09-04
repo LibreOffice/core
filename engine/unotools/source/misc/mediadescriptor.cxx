@@ -284,7 +284,7 @@ bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor
 {
     if (!_rxPostData.is())
         throw css::lang::IllegalArgumentException(u"Found invalid PostData."_ustr,
-                                                  css::uno::Reference<css::uno::XInterface>(), 1);
+                                                  css::uno::Reference<cpo::uno::XInterface>(), 1);
 
     // PostData can't be used in read/write mode!
     rMediaDescriptor[PROP_READONLY] <<= true;
@@ -388,7 +388,7 @@ bool impl_addInputStream(comphelper::SequenceAsHashMap& rMediaDescriptor, bool b
         OUString sURL = rMediaDescriptor.getUnpackedValueOrDefault(PROP_URL, OUString());
         if (sURL.isEmpty())
             throw cpo::uno::Exception(u"Found no URL."_ustr,
-                                      css::uno::Reference<css::uno::XInterface>());
+                                      css::uno::Reference<cpo::uno::XInterface>());
 
         return impl_openStreamWithURL(rMediaDescriptor, removeFragment(sURL), bLockFile);
     }

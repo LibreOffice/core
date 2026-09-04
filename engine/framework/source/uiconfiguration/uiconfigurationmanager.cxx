@@ -112,10 +112,10 @@ public:
     virtual void replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual void removeSettings( const OUString& ResourceURL ) override;
     virtual void insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual css::uno::Reference< css::uno::XInterface > getImageManager() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getImageManager() override;
     virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
     virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
-    virtual css::uno::Reference< css::uno::XInterface > getEventsManager() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getEventsManager() override;
 
     // XUIConfigurationPersistence
     virtual void reload() override;
@@ -1393,7 +1393,7 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_UIConfigurationManager_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

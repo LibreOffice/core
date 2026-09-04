@@ -24,7 +24,7 @@ published interface XMenuListener;
 
 /** specifies a simple menu.
  */
-published interface XMenu: com::sun::star::uno::XInterface
+published interface XMenu: cpo::uno::XInterface
 {
     /** adds the specified menu listener to receive events from this menu.
 

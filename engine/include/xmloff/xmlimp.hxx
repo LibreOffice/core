@@ -499,7 +499,7 @@ public:
 
     /// set the XmlId attribute of given UNO object (for RDF metadata)
     void SetXmlId(css::uno::Reference<
-                  css::uno::XInterface> const & i_xIfc,
+                  cpo::uno::XInterface> const & i_xIfc,
                   OUString const & i_rXmlId);
 
     /// Add a RDFa statement; parameters are XML attribute values

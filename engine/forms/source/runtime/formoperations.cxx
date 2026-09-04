@@ -74,7 +74,7 @@ namespace frm
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::sdbc::XResultSetUpdate;
     using ::com::sun::star::form::runtime::XFormController;
@@ -1756,7 +1756,7 @@ namespace frm
 } // namespace frm
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_forms_FormOperations_get_implementation(cpo::uno::XComponentContext* context,
                                                           cpo::uno::Sequence<cpo::uno::Any> const &)
 {

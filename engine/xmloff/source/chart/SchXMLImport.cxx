@@ -361,7 +361,7 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
 
 // first version: everything comes from one storage
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisImporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                             cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -370,21 +370,21 @@ com_sun_star_comp_Chart_XMLOasisImporter_get_implementation(cpo::uno::XComponent
 
 // multiple storage version: one for content / styles / meta
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Meta"_ustr, SvXMLImportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, u"SchXMLImport.Styles"_ustr, SvXMLImportFlags::STYLES));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentImporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

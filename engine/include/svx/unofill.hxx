@@ -20,17 +20,17 @@
 #ifndef INCLUDED_SVX_UNOFILL_HXX
 #define INCLUDED_SVX_UNOFILL_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <svx/svxdllapi.h>
 
 class SdrModel;
 
-SVXCORE_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoGradientTable_createInstance( SdrModel* pModel );
-SVXCORE_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoHatchTable_createInstance( SdrModel* pModel );
-SVXCORE_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoBitmapTable_createInstance( SdrModel* pModel );
-SVXCORE_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoTransGradientTable_createInstance( SdrModel* pModel );
-SVXCORE_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel );
-SVXCORE_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvxUnoDashTable_createInstance( SdrModel* pModel );
+SVXCORE_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvxUnoGradientTable_createInstance( SdrModel* pModel );
+SVXCORE_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvxUnoHatchTable_createInstance( SdrModel* pModel );
+SVXCORE_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvxUnoBitmapTable_createInstance( SdrModel* pModel );
+SVXCORE_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvxUnoTransGradientTable_createInstance( SdrModel* pModel );
+SVXCORE_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel );
+SVXCORE_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface > SvxUnoDashTable_createInstance( SdrModel* pModel );
 
 #endif // INCLUDED_SVX_UNOFILL_HXX
 

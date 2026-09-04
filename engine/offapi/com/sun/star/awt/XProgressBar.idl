@@ -24,7 +24,7 @@
 
 /** gives access to the value and settings of a progress bar.
  */
-published interface XProgressBar: com::sun::star::uno::XInterface
+published interface XProgressBar: cpo::uno::XInterface
 {
 
     /** sets the foreground color (RGB) of the control.

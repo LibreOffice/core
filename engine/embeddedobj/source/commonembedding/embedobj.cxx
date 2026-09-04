@@ -565,7 +565,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 try
                 {
                     uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
-                    uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
+                    uno::Reference< cpo::uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
 
                     uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create( m_xContext ) );
 
@@ -693,7 +693,7 @@ void OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
     {
         // means that the object is currently trying to reach the target state
         throw embed::StateChangeInProgressException( OUString(),
-                                                    uno::Reference< uno::XInterface >(),
+                                                    uno::Reference< cpo::uno::XInterface >(),
                                                     m_nTargetState );
     }
     else
@@ -952,12 +952,12 @@ void OCommonEmbeddedObject::SetOleState(bool bIsOleUpdate)
     m_bOleUpdate = bIsOleUpdate;
 }
 
-css::uno::Reference< css::uno::XInterface > OCommonEmbeddedObject::getParent()
+css::uno::Reference< cpo::uno::XInterface > OCommonEmbeddedObject::getParent()
 {
     return m_xParent;
 }
 
-void OCommonEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
+void OCommonEmbeddedObject::setParent( const css::uno::Reference< cpo::uno::XInterface >& xParent )
 {
     m_xParent = xParent;
     if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )

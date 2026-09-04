@@ -652,7 +652,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 }
 
 PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
-            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
     mxPropHelper = new PropertyHelper_Thes( rxSource, rxPropSet );
@@ -678,7 +678,7 @@ void PropertyHelper_Thesaurus::SetTmpPropVals( const css::beans::PropertyValues 
 }
 
 PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
-            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet)
 {
     mxPropHelper = new PropertyHelper_Hyphen( rxSource, rxPropSet );
@@ -741,7 +741,7 @@ bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
 }
 
 PropertyHelper_Spelling::PropertyHelper_Spelling(
-            const css::uno::Reference< css::uno::XInterface > &rxSource,
+            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
     mxPropHelper = new PropertyHelper_Spell( rxSource, rxPropSet );

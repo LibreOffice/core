@@ -74,7 +74,7 @@ OUString enumValueToEnumName(cpo::uno::Any const& aValue,
     return aNames[nValuesIndex];
 }
 
-OUString getInterfaceImplementationClass(uno::Reference<uno::XInterface> const& xInterface)
+OUString getInterfaceImplementationClass(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
     if (xServiceInfo.is())
@@ -186,7 +186,7 @@ OUString convertBasicValueToString(const cpo::uno::Any& aValue,
 }
 
 // returns a name of the object, if available
-OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
+OUString getInterfaceName(uno::Reference<cpo::uno::XInterface> const& xInterface,
                           const uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     uno::Reference<container::XNamed> xNamed(xInterface, uno::UNO_QUERY);
@@ -224,7 +224,7 @@ OUString convertAnyToString(const cpo::uno::Any& aValue,
     {
         case cpo::uno::TypeClass_INTERFACE:
         {
-            uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
             if (!xInterface.is())
                 aRetStr = SfxResId(STR_ANY_VALUE_NULL);
             else
@@ -494,7 +494,7 @@ private:
 
     static bool isXInterface(uno::Reference<reflection::XIdlClass> const& xClass)
     {
-        return xClass->getName() == "com.sun.star.uno.XInterface";
+        return xClass->getName() == "cpo.uno.XInterface";
     }
 
 public:
@@ -557,7 +557,7 @@ public:
             {
                 case cpo::uno::TypeClass_INTERFACE:
                 {
-                    uno::Reference<uno::XInterface> xInterface(maAny, uno::UNO_QUERY);
+                    uno::Reference<cpo::uno::XInterface> xInterface(maAny, uno::UNO_QUERY);
                     return xInterface.is();
                 }
                 case cpo::uno::TypeClass_SEQUENCE:
@@ -904,9 +904,9 @@ ObjectInspectorNodeInterface* getSelectedNode(weld::TreeView const& rTreeView)
     return nullptr;
 }
 
-uno::Reference<uno::XInterface> getSelectedXInterface(weld::TreeView const& rTreeView)
+uno::Reference<cpo::uno::XInterface> getSelectedXInterface(weld::TreeView const& rTreeView)
 {
-    uno::Reference<uno::XInterface> xInterface;
+    uno::Reference<cpo::uno::XInterface> xInterface;
 
     if (auto* pNode = getSelectedNode(rTreeView))
     {
@@ -1063,7 +1063,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
         if (auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode))
         {
             cpo::uno::Any aAny = pBasicValueNode->getAny();
-            uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
             bHaveNodeWithObject = xInterface.is();
             mpObjectInspectorWidgets->mpTextView->set_text(convertAnyToString(aAny, mxContext));
         }
@@ -1136,7 +1136,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OUString&, rSe
         cpo::uno::Any aAny = popFromStack();
         if (aAny.hasValue())
         {
-            uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+            uno::Reference<cpo::uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
             inspectObject(xInterface);
         }
     }
@@ -1153,7 +1153,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OUString&, rPageI
     if (!aAny.hasValue())
         return;
 
-    uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+    uno::Reference<cpo::uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
     if (rPageId == "object_inspector_interfaces_tab")
     {
         mpObjectInspectorWidgets->mpInterfacesTreeView->freeze();
@@ -1250,7 +1250,7 @@ void ObjectInspectorTreeHandler::clearAll(std::unique_ptr<weld::TreeView>& pTree
 }
 
 /** Append interfaces to the "interfaces" tree view */
-void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
         return;
@@ -1268,7 +1268,7 @@ void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface
 }
 
 /** Append services to the "services" tree view */
-void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::appendServices(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
         return;
@@ -1286,7 +1286,7 @@ void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> 
 }
 
 /** Append properties to the "properties" tree view */
-void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::appendProperties(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
         return;
@@ -1295,7 +1295,7 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
 }
 
 /** Append methods to the "methods" tree view */
-void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::appendMethods(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
         return;
@@ -1341,7 +1341,7 @@ cpo::uno::Any ObjectInspectorTreeHandler::popFromStack()
 }
 
 // Inspect the input object in the object inspector
-void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::inspectObject(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
         return;
@@ -1364,7 +1364,7 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
 // Inspect the input object in the object inspector.
 // Make the input object the root of the stack (clear all other
 // objects from the stack).
-void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::introspect(uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     clearStack();
     addToStack(cpo::uno::Any(xInterface));

@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module frame {
     @see Frame
     @see XDispatchRecorderSupplier
  */
-published interface XDispatchRecorder: com::sun::star::uno::XInterface
+published interface XDispatchRecorder: cpo::uno::XInterface
 {
     /** initializes the recorder by passing the frame for which all
         macro statements shall be recorded

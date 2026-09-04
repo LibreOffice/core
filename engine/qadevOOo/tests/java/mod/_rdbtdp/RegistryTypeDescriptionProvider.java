@@ -34,7 +34,7 @@ import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -63,7 +63,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
     *  <li> <code>'ElementName'</code> for
     *      {@link ifc.container._XHierarchicalNameAccess} :
     *      name of the existing element. Here it type name for
-    *      <code>com.sun.star.uno.XInterface</code> interface.</li>
+    *      <code>cpo.uno.XInterface</code> interface.</li>
     * </ul>
     */
     @Override
@@ -105,7 +105,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // adding relation for XHierarchicalNameAccess
-        tEnv.addObjRelation("ElementName", "com.sun.star.uno.XInterface") ;
+        tEnv.addObjRelation("ElementName", "cpo.uno.XInterface") ;
         tEnv.addObjRelation("SearchString", "com.sun.star.loader");
 
         return tEnv;

@@ -24,7 +24,7 @@
 
 /** specifies the layout constraints for a surrounding container.
  */
-published interface XLayoutConstrains: com::sun::star::uno::XInterface
+published interface XLayoutConstrains: cpo::uno::XInterface
 {
 
     /** returns the minimum size for this component.

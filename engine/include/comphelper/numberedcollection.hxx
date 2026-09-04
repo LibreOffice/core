@@ -32,7 +32,7 @@
 #include <mutex>
 #include <vector>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper{
@@ -54,7 +54,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
 
         struct TNumberedItem
         {
-            cpo::uno::WeakReference< css::uno::XInterface > xItem;
+            cpo::uno::WeakReference< cpo::uno::XInterface > xItem;
             ::sal_Int32 nNumber;
         };
 
@@ -90,7 +90,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
             @param  xOwner
                     the new owner of this collection.
          */
-        void setOwner (const css::uno::Reference< css::uno::XInterface >& xOwner);
+        void setOwner (const css::uno::Reference< cpo::uno::XInterface >& xOwner);
 
 
         /** set the localized prefix to be used for untitled components.
@@ -106,7 +106,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual ::sal_Int32 leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent) override;
+        virtual ::sal_Int32 leaseNumber(const css::uno::Reference< cpo::uno::XInterface >& xComponent) override;
 
 
         /** @see css.frame.XUntitledNumbers */
@@ -114,7 +114,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual void releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent) override;
+        virtual void releaseNumberForComponent(const css::uno::Reference< cpo::uno::XInterface >& xComponent) override;
 
 
         /** @see css.frame.XUntitledNumbers */
@@ -157,7 +157,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
         TNumberedItemHash m_lComponents;
 
         /// used as source of broadcasted messages or exceptions (can be null !)
-        cpo::uno::WeakReference< css::uno::XInterface > m_xOwner;
+        cpo::uno::WeakReference< cpo::uno::XInterface > m_xOwner;
 
         std::mutex m_aMutex;
 };

@@ -38,7 +38,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <config_dconf.h>
 #include <config_folders.h>
@@ -447,7 +447,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
     OUString name(descriptor.substr(0, i));
     ExternalServices::iterator j(externalServices_.find(name));
     if (j == externalServices_.end()) {
-        css::uno::Reference< css::uno::XInterface > service;
+        css::uno::Reference< cpo::uno::XInterface > service;
         try {
             service = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);

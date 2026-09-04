@@ -80,7 +80,7 @@ DECLARE_WW8EXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.doc
     auto xFieldsAccess(xSupplier->getTextFields());
     auto xFields(xFieldsAccess->createEnumeration());
 
-    css::uno::Reference<css::uno::XInterface> xField(xFields->nextElement(), css::uno::UNO_QUERY);
+    css::uno::Reference<cpo::uno::XInterface> xField(xFields->nextElement(), css::uno::UNO_QUERY);
     // Check fixed property was imported and date value was parsed correctly
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsFixed"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsDate"_ustr));

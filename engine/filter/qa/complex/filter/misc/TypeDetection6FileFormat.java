@@ -20,7 +20,7 @@ package complex.filter.misc;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import util.utils;
 

@@ -21,7 +21,7 @@ class OOO_DLLPUBLIC_TEST XReplaceable
 public:
         XReplaceable( OUString aSearchString, OUString aReplaceString):
             maSearchString(std::move(aSearchString)), maReplaceString(std::move(aReplaceString)) {}
-        virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+        virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
 
     void testCreateReplaceDescriptor();
     void testReplaceAll();

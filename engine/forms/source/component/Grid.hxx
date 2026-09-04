@@ -100,7 +100,7 @@ public:
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XChild
-    virtual void setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // XServiceInfo
     OUString getImplementationName() override
@@ -178,15 +178,15 @@ private:
 
     virtual ElementDescription* createElementMetaData( ) override;
 
-    virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) override;
+    virtual void implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject) override;
     virtual void implInserted( const ElementDescription* _pElement ) override;
     virtual void impl_replacedElement(
                     const css::container::ContainerEvent& _rEvent,
                     ::osl::ClearableMutexGuard& _rInstanceLock
                 ) override;
 
-    void gotColumn(const css::uno::Reference< css::uno::XInterface >& _rxColumn);
-    void lostColumn(const css::uno::Reference< css::uno::XInterface >& _rxColumn);
+    void gotColumn(const css::uno::Reference< cpo::uno::XInterface >& _rxColumn);
+    void lostColumn(const css::uno::Reference< cpo::uno::XInterface >& _rxColumn);
 
     void cloneColumns( const OGridControlModel* _pOriginalContainer );
 };

@@ -15,7 +15,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/util/XImportable.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -30,8 +30,8 @@ class ScImportDescriptorBaseObj : public UnoApiTest, public apitest::DatabaseImp
 public:
     ScImportDescriptorBaseObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXImportable() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXImportable() override;
 
     virtual void setUp() override;
 
@@ -48,7 +48,7 @@ ScImportDescriptorBaseObj::ScImportDescriptorBaseObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScImportDescriptorBaseObj::init()
+uno::Reference<cpo::uno::XInterface> ScImportDescriptorBaseObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
@@ -59,7 +59,7 @@ uno::Reference<uno::XInterface> ScImportDescriptorBaseObj::init()
     return xSheet;
 }
 
-uno::Reference<uno::XInterface> ScImportDescriptorBaseObj::getXImportable()
+uno::Reference<cpo::uno::XInterface> ScImportDescriptorBaseObj::getXImportable()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 

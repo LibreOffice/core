@@ -26,7 +26,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -46,7 +46,7 @@ public:
 
     virtual void setUp() override;
     virtual void tearDown() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual uno::Reference<text::XTextContent> getTextContent() override;
     virtual uno::Reference<text::XTextRange> getTextRange() override;
     virtual bool isAttachSupported() override { return false; }
@@ -110,7 +110,7 @@ void ScEditFieldObj_Header::tearDown()
     UnoApiTest::tearDown();
 }
 
-uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
+uno::Reference<cpo::uno::XInterface> ScEditFieldObj_Header::init()
 {
     // Return a field that's already in the header.
     if (!mxField.is())

@@ -46,7 +46,7 @@ protected:
     OUString m_sLibraryAndCodeName;
     std::unique_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
-    css::uno::Reference< css::uno::XInterface > m_xControl;
+    css::uno::Reference< cpo::uno::XInterface > m_xControl;
     css::uno::Reference< css::frame::XModel > m_xModel;
 
     /// @throws cpo::uno::RuntimeException
@@ -55,7 +55,7 @@ protected:
     void fireClickEvent();
 public:
     ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                    css::uno::Reference< css::uno::XInterface >  xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pHelper );
+                    css::uno::Reference< cpo::uno::XInterface >  xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pHelper );
     virtual ~ScVbaControl() override;
     // This class will own the helper, so make sure it is allocated from
     // the heap
@@ -80,7 +80,7 @@ public:
     virtual void SAL_CALL Move( double Left, double Top, const cpo::uno::Any& Width, const cpo::uno::Any& Height ) override;
     virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getObject() override;
     virtual OUString SAL_CALL getControlSource() override;
     virtual void SAL_CALL setControlSource( const OUString& _controlsource ) override;
     virtual OUString SAL_CALL getRowSource() override;

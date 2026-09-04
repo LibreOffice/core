@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 #include <memory>
 #include <vector>

@@ -903,7 +903,7 @@ Module.uno_init.then(function() {
     console.assert(test.testSolarMutex());
 
     const args = new Module.uno_Sequence_any(
-        [new Module.uno_Any(Module.uno_Type.Interface('com.sun.star.uno.XInterface'), test)]);
+        [new Module.uno_Any(Module.uno_Type.Interface('cpo.uno.XInterface'), test)]);
     const invoke = css.script.XInvocation2.query(css.script.Invocation.create(
         Module.getUnoComponentContext()).createInstanceWithArguments(args));
     args.get(0).delete();

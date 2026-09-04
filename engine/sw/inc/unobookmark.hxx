@@ -89,7 +89,7 @@ public:
 
     /// @return IMark for this, but only if it lives in pDoc
     static ::sw::mark::MarkBase const* GetBookmarkInDoc(SwDoc const*const pDoc,
-            const css::uno::Reference<css::uno::XInterface> & xUT);
+            const css::uno::Reference<cpo::uno::XInterface> & xUT);
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject() override;

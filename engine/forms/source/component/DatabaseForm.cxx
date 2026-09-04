@@ -2383,7 +2383,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt)
 
 // smartXChild
 
-void ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInterface>& Parent)
+void ODatabaseForm::setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent)
 {
     // SYNCHRONIZED ----->
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -3129,7 +3129,7 @@ bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, con
 bool ODatabaseForm::approveCursorMove(const EventObject& event)
 {
     // is our aggregate calling?
-    if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
+    if (event.Source == css::uno::Reference<cpo::uno::XInterface>(static_cast<XWeak*>(this)))
     {
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
@@ -3175,7 +3175,7 @@ bool ODatabaseForm::approveCursorMove(const EventObject& event)
 bool ODatabaseForm::approveRowChange(const RowChangeEvent& event)
 {
     // is our aggregate calling?
-    if (event.Source != css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this)))
+    if (event.Source != css::uno::Reference<cpo::uno::XInterface>(static_cast<XWeak*>(this)))
         return true;
 
     // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
@@ -3210,7 +3210,7 @@ bool ODatabaseForm::approveRowChange(const RowChangeEvent& event)
 
 bool ODatabaseForm::approveRowSetChange(const EventObject& event)
 {
-    if (event.Source == css::uno::Reference<css::uno::XInterface>(static_cast<XWeak*>(this))) // ignore our aggregate as we handle this approve ourself
+    if (event.Source == css::uno::Reference<cpo::uno::XInterface>(static_cast<XWeak*>(this))) // ignore our aggregate as we handle this approve ourself
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         bool bWasLoaded = isLoaded();
@@ -3463,7 +3463,7 @@ bool ODatabaseForm::rowDeleted()
 }
 
 
-css::uno::Reference<css::uno::XInterface> ODatabaseForm::getStatement()
+css::uno::Reference<cpo::uno::XInterface> ODatabaseForm::getStatement()
 {
     return m_xAggregateAsRowSet->getStatement();
 }
@@ -4047,7 +4047,7 @@ void ODatabaseForm::implInserted( const ElementDescription* _pElement )
 }
 
 
-void ODatabaseForm::implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject)
+void ODatabaseForm::implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject)
 {
     OFormComponents::implRemoved( _rxObject );
 
@@ -4093,7 +4093,7 @@ void ODatabaseForm::setName(const OUString& aName)
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_forms_ODatabaseForm_get_implementation(cpo::uno::XComponentContext* context,
                                                          cpo::uno::Sequence<cpo::uno::Any> const &)
 {

@@ -40,12 +40,12 @@ public:
 
     static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< css::uno::XInterface > impl_staticCreateSelfInstance(
+    static css::uno::Reference< cpo::uno::XInterface > impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance(  ) throw (cpo::uno::Exception, cpo::uno::RuntimeException);
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) throw (cpo::uno::Exception, cpo::uno::RuntimeException);
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(  ) throw (cpo::uno::Exception, cpo::uno::RuntimeException);
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) throw (cpo::uno::Exception, cpo::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString getImplementationName() throw (cpo::uno::RuntimeException);

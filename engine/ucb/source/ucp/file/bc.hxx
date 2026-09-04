@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
@@ -179,12 +179,12 @@ namespace fileaccess {
 
 
         // XChild
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+        virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
         getParent() override;
 
         // Not supported
         virtual void SAL_CALL
-        setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 
         // Notifier

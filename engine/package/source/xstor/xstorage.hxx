@@ -310,7 +310,7 @@ public:
 
     void InternalDispose( bool bNotifyImpl );
 
-    void ChildIsDisposed( const css::uno::Reference< css::uno::XInterface >& xChild );
+    void ChildIsDisposed( const css::uno::Reference< cpo::uno::XInterface >& xChild );
 
     sal_Int32 GetRefCount_Impl() const { return m_refCount; }
 

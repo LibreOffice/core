@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module configuration {  module backen
 
     @see XBackendChangesListener
 */
-interface XBackendChangesNotifier: com::sun::star::uno::XInterface
+interface XBackendChangesNotifier: cpo::uno::XInterface
 {
     /** adds the specified listener to receive events when changes occurred.
         @param aListener

@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module util {
 
 /** allows to control notification behavior of a broadcaster.
  */
-interface XBroadcaster: com::sun::star::uno::XInterface
+interface XBroadcaster: cpo::uno::XInterface
 {
     /** suspends broadcasts to the registered listeners.
 

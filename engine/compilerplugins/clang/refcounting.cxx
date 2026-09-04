@@ -205,7 +205,14 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
         QualType elementType = pArrayType->getElementType();
         return containsXInterfaceSubclass(elementType);
     } else {
-        return loplugin::isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("XInterface").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()); });
+        return loplugin::isDerivedFrom(pRecordDecl,
+                [](Decl const * decl) -> bool {
+                    return bool(loplugin::DeclCheck(decl)
+                        .Class("XInterface")
+                        .Namespace("uno")
+                        .Namespace("cpo")
+                        .GlobalNamespace());
+                });
     }
 }
 
@@ -416,7 +423,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
     } else if (containsXInterfaceSubclass(t)) {
         report(
             DiagnosticsEngine::Warning,
-            ("Temporary object of css::uno::XInterface subclass %0 being"
+            ("Temporary object of cpo::uno::XInterface subclass %0 being"
              " directly stack managed, should be managed via"
              " css::uno::Reference"),
             expr->getBeginLoc())

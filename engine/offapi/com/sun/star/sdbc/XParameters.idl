@@ -60,7 +60,7 @@
 
     @see com::sun::star::sdbc::XPreparedStatement
  */
-published interface XParameters: com::sun::star::uno::XInterface
+published interface XParameters: cpo::uno::XInterface
 {
 
     /** sets the designated parameter to SQL NULL.

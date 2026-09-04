@@ -37,7 +37,7 @@
     @see com::sun::star::form::control::GridControl
     @deprecated
  */
-published interface XGrid: com::sun::star::uno::XInterface
+published interface XGrid: cpo::uno::XInterface
 {
 
     /** retrieves the current column position.

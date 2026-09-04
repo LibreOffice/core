@@ -29,7 +29,7 @@ import com.sun.star.pgp.SimplePGPMailerFactoryReg;
 import com.sun.star.uno.IBridge;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import cpo.uno.XNamingService;
 
 

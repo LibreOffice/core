@@ -405,7 +405,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     }
 
     // get reference of this
-    css::uno::Reference< css::uno::XInterface > aOwnRef( getXWeak());
+    css::uno::Reference< cpo::uno::XInterface > aOwnRef( getXWeak());
     // notify <SwThreadJoiner> to release its reference
     SwThreadJoiner::ReleaseThreadJoiner();
 }
@@ -416,7 +416,7 @@ void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& )
     // nothing to do, because instance doesn't hold any references of observed objects
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_util_comp_FinalThreadManager_get_implementation(cpo::uno::XComponentContext* context,
                                 cpo::uno::Sequence<cpo::uno::Any> const &)
 {

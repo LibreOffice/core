@@ -29,7 +29,7 @@
 
     @see com::sun::star::frame::Frame
  */
-published interface XStatusIndicatorFactory: com::sun::star::uno::XInterface
+published interface XStatusIndicatorFactory: cpo::uno::XInterface
 {
     /** create a new status indicator instance
 

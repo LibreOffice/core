@@ -53,9 +53,9 @@ inline Any::Any()
 
 template <typename T>
     // Disallow things like
-    // Reference<css::uno::XInterface> x(...);
+    // Reference<cpo::uno::XInterface> x(...);
     // Any a(*x);
-    requires(!std::is_base_of_v<css::uno::XInterface, T>)
+    requires(!std::is_base_of_v<cpo::uno::XInterface, T>)
 inline Any::Any( T const & value )
 {
     ::uno_type_any_construct(

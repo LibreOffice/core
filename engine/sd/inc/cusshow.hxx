@@ -35,11 +35,11 @@ private:
     OUString aName;
 
     // this is a weak reference to a possible living api wrapper for this custom show
-    cpo::uno::WeakReference<css::uno::XInterface> mxUnoCustomShow;
+    cpo::uno::WeakReference<cpo::uno::XInterface> mxUnoCustomShow;
 
 public:
     SdCustomShow();
-    SdCustomShow(css::uno::Reference<css::uno::XInterface> const& xShow);
+    SdCustomShow(css::uno::Reference<cpo::uno::XInterface> const& xShow);
 
     ~SdCustomShow();
 
@@ -59,7 +59,7 @@ public:
     void SetName(const OUString& rName);
     const OUString& GetName() const { return aName; }
 
-    css::uno::Reference<css::uno::XInterface> getUnoCustomShow();
+    css::uno::Reference<cpo::uno::XInterface> getUnoCustomShow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

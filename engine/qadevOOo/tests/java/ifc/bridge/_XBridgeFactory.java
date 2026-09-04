@@ -27,7 +27,7 @@ import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Tests <code>com.sun.star.bridge.XBridgeFactory</code>

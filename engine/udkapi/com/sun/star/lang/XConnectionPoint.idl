@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module lang {
 
     @see        XConnectionPointContainer
  */
-published interface XConnectionPoint: com::sun::star::uno::XInterface
+published interface XConnectionPoint: cpo::uno::XInterface
 {
     /** @returns
                 the type of the outgoing interface managed by this
@@ -123,7 +123,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
 
         @see com::sun::star::beans::XPropertySet::addPropertyChangeListener
      */
-    void advise( [in] com::sun::star::uno::XInterface xListener )
+    void advise( [in] cpo::uno::XInterface xListener )
             raises( com::sun::star::lang::ListenerExistException,
                     com::sun::star::lang::InvalidListenerException );
 
@@ -140,12 +140,12 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
 
         @see com::sun::star::beans::XPropertySet::removePropertyChangeListener
      */
-    void unadvise( [in] com::sun::star::uno::XInterface xListener );
+    void unadvise( [in] cpo::uno::XInterface xListener );
 
     /** @returns
                 a sequence of all currently advised connections.
      */
-    sequence<com::sun::star::uno::XInterface> getConnections();
+    sequence<cpo::uno::XInterface> getConnections();
 
 };
 

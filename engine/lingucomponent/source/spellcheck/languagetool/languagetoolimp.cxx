@@ -580,7 +580,7 @@ cpo::uno::Sequence<OUString> SAL_CALL LanguageToolGrammarChecker::getSupportedSe
 
 void SAL_CALL LanguageToolGrammarChecker::initialize(const cpo::uno::Sequence<cpo::uno::Any>&) {}
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(
     cpo::uno::XComponentContext* pContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

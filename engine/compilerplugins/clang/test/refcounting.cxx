@@ -12,7 +12,7 @@
 #include <memory>
 #include <rtl/ref.hxx>
 #include <boost/intrusive_ptr.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <config_clang.h>
 #include <cppuhelper/weak.hxx>
 #include <unotools/weakref.hxx>

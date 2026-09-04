@@ -404,7 +404,7 @@ Sequence< OUString > ODataInputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.DataInputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_ODataInputStream_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -698,7 +698,7 @@ Sequence< OUString > ODataOutputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.DataOutputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_ODataOutputStream_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -958,7 +958,7 @@ Sequence< OUString > OObjectOutputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.ObjectOutputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_OObjectOutputStream_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -1216,7 +1216,7 @@ Sequence< OUString > OObjectInputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.ObjectInputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_OObjectInputStream_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

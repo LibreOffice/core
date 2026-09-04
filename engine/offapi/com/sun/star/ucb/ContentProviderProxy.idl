@@ -33,14 +33,14 @@ module com { module sun { module star { module ucb {
 published service ContentProviderProxy
 {
     /** The implementation of
-        com::sun::star::uno::XInterface::queryInterface()
+        cpo::uno::XInterface::queryInterface()
         must instantiate the real provider and return the return value
         of a queryInterface call at the real provider, except for queries
         for the interfaces implemented by the proxy itself. So the caller of
         the queryInterface method at the proxy will get access to the real
         provider in a completely transparent way.
      */
-    interface com::sun::star::uno::XInterface;
+    interface cpo::uno::XInterface;
 
     /** gives access to the original content provider behind the proxy.
 

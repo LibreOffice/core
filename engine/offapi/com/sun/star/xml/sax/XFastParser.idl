@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     @see http://wiki.openoffice.org/wiki/FastParser
 */
-interface XFastParser: com::sun::star::uno::XInterface
+interface XFastParser: cpo::uno::XInterface
 {
     /** parses an XML document from a stream.
 

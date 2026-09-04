@@ -25,7 +25,7 @@ module com { module sun { module star { module xml { module crypto {
  * <p>This interface represents a security template, which is the super interface
  * of the XXMLSignatureTemplate interface and the XXMLEncryptionTemplate interface.
  */
-interface XXMLSecurityTemplate : com::sun::star::uno::XInterface
+interface XXMLSecurityTemplate : cpo::uno::XInterface
 {
     /**
      * Load a XML signature template from XML signature element

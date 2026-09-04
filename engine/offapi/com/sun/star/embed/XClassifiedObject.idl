@@ -23,7 +23,7 @@
 
 /** represents common functionality for embedded objects
  */
-published interface XClassifiedObject: com::sun::star::uno::XInterface
+published interface XClassifiedObject: cpo::uno::XInterface
 {
     /** retrieves class ID of the object.
 

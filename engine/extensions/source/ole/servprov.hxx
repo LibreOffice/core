@@ -29,13 +29,13 @@
 #include "unoconversionutilities.hxx"
 
 /// @throws Exception
-css::uno::Reference< css::uno::XInterface> ConverterProvider_CreateInstance2(  const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
+css::uno::Reference< cpo::uno::XInterface> ConverterProvider_CreateInstance2(  const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-css::uno::Reference< css::uno::XInterface> ConverterProvider_CreateInstanceVar1(   const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
+css::uno::Reference< cpo::uno::XInterface> ConverterProvider_CreateInstanceVar1(   const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-css::uno::Reference<css::uno::XInterface> OleClient_CreateInstance( const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
+css::uno::Reference<cpo::uno::XInterface> OleClient_CreateInstance( const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 /// @throws Exception
-css::uno::Reference<css::uno::XInterface> OleServer_CreateInstance( const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
+css::uno::Reference<cpo::uno::XInterface> OleServer_CreateInstance( const css::uno::Reference<css::lang::XMultiServiceFactory> & xSMgr);
 
 /*****************************************************************************
 
@@ -53,7 +53,7 @@ class OneInstanceOleWrapper : public IClassFactory
 public:
 
     OneInstanceOleWrapper( const css::uno::Reference<css::lang::XMultiServiceFactory>& smgr,
-                           std::function<const css::uno::Reference<css::uno::XInterface>()> xInstFunction );
+                           std::function<const css::uno::Reference<cpo::uno::XInterface>()> xInstFunction );
     virtual ~OneInstanceOleWrapper();
 
     bool registerClass(GUID const * pGuid);
@@ -70,7 +70,7 @@ public:
 
 protected:
     oslInterlockedCount m_refCount;
-    std::function<const css::uno::Reference<css::uno::XInterface>()> m_xInstFunction;
+    std::function<const css::uno::Reference<cpo::uno::XInterface>()> m_xInstFunction;
     DWORD               m_factoryHandle;
     css::uno::Reference<css::bridge::XBridgeSupplier2> m_bridgeSupplier;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_smgr;
@@ -112,8 +112,8 @@ public:
     cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UnoConversionUtilities
-    css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
-    css::uno::Reference< css::uno::XInterface > createComWrapperInstance() override;
+    css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
+    css::uno::Reference< cpo::uno::XInterface > createComWrapperInstance() override;
 protected:
 
 };
@@ -128,8 +128,8 @@ public:
     ~OleClient() override;
 
     // XMultiServiceFactory
-    css::uno::Reference<css::uno::XInterface> createInstance(const OUString& ServiceSpecifier) override;
-    css::uno::Reference<css::uno::XInterface> createInstanceWithArguments(const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments) override;
+    css::uno::Reference<cpo::uno::XInterface> createInstance(const OUString& ServiceSpecifier) override;
+    css::uno::Reference<cpo::uno::XInterface> createInstanceWithArguments(const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments) override;
     cpo::uno::Sequence< OUString >    getAvailableServiceNames() override;
 
     OUString getImplementationName() override;
@@ -139,8 +139,8 @@ public:
     cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // UnoConversionUtilities
-    css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
-    css::uno::Reference< css::uno::XInterface > createComWrapperInstance() override;
+    css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
+    css::uno::Reference< cpo::uno::XInterface > createComWrapperInstance() override;
 
 protected:
     css::uno::Reference<css::bridge::XBridgeSupplier2> m_bridgeSupplier;
@@ -170,7 +170,7 @@ public:
     cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 protected:
-    bool provideInstance(std::function<const css::uno::Reference<css::uno::XInterface>()> xInstFunction, GUID const * guid);
+    bool provideInstance(std::function<const css::uno::Reference<cpo::uno::XInterface>()> xInstFunction, GUID const * guid);
 
     std::list< OneInstanceOleWrapper* > m_wrapperList;
     css::uno::Reference< css::bridge::XBridgeSupplier2 >   m_bridgeSupplier;

@@ -215,7 +215,7 @@ void OLEHandler::importStream(const uno::Reference<cpo::uno::XComponentContext>&
         return;
 
     // Create the filter service.
-    uno::Reference<uno::XInterface> xInterface = xComponentContext->getServiceManager()->createInstanceWithContext(aFilterService, xComponentContext);
+    uno::Reference<cpo::uno::XInterface> xInterface = xComponentContext->getServiceManager()->createInstanceWithContext(aFilterService, xComponentContext);
 
     // Set target document.
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY);

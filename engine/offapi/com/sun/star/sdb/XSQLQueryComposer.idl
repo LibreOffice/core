@@ -28,7 +28,7 @@
     structure of the used query.
     </p>
  */
-published interface XSQLQueryComposer: com::sun::star::uno::XInterface
+published interface XSQLQueryComposer: cpo::uno::XInterface
 {
 
     /** returns the query used for composing.

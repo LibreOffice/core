@@ -41,7 +41,7 @@ public:
 
     virtual void setUp() override;
 
-    uno::Reference<uno::XInterface> init() override;
+    uno::Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(CheckDataPilotTable);
     // _XNamed
@@ -64,7 +64,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XInterface> mxObject;
+    uno::Reference<cpo::uno::XInterface> mxObject;
     static constexpr int MAX_FIELD_INDEX = 6;
 };
 
@@ -74,7 +74,7 @@ CheckDataPilotTable::CheckDataPilotTable()
 {
 }
 
-uno::Reference<uno::XInterface> CheckDataPilotTable::init()
+uno::Reference<cpo::uno::XInterface> CheckDataPilotTable::init()
 {
     // create a calc document
     if (!mxComponent.is())
@@ -161,7 +161,7 @@ uno::Reference<uno::XInterface> CheckDataPilotTable::init()
         DPT->removeByName(u"DataPilotTable"_ustr);
     DPT->insertNewByName(u"DataPilotTable"_ustr, sCellAddress, DPDsc);
 
-    uno::Reference<uno::XInterface> xDataPilotTableObject;
+    uno::Reference<cpo::uno::XInterface> xDataPilotTableObject;
     data = DPT->getByName(DPT->getElementNames()[0]);
     CPPUNIT_ASSERT(data >>= xDataPilotTableObject);
     mxObject = xDataPilotTableObject;

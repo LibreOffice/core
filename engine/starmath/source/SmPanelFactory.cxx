@@ -133,7 +133,7 @@ cpo::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
 
 } // end of unnamed namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_libreoffice_comp_Math_sidebar_SmPanelFactory(cpo::uno::XComponentContext*,
                                                  cpo::uno::Sequence<cpo::uno::Any> const&)
 {

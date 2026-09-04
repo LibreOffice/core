@@ -164,7 +164,7 @@ EXPECT SUCCESS "constructor.tests 20":
 module com { module sun { module star { module uno {
     interface XInterface { void m(); };
 }; }; }; };
-service S: com::sun::star::uno::XInterface {
+service S: cpo::uno::XInterface {
     c1([in] long a, [in] long b);
     c2([in] long a);
 };
@@ -174,7 +174,7 @@ EXPECT SUCCESS "constructor.tests 21":
 module com { module sun { module star { module uno {
     interface XInterface { void m(); };
 }; }; }; };
-service S: com::sun::star::uno::XInterface {
+service S: cpo::uno::XInterface {
     c1([in] long a);
     c2([in] long a, [in] long b);
 };
@@ -184,7 +184,7 @@ EXPECT SUCCESS "constructor.tests 22":
 module com { module sun { module star { module uno {
     interface XInterface { void m(); };
 }; }; }; };
-service S: com::sun::star::uno::XInterface {
+service S: cpo::uno::XInterface {
     c1([in] long a, [in] short b);
     c2([in] long a, [in] long b);
 };

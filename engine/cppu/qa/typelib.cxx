@@ -19,7 +19,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -179,7 +179,7 @@ public:
 
     void testInterface()
     {
-        auto const t0 = cppu::UnoType<css::uno::XInterface>::get();
+        auto const t0 = cppu::UnoType<cpo::uno::XInterface>::get();
         typelib_TypeDescriptionReference* ref = nullptr;
         typelib_TypeDescriptionReference* bases[1] = { t0.getTypeLibType() };
         typelib_static_mi_interface_type_init(&ref, "com.sun.star.script.XTypeConverter", 1, bases);

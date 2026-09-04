@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module container {
     @see XNameAccess
     @see XEnumerationAccess
  */
-published interface XContainer: com::sun::star::uno::XInterface
+published interface XContainer: cpo::uno::XInterface
 {
 
     /** adds the specified listener to receive events when

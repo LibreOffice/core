@@ -226,14 +226,14 @@ protected:
     /**
        @short A function used by subclasses of
        <code>cppu::PropertySetMixin</code> when implementing
-       <code>css::uno::XInterface::queryInterface</code>.
+       <code>cpo::uno::XInterface::queryInterface</code>.
 
        This function checks for support of any of the UNO interface types
        specified in the call of the <code>cppu::PropertySetMixin</code>
        constructor.  It does not check for any other UNO interface types (not
-       even for <code>css::uno::XInterface</code>), and should not
+       even for <code>cpo::uno::XInterface</code>), and should not
        be used directly as the implementation of
-       <code>css::uno::XInterface::queryInterface</code> of this UNO
+       <code>cpo::uno::XInterface::queryInterface</code> of this UNO
        object.
     */
     virtual cpo::uno::Any queryInterface(

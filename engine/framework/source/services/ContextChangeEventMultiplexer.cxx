@@ -60,15 +60,15 @@ public:
     // XContextChangeEventMultiplexer
     virtual void addContextChangeEventListener (
         const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
-        const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
+        const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus) override;
     virtual void removeContextChangeEventListener (
         const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
-        const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
+        const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus) override;
     virtual void removeAllContextChangeEventListeners (
         const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener) override;
     virtual void broadcastContextChangeEvent (
         const css::ui::ContextChangeEventObject& rContextChangeEventObject,
-        const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
+        const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -88,7 +88,7 @@ public:
         OUString msCurrentApplicationName;
         OUString msCurrentContextName;
     };
-    typedef ::std::map<css::uno::Reference<css::uno::XInterface>, FocusDescriptor> ListenerMap;
+    typedef ::std::map<css::uno::Reference<cpo::uno::XInterface>, FocusDescriptor> ListenerMap;
     ListenerMap maListeners;
 
     /** Notify all listeners in the container that is associated with
@@ -99,9 +99,9 @@ public:
     */
     void BroadcastEventToSingleContainer (
         const css::ui::ContextChangeEventObject& rEventObject,
-        const css::uno::Reference<css::uno::XInterface>& rxEventFocus);
+        const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus);
     FocusDescriptor* GetFocusDescriptor (
-        const css::uno::Reference<css::uno::XInterface>& rxEventFocus,
+        const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus,
         const bool bCreateWhenMissing);
 };
 
@@ -116,7 +116,7 @@ void ContextChangeEventMultiplexer::disposing(std::unique_lock<std::mutex>& rGua
 
     rGuard.unlock();
 
-    css::uno::Reference<css::uno::XInterface> xThis (static_cast<XWeak*>(this));
+    css::uno::Reference<cpo::uno::XInterface> xThis (static_cast<XWeak*>(this));
     css::lang::EventObject aEvent (xThis);
     for (auto const& container : aListeners)
     {
@@ -139,7 +139,7 @@ void ContextChangeEventMultiplexer::disposing(std::unique_lock<std::mutex>& rGua
 // XContextChangeEventMultiplexer
 void ContextChangeEventMultiplexer::addContextChangeEventListener (
     const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
-    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
+    const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus)
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
@@ -174,7 +174,7 @@ void ContextChangeEventMultiplexer::addContextChangeEventListener (
 
 void ContextChangeEventMultiplexer::removeContextChangeEventListener (
     const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
-    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
+    const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus)
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
@@ -222,7 +222,7 @@ void ContextChangeEventMultiplexer::removeAllContextChangeEventListeners (
 
 void ContextChangeEventMultiplexer::broadcastContextChangeEvent (
     const css::ui::ContextChangeEventObject& rEventObject,
-    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
+    const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus)
 {
     // Remember the current context.
     if (rxEventFocus.is())
@@ -242,7 +242,7 @@ void ContextChangeEventMultiplexer::broadcastContextChangeEvent (
 
 void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
     const css::ui::ContextChangeEventObject& rEventObject,
-    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
+    const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus)
 {
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
     if (pFocusDescriptor != nullptr)
@@ -258,7 +258,7 @@ void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
 }
 
 ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::GetFocusDescriptor (
-    const css::uno::Reference<css::uno::XInterface>& rxEventFocus,
+    const css::uno::Reference<cpo::uno::XInterface>& rxEventFocus,
     const bool bCreateWhenMissing)
 {
     ListenerMap::iterator iDescriptor (maListeners.find(rxEventFocus));
@@ -318,7 +318,7 @@ namespace framework {
 // right now we assume there's one matching listener
 static uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_ImplImpl(
     css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
-    uno::Reference<uno::XInterface> const& xEventFocus,
+    uno::Reference<cpo::uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {
     assert(xEventFocus.is()); // in current usage it's a bug if the XController is null here
@@ -359,7 +359,7 @@ Hook g_hook;
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

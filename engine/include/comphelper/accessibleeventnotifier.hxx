@@ -22,7 +22,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::accessibility { class XAccessibleEventListener; }
 namespace com::sun::star::accessibility { struct AccessibleEventObject; }
@@ -74,7 +74,7 @@ public:
     */
     static void revokeClientNotifyDisposing(
         const TClientId _nClient,
-        const css::uno::Reference< css::uno::XInterface >& _rxEventSource );
+        const css::uno::Reference< cpo::uno::XInterface >& _rxEventSource );
 
     /** registers a listener for the given client
 

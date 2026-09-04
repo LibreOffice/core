@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** makes it possible to protect objects from modifications.
  */
-published interface XProtectable: com::sun::star::uno::XInterface
+published interface XProtectable: cpo::uno::XInterface
 {
     /** activates the protection.
 

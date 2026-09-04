@@ -24,7 +24,7 @@
 
 /** controls a presentation directly. This supplier will do this.
  */
-published interface XPresentationSupplier: com::sun::star::uno::XInterface
+published interface XPresentationSupplier: cpo::uno::XInterface
 {
 
     /**

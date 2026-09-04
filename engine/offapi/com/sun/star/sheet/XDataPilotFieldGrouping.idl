@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see DataPilotField
  */
-published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
+published interface XDataPilotFieldGrouping: cpo::uno::XInterface
 {
 
     /** Creates a new DataPilot field which contains a group containing the

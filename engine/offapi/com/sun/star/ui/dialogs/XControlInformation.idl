@@ -23,7 +23,7 @@ module com { module sun { module star { module ui { module dialogs {
 /** Interface to query for controls and control properties supported by the
     implementing instance.
 */
-published interface XControlInformation: com::sun::star::uno::XInterface
+published interface XControlInformation: cpo::uno::XInterface
 {
 /** Query for the supported controls of a service instance.
 

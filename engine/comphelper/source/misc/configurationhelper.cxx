@@ -32,7 +32,7 @@
 namespace comphelper{
 
 
-css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+css::uno::Reference< cpo::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                             const OUString&                                           sPackage,
                                                                                   EConfigurationModes                                 eMode   )
 {
@@ -56,7 +56,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     }
 
     // open it
-    css::uno::Reference< css::uno::XInterface > xCFG;
+    css::uno::Reference< cpo::uno::XInterface > xCFG;
 
     bool bReadOnly(eMode & EConfigurationModes::ReadOnly);
     if (bReadOnly)
@@ -72,7 +72,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
 }
 
 
-cpo::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
+cpo::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cpo::uno::XInterface >& xCFG    ,
                                                    const OUString&                            sRelPath,
                                                    const OUString&                            sKey    )
 {
@@ -89,7 +89,7 @@ cpo::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
 }
 
 
-void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::XInterface >& xCFG    ,
+void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< cpo::uno::XInterface >& xCFG    ,
                                            const OUString&                            sRelPath,
                                            const OUString&                            sKey    ,
                                            const cpo::uno::Any&                              aValue  )
@@ -107,7 +107,7 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
 }
 
 
-css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface >& xCFG         ,
+css::uno::Reference< cpo::uno::XInterface > ConfigurationHelper::makeSureSetNodeExists(const css::uno::Reference< cpo::uno::XInterface >& xCFG         ,
                                                                                        const OUString&                            sRelPathToSet,
                                                                                        const OUString&                            sSetNode     )
 {
@@ -120,7 +120,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
             "The requested path \"" + sRelPathToSet + "\" does not exist." );
     }
 
-    css::uno::Reference< css::uno::XInterface > xNode;
+    css::uno::Reference< cpo::uno::XInterface > xNode;
     if (xSet->hasByName(sSetNode))
         xSet->getByName(sSetNode) >>= xNode;
     else
@@ -141,7 +141,7 @@ cpo::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< cpo:
                                                  const OUString&                                       sKey    ,
                                                        EConfigurationModes                             eMode   )
 {
-    css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
+    css::uno::Reference< cpo::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
     return ConfigurationHelper::readRelativeKey(xCFG, sRelPath, sKey);
 }
 
@@ -153,13 +153,13 @@ void ConfigurationHelper::writeDirectKey(const css::uno::Reference< cpo::uno::XC
                                          const cpo::uno::Any&                                  aValue  ,
                                                EConfigurationModes                             eMode   )
 {
-    css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
+    css::uno::Reference< cpo::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
     ConfigurationHelper::writeRelativeKey(xCFG, sRelPath, sKey, aValue);
     ConfigurationHelper::flush(xCFG);
 }
 
 
-void ConfigurationHelper::flush(const css::uno::Reference< css::uno::XInterface >& xCFG)
+void ConfigurationHelper::flush(const css::uno::Reference< cpo::uno::XInterface >& xCFG)
 {
     css::uno::Reference< css::util::XChangesBatch > xBatch(xCFG, css::uno::UNO_QUERY_THROW);
     xBatch->commitChanges();

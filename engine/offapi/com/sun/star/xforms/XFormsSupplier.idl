@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module xforms {
 
 /** provides access to the XForms models contained in the component
  */
-interface XFormsSupplier: com::sun::star::uno::XInterface
+interface XFormsSupplier: cpo::uno::XInterface
 {
 
     /** access XForms model container.

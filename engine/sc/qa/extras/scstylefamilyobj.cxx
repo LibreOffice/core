@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -42,7 +42,7 @@ class ScStyleFamilyObj : public UnoApiTest,
 public:
     ScStyleFamilyObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScStyleFamilyObj);
@@ -93,7 +93,7 @@ ScStyleFamilyObj::ScStyleFamilyObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
+uno::Reference<cpo::uno::XInterface> ScStyleFamilyObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -103,7 +103,7 @@ uno::Reference<uno::XInterface> ScStyleFamilyObj::init()
     uno::Reference<container::XNameAccess> xNA_SF(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xCS(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr),
+    uno::Reference<cpo::uno::XInterface> xCS(xMSF->createInstance(u"com.sun.star.style.CellStyle"_ustr),
                                         uno::UNO_SET_THROW);
     // XNameContainer
     XNameContainer::setElement(

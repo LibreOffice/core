@@ -36,7 +36,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Test for object which is represented by service

@@ -31,7 +31,7 @@ namespace comphelper
     using ::com::sun::star::lang::NotInitializedException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
 
     void ComponentBase::checkDisposed( GuardAccess ) const
     {

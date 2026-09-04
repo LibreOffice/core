@@ -466,7 +466,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 
         if( !maShapeId.isEmpty() )
         {
-            uno::Reference< uno::XInterface > xRef( static_cast<uno::XInterface *>(xShape.get()) );
+            uno::Reference< cpo::uno::XInterface > xRef( static_cast<cpo::uno::XInterface *>(xShape.get()) );
             GetImport().getInterfaceToIdentifierMapper().registerReference( maShapeId, xRef );
         }
 
@@ -3495,7 +3495,7 @@ void SdXMLFrameShapeContext::endFastElement(sal_Int32 nElement)
     if ( pShapeContext )
     {
         assert( mxImplContext.is() );
-        const uno::Reference< uno::XInterface > xShape( pShapeContext->getShape() );
+        const uno::Reference< cpo::uno::XInterface > xShape( pShapeContext->getShape() );
         GetImport().getInterfaceToIdentifierMapper().registerReservedReference( maShapeId, xShape );
     }
 

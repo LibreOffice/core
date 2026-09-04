@@ -94,7 +94,7 @@ namespace cppu
         ~ImplHelper1() SAL_NOEXCEPT {}
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
-        css::uno::XInterface which supports weak mechanism to be held weakly
+        cpo::uno::XInterface which supports weak mechanism to be held weakly
         (supporting cpo::uno::XWeak through ::cppu::OWeakObject).
 
         @derive
@@ -125,7 +125,7 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
-        css::uno::XInterface which supports weak mechanism to be held weakly
+        cpo::uno::XInterface which supports weak mechanism to be held weakly
         (supporting cpo::uno::XWeak through ::cppu::OWeakAggObject).
         In addition, it supports also aggregation meaning object of this class can be aggregated
         (cpo::uno::XAggregation through ::cppu::OWeakAggObject).
@@ -159,13 +159,13 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
-        css::uno::XInterface inheriting from a BaseClass.
+        cpo::uno::XInterface inheriting from a BaseClass.
         All acquire() and release() calls are delegated to the BaseClass. Upon queryInterface(),
         if a demanded interface is not supported by this class directly, the request is
         delegated to the BaseClass.
 
         @attention
-        The BaseClass has to be complete in a sense, that css::uno::XInterface
+        The BaseClass has to be complete in a sense, that cpo::uno::XInterface
         and css::lang::XTypeProvider are implemented properly.  The
         BaseClass must have at least one ctor that can be called with six or
         fewer arguments, of which none is of non-const reference type.
@@ -226,13 +226,13 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
-        css::uno::XInterface inheriting from a BaseClass.
+        cpo::uno::XInterface inheriting from a BaseClass.
         All acquire(),  release() and queryInterface() calls are delegated to the BaseClass.
         Upon queryAggregation(), if a demanded interface is not supported by this class directly,
         the request is delegated to the BaseClass.
 
         @attention
-        The BaseClass has to be complete in a sense, that css::uno::XInterface,
+        The BaseClass has to be complete in a sense, that cpo::uno::XInterface,
         cpo::uno::XAggregation and css::lang::XTypeProvider
         are implemented properly.  The BaseClass must have at least one ctor
         that can be called with six or fewer arguments, of which none is of

@@ -28,7 +28,7 @@ import util.SOfficeFactory;
 import com.sun.star.chart.XChartDocument;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Test for object which is represented by service

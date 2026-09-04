@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -36,7 +36,7 @@ class ScSheetLinkObj : public UnoApiTest,
 public:
     ScSheetLinkObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
 
     virtual void setUp() override;
 
@@ -61,7 +61,7 @@ ScSheetLinkObj::ScSheetLinkObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScSheetLinkObj::init()
+uno::Reference<cpo::uno::XInterface> ScSheetLinkObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

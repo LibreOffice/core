@@ -42,7 +42,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -57,7 +57,7 @@ public:
         {
         }
 
-        return Reference<XInterface>(xTFS->getTextFields(), UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xTFS->getTextFields(), UNO_QUERY_THROW);
     }
 
     CPPUNIT_TEST_SUITE(SwXTextFieldTypes);

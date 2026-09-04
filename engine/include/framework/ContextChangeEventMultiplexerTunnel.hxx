@@ -13,7 +13,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::ui { class XContextChangeEventListener; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { class XComponentContext; }
 
 namespace framework {
@@ -22,7 +22,7 @@ namespace framework {
 FWK_DLLPUBLIC css::uno::Reference<css::ui::XContextChangeEventListener>
 GetFirstListenerWith(
     css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
-    css::uno::Reference<css::uno::XInterface> const& xEventFocus,
+    css::uno::Reference<cpo::uno::XInterface> const& xEventFocus,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
 
 }

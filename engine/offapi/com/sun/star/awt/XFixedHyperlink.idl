@@ -23,7 +23,7 @@
 
 /** gives access to the text and formatting of a fixed hyperlink field.
  */
-interface XFixedHyperlink: com::sun::star::uno::XInterface
+interface XFixedHyperlink: cpo::uno::XInterface
 {
 
         /** sets the text of the control.

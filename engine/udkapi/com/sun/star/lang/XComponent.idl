@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module lang {
     EventListener at that object and release the reference when
     "disposing" is called.</p>
  */
-published interface XComponent: com::sun::star::uno::XInterface
+published interface XComponent: cpo::uno::XInterface
 {
     /** The owner of an object calls this method to explicitly free all
         resources kept by this object and thus break cyclic references.

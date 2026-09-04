@@ -26,7 +26,7 @@
 
     @see XDispatch
  */
-published interface XDispatchProvider: com::sun::star::uno::XInterface
+published interface XDispatchProvider: cpo::uno::XInterface
 {
     /** searches for an XDispatch for the specified URL within
         the specified target frame.

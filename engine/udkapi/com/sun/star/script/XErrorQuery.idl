@@ -19,7 +19,7 @@
 
 module com { module sun { module star { module script {
 
-interface XErrorQuery : ::com::sun::star::uno::XInterface
+interface XErrorQuery : ::cpo::uno::XInterface
 {
   /**
     Returns whether this object has an error

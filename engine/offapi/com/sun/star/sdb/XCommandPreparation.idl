@@ -31,7 +31,7 @@
     prepared by the user.
     </p>
  */
-published interface XCommandPreparation: com::sun::star::uno::XInterface
+published interface XCommandPreparation: cpo::uno::XInterface
 {
 
     /** creates a

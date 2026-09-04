@@ -77,7 +77,7 @@ cpo::uno::Type SvxUnoHatchTable::getElementType(  )
 /**
  * Create a hatchtable
  */
-uno::Reference< uno::XInterface > SvxUnoHatchTable_createInstance( SdrModel* pModel )
+uno::Reference< cpo::uno::XInterface > SvxUnoHatchTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoHatchTable(pModel);
 }

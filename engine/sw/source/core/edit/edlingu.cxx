@@ -296,7 +296,7 @@ cpo::uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
     OSL_ENSURE( m_oEnd, "SwSpellIter::Continue without start?");
 
-    uno::Reference< uno::XInterface >  xSpellRet;
+    uno::Reference< cpo::uno::XInterface >  xSpellRet;
     bool bGoOn = true;
     do {
         SwPaM *pCursor = pMySh->GetCursor();
@@ -677,7 +677,7 @@ cpo::uno::Any SwEditShell::SpellContinue(
     //             Paints are also disabled.
     ++mnStartAction;
     OUString aRet;
-    uno::Reference< uno::XInterface >  xRet;
+    uno::Reference< cpo::uno::XInterface >  xRet;
     if (pConvArgs)
     {
         g_pConvIter->Continue( pPageCnt, pPageSt ) >>= aRet;
@@ -745,7 +745,7 @@ void SwEditShell::HyphEnd()
 }
 
 /// @returns HYPH_CONTINUE if hyphenation, HYPH_OK if selected area was processed.
-uno::Reference< uno::XInterface >
+uno::Reference< cpo::uno::XInterface >
     SwEditShell::HyphContinue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
     assert(g_pHyphIter);
@@ -768,7 +768,7 @@ uno::Reference< uno::XInterface >
     //JP 18.07.95: prevent displaying selection on error messages. NO StartAction so that all
     //             Paints are also disabled.
     ++mnStartAction;
-    uno::Reference< uno::XInterface >  xRet;
+    uno::Reference< cpo::uno::XInterface >  xRet;
     g_pHyphIter->Continue( pPageCnt, pPageSt ) >>= xRet;
     --mnStartAction;
 

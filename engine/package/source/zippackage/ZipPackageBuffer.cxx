@@ -108,7 +108,7 @@ void SAL_CALL ZipPackageBuffer::closeOutput(  )
 void SAL_CALL ZipPackageBuffer::seek( sal_Int64 location )
 {
     if ( location > m_nEnd || location < 0 )
-        throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+        throw IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
     m_nCurrent = location;
 }
 sal_Int64 SAL_CALL ZipPackageBuffer::getPosition(  )

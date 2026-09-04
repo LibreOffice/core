@@ -24,7 +24,7 @@
 
 /** is used for collecting and executing a set of SQL statements.
  */
-published interface XBatchExecution: com::sun::star::uno::XInterface
+published interface XBatchExecution: cpo::uno::XInterface
 {
 
     /** adds a SQL command to the current batch of commands for the statement

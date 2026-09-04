@@ -58,7 +58,7 @@ class XMLTextMarkImportContext final : public SvXMLImportContext
 private:
     XMLTextImportHelper & m_rHelper;
 
-    css::uno::Reference<css::uno::XInterface> & m_rxCrossRefHeadingBookmark;
+    css::uno::Reference<cpo::uno::XInterface> & m_rxCrossRefHeadingBookmark;
 
     OUString m_sBookmarkName;
     OUString m_sFieldName;
@@ -77,7 +77,7 @@ public:
     XMLTextMarkImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
-        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark );
+        css::uno::Reference<cpo::uno::XInterface> & io_rxCrossRefHeadingBookmark );
 
     virtual void SAL_CALL startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;

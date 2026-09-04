@@ -30,7 +30,7 @@ import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.awt.XWindow;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * This class supports some functions to handle easily accessible objects

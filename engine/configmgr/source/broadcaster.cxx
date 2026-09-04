@@ -30,7 +30,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -184,7 +184,7 @@ void Broadcaster::send() {
         throw css::lang::WrappedTargetRuntimeException(
             ("configmgr exceptions during listener notification" +
              messages),
-            css::uno::Reference< css::uno::XInterface >(),
+            css::uno::Reference< cpo::uno::XInterface >(),
             exception);
     }
 }

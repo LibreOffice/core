@@ -34,7 +34,7 @@ module com { module sun { module star { module xml { module crypto {
  * <p>In some cases, the EncryptedKey need to be clearly pointed out by the
  * encryption template.</p>
  */
-interface XXMLEncryption : com::sun::star::uno::XInterface
+interface XXMLEncryption : cpo::uno::XInterface
 {
     /**
      * Perform encryption in the environment of encryption template and context.

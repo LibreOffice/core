@@ -46,7 +46,7 @@ module com { module sun { module star { module accessibility {
    Calc the current range of valid indices for retrieving data include
    the maximum table size minus one.</p>
 */
-interface XAccessibleTable : ::com::sun::star::uno::XInterface
+interface XAccessibleTable : ::cpo::uno::XInterface
 {
     /** Returns the number of used rows in the table.
 

@@ -88,7 +88,7 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
      */
     com::sun::star::awt::XDialog createDialogWithHandler
-        ( [in] string URL, [in] com::sun::star::uno::XInterface xHandler )
+        ( [in] string URL, [in] cpo::uno::XInterface xHandler )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
     /** creates a dialog for the given URL, accepting additional creation parameters

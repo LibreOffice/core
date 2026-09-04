@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/container.hxx>
@@ -30,7 +30,7 @@ namespace comphelper
 {
 
 
-IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint)
+IndexAccessIterator::IndexAccessIterator(css::uno::Reference< cpo::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(std::move(xStartingPoint))
 {
     OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
@@ -39,7 +39,7 @@ IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterfa
 IndexAccessIterator::~IndexAccessIterator() {}
 
 
-css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
+css::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
 {
     bool bCheckingStartingPoint = !m_xCurrentObject.is();
         // Is the current node the starting point?
@@ -48,7 +48,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
     if (!m_xCurrentObject.is())
         m_xCurrentObject = m_xStartingPoint;
 
-    css::uno::Reference< css::uno::XInterface> xSearchLoop( m_xCurrentObject);
+    css::uno::Reference< cpo::uno::XInterface> xSearchLoop( m_xCurrentObject);
     bool bHasMoreToSearch = true;
     bool bFoundSomething = false;
     while (!bFoundSomething && bHasMoreToSearch)
@@ -66,7 +66,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
             {
                 cpo::uno::Any aElement(xContainerAccess->getByIndex(0));
-                xSearchLoop = *o3tl::doAccess<css::uno::Reference<css::uno::XInterface>>(aElement);
+                xSearchLoop = *o3tl::doAccess<css::uno::Reference<cpo::uno::XInterface>>(aElement);
                 bCheckingStartingPoint = false;
 
                 m_arrChildIndizies.push_back(sal_Int32(0));
@@ -78,7 +78,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
                     css::uno::Reference< css::container::XChild> xChild(xSearchLoop, css::uno::UNO_QUERY);
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no appropriate interface !");
 
-                    css::uno::Reference< css::uno::XInterface> xParent( xChild->getParent());
+                    css::uno::Reference< cpo::uno::XInterface> xParent( xChild->getParent());
                     xContainerAccess.set(xParent, css::uno::UNO_QUERY);
                     OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
@@ -91,7 +91,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
                         ++nOldSearchChildIndex;
                         // and check the next child
                         cpo::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
-                        xSearchLoop = *o3tl::doAccess<css::uno::Reference<css::uno::XInterface>>(aElement);
+                        xSearchLoop = *o3tl::doAccess<css::uno::Reference<cpo::uno::XInterface>>(aElement);
                         bCheckingStartingPoint = false;
                         // and update its position in the list.
                         m_arrChildIndizies.push_back(nOldSearchChildIndex);

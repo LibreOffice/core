@@ -125,7 +125,7 @@ namespace sd
 
     }
 
-    Reference< XInterface > DocumentSettings_createInstance( SdXImpressDocument* pModel )
+    Reference< cpo::uno::XInterface > DocumentSettings_createInstance( SdXImpressDocument* pModel )
         noexcept
     {
         DBG_ASSERT( pModel, "I need a model for the DocumentSettings!" );
@@ -949,7 +949,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 if ( !( *pValues >>= aInfo ) )
                     throw lang::IllegalArgumentException(
                         u"Value of type Sequence<PropertyValue> expected!"_ustr,
-                        uno::Reference< uno::XInterface >(),
+                        uno::Reference< cpo::uno::XInterface >(),
                         2 );
 
                 if ( !pDocSh->SetModifyPasswordInfo( aInfo ) )

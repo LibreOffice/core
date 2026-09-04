@@ -29,7 +29,7 @@
     of the implementation that must specify these parameters.
     </p>
 */
-published interface XStringSubstitution : com::sun::star::uno::XInterface
+published interface XStringSubstitution : cpo::uno::XInterface
 {
     /** Exchanges variables inside a given text with a substitution text
         defined for the variables.

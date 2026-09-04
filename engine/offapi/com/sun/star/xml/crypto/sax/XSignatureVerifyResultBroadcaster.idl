@@ -26,7 +26,7 @@ interface XSignatureVerifyResultListener;
  * <p>
  * This interface is used to manipulate signature verify result listener.
  */
-interface XSignatureVerifyResultBroadcaster : com::sun::star::uno::XInterface
+interface XSignatureVerifyResultBroadcaster : cpo::uno::XInterface
 {
     /**
      * Adds a new signature verify result listener.

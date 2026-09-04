@@ -50,7 +50,7 @@ import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

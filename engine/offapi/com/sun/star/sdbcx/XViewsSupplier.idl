@@ -23,7 +23,7 @@
 /** provides for access to a container of views, typically used for a database
     definition object.
  */
-published interface XViewsSupplier: com::sun::star::uno::XInterface
+published interface XViewsSupplier: cpo::uno::XInterface
 {
 
     /** returns the container of views.

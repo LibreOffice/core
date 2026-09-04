@@ -24,7 +24,7 @@ module com {   module sun {   module star {   module document {
 
 /** represents something that provides an embedded object.
  */
-published interface XEmbeddedObjectSupplier: com::sun::star::uno::XInterface
+published interface XEmbeddedObjectSupplier: cpo::uno::XInterface
 {
     /** returns the object which is embedded into this object.
      */

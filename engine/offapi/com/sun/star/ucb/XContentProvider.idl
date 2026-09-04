@@ -26,7 +26,7 @@ module com { module sun { module star { module ucb {
      @see      XContent
      @see      XContentIdentifier
 */
-published interface XContentProvider: com::sun::star::uno::XInterface
+published interface XContentProvider: cpo::uno::XInterface
 {
     /** creates a new XContent instance, if the given
         XContentIdentifier matches a content provided by the

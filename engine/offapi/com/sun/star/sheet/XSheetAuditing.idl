@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module sheet {
 /** provides methods to access auditing (detective) features in a
     spreadsheet.
  */
-published interface XSheetAuditing: com::sun::star::uno::XInterface
+published interface XSheetAuditing: cpo::uno::XInterface
 {
 
     /** removes arrows for one level of dependents of a formula cell.

@@ -63,7 +63,7 @@ static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >
 
 
 
-uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
+uno::Reference< cpo::uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(new utl::TempFileFastService);
@@ -73,7 +73,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
                                                   embed::StorageFormats::PACKAGE));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
+uno::Reference< cpo::uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
             const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // The request for storage can be done with up to three arguments
@@ -182,19 +182,19 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                         else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
                             nStorageType = embed::StorageFormats::OFOPXML;
                         else
-                            throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+                            throw lang::IllegalArgumentException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
                     }
                     else if ( rProp.Value >>= nFormatID )
                     {
                         if ( nFormatID != embed::StorageFormats::PACKAGE
                           && nFormatID != embed::StorageFormats::ZIP
                           && nFormatID != embed::StorageFormats::OFOPXML )
-                            throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+                            throw lang::IllegalArgumentException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
 
                         nStorageType = nFormatID;
                     }
                     else
-                        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
                 }
                 else if (rProp.Name == "NoFileSync")
                 {
@@ -276,7 +276,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceName
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 package_OStorageFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -24,7 +24,7 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.util.URL;
 import util.utils;
 /**

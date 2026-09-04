@@ -215,7 +215,7 @@ void VBATest::testMiscOLEStuff()
     bool bOk = false;
     if( xOLEFactory.is() )
     {
-        uno::Reference< uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
+        uno::Reference< cpo::uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
         bOk = xADODB.is();
     }
     if ( !bOk )

@@ -32,7 +32,7 @@ namespace cpo::uno { class XComponentContext; }
 
 namespace configmgr::configuration_provider {
 
-css::uno::Reference< css::uno::XInterface > createDefault(
+css::uno::Reference< cpo::uno::XInterface > createDefault(
     css::uno::Reference< cpo::uno::XComponentContext >
         const & context);
 

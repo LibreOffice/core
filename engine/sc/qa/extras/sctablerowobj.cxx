@@ -19,7 +19,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -36,7 +36,7 @@ class ScTableRowObj : public UnoApiTest,
 public:
     ScTableRowObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScTableRowObj);
@@ -108,7 +108,7 @@ ScTableRowObj::ScTableRowObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScTableRowObj::init()
+uno::Reference<cpo::uno::XInterface> ScTableRowObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
@@ -119,7 +119,7 @@ uno::Reference<uno::XInterface> ScTableRowObj::init()
     uno::Reference<table::XTableRows> xTR(xCRR->getRows(), uno::UNO_SET_THROW);
 
     uno::Reference<container::XIndexAccess> xIA_TR(xTR, uno::UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xReturn(xIA_TR->getByIndex(6), uno::UNO_QUERY_THROW);
+    uno::Reference<cpo::uno::XInterface> xReturn(xIA_TR->getByIndex(6), uno::UNO_QUERY_THROW);
     return xReturn;
 }
 

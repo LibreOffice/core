@@ -514,7 +514,7 @@ bool SvxUnoGluePointAccess::hasElements()
 /**
  * Create a SvxUnoGluePointAccess
  */
-uno::Reference< uno::XInterface > SvxUnoGluePointAccess_createInstance( SdrObject* pObject )
+uno::Reference< cpo::uno::XInterface > SvxUnoGluePointAccess_createInstance( SdrObject* pObject )
 {
     return *new SvxUnoGluePointAccess(pObject);
 }

@@ -157,7 +157,7 @@ css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
 
 } // closing anonymous implementation namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 unoxml_CLiteral_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -26,7 +26,7 @@
 
     <p>All values are in pixels within this device.</p>
  */
-published interface XFont: com::sun::star::uno::XInterface
+published interface XFont: cpo::uno::XInterface
 {
 
     /** returns the description of the font.

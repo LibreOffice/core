@@ -66,7 +66,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>

@@ -93,18 +93,18 @@ class ObjectRepresentation
 {
 private:
 
-    css::uno::Reference< css::uno::XInterface >         mxObject;
+    css::uno::Reference< cpo::uno::XInterface >         mxObject;
     std::unique_ptr<GDIMetaFile>    mxMtf;
 
 public:
     ObjectRepresentation();
-    ObjectRepresentation(const css::uno::Reference< css::uno::XInterface >& rxIf,
+    ObjectRepresentation(const css::uno::Reference< cpo::uno::XInterface >& rxIf,
                          const GDIMetaFile& rMtf);
     ObjectRepresentation(const ObjectRepresentation& rPresentation);
 
     ObjectRepresentation& operator=(const ObjectRepresentation& rPresentation);
 
-    const css::uno::Reference< css::uno::XInterface >&    GetObject() const { return mxObject; }
+    const css::uno::Reference< cpo::uno::XInterface >&    GetObject() const { return mxObject; }
     bool                              HasRepresentation() const { return static_cast<bool>(mxMtf); }
     const GDIMetaFile&                GetRepresentation() const { return *mxMtf; }
 };

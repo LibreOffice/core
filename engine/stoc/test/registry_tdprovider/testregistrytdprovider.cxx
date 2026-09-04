@@ -41,7 +41,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
@@ -67,7 +67,7 @@ public:
 
     static cpo::uno::Sequence< OUString > getSupportedServiceNames();
 
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
+    static css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(
         css::uno::Reference< cpo::uno::XComponentContext > const & context)
         throw (cpo::uno::Exception);
 
@@ -259,7 +259,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
             interface->getBaseTypes());
     assertEqual< sal_Int32 >(1, bases.getLength());
     assertEqual(
-        OUString( "com.sun.star.uno.XInterface"),
+        OUString( "cpo.uno.XInterface"),
         bases[0]->getName());
     cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
@@ -737,7 +737,7 @@ cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
     return cpo::uno::Sequence< OUString >();
 }
 
-css::uno::Reference< css::uno::XInterface > Service::createInstance(
+css::uno::Reference< cpo::uno::XInterface > Service::createInstance(
     css::uno::Reference< cpo::uno::XComponentContext > const & context)
     throw (cpo::uno::Exception)
 {

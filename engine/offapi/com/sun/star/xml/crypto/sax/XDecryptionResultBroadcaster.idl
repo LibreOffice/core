@@ -26,7 +26,7 @@ interface XDecryptionResultListener;
  * <p>
  * This interface is used to manipulate decryption result listener.
  */
-interface XDecryptionResultBroadcaster : com::sun::star::uno::XInterface
+interface XDecryptionResultBroadcaster : cpo::uno::XInterface
 {
     /**
      * Adds a new decryption result listener.

@@ -27,7 +27,7 @@
 
     @see NumberFormatter
  */
-published interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
+published interface XNumberFormatPreviewer: cpo::uno::XInterface
 {
 
     /** formats a value using a format string, without inserting a

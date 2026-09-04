@@ -13,7 +13,7 @@ module com {  module sun {  module star {  module frame {
 
     This interface can be obtained via com::sun::star::frame::XController.
  */
-interface XInfobarProvider: uno::XInterface
+interface XInfobarProvider : cpo::uno::XInterface
 {
     /** Creates and displays a new Infobar.
 

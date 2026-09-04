@@ -27,7 +27,7 @@ module sheet
 {
 module addin
 {
-    interface XCompatibilityNames  : com::sun::star::uno::XInterface
+    interface XCompatibilityNames  : cpo::uno::XInterface
     {
         /// @return a sequence with all localized names for a programmatic name
         sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames ( [in] string aProgrammaticName );

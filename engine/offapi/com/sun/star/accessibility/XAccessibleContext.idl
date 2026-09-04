@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
     AccessibleRole::BUTTON, its name is "OK", and its description
     is something like "Accepts all changes made in the dialog".</p>
 */
-interface XAccessibleContext : ::com::sun::star::uno::XInterface
+interface XAccessibleContext : ::cpo::uno::XInterface
 {
     /** Return the number of children.
 

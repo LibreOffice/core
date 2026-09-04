@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::FunctionAccess
  */
-published interface XFunctionAccess: com::sun::star::uno::XInterface
+published interface XFunctionAccess: cpo::uno::XInterface
 {
 
     /** calls a function and returns the result of the call.

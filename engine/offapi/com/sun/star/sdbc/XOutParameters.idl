@@ -31,7 +31,7 @@
     by number. The first parameter is 1.
     </p>
  */
-published interface XOutParameters: com::sun::star::uno::XInterface
+published interface XOutParameters: cpo::uno::XInterface
 {
 
     /** registers the designated output parameter.  This version of

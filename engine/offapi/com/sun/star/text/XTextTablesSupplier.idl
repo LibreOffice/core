@@ -24,7 +24,7 @@
 
 /** enables the object to handle text tables.
  */
-published interface XTextTablesSupplier: com::sun::star::uno::XInterface
+published interface XTextTablesSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the collection of "TextTables" currently contained in the object.

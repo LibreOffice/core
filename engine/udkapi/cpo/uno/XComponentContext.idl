@@ -28,7 +28,7 @@ module cpo {  module uno {
     com::sun::star::lang::XSingleComponentFactory.
     Arbitrary values (e.g. deployment values) can be retrieved from the context.
 */
-published interface XComponentContext : com::sun::star::uno::XInterface
+published interface XComponentContext : cpo::uno::XInterface
 {
     /** Gets a value from the context.
 

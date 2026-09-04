@@ -26,7 +26,7 @@ module com { module sun { module star { module ucb {
     @version  1.0
     @see      XContentProvider
 */
-published interface XContentProviderManager: com::sun::star::uno::XInterface
+published interface XContentProviderManager: cpo::uno::XInterface
 {
     /** registers a content provider for a specific URL template.
 

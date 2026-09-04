@@ -30,7 +30,7 @@ import util.SOfficeFactory;
 import com.sun.star.text.XChapterNumberingSupplier;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Test for object, which is a collection of chapter numbering rules of document.

@@ -29,7 +29,7 @@ module chart2
 /** A data series represents the object that has all the knowledge to
     be rendered as a visual data series.
  */
-interface XDataSeries : ::com::sun::star::uno::XInterface
+interface XDataSeries : ::cpo::uno::XInterface
 {
     /** @returns
             the element at the specified index.

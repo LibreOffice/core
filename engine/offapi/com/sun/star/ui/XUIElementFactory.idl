@@ -39,7 +39,7 @@ module com { module sun { module star { module ui {
     </p>
 */
 
-interface XUIElementFactory : ::com::sun::star::uno::XInterface
+interface XUIElementFactory : ::cpo::uno::XInterface
 {
     /** creates a new instances of a specific user interface element.
 

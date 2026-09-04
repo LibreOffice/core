@@ -300,7 +300,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         { u"ProgressMax"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"ProgressCurrent"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"NumberStyles"_ustr, 0, cppu::UnoType<container::XNameAccess>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { u"PrivateData"_ustr, 0, cppu::UnoType<uno::XInterface>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"PrivateData"_ustr, 0, cppu::UnoType<cpo::uno::XInterface>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },

@@ -87,7 +87,7 @@ cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > Primitiv
     return aRetval;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

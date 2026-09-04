@@ -220,7 +220,7 @@ void OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChan
 }
 
 // XChild
-void OGridControlModel::setParent( const css::uno::Reference<css::uno::XInterface>& i_Parent )
+void OGridControlModel::setParent( const css::uno::Reference<cpo::uno::XInterface>& i_Parent )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( i_Parent == getParent() )
@@ -273,7 +273,7 @@ bool OGridControlModel::select(const Any& rElement)
             throw IllegalArgumentException();
         }
     }
-    css::uno::Reference<css::uno::XInterface> xMe = static_cast<XWeak*>(this);
+    css::uno::Reference<cpo::uno::XInterface> xMe = static_cast<XWeak*>(this);
     if (xSel.is())
     {
         Reference<XChild> xAsChild(xSel, UNO_QUERY);
@@ -709,7 +709,7 @@ void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
         xBroadcaster->removeSQLErrorListener( this );
 }
 
-void OGridControlModel::implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject)
+void OGridControlModel::implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject)
 {
     OInterfaceContainer::implRemoved(_rxObject);
     lostColumn(_rxObject);
@@ -900,7 +900,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     // reading the attachment
     for (sal_Int32 i = 0; i < nLen; i++)
     {
-        css::uno::Reference<css::uno::XInterface>  xIfc(m_aItems[i], UNO_QUERY);
+        css::uno::Reference<cpo::uno::XInterface>  xIfc(m_aItems[i], UNO_QUERY);
         Reference<XPropertySet>  xSet(xIfc, UNO_QUERY);
         Any aHelper;
         aHelper <<= xSet;

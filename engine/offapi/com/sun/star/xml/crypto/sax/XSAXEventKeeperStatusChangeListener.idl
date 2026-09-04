@@ -24,7 +24,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * <p>
  * This interface is used to receive the SAXEventKeeper status change notification.
  */
-interface XSAXEventKeeperStatusChangeListener : com::sun::star::uno::XInterface
+interface XSAXEventKeeperStatusChangeListener : cpo::uno::XInterface
 {
     /**
      * Notifies the SAXEventKeeper is entering/leaving blocking state.

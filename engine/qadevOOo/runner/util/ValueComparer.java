@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import cpo.uno.Type;
 import com.sun.star.uno.Enum;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import java.util.HashMap;

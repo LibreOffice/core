@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XChartType : com::sun::star::uno::XInterface
+interface XChartType : cpo::uno::XInterface
 {
     /** A string representation of the chart type.
         This needs to be the service-name which can be used to create a chart type.

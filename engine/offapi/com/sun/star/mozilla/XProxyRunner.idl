@@ -27,7 +27,7 @@ published interface XCodeProxy;
     @see com::sun::star::mozilla::XProfileDiscover
     @see com::sun::star::mozilla::MozillaBootstrap
  */
-published interface XProxyRunner: com::sun::star::uno::XInterface
+published interface XProxyRunner: cpo::uno::XInterface
 {
     /** attempts to Run XPCOM code in a managed environment
 

@@ -209,7 +209,7 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
     {
         throw lang::IllegalArgumentException(
             u"Script URI not valid"_ustr,
-            uno::Reference< uno::XInterface >(), 1 );
+            uno::Reference< cpo::uno::XInterface >(), 1 );
     }
 
     return m_sBaseURI + "/" + getLanguagePath(sLanguagePart);
@@ -240,7 +240,7 @@ ScriptingFrameworkURIHelper::getSupportedServiceNames()
     return { u"com.sun.star.script.provider.ScriptURIHelper"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 scripting_ScriptingFrameworkURIHelper_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

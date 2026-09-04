@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -41,7 +41,7 @@ public:
 
     virtual void setUp() override;
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual uno::Reference<sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationObj);
@@ -106,7 +106,7 @@ ScAnnontationObj::getAnnotation(table::CellAddress& xCellAddress)
     return xSheetAnnotation;
 }
 
-uno::Reference<uno::XInterface> ScAnnontationObj::init()
+uno::Reference<cpo::uno::XInterface> ScAnnontationObj::init()
 {
     // tested annotation is in sheet 0 cell C2
     table::CellAddress aCellAddress;

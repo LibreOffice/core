@@ -40,7 +40,7 @@ module data
     instances should also support the service
     TextualDataSequence.</p>
   */
-interface XDataSource  : ::com::sun::star::uno::XInterface
+interface XDataSource  : ::cpo::uno::XInterface
 // : ::com::sun::star::container::XIndexAccess
 {
     /** returns data sequences.

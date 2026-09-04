@@ -51,23 +51,23 @@ public:
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
-    static OUString GetServiceName( const css::uno::Reference< css::uno::XInterface >& xInt );
+    static OUString GetServiceName( const css::uno::Reference< cpo::uno::XInterface >& xInt );
 
     /** Returns the multi service factory from a document shell. */
     static css::uno::Reference< css::lang::XMultiServiceFactory > GetServiceFactory( const SfxObjectShell* pShell );
 
     /** Creates an instance from the passed service name, using the passed service factory. */
-    static css::uno::Reference< css::uno::XInterface > CreateInstance(
+    static css::uno::Reference< cpo::uno::XInterface > CreateInstance(
                             const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the service factory of the passed object. */
-    static css::uno::Reference< css::uno::XInterface > CreateInstance(
+    static css::uno::Reference< cpo::uno::XInterface > CreateInstance(
                             const SfxObjectShell* pShell,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the process service factory. */
-    static css::uno::Reference< css::uno::XInterface > CreateInstance( const OUString& rServiceName );
+    static css::uno::Reference< cpo::uno::XInterface > CreateInstance( const OUString& rServiceName );
 
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */

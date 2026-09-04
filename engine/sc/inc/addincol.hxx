@@ -38,7 +38,7 @@
 
 namespace com::sun::star::reflection { class XIdlMethod; }
 namespace com::sun::star::sheet { class XVolatileResult; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 class SfxObjectShell;
 class ScUnoAddInFuncData;
@@ -154,8 +154,8 @@ private:
 
     void        Initialize();
     void        ReadConfiguration();
-    void        ReadFromAddIn( const css::uno::Reference< css::uno::XInterface>& xInterface );
-    void        UpdateFromAddIn( const css::uno::Reference< css::uno::XInterface>& xInterface,
+    void        ReadFromAddIn( const css::uno::Reference< cpo::uno::XInterface>& xInterface );
+    void        UpdateFromAddIn( const css::uno::Reference< cpo::uno::XInterface>& xInterface,
                                 std::u16string_view rServiceName );
     void        LoadComponent( const ScUnoAddInFuncData& rFuncData );
 
@@ -198,7 +198,7 @@ private:
     const ScUnoAddInFuncData*   pFuncData;
     cpo::uno::Sequence<cpo::uno::Any>         aArgs;
     cpo::uno::Sequence<cpo::uno::Any>         aVarArg;
-    css::uno::Reference<css::uno::XInterface> xCaller;
+    css::uno::Reference<cpo::uno::XInterface> xCaller;
     ScDocument&                 mrDoc;
     bool                        bValidCount;
     // result:
@@ -218,7 +218,7 @@ public:
                     ~ScUnoAddInCall();
 
     bool                NeedsCaller() const;
-    void                SetCaller( const css::uno::Reference<css::uno::XInterface>& rInterface );
+    void                SetCaller( const css::uno::Reference<cpo::uno::XInterface>& rInterface );
     void                SetCallerFromObjectShell( const SfxObjectShell* pSh );
 
     bool                ValidParamCount() { return bValidCount;}

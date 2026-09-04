@@ -596,7 +596,7 @@ DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fo
     // tdf#150235: due to wrong types used in column export, 'style:height' and 'style:style'
     // attributes were exported incorrectly for 'style:column-sep' element
     auto xSection
-        = getProperty<uno::Reference<uno::XInterface>>(getParagraph(1), u"TextSection"_ustr);
+        = getProperty<uno::Reference<cpo::uno::XInterface>>(getParagraph(1), u"TextSection"_ustr);
     auto xColumns = getProperty<uno::Reference<text::XTextColumns>>(xSection, u"TextColumns"_ustr);
     CPPUNIT_ASSERT(xColumns);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xColumns->getColumnCount());

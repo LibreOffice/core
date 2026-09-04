@@ -32,7 +32,7 @@
     <p>This interface allows generic services to navigate between
     arbitrary elements of a connection.</p>
  */
-published interface XConnectable: com::sun::star::uno::XInterface
+published interface XConnectable: cpo::uno::XInterface
 {
     /** sets the source of the data flow for this object.
      */

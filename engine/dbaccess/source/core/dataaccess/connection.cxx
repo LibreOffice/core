@@ -411,7 +411,7 @@ Sequence< Type > OConnection::getTypes()
     return comphelper::containerToSequence(aNormalizedTypes);
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any OConnection::queryInterface( const Type & rType )
 {
     if ( !m_bSupportsViews && rType.equals( cppu::UnoType<XViewsSupplier>::get() ) )

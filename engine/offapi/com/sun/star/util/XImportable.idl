@@ -23,7 +23,7 @@
 
 /** makes it possible to import files into the object.
  */
-published interface XImportable: com::sun::star::uno::XInterface
+published interface XImportable: cpo::uno::XInterface
 {
     /** @returns
                     a descriptor which contains the arguments for an import.

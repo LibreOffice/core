@@ -30,7 +30,7 @@ import util.SOfficeFactory;
 
 import cpo.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.io.PrintWriter;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.text.XTextDocument;

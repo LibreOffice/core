@@ -65,7 +65,7 @@ namespace dbaccess
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override = 0;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
         virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         virtual void acquire() noexcept override;
         virtual void release() noexcept override;
@@ -130,7 +130,7 @@ namespace dbaccess
 
         // comes from the driver can be null
         css::uno::Reference< css::container::XNameAccess >    m_xDrvColumns;
-        cpo::uno::WeakReference< css::uno::XInterface >       m_xParent;
+        cpo::uno::WeakReference< cpo::uno::XInterface >       m_xParent;
         IColumnFactory*                                       m_pColFactoryImpl;
         ::connectivity::sdbcx::IRefreshableColumns*           m_pRefreshColumns;
 
@@ -201,8 +201,8 @@ namespace dbaccess
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         void append(const OUString& rName, OColumn*);
         void clearColumns();

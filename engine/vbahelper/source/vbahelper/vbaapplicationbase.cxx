@@ -419,7 +419,7 @@ cpo::uno::Any SAL_CALL VbaApplicationBase::getVBE()
         // "VBE" object does not have a parent, but pass document model to be able to determine application type
         cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(getCurrentDocument())) };
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
+        uno::Reference< cpo::uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
             u"ooo.vba.vbide.VBE"_ustr , aArgs, mxContext );
         return cpo::uno::Any( xVBE );
     }

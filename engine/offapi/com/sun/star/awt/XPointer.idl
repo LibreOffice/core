@@ -24,7 +24,7 @@
 
 /** gives access to the type of mouse pointer.
  */
-published interface XPointer: com::sun::star::uno::XInterface
+published interface XPointer: cpo::uno::XInterface
 {
 
     /** selects a SystemPointer for this mouse pointer.

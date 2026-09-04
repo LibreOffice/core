@@ -820,7 +820,7 @@ public:
     // access to the UNO representation of the shape
     css::uno::Reference< css::drawing::XShape > getUnoShape();
 
-    static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt );
+    static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< cpo::uno::XInterface >& xInt );
 
     // notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
     //

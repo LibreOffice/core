@@ -2550,7 +2550,7 @@ void Content::insert(
                         // Abort.
                         throw ucb::CommandFailedException(
                                     OUString(),
-                                    uno::Reference< uno::XInterface >(),
+                                    uno::Reference< cpo::uno::XInterface >(),
                                     aExAsAny );
 //                            break;
 
@@ -2560,7 +2560,7 @@ void Content::insert(
                                     "Unknown interaction selection!" );
                         throw ucb::CommandFailedException(
                                     u"Unknown interaction selection!"_ustr,
-                                    uno::Reference< uno::XInterface >(),
+                                    uno::Reference< cpo::uno::XInterface >(),
                                     aExAsAny );
 //                            break;
                 }

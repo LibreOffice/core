@@ -3700,7 +3700,7 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
 }
 
 // UNO component
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 css_comp_Impress_oox_PowerPointExport(cpo::uno::XComponentContext* rxCtxt,
                                       cpo::uno::Sequence<cpo::uno::Any> const& rArguments)
 {

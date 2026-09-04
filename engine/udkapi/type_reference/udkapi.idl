@@ -1,17 +1,17 @@
-module com {
- module sun {
-  module star {
+module cpo {
    module uno {
-    published interface XInterface;
+    published interface XInterface {
+     any queryInterface([in] type aType);
+     void acquire();
+     void release();
+    };
    };
-  };
- };
 };
 module cpo {
    module uno {
     published exception Exception {
      string Message;
-     ::com::sun::star::uno::XInterface Context;
+     ::cpo::uno::XInterface Context;
     };
     published exception RuntimeException: ::cpo::uno::Exception {
     };
@@ -80,17 +80,10 @@ module com {
     published exception IllegalTypeException: ::cpo::uno::Exception {
     };
    };
-   module uno {
-    published interface XInterface {
-     any queryInterface([in] type aType);
-     void acquire();
-     void release();
-    };
-   };
    module beans {
     published interface XIntrospectionAccess;
     published interface XIntrospection {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XIntrospectionAccess inspect([in] any aObject);
     };
     /** @deprecated */ published service Introspection: ::com::sun::star::beans::XIntrospection;
@@ -150,14 +143,14 @@ module com {
    };
    module beans {
     published interface XPropertyAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< ::com::sun::star::beans::PropertyValue > getPropertyValues();
      void setPropertyValues([in] sequence< ::com::sun::star::beans::PropertyValue > aProps) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
     };
     published exception PropertyExistException: ::cpo::uno::Exception {
     };
     published interface XPropertyContainer {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void addProperty([in] string Name, [in] short Attributes, [in] any DefaultValue) raises (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException);
      void removeProperty([in] string Name) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException);
     };
@@ -165,7 +158,7 @@ module com {
     published interface XPropertySetInfo;
     published interface XVetoableChangeListener;
     published interface XPropertySet {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
      void setPropertyValue([in] string aPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
      any getPropertyValue([in] string PropertyName) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
@@ -186,7 +179,7 @@ module com {
    };
    module lang {
     published struct EventObject {
-     ::com::sun::star::uno::XInterface Source;
+     ::cpo::uno::XInterface Source;
     };
    };
    module beans {
@@ -205,13 +198,13 @@ module com {
      const long PROPERTYSET = 2;
     };
     published interface XFastPropertySet {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void setFastPropertyValue([in] long nHandle, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
      any getFastPropertyValue([in] long nHandle) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
     };
     published interface XPropertiesChangeListener;
     published interface XMultiPropertySet {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
      void setPropertyValues([in] sequence< string > aPropertyNames, [in] sequence< any > aValues) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
      sequence< any > getPropertyValues([in] sequence< string > aPropertyNames);
@@ -220,7 +213,7 @@ module com {
      void firePropertiesChangeEvent([in] sequence< string > aPropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener xListener);
     };
     published interface XPropertyState {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::PropertyState getPropertyState([in] string PropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
      sequence< ::com::sun::star::beans::PropertyState > getPropertyStates([in] sequence< string > aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
      void setPropertyToDefault([in] string PropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
@@ -258,18 +251,18 @@ module com {
      string Second;
     };
     published interface XExactName {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getExactName([in] string aApproximateName);
     };
     published interface XHierarchicalPropertySetInfo;
     published interface XHierarchicalPropertySet {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XHierarchicalPropertySetInfo getHierarchicalPropertySetInfo();
      void setHierarchicalPropertyValue([in] string aHierarchicalPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
      any getHierarchicalPropertyValue([in] string aHierarchicalPropertyName) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
     };
     published interface XHierarchicalPropertySetInfo {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::Property getPropertyByHierarchicalName([in] string aHierarchicalName) raises (::com::sun::star::beans::UnknownPropertyException);
      boolean hasPropertyByHierarchicalName([in] string aHierarchicalName);
     };
@@ -287,7 +280,7 @@ module com {
    };
    module beans {
     published interface XIntrospectionAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      long getSuppliedMethodConcepts();
      long getSuppliedPropertyConcepts();
      ::com::sun::star::beans::Property getProperty([in] string aName, [in] long nPropertyConcepts) raises (::com::sun::star::container::NoSuchElementException);
@@ -297,20 +290,20 @@ module com {
      boolean hasMethod([in] string aName, [in] long nMethodConcepts);
      sequence< ::com::sun::star::reflection::XIdlMethod > getMethods([in] long nMethodConcepts);
      sequence< type > getSupportedListeners();
-     ::com::sun::star::uno::XInterface queryAdapter([in] type aInterfaceType) raises (::com::sun::star::beans::IllegalTypeException);
+     ::cpo::uno::XInterface queryAdapter([in] type aInterfaceType) raises (::com::sun::star::beans::IllegalTypeException);
     };
     published interface XMaterialHolder {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getMaterial();
     };
     published interface XMultiHierarchicalPropertySet {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XHierarchicalPropertySetInfo getHierarchicalPropertySetInfo();
      void setHierarchicalPropertyValues([in] sequence< string > aHierarchicalPropertyNames, [in] sequence< any > Values) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
      sequence< any > getHierarchicalPropertyValues([in] sequence< string > aPropertyNames) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
     };
     published interface XMultiPropertyStates {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< ::com::sun::star::beans::PropertyState > getPropertyStates([in] sequence< string > aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
      void setAllPropertiesToDefault();
      void setPropertiesToDefault([in] sequence< string > aPropertyNames) raises (::com::sun::star::beans::UnknownPropertyException);
@@ -319,7 +312,7 @@ module com {
    };
    module lang {
     published interface XEventListener {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void disposing([in] ::com::sun::star::lang::EventObject Source);
     };
    };
@@ -329,12 +322,12 @@ module com {
      void propertiesChange([in] sequence< ::com::sun::star::beans::PropertyChangeEvent > aEvent);
     };
     published interface XPropertiesChangeNotifier {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void addPropertiesChangeListener([in] sequence< string > PropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener Listener);
      void removePropertiesChangeListener([in] sequence< string > PropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener Listener);
     };
     published interface XProperty {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::Property getAsProperty();
     };
     published interface XPropertyChangeListener {
@@ -342,7 +335,7 @@ module com {
      void propertyChange([in] ::com::sun::star::beans::PropertyChangeEvent evt);
     };
     published interface XPropertySetInfo {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< ::com::sun::star::beans::Property > getProperties();
      ::com::sun::star::beans::Property getPropertyByName([in] string aName) raises (::com::sun::star::beans::UnknownPropertyException);
      boolean hasPropertyByName([in] string Name);
@@ -352,7 +345,7 @@ module com {
      void propertySetInfoChange([in] ::com::sun::star::beans::PropertySetInfoChangeEvent evt);
     };
     published interface XPropertySetInfoChangeNotifier {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void addPropertySetInfoChangeListener([in] ::com::sun::star::beans::XPropertySetInfoChangeListener Listener);
      void removePropertySetInfoChangeListener([in] ::com::sun::star::beans::XPropertySetInfoChangeListener Listener);
     };
@@ -361,13 +354,13 @@ module com {
      void propertyStateChange([in] ::com::sun::star::beans::PropertyStateChangeEvent aEvent);
     };
     published interface XPropertyWithState {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::PropertyState getStateAsProperty();
      void setToDefaultAsProperty() raises (::com::sun::star::lang::WrappedTargetException);
-     ::com::sun::star::uno::XInterface getDefaultAsProperty() raises (::com::sun::star::lang::WrappedTargetException);
+     ::cpo::uno::XInterface getDefaultAsProperty() raises (::com::sun::star::lang::WrappedTargetException);
     };
     published interface XTolerantMultiPropertySet {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< ::com::sun::star::beans::SetPropertyTolerantFailed > setPropertyValuesTolerant([in] sequence< string > aPropertyNames, [in] sequence< any > aValues) raises (::com::sun::star::lang::IllegalArgumentException);
      sequence< ::com::sun::star::beans::GetPropertyTolerantResult > getPropertyValuesTolerant([in] sequence< string > aPropertyNames);
      sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > getDirectPropertyValuesTolerant([in] sequence< string > aPropertyNames);
@@ -380,21 +373,21 @@ module com {
    };
    module bridge {
     published interface XBridge {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface getInstance([in] string sInstanceName);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface getInstance([in] string sInstanceName);
      string getName();
      string getDescription();
     };
    };
    module lang {
     published interface XComponent {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void dispose();
      void addEventListener([in] ::com::sun::star::lang::XEventListener xListener);
      void removeEventListener([in] ::com::sun::star::lang::XEventListener aListener);
     };
     published interface XInitialization {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void initialize([in] sequence< any > aArguments) raises (::cpo::uno::Exception);
     };
    };
@@ -413,7 +406,7 @@ module com {
    };
    module bridge {
     published interface XBridgeFactory {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::bridge::XBridge createBridge([in] string sName, [in] string sProtocol, [in] ::com::sun::star::connection::XConnection aConnection, [in] ::com::sun::star::bridge::XInstanceProvider anInstanceProvider) raises (::com::sun::star::bridge::BridgeExistsException, ::com::sun::star::lang::IllegalArgumentException);
      ::com::sun::star::bridge::XBridge getBridge([in] string sName);
      sequence< ::com::sun::star::bridge::XBridge > getExistingBridges();
@@ -443,12 +436,12 @@ module com {
      const short UNO = 1;
     };
     /** @deprecated */ published service OleApplicationRegistration {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
     };
    };
    module bridge {
     published interface XBridgeSupplier2 {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any createBridge([in] any aModelDepObject, [in] sequence< byte > aProcessId, [in] short nSourceModelType, [in] short nDestModelType) raises (::com::sun::star::lang::IllegalArgumentException);
     };
     /** @deprecated */ published service OleBridgeSupplier2 {
@@ -460,9 +453,9 @@ module com {
    };
    module lang {
     published interface XMultiServiceFactory {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstance([in] string aServiceSpecifier) raises (::cpo::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] string ServiceSpecifier, [in] sequence< any > Arguments) raises (::cpo::uno::Exception);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createInstance([in] string aServiceSpecifier) raises (::cpo::uno::Exception);
+     ::cpo::uno::XInterface createInstanceWithArguments([in] string ServiceSpecifier, [in] sequence< any > Arguments) raises (::cpo::uno::Exception);
      sequence< string > getAvailableServiceNames();
     };
    };
@@ -479,8 +472,8 @@ module com {
    };
    module bridge {
     published interface XUnoUrlResolver {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface resolve([in] string sUnoUrl) raises (::com::sun::star::connection::NoConnectException, ::com::sun::star::connection::ConnectionSetupException, ::com::sun::star::lang::IllegalArgumentException);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface resolve([in] string sUnoUrl) raises (::com::sun::star::connection::NoConnectException, ::com::sun::star::connection::ConnectionSetupException, ::com::sun::star::lang::IllegalArgumentException);
     };
     published service UnoUrlResolver: ::com::sun::star::bridge::XUnoUrlResolver;
     published service UrpBridge {
@@ -489,11 +482,11 @@ module com {
      interface ::com::sun::star::lang::XComponent;
     };
     published interface XInstanceProvider {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface getInstance([in] string sInstanceName) raises (::com::sun::star::container::NoSuchElementException);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface getInstance([in] string sInstanceName) raises (::com::sun::star::container::NoSuchElementException);
     };
     published interface XProtocolProperties {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< ::com::sun::star::bridge::ProtocolProperty > getProperties();
      long requestChange([in] long nRandomNumber);
      void commitChange([in] sequence< ::com::sun::star::bridge::ProtocolProperty > newValues) raises (::com::sun::star::bridge::InvalidProtocolChangeException);
@@ -503,13 +496,13 @@ module com {
     published exception AlreadyAcceptingException: ::cpo::uno::Exception {
     };
     published interface XAcceptor {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::connection::XConnection accept([in] string sConnectionDescription) raises (::com::sun::star::connection::AlreadyAcceptingException, ::com::sun::star::connection::ConnectionSetupException, ::com::sun::star::lang::IllegalArgumentException);
      void stopAccepting();
     };
     published service Acceptor: ::com::sun::star::connection::XAcceptor;
     published interface XConnector {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::connection::XConnection connect([in] string sConnectionDescription) raises (::com::sun::star::connection::NoConnectException, ::com::sun::star::connection::ConnectionSetupException);
     };
     published service Connector: ::com::sun::star::connection::XConnector;
@@ -524,7 +517,7 @@ module com {
    };
    module connection {
     published interface XConnection {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      long read([out] sequence< byte > aReadBytes, [in] long nBytesToRead) raises (::com::sun::star::io::IOException);
      void write([in] sequence< byte > aData) raises (::com::sun::star::io::IOException);
      void flush() raises (::com::sun::star::io::IOException);
@@ -542,7 +535,7 @@ module com {
    };
    module connection {
     published interface XConnectionBroadcaster {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void addStreamListener([in] ::com::sun::star::io::XStreamListener aListener);
      void removeStreamListener([in] ::com::sun::star::io::XStreamListener aListener);
     };
@@ -556,7 +549,7 @@ module com {
     published exception ElementExistException: ::cpo::uno::Exception {
     };
     published interface XElementAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      type getElementType();
      boolean hasElements();
     };
@@ -567,12 +560,12 @@ module com {
    };
    module container {
     published interface XChild {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface getParent();
-     void setParent([in] ::com::sun::star::uno::XInterface Parent) raises (::com::sun::star::lang::NoSupportException);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface getParent();
+     void setParent([in] ::cpo::uno::XInterface Parent) raises (::com::sun::star::lang::NoSupportException);
     };
     published interface XEnumeration {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      boolean hasMoreElements();
      any nextElement() raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
     };
@@ -590,7 +583,7 @@ module com {
     };
     published interface XContainerListener;
     published interface XContainer {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void addContainerListener([in] ::com::sun::star::container::XContainerListener xListener);
      void removeContainerListener([in] ::com::sun::star::container::XContainerListener xListener);
     };
@@ -601,22 +594,22 @@ module com {
      void elementReplaced([in] ::com::sun::star::container::ContainerEvent Event);
     };
     published interface XContainerQuery {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XEnumeration createSubSetEnumerationByQuery([in] string Query);
      ::com::sun::star::container::XEnumeration createSubSetEnumerationByProperties([in] sequence< ::com::sun::star::beans::NamedValue > Properties);
     };
     published interface XContentEnumerationAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XEnumeration createContentEnumeration([in] string aServiceName);
      sequence< string > getAvailableServiceNames();
     };
     published interface XHierarchicalName {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getHierarchicalName();
      string composeHierarchicalName([in] string aRelativeName) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException);
     };
     published interface XHierarchicalNameAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getByHierarchicalName([in] string aName) raises (::com::sun::star::container::NoSuchElementException);
      boolean hasByHierarchicalName([in] string aName);
     };
@@ -649,7 +642,7 @@ module com {
      sequence< string > getImplicitIDs();
     };
     published interface XImplicitIDReplace {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void replaceByUniqueID([in] string ID, [in] any aNewElement) raises (::com::sun::star::container::NoSuchElementException);
     };
     published interface XImplicitIDContainer {
@@ -693,7 +686,7 @@ module com {
      void removeByName([in] string Name) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
     };
     published interface XNamed {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getName();
      void setName([in] string aName);
     };
@@ -704,7 +697,7 @@ module com {
      void remove([in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException);
     };
     published interface XUniqueIDAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getByUniqueID([in] string ID) raises (::com::sun::star::container::NoSuchElementException);
      void removeByUniqueID([in] string ID) raises (::com::sun::star::container::NoSuchElementException);
     };
@@ -714,12 +707,12 @@ module com {
     };
     published interface XInputStream;
     published interface XActiveDataSink {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void setInputStream([in] ::com::sun::star::io::XInputStream aStream);
      ::com::sun::star::io::XInputStream getInputStream();
     };
     published interface XConnectable {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void setPredecessor([in] ::com::sun::star::io::XConnectable aPredecessor);
      ::com::sun::star::io::XConnectable getPredecessor();
      void setSuccessor([in] ::com::sun::star::io::XConnectable aSuccessor);
@@ -728,7 +721,7 @@ module com {
     published exception NotConnectedException: ::com::sun::star::io::IOException {
     };
     published interface XInputStream {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      long readBytes([out] sequence< byte > aData, [in] long nBytesToRead) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      long readSomeBytes([out] sequence< byte > aData, [in] long nMaxBytesToRead) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      void skipBytes([in] long nBytesToSkip) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
@@ -754,12 +747,12 @@ module com {
     };
     published interface XOutputStream;
     published interface XActiveDataSource {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void setOutputStream([in] ::com::sun::star::io::XOutputStream aStream);
      ::com::sun::star::io::XOutputStream getOutputStream();
     };
     published interface XOutputStream {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void writeBytes([in] sequence< byte > aData) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      void flush() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      void closeOutput() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
@@ -788,7 +781,7 @@ module com {
      string Actions;
     };
     published interface XMarkableStream {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      long createMark() raises (::com::sun::star::io::IOException);
      void deleteMark([in] long Mark) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
      void jumpToMark([in] long nMark) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
@@ -833,7 +826,7 @@ module com {
     };
     published service Pipe: ::com::sun::star::io::XPipe;
     published interface XActiveDataControl {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void addListener([in] ::com::sun::star::io::XStreamListener aListener);
      void removeListener([in] ::com::sun::star::io::XStreamListener aListener);
      void start();
@@ -845,7 +838,7 @@ module com {
      interface ::com::sun::star::io::XActiveDataControl;
     };
     published interface XSeekable {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void seek([in] hyper location) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException);
      hyper getPosition() raises (::com::sun::star::io::IOException);
      hyper getLength() raises (::com::sun::star::io::IOException);
@@ -858,7 +851,7 @@ module com {
      createStreamFromSequence([in] sequence< byte > aData);
     };
     published interface XStream {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::io::XInputStream getInputStream();
      ::com::sun::star::io::XOutputStream getOutputStream();
     };
@@ -889,18 +882,18 @@ module com {
     published exception WrongFormatException: ::com::sun::star::io::IOException {
     };
     published interface XActiveDataStreamer {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void setStream([in] ::com::sun::star::io::XStream aStream);
      ::com::sun::star::io::XStream getStream();
     };
     published interface XDataTransferEventListener;
     published interface XDataExporter {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void exportData([in] ::com::sun::star::io::XOutputStream aOutputStream, [in] ::com::sun::star::lang::XComponent Component, [in] ::com::sun::star::io::XDataTransferEventListener aListener);
      void cancel();
     };
     published interface XDataImporter {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void importData([in] ::com::sun::star::io::XActiveDataSource aActiveSource, [in] ::com::sun::star::lang::XComponent Component, [in] ::com::sun::star::io::XDataTransferEventListener aListener);
      void cancel();
     };
@@ -910,16 +903,16 @@ module com {
      void cancelled([in] ::com::sun::star::io::DataTransferEvent aEvent);
     };
     published interface XInputStreamProvider {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::io::XInputStream createInputStream();
     };
     published interface XPersist {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void write([in] string URL) raises (::com::sun::star::io::IOException);
      void read([in] string URL) raises (::com::sun::star::io::IOException);
     };
     published interface XPersistObject {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getServiceName();
      void write([in] ::com::sun::star::io::XObjectOutputStream OutStream) raises (::com::sun::star::io::IOException);
      void read([in] ::com::sun::star::io::XObjectInputStream InStream) raises (::com::sun::star::io::IOException);
@@ -932,11 +925,11 @@ module com {
      void error([in] any aException);
     };
     published interface XTruncate {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void truncate() raises (::com::sun::star::io::IOException);
     };
     published interface XXMLExtractor {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::io::XInputStream extract([in] ::com::sun::star::io::XInputStream aStream);
     };
    };
@@ -951,7 +944,7 @@ module com {
      long ErrorCode;
     };
     /** @deprecated */ published interface XJavaVM {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getJavaVM([in] sequence< byte > processID);
      boolean isVMStarted();
      boolean isVMEnabled();
@@ -966,7 +959,7 @@ module com {
      string DetectedVersion;
     };
     /** @deprecated */ published interface XJavaThreadRegister_11 {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      boolean isThreadAttached();
      void registerThread();
      void revokeThread();
@@ -993,9 +986,9 @@ module com {
    };
    module lang {
     published interface XMultiComponentFactory {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::cpo::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
      sequence< string > getAvailableServiceNames();
     };
     published service MultiServiceFactory {
@@ -1044,60 +1037,60 @@ module com {
     };
     published interface XConnectionPointContainer;
     published interface XConnectionPoint {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      type getConnectionType();
      ::com::sun::star::lang::XConnectionPointContainer getConnectionPointContainer();
-     void advise([in] ::com::sun::star::uno::XInterface xListener) raises (::com::sun::star::lang::ListenerExistException, ::com::sun::star::lang::InvalidListenerException);
-     void unadvise([in] ::com::sun::star::uno::XInterface xListener);
-     sequence< ::com::sun::star::uno::XInterface > getConnections();
+     void advise([in] ::cpo::uno::XInterface xListener) raises (::com::sun::star::lang::ListenerExistException, ::com::sun::star::lang::InvalidListenerException);
+     void unadvise([in] ::cpo::uno::XInterface xListener);
+     sequence< ::cpo::uno::XInterface > getConnections();
     };
     published interface XConnectionPointContainer {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< type > getConnectionPointTypes();
      ::com::sun::star::lang::XConnectionPoint queryConnectionPoint([in] type aType);
-     void advise([in] type aType, [in] ::com::sun::star::uno::XInterface xListener);
-     void unadvise([in] type aType, [in] ::com::sun::star::uno::XInterface xListener);
+     void advise([in] type aType, [in] ::cpo::uno::XInterface xListener);
+     void unadvise([in] type aType, [in] ::cpo::uno::XInterface xListener);
     };
     published interface XLocalizable {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void setLocale([in] ::com::sun::star::lang::Locale eLocale);
      ::com::sun::star::lang::Locale getLocale();
     };
     published interface XMain {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      long run([in] sequence< string > aArguments);
     };
     published interface XServiceDisplayName {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getServiceDisplayName([in] ::com::sun::star::lang::Locale aLocale);
     };
     published interface XServiceInfo {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getImplementationName();
      boolean supportsService([in] string ServiceName);
      sequence< string > getSupportedServiceNames();
     };
     published interface XServiceName {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getServiceName();
     };
     published interface XSingleComponentFactory {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createInstanceWithContext([in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
+     ::cpo::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::cpo::uno::XComponentContext Context) raises (::cpo::uno::Exception);
     };
     published interface XSingleServiceFactory {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createInstance() raises (::cpo::uno::Exception);
-     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] sequence< any > aArguments) raises (::cpo::uno::Exception);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createInstance() raises (::cpo::uno::Exception);
+     ::cpo::uno::XInterface createInstanceWithArguments([in] sequence< any > aArguments) raises (::cpo::uno::Exception);
     };
     published interface XTypeProvider {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< type > getTypes();
      /** @deprecated */ sequence< byte > getImplementationId();
     };
     published interface XUnoTunnel {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      hyper getSomething([in] sequence< byte > aIdentifier);
     };
    };
@@ -1112,8 +1105,8 @@ module com {
    };
    module loader {
     published interface XImplementationLoader {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::com::sun::star::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::com::sun::star::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
      boolean writeRegistryInfo([in] ::com::sun::star::registry::XRegistryKey xKey, [in] string implementationLoaderUrl, [in] string locationUrl) raises (::com::sun::star::registry::CannotRegisterImplementationException);
     };
     published service Dynamic: ::com::sun::star::loader::XImplementationLoader;
@@ -1126,7 +1119,7 @@ module com {
    module reflection {
     published interface XIdlClass;
     published interface XIdlReflection {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::reflection::XIdlClass forName([in] string aTypeName);
      ::com::sun::star::reflection::XIdlClass getType([in] any aObj);
     };
@@ -1163,8 +1156,8 @@ module com {
    };
    module reflection {
     /** @deprecated */ published interface XProxyFactory {
-     interface ::com::sun::star::uno::XInterface;
-     ::cpo::uno::XAggregation createProxy([in] ::com::sun::star::uno::XInterface xTarget);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XAggregation createProxy([in] ::cpo::uno::XInterface xTarget);
     };
     /** @deprecated */ published service ProxyFactory: ::com::sun::star::reflection::XProxyFactory;
     published enum TypeDescriptionSearchDepth {
@@ -1175,7 +1168,7 @@ module com {
    module reflection {
     published interface XTypeDescriptionEnumeration;
     published interface XTypeDescriptionEnumerationAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::reflection::XTypeDescriptionEnumeration createTypeDescriptionEnumeration([in] string moduleName, [in] sequence< ::cpo::uno::TypeClass > types, [in] ::com::sun::star::reflection::TypeDescriptionSearchDepth depth) raises (::com::sun::star::reflection::NoSuchTypeNameException, ::com::sun::star::reflection::InvalidTypeNameException);
     };
     published service TypeDescriptionManager {
@@ -1190,7 +1183,7 @@ module com {
      [optional] interface ::com::sun::star::reflection::XTypeDescriptionEnumerationAccess;
     };
     published interface XTypeDescription {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::cpo::uno::TypeClass getTypeClass();
      string getName();
     };
@@ -1221,7 +1214,7 @@ module com {
      sequence< long > getEnumValues();
     };
     published interface XIdlArray {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void realloc([inout] any array, [in] long length) raises (::com::sun::star::lang::IllegalArgumentException);
      long getLen([in] any array) raises (::com::sun::star::lang::IllegalArgumentException);
      any get([in] any aArray, [in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException);
@@ -1229,7 +1222,7 @@ module com {
     };
     published interface XIdlField;
     published interface XIdlClass {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getClasses();
      /** @deprecated */ ::com::sun::star::reflection::XIdlClass getClass([in] string aName);
      boolean equals([in] ::com::sun::star::reflection::XIdlClass Type);
@@ -1247,11 +1240,11 @@ module com {
      void createObject([out] any obj);
     };
     /** @deprecated */ published interface XIdlClassProvider {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      sequence< ::com::sun::star::reflection::XIdlClass > getIdlClasses();
     };
     published interface XIdlMember {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::reflection::XIdlClass getDeclaringClass();
      string getName();
     };
@@ -1306,7 +1299,7 @@ module com {
      sequence< ::com::sun::star::reflection::XInterfaceMemberTypeDescription > getMembers();
     };
     published interface XMethodParameter {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getName();
      ::com::sun::star::reflection::XTypeDescription getType();
      boolean isIn();
@@ -1354,7 +1347,7 @@ module com {
     /** @deprecated */ published exception MergeConflictException: ::cpo::uno::Exception {
     };
     published interface XSimpleRegistry {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getURL();
      void open([in] string rURL, [in] boolean bReadOnly, [in] boolean bCreate) raises (::com::sun::star::registry::InvalidRegistryException);
      boolean isValid();
@@ -1368,7 +1361,7 @@ module com {
      interface ::com::sun::star::registry::XSimpleRegistry;
     };
     published interface XImplementationRegistration {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void registerImplementation([in] string aImplementationLoader, [in] string aLocation, [in] ::com::sun::star::registry::XSimpleRegistry xReg) raises (::com::sun::star::registry::CannotRegisterImplementationException);
      boolean revokeImplementation([in] string aLocation, [in] ::com::sun::star::registry::XSimpleRegistry xReg);
      sequence< string > getImplementations([in] string aImplementationLoader, [in] string aLocation);
@@ -1397,7 +1390,7 @@ module com {
     };
     published service SimpleRegistry: ::com::sun::star::registry::XSimpleRegistry;
     published interface XRegistryKey {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      [attribute, readonly] string KeyName;
      boolean isReadOnly() raises (::com::sun::star::registry::InvalidRegistryException);
      boolean isValid();
@@ -1438,8 +1431,8 @@ module com {
     };
     published interface XAllListener;
     published interface XAllListenerAdapterService {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createAllListerAdapter([in] type xListenerType, [in] ::com::sun::star::script::XAllListener xListener, [in] any aHelper);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createAllListerAdapter([in] type xListenerType, [in] ::com::sun::star::script::XAllListener xListener, [in] any aHelper);
     };
     published service AllListenerAdapter: ::com::sun::star::script::XAllListenerAdapterService;
     published exception BasicErrorException: ::cpo::uno::Exception {
@@ -1454,7 +1447,7 @@ module com {
     published exception CannotCreateAdapterException: ::cpo::uno::Exception {
     };
     published interface XTypeConverter {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any convertTo([in] any aFrom, [in] type xDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
      any convertToSimpleType([in] any aFrom, [in] ::cpo::uno::TypeClass aDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
     };
@@ -1474,8 +1467,8 @@ module com {
     published service Invocation: ::com::sun::star::lang::XSingleServiceFactory;
     published interface XInvocation;
     published interface XInvocationAdapterFactory2 {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] sequence< type > aTypes);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] sequence< type > aTypes);
     };
     published service InvocationAdapterFactory: ::com::sun::star::script::XInvocationAdapterFactory2;
     published enum MemberType {
@@ -1508,7 +1501,7 @@ module com {
      any approveFiring([in] ::com::sun::star::script::AllEventObject aEvent) raises (::com::sun::star::reflection::InvocationTargetException);
     };
     published interface XInvocation {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::beans::XIntrospectionAccess getIntrospection();
      any invoke([in] string aFunctionName, [in] sequence< any > aParams, [out] sequence< short > aOutParamIndex, [out] sequence< any > aOutParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
      void setValue([in] string aPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
@@ -1517,19 +1510,19 @@ module com {
      boolean hasProperty([in] string aName);
     };
     published interface XDirectInvocation {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any directInvoke([in] string aName, [in] sequence< any > aParams) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
      boolean hasMember([in] string aName);
     };
     published interface XEventAttacher {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::lang::XEventListener attachListener([in] ::com::sun::star::uno::XInterface xTarget, [in] ::com::sun::star::script::XAllListener xAllListener, [in] any aHelper, [in] string aListenerType, [in] string aAddListenerParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
-     ::com::sun::star::lang::XEventListener attachSingleEventListener([in] ::com::sun::star::uno::XInterface xTarget, [in] ::com::sun::star::script::XAllListener xAllListener, [in] any aHelper, [in] string aListenerType, [in] string aAddListenerParam, [in] string aEventMethod) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
-     void removeListener([in] ::com::sun::star::uno::XInterface xTarget, [in] string aListenerType, [in] string aRemoveListenerParam, [in] ::com::sun::star::lang::XEventListener xToRemoveListener) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException);
+     interface ::cpo::uno::XInterface;
+     ::com::sun::star::lang::XEventListener attachListener([in] ::cpo::uno::XInterface xTarget, [in] ::com::sun::star::script::XAllListener xAllListener, [in] any aHelper, [in] string aListenerType, [in] string aAddListenerParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     ::com::sun::star::lang::XEventListener attachSingleEventListener([in] ::cpo::uno::XInterface xTarget, [in] ::com::sun::star::script::XAllListener xAllListener, [in] any aHelper, [in] string aListenerType, [in] string aAddListenerParam, [in] string aEventMethod) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     void removeListener([in] ::cpo::uno::XInterface xTarget, [in] string aListenerType, [in] string aRemoveListenerParam, [in] ::com::sun::star::lang::XEventListener xToRemoveListener) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException);
     };
     published interface XScriptListener;
     published interface XEventAttacherManager {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void registerScriptEvent([in] long nIndex, [in] ::com::sun::star::script::ScriptEventDescriptor aScriptEvent) raises (::com::sun::star::lang::IllegalArgumentException);
      void registerScriptEvents([in] long nIndex, [in] sequence< ::com::sun::star::script::ScriptEventDescriptor > aScriptEvents) raises (::com::sun::star::lang::IllegalArgumentException);
      void revokeScriptEvent([in] long nIndex, [in] string aListenerType, [in] string aEventMethod, [in] string aRemoveListenerParam) raises (::com::sun::star::lang::IllegalArgumentException);
@@ -1537,8 +1530,8 @@ module com {
      void insertEntry([in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException);
      void removeEntry([in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException);
      sequence< ::com::sun::star::script::ScriptEventDescriptor > getScriptEvents([in] long Index) raises (::com::sun::star::lang::IllegalArgumentException);
-     void attach([in] long nIndex, [in] ::com::sun::star::uno::XInterface xObject, [in] any aHelper) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ServiceNotRegisteredException);
-     void detach([in] long nIndex, [in] ::com::sun::star::uno::XInterface xObject) raises (::com::sun::star::lang::IllegalArgumentException);
+     void attach([in] long nIndex, [in] ::cpo::uno::XInterface xObject, [in] any aHelper) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     void detach([in] long nIndex, [in] ::cpo::uno::XInterface xObject) raises (::com::sun::star::lang::IllegalArgumentException);
      void addScriptListener([in] ::com::sun::star::script::XScriptListener xListener) raises (::com::sun::star::lang::IllegalArgumentException);
      void removeScriptListener([in] ::com::sun::star::script::XScriptListener Listener) raises (::com::sun::star::lang::IllegalArgumentException);
     };
@@ -1549,15 +1542,15 @@ module com {
      ::com::sun::star::script::InvocationInfo getInfoForName([in] string aName, [in] boolean bExact) raises (::com::sun::star::lang::IllegalArgumentException);
     };
     /** @deprecated */ published interface XInvocationAdapterFactory {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] type aType);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] type aType);
     };
     published interface XScriptEventsAttacher {
-     interface ::com::sun::star::uno::XInterface;
-     void attachEvents([in] sequence< ::com::sun::star::uno::XInterface > Objects, [in] ::com::sun::star::script::XScriptListener xListener, [in] any Helper) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     interface ::cpo::uno::XInterface;
+     void attachEvents([in] sequence< ::cpo::uno::XInterface > Objects, [in] ::com::sun::star::script::XScriptListener xListener, [in] any Helper) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
     };
     published interface XScriptEventsSupplier {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameContainer getEvents();
     };
     published interface XScriptListener {
@@ -1566,19 +1559,19 @@ module com {
      any approveFiring([in] ::com::sun::star::script::ScriptEvent aEvent) raises (::com::sun::star::reflection::InvocationTargetException);
     };
     /** @deprecated */ published interface XStarBasicAccess {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameContainer getLibraryContainer();
      void createLibrary([in] string LibName, [in] string Password, [in] string ExternalSourceURL, [in] string LinkTargetURL) raises (::com::sun::star::container::ElementExistException);
      void addModule([in] string LibraryName, [in] string ModuleName, [in] string Language, [in] string Source) raises (::com::sun::star::container::NoSuchElementException);
      void addDialog([in] string LibraryName, [in] string DialogName, [in] sequence< byte > Data) raises (::com::sun::star::container::NoSuchElementException);
     };
     /** @deprecated */ published interface XStarBasicDialogInfo {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getName();
      sequence< byte > getData();
     };
     /** @deprecated */ published interface XStarBasicLibraryInfo {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getName();
      ::com::sun::star::container::XNameContainer getModuleContainer();
      ::com::sun::star::container::XNameContainer getDialogContainer();
@@ -1587,7 +1580,7 @@ module com {
      string getLinkTargetURL();
     };
     /** @deprecated */ published interface XStarBasicModuleInfo {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getName();
      string getLanguage();
      string getSource();
@@ -1600,7 +1593,7 @@ module com {
    };
    module task {
     published interface XInteractionContinuation {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void select();
     };
     published interface XInteractionAbort {
@@ -1608,7 +1601,7 @@ module com {
     };
     published interface XInteractionRequest;
     published interface XInteractionHandler {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void handle([in] ::com::sun::star::task::XInteractionRequest Request);
     };
     published interface XInteractionHandler2 {
@@ -1616,7 +1609,7 @@ module com {
      boolean handleInteractionRequest([in] ::com::sun::star::task::XInteractionRequest Request);
     };
     published interface XInteractionRequest {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getRequest();
      sequence< ::com::sun::star::task::XInteractionContinuation > getContinuations();
     };
@@ -1626,7 +1619,7 @@ module com {
    };
    module uri {
     published interface XExternalUriReferenceTranslator {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string translateToInternal([in] string externalUriReference);
      string translateToExternal([in] string internalUriReference);
     };
@@ -1638,14 +1631,14 @@ module com {
     };
     published interface XUriReference;
     published interface XUriReferenceFactory {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::uri::XUriReference parse([in] string uriReference);
      ::com::sun::star::uri::XUriReference makeAbsolute([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean processAdditionalSpecialSegments, [in] ::com::sun::star::uri::RelativeUriExcessParentSegments excessParentSegments);
      ::com::sun::star::uri::XUriReference makeRelative([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean preferAuthorityOverRelativePath, [in] boolean preferAbsoluteOverRelativePath, [in] boolean encodeRetainedSpecialSegments);
     };
     published service UriReferenceFactory: ::com::sun::star::uri::XUriReferenceFactory;
     published interface XUriSchemeParser {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::uri::XUriReference parse([in] string scheme, [in] string schemeSpecificPart);
     };
     published service UriSchemeParser_vndDOTsunDOTstarDOTexpand: ::com::sun::star::uri::XUriSchemeParser {
@@ -1653,12 +1646,12 @@ module com {
     published service UriSchemeParser_vndDOTsunDOTstarDOTscript: ::com::sun::star::uri::XUriSchemeParser {
     };
     published interface XVndSunStarPkgUrlReferenceFactory {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::com::sun::star::uri::XUriReference createVndSunStarPkgUrlReference([in] ::com::sun::star::uri::XUriReference authority);
     };
     published service VndSunStarPkgUrlReferenceFactory: ::com::sun::star::uri::XVndSunStarPkgUrlReferenceFactory;
     published interface XUriReference {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getUriReference();
      boolean isAbsolute();
      string getScheme();
@@ -1683,7 +1676,7 @@ module com {
    };
    module uri {
     published interface XVndSunStarExpandUrl {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string expand([in] ::com::sun::star::util::XMacroExpander expander) raises (::com::sun::star::lang::IllegalArgumentException);
     };
     published interface XVndSunStarExpandUrlReference {
@@ -1691,7 +1684,7 @@ module com {
      interface ::com::sun::star::uri::XVndSunStarExpandUrl;
     };
     published interface XVndSunStarScriptUrl {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string getName();
      void setName([in] string name) raises (::com::sun::star::lang::IllegalArgumentException);
      boolean hasParameter([in] string key);
@@ -1705,7 +1698,7 @@ module com {
    };
    module util {
     published interface XMacroExpander {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      string expandMacros([in] string exp) raises (::com::sun::star::lang::IllegalArgumentException);
     };
     /** @deprecated */ published service MacroExpander {
@@ -1724,42 +1717,42 @@ module com {
 module cpo {
    module uno {
     published interface XReference {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      void dispose();
     };
     published interface XAdapter {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface queryAdapted();
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface queryAdapted();
      void addReference([in] ::cpo::uno::XReference xRef);
      void removeReference([in] ::cpo::uno::XReference xRef);
     };
     /** @deprecated */ published interface XAggregation {
-     interface ::com::sun::star::uno::XInterface;
-     void setDelegator([in] ::com::sun::star::uno::XInterface pDelegator);
+     interface ::cpo::uno::XInterface;
+     void setDelegator([in] ::cpo::uno::XInterface pDelegator);
      any queryAggregation([in] type aType);
     };
     published interface XComponentContext {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getValueByName([in] string Name);
      ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
     };
     published interface XCurrentContext {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      any getValueByName([in] string Name);
     };
     published interface XNamingService {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::cpo::uno::Exception);
-     void registerObject([in] string Name, [in] ::com::sun::star::uno::XInterface Object) raises (::cpo::uno::Exception);
+     interface ::cpo::uno::XInterface;
+     ::cpo::uno::XInterface getRegisteredObject([in] string Name) raises (::cpo::uno::Exception);
+     void registerObject([in] string Name, [in] ::cpo::uno::XInterface Object) raises (::cpo::uno::Exception);
      void revokeObject([in] string Name) raises (::cpo::uno::Exception);
     };
     published service NamingService: ::cpo::uno::XNamingService;
     /** @deprecated */ published interface XUnloadingPreference {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      boolean releaseOnNotification();
     };
     published interface XWeak {
-     interface ::com::sun::star::uno::XInterface;
+     interface ::cpo::uno::XInterface;
      ::cpo::uno::XAdapter queryAdapter();
     };
    };

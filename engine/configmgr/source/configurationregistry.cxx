@@ -43,7 +43,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -117,7 +117,7 @@ private:
 
     css::uno::Reference< css::lang::XMultiServiceFactory > provider_;
     std::mutex mutex_;
-    css::uno::Reference< css::uno::XInterface > access_;
+    css::uno::Reference< cpo::uno::XInterface > access_;
     OUString url_;
     bool readOnly_;
 
@@ -628,7 +628,7 @@ OUString RegistryKey::getResolvedName(OUString const & aKeyName)
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

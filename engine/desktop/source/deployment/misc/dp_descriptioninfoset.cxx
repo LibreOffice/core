@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -239,7 +239,7 @@ ExtensionDescription::ExtensionDescription(
     } catch (const cpo::uno::Exception & e) {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::deployment::DeploymentException(
-            e.Message, Reference< css::uno::XInterface >(), a);
+            e.Message, Reference< cpo::uno::XInterface >(), a);
     }
 }
 

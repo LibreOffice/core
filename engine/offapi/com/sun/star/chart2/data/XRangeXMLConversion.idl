@@ -31,7 +31,7 @@ module data
 /** An application that provides data for a chart must implement this
     interface.
  */
-interface XRangeXMLConversion : ::com::sun::star::uno::XInterface
+interface XRangeXMLConversion : ::cpo::uno::XInterface
 {
     /** converts the range to a valid XML syntax.
 

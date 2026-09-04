@@ -265,7 +265,7 @@ void DiagramHelper_oox::reLayout()
     //       used for XShape creation, no xml snippets/data gets imported
     //       here. XShape creation may be isolated in the future.
     SdrModel& rModel(pTarget->getSdrModelFromSdrObject());
-    uno::Reference<uno::XInterface> const& rUnoModel(rModel.getUnoModel());
+    uno::Reference<cpo::uno::XInterface> const& rUnoModel(rModel.getUnoModel());
     const uno::Reference<cpo::uno::XComponentContext>& xContext(
         comphelper::getProcessComponentContext());
     rtl::Reference<oox::shape::ShapeFilterBase> xFilter(new oox::shape::ShapeFilterBase(xContext));

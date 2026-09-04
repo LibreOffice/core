@@ -20,7 +20,7 @@ package mod._sc;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import java.io.PrintWriter;
 

@@ -68,7 +68,7 @@ namespace connectivity
         css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         css::uno::Reference< css::sdbc::XDriverManager2 >         m_xManager;
         css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
-        css::uno::Reference< css::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
+        css::uno::Reference< cpo::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
         css::uno::Reference< css::frame::XDesktop2>               m_xDesktop;
 
     public:
@@ -80,22 +80,22 @@ namespace connectivity
 
     private:
         // some configuration helper methods
-        css::uno::Reference< css::uno::XInterface > const & getConfigPoolRoot();
-        static css::uno::Reference< css::uno::XInterface > createWithProvider(   const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
+        css::uno::Reference< cpo::uno::XInterface > const & getConfigPoolRoot();
+        static css::uno::Reference< cpo::uno::XInterface > createWithProvider(   const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                                                                                                     const OUString& _rPath);
-        static css::uno::Reference< css::uno::XInterface > openNode( const OUString& _rPath,
-                                                                                        const css::uno::Reference< css::uno::XInterface >& _xTreeNode) noexcept;
+        static css::uno::Reference< cpo::uno::XInterface > openNode( const OUString& _rPath,
+                                                                                        const css::uno::Reference< cpo::uno::XInterface >& _xTreeNode) noexcept;
         bool isPoolingEnabled();
         bool isDriverPoolingEnabled(std::u16string_view _sDriverImplName,
-                                        css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
+                                        css::uno::Reference< cpo::uno::XInterface >& _rxDriverNode);
         bool isPoolingEnabledByUrl( const OUString& _sUrl,
                                         css::uno::Reference< css::sdbc::XDriver >& _rxDriver,
                                         OUString& _rsImplName,
-                                        css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
+                                        css::uno::Reference< cpo::uno::XInterface >& _rxDriverNode);
 
         OConnectionPool* getConnectionPool( const OUString& _sImplName,
                                             const css::uno::Reference< css::sdbc::XDriver >& _xDriver,
-                                            const css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
+                                            const css::uno::Reference< cpo::uno::XInterface >& _rxDriverNode);
         void clearConnectionPools(bool _bDispose);
         void clearDesktop();
     protected:
@@ -103,7 +103,7 @@ namespace connectivity
     public:
 
         static cpo::uno::Any getNodeValue( const OUString& _rPath,
-                                                        const css::uno::Reference< css::uno::XInterface>& _xTreeNode)noexcept;
+                                                        const css::uno::Reference< cpo::uno::XInterface>& _xTreeNode)noexcept;
 
     // XDriverManager
         virtual css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& url ) override;

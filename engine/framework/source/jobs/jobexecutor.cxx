@@ -358,7 +358,7 @@ void JobExecutor::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
     std::unique_lock g(m_aMutex);
-    css::uno::Reference< css::uno::XInterface > xCFG(m_aConfig.cfg(), css::uno::UNO_QUERY);
+    css::uno::Reference< cpo::uno::XInterface > xCFG(m_aConfig.cfg(), css::uno::UNO_QUERY);
     if (
         (xCFG                == aEvent.Source        ) &&
         (m_aConfig.getMode() != ConfigAccess::E_CLOSED)
@@ -371,7 +371,7 @@ void JobExecutor::disposing( const css::lang::EventObject& aEvent )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_JobExecutor_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

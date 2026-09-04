@@ -24,7 +24,7 @@
 
     @see XDispatch
  */
-published interface XDispatchHelper : com::sun::star::uno::XInterface
+published interface XDispatchHelper : cpo::uno::XInterface
 {
         /** executes the dispatch synchronously.
 

@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides methods for moving ranges of cells in a sheet.
  */
-published interface XCellRangeMovement: com::sun::star::uno::XInterface
+published interface XCellRangeMovement: cpo::uno::XInterface
 {
 
     /** inserts cells, moving other cells down or right.

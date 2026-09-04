@@ -53,7 +53,7 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
                     m_xORB;
     css::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
                     m_xLastKnownDocument;
     css::uno::Reference< css::inspection::XObjectInspectorModel >
                     m_xInspectorModel;

@@ -130,14 +130,14 @@ cpo::uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServic
     return { u"com.sun.star.xml.crypto.NSSInitializer"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new NSSInitializer_NssImpl(pCtx));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_xml_crypto_SEInitializer_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

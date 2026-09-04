@@ -38,7 +38,7 @@ import com.sun.star.script.framework.provider.PathUtils;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import java.io.IOException;
 

@@ -24,7 +24,7 @@
 
 /** returns the handout master page for this document
  */
-published interface XHandoutMasterSupplier: com::sun::star::uno::XInterface
+published interface XHandoutMasterSupplier: cpo::uno::XInterface
 {
     /** returns the DrawPage.
      */

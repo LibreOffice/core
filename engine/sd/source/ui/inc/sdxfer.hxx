@@ -75,7 +75,7 @@ public:
 
     bool                            SetTableRTF( SdDrawDocument* );
 
-    static SdTransferable*          getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
+    static SdTransferable*          getImplementation( const css::uno::Reference< cpo::uno::XInterface >& rxData ) noexcept;
 
     // SfxListener
     virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

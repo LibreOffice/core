@@ -21,7 +21,7 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -47,8 +47,8 @@ public:
 
     virtual void setUp() override;
 
-    virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Reference<uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) override;
 
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
 
@@ -102,7 +102,7 @@ ScNamedRangesObj::ScNamedRangesObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScNamedRangesObj::init()
+uno::Reference<cpo::uno::XInterface> ScNamedRangesObj::init()
 {
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, UNO_QUERY_THROW);
     uno::Reference<sheet::XNamedRanges> xNamedRanges(
@@ -116,7 +116,7 @@ uno::Reference<uno::XInterface> ScNamedRangesObj::init()
     return xNamedRanges;
 }
 
-uno::Reference<uno::XInterface> ScNamedRangesObj::getXNamedRanges(sal_Int32 nSheet)
+uno::Reference<cpo::uno::XInterface> ScNamedRangesObj::getXNamedRanges(sal_Int32 nSheet)
 {
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, UNO_QUERY_THROW);
     uno::Reference<sheet::XNamedRanges> xNamedRanges(

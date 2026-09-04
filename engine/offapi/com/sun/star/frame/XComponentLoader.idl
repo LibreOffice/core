@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module frame {
     @see Frame
     @see XFrame
  */
-published interface XComponentLoader: com::sun::star::uno::XInterface
+published interface XComponentLoader: cpo::uno::XInterface
 {
     /** loads a component specified by a URL into the specified
         new or existing frame.

@@ -24,7 +24,7 @@
 
 /** gives access to the text and formatting of a fixed text field.
  */
-published interface XFixedText: com::sun::star::uno::XInterface
+published interface XFixedText: cpo::uno::XInterface
 {
 
     /** sets the text of the control.

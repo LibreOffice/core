@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 // TODO: do not create OLE objects that represent OOo documents
 
 
-uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFromEntry(
+uno::Reference< cpo::uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
                                                                     const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
@@ -68,7 +68,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFr
         throw io::IOException(); // TODO:
     }
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext, false ) ),
                     uno::UNO_QUERY );
 
@@ -100,7 +100,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFr
 }
 
 
-uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
+uno::Reference< cpo::uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -118,7 +118,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFr
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext, false ) ),
                     uno::UNO_QUERY );
 
@@ -133,7 +133,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFr
 }
 
 
-uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitNew(
+uno::Reference< cpo::uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
@@ -152,7 +152,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitNe
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             4 );
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext, aClassID, aClassName ) ),
                     uno::UNO_QUERY );
 
@@ -167,7 +167,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitNe
 }
 
 
-uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceLink(
+uno::Reference< cpo::uno::XInterface > OleEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
                                             const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -185,7 +185,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceLink(
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                 static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext, true ) ),
                 uno::UNO_QUERY );
 
@@ -200,7 +200,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceLink(
 }
 
 
-uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceUserInit(
+uno::Reference< cpo::uno::XInterface > OleEmbeddedObjectFactory::createInstanceUserInit(
             const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& aClassName,
             const uno::Reference< embed::XStorage >& xStorage,
@@ -222,7 +222,7 @@ uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceUserIn
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
-    uno::Reference< uno::XInterface > xResult(
+    uno::Reference< cpo::uno::XInterface > xResult(
                 static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext, aClassID, aClassName ) ),
                 uno::UNO_QUERY );
 
@@ -254,7 +254,7 @@ cpo::uno::Sequence< OUString > OleEmbeddedObjectFactory::getSupportedServiceName
              u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embeddedobj_OleEmbeddedObjectFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

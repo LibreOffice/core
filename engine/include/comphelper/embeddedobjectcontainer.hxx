@@ -30,7 +30,7 @@ namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::task { class XInteractionHandler; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
@@ -77,7 +77,7 @@ public:
                         EmbeddedObjectContainer();
                         EmbeddedObjectContainer( const css::uno::Reference < css::embed::XStorage >& );
                         EmbeddedObjectContainer( const css::uno::Reference < css::embed::XStorage >&,
-                                                 const css::uno::Reference < css::uno::XInterface >& );
+                                                 const css::uno::Reference < cpo::uno::XInterface >& );
                         ~EmbeddedObjectContainer();
 
     void                SwitchPersistence( const css::uno::Reference < css::embed::XStorage >& );

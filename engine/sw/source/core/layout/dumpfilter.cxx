@@ -32,7 +32,7 @@ namespace
         // Actually write bytes to XOutputSream
         try
         {
-            uno::XInterface* pObj = static_cast<uno::XInterface*>(pContext);
+            cpo::uno::XInterface* pObj = static_cast<cpo::uno::XInterface*>(pContext);
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
 
             // Don't output the terminating \0 to the xml or the file will be invalid
@@ -53,7 +53,7 @@ namespace
         int result = 0;
         try
         {
-            uno::XInterface* pObj = static_cast<uno::XInterface*>(pContext);
+            cpo::uno::XInterface* pObj = static_cast<cpo::uno::XInterface*>(pContext);
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY );
             if (xOut)
                 xOut->closeOutput( );
@@ -157,7 +157,7 @@ namespace sw
 } // Namespace sw
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_LayoutDump_get_implementation(cpo::uno::XComponentContext*,
                                 cpo::uno::Sequence<cpo::uno::Any> const &)
 {

@@ -24,7 +24,7 @@
 
 /** specifies a source for an image.
  */
-published interface XImageProducer: com::sun::star::uno::XInterface
+published interface XImageProducer: cpo::uno::XInterface
 {
 
     /** registers an image consumer with the image producer for accessing

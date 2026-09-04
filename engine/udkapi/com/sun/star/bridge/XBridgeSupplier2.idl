@@ -76,7 +76,7 @@
 
     @see com::sun::star::bridge::OleBridgeSupplier2
  */
-published interface XBridgeSupplier2: com::sun::star::uno::XInterface
+published interface XBridgeSupplier2: cpo::uno::XInterface
 {
     /** creates a bridge to provide an object of one object model with another.
      */

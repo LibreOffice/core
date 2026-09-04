@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module beans {
     <p>Another advantage of this method is that conflicts are avoided
     if property value restrictions depend on the value of other properties.</p>
  */
-published interface XPropertyAccess: com::sun::star::uno::XInterface
+published interface XPropertyAccess: cpo::uno::XInterface
 {
 
     /** @returns

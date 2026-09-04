@@ -79,7 +79,7 @@ template<typename Impl, typename... Ifc> struct ImplClassData {
 /// @endcond
 
 /** Implementation helper implementing interfaces
-    css::uno::XInterface, css::lang::XTypeProvider, and
+    cpo::uno::XInterface, css::lang::XTypeProvider, and
     cpo::uno::XWeak (through cppu::OWeakObject).
 
     @derive
@@ -121,7 +121,7 @@ public:
 };
 
 /** Implementation helper implementing interfaces
-    css::uno::XInterface and css::lang::XTypeProvider
+    cpo::uno::XInterface and css::lang::XTypeProvider
     inheriting from a BaseClass.
 
     All acquire() and release() calls are delegated to the BaseClass.  Upon
@@ -130,7 +130,7 @@ public:
 
     @attention
     The BaseClass has to be complete in the sense that
-    css::uno::XInterface and css::lang::XTypeProvider are
+    cpo::uno::XInterface and css::lang::XTypeProvider are
     implemented properly.
 
     @derive

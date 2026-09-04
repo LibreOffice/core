@@ -332,17 +332,17 @@ void SdLayer::set( LayerAttribute what, bool flag ) noexcept
 }
 
 // css::container::XChild
-uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent()
+uno::Reference<cpo::uno::XInterface> SAL_CALL SdLayer::getParent()
 {
     SolarMutexGuard aGuard;
 
     if( !mxLayerManager.is() )
         throw lang::DisposedException();
 
-    return uno::Reference<uno::XInterface> (static_cast<cppu::OWeakObject*>(mxLayerManager.get()), uno::UNO_QUERY);
+    return uno::Reference<cpo::uno::XInterface> (static_cast<cppu::OWeakObject*>(mxLayerManager.get()), uno::UNO_QUERY);
 }
 
-void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
+void SAL_CALL SdLayer::setParent (const uno::Reference<cpo::uno::XInterface >& )
 {
     throw lang::NoSupportException ();
 }

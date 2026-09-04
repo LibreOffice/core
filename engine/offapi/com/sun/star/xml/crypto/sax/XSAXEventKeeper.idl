@@ -28,7 +28,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * used to collect a particular element from the SAX event stream; the other
  * is blocker, which is used to block the SAX event stream.
  */
-interface XSAXEventKeeper : com::sun::star::uno::XInterface
+interface XSAXEventKeeper : cpo::uno::XInterface
 {
     /**
      * Adds a new element collector on the next element in the SAX event

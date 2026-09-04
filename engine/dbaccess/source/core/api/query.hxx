@@ -95,7 +95,7 @@ public:
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     DECLARE_XINTERFACE( )
 
 // css::beans::XPropertySet

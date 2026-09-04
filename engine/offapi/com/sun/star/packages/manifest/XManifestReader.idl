@@ -24,7 +24,7 @@ module com {  module sun {  module star {   module packages {  module manifest {
     must supply an XInputStream when calling readManifestSequence() to receive
     a sequence of manifest entries. Each manifest entry is represented by
     a sequence of PropertyValues. */
-published interface XManifestReader: com::sun::star::uno::XInterface
+published interface XManifestReader: cpo::uno::XInterface
 {
     /** Supplies the XManifestReader with an XInputStream to read from, reads
         the data and returns it to the caller.

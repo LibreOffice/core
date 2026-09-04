@@ -29,7 +29,7 @@
 
 namespace com::sun::star::sdbc { class SQLException; }
 namespace cpo::uno { class Type; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace connectivity
@@ -144,7 +144,7 @@ namespace connectivity
         */
         void            raiseException(
                             const ErrorCondition _eCondition,
-                            const css::uno::Reference< css::uno::XInterface >& _rxContext,
+                            const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
                             const std::optional<OUString>& _rParamValue1 = std::nullopt,
                             const std::optional<OUString>& _rParamValue2 = std::nullopt,
                             const std::optional<OUString>& _rParamValue3 = std::nullopt
@@ -192,7 +192,7 @@ namespace connectivity
         */
         void            raiseTypedException(
                             const ErrorCondition _eCondition,
-                            const css::uno::Reference< css::uno::XInterface >& _rxContext,
+                            const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
                             const cpo::uno::Type& _rExceptionType
                         ) const;
 
@@ -227,7 +227,7 @@ namespace connectivity
         css::sdbc::SQLException
                         getSQLException(
                             const ErrorCondition _eCondition,
-                            const css::uno::Reference< css::uno::XInterface >& _rxContext,
+                            const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
                             const std::optional<OUString>& _rParamValue1 = std::nullopt,
                             const std::optional<OUString>& _rParamValue2 = std::nullopt,
                             const std::optional<OUString>& _rParamValue3 = std::nullopt

@@ -46,12 +46,12 @@ TaskCreatorService::TaskCreatorService(css::uno::Reference< cpo::uno::XComponent
 {
 }
 
-css::uno::Reference< css::uno::XInterface > TaskCreatorService::createInstance()
+css::uno::Reference< cpo::uno::XInterface > TaskCreatorService::createInstance()
 {
     return createInstanceWithArguments(cpo::uno::Sequence< cpo::uno::Any >());
 }
 
-css::uno::Reference< css::uno::XInterface > TaskCreatorService::createInstanceWithArguments(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
+css::uno::Reference< cpo::uno::XInterface > TaskCreatorService::createInstanceWithArguments(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
@@ -137,7 +137,7 @@ css::uno::Reference< css::uno::XInterface > TaskCreatorService::createInstanceWi
     if (bVisible)
         xContainerWindow->setVisible(bVisible);
 
-    return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
+    return css::uno::Reference< cpo::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
 }
 
 // static
@@ -284,7 +284,7 @@ OUString TaskCreatorService::impl_filterNames( const OUString& sName )
     return sFiltered;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_TaskCreator_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

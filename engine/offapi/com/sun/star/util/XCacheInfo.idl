@@ -11,7 +11,7 @@ module com {  module sun {  module star {  module util {
 
 /** Interface that allows an implementation to opt out from caching.
  */
-interface XCacheInfo: com::sun::star::uno::XInterface
+interface XCacheInfo: cpo::uno::XInterface
 {
     boolean isCachingAllowed();
 

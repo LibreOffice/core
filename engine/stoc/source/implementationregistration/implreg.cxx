@@ -1565,7 +1565,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_stoc_ImplementationRegistration_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

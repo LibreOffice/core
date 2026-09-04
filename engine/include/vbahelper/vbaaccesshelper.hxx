@@ -27,7 +27,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <osl/diagnose.h>
 //#define VBAHELPER_DLLIMPLEMENTATION
 #include <rtl/ustring.hxx>
@@ -48,11 +48,11 @@ namespace ooo::vba
         }
 
         /// @throws cpo::uno::Exception
-        inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const cpo::uno::Sequence< cpo::uno::Any >& aArgs )
+        inline css::uno::Reference< cpo::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const cpo::uno::Sequence< cpo::uno::Any >& aArgs )
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
             OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
-            css::uno::Reference< css::uno::XInterface > xIf = getVBAServiceFactory( pShell )->createInstanceWithArguments( sVarName, aArgs  );
+            css::uno::Reference< cpo::uno::XInterface > xIf = getVBAServiceFactory( pShell )->createInstanceWithArguments( sVarName, aArgs  );
             return xIf;
         }
 

@@ -66,7 +66,7 @@ public:
     void       release() noexcept override;
 
     // XAdapter
-    css::uno::Reference< css::uno::XInterface > queryAdapted() override;
+    css::uno::Reference< cpo::uno::XInterface > queryAdapted() override;
     void addReference( const css::uno::Reference< cpo::uno::XReference >& xRef ) override;
     void removeReference( const css::uno::Reference< cpo::uno::XReference >& xRef ) override;
 

@@ -212,7 +212,7 @@ static void impl_packLocalizedProperties(  const   Sequence< OUString >&   lInNa
     std::transform(lInValues.begin(), lInValues.end(), lOutValues.getArray(), [](const Any& value)
     {
         // If item is a special localized one ... convert and pack it ...
-        if (value.getValueTypeName() == "com.sun.star.uno.XInterface")
+        if (value.getValueTypeName() == "cpo.uno.XInterface")
         {
             if (auto xSetAccess = value.query<XNameContainer>())
             {

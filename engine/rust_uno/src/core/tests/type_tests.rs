@@ -252,7 +252,7 @@ fn test_type_partial_eq() {
     ));
     let interface3 = Type::from((
         typelib_TypeClass::typelib_TypeClass_INTERFACE,
-        "com.sun.star.uno.XInterface",
+        "cpo.uno.XInterface",
     ));
 
     assert_eq!(interface1, interface2);
@@ -388,7 +388,7 @@ fn test_type_primitive_type_classes() {
 fn test_type_complex_interface_names() {
     let complex_names = vec![
         "com.sun.star.lang.XComponent",
-        "com.sun.star.uno.XInterface",
+        "cpo.uno.XInterface",
         "com.sun.star.text.XTextDocument",
         "com.sun.star.beans.XPropertySet",
         "com.sun.star.awt.XControl",

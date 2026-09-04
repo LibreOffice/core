@@ -24,7 +24,7 @@
 
 /** represents functions to get specific, predefined number formats.
  */
-published interface XNumberFormatTypes: com::sun::star::uno::XInterface
+published interface XNumberFormatTypes: cpo::uno::XInterface
 {
 
     /** @returns

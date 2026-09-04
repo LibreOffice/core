@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
  published interface XClipboardListener;
 
-published interface XClipboardNotifier: com::sun::star::uno::XInterface
+published interface XClipboardNotifier: cpo::uno::XInterface
 {
     /** Requests notifications on clipboard content changes.
 

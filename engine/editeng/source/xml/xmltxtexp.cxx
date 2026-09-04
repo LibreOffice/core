@@ -117,11 +117,11 @@ SvxSimpleUnoModel::SvxSimpleUnoModel()
 }
 
 // XMultiServiceFactory ( SvxFmMSFactory )
-uno::Reference< uno::XInterface > SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )
+uno::Reference< cpo::uno::XInterface > SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )
 {
     if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
-        return uno::Reference< uno::XInterface >(
+        return uno::Reference< cpo::uno::XInterface >(
             SvxCreateNumRule(), uno::UNO_QUERY );
     }
     if (   aServiceSpecifier == "com.sun.star.text.textfield.DateTime"
@@ -140,7 +140,7 @@ uno::Reference< uno::XInterface > SvxSimpleUnoModel::createInstance( const OUStr
 
 }
 
-uno::Reference< css::uno::XInterface > SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& )
+uno::Reference< cpo::uno::XInterface > SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     return createInstance( ServiceSpecifier );
 }
@@ -212,7 +212,7 @@ void SvxSimpleUnoModel::setCurrentController( const css::uno::Reference< css::fr
 {
 }
 
-css::uno::Reference< css::uno::XInterface > SvxSimpleUnoModel::getCurrentSelection(  )
+css::uno::Reference< cpo::uno::XInterface > SvxSimpleUnoModel::getCurrentSelection(  )
 {
     uno::Reference< XInterface > xRet;
     return xRet;

@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     FastToken::NAMESPACE. If a string identifier is not known
     to this instance, FastToken::DONTKNOW is returned.
  */
-interface XFastTokenHandler: com::sun::star::uno::XInterface
+interface XFastTokenHandler: cpo::uno::XInterface
 {
 
     /** returns an integer token for the given string

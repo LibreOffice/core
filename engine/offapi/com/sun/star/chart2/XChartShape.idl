@@ -27,7 +27,7 @@ this interface is used for a wrapper of objects implementing the service com::su
 */
 
 //interface XChartShape : ::com::sun::star::beans::XPropertySet
-interface XChartShape : ::com::sun::star::uno::XInterface
+interface XChartShape : ::cpo::uno::XInterface
 {
     /** the method corresponds to the identical methods of the interface com::sun::star::beans::XPropertySet
     */

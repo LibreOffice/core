@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -77,8 +77,8 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
     try
     {
         ::com::sun::star::uno::Reference<
-              ::com::sun::star::uno::XInterface > xHome(
-                  static_cast< css::uno::XInterface * >(
+              ::cpo::uno::XInterface > xHome(
+                  static_cast< cpo::uno::XInterface * >(
                       pInterface ),
                   ::com::sun::star::uno::UNO_QUERY );
         assert(xHome.is() && "### query to XInterface failed!");
@@ -117,7 +117,7 @@ static void s_stub_acquireInterface(va_list * pParam)
     /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
     void               * pCppI   = va_arg(*pParam, void *);
 
-    static_cast< css::uno::XInterface * >( pCppI )->acquire();
+    static_cast< cpo::uno::XInterface * >( pCppI )->acquire();
 }
 
 static void acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
@@ -130,7 +130,7 @@ static void s_stub_releaseInterface(va_list * pParam)
     /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
     void               * pCppI   = va_arg(*pParam, void *);
 
-    static_cast< css::uno::XInterface * >( pCppI )->release();
+    static_cast< cpo::uno::XInterface * >( pCppI )->release();
 }
 
 static void releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )

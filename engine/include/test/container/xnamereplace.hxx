@@ -13,7 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Any.hxx>
@@ -29,7 +29,7 @@ public:
     {
     }
 
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
     void testReplaceByName();
 
     void setElement(const cpo::uno::Any& rElement) { m_aReplacementElement = rElement; }

@@ -42,7 +42,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class AccessibleDrawDocumentView extends TestCase {
 

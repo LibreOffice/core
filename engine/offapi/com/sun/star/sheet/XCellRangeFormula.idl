@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
     the columns of the array.</p>
  */
 
-published interface XCellRangeFormula: com::sun::star::uno::XInterface
+published interface XCellRangeFormula: cpo::uno::XInterface
 {
     /** gets an array from the contents of the cell range.
 

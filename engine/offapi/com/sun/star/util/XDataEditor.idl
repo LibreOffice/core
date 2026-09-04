@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module util {
 
 /** connects to a model and broadcasts status change events.
  */
-published interface XDataEditor: com::sun::star::uno::XInterface
+published interface XDataEditor: cpo::uno::XInterface
 {
     /** makes the data editor visible to the user.
      */
@@ -30,12 +30,12 @@ published interface XDataEditor: com::sun::star::uno::XInterface
 
     /** connects the data editor to a data model.
      */
-    void setModel( [in] com::sun::star::uno::XInterface model );
+    void setModel( [in] cpo::uno::XInterface model );
 
     /** @returns
             the data model which was set by XDataEditor::setModel().
      */
-    com::sun::star::uno::XInterface getModel();
+    cpo::uno::XInterface getModel();
 
     /** registers a listener to receive `DataEditorEvent`s.
      */

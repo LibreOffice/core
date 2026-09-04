@@ -12,7 +12,7 @@ module com { module sun { module star { module chart2 { module data {
 /**
  * Interface specific to spreadsheet data provider backend.
  */
-interface XSheetDataProvider : com::sun::star::uno::XInterface
+interface XSheetDataProvider : cpo::uno::XInterface
 {
     boolean createDataSequenceByFormulaTokensPossible(
         [in] sequence< com::sun::star::sheet::FormulaToken > aTokens );

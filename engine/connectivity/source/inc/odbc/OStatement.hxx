@@ -157,7 +157,7 @@ namespace connectivity::odbc
 
     public:
         OStatement_Base(OConnection* _pConnection );
-        using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
+        using OStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
 
         const Functions& functions() const { return m_pConnection->functions(); }
         // OComponentHelper

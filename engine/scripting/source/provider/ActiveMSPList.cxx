@@ -222,7 +222,7 @@ Reference< provider::XScriptProvider >
 }
 
 void
-ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
+ActiveMSPList::addActiveMSP( const Reference< cpo::uno::XInterface >& xComponent,
                const Reference< provider::XScriptProvider >& msp )
 {
     ::osl::MutexGuard guard( m_mutex );

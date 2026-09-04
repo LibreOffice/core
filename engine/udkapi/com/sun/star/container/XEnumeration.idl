@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module container {
     <p> If the object changed, the behavior of the enumeration is
     not specified. This is not a remote interface.  </p>
  */
-published interface XEnumeration: com::sun::star::uno::XInterface
+published interface XEnumeration: cpo::uno::XInterface
 {
 
     /** tests whether this enumeration contains more elements.

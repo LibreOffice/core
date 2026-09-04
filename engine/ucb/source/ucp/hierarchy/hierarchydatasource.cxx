@@ -76,7 +76,7 @@ class HierarchyDataAccess : public cppu::OWeakObject,
                             public util::XChangesBatch
 {
     std::mutex m_aMutex;
-    uno::Reference< uno::XInterface > m_xConfigAccess;
+    uno::Reference< cpo::uno::XInterface > m_xConfigAccess;
     uno::Reference< lang::XComponent >                   m_xCfgC;
     uno::Reference< lang::XSingleServiceFactory >        m_xCfgSSF;
     uno::Reference< container::XHierarchicalNameAccess > m_xCfgHNA;
@@ -90,7 +90,7 @@ class HierarchyDataAccess : public cppu::OWeakObject,
 
 public:
     HierarchyDataAccess( uno::Reference<
-                                        uno::XInterface > xConfigAccess,
+                                        cpo::uno::XInterface > xConfigAccess,
                          bool bReadOnly );
 
     // XInterface
@@ -119,9 +119,9 @@ public:
                             lang::XEventListener > & aListener ) override;
 
     // XSingleServiceFactory
-    virtual uno::Reference< uno::XInterface > SAL_CALL
+    virtual uno::Reference< cpo::uno::XInterface > SAL_CALL
     createInstance() override;
-    virtual uno::Reference< uno::XInterface > SAL_CALL
+    virtual uno::Reference< cpo::uno::XInterface > SAL_CALL
     createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // XHierarchicalNameAccess
@@ -210,7 +210,7 @@ cpo::uno::Sequence< OUString > HierarchyDataSource::getSupportedServiceNames()
     return { u"com.sun.star.ucb.DefaultHierarchyDataSource"_ustr, u"com.sun.star.ucb.HierarchyDataSource"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ucb_HierarchyDataSource_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -259,7 +259,7 @@ void SAL_CALL HierarchyDataSource::removeEventListener(
 
 
 // virtual
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 HierarchyDataSource::createInstance( const OUString & aServiceSpecifier )
 {
     // Create view to root node.
@@ -274,7 +274,7 @@ HierarchyDataSource::createInstance( const OUString & aServiceSpecifier )
 
 
 // virtual
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 HierarchyDataSource::createInstanceWithArguments(
                                 const OUString & ServiceSpecifier,
                                 const cpo::uno::Sequence< cpo::uno::Any > & Arguments )
@@ -294,7 +294,7 @@ HierarchyDataSource::getAvailableServiceNames()
 // Non-interface methods
 
 
-uno::Reference< uno::XInterface >
+uno::Reference< cpo::uno::XInterface >
 HierarchyDataSource::createInstanceWithArguments(
                                 std::u16string_view ServiceSpecifier,
                                 const cpo::uno::Sequence< cpo::uno::Any > & Arguments,
@@ -308,7 +308,7 @@ HierarchyDataSource::createInstanceWithArguments(
     {
         OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                     "Unsupported service specifier!" );
-        return uno::Reference< uno::XInterface >();
+        return uno::Reference< cpo::uno::XInterface >();
     }
 
     cpo::uno::Sequence< cpo::uno::Any > aNewArgs( Arguments );
@@ -338,7 +338,7 @@ HierarchyDataSource::createInstanceWithArguments(
                             OSL_FAIL( "HierarchyDataSource::"
                                 "createInstanceWithArguments - "
                                 "Invalid node path!" );
-                            return uno::Reference< uno::XInterface >();
+                            return uno::Reference< cpo::uno::XInterface >();
                         }
 
                         aProp.Value <<= aConfigPath;
@@ -352,7 +352,7 @@ HierarchyDataSource::createInstanceWithArguments(
                     {
                         OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                             "Invalid type for property 'nodepath'!" );
-                        return uno::Reference< uno::XInterface >();
+                        return uno::Reference< cpo::uno::XInterface >();
                     }
                 }
             }
@@ -362,16 +362,16 @@ HierarchyDataSource::createInstanceWithArguments(
         {
             OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                         "No 'nodepath' property!" );
-            return uno::Reference< uno::XInterface >();
+            return uno::Reference< cpo::uno::XInterface >();
         }
     }
 
     // Create Configuration Provider.
     uno::Reference< lang::XMultiServiceFactory > xProv = getConfigProvider();
     if ( !xProv.is() )
-        return uno::Reference< uno::XInterface >();
+        return uno::Reference< cpo::uno::XInterface >();
 
-    uno::Reference< uno::XInterface > xConfigAccess;
+    uno::Reference< cpo::uno::XInterface > xConfigAccess;
     try
     {
         if ( bReadOnly )
@@ -473,7 +473,7 @@ css::uno::Reference<T> HierarchyDataAccess::ensureOrigInterface(css::uno::Refere
 
 
 HierarchyDataAccess::HierarchyDataAccess( uno::Reference<
-                                            uno::XInterface > xConfigAccess,
+                                            cpo::uno::XInterface > xConfigAccess,
                                           bool bReadOnly )
 : m_xConfigAccess(std::move( xConfigAccess )),
   m_bReadOnly( bReadOnly )
@@ -747,7 +747,7 @@ void SAL_CALL HierarchyDataAccess::removeChangesListener(
 
 
 // virtual
-uno::Reference< uno::XInterface > SAL_CALL HierarchyDataAccess::createInstance()
+uno::Reference< cpo::uno::XInterface > SAL_CALL HierarchyDataAccess::createInstance()
 {
     uno::Reference< lang::XSingleServiceFactory > xOrig
         = ensureOrigInterface( m_xCfgSSF );
@@ -759,7 +759,7 @@ uno::Reference< uno::XInterface > SAL_CALL HierarchyDataAccess::createInstance()
 
 
 // virtual
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 HierarchyDataAccess::createInstanceWithArguments(
                             const cpo::uno::Sequence< cpo::uno::Any > & aArguments )
 {

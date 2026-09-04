@@ -25,7 +25,7 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XView;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.awt.XControl</code>

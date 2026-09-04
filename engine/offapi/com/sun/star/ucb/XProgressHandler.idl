@@ -23,7 +23,7 @@ module com { module sun { module star { module ucb {
 
 /** Handle a tasks notification that it has made some progress.
 */
-published interface XProgressHandler: com::sun::star::uno::XInterface
+published interface XProgressHandler: cpo::uno::XInterface
 {
     /** The task notifies the handler that it has started some new activity
         (possibly a sub-activity of another activity already making progress;

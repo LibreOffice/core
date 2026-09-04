@@ -166,7 +166,7 @@ private:
 
     virtual ~Bridge() override;
 
-    virtual css::uno::Reference< css::uno::XInterface >
+    virtual css::uno::Reference< cpo::uno::XInterface >
     getInstance(OUString const & sInstanceName) override;
 
     virtual OUString getName() override;

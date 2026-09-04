@@ -147,7 +147,7 @@ struct ThreeByteStruct
 struct TestElement : TestSimple
 {
     string                     String;
-    com::sun::star::uno::XInterface   Interface;
+    cpo::uno::XInterface   Interface;
     any                        Any;
 };
 /**
@@ -169,7 +169,7 @@ struct TestPolyStruct2<T,C> {
     C member2;
 };
 
-interface XRecursiveCall : com::sun::star::uno::XInterface
+interface XRecursiveCall : cpo::uno::XInterface
 {
     /***
      * @param nToCall If nToCall is 0, the method returns immediately.
@@ -233,7 +233,7 @@ interface XMulti {
  * An implementation of this object has to store given values and return whenever there
  * is an out param or return value.
  */
-interface XBridgeTestBase : com::sun::star::uno::XInterface
+interface XBridgeTestBase : cpo::uno::XInterface
 {
     /**
      * in parameter test, tests by calls reference also (complex types)
@@ -253,7 +253,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                     [in] string aString,
                     [in] byte aByte2,
                     [in] short aShort2,
-                    [in] com::sun::star::uno::XInterface xInterface,
+                    [in] cpo::uno::XInterface xInterface,
                     [in] any aAny,
                     [in] sequence< TestElement > aSequence,
                     [in] TestData aStruct );
@@ -279,7 +279,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                          [inout] string aString,
                          [inout] byte aByte2,
                          [inout] short aShort2,
-                         [inout] com::sun::star::uno::XInterface xInterface,
+                         [inout] cpo::uno::XInterface xInterface,
                          [inout] any aAny,
                          [inout] sequence< TestElement > aSequence,
                          [inout] TestData aStruct );
@@ -302,7 +302,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
                         [out] string aString,
                         [out] byte aByte2,
                         [out] short aShort2,
-                        [out] com::sun::star::uno::XInterface xInterface,
+                        [out] cpo::uno::XInterface xInterface,
                         [out] any aAny,
                         [out] sequence< TestElement > aSequence,
                         [out] TestData aStruct );
@@ -379,7 +379,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     [attribute] string                   String;
     [attribute] byte                     Byte2;
     [attribute] short                    Short2;
-    [attribute] com::sun::star::uno::XInterface Interface;
+    [attribute] cpo::uno::XInterface Interface;
     [attribute] any                      Any;
     [attribute] sequence< TestElement >  Sequence;
     [attribute] TestData                 Struct;
@@ -447,7 +447,7 @@ interface XBridgeTest : XBridgeTestBase
      */
     TestData raiseException( [in] short ArgumentPosition,
                              [in] string Message,
-                             [in] com::sun::star::uno::XInterface Context )
+                             [in] cpo::uno::XInterface Context )
         raises( com::sun::star::lang::IllegalArgumentException );
 
 
@@ -458,7 +458,7 @@ interface XBridgeTest : XBridgeTestBase
      * have the proper message and context.
      ***/
     void raiseRuntimeExceptionOneway(  [in] string Message,
-                                       [in] com::sun::star::uno::XInterface Context );
+                                       [in] cpo::uno::XInterface Context );
 
     /**
      * raises runtime exception;
@@ -470,7 +470,7 @@ interface XBridgeTest : XBridgeTestBase
 
 exception BadConstructorArguments: cpo::uno::Exception {};
 
-service Constructors: com::sun::star::uno::XInterface {
+service Constructors: cpo::uno::XInterface {
     create1(
         [in] boolean arg0,
         [in] byte arg1,
@@ -506,12 +506,12 @@ service Constructors: com::sun::star::uno::XInterface {
         [in] sequence< TestStruct > arg31,
         [in] sequence< TestPolyStruct< boolean > > arg32,
         [in] sequence< TestPolyStruct< any > > arg33,
-        [in] sequence< com::sun::star::uno::XInterface > arg34,
+        [in] sequence< cpo::uno::XInterface > arg34,
         [in] TestEnum arg35,
         [in] TestStruct arg36,
         [in] TestPolyStruct< boolean > arg37,
         [in] TestPolyStruct< any > arg38,
-        [in] com::sun::star::uno::XInterface arg39)
+        [in] cpo::uno::XInterface arg39)
         raises (BadConstructorArguments);
 
     create2([in] any... args) raises (BadConstructorArguments);
@@ -532,7 +532,7 @@ service Constructors2: XMultiBase1 {
         [in] TestPolyStruct<string> arg9,
         [in] TestPolyStruct<float> arg10,
         [in] TestPolyStruct<double> arg11,
-        [in] TestPolyStruct<com::sun::star::uno::XInterface> arg12,
+        [in] TestPolyStruct<cpo::uno::XInterface> arg12,
         [in] TestPolyStruct<com::sun::star::lang::XComponent> arg13,
         [in] TestPolyStruct<TestEnum> arg14,
         [in] TestPolyStruct<TestPolyStruct2<char,any> > arg15,
@@ -550,7 +550,7 @@ service Constructors2: XMultiBase1 {
         [in] TestPolyStruct<sequence<string> > arg27,
         [in] TestPolyStruct<sequence<float> > arg28,
         [in] TestPolyStruct<sequence<double> > arg29,
-        [in] TestPolyStruct<sequence<com::sun::star::uno::XInterface> > arg30,
+        [in] TestPolyStruct<sequence<cpo::uno::XInterface> > arg30,
         [in] TestPolyStruct<sequence<com::sun::star::lang::XComponent> > arg31,
         [in] TestPolyStruct<sequence<TestEnum> > arg32,
         [in] TestPolyStruct<sequence<TestPolyStruct2<char, sequence<any> > > > arg33,
@@ -592,8 +592,8 @@ interface XBridgeTest2 : XBridgeTest
     sequence< double > setSequenceDouble( [in] sequence< double > aSeq);
     sequence< TestEnum > setSequenceEnum( [in] sequence< TestEnum > aSeq);
     sequence< string > setSequenceString( [in] sequence< string > aString);
-    sequence< com::sun::star::uno::XInterface > setSequenceXInterface(
-        [in] sequence< com::sun::star::uno::XInterface > aSeq);
+    sequence< cpo::uno::XInterface > setSequenceXInterface(
+        [in] sequence< cpo::uno::XInterface > aSeq);
     sequence< any > setSequenceAny( [in] sequence< any > aSeq);
     sequence< TestElement > setSequenceStruct( [in] sequence< TestElement > aSeq);
 
@@ -614,7 +614,7 @@ interface XBridgeTest2 : XBridgeTest
                        [inout] sequence< double > aSeqDouble,
                        [inout] sequence< TestEnum > aSeqEnum,
                        [inout] sequence< string > aSeqString,
-                       [inout] sequence< com::sun::star::uno::XInterface > aSeqXInterface,
+                       [inout] sequence< cpo::uno::XInterface > aSeqXInterface,
                        [inout] sequence< any > aSeqAny,
                        [inout] sequence< sequence< long > > aSeqDim2,
                        [inout] sequence< sequence < sequence < long > > > aSeqDim3);
@@ -632,7 +632,7 @@ interface XBridgeTest2 : XBridgeTest
                        [out] sequence< double > aSeqDouble,
                        [out] sequence< TestEnum > aSeqEnum,
                        [out] sequence< string > aSeqString,
-                       [out] sequence< com::sun::star::uno::XInterface > aSeqXInterface,
+                       [out] sequence< cpo::uno::XInterface > aSeqXInterface,
                        [out] sequence< any > aSeqAny,
                        [out] sequence< sequence< long > > aSeqDim2,
                        [out] sequence< sequence < sequence < long > > > aSeqDim3);

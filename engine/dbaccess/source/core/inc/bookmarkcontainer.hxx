@@ -77,7 +77,7 @@ public:
     */
     virtual ~OBookmarkContainer() override;
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     virtual void acquire(  ) noexcept override;
     virtual void release(  ) noexcept override;
 
@@ -114,8 +114,8 @@ public:
     virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
 // css::container::XChild
-    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 private:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.

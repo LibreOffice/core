@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module text {
 
 /** makes it possible to perform cursor movements between pages.
  */
-published interface XPageCursor: com::sun::star::uno::XInterface
+published interface XPageCursor: cpo::uno::XInterface
 {
     /** moves the cursor to the first page.
      */

@@ -25,7 +25,7 @@
 
 /** allows converting selections of text to frames or tables.
  */
-interface XTextConvert : com::sun::star::uno::XInterface
+interface XTextConvert : cpo::uno::XInterface
 {
 
         /** moves the paragraphs from Start to End into a text frame.

@@ -571,7 +571,7 @@ void ChartDataWrapper::fireChartDataChangeEvent( css::chart::ChartDataChangeEven
     if( ! m_aEventListenerContainer.getLength(g) )
         return;
 
-    uno::Reference< uno::XInterface > xSrc( static_cast< cppu::OWeakObject* >( this ));
+    uno::Reference< cpo::uno::XInterface > xSrc( static_cast< cppu::OWeakObject* >( this ));
     OSL_ASSERT( xSrc.is());
     if( xSrc.is() )
         aEvent.Source = std::move(xSrc);

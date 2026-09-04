@@ -39,8 +39,8 @@ public:
     }
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance() override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

@@ -71,7 +71,7 @@ public:
 
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any   queryInterface( const cpo::uno::Type & rType ) override;
     void            acquire() noexcept override  { OWeakObject::acquire(); }
     void            release() noexcept override  { OWeakObject::release(); }

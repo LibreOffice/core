@@ -34,7 +34,7 @@ module com { module sun { module star { module uri {
    com::sun::star::uri::XUriReference and additional,
    scheme-specific interfaces.
  */
-published interface XUriReference: com::sun::star::uno::XInterface {
+published interface XUriReference: cpo::uno::XInterface {
     /**
        returns the textual representation of the complete URI reference.
 

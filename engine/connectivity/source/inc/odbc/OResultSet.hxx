@@ -133,7 +133,7 @@ namespace connectivity::odbc
         SQLHANDLE                                   m_aConnectionHandle;
         OStatement_Base*                            m_pStatement;
         std::unique_ptr<OSkipDeletedSet>            m_pSkipDeletedSet;
-        css::uno::Reference< css::uno::XInterface>    m_xStatement;
+        css::uno::Reference< cpo::uno::XInterface>    m_xStatement;
         rtl::Reference< OResultSetMetaData>        m_xMetaData;
         std::unique_ptr<SQLUSMALLINT[]>             m_pRowStatusArray;
         rtl_TextEncoding                            m_nTextEncoding;
@@ -232,9 +232,9 @@ namespace connectivity::odbc
 
         const Functions& functions() const { return m_pStatement->functions(); }
 
-        css::uno::Reference< css::uno::XInterface > operator *()
+        css::uno::Reference< cpo::uno::XInterface > operator *()
         {
-            return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
+            return css::uno::Reference< cpo::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
         }
 
         void setMetaData(const rtl::Reference<OResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
@@ -267,7 +267,7 @@ namespace connectivity::odbc
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
         // XRow
         virtual bool wasNull(  ) override;
         virtual OUString getString( sal_Int32 columnIndex ) override;

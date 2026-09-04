@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module java {
     part of the public C++ UNO runtime API).  This should probably be replaced
     by an appropriate C/C++ API.
  */
-published interface XJavaVM: com::sun::star::uno::XInterface
+published interface XJavaVM: cpo::uno::XInterface
 {
     /** returns the address of the Java Virtual Machine.
 

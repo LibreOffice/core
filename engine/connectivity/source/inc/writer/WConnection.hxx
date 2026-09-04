@@ -59,7 +59,7 @@ class OWriterConnection : public file::OConnection
         {
         }
 
-        void start(const css::uno::Reference<css::uno::XInterface>& rCloseable,
+        void start(const css::uno::Reference<cpo::uno::XInterface>& rCloseable,
                    const css::uno::Reference<css::frame::XDesktop2>& rDesktop)
         {
             m_xDesktop = rDesktop;

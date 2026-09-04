@@ -23,7 +23,7 @@ module com { module sun { module star { module ui { module dialogs {
 /** Specifies a filter manager interface for a FilePicker
 */
 
-published interface XFilterManager: com::sun::star::uno::XInterface
+published interface XFilterManager: cpo::uno::XInterface
 {
 
     /** Adds a filter identified by a title.

@@ -30,7 +30,7 @@ import util.utils;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class SwXTextRange extends TestCase {
     XTextDocument xTextDoc;

@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module sheet {
 /** gives access to the sequence of compatibility names for an Addin
     function.
  */
-published interface XCompatibilityNames: com::sun::star::uno::XInterface
+published interface XCompatibilityNames: cpo::uno::XInterface
 {
     /** returns the compatibility names of the specified function.
 

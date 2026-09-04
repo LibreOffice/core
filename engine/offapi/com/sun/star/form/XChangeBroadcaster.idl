@@ -29,7 +29,7 @@
 
     @see XChangeListener
  */
-published interface XChangeBroadcaster: com::sun::star::uno::XInterface
+published interface XChangeBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener to receive the "changed" event.

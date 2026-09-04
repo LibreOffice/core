@@ -23,7 +23,7 @@
 /** This interface provides access to the style families within the
     container document.
  */
-interface XAutoStylesSupplier: com::sun::star::uno::XInterface
+interface XAutoStylesSupplier: cpo::uno::XInterface
 {
 
     /** This method returns the collection of automatic style families available

@@ -51,7 +51,7 @@ module com { module sun { module star { module frame {
     </p>
 */
 
-interface XLayoutManager : com::sun::star::uno::XInterface
+interface XLayoutManager : cpo::uno::XInterface
 {
     /** attaches a com::sun::star::frame::XFrame to a layout manager.
 

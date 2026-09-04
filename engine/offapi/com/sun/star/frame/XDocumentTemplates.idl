@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module frame {
     force that.
     </p>
  */
-published interface XDocumentTemplates:  com::sun::star::uno::XInterface
+published interface XDocumentTemplates:  cpo::uno::XInterface
 {
     /** provides access to the root of internal used hierarchy
 

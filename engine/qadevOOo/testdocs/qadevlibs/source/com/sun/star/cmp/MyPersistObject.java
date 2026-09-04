@@ -28,7 +28,7 @@ import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;

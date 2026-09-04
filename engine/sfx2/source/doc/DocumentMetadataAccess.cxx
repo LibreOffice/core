@@ -1363,7 +1363,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
         }
         task::ErrorCodeIOException ex(
             "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toString(),
-            uno::Reference< uno::XInterface >(), sal_uInt32(nError.GetCode()));
+            uno::Reference< cpo::uno::XInterface >(), sal_uInt32(nError.GetCode()));
         throw lang::WrappedTargetException(OUString(), *this,
                 cpo::uno::Any(ex));
     }

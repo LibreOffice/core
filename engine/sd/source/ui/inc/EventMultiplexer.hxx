@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <ResourceId.hxx>
 
 template <typename Arg, typename Ret> class Link;

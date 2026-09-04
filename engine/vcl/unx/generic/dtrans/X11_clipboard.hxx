@@ -99,7 +99,7 @@ namespace x11 {
         virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() override;
         virtual void clearTransferable() override;
         virtual void fireContentsChanged() override;
-        virtual css::uno::Reference< css::uno::XInterface > getReference() noexcept override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
     };
 
     cpo::uno::Sequence< OUString > X11Clipboard_getSupportedServiceNames();

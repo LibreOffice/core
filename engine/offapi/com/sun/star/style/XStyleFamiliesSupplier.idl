@@ -24,7 +24,7 @@
 /** This interface provides access to the style families within the
     container document.
  */
-published interface XStyleFamiliesSupplier: com::sun::star::uno::XInterface
+published interface XStyleFamiliesSupplier: cpo::uno::XInterface
 {
     /** This method returns the collection of style families available
         in the container document.@see StyleFamilies

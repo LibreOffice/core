@@ -19,7 +19,7 @@
 package mod._configmgr;
 
 import com.sun.star.beans.NamedValue;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import lib.TestEnvironment;
 
 final class ProviderTestEnvironment {

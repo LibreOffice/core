@@ -43,14 +43,14 @@ namespace dbaccess
 
     public:
         OPreparedStatement(const rtl::Reference< OConnection > & _xConn,
-                           const css::uno::Reference< css::uno::XInterface > & _xStatement);
+                           const css::uno::Reference< cpo::uno::XInterface > & _xStatement);
         virtual ~OPreparedStatement() override;
 
     // css::lang::XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
         virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         virtual void acquire() noexcept override;
         virtual void release() noexcept override;

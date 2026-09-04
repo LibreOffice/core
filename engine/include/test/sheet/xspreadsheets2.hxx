@@ -38,7 +38,7 @@ public:
     void testImportCellStyle();
     void testLastAfterInsertCopy();
 
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
     virtual css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString&) = 0;
 
 protected:

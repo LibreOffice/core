@@ -30,7 +30,7 @@
 #include <uno/dispatcher.h>
 #include <uno/environment.h>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 namespace bridges::cpp_uno::shared {
 
@@ -60,21 +60,21 @@ public:
     // Interface for Bridge:
 
     static UnoInterfaceProxy * create(
-        Bridge * pBridge, css::uno::XInterface * pCppI,
+        Bridge * pBridge, cpo::uno::XInterface * pCppI,
         typelib_InterfaceTypeDescription * pTypeDescr,
         OUString const & rOId);
 
     // Interface for individual CPP--UNO bridges:
 
     Bridge * getBridge() { return pBridge; }
-    css::uno::XInterface * getCppI() { return pCppI; }
+    cpo::uno::XInterface * getCppI() { return pCppI; }
 
 private:
     UnoInterfaceProxy(UnoInterfaceProxy const &) = delete;
     UnoInterfaceProxy& operator =(const UnoInterfaceProxy&) = delete;
 
     UnoInterfaceProxy(
-        Bridge * pBridge_, css::uno::XInterface * pCppI_,
+        Bridge * pBridge_, cpo::uno::XInterface * pCppI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
         OUString aOId_);
 
@@ -84,7 +84,7 @@ private:
     Bridge * pBridge;
 
     // mapping information
-    css::uno::XInterface * pCppI; // wrapped interface
+    cpo::uno::XInterface * pCppI; // wrapped interface
     typelib_InterfaceTypeDescription * pTypeDescr;
     OUString oid;
 

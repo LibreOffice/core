@@ -76,7 +76,7 @@ bool MasterScriptProviderFactory::supportsService(
 
 } // namespace func_provider
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 scripting_MasterScriptProviderFactory_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -14,7 +14,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** Provides access to the solver settings stored in a specific Calc sheet
  */
-interface XSolverSettings: com::sun::star::uno::XInterface
+interface XSolverSettings: cpo::uno::XInterface
 {
     /** Determines the model objective function type
         Possible values defined in css::sheet::SolverObjectiveType

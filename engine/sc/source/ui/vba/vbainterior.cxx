@@ -72,7 +72,7 @@ ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent,
     m_aPattColor = Color(0);
     m_nPattern = 0;
     if ( !m_xProps.is() )
-        throw lang::IllegalArgumentException(u"properties"_ustr, uno::Reference< uno::XInterface >(), 2 );
+        throw lang::IllegalArgumentException(u"properties"_ustr, uno::Reference< cpo::uno::XInterface >(), 2 );
 }
 
 cpo::uno::Any

@@ -93,7 +93,7 @@ class OConnection final     :public OConnection_Base
 
     // defines the helper services for example to query the command of a view
     // @ see com.sun.star.sdb.tools.XViewAccess
-    typedef std::map< OUString, css::uno::Reference< css::uno::XInterface> > TSupportServices;
+    typedef std::map< OUString, css::uno::Reference< cpo::uno::XInterface> > TSupportServices;
     TSupportServices                m_aSupportServices;
 
     std::unique_ptr<OTableContainer> m_pTables;
@@ -113,15 +113,15 @@ public:
 // css::lang::XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
 
 // OComponentHelper
     virtual void disposing() override;
 
 // css::container::XChild
-    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 // css::sdbcx::XTablesSupplier
     virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
@@ -170,8 +170,8 @@ public:
     virtual void close(  ) override;
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XUsersSupplier
@@ -188,7 +188,7 @@ public:
 
     // XTableUIProvider
     virtual css::uno::Reference< css::graphic::XGraphic > getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
-    virtual css::uno::Reference< css::uno::XInterface > getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
 
     // IRefreshListener
     virtual void refresh(const css::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) override;

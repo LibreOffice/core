@@ -870,7 +870,7 @@ Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
     return { SN_HYPHENATOR };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 lingucomponent_Hyphenator_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

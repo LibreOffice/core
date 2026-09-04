@@ -21,7 +21,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -37,7 +37,7 @@ public:
 
     virtual void setUp() override;
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(ScStyleObj);
 
@@ -91,7 +91,7 @@ ScStyleObj::ScStyleObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScStyleObj::init()
+uno::Reference<cpo::uno::XInterface> ScStyleObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

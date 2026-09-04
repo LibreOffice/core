@@ -158,18 +158,18 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                 // XInterface
                 if (! s_aTypes[typelib_TypeClass_INTERFACE])
                 {
-                    OUString sTypeName(u"com.sun.star.uno.XInterface"_ustr);
+                    OUString sTypeName(u"cpo.uno.XInterface"_ustr);
 
                     typelib_InterfaceTypeDescription * pTD = nullptr;
 
                     typelib_TypeDescriptionReference * pMembers[3] = { nullptr,nullptr,nullptr };
-                    OUString sMethodName0(u"com.sun.star.uno.XInterface::queryInterface"_ustr);
+                    OUString sMethodName0(u"cpo.uno.XInterface::queryInterface"_ustr);
                     ::typelib_typedescriptionreference_new(
                         &pMembers[0], typelib_TypeClass_INTERFACE_METHOD, sMethodName0.pData );
-                    OUString sMethodName1(u"com.sun.star.uno.XInterface::acquire"_ustr);
+                    OUString sMethodName1(u"cpo.uno.XInterface::acquire"_ustr);
                     ::typelib_typedescriptionreference_new(
                         &pMembers[1], typelib_TypeClass_INTERFACE_METHOD, sMethodName1.pData );
-                    OUString sMethodName2(u"com.sun.star.uno.XInterface::release"_ustr);
+                    OUString sMethodName2(u"cpo.uno.XInterface::release"_ustr);
                     ::typelib_typedescriptionreference_new(
                         &pMembers[2], typelib_TypeClass_INTERFACE_METHOD, sMethodName2.pData );
 
@@ -199,7 +199,7 @@ typelib_TypeDescriptionReference ** typelib_static_type_getByTypeClass(
                     aMembers[0].eTypeClass = typelib_TypeClass_STRING;
                     aMembers[0].pTypeName = sMemberType0.pData;
                     aMembers[0].pMemberName = sMemberName0.pData;
-                    OUString sMemberType1(u"com.sun.star.uno.XInterface"_ustr);
+                    OUString sMemberType1(u"cpo.uno.XInterface"_ustr);
                     OUString sMemberName1(u"Context"_ustr);
                     aMembers[1].eTypeClass = typelib_TypeClass_INTERFACE;
                     aMembers[1].pTypeName = sMemberType1.pData;

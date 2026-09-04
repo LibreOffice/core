@@ -232,7 +232,7 @@ namespace SwUnoCursorHelper
     /// at most one of the out parameters gets assigned a non-null value
     /// o_rpPaM is newly allocated and must be deleted; other parameters not
     SW_DLLPUBLIC void GetSelectableFromAny(
-        css::uno::Reference<css::uno::XInterface> const& xIfc,
+        css::uno::Reference<cpo::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         std::optional<SwPaM>& o_rpPaM, std::pair<UIName, FlyCntType> & o_rFrame,
         UIName & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,

@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XProgressBar: com::sun::star::uno::XInterface
+interface XProgressBar: cpo::uno::XInterface
 {
     [attribute] any Value;
 };

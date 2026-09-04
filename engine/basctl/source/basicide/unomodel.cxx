@@ -115,7 +115,7 @@ void  SIDEModel::notImplemented()
 }
 
 // XModel
-css::uno::Reference< css::uno::XInterface > SIDEModel::getCurrentSelection()
+css::uno::Reference< cpo::uno::XInterface > SIDEModel::getCurrentSelection()
 {
     SolarMutexGuard aGuard;
     Shell* pShell = GetShell();
@@ -127,7 +127,7 @@ css::uno::Reference< css::uno::XInterface > SIDEModel::getCurrentSelection()
 
 } // namespace basctl
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_basic_BasicID_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include "com/sun/star/uno/XInterface.hpp"
+#include "cpo/uno/XInterface.hpp"
 
 void foo();
 
@@ -61,7 +61,7 @@ void test2(int* p)
         foo();
 }
 
-void test2(css::uno::Reference<css::uno::XInterface> const& p)
+void test2(css::uno::Reference<cpo::uno::XInterface> const& p)
 {
     // expected-error@+1 {{simplify, drop the get() [loplugin:simplifypointertobool]}}
     if (p.get())

@@ -32,7 +32,7 @@
 
     @see XDispatchRecorder
  */
-published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
+published interface XDispatchRecorderSupplier: cpo::uno::XInterface
 {
     /** set a dispatch recorder on this supplier
 

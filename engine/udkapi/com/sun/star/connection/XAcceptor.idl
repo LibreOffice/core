@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module connection {
     <p>
     This is the counterpart to the XConnector interface.
  */
-published interface XAcceptor: com::sun::star::uno::XInterface
+published interface XAcceptor: cpo::uno::XInterface
 {
     /** accepts an interprocess connection. Waits until someone connects to the resource.
         <p>

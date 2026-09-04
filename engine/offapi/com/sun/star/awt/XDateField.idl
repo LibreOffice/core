@@ -24,7 +24,7 @@
 
 /** gives access to the value and settings of a date field.
  */
-published interface XDateField: com::sun::star::uno::XInterface
+published interface XDateField: cpo::uno::XInterface
 {
 
     /** sets the date value which is displayed in the date field.

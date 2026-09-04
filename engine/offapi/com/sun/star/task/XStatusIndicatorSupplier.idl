@@ -25,7 +25,7 @@
 
     @deprecated
  */
-published interface XStatusIndicatorSupplier: com::sun::star::uno::XInterface
+published interface XStatusIndicatorSupplier: cpo::uno::XInterface
 {
     /** use XStatusIndicatorFactory::createStatusIndicator()
         instead of this

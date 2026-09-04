@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module table {
 /** provides a method to access a collection of charts in a table or
     spreadsheet.
  */
-published interface XTableChartsSupplier: com::sun::star::uno::XInterface
+published interface XTableChartsSupplier: cpo::uno::XInterface
 {
 
     /** returns the collection of charts.

@@ -159,7 +159,7 @@ cpo::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
 
 } // end of namespace chart::sidebar
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_libreoffice_comp_chart2_sidebar_ChartPanelFactory(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::sidebar::ChartPanelFactory());

@@ -24,7 +24,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <comphelper/json.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppu/unotype.hxx>
@@ -118,7 +118,7 @@ public:
 
     void testAppendInterfaceNull()
     {
-        css::uno::Reference<css::uno::XInterface> ref;
+        css::uno::Reference<cpo::uno::XInterface> ref;
         CPPUNIT_ASSERT_EQUAL("null"_ostr, render(cpo::uno::Any(ref)));
     }
 
@@ -308,11 +308,11 @@ public:
     void testParseInterface()
     {
         // Null interface reference:
-        css::uno::Reference<css::uno::XInterface> ref;
-        comphelper::parseJsonToAny(u"null"_ustr, cppu::UnoType<css::uno::XInterface>::get()) >>= ref;
+        css::uno::Reference<cpo::uno::XInterface> ref;
+        comphelper::parseJsonToAny(u"null"_ustr, cppu::UnoType<cpo::uno::XInterface>::get()) >>= ref;
         CPPUNIT_ASSERT(!ref.is());
         // Non-null is not implemented yet:
-        CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"{}"_ustr, cppu::UnoType<css::uno::XInterface>::get()),
+        CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"{}"_ustr, cppu::UnoType<cpo::uno::XInterface>::get()),
                              cpo::uno::RuntimeException);
     }
 

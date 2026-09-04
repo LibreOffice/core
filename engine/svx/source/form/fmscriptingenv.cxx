@@ -663,8 +663,8 @@ namespace svxform
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.lang.XConnectionPointContainer",u"advise"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.lang.XConnectionPointContainer",u"unadvise"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.script.XAllListener",u"firing"),
-            pair<std::u16string_view,std::u16string_view>(u"com.sun.star.uno.XInterface",u"acquire"),
-            pair<std::u16string_view,std::u16string_view>(u"com.sun.star.uno.XInterface",u"release"),
+            pair<std::u16string_view,std::u16string_view>(u"cpo.uno.XInterface",u"acquire"),
+            pair<std::u16string_view,std::u16string_view>(u"cpo.uno.XInterface",u"release"),
             pair<std::u16string_view,std::u16string_view>(u"cpo.uno.XReference",u"dispose")};
 
         pair<std::u16string_view,std::u16string_view> k(_rListenerType, _rMethodName);

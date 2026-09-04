@@ -28,7 +28,7 @@
     @see        XCustomPresentation
     @see        XCustomPresentationAccess
  */
-published interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
+published interface XCustomPresentationSupplier: cpo::uno::XInterface
 {
 
     /** @returns

@@ -30,7 +30,7 @@
     offers a factory for the <em>graphics</em> which provides write
     operations on the device.
  */
-published interface XDevice: com::sun::star::uno::XInterface
+published interface XDevice: cpo::uno::XInterface
 {
 
     /** creates a new graphics whose output operation is directed to this

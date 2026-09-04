@@ -26,7 +26,7 @@
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 namespace com { namespace sun { namespace star { namespace registry { class XRegistryKey; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace cpo::uno { class XInterface; }
 
 namespace cppu
 {
@@ -46,7 +46,7 @@ namespace cppu
     factory instance (css::lang::XSingleComponentFactory or legacy
     css::lang::XSingleServiceFactory)
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface >
+CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface >
 loadSharedLibComponentFactory(
     ::rtl::OUString const & uri,
     ::rtl::OUString const & rImplName,

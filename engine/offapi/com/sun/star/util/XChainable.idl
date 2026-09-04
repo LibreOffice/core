@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** enables the object to be a member of a chain.
  */
-published interface XChainable: com::sun::star::uno::XInterface
+published interface XChainable: cpo::uno::XInterface
 {
     /** @returns
                 the previous object in this chain or NULL, if this is the first

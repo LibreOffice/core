@@ -31,7 +31,7 @@ module com { module sun { module star { module text {
     @see    com::sun::star::text::MailMerge
     @see    com::sun::star::text::MailMergeEvent
 */
-published interface XMailMergeListener : com::sun::star::uno::XInterface
+published interface XMailMergeListener : cpo::uno::XInterface
 {
     /** Notifies the listener about mail merge events.
 

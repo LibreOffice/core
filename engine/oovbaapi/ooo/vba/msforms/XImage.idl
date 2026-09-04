@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XImage: com::sun::star::uno::XInterface
+interface XImage: cpo::uno::XInterface
 {
     [attribute] long BackColor;
 };

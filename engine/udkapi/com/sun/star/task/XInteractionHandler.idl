@@ -23,7 +23,7 @@
 
 /** An interaction request handler.
  */
-published interface XInteractionHandler: com::sun::star::uno::XInterface
+published interface XInteractionHandler: cpo::uno::XInterface
 {
     /** Handle an interaction request.
      */

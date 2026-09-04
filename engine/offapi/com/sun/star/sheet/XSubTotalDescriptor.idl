@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::SubTotalDescriptor
  */
-published interface XSubTotalDescriptor: com::sun::star::uno::XInterface
+published interface XSubTotalDescriptor: cpo::uno::XInterface
 {
 
     /** adds a subtotal field definition to the descriptor.

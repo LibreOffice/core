@@ -23,7 +23,7 @@
 
 /** Listener for closing of the corresponding session.
 */
-published interface XCloseSessionListener: com::sun::star::uno::XInterface
+published interface XCloseSessionListener: cpo::uno::XInterface
 {
 
     /** Notifies a closesession listener that the corresponding session was logged out

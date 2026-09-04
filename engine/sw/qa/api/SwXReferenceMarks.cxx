@@ -45,7 +45,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -55,7 +55,7 @@ public:
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
         //RefMark 1
-        Reference<XInterface> xRefMark1
+        Reference<cpo::uno::XInterface> xRefMark1
             = xMSF->createInstance(u"com.sun.star.text.ReferenceMark"_ustr);
         Reference<container::XNamed> xNamed1(xRefMark1, UNO_QUERY_THROW);
         xNamed1->setName(u"SwXReferenceMarks1"_ustr);
@@ -64,7 +64,7 @@ public:
         xText->insertTextContent(xCursor, xTextContent1, false);
 
         //RefMark 2
-        Reference<XInterface> xRefMark2
+        Reference<cpo::uno::XInterface> xRefMark2
             = xMSF->createInstance(u"com.sun.star.text.ReferenceMark"_ustr);
         Reference<container::XNamed> xNamed2(xRefMark2, UNO_QUERY_THROW);
         xNamed2->setName(u"SwXReferenceMarks2"_ustr);
@@ -75,7 +75,7 @@ public:
         // Getting ReferenceMarks from Text Document
         Reference<text::XReferenceMarksSupplier> xRefMarkSupp(xTextDocument, UNO_QUERY_THROW);
 
-        return Reference<XInterface>(xRefMarkSupp->getReferenceMarks(), UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xRefMarkSupp->getReferenceMarks(), UNO_QUERY_THROW);
     }
 
     CPPUNIT_TEST_SUITE(SwXReferenceMarks);

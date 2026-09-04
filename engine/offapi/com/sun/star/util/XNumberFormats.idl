@@ -26,7 +26,7 @@
 
     The number formats are managed by their unique key in the document.
  */
-published interface XNumberFormats: com::sun::star::uno::XInterface
+published interface XNumberFormats: cpo::uno::XInterface
 {
 
     /** @returns

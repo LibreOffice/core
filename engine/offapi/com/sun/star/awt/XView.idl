@@ -26,7 +26,7 @@
 
     <p>This kind of object is called view-object.</p>
  */
-published interface XView: com::sun::star::uno::XInterface
+published interface XView: cpo::uno::XInterface
 {
 
     /** sets the output device.

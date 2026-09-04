@@ -36,7 +36,7 @@
 
     @see com::sun::star::sdbc::XConnection
  */
-published interface XPooledConnection: com::sun::star::uno::XInterface
+published interface XPooledConnection: cpo::uno::XInterface
 {
 
     /** return the connection which is pooled

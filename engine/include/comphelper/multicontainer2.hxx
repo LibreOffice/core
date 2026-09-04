@@ -27,10 +27,7 @@
 #include <vector>
 #include <utility>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
+namespace cpo::uno { class XInterface; }
 namespace com::sun::star::lang
 {
 struct EventObject;
@@ -92,7 +89,7 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 addInterface(const cpo::uno::Type& rKey,
-                           const css::uno::Reference<css::uno::XInterface>& r);
+                           const css::uno::Reference<cpo::uno::XInterface>& r);
 
     /** Removes an element from the container with the specified key.
         It uses interface equality to remove the interface.
@@ -105,7 +102,7 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 removeInterface(const cpo::uno::Type& rKey,
-                              const css::uno::Reference<css::uno::XInterface>& rxIFace);
+                              const css::uno::Reference<cpo::uno::XInterface>& rxIFace);
 
     /**
       Call disposing on all object in the container that

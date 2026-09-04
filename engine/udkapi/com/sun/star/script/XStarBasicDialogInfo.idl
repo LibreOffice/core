@@ -26,7 +26,7 @@
 
     @deprecated
  */
-published interface XStarBasicDialogInfo: com::sun::star::uno::XInterface
+published interface XStarBasicDialogInfo: cpo::uno::XInterface
 {
     /** returns the name of the dialog
      */

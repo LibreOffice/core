@@ -48,7 +48,7 @@ class Wrapper
     private final com.sun.star.uno.IQueryInterface xQueryInterface;
     private final com.sun.star.lang.XComponent xComponent;
 
-    public Wrapper( com.sun.star.uno.XInterface xProxy )
+    public Wrapper( cpo.uno.XInterface xProxy )
     {
         xQueryInterface = (com.sun.star.uno.IQueryInterface) xProxy;
         xComponent = UnoRuntime.queryInterface(

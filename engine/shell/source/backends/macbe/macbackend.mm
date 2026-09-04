@@ -348,7 +348,7 @@ cpo::uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(vo
     return { u"com.sun.star.configuration.backend.MacOSXBackend"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 shell_MacOSXBackend_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

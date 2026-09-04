@@ -29,7 +29,7 @@
     has to implement the compare method for bookmarks.
     </p>
  */
-published interface XRowLocate: com::sun::star::uno::XInterface
+published interface XRowLocate: cpo::uno::XInterface
 {
 
     /** returns the bookmark of the current row of a result set.

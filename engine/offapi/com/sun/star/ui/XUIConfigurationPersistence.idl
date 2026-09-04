@@ -24,7 +24,7 @@ module com { module sun { module star { module ui {
     about the current state.
 */
 
-published interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
+published interface XUIConfigurationPersistence : ::cpo::uno::XInterface
 {
     /** reloads the configuration data from the storage and reinitialize
         the user interface configuration manager instance with this data.

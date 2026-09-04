@@ -1491,7 +1491,7 @@ void OleComponent::OnClose_Impl()
 
 void OleComponent::close( bool bDeliverOwnership )
 {
-    uno::Reference< uno::XInterface > xSelfHold;
+    uno::Reference< cpo::uno::XInterface > xSelfHold;
     {
         osl::MutexGuard aGuard(m_aMutex);
         if (m_bDisposed)

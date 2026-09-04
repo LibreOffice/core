@@ -23,7 +23,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -39,7 +39,7 @@ class ScHeaderFieldsObj : public UnoApiTest,
 public:
     ScHeaderFieldsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -72,7 +72,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
+uno::Reference<cpo::uno::XInterface> ScHeaderFieldsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

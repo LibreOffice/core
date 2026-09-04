@@ -24,7 +24,7 @@
 
 /** provides the access to a collection of forms.
  */
-published interface XFormsSupplier: com::sun::star::uno::XInterface
+published interface XFormsSupplier: cpo::uno::XInterface
 {
 
     /** accesses the forms.

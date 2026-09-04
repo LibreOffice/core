@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module frame {
 
     @see Frame
  */
-published interface XDispatchInformationProvider: com::sun::star::uno::XInterface
+published interface XDispatchInformationProvider: cpo::uno::XInterface
 {
     /** returns all supported command groups.
 

@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module sheet {
 /** provides a method to apply a Multiple Operations Table to the
     cell range.
  */
-published interface XMultipleOperation: com::sun::star::uno::XInterface
+published interface XMultipleOperation: cpo::uno::XInterface
 {
 
     /** creates a table of formulas (a "Multiple Operations Table").

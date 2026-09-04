@@ -25,7 +25,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Tests <code>com.sun.star.bridge.BridgeFactory</code>

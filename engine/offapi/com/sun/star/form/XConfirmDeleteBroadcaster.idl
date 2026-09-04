@@ -27,7 +27,7 @@
 
     @see XConfirmDeleteListener
  */
-published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
+published interface XConfirmDeleteBroadcaster: cpo::uno::XInterface
 {
 
     /** remembers the specified listener to receive an event for confirming deletions

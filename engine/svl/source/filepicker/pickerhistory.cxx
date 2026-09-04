@@ -27,7 +27,7 @@ namespace svt
 
     namespace
     {
-        typedef ::std::vector< cpo::uno::WeakReference< XInterface >  >  InterfaceArray;
+        typedef ::std::vector< cpo::uno::WeakReference< cpo::uno::XInterface >  >  InterfaceArray;
 
 
         InterfaceArray& getFolderPickerHistory()
@@ -44,25 +44,25 @@ namespace svt
         }
 
 
-        void implPushBackPicker( InterfaceArray& _rHistory, const Reference< XInterface >& _rxPicker )
+        void implPushBackPicker( InterfaceArray& _rHistory, const Reference< cpo::uno::XInterface >& _rxPicker )
         {
             if ( !_rxPicker.is() )
                 return;
 
             // first, check which of the objects we hold in s_aHistory can be removed
-            std::erase_if(_rHistory, [](const cpo::uno::WeakReference< XInterface > & x) { return !x.get().is(); });
+            std::erase_if(_rHistory, [](const cpo::uno::WeakReference< cpo::uno::XInterface > & x) { return !x.get().is(); });
 
             // then push_back the picker
             _rHistory.emplace_back( _rxPicker );
         }
     }
 
-    void addFolderPicker( const Reference< XInterface >& _rxPicker )
+    void addFolderPicker( const Reference< cpo::uno::XInterface >& _rxPicker )
     {
         implPushBackPicker( getFolderPickerHistory(), _rxPicker );
     }
 
-    void addFilePicker( const Reference< XInterface >& _rxPicker )
+    void addFilePicker( const Reference< cpo::uno::XInterface >& _rxPicker )
     {
         implPushBackPicker( getFilePickerHistory(), _rxPicker );
     }

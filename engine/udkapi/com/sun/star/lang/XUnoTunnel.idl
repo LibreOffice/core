@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module lang {
     implementation directly, most often because of a design flaw.
     </p>
 */
-published interface XUnoTunnel: com::sun::star::uno::XInterface
+published interface XUnoTunnel: cpo::uno::XInterface
 {
     /** Call this method to get something which is not specified in UNO, e.g.
         an address to some C++ object.

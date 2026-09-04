@@ -219,9 +219,9 @@ ConverterRoot::~ConverterRoot()
 {
 }
 
-Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceName ) const
+Reference< cpo::uno::XInterface > ConverterRoot::createInstance( const OUString& rServiceName ) const
 {
-    Reference< XInterface > xInt;
+    Reference< cpo::uno::XInterface > xInt;
     try
     {
         Reference<XMultiServiceFactory> xMSF(getComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);

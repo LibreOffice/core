@@ -25,7 +25,7 @@
 
     <p>In general this interface is supported by a TextDocument.</p>
  */
-published interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface
+published interface XDocumentIndexesSupplier: cpo::uno::XInterface
 {
     /** @returns
                 the collection of "DocumentIndexes" currently contained in the object.

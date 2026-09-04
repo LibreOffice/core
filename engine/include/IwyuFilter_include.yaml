@@ -353,7 +353,7 @@ excludelist:
     - comphelper/diagnose_ex.hxx
     include/xmloff/unointerfacetouniqueidentifiermapper.hxx:
     # base class has to be a complete type
-    - com/sun/star/uno/XInterface.hpp
+    - cpo/uno/XInterface.hpp
     include/xmloff/unoatrcn.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNameContainer.hpp

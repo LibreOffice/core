@@ -60,7 +60,7 @@ UnoScriptTypeDetector::getSupportedServiceNames()
     return { u"com.sun.star.i18n.ScriptTypeDetector"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_i18n_ScriptTypeDetector_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

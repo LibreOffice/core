@@ -15,7 +15,7 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -31,7 +31,7 @@ class ScIndexEnumeration_LabelRangesEnumeration : public UnoApiTest, public apit
 public:
     ScIndexEnumeration_LabelRangesEnumeration();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_LabelRangesEnumeration);
@@ -48,7 +48,7 @@ ScIndexEnumeration_LabelRangesEnumeration::ScIndexEnumeration_LabelRangesEnumera
 {
 }
 
-uno::Reference<uno::XInterface> ScIndexEnumeration_LabelRangesEnumeration::init()
+uno::Reference<cpo::uno::XInterface> ScIndexEnumeration_LabelRangesEnumeration::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

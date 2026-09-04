@@ -302,7 +302,7 @@ void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException(
                             u"Can not commit storage sequence!"_ustr,
-                            uno::Reference< uno::XInterface >(),
+                            uno::Reference< cpo::uno::XInterface >(),
                             anyEx );
     }
 }

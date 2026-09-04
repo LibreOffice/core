@@ -63,7 +63,7 @@ public:
     ConverterRoot & operator =(ConverterRoot &&) = default;
 
     /** Creates an instance for the passed service name, using the process service factory. */
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
                         createInstance( const OUString& rServiceName ) const;
     css::uno::Reference< cpo::uno::XComponentContext > const &
                         getComponentContext() const;

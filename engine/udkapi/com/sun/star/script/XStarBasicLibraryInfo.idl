@@ -25,7 +25,7 @@
 
     @deprecated
  */
-published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
+published interface XStarBasicLibraryInfo: cpo::uno::XInterface
 {
     /** returns the library's name
      */

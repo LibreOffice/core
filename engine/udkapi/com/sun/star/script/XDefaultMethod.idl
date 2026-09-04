@@ -29,7 +29,7 @@ module com { module sun { module star { module script {
     which would be equivalent to writing
     <p>"ExampleObject.defaultMethod( Param1 ... ParamN )"</p>
 */
-interface XDefaultMethod : ::com::sun::star::uno::XInterface
+interface XDefaultMethod : ::cpo::uno::XInterface
 {
   /**
     Returns the name of the default method

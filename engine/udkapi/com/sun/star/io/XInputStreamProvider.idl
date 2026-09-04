@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module io {
     input streams returned by createInputStream()
     are completely independent from each other.</p>
 */
-published interface XInputStreamProvider : com::sun::star::uno::XInterface
+published interface XInputStreamProvider : cpo::uno::XInterface
 {
     /** Creates a new input stream, every time providing
         the same data.

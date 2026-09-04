@@ -58,7 +58,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
 
     cpo::uno::Any m_aResult;
 
-    css::uno::Reference<css::uno::XInterface> m_xBroadcaster;
+    css::uno::Reference<cpo::uno::XInterface> m_xBroadcaster;
 
     // interface
 

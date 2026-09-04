@@ -417,7 +417,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.structSource.aInputStream.is() )
     {
         throw SAXException(u"No input source"_ustr,
-                            css::uno::Reference< css::uno::XInterface > () , cpo::uno::Any() );
+                            css::uno::Reference< cpo::uno::XInterface > () , cpo::uno::Any() );
     }
 
     entity.converter.setInputStream( entity.structSource.aInputStream );
@@ -432,7 +432,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.pParser )
     {
         throw SAXException(u"Couldn't create parser"_ustr,
-                            css::uno::Reference< css::uno::XInterface > (), cpo::uno::Any() );
+                            css::uno::Reference< cpo::uno::XInterface > (), cpo::uno::Any() );
     }
 
     // set all necessary C-Callbacks
@@ -663,7 +663,7 @@ void SaxExpatParser_Impl::parse( )
 
             SAXParseException aExcept(
                 getErrorMessage(xmlE , sSystemId, nLine) ,
-                css::uno::Reference< css::uno::XInterface >(),
+                css::uno::Reference< cpo::uno::XInterface >(),
                 cpo::uno::Any( &exception , cppu::UnoType<decltype(exception)>::get() ),
                 rDocumentLocator->getPublicId(),
                 rDocumentLocator->getSystemId(),
@@ -944,7 +944,7 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 
 } // namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

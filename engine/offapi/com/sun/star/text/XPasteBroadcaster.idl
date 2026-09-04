@@ -11,7 +11,7 @@ module com { module sun { module star { module text {
 
 /** allows for adding/removing of paste event listeners.
 */
-interface XPasteBroadcaster : com::sun::star::uno::XInterface
+interface XPasteBroadcaster : cpo::uno::XInterface
 {
     /** Adds an entry to the list of paste listeners.
 

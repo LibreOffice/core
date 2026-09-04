@@ -143,8 +143,8 @@ namespace sfx2
         virtual bool isLocked(  ) override;
 
         // XChild, base of XUndoManager
-        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     private:
         std::unique_ptr< DocumentUndoManager_Impl > m_pImpl;

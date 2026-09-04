@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module io {
     <p>If you want to allow control from outside, also implement the
     XActiveDataControl interface. </p>
  */
-published interface XActiveDataSink: com::sun::star::uno::XInterface
+published interface XActiveDataSink: cpo::uno::XInterface
 {
     /** plugs the input stream.
 

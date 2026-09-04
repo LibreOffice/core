@@ -25,7 +25,7 @@
 /** gives access to the items of a list box and makes it possible to
     register item and action event listeners.
  */
-published interface XListBox: com::sun::star::uno::XInterface
+published interface XListBox: cpo::uno::XInterface
 {
 
     /** registers a listener for item events.

@@ -48,7 +48,7 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< cpo::uno::XComponentCo
 bool DocxExportFilter::exportDocument()
 {
     // get SwDoc*
-    uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
+    uno::Reference< cpo::uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
     SwXTextDocument *pTextDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
     if ( !pTextDoc )
         return false;
@@ -153,7 +153,7 @@ OUString DocxExportFilter::getImplementationName()
     return u"com.sun.star.comp.Writer.DocxExport"_ustr;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_DocxExport_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

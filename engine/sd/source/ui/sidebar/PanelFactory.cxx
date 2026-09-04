@@ -141,7 +141,7 @@ cpo::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
 } // end of namespace sd::sidebar
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(cpo::uno::XComponentContext* /*context*/,
                                                                    cpo::uno::Sequence<cpo::uno::Any> const &)
 {

@@ -113,7 +113,7 @@ namespace anim
         if (!rTarget.hasValue())
             return;
 
-        css::uno::Reference<css::uno::XInterface> xRef;
+        css::uno::Reference<cpo::uno::XInterface> xRef;
         if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
         {
             if (xParagraphTarget->Shape.is())

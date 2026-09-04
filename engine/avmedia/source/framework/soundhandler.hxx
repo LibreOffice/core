@@ -92,7 +92,7 @@ class SoundHandler : public comphelper::WeakImplHelper<css::lang::XServiceInfo,
     private:
 
         bool m_bError;
-        css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   // we must protect us against dying during async(!) dispatch() call!
+        css::uno::Reference< cpo::uno::XInterface >                m_xSelfHold         ;   // we must protect us against dying during async(!) dispatch() call!
         css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   // uses avmedia player to play sounds...
 
         css::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;

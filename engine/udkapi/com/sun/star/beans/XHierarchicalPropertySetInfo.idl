@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module beans {
     <p>The specification only describes the properties, it does not contain
     any values.</p>
  */
-published interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterface
+published interface XHierarchicalPropertySetInfo: cpo::uno::XInterface
 {
 
     /** @returns

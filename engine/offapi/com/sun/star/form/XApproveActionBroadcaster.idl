@@ -28,7 +28,7 @@
     XApproveActionBroadcaster interface implements
     com::sun::star::awt::XActionListener as well.</p>
  */
-published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
+published interface XApproveActionBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener to receive the XApproveActionListener::approveAction()

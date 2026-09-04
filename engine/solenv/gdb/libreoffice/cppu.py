@@ -45,7 +45,7 @@ class UnoReferencePrinter(object):
                 return '%s to (%s) %s' % (self.typename, str(iface.dynamic_type), str(iface))
             except Exception:
                 # fallback for potential problem:
-                # base class 'com::sun::star::uno::XInterface' is ambiguous
+                # base class 'cpo::uno::XInterface' is ambiguous
                 return '%s to (XInterface) %s' % (self.typename, str(iface))
 
         else:

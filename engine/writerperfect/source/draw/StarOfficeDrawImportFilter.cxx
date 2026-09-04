@@ -15,7 +15,7 @@
 
 using cpo::uno::Sequence;
 using cpo::uno::XComponentContext;
-using com::sun::star::uno::XInterface;
+using cpo::uno::XInterface;
 
 static bool handleEmbeddedSTOFFGraphicObject(const librevenge::RVNGBinaryData& data,
                                              OdfDocumentHandler* pHandler,
@@ -93,7 +93,7 @@ Sequence<OUString> SAL_CALL StarOfficeDrawImportFilter::getSupportedServiceNames
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_libreoffice_comp_Draw_StarOfficeDrawImportFilter_get_implementation(
     cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {

@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module table {
 
     @see com::sun::star::table::CellRange
  */
-published interface XColumnRowRange: com::sun::star::uno::XInterface
+published interface XColumnRowRange: cpo::uno::XInterface
 {
 
     /** returns the collection of columns in the range.

@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** is supported by objects which supply different modes.
  */
-published interface XModeSelector: com::sun::star::uno::XInterface
+published interface XModeSelector: cpo::uno::XInterface
 {
     /** sets a new mode for the implementing object.
      */

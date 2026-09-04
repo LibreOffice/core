@@ -33,7 +33,7 @@ import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 final class Marshal {
     public Marshal(IBridge bridge, short cacheSize) {

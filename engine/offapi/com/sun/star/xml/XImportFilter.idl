@@ -24,7 +24,7 @@ module com { module sun { module star { module xml {
 
 /** interface to implement for an XML-based import filter.
  */
-published interface XImportFilter: com::sun::star::uno::XInterface
+published interface XImportFilter: cpo::uno::XInterface
 {
      /** performs the import.
 

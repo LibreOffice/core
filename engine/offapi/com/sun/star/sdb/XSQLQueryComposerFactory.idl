@@ -22,7 +22,7 @@
 
 /** is a factory for instances of service com::sun::star::sdb::SQLQueryComposer.
  */
-published interface XSQLQueryComposerFactory: com::sun::star::uno::XInterface
+published interface XSQLQueryComposerFactory: cpo::uno::XInterface
 {
 
     /** creates a new query composer.

@@ -503,7 +503,7 @@ DataSeriesPointWrapper::~DataSeriesPointWrapper()
 void DataSeriesPointWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
-    uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    uno::Reference< cpo::uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
     m_xDataSeries.clear();
@@ -649,14 +649,14 @@ beans::PropertyState DataSeriesPointWrapper::getPropertyState( const OUString& r
         cpo::uno::Any a(e.TargetException);
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
-            css::uno::Reference<css::uno::XInterface>(), a);
+            css::uno::Reference<cpo::uno::XInterface>(), a);
     }
     catch( const cpo::uno::Exception& e )
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
-            css::uno::Reference<css::uno::XInterface>(), a);
+            css::uno::Reference<cpo::uno::XInterface>(), a);
     }
     return aState;
 }

@@ -32,7 +32,7 @@ module com { module sun { module star { module document {
     @see ImportFilter
     @see XImporter
  */
-published interface XExporter: com::sun::star::uno::XInterface
+published interface XExporter: cpo::uno::XInterface
 {
     /** sets the source document for the exporter
 

@@ -48,7 +48,7 @@
 #include <unordered_set>
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::cpo::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::cpo::uno::Any;
@@ -530,7 +530,7 @@ ImageManagerImpl::~ImageManagerImpl()
 
 void ImageManagerImpl::dispose()
 {
-    uno::Reference< uno::XInterface > xOwner(m_pOwner);
+    uno::Reference< cpo::uno::XInterface > xOwner(m_pOwner);
     css::lang::EventObject aEvent( xOwner );
     {
         std::unique_lock aGuard(m_mutex);
@@ -843,7 +843,7 @@ void ImageManagerImpl::replaceImages(
         }
     }
 
-    uno::Reference< uno::XInterface > xOwner(m_pOwner);
+    uno::Reference< cpo::uno::XInterface > xOwner(m_pOwner);
     // Notify listeners
     if ( pInsertedImages != nullptr )
     {
@@ -944,7 +944,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
     }
 
     // Notify listeners
-    uno::Reference< uno::XInterface > xOwner(m_pOwner);
+    uno::Reference< cpo::uno::XInterface > xOwner(m_pOwner);
     if ( pRemovedImages != nullptr )
     {
         ConfigurationEvent aRemoveEvent;
@@ -1081,7 +1081,7 @@ void ImageManagerImpl::reload()
             aGuard.clear();
 
             // Now notify our listeners. Unlock mutex to prevent deadlocks
-            uno::Reference< uno::XInterface > xOwner(m_pOwner);
+            uno::Reference< cpo::uno::XInterface > xOwner(m_pOwner);
             if ( pInsertedImages != nullptr )
             {
                 ConfigurationEvent aInsertEvent;

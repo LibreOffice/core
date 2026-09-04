@@ -217,8 +217,8 @@ protected:
     virtual OUString    getImplementationName() override = 0;
 
 // XControl
-    virtual void                                        setContext(const css::uno::Reference<css::uno::XInterface>& Context) override;
-    virtual css::uno::Reference<css::uno::XInterface>   getContext() override;
+    virtual void                                        setContext(const css::uno::Reference<cpo::uno::XInterface>& Context) override;
+    virtual css::uno::Reference<cpo::uno::XInterface>   getContext() override;
     virtual void                                        createPeer(const css::uno::Reference<css::awt::XToolkit>& Toolkit, const css::uno::Reference<css::awt::XWindowPeer>& Parent) override;
     virtual css::uno::Reference<css::awt::XWindowPeer>  getPeer() override;
     virtual bool                                    setModel(const css::uno::Reference<css::awt::XControlModel>& Model) override;
@@ -307,7 +307,7 @@ protected:
     ::osl::Mutex                    m_aMutex;
     oslInterlockedCount             m_lockCount;
 
-    css::uno::Reference<css::uno::XInterface>                    m_xParent;                  // ParentComponent
+    css::uno::Reference<cpo::uno::XInterface>                    m_xParent;                  // ParentComponent
     PropertyBagHelper               m_aPropertyBagHelper;
 
     const css::uno::Reference<cpo::uno::XComponentContext>&
@@ -394,8 +394,8 @@ public:
         read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
 // XChild (base of XFormComponent)
-    virtual css::uno::Reference<css::uno::XInterface>   getParent() override;
-    virtual void           setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual css::uno::Reference<cpo::uno::XInterface>   getParent() override;
+    virtual void           setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
 // XEventListener
     virtual void disposing(const css::lang::EventObject& Source) override;
@@ -822,7 +822,7 @@ protected:
 
     /** called whenever a connection to a database column has been established
     */
-    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm );
+    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm );
     /** called whenever a connection to a database column has been suspended
     */
     virtual void            onDisconnectedDbColumn();
@@ -937,7 +937,7 @@ public:
     static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
     // XChild
-    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XPersistObject
     virtual void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;

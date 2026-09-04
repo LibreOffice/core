@@ -259,9 +259,9 @@ public:
                   const std::function<bool ( const SfxObjectShell* )>& isObjectShell = nullptr,
                   bool bOnlyVisible = true );
     SAL_RET_MAYBENULL static SfxObjectShell* Current();
-    static css::uno::Reference< css::uno::XInterface >
+    static css::uno::Reference< cpo::uno::XInterface >
                                 GetCurrentComponent();
-    static void                 SetCurrentComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
+    static void                 SetCurrentComponent( const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 
@@ -416,7 +416,7 @@ public:
         const cpo::uno::Any* aCaller = nullptr );
 
     static ErrCode  CallXScript(
-        const css::uno::Reference< css::uno::XInterface >& _rxScriptContext,
+        const css::uno::Reference< cpo::uno::XInterface >& _rxScriptContext,
         const OUString& rScriptURL,
         const cpo::uno::Sequence< cpo::uno::Any >& aParams,
         cpo::uno::Any& aRet,
@@ -440,7 +440,7 @@ public:
     /// Check if script URL whitelist exists, and if so, if current script url is part of it
     static bool                 isScriptURLAllowed(const OUString& rScriptURL);
 
-    static bool                 isScriptAccessAllowed(const css::uno::Reference<css::uno::XInterface>& rScriptContext);
+    static bool                 isScriptAccessAllowed(const css::uno::Reference<cpo::uno::XInterface>& rScriptContext);
 
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
@@ -630,8 +630,8 @@ public:
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static css::uno::Reference< css::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet );
-    static SfxObjectShell* GetShellFromComponent(const css::uno::Reference< css::uno::XInterface >& xComp);
-    static SfxObjectShell* GetParentShell(const css::uno::Reference<css::uno::XInterface>& xChild);
+    static SfxObjectShell* GetShellFromComponent(const css::uno::Reference< cpo::uno::XInterface >& xComp);
+    static SfxObjectShell* GetParentShell(const css::uno::Reference<cpo::uno::XInterface>& xChild);
     static OUString             GetServiceNameFromFactory( const OUString& rFact );
     bool                        IsInPlaceActive() const;
     bool                        IsUIActive() const;

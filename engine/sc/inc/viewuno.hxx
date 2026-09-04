@@ -167,7 +167,7 @@ private:
     sal_Int16                   GetZoomType() const;
     void                    SetZoomType(sal_Int16 ZoomType);
 
-    css::uno::Reference< css::uno::XInterface > GetClickedObject(const Point& rPoint) const;
+    css::uno::Reference< cpo::uno::XInterface > GetClickedObject(const Point& rPoint) const;
     void                    EndMouseListening();
     void                    EndActivationListening();
     bool                    mbLeftMousePressed;

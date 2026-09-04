@@ -273,10 +273,10 @@ ResultSetBase::rowDeleted()
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 ResultSetBase::getStatement()
 {
-    return uno::Reference< uno::XInterface >();
+    return uno::Reference< cpo::uno::XInterface >();
 }
 
 

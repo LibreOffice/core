@@ -211,8 +211,8 @@ xray para2.String
 xray para2.PageStyleName
 */
     // get the 2nd and 4th paragraph
-    uno::Reference<uno::XInterface> paragraph1(getParagraph( 2, u"text1"_ustr ));
-    uno::Reference<uno::XInterface> paragraph2(getParagraph( 4, u"text2"_ustr ));
+    uno::Reference<cpo::uno::XInterface> paragraph1(getParagraph( 2, u"text1"_ustr ));
+    uno::Reference<cpo::uno::XInterface> paragraph2(getParagraph( 4, u"text2"_ustr ));
     OUString pageStyle1 = getProperty< OUString >( paragraph1, u"PageStyleName"_ustr );
     OUString pageStyle2 = getProperty< OUString >( paragraph2, u"PageStyleName"_ustr );
     // "Standard" is the style for the first page (2nd is "Converted1").
@@ -953,8 +953,8 @@ DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testIndentation, "indentation.docx")
 {
-    uno::Reference<uno::XInterface> xParaLTRTitle(getParagraph( 1, u"Title aligned"_ustr));
-    uno::Reference<uno::XInterface> xParaLTRNormal(getParagraph( 2, u""_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLTRTitle(getParagraph( 1, u"Title aligned"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLTRNormal(getParagraph( 2, u""_ustr));
 
     // this will test the text direction for paragraphs
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaLTRTitle, u"WritingMode"_ustr ));
@@ -1222,19 +1222,19 @@ DECLARE_OOXMLEXPORT_TEST(testChartProp, "chart-prop.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093b.docx")
 {
     // The problem was that the direction and alignment are not correct for RTL paragraphs.
-    uno::Reference<uno::XInterface> xParaRtlRight(getParagraph( 1, u"Right and RTL in M$"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaRtlRight(getParagraph( 1, u"Right and RTL in M$"_ustr));
     sal_Int32 nRtlRight = getProperty< sal_Int32 >( xParaRtlRight, u"ParaAdjust"_ustr );
     sal_Int16 nRRDir  = getProperty< sal_Int32 >( xParaRtlRight, u"WritingMode"_ustr );
 
-    uno::Reference<uno::XInterface> xParaRtlLeft(getParagraph( 2, u"Left and RTL in M$"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaRtlLeft(getParagraph( 2, u"Left and RTL in M$"_ustr));
     sal_Int32 nRtlLeft = getProperty< sal_Int32 >( xParaRtlLeft, u"ParaAdjust"_ustr );
     sal_Int16 nRLDir  = getProperty< sal_Int32 >( xParaRtlLeft, u"WritingMode"_ustr );
 
-    uno::Reference<uno::XInterface> xParaLtrRight(getParagraph( 3, u"Right and LTR in M$"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLtrRight(getParagraph( 3, u"Right and LTR in M$"_ustr));
     sal_Int32 nLtrRight = getProperty< sal_Int32 >( xParaLtrRight, u"ParaAdjust"_ustr );
     sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLtrRight, u"WritingMode"_ustr );
 
-    uno::Reference<uno::XInterface> xParaLtrLeft(getParagraph( 4, u"Left and LTR in M$"_ustr));
+    uno::Reference<cpo::uno::XInterface> xParaLtrLeft(getParagraph( 4, u"Left and LTR in M$"_ustr));
     sal_Int32 nLtrLeft = getProperty< sal_Int32 >( xParaLtrLeft, u"ParaAdjust"_ustr );
     sal_Int16 nLLDir  = getProperty< sal_Int32 >( xParaLtrLeft, u"WritingMode"_ustr );
 

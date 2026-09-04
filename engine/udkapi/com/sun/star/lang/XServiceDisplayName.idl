@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module lang {
      implementation name. It should not be used to identify / select a
      specific service / implementation.</p>
  */
-published interface XServiceDisplayName : ::com::sun::star::uno::XInterface
+published interface XServiceDisplayName : ::cpo::uno::XInterface
 {
     /** returns the display name of the service for a given language.
 

@@ -43,7 +43,7 @@
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
 
-typedef std::map< const css::uno::Reference< css::uno::XInterface >, OUString > TableStyleMap;
+typedef std::map< const css::uno::Reference< cpo::uno::XInterface >, OUString > TableStyleMap;
 
 struct XMLTableInfo
 {

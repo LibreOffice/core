@@ -319,7 +319,7 @@ void AtkListener::handleInvalidateChildren(
 /*****************************************************************************/
 
 static uno::Reference< accessibility::XAccessibleContext >
-getAccessibleContextFromSource( const uno::Reference< uno::XInterface >& rxSource )
+getAccessibleContextFromSource( const uno::Reference< cpo::uno::XInterface >& rxSource )
 {
     uno::Reference< accessibility::XAccessibleContext > xContext(rxSource, uno::UNO_QUERY);
     if( ! xContext.is() )

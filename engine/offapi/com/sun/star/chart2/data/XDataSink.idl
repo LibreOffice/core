@@ -34,7 +34,7 @@ module data
     <p>If you want to be able to also read the data set here, your
     component must also implement XDataSource.</p>
   */
-interface XDataSink : ::com::sun::star::uno::XInterface
+interface XDataSink : ::cpo::uno::XInterface
 {
     /** sets new data sequences.  The elements set here must support
         the service DataSequence.

@@ -59,7 +59,7 @@ cpo::uno::Sequence<OUString> VCLXPointer::getSupportedServiceNames()
         u"com.sun.star.awt.Pointer"_ustr, u"stardiv.vcl.Pointer"_ustr};
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_VCLXPointer_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

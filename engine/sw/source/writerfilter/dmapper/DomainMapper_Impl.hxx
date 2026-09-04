@@ -250,7 +250,7 @@ struct SubstreamContext
     /// paragraph's content once it is finished: a formula that is the paragraph's
     /// only content is a display equation, otherwise it is inline.
     std::vector<std::pair<rtl::Reference<SwXTextEmbeddedObject>,
-                          css::uno::Reference<css::uno::XInterface>>>
+                          css::uno::Reference<cpo::uno::XInterface>>>
         aParagraphFormulas;
     /// This is a continuation of already finished paragraph - e.g., first in an index section
     bool bRemoveThisParagraph = false;

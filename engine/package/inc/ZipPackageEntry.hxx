@@ -79,8 +79,8 @@ public:
     virtual OUString SAL_CALL getName(  ) override;
     virtual void SAL_CALL setName( const OUString& aName ) override;
     // XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getParent(  ) override;
+    virtual void SAL_CALL setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override = 0;

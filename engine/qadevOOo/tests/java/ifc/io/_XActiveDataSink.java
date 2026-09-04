@@ -23,7 +23,7 @@ import lib.MultiMethodTest;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.io.XActiveDataSink</code>

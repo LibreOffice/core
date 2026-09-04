@@ -28,7 +28,7 @@ import com.sun.star.script.XInvocation;
 import com.sun.star.script.XInvocationAdapterFactory2;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
 * Testing <code>com.sun.star.script.XInvocationAdapterFactory</code>

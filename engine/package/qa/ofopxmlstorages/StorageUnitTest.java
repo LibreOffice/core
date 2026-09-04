@@ -24,7 +24,7 @@ import com.sun.star.connection.XConnection;
 
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import cpo.uno.XNamingService;
 import cpo.uno.XComponentContext;
 

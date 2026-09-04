@@ -265,8 +265,8 @@ std::optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
                 m_CannotFix.back() = true;
         }
         // Allowlist of functions that could be noexcept, but we can't change them because of backwards-compatibility reasons
-        // css::uno::XInterface::acquire
-        // css::uno::XInterface::release
+        // cpo::uno::XInterface::acquire
+        // cpo::uno::XInterface::release
         if (calleeFunctionDecl->getIdentifier())
         {
             auto name = calleeFunctionDecl->getName();

@@ -35,7 +35,7 @@ const char CR = 0x0d;
 const char LF = 0x0a;
 
 
-inline void try_dispose( css::uno::Reference< css::uno::XInterface> const & x )
+inline void try_dispose( css::uno::Reference< cpo::uno::XInterface> const & x )
 {
     css::uno::Reference< css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
     if (xComp.is())
@@ -84,7 +84,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC void setOfficeIpcThreadRunning(bool bRunning);
 class AbortChannel;
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-css::uno::Reference< css::uno::XInterface> resolveUnoURL(
+css::uno::Reference< cpo::uno::XInterface> resolveUnoURL(
     OUString const & connectString,
     css::uno::Reference< cpo::uno::XComponentContext> const & xLocalContext,
     AbortChannel const * abortChannel = nullptr );

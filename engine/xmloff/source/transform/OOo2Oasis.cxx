@@ -1727,7 +1727,7 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
 
 // Service registration
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 xmloff_OOo2OasisTransformer_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -1735,7 +1735,7 @@ xmloff_OOo2OasisTransformer_get_implementation(
 }
 
 #define OOO_IMPORTER( xml_className_get_impl, implName, subServiceName )             \
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* \
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface* \
 xml_className_get_impl( \
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&) \
 { \

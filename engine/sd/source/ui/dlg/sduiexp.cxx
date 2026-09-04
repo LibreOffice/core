@@ -59,7 +59,7 @@ public:
 } // closing anonymous implementation namespace
 
 extern "C" {
-SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_presentation_CreateDialogFactoryService_get_implementation(
     cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

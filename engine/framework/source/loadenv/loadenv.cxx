@@ -1147,7 +1147,7 @@ bool LoadEnv::impl_loadContent()
     OUString sURL = m_aURL.Complete;
 
     // try to locate any interested frame loader
-    css::uno::Reference< css::uno::XInterface >                xLoader     = impl_searchLoader();
+    css::uno::Reference< cpo::uno::XInterface >                xLoader     = impl_searchLoader();
     css::uno::Reference< css::frame::XFrameLoader >            xAsyncLoader(xLoader, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XSynchronousFrameLoader > xSyncLoader (xLoader, css::uno::UNO_QUERY);
 
@@ -1186,7 +1186,7 @@ bool LoadEnv::impl_loadContent()
     return false;
 }
 
-css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
+css::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
 {
     // SAFE -> -----------------------------------
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -1233,7 +1233,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
             // Ignore any loader, which makes trouble :-)
             ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
             OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(PROP_NAME, OUString());
-            css::uno::Reference< css::uno::XInterface > xLoader = xLoaderFactory->createInstance(sLoader);
+            css::uno::Reference< cpo::uno::XInterface > xLoader = xLoaderFactory->createInstance(sLoader);
             if (xLoader.is())
                 return xLoader;
         }
@@ -1243,7 +1243,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
             { continue; }
     }
 
-    return css::uno::Reference< css::uno::XInterface >();
+    return css::uno::Reference< cpo::uno::XInterface >();
 }
 
 void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,

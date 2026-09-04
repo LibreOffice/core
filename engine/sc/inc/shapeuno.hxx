@@ -150,8 +150,8 @@ public:
     virtual void SAL_CALL   setString( const OUString& aString ) override;
 
     // XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent() override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getParent() override;
+    virtual void SAL_CALL setParent( const css::uno::Reference< cpo::uno::XInterface >& xParent ) override;
 
                             // XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;

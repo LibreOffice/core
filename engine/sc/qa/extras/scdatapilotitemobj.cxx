@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -35,7 +35,7 @@ class ScDataPilotItemObj : public UnoApiTest, public apitest::DataPilotItem, pub
 {
 public:
     virtual void setUp() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
 
     ScDataPilotItemObj();
 
@@ -59,7 +59,7 @@ ScDataPilotItemObj::ScDataPilotItemObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
+uno::Reference<cpo::uno::XInterface> ScDataPilotItemObj::init()
 {
     table::CellRangeAddress aCellRangeAddress(0, 1, 0, m_nMaxFieldIndex - 1, m_nMaxFieldIndex - 1);
     table::CellAddress aCellAddress(0, 7, 8);
@@ -111,7 +111,7 @@ uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
 
     xDPT->insertNewByName(u"DataPilotTable"_ustr, aCellAddress, xDPD);
     uno::Reference<sheet::XDataPilotField> xDPF(xIA_DPF->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xReturn(xDPF->getItems()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<cpo::uno::XInterface> xReturn(xDPF->getItems()->getByIndex(0), uno::UNO_QUERY_THROW);
     return xReturn;
 }
 

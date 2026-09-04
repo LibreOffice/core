@@ -94,7 +94,7 @@ namespace dbaccess
     protected:
         ::comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener> m_aContentListeners;
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
-        css::uno::Reference< css::uno::XInterface >
+        css::uno::Reference< cpo::uno::XInterface >
                                                 m_xParentContainer;
         const css::uno::Reference< cpo::uno::XComponentContext >
                                                 m_aContext;
@@ -119,7 +119,7 @@ namespace dbaccess
     public:
 
         OContentHelper( const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-                        ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
+                        ,const css::uno::Reference< cpo::uno::XInterface >&   _xParentContainer
                         ,TContentPtr _pImpl
                     );
 
@@ -154,8 +154,8 @@ namespace dbaccess
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         // XRename
         virtual void rename( const OUString& newName ) override;

@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XScrollBar: com::sun::star::uno::XInterface
+interface XScrollBar: cpo::uno::XInterface
 {
     [attribute] long Max;
     [attribute] long Min;

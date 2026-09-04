@@ -82,7 +82,7 @@ public:
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) override;
+    virtual void SAL_CALL setParent( const css::uno::Reference< cpo::uno::XInterface >& xParent ) override;
 
     // oox::FormulaImExportBase
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,

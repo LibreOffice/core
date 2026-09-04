@@ -23,7 +23,7 @@
 
 /** enables a text object to copy attributed text from another text object.
  */
-published interface XTextCopy: com::sun::star::uno::XInterface
+published interface XTextCopy: cpo::uno::XInterface
 {
 
         /** copies the content from another text object.

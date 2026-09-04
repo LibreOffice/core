@@ -25,7 +25,7 @@ interface XListEntrySource;
 
 /** specifies support for indirect manipulation of a string list
 */
-interface XListEntrySink : com::sun::star::uno::XInterface
+interface XListEntrySink : cpo::uno::XInterface
 {
     /** sets the new source for the list entries of the component
 

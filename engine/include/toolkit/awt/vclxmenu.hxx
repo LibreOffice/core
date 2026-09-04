@@ -78,7 +78,7 @@ public:
     void setUserValue(sal_uInt16 nItemId, void* nUserValue, MenuUserDataReleaseFunction aFunc);
     void* getUserValue(sal_uInt16 nItemId);
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override;
     void acquire() noexcept override  { OWeakObject::acquire(); }
     void release() noexcept override  { OWeakObject::release(); }

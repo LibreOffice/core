@@ -24,7 +24,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableColumns.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -45,7 +45,7 @@ class ScTableColumnsObj : public UnoApiTest,
 public:
     ScTableColumnsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScTableColumnsObj);
@@ -93,7 +93,7 @@ ScTableColumnsObj::ScTableColumnsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScTableColumnsObj::init()
+uno::Reference<cpo::uno::XInterface> ScTableColumnsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);

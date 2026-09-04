@@ -48,7 +48,7 @@ using namespace dbtools;
 
 
 OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
-                       const css::uno::Reference< css::uno::XInterface >& _xStatement,
+                       const css::uno::Reference< cpo::uno::XInterface >& _xStatement,
                        bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
@@ -109,7 +109,7 @@ Sequence< sal_Int8 > OResultSet::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 Any OResultSet::queryInterface( const Type & rType )
 {
     Any aIface = OResultSetBase::queryInterface( rType );

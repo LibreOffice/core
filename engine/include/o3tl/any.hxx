@@ -21,7 +21,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -68,15 +68,15 @@ template<> struct Optional<double> {
 template<typename T> struct Optional<css::uno::Reference<T>> {
     using type = std::optional<css::uno::Reference<T> const>;
 };
-template<> struct Optional<css::uno::Reference<css::uno::XInterface>> {
-    using type = css::uno::Reference<css::uno::XInterface> const *;
+template<> struct Optional<css::uno::Reference<cpo::uno::XInterface>> {
+    using type = css::uno::Reference<cpo::uno::XInterface> const *;
 };
 
 template<typename> struct IsDerivedReference: std::false_type {};
 template<typename T> struct IsDerivedReference<css::uno::Reference<T>>:
     std::true_type
 {};
-template<> struct IsDerivedReference<css::uno::Reference<css::uno::XInterface>>:
+template<> struct IsDerivedReference<css::uno::Reference<cpo::uno::XInterface>>:
     std::false_type
 {};
 
@@ -143,11 +143,11 @@ template<typename T> inline
 typename std::enable_if<
     !(detail::IsDerivedReference<T>::value
       || detail::IsUnoSequenceType<T>::value
-      || std::is_base_of<css::uno::XInterface, T>::value),
+      || std::is_base_of<cpo::uno::XInterface, T>::value),
     typename detail::Optional<T>::type>::type
 tryAccess(cpo::uno::Any const & any) {
     // CHAR, STRING, TYPE, sequence types, enum types, struct types, exception
-    // types, and com.sun.star.uno.XInterface interface type:
+    // types, and cpo.uno.XInterface interface type:
     return cppu::UnoType<T>::get().isAssignableFrom(any.getValueType())
         ? static_cast<T const *>(any.getValue()) : nullptr;
 }
@@ -225,7 +225,7 @@ template<> detail::Optional<cpo::uno::Any>::type tryAccess<cpo::uno::Any>(
 
 /*
 
-// Already prevented by std::is_base_of<css::uno::XInterface, T> requiring T to
+// Already prevented by std::is_base_of<cpo::uno::XInterface, T> requiring T to
 // be complete:
 
 template<> detail::Optional<cppu::UnoVoidType>::type

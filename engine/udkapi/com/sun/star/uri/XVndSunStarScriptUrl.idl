@@ -46,7 +46,7 @@ module com { module sun { module star { module uri {
    without considering case folding or normalization.  There may be multiple
    parameters with equal keys.</p>
  */
-published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
+published interface XVndSunStarScriptUrl: cpo::uno::XInterface {
     /**
        returns the name part of this URL.
 

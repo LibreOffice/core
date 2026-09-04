@@ -33,7 +33,7 @@ interface XStorageChangeListener: com::sun::star::lang::XEventListener
             the new storage the document is based on
      */
     void notifyStorageChange(
-        [in] ::com::sun::star::uno::XInterface xDocument,
+        [in] ::cpo::uno::XInterface xDocument,
         [in] ::com::sun::star::embed::XStorage xStorage );
 };
 

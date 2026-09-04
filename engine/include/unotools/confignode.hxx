@@ -50,12 +50,12 @@ namespace utl
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
         bool        m_bEscapeNames;         /// escape names before accessing children ?
 
-        OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< css::uno::XInterface >& _xNode) const noexcept;
+        OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< cpo::uno::XInterface >& _xNode) const noexcept;
 
     protected:
         /// constructs a node object with an interface representing a node
         OConfigurationNode(
-            const css::uno::Reference< css::uno::XInterface >& _rxNode
+            const css::uno::Reference< cpo::uno::XInterface >& _rxNode
         );
 
         const css::uno::Reference< css::container::XNameAccess >&
@@ -166,7 +166,7 @@ namespace utl
         /** ctor for a readonly node
         */
         OConfigurationTreeRoot(
-            const css::uno::Reference< css::uno::XInterface >& _rxRootNode
+            const css::uno::Reference< cpo::uno::XInterface >& _rxRootNode
         );
 
     public:

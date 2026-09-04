@@ -45,7 +45,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
 import com.sun.star.view.XViewSettingsSupplier;

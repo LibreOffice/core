@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides methods to access the outlines of a sheet.
  */
-published interface XSheetOutline: com::sun::star::uno::XInterface
+published interface XSheetOutline: cpo::uno::XInterface
 {
 
     /** creates an outline group.

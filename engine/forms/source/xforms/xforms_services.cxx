@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
@@ -49,7 +49,7 @@ class Implementation:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_XForms_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

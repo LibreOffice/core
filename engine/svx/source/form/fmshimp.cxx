@@ -468,7 +468,7 @@ namespace
 
 // check if the control has one of the interfaces we can use for searching
 // *_pCurrentText will be filled with the current text of the control (as used when searching this control)
-bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _rxControl,
+bool IsSearchableControl( const css::uno::Reference< cpo::uno::XInterface>& _rxControl,
     OUString* _pCurrentText )
 {
     if ( !_rxControl.is() )

@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     <em>org.xml.sax.DocumentHandler</em> with some smaller
     adaptations.</p>
  */
-published interface XDocumentHandler: com::sun::star::uno::XInterface
+published interface XDocumentHandler: cpo::uno::XInterface
 {
 
     /** receives notification of the beginning of a document.

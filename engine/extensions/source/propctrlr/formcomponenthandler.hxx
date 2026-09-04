@@ -59,7 +59,7 @@ namespace pcr
         /// access to property states
         css::uno::Reference< css::beans::XPropertyState >             m_xPropertyState;
         /// the parent of our component
-        css::uno::Reference< css::uno::XInterface >                   m_xObjectParent;
+        css::uno::Reference< cpo::uno::XInterface >                   m_xObjectParent;
 
         /// the database connection. Owned by us if and only if we created it ourself.
         mutable ::dbtools::SharedConnection                           m_xRowSetConnection;

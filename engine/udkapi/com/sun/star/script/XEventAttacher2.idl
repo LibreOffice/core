@@ -20,7 +20,7 @@ interface XEventAttacher2: com::sun::star::script::XEventAttacher
      */
     sequence<com::sun::star::lang::XEventListener>
         attachMultipleEventListeners(
-            [in] com::sun::star::uno::XInterface xTarget,
+            [in] cpo::uno::XInterface xTarget,
             [in] sequence<com::sun::star::script::EventListener> aListeners )
            raises( com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::beans::IntrospectionException,

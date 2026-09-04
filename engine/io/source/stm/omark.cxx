@@ -359,7 +359,7 @@ Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.MarkableOutputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_OMarkableOutputStream_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -769,7 +769,7 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.MarkableInputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_OMarkableInputStream_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

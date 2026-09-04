@@ -226,7 +226,7 @@ void SwXContentControl::Impl::Notify(const SfxHint& rHint)
     m_bIsDisposed = true;
     m_pContentControl = nullptr;
     m_xText->Invalidate();
-    uno::Reference<uno::XInterface> xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> xThis(m_wThis);
     if (!xThis.is())
     {
         // If UNO object is already dead, don't refer to it in an event.

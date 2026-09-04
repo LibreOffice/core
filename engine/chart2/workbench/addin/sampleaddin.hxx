@@ -34,7 +34,7 @@
 
 #include <com/sun/star/chart/XChartDocument.hpp>
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
     SampleAddIn_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 

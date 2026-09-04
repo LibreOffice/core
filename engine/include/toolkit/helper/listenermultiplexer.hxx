@@ -52,7 +52,7 @@
 
 template <class ListenerT>
 class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) ListenerMultiplexerBase :
-                                public css::uno::XInterface
+                                public cpo::uno::XInterface
 {
 private:
     ::cppu::OWeakObject&    mrContext;
@@ -72,10 +72,10 @@ public:
     {
     }
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any  queryInterface(const cpo::uno::Type & rType) override
     {
-        return ::cppu::queryInterface(rType, static_cast<css::uno::XInterface*>(this));
+        return ::cppu::queryInterface(rType, static_cast<cpo::uno::XInterface*>(this));
     }
 
     void                        acquire() noexcept override  { mrContext.acquire(); }

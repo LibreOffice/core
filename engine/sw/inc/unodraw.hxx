@@ -196,7 +196,7 @@ class SwXShape : public SwXShapeBaseClass
 protected:
     virtual ~SwXShape() override;
 public:
-    SwXShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const*const pDoc);
+    SwXShape(css::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const*const pDoc);
 
     static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
@@ -255,7 +255,7 @@ class SwXGroupShape final :
 {
     virtual ~SwXGroupShape() override;
 public:
-    SwXGroupShape(css::uno::Reference<css::uno::XInterface> & xShape, SwDoc const* pDoc);
+    SwXGroupShape(css::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const* pDoc);
 
     virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;

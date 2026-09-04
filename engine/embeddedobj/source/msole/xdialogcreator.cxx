@@ -333,7 +333,7 @@ cpo::uno::Sequence< OUString > MSOLEDialogObjectCreator::getSupportedServiceName
              "com.sun.star.comp.embed.MSOLEObjectSystemCreator" };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embeddedobj_MSOLEDialogObjectCreator_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

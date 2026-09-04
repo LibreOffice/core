@@ -144,7 +144,7 @@ static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw embed::StorageWrappedTargetException(
                     u"Can't copy storage!"_ustr,
-                    uno::Reference< uno::XInterface >(),
+                    uno::Reference< cpo::uno::XInterface >(),
                     anyEx );
     }
 
@@ -196,7 +196,7 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
     aArguments.put( u"EmbeddedScriptSupport"_ustr, _bEmbeddedScriptSupport );
     aArguments.put( u"DocumentRecoverySupport"_ustr, i_bDocumentRecoverySupport );
 
-    uno::Reference< uno::XInterface > xDocument;
+    uno::Reference< cpo::uno::XInterface > xDocument;
     try
     {
         xDocument = _rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(

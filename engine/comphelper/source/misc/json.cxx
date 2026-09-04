@@ -29,7 +29,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <comphelper/json.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/genfunc.hxx>
@@ -594,7 +594,7 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
         }
         case cpo::uno::TypeClass_INTERFACE:
         {
-            auto const ptr = *static_cast<css::uno::XInterface* const*>(value);
+            auto const ptr = *static_cast<cpo::uno::XInterface* const*>(value);
             if (ptr == nullptr)
             {
                 buf.append("null");
@@ -917,7 +917,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
         {
             if (json == u"null")
             {
-                css::uno::XInterface* nullRef = nullptr;
+                cpo::uno::XInterface* nullRef = nullptr;
                 return cpo::uno::Any(&nullRef, type);
             }
             //TODO: non-null interface references need a JSContext-based path that can

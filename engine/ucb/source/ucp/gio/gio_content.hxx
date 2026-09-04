@@ -53,11 +53,11 @@ inline constexpr OUString GIO_FILE_TYPE = u"application/vnd.sun.staroffice.gio-f
 inline constexpr OUString GIO_FOLDER_TYPE = u"application/vnd.sun.staroffice.gio-folder"_ustr;
 
 cpo::uno::Any convertToException(GError *pError,
-    const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow=true);
+    const css::uno::Reference< cpo::uno::XInterface >& rContext, bool bThrow=true);
 /// @throws css::io::IOException
 /// @throws cpo::uno::RuntimeException
 void convertToIOException(GError *pError,
-    const css::uno::Reference< css::uno::XInterface >& rContext);
+    const css::uno::Reference< cpo::uno::XInterface >& rContext);
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper, public css::ucb::XContentCreator
@@ -111,7 +111,7 @@ private:
             const css::uno::Reference<
             css::ucb::XCommandEnvironment >& xEnv );
 
-    bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink );
+    bool feedSink( const css::uno::Reference< cpo::uno::XInterface>& aSink );
 
     bool exchangeIdentity(const css::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
 

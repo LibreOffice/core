@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     at the XFastParser, else this attribute is also unknown even if
     the local name is known.
  */
-interface XFastAttributeList: com::sun::star::uno::XInterface
+interface XFastAttributeList: cpo::uno::XInterface
 {
     /** checks if an attribute is available.<br>
 

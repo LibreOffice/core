@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
+interface XRegressionCurveCalculator : cpo::uno::XInterface
 {
     /** set calculation properties for curve calculation.
 

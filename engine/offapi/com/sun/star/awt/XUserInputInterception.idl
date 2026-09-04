@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module awt {
 /** Interface to add handlers for key and mouse events. A handler is not a passive
    listener, it can even consume the event.
  */
-published interface XUserInputInterception : ::com::sun::star::uno::XInterface
+published interface XUserInputInterception : ::cpo::uno::XInterface
 {
     /** Add a new listener that is called on ::com::sun::star::awt::KeyEvent.
         Every listener is

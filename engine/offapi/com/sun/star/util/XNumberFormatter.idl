@@ -24,7 +24,7 @@
 
 /** represents a number formatter.
  */
-published interface XNumberFormatter: com::sun::star::uno::XInterface
+published interface XNumberFormatter: cpo::uno::XInterface
 {
 
     /** attaches an XNumberFormatsSupplier to this

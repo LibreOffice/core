@@ -1419,7 +1419,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     if ( !xContainer.is() )
     {
         Any aValue;
-        css::uno::Reference< css::uno::XInterface > xMy(*this);
+        css::uno::Reference< cpo::uno::XInterface > xMy(*this);
         if (dbtools::getDataSourceSetting(xMy, bFormsContainer ? u"Forms"_ustr : u"Reports"_ustr, aValue))
         {
             OUString sSupportService;
@@ -1816,7 +1816,7 @@ void ODatabaseDocument::disposing()
         // the document. And upon closing, our controllers are closed, too
 
         {
-            uno::Reference<uno::XInterface> xUIInterface(m_xUIConfigurationManager);
+            uno::Reference<cpo::uno::XInterface> xUIInterface(m_xUIConfigurationManager);
             aKeepAlive.push_back(xUIInterface);
         }
         m_xUIConfigurationManager = nullptr;
@@ -1842,13 +1842,13 @@ void ODatabaseDocument::disposing()
         impl_disposeControllerFrames_nothrow();
 
         {
-            uno::Reference<uno::XInterface> xModuleInterface(m_xModuleManager);
+            uno::Reference<cpo::uno::XInterface> xModuleInterface(m_xModuleManager);
             aKeepAlive.push_back(xModuleInterface);
         }
         m_xModuleManager.clear();
 
         {
-            uno::Reference<uno::XInterface> xTitleInterface(cppu::getXWeak(m_xTitleHelper.get()));
+            uno::Reference<cpo::uno::XInterface> xTitleInterface(cppu::getXWeak(m_xTitleHelper.get()));
             aKeepAlive.push_back(xTitleInterface);
         }
         m_xTitleHelper.clear();
@@ -2099,7 +2099,7 @@ rtl::Reference< ::framework::TitleHelper > const & ODatabaseDocument::impl_getTi
     return m_xTitleHelper;
 }
 
-uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< uno::XInterface >& _xComponent)
+uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< cpo::uno::XInterface >& _xComponent)
 {
     if ( !m_xModuleManager.is() )
         m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext) );
@@ -2164,7 +2164,7 @@ void ODatabaseDocument::removeTitleChangeListener( const uno::Reference< frame::
 }
 
 // css.frame.XUntitledNumbers
-::sal_Int32 ODatabaseDocument::leaseNumber( const uno::Reference< uno::XInterface >& xComponent )
+::sal_Int32 ODatabaseDocument::leaseNumber( const uno::Reference< cpo::uno::XInterface >& xComponent )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     return impl_getUntitledHelper_throw(xComponent)->leaseNumber (xComponent);
@@ -2178,7 +2178,7 @@ void ODatabaseDocument::releaseNumber( ::sal_Int32 nNumber )
 }
 
 // css.frame.XUntitledNumbers
-void ODatabaseDocument::releaseNumberForComponent( const uno::Reference< uno::XInterface >& xComponent )
+void ODatabaseDocument::releaseNumberForComponent( const uno::Reference< cpo::uno::XInterface >& xComponent )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     impl_getUntitledHelper_throw(xComponent)->releaseNumberForComponent (xComponent);
@@ -2192,7 +2192,7 @@ OUString ODatabaseDocument::getUntitledPrefix()
 
 }   // namespace dbaccess
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseDocument(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

@@ -158,7 +158,7 @@ namespace dbaui
         or returns a data source when a model is given.
         @param _xObject Either a data source or a model.
     */
-    css::uno::Reference< css::uno::XInterface > getDataSourceOrModel(const css::uno::Reference< css::uno::XInterface >& _xObject);
+    css::uno::Reference< cpo::uno::XInterface > getDataSourceOrModel(const css::uno::Reference< cpo::uno::XInterface >& _xObject);
 
     /** maps css::awt::TextAlign to SvxCellHorJustify
         @param css::awt::TextAlign& _nAlignment

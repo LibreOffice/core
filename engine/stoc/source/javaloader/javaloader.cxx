@@ -547,7 +547,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     return loader->activate(rImplName, remoteArg, rLibName, xKey);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 stoc_JavaComponentLoader_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

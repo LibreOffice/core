@@ -59,7 +59,7 @@ namespace comphelper {
     }
 
     // Takes an interface
-    template <class T> T* getFromUnoTunnel(const css::uno::Reference<css::uno::XInterface>& xIface)
+    template <class T> T* getFromUnoTunnel(const css::uno::Reference<cpo::uno::XInterface>& xIface)
     {
         return getFromUnoTunnel<T>(
             css::uno::Reference<css::lang::XUnoTunnel>{ xIface, css::uno::UNO_QUERY });

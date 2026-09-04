@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/Any.hxx>
@@ -79,7 +79,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return ranges_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return ranges_; }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
         override;
@@ -133,7 +133,7 @@ class TextRunImpl: public cppu::WeakImplHelper<scriptinterop::XTextRun> {
 public:
     explicit TextRunImpl(css::uno::Reference<css::text::XTextRange> const & range): range_(range) {}
 
-    css::uno::Reference<css::uno::XInterface> getuno() override { return range_; }
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
 
     sal_Int16 getEscapement() override {
         sal_Int16 esc = 0;
@@ -203,7 +203,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return content_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return content_; }
 
     scriptinterop::ElementType getElementType() override {
         css::uno::Reference<css::beans::XPropertySet> const props(content_, css::uno::UNO_QUERY);
@@ -363,7 +363,7 @@ public:
         startOffset_ = probe->getString().getLength();
     }
 
-    css::uno::Reference<css::uno::XInterface> getuno() override { return range_; }
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
 
     css::uno::Reference<scriptinterop::XParagraph> getElement() override {
         return paragraph_.is() ? new ParagraphImpl(paragraph_) : nullptr;
@@ -410,7 +410,7 @@ class CursorImpl: public cppu::WeakImplHelper<scriptinterop::XCursor> {
 public:
     explicit CursorImpl(css::uno::Reference<css::frame::XModel> const & model): model_(model) {}
 
-    css::uno::Reference<css::uno::XInterface> getuno() override { return viewCursor(); }
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return viewCursor(); }
 
     css::uno::Reference<scriptinterop::XParagraph> getElement() override {
         auto const c = viewCursor();
@@ -480,7 +480,7 @@ public:
     explicit FootnoteImpl(css::uno::Reference<css::text::XFootnote> const & footnote):
         footnote_(footnote) {}
 
-    css::uno::Reference<css::uno::XInterface> getuno() override { return footnote_; }
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getParagraphs() override {
         return enumerateParagraphs(
@@ -495,7 +495,7 @@ class BodyImpl: public cppu::WeakImplHelper<scriptinterop::XBody> {
 public:
     explicit BodyImpl(css::uno::Reference<css::text::XText> const & text): text_(text) {}
 
-    css::uno::Reference<css::uno::XInterface> getuno() override { return text_; }
+    css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
     cpo::uno::Sequence<css::uno::Reference<scriptinterop::XParagraph>> getChildren() override {
         return enumerateParagraphs(text_);
@@ -515,7 +515,7 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getuno() override { return model_; }
+    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
 
     css::uno::Reference<scriptinterop::XSelection> SAL_CALL getSelection() override
     {

@@ -35,7 +35,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uri/RelativeUriExcessParentSegments.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -382,7 +382,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
         css::uno::Reference< css::lang::XMultiComponentFactory > factory(
             m_context->getServiceManager());
         if (factory.is()) {
-            css::uno::Reference< css::uno::XInterface > service;
+            css::uno::Reference< cpo::uno::XInterface > service;
             try {
                 service = factory->createInstanceWithContext(
                     serviceName, m_context);
@@ -691,7 +691,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_uri_UriReferenceFactory_get_implementation(cpo::uno::XComponentContext* rxContext,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

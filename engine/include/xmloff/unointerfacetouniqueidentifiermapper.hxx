@@ -27,12 +27,12 @@
 #include <deque>
 #include <map>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 namespace comphelper
 {
 
-typedef ::std::map< OUString, css::uno::Reference< css::uno::XInterface > > IdMap_t;
+typedef ::std::map< OUString, css::uno::Reference< cpo::uno::XInterface > > IdMap_t;
 
 class UnoInterfaceToUniqueIdentifierMapper
 {
@@ -44,14 +44,14 @@ public:
     /** returns a unique identifier for the given uno object. If a UNO object is
         registered more than once, the returned identifier is always the same.
     */
-    XMLOFF_DLLPUBLIC const OUString& registerReference( const css::uno::Reference< css::uno::XInterface >& rInterface );
+    XMLOFF_DLLPUBLIC const OUString& registerReference( const css::uno::Reference< cpo::uno::XInterface >& rInterface );
 
     /** registers the given uno object with the given identifier.
 
         @returns
             false, if the given identifier already exists and is not associated with the given interface
     */
-    bool registerReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
+    bool registerReference( const OUString& rIdentifier, const css::uno::Reference< cpo::uno::XInterface >& rInterface );
 
     /** reserves an identifier for later registration.
 
@@ -62,22 +62,22 @@ public:
 
     /** registers the given uno object with reserved identifier.
       */
-    bool registerReservedReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
+    bool registerReservedReference( const OUString& rIdentifier, const css::uno::Reference< cpo::uno::XInterface >& rInterface );
 
     /** @returns
             the identifier for the given uno object. If this uno object is not already
             registered, an empty string is returned
     */
-    XMLOFF_DLLPUBLIC const OUString& getIdentifier( const css::uno::Reference< css::uno::XInterface >& rInterface ) const;
+    XMLOFF_DLLPUBLIC const OUString& getIdentifier( const css::uno::Reference< cpo::uno::XInterface >& rInterface ) const;
 
     /** @returns
         the uno object that is registered with the given identifier. If no uno object
         is registered with the given identifier, an empty reference is returned.
     */
-    const css::uno::Reference< css::uno::XInterface >& getReference( const OUString& rIdentifier ) const;
+    const css::uno::Reference< cpo::uno::XInterface >& getReference( const OUString& rIdentifier ) const;
 
 private:
-    bool findReference( const css::uno::Reference< css::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
+    bool findReference( const css::uno::Reference< cpo::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
     bool findIdentifier( const OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const;
     bool findReserved( const OUString& rIdentifier ) const;
     bool findReserved( const OUString& rIdentifier, Reserved_t::const_iterator& rIter ) const;

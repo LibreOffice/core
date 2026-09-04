@@ -28,7 +28,7 @@ module com { module sun { module star { module bridge {
 
     <p>INTERNAL INTERFACE, DO NOT USE IT ELSEWHERE!</p>
 */
-published interface XProtocolProperties : com::sun::star::uno::XInterface
+published interface XProtocolProperties : cpo::uno::XInterface
 {
     /** called to get a list of bridge internal properties. Which properties can be retrieved,
         is protocol dependent.

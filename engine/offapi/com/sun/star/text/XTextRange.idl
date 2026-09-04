@@ -28,7 +28,7 @@
     be identical.
     </p>
  */
-published interface XTextRange: com::sun::star::uno::XInterface
+published interface XTextRange: cpo::uno::XInterface
 {
     /** @returns
                 the text interface in which the text position is contained.

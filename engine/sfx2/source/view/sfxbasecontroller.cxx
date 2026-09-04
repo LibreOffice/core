@@ -847,7 +847,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
         return;
 
     frame::BorderWidths aBWidths = getBorder();
-    Reference< uno::XInterface > xThis( getXWeak() );
+    Reference< cpo::uno::XInterface > xThis( getXWeak() );
 
     ::comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())

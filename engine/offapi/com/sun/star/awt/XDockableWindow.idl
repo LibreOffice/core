@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module awt {
         reside in its own decorated top level window.
     </p>
  */
-interface XDockableWindow : com::sun::star::uno::XInterface
+interface XDockableWindow : cpo::uno::XInterface
 {
 
     /** adds a docking listener to the object.

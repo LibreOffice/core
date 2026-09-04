@@ -37,7 +37,7 @@
     application has a reference to it.
     </p>
  */
-published interface XStruct: com::sun::star::uno::XInterface
+published interface XStruct: cpo::uno::XInterface
 {
 
     /** retrieves the SQL type name of the SQL structured type

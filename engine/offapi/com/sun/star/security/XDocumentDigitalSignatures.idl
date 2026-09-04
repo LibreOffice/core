@@ -27,7 +27,7 @@ module com { module sun { module star { module security {
     </p>
  */
 
-interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
+interface XDocumentDigitalSignatures : cpo::uno::XInterface
 {
     /** Signs the content of the document including text and pictures
         using the given XCertificate.

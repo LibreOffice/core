@@ -22,7 +22,7 @@ module com { module sun { module star { module mail {
 /**
    A factory for creating different mail services.
  */
-interface XMailServiceProvider: ::com::sun::star::uno::XInterface {
+interface XMailServiceProvider: ::cpo::uno::XInterface {
 
     /**
         A factory method.

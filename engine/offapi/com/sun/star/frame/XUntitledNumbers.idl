@@ -23,7 +23,7 @@
 /** knows all currently used and all free numbers for using with untitled
     but counted objects.
  */
-interface XUntitledNumbers : com::sun::star::uno::XInterface
+interface XUntitledNumbers : cpo::uno::XInterface
 {
     /** callee has to lease a number before he can use it within in its own title.
 
@@ -38,7 +38,7 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
         @throws [IllegalArgumentException]
                 if an invalid object reference was provided to this method.
      */
-    long leaseNumber ( [in] com::sun::star::uno::XInterface xComponent )
+    long leaseNumber ( [in] cpo::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** has to be used to mark those numbers as "free for using".
@@ -67,7 +67,7 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
         @throws [IllegalArgumentException]
                 if an invalid object reference was provided to this method.
      */
-    void releaseNumberForComponent ( [in] com::sun::star::uno::XInterface xComponent )
+    void releaseNumberForComponent ( [in] cpo::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** returns the localized string value to be used for untitled objects in

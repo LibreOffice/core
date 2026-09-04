@@ -55,7 +55,7 @@ namespace x11 {
         virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() = 0;
         virtual void clearTransferable() = 0;
         virtual void fireContentsChanged() = 0;
-        virtual css::uno::Reference< css::uno::XInterface > getReference() = 0;
+        virtual css::uno::Reference< cpo::uno::XInterface > getReference() = 0;
         // returns a reference that will keep the SelectionAdaptor alive until the
         // reference is released
 
@@ -437,7 +437,7 @@ namespace x11 {
         virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() noexcept override;
         virtual void clearTransferable() noexcept override;
         virtual void fireContentsChanged() noexcept override;
-        virtual css::uno::Reference< css::uno::XInterface > getReference() noexcept override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

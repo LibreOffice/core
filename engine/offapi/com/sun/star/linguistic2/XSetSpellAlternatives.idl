@@ -30,7 +30,7 @@ module com { module sun { module star { module linguistic2 {
 
     @see    com::sun::star::linguistic2::XSpellAlternatives
 */
-interface XSetSpellAlternatives : com::sun::star::uno::XInterface
+interface XSetSpellAlternatives : cpo::uno::XInterface
 {
     /**
         set the list of suggestions to be returned.

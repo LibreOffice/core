@@ -27,7 +27,7 @@ import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleComponent</code>

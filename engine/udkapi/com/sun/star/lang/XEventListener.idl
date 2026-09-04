@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module lang {
 
 /** base interface for all event listeners interfaces.
  */
-published interface XEventListener: com::sun::star::uno::XInterface
+published interface XEventListener: cpo::uno::XInterface
 {
     /** gets called when the broadcaster is about to be disposed.
 

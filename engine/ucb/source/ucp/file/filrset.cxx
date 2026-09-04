@@ -216,7 +216,7 @@ XResultSet_impl::OneMore(std::unique_lock<std::mutex>& rGuard)
         }
         else  // error fetching anything
         {
-            throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
+            throw sdbc::SQLException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
         }
     }
 }
@@ -339,7 +339,7 @@ bool SAL_CALL
 XResultSet_impl::relative( sal_Int32 row )
 {
     if( isAfterLast() || isBeforeFirst() )
-        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< cpo::uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
     if( row > 0 )
         while( row-- ) next();
     else if( row < 0 )
@@ -386,10 +386,10 @@ XResultSet_impl::rowDeleted()
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 XResultSet_impl::getStatement()
 {
-    return uno::Reference< uno::XInterface >();
+    return uno::Reference< cpo::uno::XInterface >();
 }
 
 

@@ -1123,7 +1123,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
     css::uno::Reference< css::lang::XSingleServiceFactory > xFac;
-    css::uno::Reference< css::uno::XInterface > xInst;
+    css::uno::Reference< cpo::uno::XInterface > xInst;
 
     if ( bPreferred )
         m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;

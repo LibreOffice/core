@@ -23,7 +23,7 @@
 
 /** allows converting between different measurement units
  */
-interface XUnitConversion: com::sun::star::uno::XInterface
+interface XUnitConversion: cpo::uno::XInterface
 {
     /** converts the given Point, which is specified in pixels, into the given logical unit
 

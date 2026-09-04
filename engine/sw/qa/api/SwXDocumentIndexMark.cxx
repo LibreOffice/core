@@ -40,7 +40,7 @@ class SwXDocumentIndexMark final : public UnoApiTest,
 public:
     SwXDocumentIndexMark();
 
-    Reference<XInterface> init() override;
+    Reference<cpo::uno::XInterface> init() override;
     uno::Reference<text::XTextRange> getTextRange() override;
     uno::Reference<text::XTextContent> getTextContent() override;
     bool isAttachSupported() override { return true; }
@@ -66,7 +66,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark()
 {
 }
 
-Reference<XInterface> SwXDocumentIndexMark::init()
+Reference<cpo::uno::XInterface> SwXDocumentIndexMark::init()
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -83,7 +83,7 @@ Reference<XInterface> SwXDocumentIndexMark::init()
         xMSF->createInstance(u"com.sun.star.text.DocumentIndex"_ustr), uno::UNO_QUERY_THROW);
     xText->insertTextContent(xCursor, xDIM, false);
 
-    return Reference<XInterface>(xDIM, UNO_QUERY_THROW);
+    return Reference<cpo::uno::XInterface>(xDIM, UNO_QUERY_THROW);
 }
 
 uno::Reference<text::XTextRange> SwXDocumentIndexMark::getTextRange() { return mxTextRange; }

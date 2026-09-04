@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module i18n {
     <p> Assumption: StartPos is inclusive and EndPos is exclusive. </p>
  */
 
-published interface XBreakIterator: com::sun::star::uno::XInterface
+published interface XBreakIterator: cpo::uno::XInterface
 {
     /** Traverses specified number of characters/cells in Text from
         <em>nStartPos</em> forwards.

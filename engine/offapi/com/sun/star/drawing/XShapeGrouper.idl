@@ -24,7 +24,7 @@
 
 /** specifies the group/ungroup functionality.
  */
-published interface XShapeGrouper: com::sun::star::uno::XInterface
+published interface XShapeGrouper: cpo::uno::XInterface
 {
 
     /** groups the Shapes inside a collection.

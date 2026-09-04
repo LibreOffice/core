@@ -127,7 +127,7 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_FilterOptionsDialog_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;

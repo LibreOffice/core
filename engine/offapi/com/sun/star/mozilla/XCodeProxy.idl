@@ -28,7 +28,7 @@
     @see XProxyRunner
     @see XMozillaBootstrap
  */
-published interface XCodeProxy: com::sun::star::uno::XInterface
+published interface XCodeProxy: cpo::uno::XInterface
 {
 
     /** all Mozilla XPCOM code must be called in run() or functions called by run()

@@ -246,7 +246,7 @@ public:
      */
     sal_Int32 addInterface(
         const sal_Int32 & rKey,
-        const css::uno::Reference< css::uno::XInterface > & r );
+        const css::uno::Reference< cpo::uno::XInterface > & r );
 
     /**
       Remove an element from the container specified with the key.
@@ -257,7 +257,7 @@ public:
      */
     sal_Int32 removeInterface(
         const sal_Int32 & rKey,
-        const css::uno::Reference< css::uno::XInterface > & rxIFace );
+        const css::uno::Reference< cpo::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all objects in the container that

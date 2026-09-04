@@ -175,7 +175,7 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeName
 public:
     explicit ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
-    OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) override
+    OUString SAL_CALL getCodeNameForObject( const uno::Reference< cpo::uno::XInterface >& xIf ) override
     {
         SolarMutexGuard aGuard;
         OUString sCodeName;
@@ -195,7 +195,7 @@ public:
                 sal_Int32 nCntrls = xFormControls->getCount();
                 for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
                 {
-                    uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                    uno::Reference< cpo::uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
                     bMatched = ( xControl == xIf );
                     if ( bMatched )
                     {
@@ -213,7 +213,7 @@ public:
         return sCodeName;
     }
 
-    OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer ) override
+    OUString SAL_CALL getCodeNameForContainer( const uno::Reference<cpo::uno::XInterface>& xContainer ) override
     {
         SolarMutexGuard aGuard;
         uno::Reference<container::XIndexAccess> xIndex(mrDocShell.GetModel()->getDrawPages(), uno::UNO_QUERY_THROW);
@@ -392,10 +392,10 @@ ScServiceProvider::Type ScServiceProvider::GetProviderType(std::u16string_view r
     return Type::INVALID;
 }
 
-uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
+uno::Reference<cpo::uno::XInterface> ScServiceProvider::MakeInstance(
                                     Type nType, ScDocShell* pDocShell )
 {
-    uno::Reference<uno::XInterface> xRet;
+    uno::Reference<cpo::uno::XInterface> xRet;
 
     switch (nType)
     {

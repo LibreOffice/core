@@ -126,8 +126,8 @@ protected:
                                        cpo::uno::Sequence< cpo::uno::Any >& OutParam);
 
     // UnoConversionUtilities -------------------------------------------------------------------------------
-    virtual css::uno::Reference<css::uno::XInterface> createUnoWrapperInstance() override;
-    virtual css::uno::Reference<css::uno::XInterface> createComWrapperInstance() override;
+    virtual css::uno::Reference<cpo::uno::XInterface> createUnoWrapperInstance() override;
+    virtual css::uno::Reference<cpo::uno::XInterface> createComWrapperInstance() override;
 
     /**Obtains a FUNCDESC structure for a function.
        Fills the FUNCDESC structure if ITypeInfo provides information for

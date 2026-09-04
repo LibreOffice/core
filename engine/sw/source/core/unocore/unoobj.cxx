@@ -2466,7 +2466,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
         cpo::uno::Any a(cppu::getCaughtException());
         throw lang::WrappedTargetException(
             "wrapped Exception " + e.Message,
-            uno::Reference<uno::XInterface>(), a);
+            uno::Reference<cpo::uno::XInterface>(), a);
     }
 }
 

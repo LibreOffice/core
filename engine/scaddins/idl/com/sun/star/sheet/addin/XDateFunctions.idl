@@ -30,7 +30,7 @@ module addin
     /**
      * Interface with date functions.
      */
-    interface XDateFunctions : com::sun::star::uno::XInterface
+    interface XDateFunctions : cpo::uno::XInterface
     {
         /// calculates the number of weeks between two dates.
         long getDiffWeeks(

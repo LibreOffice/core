@@ -228,7 +228,7 @@ OString JavaOptions::prepareHelp()
         "    -T<name>   = name specifies a type or a list of types. The output for this\n"
         "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n"
         "                 specified, then output for all types is generated.\n"
-        "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n"
+        "                 Example: 'cpo.uno.XInterface' is a valid type.\n"
         "    -nD        = no dependent types are generated.\n"
         "    -G         = generate only target files which does not exists.\n"
         "    -Gc        = generate only target files which content will be changed.\n"

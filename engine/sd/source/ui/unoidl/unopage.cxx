@@ -395,7 +395,7 @@ void SdGenericDrawPage::UpdateModel()
     mpSdrModel = SvxDrawPage::mpModel;
     if( mpSdrModel )
     {
-        uno::Reference< uno::XInterface > xModel( SvxDrawPage::mpModel->getUnoModel() );
+        uno::Reference< cpo::uno::XInterface > xModel( SvxDrawPage::mpModel->getUnoModel() );
         mpDocModel = comphelper::getFromUnoTunnel<SdXImpressDocument>( xModel );
     }
     else

@@ -24,7 +24,7 @@ module com { module sun { module star { module script { module provider {
     This interface provides a factory for obtaining objects implementing the
     XScriptProvider interface.
 */
-interface XScriptProviderFactory : ::com::sun::star::uno::XInterface {
+interface XScriptProviderFactory : ::cpo::uno::XInterface {
 
     /** a factory method for the creation of XScriptProviders
         implementations.

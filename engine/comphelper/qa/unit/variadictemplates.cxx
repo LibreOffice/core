@@ -41,7 +41,7 @@ template <typename T>
 void extract(
     ::cpo::uno::Sequence< ::cpo::uno::Any> const& seq,
     sal_Int32 nArg, T & v,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+    ::com::sun::star::uno::Reference< ::cpo::uno::XInterface>
     const& xErrorContext )
 {
     if (nArg >= seq.getLength()) {
@@ -63,7 +63,7 @@ template <typename T>
 void extract(
     ::cpo::uno::Sequence< ::cpo::uno::Any> const& seq,
     sal_Int32 nArg, ::std::optional<T> & v,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+    ::com::sun::star::uno::Reference< ::cpo::uno::XInterface>
     const& xErrorContext )
 {
     if (nArg < seq.getLength()) {
@@ -80,8 +80,8 @@ void unwrapArgsBaseline(
     ::cpo::uno::Sequence< ::cpo::uno::Any > const& seq,
     T0& v0, T1& v1, T2& v2, T3& v3, T4& v4,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface> const& xErrorContext =
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>() )
+    ::cpo::uno::XInterface> const& xErrorContext =
+    ::com::sun::star::uno::Reference< ::cpo::uno::XInterface>() )
 {
     ::detail::extract( seq, 0, v0, xErrorContext );
     ::detail::extract( seq, 1, v1, xErrorContext );

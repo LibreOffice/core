@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module container {
 
 /** This is the base interface of all collection interfaces.
  */
-published interface XElementAccess: com::sun::star::uno::XInterface
+published interface XElementAccess: cpo::uno::XInterface
 {
 
     /** @returns

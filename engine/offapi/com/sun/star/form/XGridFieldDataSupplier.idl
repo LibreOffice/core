@@ -36,7 +36,7 @@
 
     @deprecated
  */
-published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
+published interface XGridFieldDataSupplier: cpo::uno::XInterface
 {
     /** checks whether or not the content of the grid's columns can be retrieved in the requested format.
 

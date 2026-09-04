@@ -277,7 +277,7 @@ void UnoControlTabPage::windowShown( const css::lang::EventObject& ) {}
 
 void UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {}
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -285,7 +285,7 @@ stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
     return cppu::acquire(new UnoControlTabPageModel(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPage_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

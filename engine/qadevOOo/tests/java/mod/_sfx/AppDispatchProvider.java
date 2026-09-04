@@ -26,7 +26,7 @@ import lib.TestParameters;
 import util.dbg;
 import util.utils;
 
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  * Test for object which is represented by service

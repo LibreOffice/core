@@ -28,7 +28,7 @@ using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::XComponentContext;
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::cpo::uno::Any;
 using ::com::sun::star::sdbc::XRowSet;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -220,14 +220,14 @@ void OPatternModel::resetNoBroadcast()
 
 }   // namespace frm
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OPatternModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OPatternModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OPatternControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

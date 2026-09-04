@@ -294,7 +294,7 @@ cpo::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServ
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 ucb_UniversalContentBroker_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -793,7 +793,7 @@ bool UniversalContentBroker::getContentProviderData(
             {u"nodepath"_ustr, cpo::uno::Any(aFullPath.makeStringAndClear())}
         }));
 
-        uno::Reference< uno::XInterface > xInterface(
+        uno::Reference< cpo::uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     aArguments ) );

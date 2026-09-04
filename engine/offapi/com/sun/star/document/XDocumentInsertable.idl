@@ -25,7 +25,7 @@ module com {   module sun {   module star {   module document {
 /** Makes it possible to import a document from a given URL
     into this document.
  */
-published interface XDocumentInsertable: com::sun::star::uno::XInterface
+published interface XDocumentInsertable: cpo::uno::XInterface
 {
     /** Inserts the document that is specified by the URL.
         The document will be inserted at the current cursor position.

@@ -37,7 +37,7 @@ const std::unordered_map<std::u16string_view, std::u16string_view> s_typeNames{
     { u"System.Type", u"type" },
     { u"com.sun.star.uno.Any", u"any" },
     { u"com.sun.star.uno.UnoException", u"cpo.uno.Exception" },
-    { u"com.sun.star.uno.IQueryInterface", u"com.sun.star.uno.XInterface" },
+    { u"com.sun.star.uno.IQueryInterface", u"cpo.uno.XInterface" },
 };
 
 const std::unordered_map<OUString, typelib_TypeClass> s_typeClasses{
@@ -123,7 +123,7 @@ void map_uno_type_to_net(typelib_TypeDescriptionReference* pTDRef, OUStringBuffe
         case typelib_TypeClass_INTERFACE:
         {
             // These have the same name on both sides
-            if (u"com.sun.star.uno.XInterface"_ustr.equals(pTDRef->pTypeName))
+            if (u"cpo.uno.XInterface"_ustr.equals(pTDRef->pTypeName))
                 // Except XInterface, which does not exist on the .NET side
                 buffer.append(u"com.sun.star.uno.IQueryInterface");
             else

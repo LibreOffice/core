@@ -28,7 +28,7 @@ import util.SOfficeFactory;
 
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 /**
  *

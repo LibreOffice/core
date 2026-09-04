@@ -10611,7 +10611,7 @@ static cpo::uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>
     // create the special document module objects if they don't exist.
     BasicManager* pBasMgr = pDok->GetDocumentShell()->GetBasicManager();
 
-    uno::Reference< uno::XInterface > xIf;
+    uno::Reference< cpo::uno::XInterface > xIf;
     if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
         OUString sProj( u"Standard"_ustr );
@@ -10637,7 +10637,7 @@ static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxV
     bool bOk = false;
     try
     {
-        uno::Reference< uno::XInterface > xVBARange;
+        uno::Reference< cpo::uno::XInterface > xVBARange;
         uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( rDok, aRange );
         cpo::uno::Sequence< cpo::uno::Any > aArgs{ lcl_getSheetModule( xCellRange, &rDok ),
             cpo::uno::Any(xCellRange) };

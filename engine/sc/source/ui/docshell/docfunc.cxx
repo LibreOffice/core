@@ -832,11 +832,11 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     return aOperation.run();
 }
 
-static uno::Reference< uno::XInterface > GetDocModuleObject( const SfxObjectShell& rDocSh, const OUString& sCodeName )
+static uno::Reference< cpo::uno::XInterface > GetDocModuleObject( const SfxObjectShell& rDocSh, const OUString& sCodeName )
 {
     uno::Reference< lang::XMultiServiceFactory> xSF(rDocSh.GetModel(), uno::UNO_QUERY);
     uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
-    uno::Reference< uno::XInterface > xDocModuleApiObject;
+    uno::Reference< cpo::uno::XInterface > xDocModuleApiObject;
     if ( xSF.is() )
     {
         xVBACodeNamedObjectAccess.set( xSF->createInstance(u"ooo.vba.VBAObjectModuleObjectProvider"_ustr), uno::UNO_QUERY );

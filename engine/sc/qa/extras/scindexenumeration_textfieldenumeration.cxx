@@ -21,7 +21,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -35,7 +35,7 @@ class ScIndexEnumeration_TextFieldEnumeration : public UnoApiTest, public apites
 public:
     ScIndexEnumeration_TextFieldEnumeration();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_TextFieldEnumeration);
@@ -52,7 +52,7 @@ ScIndexEnumeration_TextFieldEnumeration::ScIndexEnumeration_TextFieldEnumeration
 {
 }
 
-uno::Reference<uno::XInterface> ScIndexEnumeration_TextFieldEnumeration::init()
+uno::Reference<cpo::uno::XInterface> ScIndexEnumeration_TextFieldEnumeration::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

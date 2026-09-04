@@ -120,7 +120,7 @@ protected:
     }
 
     template< typename T >
-    T getProperty( const css::uno::Reference< css::uno::XInterface >& obj, const OUString& name ) const
+    T getProperty( const css::uno::Reference< cpo::uno::XInterface >& obj, const OUString& name ) const
     {
         css::uno::Reference< css::beans::XPropertySet > properties( obj, css::uno::UNO_QUERY_THROW );
         T data = T();
@@ -133,7 +133,7 @@ protected:
         return data;
     }
 
-    bool isPropertyVoid(const css::uno::Reference<css::uno::XInterface>& object, const OUString& name) const
+    bool isPropertyVoid(const css::uno::Reference<cpo::uno::XInterface>& object, const OUString& name) const
     {
         if (!hasProperty(object, name))
             return false;
@@ -142,7 +142,7 @@ protected:
         return !properties->getPropertyValue(name).hasValue();
     }
 
-    bool hasProperty(const css::uno::Reference<css::uno::XInterface>& obj, const OUString& name) const;
+    bool hasProperty(const css::uno::Reference<cpo::uno::XInterface>& obj, const OUString& name) const;
 
     css::xml::AttributeData getUserDefineAttribute(const cpo::uno::Any& obj, const OUString& name, const OUString& rValue) const;
 
@@ -172,7 +172,7 @@ protected:
 
     /// get cell of a table; table can be retrieved with getParagraphOrTable
     css::uno::Reference<css::table::XCell> getCell(
-            css::uno::Reference<css::uno::XInterface> const& xTableIfc,
+            css::uno::Reference<cpo::uno::XInterface> const& xTableIfc,
             OUString const& rCell, OUString const& rContent = OUString());
 
     /// Get shape (counted from 1)

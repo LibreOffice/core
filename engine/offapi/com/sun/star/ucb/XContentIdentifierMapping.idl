@@ -41,7 +41,7 @@ module com { module sun { module star { module ucb {
     @see XContentIdentifier
 */
 
-published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
+published interface XContentIdentifierMapping: cpo::uno::XInterface
 {
     /** Map the string representation of an XContentIdentifier.
 

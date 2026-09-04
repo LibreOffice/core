@@ -1330,7 +1330,7 @@ librdf_Repository::destroyGraph(
 }
 
 bool isMetadatableWithoutMetadata(
-    uno::Reference<uno::XInterface> const & i_xNode)
+    uno::Reference<cpo::uno::XInterface> const & i_xNode)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( i_xNode, uno::UNO_QUERY );
     return (xMeta.is() && xMeta->getMetadataReference().Second.isEmpty());
@@ -2460,7 +2460,7 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 } // closing anonymous implementation namespace
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 unoxml_rdfRepository_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

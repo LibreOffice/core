@@ -986,7 +986,7 @@ void SwXFieldMaster::Impl::Notify(const SfxHint& rHint)
     {
         m_pDoc = nullptr;
         m_pType = nullptr;
-        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
         if (!xThis.is())
         {   // fdo#72695: if UNO object is already dead, don't revive it with event
             return;
@@ -2645,7 +2645,7 @@ void SwXTextField::Impl::Invalidate()
     EndListeningAll();
     m_pFormatField = nullptr;
     m_pDoc = nullptr;
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         return;
@@ -2763,7 +2763,7 @@ rtl::Reference<SwXFieldMaster> SwXTextFieldMasters::getFieldMasterByName(const O
     if( SwFieldIds::Unknown == nResId )
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
-            css::uno::Reference<css::uno::XInterface>());
+            css::uno::Reference<cpo::uno::XInterface>());
 
     sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
     auto& rDoc = GetDoc();
@@ -2771,7 +2771,7 @@ rtl::Reference<SwXFieldMaster> SwXTextFieldMasters::getFieldMasterByName(const O
     if(!pType)
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
-            css::uno::Reference<css::uno::XInterface>());
+            css::uno::Reference<cpo::uno::XInterface>());
 
     rtl::Reference<SwXFieldMaster> const xRet =
             SwXFieldMaster::CreateXFieldMaster(&rDoc, pType);
@@ -3091,7 +3091,7 @@ cpo::uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
     if (m_pImpl->m_nNextIndex >= static_cast<sal_Int32>(m_pImpl->m_Items.size()))
         throw container::NoSuchElementException(
             u"SwXFieldEnumeration::nextElement"_ustr,
-            css::uno::Reference<css::uno::XInterface>());
+            css::uno::Reference<cpo::uno::XInterface>());
 
     uno::Reference< text::XTextField >  &rxField =
         m_pImpl->m_Items[ m_pImpl->m_nNextIndex++ ];

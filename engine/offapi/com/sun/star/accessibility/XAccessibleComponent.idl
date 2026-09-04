@@ -62,7 +62,7 @@ module com { module sun { module star { module accessibility {
 
     @see XAccessibleExtendedComponent
 */
-interface XAccessibleComponent : ::com::sun::star::uno::XInterface
+interface XAccessibleComponent : ::cpo::uno::XInterface
 {
     /** Tests whether the specified point lies within this object's bounds.
 

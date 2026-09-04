@@ -24,7 +24,7 @@
 
 /** gives access to the tab controllers of a UnoControlContainer.
  */
-published interface XUnoControlContainer: com::sun::star::uno::XInterface
+published interface XUnoControlContainer: cpo::uno::XInterface
 {
 
     /** sets a set of tab controllers.

@@ -175,7 +175,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*f
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embedserv_EmbedServer(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

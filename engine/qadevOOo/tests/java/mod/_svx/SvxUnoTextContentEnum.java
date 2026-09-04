@@ -34,7 +34,7 @@ import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 public class SvxUnoTextContentEnum extends TestCase {
 

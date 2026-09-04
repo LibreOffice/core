@@ -376,7 +376,7 @@ Sequence< OUString > OTextInputStream::getSupportedServiceNames()
     return { u"com.sun.star.io.TextInputStream"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 io_OTextInputStream_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -35,7 +35,7 @@ namespace dbaui
 {
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::cpo::uno::Any;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
@@ -257,7 +257,7 @@ namespace dbaui
 
 } // namespace dbaui
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_dbaccess_OTextConnectionSettingsDialog_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

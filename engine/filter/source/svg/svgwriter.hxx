@@ -282,8 +282,8 @@ class SVGTextWriter final
     template< typename SubType >
     bool implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, bool& rbEmpty );
 
-    void implRegisterInterface( const css::uno::Reference< css::uno::XInterface >& rxIf );
-    const OUString & implGetValidIDFromInterface( const css::uno::Reference< css::uno::XInterface >& rxIf );
+    void implRegisterInterface( const css::uno::Reference< cpo::uno::XInterface >& rxIf );
+    const OUString & implGetValidIDFromInterface( const css::uno::Reference< cpo::uno::XInterface >& rxIf );
 };
 
 

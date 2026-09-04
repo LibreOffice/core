@@ -137,7 +137,7 @@ sal_Int16 SidebarPanelBase::getType()
     return ui::UIElementType::TOOLPANEL;
 }
 
-Reference<XInterface> SidebarPanelBase::getRealInterface()
+Reference<cpo::uno::XInterface> SidebarPanelBase::getRealInterface()
 {
     return getXWeak();
 }

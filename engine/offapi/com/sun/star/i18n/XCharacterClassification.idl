@@ -64,7 +64,7 @@ NUMBER=[SIGN]*(1*DIGIT  *(GRPSEP 1*DIGIT))[DECSEP]1*DIGIT[EXPONENT]
     and generic Unicode enabled parser.
  */
 
-published interface XCharacterClassification : com::sun::star::uno::XInterface
+published interface XCharacterClassification : cpo::uno::XInterface
 {
     /** Convert lower case alpha to upper case alpha, starting at
         position <em>nPos</em> for <em>nCount</em> code points.

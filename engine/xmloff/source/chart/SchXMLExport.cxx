@@ -4145,7 +4145,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
 
 // first version: everything goes in one storage
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLExporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -4157,7 +4157,7 @@ com_sun_star_comp_Chart_XMLExporter_get_implementation(cpo::uno::XComponentConte
 }
 
 // Oasis format
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(cpo::uno::XComponentContext* pCtx,
                                                             cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -4171,7 +4171,7 @@ com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(cpo::uno::XComponent
 
 // multiple storage version: one for content / styles / meta
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -4179,7 +4179,7 @@ com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
 }
 
 // Oasis format
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -4187,7 +4187,7 @@ com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
                                           SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -4196,7 +4196,7 @@ com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
                                               | SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
@@ -4208,7 +4208,7 @@ com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
 
 // Oasis format
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation(
     cpo::uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {

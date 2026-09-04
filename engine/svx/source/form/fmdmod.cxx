@@ -31,9 +31,9 @@
 using namespace ::svxform;
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
+::com::sun::star::uno::Reference< ::cpo::uno::XInterface >  SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
+    ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >  xRet;
 
     if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {

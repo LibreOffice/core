@@ -26,7 +26,7 @@
 
     @see Dim3DDiagram
  */
-published interface X3DDisplay: com::sun::star::uno::XInterface
+published interface X3DDisplay: cpo::uno::XInterface
 {
 
     /** @returns

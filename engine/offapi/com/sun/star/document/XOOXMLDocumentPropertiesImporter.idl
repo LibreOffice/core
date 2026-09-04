@@ -22,7 +22,7 @@ module com { module sun { module star { module document {
 
 /** allows to import the document properties from OOXML format
  */
-interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
+interface XOOXMLDocumentPropertiesImporter: cpo::uno::XInterface
 {
     /** allows to import the document properties from OOXML format
 

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_CONTAINER_XELEMENTACCESS_HXX
 #define INCLUDED_TEST_CONTAINER_XELEMENTACCESS_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
@@ -30,7 +30,7 @@ public:
     void testGetElementType();
     void testHasElements();
 
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
 
 protected:
     ~XElementAccess() {}

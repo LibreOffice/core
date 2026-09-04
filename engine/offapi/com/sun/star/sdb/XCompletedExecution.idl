@@ -23,7 +23,7 @@
 /** is used for execution where information for execution may be required from
     the user.
  */
-published interface XCompletedExecution: com::sun::star::uno::XInterface
+published interface XCompletedExecution: cpo::uno::XInterface
 {
 
     /** completes necessary information before execution, for example parameter values.

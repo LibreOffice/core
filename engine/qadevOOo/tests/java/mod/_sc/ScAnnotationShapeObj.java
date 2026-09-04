@@ -32,7 +32,7 @@ import com.sun.star.text.XSimpleText;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import lib.TestCase;
 import lib.TestEnvironment;

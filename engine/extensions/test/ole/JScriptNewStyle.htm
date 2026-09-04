@@ -207,11 +207,11 @@ function callOleTest(	 id)
 			var ob= new Object();
 			var valueObject= oletest._GetValueObject();
 			ob.value= "A JScript object!";
-			valueObject.Set("com.sun.star.uno.XInterface", ob);
+			valueObject.Set("cpo.uno.XInterface", ob);
 //			valueObject.Set("long", 5);
 			ar[i]= valueObject;
 		}
-		value.Set("[]com.sun.star.uno.XInterface", ar);
+		value.Set("[]cpo.uno.XInterface", ar);
 //		value.Set("[]long", ar);
 
 		ret	=	oletest.methodXInterface( value);
@@ -389,10 +389,10 @@ function callOleTest(	 id)
 			var ob= new Object();
 			var valueObject= oletest._GetValueObject();
 			ob.value= "A JScript object!";
-			valueObject.Set("com.sun.star.uno.XInterface", ob);
+			valueObject.Set("cpo.uno.XInterface", ob);
 			ar[i]= valueObject;
 		}
-		value.Set("[]com.sun.star.uno.XInterface", ar);
+		value.Set("[]cpo.uno.XInterface", ar);
 
 		oletest.AttrXInterface= value;
 		ret= oletest.AttrXInterface;

@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module sheet {
 
     @deprecated
  */
-published interface XConsolidatable: com::sun::star::uno::XInterface
+published interface XConsolidatable: cpo::uno::XInterface
 {
 
     /** creates a consolidation descriptor.

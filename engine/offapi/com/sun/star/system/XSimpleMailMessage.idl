@@ -25,7 +25,7 @@ module com { module sun { module star { module system {
 */
 
 
-published interface XSimpleMailMessage: com::sun::star::uno::XInterface
+published interface XSimpleMailMessage: cpo::uno::XInterface
 {
     /** To set the recipient of the simple mail message.
         @param aRecipient

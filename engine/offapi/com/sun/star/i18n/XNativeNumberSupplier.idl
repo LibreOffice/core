@@ -25,7 +25,7 @@ module com { module sun { module star { module i18n {
     numeral strings.
  */
 
-published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
+published interface XNativeNumberSupplier : ::cpo::uno::XInterface
 {
     /** Returns native number string for given number string.
 

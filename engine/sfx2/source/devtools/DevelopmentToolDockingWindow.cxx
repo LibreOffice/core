@@ -131,7 +131,7 @@ void DevelopmentToolDockingWindow::ToggleFloatingMode()
 }
 
 void DevelopmentToolDockingWindow::selectionChanged(
-    uno::Reference<uno::XInterface> const& xInterface)
+    uno::Reference<cpo::uno::XInterface> const& xInterface)
 {
     mxCurrentSelection = xInterface;
     updateSelection();
@@ -144,7 +144,7 @@ void DevelopmentToolDockingWindow::changeToCurrentSelection()
         cpo::uno::Any aAny = mxSelectionSupplier->getSelection();
         if (aAny.hasValue())
         {
-            auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
+            auto xInterface = aAny.get<css::uno::Reference<cpo::uno::XInterface>>();
             if (xInterface.is())
             {
                 maObjectInspectorTreeHandler.introspect(xInterface);

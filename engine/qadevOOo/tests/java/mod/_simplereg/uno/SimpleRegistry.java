@@ -19,7 +19,7 @@
 package mod._simplereg.uno;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

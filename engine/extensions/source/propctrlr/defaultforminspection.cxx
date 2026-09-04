@@ -36,7 +36,7 @@ namespace pcr
 
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::inspection::PropertyCategoryDescriptor;
     using ::com::sun::star::ucb::AlreadyInitializedException;
@@ -203,7 +203,7 @@ namespace pcr
 
 } // namespace pcr
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 extensions_propctrlr_DefaultFormComponentInspectorModel_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

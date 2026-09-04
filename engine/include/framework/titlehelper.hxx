@@ -39,7 +39,7 @@ namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XModel3; }
 namespace com::sun::star::frame { class XUntitledNumbers; }
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 
 namespace framework{
@@ -75,7 +75,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
                     provides the right string and number for  an untitled component.
          */
         TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xContext,
-            const css::uno::Reference< css::uno::XInterface >& xOwner,
+            const css::uno::Reference< cpo::uno::XInterface >& xOwner,
             const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
 
         /** @short  free all internally used resources.
@@ -131,7 +131,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
         void impl_updateListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
 
         static void impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
-                                        const css::uno::Reference< css::uno::XInterface >& xComponent);
+                                        const css::uno::Reference< cpo::uno::XInterface >& xComponent);
         static void impl_appendProductName (OUStringBuffer& sTitle);
         void impl_appendModuleName (OUStringBuffer& sTitle);
         static void impl_appendDebugVersion (OUStringBuffer& sTitle);
@@ -148,7 +148,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
         css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 
         /** reference to the outside UNO class using this helper. */
-        cpo::uno::WeakReference< css::uno::XInterface > m_xOwner;
+        cpo::uno::WeakReference< cpo::uno::XInterface > m_xOwner;
 
         /** used to know how an "Untitled X" string can be created right :-) */
         cpo::uno::WeakReference< css::frame::XUntitledNumbers > m_xUntitledNumbers;

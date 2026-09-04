@@ -1553,7 +1553,7 @@ namespace cmis
         return aRet;
     }
 
-    bool Content::feedSink( const uno::Reference< uno::XInterface>& xSink,
+    bool Content::feedSink( const uno::Reference< cpo::uno::XInterface>& xSink,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( !xSink.is() )
@@ -1779,7 +1779,7 @@ namespace cmis
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
                 "wrapped Exception " + e.Message,
-                uno::Reference<uno::XInterface>(), a);
+                uno::Reference<cpo::uno::XInterface>(), a);
         }
         return sRet;
     }
@@ -1983,7 +1983,7 @@ namespace cmis
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
                 "wrapped Exception " + e.Message,
-                uno::Reference<uno::XInterface>(), a);
+                uno::Reference<cpo::uno::XInterface>(), a);
         }
 
         static cppu::OTypeCollection s_aFileCollection
@@ -2045,7 +2045,7 @@ namespace cmis
             cpo::uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException(
                 "wrapped Exception " + e.Message,
-                uno::Reference<uno::XInterface>(), a);
+                uno::Reference<cpo::uno::XInterface>(), a);
         }
         return {};
     }

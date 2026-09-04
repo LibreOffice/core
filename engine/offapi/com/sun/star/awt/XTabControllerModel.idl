@@ -24,7 +24,7 @@
 
 /** specifies the basic operations for a tab controller model.
  */
-published interface XTabControllerModel: com::sun::star::uno::XInterface
+published interface XTabControllerModel: cpo::uno::XInterface
 {
 
     /** returns whether the control models are grouped together.

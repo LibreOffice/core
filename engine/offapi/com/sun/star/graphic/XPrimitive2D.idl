@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module graphic {
     - to provide a decomposition consisting of simpler graphic primitives
     - to provide a 2D bound rectangle as a 2D range
  */
-interface XPrimitive2D : ::com::sun::star::uno::XInterface
+interface XPrimitive2D : ::cpo::uno::XInterface
 {
     /** Retrieve decomposed list of simpler primitives
 

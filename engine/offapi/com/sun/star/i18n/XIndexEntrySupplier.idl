@@ -26,7 +26,7 @@ module com { module sun { module star { module i18n {
     alphabetical index" for a given locale.
 */
 
-published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
+published interface XIndexEntrySupplier : cpo::uno::XInterface
 {
     /**
         returns the capital index key for sorting a table of indexes, to

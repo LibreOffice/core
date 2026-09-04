@@ -831,7 +831,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
     return 2 == nDicVersion || nDicVersion >= 5;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 linguistic_DicList_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

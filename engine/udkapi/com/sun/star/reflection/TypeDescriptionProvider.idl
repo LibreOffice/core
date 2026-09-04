@@ -37,7 +37,7 @@ published service TypeDescriptionProvider
     /** Interface to retrieve type descriptions.
 
         <p>Names are given in dotted notation, for example
-        <code>"com.sun.star.uno.XInterface"</code>.</p>
+        <code>"cpo.uno.XInterface"</code>.</p>
 
         </p>The returned values are generally non-null references of type
         XTypeDescription.  However, before LibreOffice&nbsp;4.1,

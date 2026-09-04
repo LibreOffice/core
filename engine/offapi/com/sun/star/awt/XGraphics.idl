@@ -28,7 +28,7 @@ published interface XDevice;
 
 /** provides the basic output operation of a device.
  */
-published interface XGraphics: com::sun::star::uno::XInterface
+published interface XGraphics: cpo::uno::XInterface
 {
     /** returns the device of this graphics.
      */

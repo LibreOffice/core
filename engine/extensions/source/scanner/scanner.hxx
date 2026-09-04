@@ -74,6 +74,6 @@ public:
  };
 
 /// @throws Exception
-css::uno::Reference< css::uno::XInterface > ScannerManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxFactory );
+css::uno::Reference< cpo::uno::XInterface > ScannerManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxFactory );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-interface XSheetRange: com::sun::star::uno::XInterface
+interface XSheetRange: cpo::uno::XInterface
 {
     /** @returns
                 selection from given string range

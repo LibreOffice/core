@@ -26,7 +26,7 @@
 
     <p>This is similar to the abstract window toolkit (AWT) in Java.</p>
  */
-published interface XToolkit: com::sun::star::uno::XInterface
+published interface XToolkit: cpo::uno::XInterface
 {
 
     /** returns the desktop window.

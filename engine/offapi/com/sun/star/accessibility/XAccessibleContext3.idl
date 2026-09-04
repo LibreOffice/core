@@ -23,7 +23,7 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to speed up operations when iterating over large amounts of children.
 */
-interface XAccessibleContext3 : ::com::sun::star::uno::XInterface
+interface XAccessibleContext3 : ::cpo::uno::XInterface
 {
     /** Return the children.
 

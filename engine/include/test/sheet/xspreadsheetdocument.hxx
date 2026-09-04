@@ -19,7 +19,7 @@ class XSpreadsheetDocument
 public:
     XSpreadsheetDocument(sal_Int32 nSheets) : mnSheets(nSheets) {}
 
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
 
     void testGetSheets();
 

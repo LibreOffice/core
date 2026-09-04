@@ -56,8 +56,8 @@ public:
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
-    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
+    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< cpo::uno::XInterface >& Object ) override;
     virtual void SAL_CALL revokeObject( const OUString& Name ) override;
 };
 
@@ -112,7 +112,7 @@ void NamingService_Impl::revokeObject( const OUString& Name )
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 stoc_NamingService_Impl_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

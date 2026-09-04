@@ -38,7 +38,7 @@ void EventListenerMultiplexer::release() noexcept
     return ListenerMultiplexerBase::release();
 }
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 cpo::uno::Any EventListenerMultiplexer::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,

@@ -86,8 +86,8 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
     const cpo::uno::Sequence< cpo::uno::Any >             m_aInitArgs;
     PropertySetMap_Impl               m_aPropSets;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
-    css::uno::Reference< css::uno::XInterface >           m_xRootReadAccess;
-    css::uno::Reference< css::uno::XInterface >           m_xRootWriteAccess;
+    css::uno::Reference< cpo::uno::XInterface >           m_xRootReadAccess;
+    css::uno::Reference< cpo::uno::XInterface >           m_xRootWriteAccess;
     std::mutex                        m_aMutex;
     bool                              m_bTriedToGetRootReadAccess;
     bool                              m_bTriedToGetRootWriteAccess;
@@ -135,14 +135,14 @@ public:
     hasByName( const OUString& aName ) override;
 
     // Non-interface methods
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
     getRootConfigReadAccess();
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
     getConfigWriteAccess( const OUString& rPath );
 private:
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
     getRootConfigReadAccessImpl(std::unique_lock<std::mutex>& l);
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
     getConfigWriteAccessImpl( std::unique_lock<std::mutex>& l, const OUString& rPath );
 };
 

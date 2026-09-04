@@ -26,7 +26,7 @@ module star
 module chart2
 {
 
-interface XDataSeriesContainer : com::sun::star::uno::XInterface
+interface XDataSeriesContainer : cpo::uno::XInterface
 {
     /** add a data series to the data series container
 

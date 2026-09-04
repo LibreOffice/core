@@ -14,7 +14,7 @@ module com {  module sun {  module star {  module sheet {
 /** provides functions to manage the sheet local databases
  */
 
-interface XUnnamedDatabaseRanges: com::sun::star::uno::XInterface
+interface XUnnamedDatabaseRanges: cpo::uno::XInterface
  {
     void setByTable( [in] com::sun::star::table::CellRangeAddress aRange )
         raises( com::sun::star::lang::IndexOutOfBoundsException );

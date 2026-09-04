@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XTextBoxShape: com::sun::star::uno::XInterface
+interface XTextBoxShape: cpo::uno::XInterface
 {
     [attribute] string  Text;
     ::ooo::vba::excel::XCharacters characters([in] any Start, [in] any Length);

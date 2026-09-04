@@ -103,7 +103,7 @@ SdtHelper::~SdtHelper() = default;
 void SdtHelper::loadPropertiesXMLs()
 {
     // Initialize properties xml storage (m_xPropertiesXMLs)
-    uno::Reference<uno::XInterface> xTemp
+    uno::Reference<cpo::uno::XInterface> xTemp
         = m_xComponentContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.document.OOXMLDocumentPropertiesImporter"_ustr, m_xComponentContext);
     uno::Reference<document::XOOXMLDocumentPropertiesImporter> xImporter(xTemp, uno::UNO_QUERY);

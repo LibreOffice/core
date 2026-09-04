@@ -160,7 +160,7 @@ cpo::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceName
 
 } // namespace vcl
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 vcl_FontIdentificator_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -23,7 +23,7 @@ import util.XInstCreator;
 
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 
 /**

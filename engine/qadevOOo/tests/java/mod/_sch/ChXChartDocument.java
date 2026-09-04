@@ -21,7 +21,7 @@ import com.sun.star.chart.XChartData;
 import com.sun.star.chart.XChartDocument;
 import com.sun.star.frame.XController;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.view.XSelectionSupplier;
 
 import java.io.PrintWriter;

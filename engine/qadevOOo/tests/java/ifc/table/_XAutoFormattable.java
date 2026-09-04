@@ -28,7 +28,7 @@ import com.sun.star.table.XAutoFormattable;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 
 /**

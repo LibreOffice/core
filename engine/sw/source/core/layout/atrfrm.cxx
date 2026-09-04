@@ -2014,7 +2014,7 @@ bool SwFormatURL::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         case MID_URL_CLIENTMAP:
         {
-            uno::Reference< uno::XInterface > xInt;
+            uno::Reference< cpo::uno::XInterface > xInt;
             if(m_pMap)
             {
                 xInt = SvUnoImageMap_createInstance( *m_pMap, sw_GetSupportedMacroItems() );

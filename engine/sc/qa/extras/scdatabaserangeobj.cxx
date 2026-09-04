@@ -32,8 +32,8 @@ class ScDatabaseRangeObj : public UnoApiTest,
 public:
     virtual void setUp() override;
 
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< uno::XInterface > init( const OUString& rDBName ) override;
+    virtual uno::Reference< cpo::uno::XInterface > init() override;
+    virtual uno::Reference< cpo::uno::XInterface > init( const OUString& rDBName ) override;
 
     ScDatabaseRangeObj();
 
@@ -71,12 +71,12 @@ ScDatabaseRangeObj::ScDatabaseRangeObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDatabaseRangeObj::init()
+uno::Reference<cpo::uno::XInterface> ScDatabaseRangeObj::init()
 {
     return init(u"DataArea"_ustr);
 }
 
-uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBName )
+uno::Reference< cpo::uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBName )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 

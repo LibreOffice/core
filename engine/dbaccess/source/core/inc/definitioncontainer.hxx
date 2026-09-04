@@ -150,12 +150,12 @@ public:
     */
     ODefinitionContainer(
           const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-        , const css::uno::Reference< css::uno::XInterface >&  _xParentContainer
+        , const css::uno::Reference< cpo::uno::XInterface >&  _xParentContainer
         , const TContentPtr& _pImpl
         , bool _bCheckSlash = true
         );
 
-// css::uno::XInterface
+// cpo::uno::XInterface
     DECLARE_XINTERFACE( )
 
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
@@ -286,7 +286,7 @@ protected:
             ListenerType _eType
         );
 
-    operator css::uno::Reference< css::uno::XInterface > () const
+    operator css::uno::Reference< cpo::uno::XInterface > () const
     {
         return const_cast< XContainer* >( static_cast< const XContainer* >( this ) );
     }

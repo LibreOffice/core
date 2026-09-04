@@ -23,7 +23,7 @@
 /** can be used to find out about the types and properties
     of the columns in a ResultSet.
  */
-published interface XResultSetMetaData: com::sun::star::uno::XInterface
+published interface XResultSetMetaData: cpo::uno::XInterface
 {
 
     /** returns the number of columns in this ResultSet.

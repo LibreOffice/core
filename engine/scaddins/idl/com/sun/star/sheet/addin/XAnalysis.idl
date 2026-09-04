@@ -30,7 +30,7 @@ module addin
     /**
     * Interface with analysis functions.
     */
-    interface XAnalysis : com::sun::star::uno::XInterface
+    interface XAnalysis : cpo::uno::XInterface
     {
         /// workday.
         long getWorkday(

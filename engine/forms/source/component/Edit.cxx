@@ -194,7 +194,7 @@ void OEditControl::keyPressed(const css::awt::KeyEvent& e)
         return;
 
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
-    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
+    css::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
 
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(OEditControl, OnKeyPressed, void*, void)
     m_nKeyEvent = nullptr;
 
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
-    css::uno::Reference<css::uno::XInterface>  xParent = xFComp->getParent();
+    css::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl>(), css::awt::MouseEvent() );
@@ -700,14 +700,14 @@ Any OEditModel::getDefaultForReset() const
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OEditModel_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OEditModel(component));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OEditControl_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

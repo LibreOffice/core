@@ -470,9 +470,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	XNamingService \
 	XUnloadingPreference \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
-	XInterface \
-))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uri,\
 	RelativeUriExcessParentSegments \
 	XExternalUriReferenceTranslator \
@@ -494,6 +491,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	XAggregation \
 	XComponentContext \
 	XCurrentContext \
+	XInterface \
 	XReference \
 	XWeak \
 ))

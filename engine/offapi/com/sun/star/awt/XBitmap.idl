@@ -24,7 +24,7 @@
 
 /** provides a bitmap in the Microsoft DIB format.
  */
-published interface XBitmap: com::sun::star::uno::XInterface
+published interface XBitmap: cpo::uno::XInterface
 {
 
     /** returns the size of the bitmap in pixel.

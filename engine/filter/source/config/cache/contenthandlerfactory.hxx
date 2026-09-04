@@ -63,9 +63,9 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< css::uno::XInterface > createInstance(const OUString& sHandler) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > createInstance(const OUString& sHandler) override;
 
-        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments(const OUString&                     sHandler  ,
+        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(const OUString&                     sHandler  ,
                                                                                                  const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;

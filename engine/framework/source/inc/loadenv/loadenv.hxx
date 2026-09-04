@@ -169,7 +169,7 @@ private:
     /** @short  it holds one (!) asynchronous used contenthandler or frameloader
                 alive, till the asynchronous operation will be finished.
      */
-    css::uno::Reference< css::uno::XInterface > m_xAsynchronousJob;
+    css::uno::Reference< cpo::uno::XInterface > m_xAsynchronousJob;
 
     /** @short  holds the information about the finished load process.
 
@@ -347,7 +347,7 @@ public:
     void impl_setResult(bool bResult);
 
     /** TODO document me ... */
-    css::uno::Reference< css::uno::XInterface > impl_searchLoader();
+    css::uno::Reference< cpo::uno::XInterface > impl_searchLoader();
 
     /** @short  it means; show the frame, bring it to front,
                 might set the right icon etcpp. in case loading was

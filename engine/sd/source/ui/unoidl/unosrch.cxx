@@ -193,9 +193,9 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     sal_Int32 nSequence = 32;
     sal_Int32 nFound    = 0;
 
-    cpo::uno::Sequence < uno::Reference< uno::XInterface >  > aSeq( nSequence );
+    cpo::uno::Sequence < uno::Reference< cpo::uno::XInterface >  > aSeq( nSequence );
 
-    uno::Reference< uno::XInterface > * pArray = aSeq.getArray();
+    uno::Reference< cpo::uno::XInterface > * pArray = aSeq.getArray();
 
     uno::Reference< drawing::XShapes >  xShapes;
     uno::Reference< drawing::XShape >  xShape;
@@ -276,13 +276,13 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     return xRet;
 }
 
-uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     uno::Reference< text::XTextRange > xRange( GetCurrentShape(), uno::UNO_QUERY );
     if( xRange.is() )
         return findNext( xRange, xDesc );
 
-    return uno::Reference< uno::XInterface > ();
+    return uno::Reference< cpo::uno::XInterface > ();
 }
 
 uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() const noexcept
@@ -296,11 +296,11 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
 
 }
 
-uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const css::uno::Reference< css::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const css::uno::Reference< cpo::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     SdUnoSearchReplaceDescriptor* pDescr = dynamic_cast<SdUnoSearchReplaceDescriptor*>( xDesc.get() );
 
-    uno::Reference< uno::XInterface > xFound;
+    uno::Reference< cpo::uno::XInterface > xFound;
 
     uno::Reference< text::XTextRange > xRange( xStartAt, uno::UNO_QUERY );
     if(pDescr && xRange.is() )
@@ -733,7 +733,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const 
 
 /* ================================================================= */
 
-SdUnoFindAllAccess::SdUnoFindAllAccess( cpo::uno::Sequence< uno::Reference< uno::XInterface >  > const & rSequence ) noexcept
+SdUnoFindAllAccess::SdUnoFindAllAccess( cpo::uno::Sequence< uno::Reference< cpo::uno::XInterface >  > const & rSequence ) noexcept
 :maSequence( rSequence )
 {
 }

@@ -73,7 +73,7 @@ void SwXBookmark::Impl::Notify(const SfxHint& rHint)
     {
         m_pRegisteredBookmark = nullptr;
         m_pDoc = nullptr;
-        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
         if (!xThis.is())
         {   // fdo#72695: if UNO object is already dead, don't revive it with event
             return;
@@ -168,7 +168,7 @@ rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
 }
 
 ::sw::mark::MarkBase const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
-        const uno::Reference<uno::XInterface> & xUT)
+        const uno::Reference<cpo::uno::XInterface> & xUT)
 {
     SwXBookmark *const pXBkm = dynamic_cast<SwXBookmark*>(xUT.get());
     if (pXBkm && (pDoc == pXBkm->m_pImpl->m_pDoc))

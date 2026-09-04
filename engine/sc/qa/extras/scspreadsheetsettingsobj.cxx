@@ -12,7 +12,7 @@
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -27,7 +27,7 @@ class ScSpreadsheetSettingsObj : public UnoApiTest,
 public:
     ScSpreadsheetSettingsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScSpreadsheetSettingsObj);
@@ -55,7 +55,7 @@ ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScSpreadsheetSettingsObj::init()
+uno::Reference<cpo::uno::XInterface> ScSpreadsheetSettingsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     return xDoc;

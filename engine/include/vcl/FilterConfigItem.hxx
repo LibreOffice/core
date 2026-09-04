@@ -35,11 +35,11 @@
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::task { class XStatusIndicator; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 
 class VCL_DLLPUBLIC FilterConfigItem
 {
-    css::uno::Reference< css::uno::XInterface > xUpdatableView;
+    css::uno::Reference< cpo::uno::XInterface > xUpdatableView;
     css::uno::Reference< css::beans::XPropertySet > xPropSet;
     cpo::uno::Sequence< css::beans::PropertyValue > aFilterData;
 

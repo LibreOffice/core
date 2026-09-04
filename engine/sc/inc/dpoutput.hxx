@@ -159,7 +159,7 @@ public:
 
     static void GetDataDimensionNames(
         OUString& rSourceName, OUString& rGivenName,
-        const css::uno::Reference< css::uno::XInterface>& xDim );
+        const css::uno::Reference< cpo::uno::XInterface>& xDim );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

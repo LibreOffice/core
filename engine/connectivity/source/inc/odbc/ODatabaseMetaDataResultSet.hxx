@@ -124,9 +124,9 @@ namespace connectivity::odbc
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
-        css::uno::Reference< css::uno::XInterface > operator *()
+        css::uno::Reference< cpo::uno::XInterface > operator *()
         {
-            return css::uno::Reference< css::uno::XInterface >(*static_cast<ODatabaseMetaDataResultSet_BASE*>(this));
+            return css::uno::Reference< cpo::uno::XInterface >(*static_cast<ODatabaseMetaDataResultSet_BASE*>(this));
         }
         // XResultSet
         virtual bool next(  ) override;
@@ -146,7 +146,7 @@ namespace connectivity::odbc
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
         // XRow
         virtual bool wasNull(  ) override;
         virtual OUString getString( sal_Int32 columnIndex ) override;

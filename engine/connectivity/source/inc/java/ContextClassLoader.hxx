@@ -51,7 +51,7 @@ namespace connectivity::jdbc
             JNIEnv& environment,
             const GlobalRef< jobject >& newClassLoader,
             const ::comphelper::EventLogger& _rLoggerForErrors,
-            const css::uno::Reference< css::uno::XInterface >& _rxErrorContext
+            const css::uno::Reference< cpo::uno::XInterface >& _rxErrorContext
         );
 
         ~ContextClassLoaderScope();

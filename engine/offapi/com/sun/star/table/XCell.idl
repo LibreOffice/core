@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module table {
 
     @see com::sun::star::table::Cell
  */
-published interface XCell: com::sun::star::uno::XInterface
+published interface XCell: cpo::uno::XInterface
 {
 
     /** returns the formula string of a cell.

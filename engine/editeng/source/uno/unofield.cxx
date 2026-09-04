@@ -870,9 +870,9 @@ bool SvxUnoTextField::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Reference< uno::XInterface > SvxUnoTextCreateTextField( std::u16string_view ServiceSpecifier )
+uno::Reference< cpo::uno::XInterface > SvxUnoTextCreateTextField( std::u16string_view ServiceSpecifier )
 {
-    uno::Reference< uno::XInterface > xRet;
+    uno::Reference< cpo::uno::XInterface > xRet;
 
     // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.

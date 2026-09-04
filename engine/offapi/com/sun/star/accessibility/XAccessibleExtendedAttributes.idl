@@ -19,7 +19,7 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleExtendedAttributes : ::com::sun::star::uno::XInterface
+interface XAccessibleExtendedAttributes : ::cpo::uno::XInterface
 {
     /** Returns the attributes specific to this object, like a cell's formula. */
     string getExtendedAttributes() raises (::com::sun::star::lang::IndexOutOfBoundsException);

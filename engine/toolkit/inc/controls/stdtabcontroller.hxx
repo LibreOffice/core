@@ -52,7 +52,7 @@ public:
 
     static css::uno::Reference< css::awt::XControl >  FindControl( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
     cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        release() noexcept override  { OWeakAggObject::release(); }

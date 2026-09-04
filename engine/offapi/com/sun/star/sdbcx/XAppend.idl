@@ -25,7 +25,7 @@
 
 /** is used for creating and appending new objects to a specific container.
  */
-published interface XAppend: com::sun::star::uno::XInterface
+published interface XAppend: cpo::uno::XInterface
 {
 
     /** creates a new object using the given descriptor and appends it

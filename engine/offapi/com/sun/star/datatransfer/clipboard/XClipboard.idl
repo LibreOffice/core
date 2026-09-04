@@ -26,7 +26,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
  published interface XClipboardListener;
  published interface XClipboardOwner;
 
-published interface XClipboard: com::sun::star::uno::XInterface
+published interface XClipboard: cpo::uno::XInterface
 {
     /** To get the current content of the clipboard.
 

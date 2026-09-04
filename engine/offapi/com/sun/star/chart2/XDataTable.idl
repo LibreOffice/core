@@ -21,7 +21,7 @@ module chart2
     The data table of a chart is an chart element, that shows the
     values used to visualize the chart in a table.
  */
-interface XDataTable : ::com::sun::star::uno::XInterface
+interface XDataTable : ::cpo::uno::XInterface
 {
 };
 

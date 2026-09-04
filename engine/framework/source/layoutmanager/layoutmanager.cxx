@@ -1484,7 +1484,7 @@ void LayoutManager::createElement( const OUString& aName )
         else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
         {
             // Add layout manager as listener for docking and other window events
-            uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject* >(this), uno::UNO_QUERY );
+            uno::Reference< cpo::uno::XInterface > xThis( static_cast< OWeakObject* >(this), uno::UNO_QUERY );
             uno::Reference< ui::XUIElement > xUIElement( implts_createDockingWindow( aName ));
 
             if ( xUIElement.is() )
@@ -2869,7 +2869,7 @@ void LayoutManager::elementInserted( const ui::ConfigurationEvent& Event )
             uno::Reference< XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
             if ( xPropSet.is() )
             {
-                if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
+                if ( Event.Source == uno::Reference< cpo::uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
                     xPropSet->setPropertyValue( u"ConfigurationSource"_ustr, Any( m_xDocCfgMgr ));
             }
             xElementSettings->updateSettings();
@@ -3090,7 +3090,7 @@ uno::Reference< beans::XPropertySetInfo > LayoutManager::getPropertySetInfo()
 
 } // namespace framework
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_LayoutManager_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

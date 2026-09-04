@@ -24,7 +24,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <unonames.hxx>
 
@@ -51,7 +51,7 @@ class ScTableConditionalFormat : public UnoApiTest,
 public:
     ScTableConditionalFormat();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual cpo::uno::Sequence<beans::PropertyValue> createCondition(const sal_Int32 nr) override;
     virtual void setUp() override;
 
@@ -96,7 +96,7 @@ ScTableConditionalFormat::ScTableConditionalFormat()
 {
 }
 
-uno::Reference<uno::XInterface> ScTableConditionalFormat::init()
+uno::Reference<cpo::uno::XInterface> ScTableConditionalFormat::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

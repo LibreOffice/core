@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitNew(
+uno::Reference< cpo::uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
@@ -66,7 +66,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitNe
         aEmbedFactory = u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr;
     }
 
-    uno::Reference < uno::XInterface > xFact( m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext) );
+    uno::Reference < cpo::uno::XInterface > xFact( m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext) );
     uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY );
     if ( xEmbCreator.is() )
         return xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, lObjArgs );
@@ -76,7 +76,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitNe
 }
 
 
-uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
+uno::Reference< cpo::uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
                                                                     const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
@@ -172,7 +172,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
          // the embedded object to be an ODummyEmbeddedObject
          && !officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
     {
-        uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext);
+        uno::Reference< cpo::uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext);
 
         uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY );
         if ( xEmbCreator.is() )
@@ -184,7 +184,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
     }
 
     // the default object should be created, it will allow to store the contents on the next saving
-    uno::Reference< uno::XInterface > xResult( static_cast< cppu::OWeakObject* >( new ODummyEmbeddedObject() ) );
+    uno::Reference< cpo::uno::XInterface > xResult( static_cast< cppu::OWeakObject* >( new ODummyEmbeddedObject() ) );
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
     xPersist->setPersistentEntry( xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs );
     return xResult;
@@ -238,7 +238,7 @@ static OUString HandleFilter(const OUString& rFilter)
     return aRet;
 }
 
-uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
+uno::Reference< cpo::uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -258,7 +258,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
     cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is FilterName
@@ -298,7 +298,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFr
 }
 
 
-uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceUserInit(
+uno::Reference< cpo::uno::XInterface > UNOEmbeddedObjectCreator::createInstanceUserInit(
         const cpo::uno::Sequence< sal_Int8 >& aClassID,
         const OUString& sClassName,
         const uno::Reference< embed::XStorage >& xStorage,
@@ -334,7 +334,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceUserIn
 }
 
 
-uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceLink(
+uno::Reference< cpo::uno::XInterface > UNOEmbeddedObjectCreator::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
                                             const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -343,7 +343,7 @@ uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceLink(
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
 
-    uno::Reference< uno::XInterface > xResult;
+    uno::Reference< cpo::uno::XInterface > xResult;
 
     cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
@@ -416,7 +416,7 @@ cpo::uno::Sequence< OUString > UNOEmbeddedObjectCreator::getSupportedServiceName
     return { u"com.sun.star.embed.EmbeddedObjectCreator"_ustr, u"com.sun.star.comp.embed.EmbeddedObjectCreator"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embeddedobj_UNOEmbeddedObjectCreator_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

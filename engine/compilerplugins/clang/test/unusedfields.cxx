@@ -17,7 +17,7 @@
 #include <ostream>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 
 struct Foo
@@ -308,8 +308,8 @@ namespace ReadOnlyAnalysis5
     {
         std::unique_ptr<int> m_field1;
         rtl::Reference<RefTarget> m_field2;
-        css::uno::Reference<css::uno::XInterface> m_field3xx;
-        void f1(css::uno::Reference<css::uno::XInterface> a)
+        css::uno::Reference<cpo::uno::XInterface> m_field3xx;
+        void f1(css::uno::Reference<cpo::uno::XInterface> a)
         {
             if (m_field1)
                 m_field1.reset(new int);

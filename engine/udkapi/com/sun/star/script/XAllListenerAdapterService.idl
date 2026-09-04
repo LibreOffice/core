@@ -24,17 +24,17 @@
 /** allows the generation of adapters from specific
     interfaces to the XAllListener interface.
  */
-published interface XAllListenerAdapterService: com::sun::star::uno::XInterface
+published interface XAllListenerAdapterService: cpo::uno::XInterface
 {
     /** creates a wrapper from the listener of type
         <var>xListenerType</var> to the XAllListener
         listener.
 
         To get the correct listener interface the returned
-        com::sun::star::uno::XInterface has to
+        cpo::uno::XInterface has to
         be queried for it.
      */
-    com::sun::star::uno::XInterface createAllListerAdapter( [in] type xListenerType,
+    cpo::uno::XInterface createAllListerAdapter( [in] type xListenerType,
              [in] com::sun::star::script::XAllListener xListener,
              [in] any aHelper );
 

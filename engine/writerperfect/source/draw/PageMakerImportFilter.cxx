@@ -48,7 +48,7 @@ cpo::uno::Sequence<OUString> SAL_CALL PageMakerImportFilter::getSupportedService
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 org_libreoffice_comp_Draw_PageMakerImportFilter_get_implementation(
     cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {

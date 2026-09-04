@@ -24,7 +24,7 @@
 
 /** Listens for changes in menu items.
  */
-published interface XMenuProxyListener: com::sun::star::uno::XInterface
+published interface XMenuProxyListener: cpo::uno::XInterface
 {
     /** is called, if the content or graphical representation/state of the menu changes
         completely, for one or more menu items

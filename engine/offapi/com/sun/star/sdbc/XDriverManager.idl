@@ -36,7 +36,7 @@
     @see com::sun::star::sdbc::XDriver
      @see com::sun::star::sdbc::XConnection
  */
-published interface XDriverManager: com::sun::star::uno::XInterface
+published interface XDriverManager: cpo::uno::XInterface
 {
 
     /** attempts to establish a connection to the given database URL.

@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     @see XFastDocumentHandler
  */
-interface XFastContextHandler: com::sun::star::uno::XInterface
+interface XFastContextHandler: cpo::uno::XInterface
 {
 
     /** receives notification of the beginning of an element .

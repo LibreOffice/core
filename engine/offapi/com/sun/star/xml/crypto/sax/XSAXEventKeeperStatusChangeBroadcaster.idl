@@ -26,7 +26,7 @@ interface XSAXEventKeeperStatusChangeListener;
  * <p>
  * This interface is used to manipulate SAXEventKeeper status change listener.
  */
-interface XSAXEventKeeperStatusChangeBroadcaster : com::sun::star::uno::XInterface
+interface XSAXEventKeeperStatusChangeBroadcaster : cpo::uno::XInterface
 {
     /**
      * Adds a new status change listener.

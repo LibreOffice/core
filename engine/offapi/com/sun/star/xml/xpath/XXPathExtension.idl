@@ -20,7 +20,7 @@
 module com { module sun { module star { module xml { module xpath {
 
 
-interface XXPathExtension : com::sun::star::uno::XInterface
+interface XXPathExtension : cpo::uno::XInterface
 {
     Libxml2ExtensionHandle getLibxml2ExtensionHandle();
 };

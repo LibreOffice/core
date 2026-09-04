@@ -23,7 +23,7 @@
 /** provides the possibility to write changes made on a result set back to
     database.
  */
-published interface XResultSetUpdate: com::sun::star::uno::XInterface
+published interface XResultSetUpdate: cpo::uno::XInterface
 {
 
     /** inserts the contents of the insert row into the result set and

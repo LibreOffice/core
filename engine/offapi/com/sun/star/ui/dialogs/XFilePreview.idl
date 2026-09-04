@@ -24,7 +24,7 @@ module com { module sun { module star { module ui { module dialogs {
     this interface.
 */
 
-published interface XFilePreview: com::sun::star::uno::XInterface
+published interface XFilePreview: cpo::uno::XInterface
 {
     /** The method returns all image formats that the preview supports.
 

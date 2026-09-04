@@ -168,7 +168,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
         throw cpo::uno::RuntimeException(
             u"Could not create system bitmap!"_ustr,
-            css::uno::Reference< css::uno::XInterface >() );
+            css::uno::Reference< cpo::uno::XInterface >() );
     }
 
     mnBitCount = pOutDev->GetBitCount();

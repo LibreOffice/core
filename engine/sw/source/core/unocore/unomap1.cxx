@@ -1082,8 +1082,8 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetRedlinePro
     {
         REDLINE_PROPERTIES(PropertyAttribute::READONLY)
         REDLINE_NODE_PROPERTIES
-        {UNO_NAME_REDLINE_START, 0, cppu::UnoType<css::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
-        {UNO_NAME_REDLINE_END, 0, cppu::UnoType<css::uno::XInterface>::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+        {UNO_NAME_REDLINE_START, 0, cppu::UnoType<cpo::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
+        {UNO_NAME_REDLINE_END, 0, cppu::UnoType<cpo::uno::XInterface>::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
     };
 
     return aRedlineMap_Impl;

@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace lang { class XSingleC
 namespace com { namespace sun { namespace star { namespace lang { class XSingleServiceFactory; } } } }
 namespace com { namespace sun { namespace star { namespace registry { class XRegistryKey; } } } }
 namespace cpo::uno { class XComponentContext; }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { template <class E> class Sequence; }
 
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"
@@ -119,7 +119,7 @@ namespace cppu
     @param xContext component context to be used
     @return component instance
 */
-typedef css::uno::Reference< css::uno::XInterface >(
+typedef css::uno::Reference< cpo::uno::XInterface >(
     * ComponentFactoryFunc)(
         css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
@@ -161,7 +161,7 @@ createOneInstanceComponentFactory(
     @see createOneInstanceFactory
     @deprecated
 */
-typedef css::uno::Reference< css::uno::XInterface >(* ComponentInstantiation)(
+typedef css::uno::Reference< cpo::uno::XInterface >(* ComponentInstantiation)(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
 
 /** Deprecated.  Creates a single service factory.

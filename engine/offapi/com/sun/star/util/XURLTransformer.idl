@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module util {
     @see URL
     @see URLTransformer
  */
-published interface XURLTransformer: com::sun::star::uno::XInterface
+published interface XURLTransformer: cpo::uno::XInterface
 {
     /** parses the string in URL::Complete which should contain
         a syntactically complete URL.

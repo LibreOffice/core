@@ -111,8 +111,8 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;

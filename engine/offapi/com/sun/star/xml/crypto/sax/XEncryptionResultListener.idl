@@ -27,7 +27,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * This interface is used to receive the result information of an
  * encryption operation.
  */
-interface XEncryptionResultListener : com::sun::star::uno::XInterface
+interface XEncryptionResultListener : cpo::uno::XInterface
 {
     /**
      * Notifies the encryption result.

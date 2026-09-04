@@ -334,7 +334,7 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     uno::Reference<container::XNameAccess> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> pageStyles;
     styleFamilies->getByName(u"PageStyles"_ustr) >>= pageStyles;
-    uno::Reference<uno::XInterface> defaultStyle;
+    uno::Reference<cpo::uno::XInterface> defaultStyle;
     pageStyles->getByName(u"Standard"_ustr) >>= defaultStyle;
     uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
     sal_Int32 width = 0;

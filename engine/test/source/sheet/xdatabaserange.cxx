@@ -121,7 +121,7 @@ void XDatabaseRange::testGetSortDescriptor()
 void XDatabaseRange::testGetFilterDescriptor()
 {
     uno::Reference<sheet::XDatabaseRange> xDBRange(init(u"FilterDescriptor"_ustr), UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xFilterDescr(xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
+    uno::Reference<cpo::uno::XInterface> xFilterDescr(xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
 }
 
 void XDatabaseRange::testGetImportDescriptor()

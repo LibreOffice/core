@@ -29,7 +29,7 @@ module com { module sun { module star { module util {
     later. In many cases, storing the reference directly would destroy the
     relocatability of an office installation.
  */
-published interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
+published interface XOfficeInstallationDirectories : cpo::uno::XInterface
 {
     /** returns the absolute URL containing the directory of the current office
         installation (for example "file:///opt/LibreOffice")

@@ -25,7 +25,7 @@
 
 /** provides the creation of a descriptor for a definition object.
  */
-published interface XDataDescriptorFactory: com::sun::star::uno::XInterface
+published interface XDataDescriptorFactory: cpo::uno::XInterface
 {
 
     /** returns a descriptor of a definition object.

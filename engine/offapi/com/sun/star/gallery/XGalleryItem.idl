@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module gallery {
 
 /** provides access to a single item of a Gallery theme.
  */
-interface XGalleryItem : com::sun::star::uno::XInterface
+interface XGalleryItem : cpo::uno::XInterface
 {
     /** retrieves the type of the Gallery item
 

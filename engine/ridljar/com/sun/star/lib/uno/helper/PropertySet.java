@@ -22,7 +22,7 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.XPropertyChangeListener;

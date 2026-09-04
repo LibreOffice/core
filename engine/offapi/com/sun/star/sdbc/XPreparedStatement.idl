@@ -31,7 +31,7 @@
     times.
     </p>
  */
-published interface XPreparedStatement: com::sun::star::uno::XInterface
+published interface XPreparedStatement: cpo::uno::XInterface
 {
 
     /** executes the SQL query in this

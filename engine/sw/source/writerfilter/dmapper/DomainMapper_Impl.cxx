@@ -758,7 +758,7 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
      return sName;
  }
 
-static void reanchorObjects(const uno::Reference<uno::XInterface>& xFrom,
+static void reanchorObjects(const uno::Reference<cpo::uno::XInterface>& xFrom,
                             const uno::Reference<text::XTextRange>& xTo,
                             const uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
@@ -3828,7 +3828,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
         xStarMath->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
             cpo::uno::Any(sal_Int32(0)));
 
-        uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
+        uno::Reference< cpo::uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
         // set zero margins for object's component
         uno::Reference< beans::XPropertySet > xComponentProperties( xInterface, uno::UNO_QUERY_THROW );
         xComponentProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ),
@@ -3923,8 +3923,8 @@ getParagraphOfRange(const css::uno::Reference<css::text::XTextRange>& xRange)
     return { xEA->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW };
 }
 
-static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
-                         const css::uno::Reference<css::uno::XInterface>& to)
+static void copyAllProps(const css::uno::Reference<cpo::uno::XInterface>& from,
+                         const css::uno::Reference<cpo::uno::XInterface>& to)
 {
     css::uno::Reference<css::beans::XPropertySet> xFromProps(from, css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::beans::XPropertySetInfo> xFromInfo(xFromProps->getPropertySetInfo(),

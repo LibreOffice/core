@@ -21,7 +21,7 @@
 
 module ooo {  module vba {  module word {
 
-interface XFont : com::sun::star::uno::XInterface
+interface XFont : cpo::uno::XInterface
 {
 };
 

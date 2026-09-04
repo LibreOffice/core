@@ -30,7 +30,7 @@
 
     @see XImageProducer
  */
-published interface XImageConsumer: com::sun::star::uno::XInterface
+published interface XImageConsumer: cpo::uno::XInterface
 {
 
     /** initializes the consumer with image dimensions.

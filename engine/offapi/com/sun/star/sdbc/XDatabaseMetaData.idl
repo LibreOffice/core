@@ -58,7 +58,7 @@
     either an XResultSet (which may be empty) is returned or a
     SQLException is thrown.</p>
  */
-published interface XDatabaseMetaData: com::sun::star::uno::XInterface
+published interface XDatabaseMetaData: cpo::uno::XInterface
 {
 
     /** Can all the procedures returned by getProcedures be called by the

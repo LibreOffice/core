@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module io {
     <p>This interface should be supported by objects which implement
     XActiveDataSource or XActiveDataSink.</p>
  */
-published interface XActiveDataControl: com::sun::star::uno::XInterface
+published interface XActiveDataControl: cpo::uno::XInterface
 {
     /** registers an object to receive events from this data source.
        <p>It is suggested to allow multiple registration of the same listener,

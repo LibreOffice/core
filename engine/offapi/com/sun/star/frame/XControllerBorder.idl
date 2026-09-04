@@ -23,7 +23,7 @@
 
 /** allows to retrieve information about controller's border.
  */
-interface XControllerBorder: com::sun::star::uno::XInterface
+interface XControllerBorder: cpo::uno::XInterface
 {
     /** allows to get current border sizes of the document.
 

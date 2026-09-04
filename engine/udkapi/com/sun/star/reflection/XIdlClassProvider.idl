@@ -26,7 +26,7 @@
 
     @deprecated
 */
-published interface XIdlClassProvider: com::sun::star::uno::XInterface
+published interface XIdlClassProvider: cpo::uno::XInterface
 {
     sequence<com::sun::star::reflection::XIdlClass> getIdlClasses();
 };

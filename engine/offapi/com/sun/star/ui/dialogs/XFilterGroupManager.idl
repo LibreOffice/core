@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module ui { module dialogs {
 /** Specifies an interface which allows manipulation of groups of filters
     for the FilePicker service.
 */
-published interface XFilterGroupManager : com::sun::star::uno::XInterface
+published interface XFilterGroupManager : cpo::uno::XInterface
 {
     /** Appends a group of filters to the current filter list.
 

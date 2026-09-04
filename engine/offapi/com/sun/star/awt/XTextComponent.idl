@@ -25,7 +25,7 @@
 /** gives access to the text of a component and makes it possible
     to register event listeners.
  */
-published interface XTextComponent: com::sun::star::uno::XInterface
+published interface XTextComponent: cpo::uno::XInterface
 {
 
     /** registers a text event listener.

@@ -17,7 +17,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see SheetFilterDescriptor2
  */
-interface XSheetFilterDescriptor3: com::sun::star::uno::XInterface
+interface XSheetFilterDescriptor3: cpo::uno::XInterface
 {
 
     /** returns the collection of filter fields.

@@ -158,7 +158,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
                 = runtime.getImpl()->cargo->xTypeConverter->convertTo(param, pDestType->pWeakRef);
         }
 
-        css::uno::Reference<css::uno::XInterface> xInterface
+        css::uno::Reference<cpo::uno::XInterface> xInterface
             = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 me->members.xService->getName(), aParams, xContext);
         return runtime.any2PyObject(cpo::uno::Any(std::move(xInterface))).getAcquired();

@@ -396,7 +396,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             Any aRealValue;
 
             if( auto valInterface = o3tl::tryAccess<
-                    css::uno::Reference<css::uno::XInterface>>(aValue) )
+                    css::uno::Reference<cpo::uno::XInterface>>(aValue) )
             {
                 Type aPropType = rProp.Type;
                 OUString aTypeName( aPropType.getTypeName() );
@@ -1818,7 +1818,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         // can not be called from scripting
                         OUString className(
                             rxMethod_i->getDeclaringClass()->getName());
-                        if (className == "com.sun.star.uno.XInterface") {
+                        if (className == "cpo.uno.XInterface") {
                             bFoundXInterface = true;
 
                             if( bXInterfaceIsInvalid )
@@ -2371,7 +2371,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_stoc_Introspection_get_implementation(
     cpo::uno::XComponentContext * context,
     cpo::uno::Sequence<cpo::uno::Any> const & arguments)

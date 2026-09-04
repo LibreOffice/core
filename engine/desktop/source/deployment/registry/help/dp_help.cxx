@@ -599,7 +599,7 @@ Reference< ucb::XSimpleFileAccess3 > const & BackendImpl::getFileAccess()
 
 } // namespace dp_registry
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_deployment_help_PackageRegistryBackend_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {

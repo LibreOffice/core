@@ -25,7 +25,7 @@ module com { module sun { module star { module xml { module input {
 
     @internal
 */
-interface XRoot : com::sun::star::uno::XInterface
+interface XRoot : cpo::uno::XInterface
 {
     /** Receives notification of the beginning of a document.
 

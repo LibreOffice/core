@@ -23,7 +23,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 import cpo.uno.XNamingService;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -90,7 +90,7 @@ public final class TypeDescription_Test {
             "cpo.uno.TypeClass", "[Lcpo.uno.TypeClass;",
             TypeClass.class, TypeClass.ENUM };
         Object[] interfaceData = new Object[] {
-            "com.sun.star.uno.XInterface", "[Lcom.sun.star.uno.XInterface;",
+            "cpo.uno.XInterface", "[Lcpo.uno.XInterface;",
             XInterface.class, TypeClass.INTERFACE };
         Object[] exceptionData = new Object [] {
             "cpo.uno.Exception", "[Lcpo.uno.Exception;",
@@ -114,7 +114,7 @@ public final class TypeDescription_Test {
                                   "cpo.uno.Exception"));
         interfaceTypeSig.test("TypeSignature.test(XInterface)", interfaceData,
                               TypeDescription.getTypeDescription(
-                                  "com.sun.star.uno.XInterface"));
+                                  "cpo.uno.XInterface"));
         namingServiceTypeSig.test("TypeSignature.test(XNamingService)",
                                   namingServiceData,
                                   TypeDescription.getTypeDescription(

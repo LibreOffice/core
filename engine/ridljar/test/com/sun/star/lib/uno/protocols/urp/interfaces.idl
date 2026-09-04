@@ -61,11 +61,11 @@ module protocols { module urp {
         sequence< sequence< long > > val;
     };
 
-    interface TestXInterface : com::sun::star::uno::XInterface {
-        void method1([in] com::sun::star::uno::XInterface itf) raises( cpo::uno::Exception );
-        void method2([out] com::sun::star::uno::XInterface itf) raises( cpo::uno::Exception );
-        void method3([inout] com::sun::star::uno::XInterface itf) raises( cpo::uno::Exception );
-        com::sun::star::uno::XInterface method4() raises( cpo::uno::Exception );
+    interface TestXInterface : cpo::uno::XInterface {
+        void method1([in] cpo::uno::XInterface itf) raises( cpo::uno::Exception );
+        void method2([out] cpo::uno::XInterface itf) raises( cpo::uno::Exception );
+        void method3([inout] cpo::uno::XInterface itf) raises( cpo::uno::Exception );
+        cpo::uno::XInterface method4() raises( cpo::uno::Exception );
 
         any returnAny() raises( cpo::uno::Exception );
 
@@ -80,7 +80,7 @@ module protocols { module urp {
 
     struct TestInterfaceStruct
     {
-        com::sun::star::uno::XInterface hallo;
+        cpo::uno::XInterface hallo;
 
         com::sun::star::beans::XPropertySet hallo2;
     };

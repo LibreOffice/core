@@ -31,7 +31,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     under feedback and to effect the subsequent data transfer, if appropriate. </p>
 */
 
-published interface XDropTargetDropContext : com::sun::star::uno::XInterface
+published interface XDropTargetDropContext : cpo::uno::XInterface
 {
     /** Accept the Drop.
 

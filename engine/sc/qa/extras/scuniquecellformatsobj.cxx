@@ -18,7 +18,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -37,7 +37,7 @@ class ScUniqueCellFormatsObj : public UnoApiTest,
 public:
     ScUniqueCellFormatsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScUniqueCellFormatsObj);
@@ -63,7 +63,7 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScUniqueCellFormatsObj::init()
+uno::Reference<cpo::uno::XInterface> ScUniqueCellFormatsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

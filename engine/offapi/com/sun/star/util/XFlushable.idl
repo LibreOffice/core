@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module util {
 
 /** is supported by objects with data that can be flushed to a data source.
  */
-published interface XFlushable: com::sun::star::uno::XInterface
+published interface XFlushable: cpo::uno::XInterface
 {
     /** flushes the data of the object to the connected data source.
      */

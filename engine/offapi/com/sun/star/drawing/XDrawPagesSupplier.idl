@@ -24,7 +24,7 @@
 
 /** must be supported to provide access to a multi-page drawing-layer.
 */
-published interface XDrawPagesSupplier: com::sun::star::uno::XInterface
+published interface XDrawPagesSupplier: cpo::uno::XInterface
 {
 
     /** @returns

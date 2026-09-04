@@ -1695,7 +1695,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 xSet->getPropertyValue(u"EmbeddedObject"_ustr), uno::UNO_QUERY);
             if (xObj.is())
             {
-                uno::Reference<uno::XInterface> const xMathModel(xObj->getComponent());
+                uno::Reference<cpo::uno::XInterface> const xMathModel(xObj->getComponent());
                 oox::FormulaImExportBase *const pMagic(
                         dynamic_cast<oox::FormulaImExportBase*>(xMathModel.get()));
                 assert(pMagic);

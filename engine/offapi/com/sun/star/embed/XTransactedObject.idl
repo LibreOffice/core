@@ -22,7 +22,7 @@
 
 /** allows transacted access to an object.
  */
-published interface XTransactedObject: com::sun::star::uno::XInterface
+published interface XTransactedObject: cpo::uno::XInterface
 {
     /** commits the changes made for object.
      */

@@ -12,7 +12,7 @@
 
 #include <com/sun/star/sheet/XConsolidatable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -27,7 +27,7 @@ class ScConsolidationDescriptorObj : public UnoApiTest, public apitest::XConsoli
 public:
     ScConsolidationDescriptorObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScConsolidationDescriptorObj);
@@ -54,7 +54,7 @@ ScConsolidationDescriptorObj::ScConsolidationDescriptorObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScConsolidationDescriptorObj::init()
+uno::Reference<cpo::uno::XInterface> ScConsolidationDescriptorObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 

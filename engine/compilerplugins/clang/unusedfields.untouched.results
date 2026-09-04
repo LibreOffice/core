@@ -223,7 +223,7 @@ include/svtools/genericasyncunodialog.hxx:52
 include/svtools/genericunodialog.hxx:152
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
-    SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
+    SvEventDescriptor xParentRef css::uno::Reference<cpo::uno::XInterface>
 include/svx/ChartThemeType.hxx:57
     chart::ChartThemeType m_aName OUString
 include/svx/ChartThemeType.hxx:58

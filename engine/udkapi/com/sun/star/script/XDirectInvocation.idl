@@ -23,7 +23,7 @@
 
 /** provides access to an object's methods and properties.
  */
-published interface XDirectInvocation: com::sun::star::uno::XInterface
+published interface XDirectInvocation: cpo::uno::XInterface
 {
     /** provides access to methods and properties exposed by an object.
 

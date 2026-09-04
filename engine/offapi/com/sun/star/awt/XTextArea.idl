@@ -24,7 +24,7 @@
 
 /** gives access to the text in a control.
  */
-published interface XTextArea: com::sun::star::uno::XInterface
+published interface XTextArea: cpo::uno::XInterface
 {
 
     /** returns the text lines as a single string with line separators.

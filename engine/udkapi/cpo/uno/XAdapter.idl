@@ -31,11 +31,11 @@ module cpo { module uno {
     </p>@see XWeak
         for description of concepts.
  */
-published interface XAdapter: com::sun::star::uno::XInterface
+published interface XAdapter: cpo::uno::XInterface
 {
     /** queries the adapted object if it is alive.
      */
-    com::sun::star::uno::XInterface queryAdapted();
+    cpo::uno::XInterface queryAdapted();
 
     /** adds a reference to the adapter.
 

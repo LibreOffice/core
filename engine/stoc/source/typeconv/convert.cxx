@@ -502,7 +502,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             break;
         }
 
-        auto ifc = o3tl::tryAccess<css::uno::Reference<css::uno::XInterface>>(
+        auto ifc = o3tl::tryAccess<css::uno::Reference<cpo::uno::XInterface>>(
             rVal);
         if (!ifc || !ifc->is())
         {
@@ -862,7 +862,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_stoc_TypeConverter_get_implementation(cpo::uno::XComponentContext*,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

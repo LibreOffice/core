@@ -224,7 +224,7 @@ cpo::uno::Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServi
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_WordPerfectImportFilter_get_implementation(
     cpo::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {

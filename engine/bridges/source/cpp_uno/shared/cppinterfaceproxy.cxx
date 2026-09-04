@@ -23,7 +23,7 @@
 #include <utility>
 #include <vtablefactory.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <typelib/typedescription.h>
 
 #include <cstddef>
@@ -54,7 +54,7 @@ void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
     delete[] reinterpret_cast< char * >(pThis);
 }
 
-css::uno::XInterface * CppInterfaceProxy::create(
+cpo::uno::XInterface * CppInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge, uno_Interface * pUnoI,
     typelib_InterfaceTypeDescription * pTypeDescr, OUString const & rOId)
 {
@@ -122,10 +122,10 @@ CppInterfaceProxy::CppInterfaceProxy(
 CppInterfaceProxy::~CppInterfaceProxy()
 {}
 
-css::uno::XInterface * CppInterfaceProxy::castProxyToInterface(
+cpo::uno::XInterface * CppInterfaceProxy::castProxyToInterface(
     CppInterfaceProxy * pProxy)
 {
-    return reinterpret_cast< css::uno::XInterface * >(
+    return reinterpret_cast< cpo::uno::XInterface * >(
         &pProxy->vtables);
 }
 

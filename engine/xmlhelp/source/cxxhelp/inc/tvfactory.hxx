@@ -20,7 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -52,11 +52,11 @@ class TVFactory final : public cppu::WeakImplHelper <
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+        virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
         createInstance(
             const OUString& aServiceSpecifier ) override;
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+        virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const OUString& ServiceSpecifier,
             const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
@@ -67,7 +67,7 @@ class TVFactory final : public cppu::WeakImplHelper <
     private:
 
         // Members
-        css::uno::Reference< css::uno::XInterface >             m_xHDS;
+        css::uno::Reference< cpo::uno::XInterface >             m_xHDS;
     };
 
 }

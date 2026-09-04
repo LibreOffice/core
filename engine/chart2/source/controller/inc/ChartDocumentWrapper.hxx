@@ -106,7 +106,7 @@ public:
     virtual css::uno::Reference<
         css::frame::XController > getCurrentController() override;
     virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override;
-    virtual css::uno::Reference<css::uno::XInterface > getCurrentSelection() override;
+    virtual css::uno::Reference<cpo::uno::XInterface > getCurrentSelection() override;
 
     // ____ XComponent ____
     virtual void dispose() override;
@@ -123,15 +123,15 @@ public:
     virtual css::uno::Reference< css::drawing::XDrawPage > getDrawPage() override;
 
     // ____ XMultiServiceFactory ____
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments(
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(
                 const OUString& ServiceSpecifier,
                 const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
     // ____ XAggregation ____
     virtual void setDelegator(
-        const css::uno::Reference< css::uno::XInterface >& rDelegator ) override;
+        const css::uno::Reference< cpo::uno::XInterface >& rDelegator ) override;
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& aType ) override;
 
     // ____ WrappedPropertySet ____
@@ -149,7 +149,7 @@ private: //methods
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 
-    css::uno::Reference< css::uno::XInterface >   m_xDelegator;
+    css::uno::Reference< cpo::uno::XInterface >   m_xDelegator;
 
     rtl::Reference< TitleWrapper >   m_xTitle;
     rtl::Reference< TitleWrapper >   m_xSubTitle;

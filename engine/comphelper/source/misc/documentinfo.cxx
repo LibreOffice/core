@@ -45,7 +45,7 @@ namespace comphelper {
     using ::com::sun::star::document::XDocumentPropertiesSupplier;
     using ::com::sun::star::document::XDocumentProperties;
     using ::com::sun::star::frame::XStorable;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::com::sun::star::frame::XFrame;
 
     namespace

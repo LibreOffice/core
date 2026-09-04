@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** allows to call a solver for a model that is defined by spreadsheet cells.
  */
-interface XSolver: com::sun::star::uno::XInterface
+interface XSolver: cpo::uno::XInterface
 {
     /// The spreadsheet document that contains the cells.
     [attribute] XSpreadsheetDocument Document;

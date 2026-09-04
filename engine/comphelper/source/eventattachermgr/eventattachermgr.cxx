@@ -326,7 +326,7 @@ Any AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
                     cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetRuntimeException(
                         "wrapped CannotConvertException " + e.Message,
-                        css::uno::Reference<css::uno::XInterface>(), anyEx);
+                        css::uno::Reference<cpo::uno::XInterface>(), anyEx);
                 }
             }
         }

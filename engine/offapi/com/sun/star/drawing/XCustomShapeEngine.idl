@@ -23,7 +23,7 @@
 
 /** The XCustomShapeEngine
  */
-interface XCustomShapeEngine: com::sun::star::uno::XInterface
+interface XCustomShapeEngine: cpo::uno::XInterface
 {
     /**
         @returns

@@ -33,7 +33,7 @@ module com { module sun { module star { module ucb {
     @version 1.0
  */
 published interface XRemoteContentProviderConnectionControl:
-    com::sun::star::uno::XInterface
+    cpo::uno::XInterface
 {
     /** Enable connection control, using as a token some object implemented on
         the remote content provider acceptor's side.
@@ -53,7 +53,7 @@ published interface XRemoteContentProviderConnectionControl:
      */
     void
     enableConnectionControl([in] XRemoteContentProviderAcceptor Acceptor,
-                            [in] com::sun::star::uno::XInterface Token);
+                            [in] cpo::uno::XInterface Token);
 };
 
 }; }; }; };

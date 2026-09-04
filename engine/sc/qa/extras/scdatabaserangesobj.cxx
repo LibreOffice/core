@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -43,7 +43,7 @@ class ScDatabaseRangesObj : public UnoApiTest,
 public:
     ScDatabaseRangesObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScDatabaseRangesObj);
@@ -84,7 +84,7 @@ ScDatabaseRangesObj::ScDatabaseRangesObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDatabaseRangesObj::init()
+uno::Reference<cpo::uno::XInterface> ScDatabaseRangesObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 

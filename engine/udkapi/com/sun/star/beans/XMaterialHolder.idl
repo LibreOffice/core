@@ -32,7 +32,7 @@
 
     @see XIntrospectionAccess
  */
-published interface XMaterialHolder: com::sun::star::uno::XInterface
+published interface XMaterialHolder: cpo::uno::XInterface
 {
     /** returns the material that is connected to this (tool-) object
 

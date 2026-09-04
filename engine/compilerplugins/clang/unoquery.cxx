@@ -50,7 +50,7 @@ bool UnoQuery::VisitCXXMemberCallExpr(CXXMemberCallExpr const* memberCallExpr)
         return bool(loplugin::DeclCheck(decl)
                         .Class("XInterface")
                         .Namespace("uno")
-                        .Namespace("star").Namespace("sun").Namespace("com")
+                        .Namespace("cpo")
                         .GlobalNamespace());
     };
     // clang-format on

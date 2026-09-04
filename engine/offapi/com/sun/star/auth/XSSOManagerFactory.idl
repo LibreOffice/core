@@ -23,7 +23,7 @@ module com { module sun { module star { module auth {
     security mechanism
  */
 
-published interface XSSOManagerFactory : ::com::sun::star::uno::XInterface
+published interface XSSOManagerFactory : ::cpo::uno::XInterface
 {
     /** provides a XSSOManager to be used in subsequent security
         context creation.

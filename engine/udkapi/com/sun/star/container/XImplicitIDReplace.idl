@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module container {
 /** makes it possible to replace contents in a collection by
     an implicit (unique) ID:
  */
-published interface XImplicitIDReplace: com::sun::star::uno::XInterface
+published interface XImplicitIDReplace: cpo::uno::XInterface
 {
     /** replaces the content which is specified by its implicit (unique)
         ID with a new content.

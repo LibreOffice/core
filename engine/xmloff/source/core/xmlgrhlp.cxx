@@ -1132,7 +1132,7 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServic
     uses eCreateMode == SvXMLGraphicHelperMode::Read, bDirect == true in
     SvXMLGraphicHelper
  */
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -1152,7 +1152,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     uses eCreateMode == SvXMLGraphicHelperMode::Write, bDirect == true in
     SvXMLGraphicHelper
  */
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

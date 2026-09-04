@@ -22,7 +22,7 @@
 
 /** an interface representing an entity with a modifiable title.
  */
-interface XTitle : com::sun::star::uno::XInterface
+interface XTitle : cpo::uno::XInterface
 {
     /** Returns the title of the object.
      *

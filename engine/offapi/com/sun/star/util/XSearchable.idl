@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module util {
     @endcode
 
  */
-published interface XSearchable: com::sun::star::uno::XInterface
+published interface XSearchable: cpo::uno::XInterface
 {
     /** creates a SearchDescriptor which contains properties that
         specify a search in this container.@see SearchDescriptor
@@ -61,7 +61,7 @@ published interface XSearchable: com::sun::star::uno::XInterface
 
         @see SearchDescriptor
      */
-    com::sun::star::uno::XInterface findFirst( [in] com::sun::star::util::XSearchDescriptor xDesc );
+    cpo::uno::XInterface findFirst( [in] com::sun::star::util::XSearchDescriptor xDesc );
 
     /** searches the contained texts for the next occurrence of whatever is specified.
 
@@ -74,7 +74,7 @@ published interface XSearchable: com::sun::star::uno::XInterface
 
         @see SearchDescriptor
      */
-    com::sun::star::uno::XInterface findNext( [in] com::sun::star::uno::XInterface xStartAt,
+    cpo::uno::XInterface findNext( [in] cpo::uno::XInterface xStartAt,
              [in] com::sun::star::util::XSearchDescriptor xDesc );
 
 };

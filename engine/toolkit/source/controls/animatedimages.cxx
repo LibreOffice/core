@@ -474,7 +474,7 @@ namespace toolkit {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)
@@ -482,7 +482,7 @@ org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
     return cppu::acquire(new AnimatedImagesControl());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControlModel_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)

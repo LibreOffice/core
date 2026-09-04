@@ -39,14 +39,14 @@ public:
     {
         if ( Index < 0 || Index > mnPages )
             throw lang::IndexOutOfBoundsException();
-        return cpo::uno::Any( uno::Reference< uno::XInterface >() );
+        return cpo::uno::Any( uno::Reference< cpo::uno::XInterface >() );
     }
     // XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         // no Pages object yet #FIXME
         //return cppu::UnoType<msforms::XPage>::get();
-        return cppu::UnoType<uno::XInterface>::get();
+        return cppu::UnoType<cpo::uno::XInterface>::get();
     }
     virtual bool SAL_CALL hasElements( ) override
     {
@@ -59,7 +59,7 @@ public:
 ScVbaMultiPage::ScVbaMultiPage(
         const uno::Reference< ov::XHelperInterface >& xParent,
         const uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const uno::Reference< uno::XInterface >& xControl,
+        const uno::Reference< cpo::uno::XInterface >& xControl,
         const uno::Reference< frame::XModel >& xModel,
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper) :
     MultiPageImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )

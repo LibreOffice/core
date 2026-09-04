@@ -24,7 +24,7 @@
 
 /** is implemented by views that display DrawPages or MasterPages.
  */
-published interface XDrawView: com::sun::star::uno::XInterface
+published interface XDrawView: cpo::uno::XInterface
 {
 
     /** changes the current page.

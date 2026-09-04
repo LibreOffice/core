@@ -751,19 +751,19 @@ void SAL_CALL ZipPackage::initialize( const cpo::uno::Sequence< Any >& aArgument
                     else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
                         m_nFormat = embed::StorageFormats::OFOPXML;
                     else
-                        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
                 }
                 else if ( aNamedValue.Value >>= nFormatID )
                 {
                     if (nFormatID != embed::StorageFormats::PACKAGE
                         && nFormatID != embed::StorageFormats::ZIP
                         && nFormatID != embed::StorageFormats::OFOPXML)
-                        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
 
                     m_nFormat = nFormatID;
                 }
                 else
-                    throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+                    throw lang::IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
 
                 m_xRootFolder->setPackageFormat_Impl( m_nFormat );
             }
@@ -1388,7 +1388,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // the document is written directly, although it was empty it is important to notify that the writing has failed
             // TODO/LATER: let the package be able to recover in this situation
             OUString aErrTxt(u"This package is unusable!"_ustr);
-            embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), OUString() );
+            embed::UseBackupException aException( aErrTxt, uno::Reference< cpo::uno::XInterface >(), OUString() );
             throw WrappedTargetException( aErrTxt,
                                             getXWeak(),
                                             Any ( aException ) );
@@ -1660,7 +1660,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     }
 
     OUString aErrTxt(u"This package is read only!"_ustr);
-    embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), aTempURL );
+    embed::UseBackupException aException( aErrTxt, uno::Reference< cpo::uno::XInterface >(), aTempURL );
     throw WrappedTargetException( aErrTxt,
                                     getXWeak(),
                                     Any ( aException ) );
@@ -1738,7 +1738,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         if ( !( aValue >>= m_aEncryptionKey ) )
-            throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 2 );
 
         m_aStorageEncryptionKeys.realloc( 0 );
     }
@@ -1748,7 +1748,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;
         // when this support is removed, the storage will get only one key from outside
         if ( !( aValue >>= m_aStorageEncryptionKeys ) )
-            throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 2 );
 
         m_aEncryptionKey.realloc( 0 );
     }
@@ -1758,7 +1758,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if ( m_pZipFile || !( aValue >>= aAlgorithms ) || !aAlgorithms.hasElements() )
         {
             // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
-            throw IllegalArgumentException(u"unexpected algorithms list is provided."_ustr, uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u"unexpected algorithms list is provided."_ustr, uno::Reference< cpo::uno::XInterface >(), 2 );
         }
 
         for (const auto& rAlgorithm : aAlgorithms)
@@ -1769,7 +1769,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA256 && nID != xml::crypto::DigestID::SHA1 ) )
                 {
-                    throw IllegalArgumentException(u"Unexpected start key generation algorithm is provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected start key generation algorithm is provided!"_ustr, uno::Reference<cpo::uno::XInterface>(), 2);
                 }
 
                 m_nStartKeyGenerationID = nID;
@@ -1782,7 +1782,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                       && nID != xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P
                       && nID != xml::crypto::KDFID::Argon2id))
                 {
-                    throw IllegalArgumentException(u"Unexpected key derivation function provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected key derivation function provided!"_ustr, uno::Reference<cpo::uno::XInterface>(), 2);
                 }
                 m_nKeyDerivationFunctionID = nID;
             }
@@ -1794,7 +1794,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                       && nID != xml::crypto::CipherID::AES_CBC_W3C_PADDING
                       && nID != xml::crypto::CipherID::BLOWFISH_CFB_8))
                 {
-                    throw IllegalArgumentException(u"Unexpected encryption algorithm is provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected encryption algorithm is provided!"_ustr, uno::Reference<cpo::uno::XInterface>(), 2);
                 }
 
                 m_nCommonEncryptionID = nID;
@@ -1810,7 +1810,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA1_1K && nID != xml::crypto::DigestID::SHA256_1K ) )
                 {
-                    throw IllegalArgumentException(u"Unexpected checksum algorithm is provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected checksum algorithm is provided!"_ustr, uno::Reference<cpo::uno::XInterface>(), 2);
                 }
 
                 m_oChecksumDigestID.emplace(nID);
@@ -1818,7 +1818,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             else
             {
                 OSL_ENSURE( false, "Unexpected encryption algorithm is provided!" );
-                throw IllegalArgumentException(u"unexpected algorithms list is provided."_ustr, uno::Reference< uno::XInterface >(), 2 );
+                throw IllegalArgumentException(u"unexpected algorithms list is provided."_ustr, uno::Reference< cpo::uno::XInterface >(), 2 );
             }
         }
     }
@@ -1891,7 +1891,7 @@ void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*Proper
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 package_ZipPackage_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

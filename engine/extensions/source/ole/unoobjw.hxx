@@ -155,13 +155,13 @@ public:
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // IUnoObjectWrapper
-    STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pXInt) override;
-    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<css::uno::XInterface>* pXInt) override;
+    STDMETHOD( getWrapperXInterface)( css::uno::Reference<cpo::uno::XInterface>* pXInt) override;
+    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<cpo::uno::XInterface>* pXInt) override;
     STDMETHOD( getOriginalUnoStruct)( cpo::uno::Any * pStruct) override;
 
     // UnoConversionUtility
-    virtual css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
-    virtual css::uno::Reference< css::uno::XInterface > createComWrapperInstance() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createComWrapperInstance() override;
 
     const OUString& getImplementationName() const
     {
@@ -189,7 +189,7 @@ protected:
 
     css::uno::Reference<css::script::XInvocation>                  m_xInvocation;
     css::uno::Reference<css::beans::XExactName>                   m_xExactName;
-    css::uno::Reference<css::uno::XInterface>                   m_xOrigin;
+    css::uno::Reference<cpo::uno::XInterface>                   m_xOrigin;
     NameToIdMap                     m_nameToDispIdMap;
     std::vector<MemberInfo>              m_MemberInfos;
     // This member is used to determine the default value
@@ -234,7 +234,7 @@ public:
     // UnoConversionUtility
     // If UNO interfaces are converted in methods of this class then
     // they are always wrapped with instances of this class
-    virtual css::uno::Reference< css::uno::XInterface > createUnoWrapperInstance() override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
 
 protected:
 

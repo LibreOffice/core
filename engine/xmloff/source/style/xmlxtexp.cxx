@@ -164,7 +164,7 @@ SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()
 {
 }
 
-static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &xOut )
+static void initializeStreamMetadata( const uno::Reference< cpo::uno::XInterface > &xOut )
 {
     uno::Reference< beans::XPropertySet > xProps( xOut, uno::UNO_QUERY );
     if( !xProps.is() )

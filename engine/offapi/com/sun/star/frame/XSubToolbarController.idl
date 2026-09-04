@@ -31,7 +31,7 @@
 
     @see com::sun::star::frame::ToolbarController
  */
-interface XSubToolbarController : com::sun::star::uno::XInterface
+interface XSubToolbarController : cpo::uno::XInterface
 {
     /** if the controller features a sub-toolbar.
 

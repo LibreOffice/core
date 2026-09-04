@@ -30,7 +30,7 @@ class XMLHints_Impl
 private:
     std::vector<std::unique_ptr<XMLHint_Impl>> m_Hints;
     std::unordered_map<OUString, XMLIndexMarkHint_Impl*> m_IndexHintsById;
-    css::uno::Reference<css::uno::XInterface> m_xCrossRefHeadingBookmark;
+    css::uno::Reference<cpo::uno::XInterface> m_xCrossRefHeadingBookmark;
 
 public:
     void push_back(std::unique_ptr<XMLHint_Impl> pHint);
@@ -45,7 +45,7 @@ public:
         return it == m_IndexHintsById.end() ? nullptr : it->second;
     }
 
-    css::uno::Reference<css::uno::XInterface>& GetCrossRefHeadingBookmark()
+    css::uno::Reference<cpo::uno::XInterface>& GetCrossRefHeadingBookmark()
     {
         return m_xCrossRefHeadingBookmark;
     }

@@ -73,7 +73,7 @@ css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cs
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::frame::XModel >& xModel, SCTAB nTab );
 
 /// @throws cpo::uno::RuntimeException
-ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange );
+ScDocShell* GetDocShellFromRange( const css::uno::Reference< cpo::uno::XInterface >& xRange );
 void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
 
 void ExportAsFixedFormatHelper(
@@ -96,7 +96,7 @@ public:
 // Will throw if unsuccessful.
 /// @throws cpo::uno::RuntimeException
 template < typename ImplObject >
-    ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf )
+    ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< cpo::uno::XInterface >& rxWrapperIf )
     {
         ImplObject* pObj = comphelper::getFromUnoTunnel<ImplObject>(rxWrapperIf);
         if ( !pObj )

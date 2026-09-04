@@ -39,7 +39,7 @@ module com { module sun { module star { module ui {
     </p>
 */
 
-interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
+interface XModuleUIConfigurationManager : ::cpo::uno::XInterface
 {
     /** determine if the settings of a user interface element is part
         of the default layer of the user interface configuration manager.

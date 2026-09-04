@@ -27,7 +27,7 @@
 #include <limits>
 #include <typeinfo>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <sal/alloca.h>
 #include <sal/types.h>

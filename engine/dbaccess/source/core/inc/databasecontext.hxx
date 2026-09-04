@@ -54,8 +54,8 @@ private:
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
     */
-    css::uno::Reference< css::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
-    css::uno::Reference< css::uno::XInterface > getObject( const OUString& _rURL );
+    css::uno::Reference< cpo::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
+    css::uno::Reference< cpo::uno::XInterface > getObject( const OUString& _rURL );
 
     /** sets all properties which were transient at the data source. e.g. password
         @param  _sURL       The file URL of the data source
@@ -65,7 +65,7 @@ private:
 
     /** creates a new data source
     */
-    css::uno::Reference< css::uno::XInterface >
+    css::uno::Reference< cpo::uno::XInterface >
             impl_createNewDataSource();
 
 #if HAVE_FEATURE_SCRIPTING
@@ -101,8 +101,8 @@ public:
     virtual void disposing() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance(  ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;
@@ -122,8 +122,8 @@ public:
     virtual bool hasByName( const OUString& aName ) override;
 
     // XNamingService
-    virtual css::uno::Reference< css::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
-    virtual void registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
+    virtual void registerObject( const OUString& Name, const css::uno::Reference< cpo::uno::XInterface >& Object ) override;
     virtual void revokeObject( const OUString& Name ) override;
 
     // XDatabaseRegistrations

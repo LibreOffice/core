@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module lang {
 /** interface to get information about the types
     (usually interface types) supported by an object.
  */
-published interface XTypeProvider: com::sun::star::uno::XInterface
+published interface XTypeProvider: cpo::uno::XInterface
 {
 
     /** returns

@@ -43,7 +43,7 @@ using ::cpo::uno::Any;
 using ::cpo::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XDocumentHandler;
 
@@ -193,7 +193,7 @@ void XMLAutoTextEventExport::ExportContent_() {}
 
 // methods to support the component registration
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
@@ -202,7 +202,7 @@ com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(
         SvXMLExportFlags::ALL | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

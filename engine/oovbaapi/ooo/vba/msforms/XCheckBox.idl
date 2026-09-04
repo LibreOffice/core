@@ -22,7 +22,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XCheckBox: com::sun::star::uno::XInterface
+interface XCheckBox: cpo::uno::XInterface
 {
     [attribute] string Caption;
     [attribute] any Value;

@@ -25,7 +25,7 @@
 /** provides the possibility of reviving an event before changing the content
     of a row set.
  */
-published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
+published interface XRowSetApproveBroadcaster: cpo::uno::XInterface
 {
 
     /** adds the specified listener to receive the events "approveCursorMove",

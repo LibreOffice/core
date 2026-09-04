@@ -19,7 +19,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST BaseIndex
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
     virtual ~BaseIndex();
     void testBaseIndexProperties();
 };

@@ -345,7 +345,7 @@ sal_uInt64 vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned 
                         &td, (reinterpret_cast<cpo::uno::Type*>(arguments[0])->getTypeLibType()));
                     if (td != nullptr && td->eTypeClass == typelib_TypeClass_INTERFACE)
                     {
-                        css::uno::XInterface* ifc = nullptr;
+                        cpo::uno::XInterface* ifc = nullptr;
                         proxy->getBridge()->getCppEnv()->getRegisteredInterface(
                             proxy->getBridge()->getCppEnv(), reinterpret_cast<void**>(&ifc),
                             proxy->getOid().pData,

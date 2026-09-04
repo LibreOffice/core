@@ -130,7 +130,7 @@ namespace connectivity::file
 
         OConnection* getOwnConnection() const { return m_pConnection.get(); }
 
-        using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
+        using OStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
 
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException

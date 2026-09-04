@@ -496,7 +496,7 @@ void SvxSearchDialog::Construct_Impl()
         cpo::uno::Sequence< cpo::uno::Any > aArgs {
                     Any(u"/org.openoffice.Office.Common/SearchOptions/"_ustr) };
 
-        uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
+        uno::Reference< cpo::uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
                     aArgs);
         uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);

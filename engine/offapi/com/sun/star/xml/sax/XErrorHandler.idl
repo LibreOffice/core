@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     as an argument, so an <code>any</code> serves as the container. The type of the
     exception is SAXParseException or an instance of a derived class.</p>
  */
-published interface XErrorHandler: com::sun::star::uno::XInterface
+published interface XErrorHandler: cpo::uno::XInterface
 {
     /** receives notification of a recoverable error.
      */

@@ -90,7 +90,7 @@ void SwXReferenceMark::Impl::Invalidate()
 {
     m_pDoc = nullptr;
     m_pMarkFormat = nullptr;
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         return;
@@ -620,7 +620,7 @@ void SwXMeta::Impl::Notify(const SfxHint& rHint)
     m_bIsDisposed = true;
     m_pMeta = nullptr;
     m_xText->Invalidate();
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    uno::Reference<cpo::uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
         return;
@@ -1078,7 +1078,7 @@ SwXMeta::removeTextContent(
 }
 
 // XChild
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface > SAL_CALL
 SwXMeta::getParent()
 {
     SolarMutexGuard g;
@@ -1098,7 +1098,7 @@ SwXMeta::getParent()
 }
 
 void SAL_CALL
-SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
+SwXMeta::setParent(uno::Reference< cpo::uno::XInterface > const& /*xParent*/)
 {
     throw lang::NoSupportException(u"setting parent not supported"_ustr, *this);
 }

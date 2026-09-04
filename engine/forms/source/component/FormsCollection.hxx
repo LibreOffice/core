@@ -42,7 +42,7 @@ class OFormsCollection
         ,public OFormsCollection_BASE
 {
     ::osl::Mutex                               m_aMutex;
-    css::uno::Reference<css::uno::XInterface>  m_xParent; // Parent
+    css::uno::Reference<cpo::uno::XInterface>  m_xParent; // Parent
 
 public:
     explicit OFormsCollection(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
@@ -73,8 +73,8 @@ public:
     virtual void disposing() override;
 
     // css::container::XChild
-    virtual css::uno::Reference<css::uno::XInterface> getParent() override;
-    virtual void setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
+    virtual css::uno::Reference<cpo::uno::XInterface> getParent() override;
+    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // prevent method hiding
     using OInterfaceContainer::disposing;
@@ -122,9 +122,9 @@ public:
         { OInterfaceContainer::removeEntry(p1); }
     virtual cpo::uno::Sequence<css::script::ScriptEventDescriptor> getScriptEvents(sal_Int32 p1) override
         { return OInterfaceContainer::getScriptEvents(p1); }
-    virtual void attach(sal_Int32 p1, const css::uno::Reference<css::uno::XInterface>& p2, const cpo::uno::Any& p3) override
+    virtual void attach(sal_Int32 p1, const css::uno::Reference<cpo::uno::XInterface>& p2, const cpo::uno::Any& p3) override
         { OInterfaceContainer::attach(p1, p2, p3); }
-    virtual void detach(sal_Int32 p1, const css::uno::Reference<css::uno::XInterface>& p2) override
+    virtual void detach(sal_Int32 p1, const css::uno::Reference<cpo::uno::XInterface>& p2) override
         { OInterfaceContainer::detach(p1, p2); }
     virtual void addScriptListener(const css::uno::Reference<css::script::XScriptListener>& p1) override
         { OInterfaceContainer::addScriptListener(p1); }

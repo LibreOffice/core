@@ -82,7 +82,7 @@ void ScannerManager::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArgume
         aProperties.get(u"ParentWindow"_ustr) >>= mxDialogParent;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 extensions_ScannerManager_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

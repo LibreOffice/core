@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XDATABASERANGE_HXX
 #define INCLUDED_TEST_SHEET_XDATABASERANGE_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
@@ -19,7 +19,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XDatabaseRange
 {
 public:
-    virtual css::uno::Reference<css::uno::XInterface> init(const OUString& rDBName) = 0;
+    virtual css::uno::Reference<cpo::uno::XInterface> init(const OUString& rDBName) = 0;
 
     void testDataArea();
     void testGetSortDescriptor();

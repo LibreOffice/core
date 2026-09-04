@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module java {
     @note incomplete
     @deprecated
  */
-published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
+published interface XJavaThreadRegister_11: cpo::uno::XInterface
 {
     /** returns `TRUE` if the current thread is already attached to the VM otherwise `FALSE`.
      */

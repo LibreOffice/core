@@ -186,7 +186,7 @@ using namespace cpo::uno;
         m_bFocusEntry = _bFocusEntry;
     }
 
-    void OControlTransferData::addHiddenControlsFormat(const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces)
+    void OControlTransferData::addHiddenControlsFormat(const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >& seqInterfaces)
     {
         m_aHiddenControlModels = seqInterfaces;
     }

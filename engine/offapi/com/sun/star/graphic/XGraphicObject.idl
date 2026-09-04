@@ -28,7 +28,7 @@ interface XGraphic;
     @see MediaProperties
 */
 
-interface XGraphicObject : ::com::sun::star::uno::XInterface
+interface XGraphicObject : ::cpo::uno::XInterface
 {
     /** is the associated image/graphic for this object.
     */

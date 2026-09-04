@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module beans {
     interface. The get and set methods use handles to access the
     property values instead of character strings.</p>
  */
-published interface XFastPropertySet: com::sun::star::uno::XInterface
+published interface XFastPropertySet: cpo::uno::XInterface
 {
 
     /** sets the value to the property with the specified name.

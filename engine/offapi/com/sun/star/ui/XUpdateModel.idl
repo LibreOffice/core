@@ -15,7 +15,7 @@ module com { module sun { module star { module ui {
     </p>
 */
 
-interface XUpdateModel : com::sun::star::uno::XInterface
+interface XUpdateModel : cpo::uno::XInterface
 {
     void updateModel( [in] com::sun::star::frame::XModel xModel);
 };

@@ -30,7 +30,7 @@
     Although the name of this interface denotes arrays,
     sequences are meant. Don't be obfuscated, arrays are not supported by UNO!
 */
-published interface XIdlArray: com::sun::star::uno::XInterface
+published interface XIdlArray: cpo::uno::XInterface
 {
     /** Reallocates the length of the sequence instance.
 

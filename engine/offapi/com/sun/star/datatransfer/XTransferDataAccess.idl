@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer {
     @see com::sun::star::datatransfer::XTransferable
 */
 
-published interface XTransferDataAccess: com::sun::star::uno::XInterface
+published interface XTransferDataAccess: cpo::uno::XInterface
 {
     /** To query for the summarized data size in bytes of a sequence of DataFlavor.
 

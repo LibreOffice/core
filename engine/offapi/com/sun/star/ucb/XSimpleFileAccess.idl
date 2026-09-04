@@ -24,7 +24,7 @@ module com { module sun { module star { module ucb {
 
 /** This is the basic interface to read data from a stream.
 */
-published interface XSimpleFileAccess: com::sun::star::uno::XInterface
+published interface XSimpleFileAccess: cpo::uno::XInterface
 {
 
     /** Copies a file

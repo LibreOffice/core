@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module i18n {
     placed at the beginning or at the end of a text line. </p>
  */
 
-published interface XForbiddenCharacters : com::sun::star::uno::XInterface
+published interface XForbiddenCharacters : cpo::uno::XInterface
 {
     /** returns the forbidden characters for a given locale.
      */

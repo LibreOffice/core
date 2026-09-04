@@ -22,7 +22,7 @@ module com {  module sun {  module star {  module linguistic2 {
 
 /** API for the proofreading iterator that mediates between the document and the proofreader.
 */
-interface XProofreadingIterator: com::sun::star::uno::XInterface
+interface XProofreadingIterator: cpo::uno::XInterface
 {
     /** start proofreading and automatically process the whole text
 
@@ -35,7 +35,7 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
         @throws IllegalArgumentException
                 when any argument is wrong.
     */
-    void startProofreading( [in] com::sun::star::uno::XInterface xDocument,
+    void startProofreading( [in] cpo::uno::XInterface xDocument,
                     [in] com::sun::star::text::XFlatParagraphIteratorProvider xIteratorProvider )
             raises( com::sun::star::lang::IllegalArgumentException );
 
@@ -66,7 +66,7 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
                 when any argument is wrong.
     */
 
-    ProofreadingResult checkSentenceAtPosition( [in] com::sun::star::uno::XInterface xDocument,
+    ProofreadingResult checkSentenceAtPosition( [in] cpo::uno::XInterface xDocument,
                     [in] com::sun::star::text::XFlatParagraph xFlatParagraph,
                     [in] string aText,
                     [in] com::sun::star::lang::Locale aLocale,
@@ -87,7 +87,7 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
         @returns
                 if the document is currently being checked.
     */
-    boolean isProofreading( [in] com::sun::star::uno::XInterface xDocument );
+    boolean isProofreading( [in] cpo::uno::XInterface xDocument );
 };
 
 

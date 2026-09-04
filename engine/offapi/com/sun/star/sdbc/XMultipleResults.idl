@@ -42,7 +42,7 @@
     @see com::sun::star::sdbc::XStatement
      @see com::sun::star::sdbc::XPreparedStatement
  */
-published interface XMultipleResults: com::sun::star::uno::XInterface
+published interface XMultipleResults: cpo::uno::XInterface
 {
 
     /** returns the current result as a

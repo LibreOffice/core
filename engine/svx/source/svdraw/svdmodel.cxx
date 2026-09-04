@@ -599,7 +599,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     std::vector<rtl::Reference<SdrObject>> allObjs(maAllIncarnatedObjects.begin(), maAllIncarnatedObjects.end());
     for (const auto & pSdrObj : allObjs)
     {
-        uno::Reference<uno::XInterface> xShape = pSdrObj->getWeakUnoShape().get();
+        uno::Reference<cpo::uno::XInterface> xShape = pSdrObj->getWeakUnoShape().get();
         rtl::Reference<SvxShape> pSvxShape = dynamic_cast<SvxShape*>(xShape.get());
         // calling getWeakUnoShape so we don't accidentally create new UNO shapes
         if (pSvxShape)

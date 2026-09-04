@@ -201,7 +201,7 @@ static cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > Impl
 }
 
 
-// css::uno::XInterface
+// cpo::uno::XInterface
 cpo::uno::Any StdTabControllerModel::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -427,7 +427,7 @@ cpo::uno::Sequence<OUString> StdTabControllerModel::getSupportedServiceNames()
         u"stardiv.vcl.controlmodel.TabController"_ustr};
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 stardiv_Toolkit_StdTabControllerModel_get_implementation(
     cpo::uno::XComponentContext *,
     cpo::uno::Sequence<cpo::uno::Any> const &)

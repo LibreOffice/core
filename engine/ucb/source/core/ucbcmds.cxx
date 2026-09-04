@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -1332,7 +1332,7 @@ void globalTransfer_(
                                 throw ucb::CommandFailedException(
                                     u"abort requested via interaction "
                                     "handler"_ustr,
-                                    uno::Reference< uno::XInterface >(),
+                                    uno::Reference< cpo::uno::XInterface >(),
                                     aExc );
     //                            break;
 
@@ -1362,7 +1362,7 @@ void globalTransfer_(
                                     // error setting title. Abort.
                                     throw ucb::CommandFailedException(
                                         u"error setting Title property!"_ustr,
-                                        uno::Reference< uno::XInterface >(),
+                                        uno::Reference< cpo::uno::XInterface >(),
                                         aExc );
                                 }
                                 break;
@@ -1693,7 +1693,7 @@ void UniversalContentBroker::globalTransfer(
                                 throw ucb::CommandFailedException(
                                     u"abort requested via interaction "
                                     "handler"_ustr,
-                                    uno::Reference< uno::XInterface >(),
+                                    uno::Reference< cpo::uno::XInterface >(),
                                     aExc );
 //                                break;
 

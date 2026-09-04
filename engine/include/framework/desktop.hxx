@@ -260,13 +260,13 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual void                                                                handle                     ( const css::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) override;
 
         // css.frame.XUntitledNumbers
-        virtual ::sal_Int32 leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+        virtual ::sal_Int32 leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
 
         // css.frame.XUntitledNumbers
         virtual void releaseNumber( ::sal_Int32 nNumber ) override;
 
         // css.frame.XUntitledNumbers
-        virtual void releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent ) override;
+        virtual void releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
 
         // css.frame.XUntitledNumbers
         virtual OUString getUntitledPrefix() override;

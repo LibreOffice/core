@@ -25,7 +25,7 @@ module com { module sun { module star { module xml {
 /** interface to implement for an XML-based import filter.
     Enhanced vs XImportFilter to take a XFastDocumentHandler.
  */
-interface XImportFilter2: com::sun::star::uno::XInterface
+interface XImportFilter2: cpo::uno::XInterface
 {
      /** performs the import.
 

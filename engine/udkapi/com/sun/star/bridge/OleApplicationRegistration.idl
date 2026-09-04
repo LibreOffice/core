@@ -47,7 +47,7 @@
 published service OleApplicationRegistration
 {
 
-    interface com::sun::star::uno::XInterface;
+    interface cpo::uno::XInterface;
 
 };
 

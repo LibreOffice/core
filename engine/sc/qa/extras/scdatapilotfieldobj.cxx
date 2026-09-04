@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -38,7 +38,7 @@ class ScDataPilotFieldObj : public UnoApiTest,
 {
 public:
     virtual void setUp() override;
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
 
     ScDataPilotFieldObj();
 
@@ -87,7 +87,7 @@ ScDataPilotFieldObj::ScDataPilotFieldObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScDataPilotFieldObj::init()
+uno::Reference<cpo::uno::XInterface> ScDataPilotFieldObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
@@ -100,7 +100,7 @@ uno::Reference<uno::XInterface> ScDataPilotFieldObj::init()
     uno::Reference<sheet::XDataPilotDescriptor> xDPDsc(xDPT->getByName(u"DataPilot1"_ustr),
                                                        uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDPDsc->getDataPilotFields(), uno::UNO_SET_THROW);
-    uno::Reference<uno::XInterface> xReturnValue(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<cpo::uno::XInterface> xReturnValue(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
     return xReturnValue;
 }
 

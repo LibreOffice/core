@@ -63,7 +63,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
@@ -183,7 +183,7 @@ cpo::uno::Sequence< cpo::uno::Type > Access::getTypes()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    std::vector< cpo::uno::Type > types { cppu::UnoType< css::uno::XInterface >::get(),
+    std::vector< cpo::uno::Type > types { cppu::UnoType< cpo::uno::XInterface >::get(),
                                           cppu::UnoType< cpo::uno::XWeak >::get(),
                                           cppu::UnoType< css::lang::XTypeProvider >::get(),
                                           cppu::UnoType< css::lang::XServiceInfo >::get(),
@@ -1249,7 +1249,7 @@ void Access::removeByName(OUString const & aName)
     bc.send();
 }
 
-css::uno::Reference< css::uno::XInterface > Access::createInstance()
+css::uno::Reference< cpo::uno::XInterface > Access::createInstance()
 {
     assert(thisIs(IS_SET|IS_UPDATE));
     OUString tmplName(
@@ -1267,7 +1267,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
         new ChildAccess(components_, getRootAccess(), node));
 }
 
-css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
+css::uno::Reference< cpo::uno::XInterface > Access::createInstanceWithArguments(
     cpo::uno::Sequence< cpo::uno::Any > const & aArguments)
 {
     assert(thisIs(IS_SET|IS_UPDATE));
@@ -2189,7 +2189,7 @@ css::beans::Property Access::asProperty() {
             LocalizedPropertyNode * locprop =
                 static_cast< LocalizedPropertyNode *>(p.get());
             if (Components::allLocales(getRootAccess()->getLocale())) {
-                type = cppu::UnoType< css::uno::XInterface >::get();
+                type = cppu::UnoType< cpo::uno::XInterface >::get();
                     //TODO: correct?
                 removable = false;
             } else {
@@ -2209,7 +2209,7 @@ css::beans::Property Access::asProperty() {
         }
         break;
     default:
-        type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
+        type = cppu::UnoType< cpo::uno::XInterface >::get(); //TODO: correct?
         nillable = false;
         rtl::Reference< Node > parent(getParentNode());
         removable = parent.is() && parent->kind() == Node::KIND_SET;

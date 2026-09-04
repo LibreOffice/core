@@ -2524,7 +2524,7 @@ void OOXMLFastContextHandlerMath::process()
     assert(ref.is());
     if (!ref.is())
         return;
-    uno::Reference< uno::XInterface > component(ref->getComponent(), uno::UNO_QUERY_THROW);
+    uno::Reference< cpo::uno::XInterface > component(ref->getComponent(), uno::UNO_QUERY_THROW);
     if( oox::FormulaImExportBase* import
         = dynamic_cast< oox::FormulaImExportBase* >( component.get()))
         import->readFormulaOoxml( m_buffer );

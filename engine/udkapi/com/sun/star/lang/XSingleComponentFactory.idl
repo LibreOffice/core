@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module lang {
 
     @see XInitialization
 */
-published interface XSingleComponentFactory : com::sun::star::uno::XInterface
+published interface XSingleComponentFactory : cpo::uno::XInterface
 {
     /** Creates an instance of a service implementation.
 
@@ -35,7 +35,7 @@ published interface XSingleComponentFactory : com::sun::star::uno::XInterface
         @return
                 component instance
     */
-    com::sun::star::uno::XInterface createInstanceWithContext(
+    cpo::uno::XInterface createInstanceWithContext(
         [in] cpo::uno::XComponentContext Context )
         raises (cpo::uno::Exception);
 
@@ -49,7 +49,7 @@ published interface XSingleComponentFactory : com::sun::star::uno::XInterface
         @return
                 component instance
     */
-    com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext(
+    cpo::uno::XInterface createInstanceWithArgumentsAndContext(
         [in] sequence<any> Arguments,
         [in] cpo::uno::XComponentContext Context )
         raises( cpo::uno::Exception );

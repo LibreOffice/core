@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module lang {
     @see XConnectionPoint
     @see cpo::uno::XWeak
  */
-published interface XConnectionPointContainer: com::sun::star::uno::XInterface
+published interface XConnectionPointContainer: cpo::uno::XInterface
 {
     /** @returns
             a sequence of all outgoing types; specifies which are supported
@@ -66,7 +66,7 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
         @see XConnectionPoint::advise
      */
     void advise( [in] type aType,
-             [in] com::sun::star::uno::XInterface xListener );
+             [in] cpo::uno::XInterface xListener );
 
     /** terminates a notification previously set up with
         advise at the container or at the suitable connection point.
@@ -74,7 +74,7 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
         @see XConnectionPoint::unadvise
      */
     void unadvise( [in] type aType,
-             [in] com::sun::star::uno::XInterface xListener );
+             [in] cpo::uno::XInterface xListener );
 
 };
 

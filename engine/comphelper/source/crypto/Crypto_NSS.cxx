@@ -94,7 +94,7 @@ public:
             mWrapKey = PK11_KeyGen(mSlot, wrap_mechanism, nullptr, wrap_key_len, nullptr);
             if (!mWrapKey)
                 throw cpo::uno::RuntimeException(u"PK11_KeyGen SymKey failure"_ustr,
-                                                 css::uno::Reference<css::uno::XInterface>());
+                                                 css::uno::Reference<cpo::uno::XInterface>());
 
             /*
              * Encrypt authkey with wrapping key
@@ -108,7 +108,7 @@ public:
                 = PK11_CreateContextBySymKey(wrap_mechanism, CKA_ENCRYPT, mWrapKey, &tmp_sec_item);
             if (!mWrapKeyContext)
                 throw cpo::uno::RuntimeException(u"PK11_CreateContextBySymKey failure"_ustr,
-                                                 css::uno::Reference<css::uno::XInterface>());
+                                                 css::uno::Reference<cpo::uno::XInterface>());
 
             unsigned char wrapped_key_data[MAX_WRAPPED_KEY_LEN];
             int wrapped_key_len = sizeof(wrapped_key_data);
@@ -118,12 +118,12 @@ public:
                 != SECSuccess)
             {
                 throw cpo::uno::RuntimeException(u"PK11_CipherOp failure"_ustr,
-                                                 css::uno::Reference<css::uno::XInterface>());
+                                                 css::uno::Reference<cpo::uno::XInterface>());
             }
 
             if (PK11_Finalize(mWrapKeyContext) != SECSuccess)
                 throw cpo::uno::RuntimeException(u"PK11_Finalize failure"_ustr,
-                                                 css::uno::Reference<css::uno::XInterface>());
+                                                 css::uno::Reference<cpo::uno::XInterface>());
 
             /*
              * Finally unwrap sym key
@@ -186,7 +186,7 @@ public:
 
         if (!mSlot)
             throw cpo::uno::RuntimeException(u"NSS Slot failure"_ustr,
-                                             css::uno::Reference<css::uno::XInterface>());
+                                             css::uno::Reference<cpo::uno::XInterface>());
 
         SECItem keyItem;
         keyItem.type = siBuffer;
@@ -196,7 +196,7 @@ public:
         mSymKey = ImportSymKey(mechanism, CKA_ENCRYPT, &keyItem);
         if (!mSymKey)
             throw cpo::uno::RuntimeException(u"NSS SymKey failure"_ustr,
-                                             css::uno::Reference<css::uno::XInterface>());
+                                             css::uno::Reference<cpo::uno::XInterface>());
 
         mSecParam = PK11_ParamFromIV(mechanism, pIvItem);
         mContext = PK11_CreateContextBySymKey(mechanism, operation, mSymKey, mSecParam);
@@ -226,7 +226,7 @@ public:
 
         if (!mSlot)
             throw cpo::uno::RuntimeException(u"NSS Slot failure"_ustr,
-                                             css::uno::Reference<css::uno::XInterface>());
+                                             css::uno::Reference<cpo::uno::XInterface>());
 
         SECItem aKeyItem;
         aKeyItem.data = rKey.data();
@@ -235,7 +235,7 @@ public:
         mSymKey = ImportSymKey(aMechanism, CKA_SIGN, &aKeyItem);
         if (!mSymKey)
             throw cpo::uno::RuntimeException(u"NSS SymKey failure"_ustr,
-                                             css::uno::Reference<css::uno::XInterface>());
+                                             css::uno::Reference<cpo::uno::XInterface>());
 
         SECItem param;
         param.data = nullptr;

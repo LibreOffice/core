@@ -69,7 +69,7 @@ public:
 
     /** Returns the layer manager that manages this layer.
     */
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getParent(  ) override;
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
@@ -79,7 +79,7 @@ public:
     /** Not implemented.  Always throws an exception.
         @throws NoSupportException.
     */
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual void SAL_CALL setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 private:
     rtl::Reference<SdLayerManager>     mxLayerManager;

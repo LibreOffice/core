@@ -35,7 +35,7 @@ interface XPrimitive2D;
 
     Use this interface to generate XPrimitive2D instances
  */
-interface XPrimitiveFactory2D : ::com::sun::star::uno::XInterface
+interface XPrimitiveFactory2D : ::cpo::uno::XInterface
 {
     /** Create primitives from ::com::sun::star::drawing::XShape
 

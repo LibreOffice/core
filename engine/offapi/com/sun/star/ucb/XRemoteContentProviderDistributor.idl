@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
     @version 1.0
     @see XRemoteContentProviderAcceptor
 */
-published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
+published interface XRemoteContentProviderDistributor: cpo::uno::XInterface
 {
     /** Offer the local content broker to a remote content provider acceptor.
 

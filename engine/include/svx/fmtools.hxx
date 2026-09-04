@@ -54,7 +54,7 @@ SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, const css::
 void displayException(const css::sdb::SQLErrorEvent&, const css::uno::Reference<css::awt::XWindow>& rParent);
 void displayException(const cpo::uno::Any&, const css::uno::Reference<css::awt::XWindow>& rParent);
 
-sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
+sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< cpo::uno::XInterface>& xElement);
 
 SVXCORE_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::XPropertySet>& xControlModel);
 
@@ -66,7 +66,7 @@ SVXCORE_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::X
 class SAL_WARN_UNUSED CursorWrapper
 {
 private:
-    css::uno::Reference< css::uno::XInterface>                m_xGeneric;
+    css::uno::Reference< cpo::uno::XInterface>                m_xGeneric;
     css::uno::Reference< css::sdbc::XResultSet>               m_xMoveOperations;
     css::uno::Reference< css::sdbcx::XRowLocate>              m_xBookmarkOperations;
     css::uno::Reference< css::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
@@ -87,7 +87,7 @@ public:
     bool is() const { return m_xMoveOperations.is(); }
     bool Is() const { return m_xMoveOperations.is(); }
 
-    operator const css::uno::Reference< css::uno::XInterface>& () const{ return m_xGeneric; }
+    operator const css::uno::Reference< cpo::uno::XInterface>& () const{ return m_xGeneric; }
 
     // 'Conversions'
     CursorWrapper& operator=(const css::uno::Reference< css::sdbc::XRowSet>& xCursor);
@@ -164,11 +164,11 @@ SdrObjKind getControlTypeByObject(const css::uno::Reference< css::lang::XService
     // get the object type (OBJ_FM_...) from the services the object supports
 
 
-bool isRowSetAlive(const css::uno::Reference< css::uno::XInterface>& _rxRowSet);
+bool isRowSetAlive(const css::uno::Reference< cpo::uno::XInterface>& _rxRowSet);
     // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supplies any columns
 
 
-typedef ::o3tl::sorted_vector< css::uno::Reference< css::uno::XInterface > > InterfaceBag;
+typedef ::o3tl::sorted_vector< css::uno::Reference< cpo::uno::XInterface > > InterfaceBag;
 
 #endif // INCLUDED_SVX_FMTOOLS_HXX
 

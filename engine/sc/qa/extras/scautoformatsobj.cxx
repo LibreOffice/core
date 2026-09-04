@@ -20,7 +20,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -41,7 +41,7 @@ class ScAutoFormatsObj : public UnoApiTest,
 public:
     ScAutoFormatsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScAutoFormatsObj);
@@ -92,10 +92,10 @@ ScAutoFormatsObj::ScAutoFormatsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
+uno::Reference<cpo::uno::XInterface> ScAutoFormatsObj::init()
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<uno::XInterface> xTAF(
+    uno::Reference<cpo::uno::XInterface> xTAF(
         xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormats"_ustr), uno::UNO_SET_THROW);
 
     uno::Reference<container::XNameContainer> xNC(xTAF, uno::UNO_QUERY_THROW);

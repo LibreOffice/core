@@ -399,7 +399,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     return { u"com.sun.star.reflection.ProxyFactory"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 stoc_FactoryImpl_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

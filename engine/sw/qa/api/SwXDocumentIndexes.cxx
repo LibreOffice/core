@@ -43,7 +43,7 @@ public:
     {
     }
 
-    Reference<XInterface> init() override
+    Reference<cpo::uno::XInterface> init() override
     {
         loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -57,7 +57,7 @@ public:
         xText->insertTextContent(xCursor, xTextContent, false);
         Reference<text::XDocumentIndexesSupplier> xDocIndSupp(xTextDocument, UNO_QUERY_THROW);
 
-        return Reference<XInterface>(xDocIndSupp->getDocumentIndexes(), UNO_QUERY_THROW);
+        return Reference<cpo::uno::XInterface>(xDocIndSupp->getDocumentIndexes(), UNO_QUERY_THROW);
     }
 
     CPPUNIT_TEST_SUITE(SwXDocumentIndexes);

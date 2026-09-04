@@ -30,7 +30,7 @@ module addin
     /**
      * Interface with miscellaneous functions.
      */
-    interface XMiscFunctions : com::sun::star::uno::XInterface
+    interface XMiscFunctions : cpo::uno::XInterface
     {
         /// Encrypts or decrypts a string using the ROT13 algorithm.
         string getRot13( [in] string aSrcString )

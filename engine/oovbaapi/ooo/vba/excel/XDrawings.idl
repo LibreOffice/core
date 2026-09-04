@@ -24,7 +24,7 @@ module ooo {  module vba { module excel {
     <p>This symbol is now deprecated in VBA but kept for compatibility with old
     VBA scripts.</p>
  */
-interface XDrawings : com::sun::star::uno::XInterface
+interface XDrawings : cpo::uno::XInterface
 {
     /** Adds a new polygon object to the sheet this collection belongs to.
 

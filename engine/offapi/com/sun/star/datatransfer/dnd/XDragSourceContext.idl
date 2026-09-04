@@ -38,7 +38,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     @see com::sun::star::datatransfer::dnd::XDragSourceListener
 */
 
-published interface XDragSourceContext: com::sun::star::uno::XInterface
+published interface XDragSourceContext: cpo::uno::XInterface
 {
     /** Get the identifier of the currently used cursor.
 

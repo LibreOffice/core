@@ -141,7 +141,7 @@ OString mapUnoTypeToPythonHint(std::u16string_view unoTypeName, TypeManager cons
         {
             OString pySimpleNameOfNucleus; // This will hold the final, safe Python class name
             sal_Int32 lastDotInNucleus = nucleus.lastIndexOf('.');
-            // Extract the simple name (e.g., "XInterface" from "com.sun.star.uno.XInterface")
+            // Extract the simple name (e.g., "XInterface" from "cpo.uno.XInterface")
             if (lastDotInNucleus != -1)
             {
                 pySimpleNameOfNucleus = getSafePythonIdentifier(
@@ -908,7 +908,7 @@ void PythonStubGenerator::generateInterface(const unoidl::InterfaceTypeEntity* e
 
     // The root UNO interface, XInterface, should inherit from ABC. All others
     // will then inherit it transitively.
-    if (m_unoName == u"com.sun.star.uno.XInterface" || bases.empty())
+    if (m_unoName == u"cpo.uno.XInterface" || bases.empty())
     {
         addImportLine("from abc import ABC, abstractmethod"_ostr);
         baseClassesStr.append("ABC");

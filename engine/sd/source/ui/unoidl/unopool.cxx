@@ -81,7 +81,7 @@ void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEnt
     SvxUnoDrawPool::putAny( pPool, pEntry, rValue );
 }
 
-uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel )
+uno::Reference< cpo::uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel )
 {
     return static_cast<cppu::OWeakObject*>(new SdUnoDrawPool( pDrawModel ));
 }

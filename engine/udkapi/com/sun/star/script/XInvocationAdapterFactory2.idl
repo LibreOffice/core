@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module script {
 /** Interface to create adapter objects giving types to be supported and a
     an invocation interface incoming calls are delegated to.
 */
-published interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
+published interface XInvocationAdapterFactory2 : cpo::uno::XInterface
 {
     /** Creates an adapter interface of given types for calling the given
         XInvocation interface.
@@ -38,7 +38,7 @@ published interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
                  adapter interface; this interface can be queried for
                  XInterface and given types
     */
-    com::sun::star::uno::XInterface createAdapter(
+    cpo::uno::XInterface createAdapter(
         [in] XInvocation Invocation,
         [in] sequence< type > aTypes );
 };

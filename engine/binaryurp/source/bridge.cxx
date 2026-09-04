@@ -38,7 +38,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/thread.hxx>
 #include <rtl/byteseq.hxx>
@@ -777,7 +777,7 @@ void Bridge::handleCommitChangeRequest(
                 cpo::uno::Any(
                     css::bridge::InvalidProtocolChangeException(
                         u"InvalidProtocolChangeException"_ustr,
-                        css::uno::Reference< css::uno::XInterface >(), pp,
+                        css::uno::Reference< cpo::uno::XInterface >(), pp,
                         1)));
             break;
         }
@@ -843,7 +843,7 @@ Bridge::~Bridge() {
     dispose();
 }
 
-css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
+css::uno::Reference< cpo::uno::XInterface > Bridge::getInstance(
     OUString const & sInstanceName)
 {
     if (sInstanceName.isEmpty()) {
@@ -858,7 +858,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
                 " character"_ustr);
         }
     }
-    css::uno::TypeDescription ifc(cppu::UnoType<css::uno::XInterface>::get());
+    css::uno::TypeDescription ifc(cppu::UnoType<cpo::uno::XInterface>::get());
     typelib_TypeDescription * p = ifc.get();
     std::vector< BinaryAny > inArgs;
     inArgs.emplace_back(
@@ -869,7 +869,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     bool bExc = makeCall(
         sInstanceName,
         css::uno::TypeDescription(
-            u"com.sun.star.uno.XInterface::queryInterface"_ustr),
+            u"cpo.uno.XInterface::queryInterface"_ustr),
         false, std::move(inArgs), &ret, &outArgs);
     throwException(bExc, ret);
     auto const t = ret.getType();
@@ -887,8 +887,8 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
             "initial object queryInterface for OID \"" + sInstanceName
             + "\" returned null css.uno.XInterface ANY");
     }
-    return css::uno::Reference< css::uno::XInterface >(
-        static_cast< css::uno::XInterface * >(
+    return css::uno::Reference< cpo::uno::XInterface >(
+        static_cast< cpo::uno::XInterface * >(
             binaryToCppMapping_.mapInterface(
                 val,
                 ifc.get())),
@@ -992,7 +992,7 @@ void Bridge::makeReleaseCall(
         }();
     sendRequest(
         tid, oid, type,
-        css::uno::TypeDescription(u"com.sun.star.uno.XInterface::release"_ustr),
+        css::uno::TypeDescription(u"cpo.uno.XInterface::release"_ustr),
         std::vector< BinaryAny >());
 }
 

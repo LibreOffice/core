@@ -148,7 +148,7 @@ for d in definitionSet:
        continue
     if d[0]=="_Bool" and "_supportsService(const class rtl::OUString &)" in d[1]:
        continue
-    if (d[0]=="class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>"
+    if (d[0]=="class com::sun::star::uno::Reference<class cpo::uno::XInterface>"
         and "Instance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)" in d[1]):
        continue
     # ignore the Java symbols, loaded from the JavaVM
@@ -253,10 +253,10 @@ for d in definitionSet:
         or "operator++" in d[1] or "operator--" in d[1]):
         continue
     # ignore UNO constructor functions
-    if (d[0] == "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>" and
+    if (d[0] == "class com::sun::star::uno::Reference<class cpo::uno::XInterface>" and
         d[1].endswith("_createInstance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)")):
         continue
-    if (d[0] == "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>" and
+    if (d[0] == "class com::sun::star::uno::Reference<class cpo::uno::XInterface>" and
         d[1].endswith("_CreateInstance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)")):
         continue
     # debug code

@@ -55,7 +55,7 @@ inline bool type_equals(
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 {
     return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
-            OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
+            OUString::unacquired( &type->pTypeName ) == "cpo.uno.XInterface");
 }
 
 struct JNI_type_info

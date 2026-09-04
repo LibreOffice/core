@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
 
     @version 1.0
 */
-published interface XRemoteContentProviderDoneListener: com::sun::star::uno::XInterface
+published interface XRemoteContentProviderDoneListener: cpo::uno::XInterface
 {
     /** A notification that all remote content providers added to the given
         XRemoteContentProviderAcceptor should be removed,

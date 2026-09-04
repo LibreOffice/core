@@ -1258,7 +1258,7 @@ GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
             u"bad GtkInstance::CreateClipboard arguments"_ustr,
-            css::uno::Reference<css::uno::XInterface>(), -1);
+            css::uno::Reference<cpo::uno::XInterface>(), -1);
     }
 
     SelectionType eSelection = (sel == "CLIPBOARD") ? SELECTION_CLIPBOARD : SELECTION_PRIMARY;

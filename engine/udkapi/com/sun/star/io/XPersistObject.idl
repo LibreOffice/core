@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module io {
      @see com::sun::star::io::XObjectOutputStream
      @see com::sun::star::io::XObjectInputStream
  */
-published interface XPersistObject: com::sun::star::uno::XInterface
+published interface XPersistObject: cpo::uno::XInterface
 {
 
     /** gives the service name of the object

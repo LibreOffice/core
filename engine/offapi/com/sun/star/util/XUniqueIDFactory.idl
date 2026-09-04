@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module util {
 
 /** creates IDs which are unique within the container.
  */
-published interface XUniqueIDFactory: com::sun::star::uno::XInterface
+published interface XUniqueIDFactory: cpo::uno::XInterface
 {
     /// creates a new ID, unique within this container.
     string createUniqueID( );

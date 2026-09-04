@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::RecentFunctions
  */
-published interface XRecentFunctions: com::sun::star::uno::XInterface
+published interface XRecentFunctions: cpo::uno::XInterface
 {
 
     /** returns a sequence of those functions that were most recently used.

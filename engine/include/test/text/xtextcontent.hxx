@@ -23,7 +23,7 @@ class OOO_DLLPUBLIC_TEST XTextContent
 public:
     virtual ~XTextContent() {}
 
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
     virtual css::uno::Reference< css::text::XTextRange > getTextRange() = 0;
     virtual css::uno::Reference< css::text::XTextContent > getTextContent() = 0;
     virtual bool isAttachSupported() = 0;

@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module util {
 
 /** provides a mapping from `string` to `string`
  */
-published interface XStringMapping: com::sun::star::uno::XInterface
+published interface XStringMapping: cpo::uno::XInterface
 {
     /** provides a mapping for a given sequence of strings to
         a sequence of belonging strings.

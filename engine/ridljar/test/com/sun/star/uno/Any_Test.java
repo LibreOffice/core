@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import cpo.uno.Type;
+import cpo.uno.XInterface;
 
 public final class Any_Test {
 

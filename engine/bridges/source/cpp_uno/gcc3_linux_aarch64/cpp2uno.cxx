@@ -28,7 +28,7 @@
 
 #include <dlfcn.h>
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <sal/alloca.h>
 #include <sal/types.h>
@@ -437,7 +437,7 @@ void vtableCall(
                     (reinterpret_cast<cpo::uno::Type *>(gpr[1])
                      ->getTypeLibType()));
                 if (td != nullptr && td->eTypeClass == typelib_TypeClass_INTERFACE) {
-                    css::uno::XInterface * ifc = nullptr;
+                    cpo::uno::XInterface * ifc = nullptr;
                     proxy->getBridge()->getCppEnv()->getRegisteredInterface(
                         proxy->getBridge()->getCppEnv(),
                         reinterpret_cast<void **>(&ifc), proxy->getOid().pData,

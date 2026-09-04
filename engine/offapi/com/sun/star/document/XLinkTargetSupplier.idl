@@ -27,7 +27,7 @@ module com {   module sun {   module star {   module document {
 
     <p>These targets implement the service LinkTarget.  </p>
  */
-published interface XLinkTargetSupplier: com::sun::star::uno::XInterface
+published interface XLinkTargetSupplier: cpo::uno::XInterface
 {
     /** @returns
             the names of possible links to children of this object inside  a

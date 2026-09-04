@@ -29,7 +29,7 @@ module com { module sun { module star { module accessibility {
     expose all actions that it can perform.  Each action can be performed or
     be queried for a description or associated key bindings.</p>
 */
-interface XAccessibleAction : ::com::sun::star::uno::XInterface
+interface XAccessibleAction : ::cpo::uno::XInterface
 {
     /** Returns the number of accessible actions available in this object.
 

@@ -30,13 +30,13 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_uno_comp_sdb_RowsetOrderDialog_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::RowsetOrderDialog(context));
 }
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_uno_comp_sdb_RowsetFilterDialog_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {

@@ -127,10 +127,10 @@ public:
             const css::uno::Reference< css::lang::XEventListener > & xListener) override;
 
     // XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
         getParent() override;
     virtual void SAL_CALL setParent(
-            css::uno::Reference< css::uno::XInterface> const& xParent) override;
+            css::uno::Reference< cpo::uno::XInterface> const& xParent) override;
 
     // XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;

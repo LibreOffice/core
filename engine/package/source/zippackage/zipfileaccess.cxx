@@ -168,7 +168,7 @@ void SAL_CALL OZipFileAccess::initialize( const cpo::uno::Sequence< cpo::uno::An
         throw cpo::uno::RuntimeException(); // initialization is allowed only one time
 
     if ( !aArguments.hasElements() )
-        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
 
     OSL_ENSURE( aArguments.getLength() == 1, "Too many arguments are provided, only the first one will be used!" );
 
@@ -217,12 +217,12 @@ void SAL_CALL OZipFileAccess::initialize( const cpo::uno::Sequence< cpo::uno::An
         if (aParamURL.isEmpty())
             throw lang::IllegalArgumentException(
                 u"required argument 'URL' is not given or invalid."_ustr,
-                uno::Reference<uno::XInterface>(), 1);
+                uno::Reference<cpo::uno::XInterface>(), 1);
 
         openInputStream();
     }
     else
-        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
 
     if ( !m_xContentStream.is() )
         throw io::IOException();
@@ -462,7 +462,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 package_OZipFileAccess_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

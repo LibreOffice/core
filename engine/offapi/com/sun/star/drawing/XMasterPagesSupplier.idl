@@ -25,7 +25,7 @@
 /** must be supported to provide access to the
     MasterPages of a multi-page drawing-layer.
  */
-published interface XMasterPagesSupplier: com::sun::star::uno::XInterface
+published interface XMasterPagesSupplier: cpo::uno::XInterface
 {
 
     /** @returns

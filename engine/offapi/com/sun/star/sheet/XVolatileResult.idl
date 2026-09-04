@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::VolatileResult
     @see com::sun::star::sheet::ResultEvent
  */
-published interface XVolatileResult: com::sun::star::uno::XInterface
+published interface XVolatileResult: cpo::uno::XInterface
 {
 
     /** adds a listener to be notified when a new value is available.

@@ -34,7 +34,7 @@ interface XBorderResizeListener: com::sun::star::lang::XEventListener
         @param NewSize
             the new widths of the controller's border
      */
-    void borderWidthsChanged( [in] ::com::sun::star::uno::XInterface Object,
+    void borderWidthsChanged( [in] ::cpo::uno::XInterface Object,
                               [in] BorderWidths NewSize );
 };
 

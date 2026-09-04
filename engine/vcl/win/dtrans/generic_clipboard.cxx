@@ -127,7 +127,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
         maClipboardListeners.removeInterface( aGuard, listener );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 dtrans_GenericClipboard_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -34,7 +34,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 
@@ -54,7 +54,7 @@ struct DerivedException1: cpo::uno::Exception {};
 
 struct DerivedException2: cpo::uno::RuntimeException {};
 
-struct DerivedInterface1: css::uno::XInterface {
+struct DerivedInterface1: cpo::uno::XInterface {
 private:
     ~DerivedInterface1() {}
         // avoid warnings about virtual members and non-virtual dtor
@@ -202,12 +202,12 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT_EQUAL(
         u"cpo.uno.RuntimeException"_ustr, t.getTypeName());
     CPPUNIT_ASSERT_EQUAL(cppu::UnoType<DerivedException2>::get(), t);
-    t = cppu::UnoType<css::uno::XInterface>::get();
+    t = cppu::UnoType<cpo::uno::XInterface>::get();
     CPPUNIT_ASSERT_EQUAL(cpo::uno::TypeClass_INTERFACE, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
-        u"com.sun.star.uno.XInterface"_ustr, t.getTypeName());
+        u"cpo.uno.XInterface"_ustr, t.getTypeName());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::UnoType<css::uno::Reference<css::uno::XInterface>>::get(), t);
+        cppu::UnoType<css::uno::Reference<cpo::uno::XInterface>>::get(), t);
     CPPUNIT_ASSERT_EQUAL(cppu::UnoType<DerivedInterface1>::get(), t);
     CPPUNIT_ASSERT_EQUAL(
         cppu::UnoType<css::uno::Reference<DerivedInterface1>>::get(), t);
@@ -357,19 +357,19 @@ void Test::testGetTypeFavourUnsigned() {
         cppu::UnoType<cpo::uno::RuntimeException>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
-            static_cast<css::uno::XInterface *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+            static_cast<cpo::uno::XInterface *>(nullptr)),
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
-            static_cast<css::uno::Reference<css::uno::XInterface> *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+            static_cast<css::uno::Reference<cpo::uno::XInterface> *>(nullptr)),
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<DerivedInterface1 *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<css::uno::Reference<DerivedInterface1> *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<cpo::uno::XComponentContext *>(nullptr)),
@@ -518,19 +518,19 @@ void Test::testGetTypeFavourChar() {
         cppu::getTypeFavourChar(static_cast<DerivedException2 *>(nullptr)),
         cppu::UnoType<cpo::uno::RuntimeException>::get());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::getTypeFavourChar(static_cast<css::uno::XInterface *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+        cppu::getTypeFavourChar(static_cast<cpo::uno::XInterface *>(nullptr)),
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
-            static_cast<css::uno::Reference<css::uno::XInterface> *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+            static_cast<css::uno::Reference<cpo::uno::XInterface> *>(nullptr)),
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<DerivedInterface1 *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<css::uno::Reference<DerivedInterface1> *>(nullptr)),
-        cppu::UnoType<css::uno::XInterface>::get());
+        cppu::UnoType<cpo::uno::XInterface>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<cpo::uno::XComponentContext *>(nullptr)),

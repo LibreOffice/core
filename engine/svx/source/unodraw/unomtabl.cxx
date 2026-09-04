@@ -442,7 +442,7 @@ bool SvxUnoMarkerTable::hasElements(  )
 /**
  * Create a hatchtable
  */
-uno::Reference< uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel )
+uno::Reference< cpo::uno::XInterface > SvxUnoMarkerTable_createInstance( SdrModel* pModel )
 {
     return *new SvxUnoMarkerTable(pModel);
 }

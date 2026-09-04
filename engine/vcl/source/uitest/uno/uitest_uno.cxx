@@ -150,7 +150,7 @@ cpo::uno::Sequence<OUString> UITestUnoObj::getSupportedServiceNames()
     return { u"com.sun.star.ui.test.UITest"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 UITest_get_implementation(cpo::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UITestUnoObj());

@@ -26,7 +26,7 @@
 
     @see XChartDocument
  */
-published interface XChartData: com::sun::star::uno::XInterface
+published interface XChartData: cpo::uno::XInterface
 {
 
     /** allows a component supporting the

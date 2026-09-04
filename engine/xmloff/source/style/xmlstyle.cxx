@@ -744,7 +744,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::cr
             }
         }
 
-        uno::Reference<uno::XInterface> xObject(GetImport().GetModel(), uno::UNO_QUERY);
+        uno::Reference<cpo::uno::XInterface> xObject(GetImport().GetModel(), uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPageSupplier> const xDrawPageSupplier(GetImport().GetModel(), uno::UNO_QUERY);
         if (xDrawPageSupplier.is())
         {

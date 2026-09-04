@@ -18,7 +18,7 @@
 package mod._toolkit;
 
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import java.io.PrintWriter;
 

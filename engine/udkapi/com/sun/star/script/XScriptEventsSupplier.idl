@@ -26,7 +26,7 @@
     Gives access to an event container represented by an
     XNameContainer containing ScriptEventDescriptor instances.
  */
-published interface XScriptEventsSupplier: com::sun::star::uno::XInterface
+published interface XScriptEventsSupplier: cpo::uno::XInterface
 {
     /**
         Returns an XNameContainer containing instances

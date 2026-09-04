@@ -26,7 +26,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 
-namespace com::sun::star::uno { class XInterface; }
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { template <class E> class Sequence; }
 
 enum class SfxModelFlags
@@ -49,10 +49,10 @@ namespace sfx2
      * This evaluates certain creation arguments (passed to createInstanceWithArguments)
      * and passes them to the factory function of the derived class.
      */
-    css::uno::Reference<css::uno::XInterface>
+    css::uno::Reference<cpo::uno::XInterface>
         SFX2_DLLPUBLIC createSfxModelInstance(
             const cpo::uno::Sequence<cpo::uno::Any> & rxArgs,
-            std::function<css::uno::Reference<css::uno::XInterface>( SfxModelFlags )> creationFunc
+            std::function<css::uno::Reference<cpo::uno::XInterface>( SfxModelFlags )> creationFunc
         );
 
 } // namespace sfx2

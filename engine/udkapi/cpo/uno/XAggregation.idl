@@ -62,7 +62,7 @@ module cpo { module uno {
     several single objects in your specific programming language, though this
     depends on your programming language.
 */
-published interface XAggregation: com::sun::star::uno::XInterface
+published interface XAggregation: cpo::uno::XInterface
 {
     /** sets the object to which all calls to the method
         XInterface::queryInterface()
@@ -79,7 +79,7 @@ published interface XAggregation: com::sun::star::uno::XInterface
 
         @see XAggregation::queryAggregation
     */
-    void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
+    void setDelegator( [in] cpo::uno::XInterface pDelegator );
 
     /** is similar to XInterface::queryInterface(),
         but it is to be processed directly without being forwarded to the

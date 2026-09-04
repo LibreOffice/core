@@ -26,7 +26,7 @@ module com { module sun { module star { module script { module browse {
     com.sun.star.script.XInvocation (see the Developer's Guide for
     more details).
 */
-interface XBrowseNode : ::com::sun::star::uno::XInterface
+interface XBrowseNode : ::cpo::uno::XInterface
 {
   /**
     Get the name of the node

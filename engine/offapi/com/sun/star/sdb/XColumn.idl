@@ -37,7 +37,7 @@
 
 /** is used to access data which is collected in a row.
  */
-published interface XColumn: com::sun::star::uno::XInterface
+published interface XColumn: cpo::uno::XInterface
 {
 
     /** reports whether the last column read had a value of SQL NULL.

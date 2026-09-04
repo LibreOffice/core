@@ -21,7 +21,7 @@ import com.sun.star.awt.tree.XMutableTreeDataModel;
 import com.sun.star.awt.tree.XMutableTreeNode;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
+import cpo.uno.XInterface;
 
 import java.io.PrintWriter;
 

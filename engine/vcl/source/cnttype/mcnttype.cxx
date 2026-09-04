@@ -75,13 +75,13 @@ void CMimeContentType::init( const OUString& aCntType )
         != aCntType.getStr() + aCntType.getLength())
     {
         throw css::lang::IllegalArgumentException(
-            "illegal media type " + aCntType, css::uno::Reference<css::uno::XInterface>(), -1);
+            "illegal media type " + aCntType, css::uno::Reference<cpo::uno::XInterface>(), -1);
     }
     for (auto const & i: params) {
         if (!i.second.m_bConverted) {
             throw css::lang::IllegalArgumentException(
                 "illegal parameter value in media type " + aCntType,
-                css::uno::Reference<css::uno::XInterface>(), -1);
+                css::uno::Reference<cpo::uno::XInterface>(), -1);
         }
         m_ParameterMap[OUString::fromUtf8(i.first)] = i.second.m_sValue;
     }

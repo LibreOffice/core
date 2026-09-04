@@ -41,7 +41,7 @@ class SwXBodyText final : public UnoApiTest,
 public:
     SwXBodyText();
 
-    Reference<XInterface> init() override;
+    Reference<cpo::uno::XInterface> init() override;
 
     CPPUNIT_TEST_SUITE(SwXBodyText);
     CPPUNIT_TEST(testCreateTextCursor);
@@ -66,7 +66,7 @@ SwXBodyText::SwXBodyText()
 {
 }
 
-Reference<XInterface> SwXBodyText::init()
+Reference<cpo::uno::XInterface> SwXBodyText::init()
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
@@ -74,7 +74,7 @@ Reference<XInterface> SwXBodyText::init()
 
     Reference<text::XText> xText = xTextDocument->getText();
 
-    return Reference<XInterface>(xText, UNO_QUERY_THROW);
+    return Reference<cpo::uno::XInterface>(xText, UNO_QUERY_THROW);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXBodyText);

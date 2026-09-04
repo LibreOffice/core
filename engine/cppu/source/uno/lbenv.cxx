@@ -192,7 +192,7 @@ InterfaceEntry * ObjectEntry::find(
     // shortcut common case:
     OUString const & type_name =
         OUString::unacquired( &pTypeDescr_->aBase.pTypeName );
-    if ( type_name == "com.sun.star.uno.XInterface" )
+    if ( type_name == "cpo.uno.XInterface" )
     {
         return aInterfaces.data();
     }

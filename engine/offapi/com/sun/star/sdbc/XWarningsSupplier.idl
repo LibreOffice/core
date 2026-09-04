@@ -24,7 +24,7 @@
     errors.
     @see com::sun::star::sdbc::SQLWarning
  */
-published interface XWarningsSupplier: com::sun::star::uno::XInterface
+published interface XWarningsSupplier: cpo::uno::XInterface
 {
 
     /** returns the first warning reported by calls on an object that supports

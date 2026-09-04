@@ -699,7 +699,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const cpo::
     SolarMutexGuard aGuard;
     bool bDone = false;
     //  reflection does not need to be uno::XInterface, can be any interface...
-    uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
+    uno::Reference< cpo::uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScStyleObj* pStyleObj = dynamic_cast<ScStyleObj*>( xInterface.get() );

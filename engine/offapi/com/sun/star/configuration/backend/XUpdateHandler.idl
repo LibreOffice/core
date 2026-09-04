@@ -24,7 +24,7 @@ module com { module sun { module star { module configuration { module backend {
 /** receives a description of a configuration update or layer
     as a sequence of events.
  */
-published interface XUpdateHandler: ::com::sun::star::uno::XInterface
+published interface XUpdateHandler: ::cpo::uno::XInterface
 {
 
     /** receives notification that an update or description is started.

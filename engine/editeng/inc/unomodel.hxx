@@ -35,8 +35,8 @@ public:
     SvxSimpleUnoModel();
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XStyleFamiliesSupplier
@@ -56,7 +56,7 @@ public:
     virtual bool hasControllersLocked(  ) override;
     virtual css::uno::Reference< css::frame::XController > getCurrentController(  ) override;
     virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getCurrentSelection(  ) override;
 
     // XComponent
     virtual void dispose(  ) override;

@@ -24,7 +24,7 @@
     com::sun::star::datatransfer::XTransferable
     implementation from the object.
  */
-published interface XTransferableSupplier: com::sun::star::uno::XInterface
+published interface XTransferableSupplier: cpo::uno::XInterface
 {
     /** allows to get access to
         com::sun::star::datatransfer::XTransferable

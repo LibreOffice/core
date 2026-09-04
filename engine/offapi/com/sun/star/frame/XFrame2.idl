@@ -119,7 +119,7 @@ published interface XFrame2
     /** Provides access to the LayoutManager of the frame.
         This is actually of type XLayoutManager, but this API is still experimental (unpublished).
     */
-    [attribute] com::sun::star::uno::XInterface LayoutManager;
+    [attribute] cpo::uno::XInterface LayoutManager;
 };
 
 

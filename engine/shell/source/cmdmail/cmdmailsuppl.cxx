@@ -84,7 +84,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
         throw cpo::uno::Exception(
             ("Could not convert \"" + word + "\" to encoding #"
              + OUString::number(osl_getThreadTextEncoding())),
-            css::uno::Reference<css::uno::XInterface>());
+            css::uno::Reference<cpo::uno::XInterface>());
     }
     buffer.append('\'');
     for (sal_Int32 i = 0; i != sys.getLength(); ++i) {
@@ -94,7 +94,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
             if (strict) {
                 throw cpo::uno::Exception(
                     "Could not convert word containing NUL, \"" + word + "\"",
-                    css::uno::Reference<css::uno::XInterface>());
+                    css::uno::Reference<cpo::uno::XInterface>());
             }
             break;
         case '\'':
@@ -278,7 +278,7 @@ Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
     return { u"com.sun.star.system.SimpleCommandMail"_ustr };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 shell_CmdMailSuppl_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {

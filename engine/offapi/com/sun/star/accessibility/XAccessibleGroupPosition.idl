@@ -19,7 +19,7 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleGroupPosition : ::com::sun::star::uno::XInterface
+interface XAccessibleGroupPosition : ::cpo::uno::XInterface
 {
     /* Returns the group position of the object */
     sequence<long> getGroupPosition( [in] any accoject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);

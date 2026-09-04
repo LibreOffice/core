@@ -15,7 +15,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -41,7 +41,7 @@ uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
     uno::Reference<drawing::XControlShape> xControlShape(
         xMSF->createInstance(u"com.sun.star.drawing.ControlShape"_ustr), uno::UNO_QUERY_THROW);
 
-    uno::Reference<uno::XInterface> aComponent(
+    uno::Reference<cpo::uno::XInterface> aComponent(
         xMSF->createInstance(OUString::Concat("com.sun.star.form.component.") + r_aKind),
         uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(aComponent, uno::UNO_QUERY_THROW);

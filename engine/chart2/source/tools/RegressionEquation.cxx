@@ -291,7 +291,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::pr
 
 } //  namespace chart
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_chart2_RegressionEquation_get_implementation(cpo::uno::XComponentContext *,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {

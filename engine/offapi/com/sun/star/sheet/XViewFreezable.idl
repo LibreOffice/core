@@ -25,7 +25,7 @@
 /** enables a SpreadsheetView to freeze
     columns and rows of the view.
  */
-published interface XViewFreezable: com::sun::star::uno::XInterface
+published interface XViewFreezable: cpo::uno::XInterface
 {
 
     /** returns `TRUE` if the view has frozen panes.

@@ -18,7 +18,7 @@
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -35,7 +35,7 @@ class ScAreaLinkObj : public UnoApiTest,
 public:
     ScAreaLinkObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScAreaLinkObj);
@@ -72,7 +72,7 @@ ScAreaLinkObj::ScAreaLinkObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScAreaLinkObj::init()
+uno::Reference<cpo::uno::XInterface> ScAreaLinkObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 

@@ -18,7 +18,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -32,7 +32,7 @@ class ScIndexEnumeration_TableRowsEnumeration : public UnoApiTest, public apites
 public:
     ScIndexEnumeration_TableRowsEnumeration();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScIndexEnumeration_TableRowsEnumeration);
@@ -49,7 +49,7 @@ ScIndexEnumeration_TableRowsEnumeration::ScIndexEnumeration_TableRowsEnumeration
 {
 }
 
-uno::Reference<uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
+uno::Reference<cpo::uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());

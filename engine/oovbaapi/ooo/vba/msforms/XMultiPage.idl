@@ -21,7 +21,7 @@
 module ooo {  module vba {  module msforms {
 
 
-interface XMultiPage: com::sun::star::uno::XInterface
+interface XMultiPage: cpo::uno::XInterface
 {
     [attribute] long Value;
     any Pages( [in] any index );

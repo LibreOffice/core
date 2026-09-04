@@ -27,7 +27,7 @@
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -47,7 +47,7 @@ class ScChartsObj : public UnoApiTest,
 public:
     ScChartsObj();
 
-    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<cpo::uno::XInterface> init() override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScChartsObj);
@@ -88,7 +88,7 @@ ScChartsObj::ScChartsObj()
 {
 }
 
-uno::Reference<uno::XInterface> ScChartsObj::init()
+uno::Reference<cpo::uno::XInterface> ScChartsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);

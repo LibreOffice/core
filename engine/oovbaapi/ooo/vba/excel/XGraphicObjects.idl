@@ -60,7 +60,7 @@ module ooo {  module vba { module excel {
     NOT belong to ActiveX form controls but to the old-style drawing controls.
     </p>
  */
-interface XGraphicObjects : com::sun::star::uno::XInterface
+interface XGraphicObjects : cpo::uno::XInterface
 {
     /** Adds a new graphic object to the sheet this collection belongs to. The
         type of the object is determined by the type of the collection.

@@ -647,9 +647,9 @@ void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt) {
     for (auto it = range.first; it != range.second; ++it)
         if (it->second == evt.Source)
         {
-            css::uno::Reference<css::uno::XInterface>  xCorrectType(it->second);
+            css::uno::Reference<cpo::uno::XInterface>  xCorrectType(it->second);
             m_aMap.erase(it);
-            m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
+            m_aMap.insert(::std::pair<const OUString, css::uno::Reference<cpo::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
             break;
         }
 }
@@ -793,7 +793,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     else
         m_aItems.insert( m_aItems.begin() + _nIndex, pElementMetaData->xInterface );
 
-    m_aMap.insert( ::std::pair< const OUString, css::uno::Reference<css::uno::XInterface> >( sName, pElementMetaData->xInterface ) );
+    m_aMap.insert( ::std::pair< const OUString, css::uno::Reference<cpo::uno::XInterface> >( sName, pElementMetaData->xInterface ) );
 
     // announce ourself as parent to the new element
     pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
@@ -857,7 +857,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
 void OInterfaceContainer::removeElementsNoEvents()
 {
     OInterfaceArray::iterator i = m_aItems.begin();
-    css::uno::Reference<css::uno::XInterface>  xElement(*i);
+    css::uno::Reference<cpo::uno::XInterface>  xElement(*i);
 
     OInterfaceMap::iterator j = std::find_if(m_aMap.begin(), m_aMap.end(),
         [&xElement](const OInterfaceMap::value_type& rEntry) { return rEntry.second == xElement; });
@@ -871,7 +871,7 @@ void OInterfaceContainer::removeElementsNoEvents()
 
     Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(css::uno::Reference<css::uno::XInterface> ());
+        xChild->setParent(css::uno::Reference<cpo::uno::XInterface> ());
 }
 
 
@@ -881,7 +881,7 @@ void OInterfaceContainer::implInserted( const ElementDescription* /*_pElement*/ 
 }
 
 
-void OInterfaceContainer::implRemoved( const css::uno::Reference<css::uno::XInterface>& /*_rxObject*/ )
+void OInterfaceContainer::implRemoved( const css::uno::Reference<cpo::uno::XInterface>& /*_rxObject*/ )
 {
     // not interested in
 }
@@ -918,7 +918,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     }
 
     // get the old element
-    css::uno::Reference<css::uno::XInterface>  xOldElement( m_aItems[ _nIndex ] );
+    css::uno::Reference<cpo::uno::XInterface>  xOldElement( m_aItems[ _nIndex ] );
     DBG_ASSERT( xOldElement.get() == Reference< XInterface >( xOldElement, UNO_QUERY ).get(),
         "OInterfaceContainer::implReplaceByIndex: elements should be held normalized!" );
 
@@ -929,7 +929,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     // remove event knittings
     if ( m_xEventAttacher.is() )
     {
-        css::uno::Reference<css::uno::XInterface> xNormalized( xOldElement, UNO_QUERY );
+        css::uno::Reference<cpo::uno::XInterface> xNormalized( xOldElement, UNO_QUERY );
         m_xEventAttacher->detach( _nIndex, xNormalized );
         m_xEventAttacher->removeEntry( _nIndex );
     }
@@ -942,7 +942,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     // give the old element a new (void) parent
     Reference<XChild>  xChild(xOldElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(css::uno::Reference<css::uno::XInterface> ());
+        xChild->setParent(css::uno::Reference<cpo::uno::XInterface> ());
 
     // remove the old one
     m_aMap.erase(j);
@@ -956,7 +956,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     aElementMetaData->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // insert the new one
-    m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface>>(
+    m_aMap.insert(::std::pair<const OUString, css::uno::Reference<cpo::uno::XInterface>>(
         sName, aElementMetaData->xInterface));
     m_aItems[_nIndex] = aElementMetaData->xInterface;
 
@@ -1001,7 +1001,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
     OSL_PRECOND( ( _nIndex >= 0 ) && ( o3tl::make_unsigned(_nIndex) < m_aItems.size() ), "OInterfaceContainer::implRemoveByIndex: precondition not met (index)!" );
 
     OInterfaceArray::iterator i = m_aItems.begin() + _nIndex;
-    css::uno::Reference<css::uno::XInterface>  xElement(*i);
+    css::uno::Reference<cpo::uno::XInterface>  xElement(*i);
 
     OInterfaceMap::iterator j = std::find_if(m_aMap.begin(), m_aMap.end(),
         [&xElement](const OInterfaceMap::value_type& rEntry) { return rEntry.second == xElement; });
@@ -1012,7 +1012,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
     // remove event knittings
     if ( m_xEventAttacher.is() )
     {
-        css::uno::Reference<css::uno::XInterface> xNormalized( xElement, UNO_QUERY );
+        css::uno::Reference<cpo::uno::XInterface> xNormalized( xElement, UNO_QUERY );
         m_xEventAttacher->detach( _nIndex, xNormalized );
         m_xEventAttacher->removeEntry( _nIndex );
     }
@@ -1023,7 +1023,7 @@ void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::Cle
 
     Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(css::uno::Reference<css::uno::XInterface> ());
+        xChild->setParent(css::uno::Reference<cpo::uno::XInterface> ());
 
     // notify derived classes
     implRemoved(xElement);
@@ -1285,14 +1285,14 @@ void OFormComponents::disposing()
 
 //XChild
 
-void OFormComponents::setParent(const css::uno::Reference<css::uno::XInterface>& Parent)
+void OFormComponents::setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
 
-css::uno::Reference<css::uno::XInterface> OFormComponents::getParent()
+css::uno::Reference<cpo::uno::XInterface> OFormComponents::getParent()
 {
     return m_xParent;
 }

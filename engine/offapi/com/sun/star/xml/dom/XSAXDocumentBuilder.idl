@@ -22,7 +22,7 @@ module com { module sun { module star { module xml { module dom {
 /**
 Builds a new dom tree
 */
-interface XSAXDocumentBuilder : com::sun::star::uno::XInterface
+interface XSAXDocumentBuilder : cpo::uno::XInterface
 {
 
     SAXDocumentBuilderState getState();

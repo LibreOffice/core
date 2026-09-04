@@ -21,7 +21,7 @@ module com { module sun { module star { module accessibility {
 
 interface XAccessible;
 
-interface XAccessibleTableSelection : ::com::sun::star::uno::XInterface
+interface XAccessibleTableSelection : ::cpo::uno::XInterface
 {
     boolean selectRow ([in] long row) raises (::com::sun::star::lang::IndexOutOfBoundsException);
     boolean unselectRow ([in] long row) raises (::com::sun::star::lang::IndexOutOfBoundsException);

@@ -178,7 +178,7 @@ bool lcl_ExecuteFilterDialog(const cpo::uno::Sequence<beans::PropertyValue>& rPr
         throw task::ErrorCodeIOException(
             ("lcl_ExecuteFilterDialog: NoSuchElementException"
              " \"" + exception.Message + "\": ERRCODE_IO_ABORT"),
-            uno::Reference<uno::XInterface>(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
+            uno::Reference<cpo::uno::XInterface>(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
     }
     catch (const task::ErrorCodeIOException&)
     {

@@ -48,7 +48,7 @@ static void checkInterface( Type const & rType )
 
 static bool isXInterface( rtl_uString * pStr )
 {
-    return OUString::unacquired(&pStr) == "com.sun.star.uno.XInterface";
+    return OUString::unacquired(&pStr) == "cpo.uno.XInterface";
 }
 
 static void * makeInterface( sal_IntPtr nOffset, void * that )

@@ -238,7 +238,7 @@ namespace dbaccess
     // css::lang::XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
-    // css::uno::XInterface
+    // cpo::uno::XInterface
         virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
 
     // css::sdbc::XWarningsSupplier
@@ -302,7 +302,7 @@ namespace dbaccess
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) override;
+        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
 
     // css::sdbc::XRowSet
         virtual void execute(  ) override = 0;

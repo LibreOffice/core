@@ -231,7 +231,7 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
         {
             uno::Reference<beans::XPropertySet>       xSet;
             uno::Reference<lang::XSingleServiceFactory> xFac;
-            uno::Reference<uno::XInterface>             xInst;
+            uno::Reference<cpo::uno::XInterface> xInst;
             uno::Reference<beans::XPropertySet> xPrevSet;
             uno::Reference<beans::XPropertySet> xNextSet;
 

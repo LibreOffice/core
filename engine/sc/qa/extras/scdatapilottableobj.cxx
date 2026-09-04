@@ -34,9 +34,9 @@ public:
     ScDataPilotTableObj();
 
     virtual void setUp() override;
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< uno::XInterface > initDP2() override;
-    virtual uno::Reference< uno::XInterface > getSheets() override;
+    virtual uno::Reference< cpo::uno::XInterface > init() override;
+    virtual uno::Reference< cpo::uno::XInterface > initDP2() override;
+    virtual uno::Reference< cpo::uno::XInterface > getSheets() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
 
@@ -74,7 +74,7 @@ ScDataPilotTableObj::ScDataPilotTableObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
+uno::Reference< cpo::uno::XInterface > ScDataPilotTableObj::init()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
@@ -97,14 +97,14 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
     return xDPTable;
 }
 
-uno::Reference< uno::XInterface > ScDataPilotTableObj::getSheets()
+uno::Reference< cpo::uno::XInterface > ScDataPilotTableObj::getSheets()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference< uno::XInterface > xSheets(xDoc->getSheets());
+    uno::Reference< cpo::uno::XInterface > xSheets(xDoc->getSheets());
     return xSheets;
 }
 
-uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
+uno::Reference< cpo::uno::XInterface > ScDataPilotTableObj::initDP2()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);

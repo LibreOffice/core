@@ -59,7 +59,7 @@ class ConfigAccess final
         css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** hold an opened configuration alive */
-        css::uno::Reference< css::uno::XInterface > m_xConfig;
+        css::uno::Reference< cpo::uno::XInterface > m_xConfig;
 
         /** knows the root of the opened config access point */
         OUString m_sRoot;
@@ -80,7 +80,7 @@ class ConfigAccess final
         void      close  (                 );
         EOpenMode getMode(                 ) const;
 
-        const css::uno::Reference< css::uno::XInterface >& cfg();
+        const css::uno::Reference< cpo::uno::XInterface >& cfg();
 };
 
 } // namespace framework

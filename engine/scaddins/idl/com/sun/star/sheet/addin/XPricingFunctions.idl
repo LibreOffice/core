@@ -30,7 +30,7 @@ module addin
     /**
      * Interface with pricing functions.
      */
-    interface XPricingFunctions : com::sun::star::uno::XInterface
+    interface XPricingFunctions : cpo::uno::XInterface
     {
         /// OPT_BARRIER(), pricing of a barrier option.
         double getOptBarrier( [in] double spot, [in] double vol,

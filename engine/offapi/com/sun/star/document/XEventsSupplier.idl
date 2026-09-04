@@ -22,7 +22,7 @@ module com { module sun { module star { module document {
 
 /** gives access to a list of URLs bound to events of this object
  */
-published interface XEventsSupplier: com::sun::star::uno::XInterface
+published interface XEventsSupplier: cpo::uno::XInterface
 {
     /** offers a list of event handlers which are be bound to events of
         this object

@@ -23,7 +23,7 @@
 #include <oleidl.h>
 #include <com/sun/star/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 

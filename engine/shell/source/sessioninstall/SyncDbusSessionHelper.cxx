@@ -201,7 +201,7 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
         o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 shell_sessioninstall_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {

@@ -68,7 +68,7 @@ struct EmbedImpl
     uno::Reference < embed::XStorage > mxStorage;
     std::unique_ptr<EmbeddedObjectContainer> mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
-    cpo::uno::WeakReference < uno::XInterface > m_xModel;
+    cpo::uno::WeakReference < cpo::uno::XInterface > m_xModel;
 
     bool mbOwnsStorage : 1;
     bool mbUserAllowsLinkUpdate : 1;
@@ -116,7 +116,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
     pImpl->mpTempObjectContainer = nullptr;
 }
 
-EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor, const uno::Reference < uno::XInterface >& xModel )
+EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor, const uno::Reference < cpo::uno::XInterface >& xModel )
     :     pImpl(new EmbedImpl)
 {
     pImpl->mxStorage = rStor;
@@ -974,7 +974,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject(
         pImpl->maNameToObjectMap.erase( aIter );
         uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
         if ( xChild.is() )
-            xChild->setParent( uno::Reference < uno::XInterface >() );
+            xChild->setParent( uno::Reference < cpo::uno::XInterface >() );
     }
     else
         SAL_WARN( "comphelper.container", "Object not found for removal!" );

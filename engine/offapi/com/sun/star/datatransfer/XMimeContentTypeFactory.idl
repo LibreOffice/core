@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer {
     <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>).
 
 */
-published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
+published interface XMimeContentTypeFactory : cpo::uno::XInterface
 {
     /** Creates an object that implements XMimeContentType.
 

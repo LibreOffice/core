@@ -34,7 +34,7 @@ module com { module sun { module star { module text {
     @see    com::sun::star::text::MailMergeEvent
     @see    com::sun::star::text::MailMerge
 */
-published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
+published interface XMailMergeBroadcaster : cpo::uno::XInterface
 {
     /** Adds an entry to the list of mail merge listeners.
 

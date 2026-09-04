@@ -21,7 +21,7 @@ module com { module sun { module star { module xml { module dom {
 
 interface XNode;
 
-interface XNamedNodeMap : com::sun::star::uno::XInterface
+interface XNamedNodeMap : cpo::uno::XInterface
 {
 
     /**

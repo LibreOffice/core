@@ -110,7 +110,7 @@ private:
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
     virtual cpo::uno::Any   getDefaultForReset() const override;

@@ -151,7 +151,7 @@ void DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&         
 
 }   // namespace framework
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 framework_DispatchRecorderSupplier_get_implementation(
     cpo::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {

@@ -423,7 +423,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     // Further this member is used to detect still running and not yet finished
     // asynchronous operations. So it's time now to release this reference.
     // But hold it temp alive. Otherwise we die before we can finish this method really :-))
-    css::uno::Reference< css::uno::XInterface > xTempHold = m_xSelfHold;
+    css::uno::Reference< cpo::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();
     m_xResultListener.clear();
     }
@@ -559,7 +559,7 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
         return;
 
     css::frame::DispatchResultEvent aEvent(
-        css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY),
+        css::uno::Reference< cpo::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY),
         nState,
         aResult);
 

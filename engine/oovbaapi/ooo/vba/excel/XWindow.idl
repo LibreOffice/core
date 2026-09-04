@@ -27,7 +27,7 @@ interface XRange;
 interface XWorksheet;
 interface XPane;
 
-interface XWindow : com::sun::star::uno::XInterface
+interface XWindow : cpo::uno::XInterface
 {
     [attribute] any Caption;
     [attribute] boolean DisplayGridlines;

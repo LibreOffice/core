@@ -33,7 +33,7 @@
     The "next" method moves the cursor to the next row.
     </p>
  */
-published interface XResultSet: com::sun::star::uno::XInterface
+published interface XResultSet: cpo::uno::XInterface
 {
 
     /** moves the cursor down one row from its current position.
@@ -285,7 +285,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         @throws SQLException
             if a database access error occurs.
      */
-    com::sun::star::uno::XInterface getStatement() raises (SQLException);
+    cpo::uno::XInterface getStatement() raises (SQLException);
 };
 
 

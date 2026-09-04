@@ -419,14 +419,14 @@ public:
       * if such a parent exists. The implementation of this method uses your
       * implementation of getParentURL.
       */
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
     getParent() override;
 
     /**
       * The implementation of this method always throws a NoSupportException.
       */
     virtual void SAL_CALL
-    setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 
     // Non-interface methods.

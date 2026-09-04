@@ -35,7 +35,7 @@ namespace svxform
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
+    using ::cpo::uno::XInterface;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -192,7 +192,7 @@ namespace svxform
 
 }
 
-css::uno::Reference< css::uno::XInterface >
+css::uno::Reference< cpo::uno::XInterface >
     LegacyFormController_NewInstance_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxORB )
 {
     return ::svxform::LegacyFormController::Create( _rxORB );

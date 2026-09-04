@@ -29,7 +29,7 @@
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::XInterface;
+using ::cpo::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;
 using ::com::sun::star::task::DocumentMSPasswordRequest2;
 using ::com::sun::star::task::DocumentPasswordRequest2;

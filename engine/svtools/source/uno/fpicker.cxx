@@ -55,10 +55,10 @@ static bool UseSystemFileDialog()
     return !Application::IsHeadlessModeEnabled() && officecfg::Office::Common::Misc::UseSystemFileDialog::get();
 }
 
-Reference< css::uno::XInterface > FilePicker_CreateInstance (
+Reference< cpo::uno::XInterface > FilePicker_CreateInstance (
     Reference< cpo::uno::XComponentContext > const & context)
 {
-    Reference< css::uno::XInterface > xResult;
+    Reference< cpo::uno::XInterface > xResult;
 
     if (!context.is())
         return xResult;
@@ -123,10 +123,10 @@ static OUString FolderPicker_getSystemPickerServiceName()
     return u"com.sun.star.ui.dialogs.SystemFolderPicker"_ustr;
 }
 
-Reference< css::uno::XInterface > FolderPicker_CreateInstance (
+Reference< cpo::uno::XInterface > FolderPicker_CreateInstance (
     Reference< cpo::uno::XComponentContext > const & context)
 {
-    Reference< css::uno::XInterface > xResult;
+    Reference< cpo::uno::XInterface > xResult;
 
     if (!context.is())
         return xResult;

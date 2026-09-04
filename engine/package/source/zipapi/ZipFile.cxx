@@ -697,7 +697,7 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location ) override
     {
         if ( location < 0 || o3tl::make_unsigned(location) > maBytes.size() )
-            throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
+            throw IllegalArgumentException(u""_ustr, uno::Reference< cpo::uno::XInterface >(), 1 );
         mnPos = location;
     }
     virtual sal_Int64 SAL_CALL getPosition() override

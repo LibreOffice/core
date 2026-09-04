@@ -36,7 +36,7 @@ void XSearchable::testFindFirst()
     uno::Reference<util::XSearchDescriptor> xSearchDescr = xSearchable->createSearchDescriptor();
     xSearchDescr->setSearchString(maSearchString);
 
-    uno::Reference<uno::XInterface> xElement = xSearchable->findFirst(xSearchDescr);
+    uno::Reference<cpo::uno::XInterface> xElement = xSearchable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 }
 
@@ -46,12 +46,12 @@ void XSearchable::testFindNext()
     uno::Reference<util::XSearchDescriptor> xSearchDescr = xSearchable->createSearchDescriptor();
     xSearchDescr->setSearchString(maSearchString);
 
-    uno::Reference<uno::XInterface> xElement = xSearchable->findFirst(xSearchDescr);
+    uno::Reference<cpo::uno::XInterface> xElement = xSearchable->findFirst(xSearchDescr);
     CPPUNIT_ASSERT(xElement.is());
 
     if (mnCount > 1)
     {
-        uno::Reference<uno::XInterface> xElement2 = xSearchable->findNext(xElement, xSearchDescr);
+        uno::Reference<cpo::uno::XInterface> xElement2 = xSearchable->findNext(xElement, xSearchDescr);
         CPPUNIT_ASSERT(xElement2.is());
     }
 }

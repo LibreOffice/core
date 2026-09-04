@@ -265,8 +265,8 @@ public:
     virtual css::uno::Reference < css::frame::XDispatchRecorderSupplier > getDispatchRecorderSupplier() override;
     virtual void setDispatchRecorderSupplier(const css::uno::Reference < css::frame::XDispatchRecorderSupplier > & ) override;
 
-    virtual css::uno::Reference < css::uno::XInterface > getLayoutManager() override;
-    virtual void setLayoutManager(const css::uno::Reference < css::uno::XInterface > & ) override;
+    virtual css::uno::Reference < cpo::uno::XInterface > getLayoutManager() override;
+    virtual void setLayoutManager(const css::uno::Reference < cpo::uno::XInterface > & ) override;
 
     // XPropertySet
     virtual css::uno::Reference < css::beans::XPropertySetInfo > getPropertySetInfo() override;
@@ -468,7 +468,7 @@ XFrameImpl::XFrameImpl( css::uno::Reference< cpo::uno::XComponentContext >  xCon
 
 void XFrameImpl::initListeners()
 {
-    css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
     // Initialize a new DispatchHelper-object to handle dispatches.
     // We use this helper as a slave for our interceptor helper, not directly!
@@ -1659,7 +1659,7 @@ void XFrameImpl::close( bool bDeliverOwnership )
     // At the end of this method we might have to dispose ourselves
     // without anybody from outside holding a reference to us.
     // Thus, it's a good idea to do that ourselves.
-    css::uno::Reference< css::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+    css::uno::Reference< cpo::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
 
     // Try to close any listeners before we look for currently running internal processes.
     // Because if a listener disagrees with this close() request, we have time to finish these
@@ -1825,13 +1825,13 @@ void XFrameImpl::setDispatchRecorderSupplier(const css::uno::Reference<css::fram
     m_xDispatchRecorderSupplier.set(p);
 }
 
-css::uno::Reference<css::uno::XInterface> XFrameImpl::getLayoutManager()
+css::uno::Reference<cpo::uno::XInterface> XFrameImpl::getLayoutManager()
 {
     SolarMutexGuard g;
     return m_xLayoutManager;
 }
 
-void XFrameImpl::setLayoutManager(const css::uno::Reference<css::uno::XInterface>& p1)
+void XFrameImpl::setLayoutManager(const css::uno::Reference<cpo::uno::XInterface>& p1)
 {
     checkDisposed();
     SolarMutexGuard g;
@@ -2841,7 +2841,7 @@ void XFrameImpl::impl_disablePropertySet()
 {
     SolarMutexGuard g;
 
-    css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::beans::XPropertySet* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< css::beans::XPropertySet* >(this), css::uno::UNO_QUERY);
     css::lang::EventObject aEvent(xThis);
 
     m_lSimpleChangeListener.disposeAndClear(aEvent);
@@ -3308,13 +3308,13 @@ void XFrameImpl::impl_checkMenuCloser()
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface *
 com_sun_star_comp_framework_Frame_get_implementation(
     cpo::uno::XComponentContext *context,
     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<XFrameImpl> inst = new XFrameImpl(context);
-    css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());
+    cpo::uno::XInterface *acquired_inst = cppu::acquire(inst.get());
 
     inst->initListeners();
 

@@ -32,7 +32,7 @@ interface XObjectInspectorUI;
     the extended help text of this control's window, and set this help text at the
     object inspector's help section.</p>
  */
-service DefaultHelpProvider : com::sun::star::uno::XInterface
+service DefaultHelpProvider : cpo::uno::XInterface
 {
     /** creates a help provider instance
         @param InspectorUI

@@ -27,7 +27,7 @@
     @see com::sun::star::mozilla::XProfileManager
     @see com::sun::star::mozilla::MozillaBootstrap
  */
-published interface XProfileDiscover: com::sun::star::uno::XInterface
+published interface XProfileDiscover: cpo::uno::XInterface
 {
 
     /** attempts to get the profiles count.

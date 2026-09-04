@@ -28,7 +28,7 @@ interface XControl
     // support for unit test harness ( and possibly internal clients )
     // to generate events that will call appropriate event handlers
     void fireEvent( [in] com::sun::star::script::ScriptEvent evt );
-    [attribute, readonly ] com::sun::star::uno::XInterface Object;
+    [attribute, readonly ] cpo::uno::XInterface Object;
     [attribute] string ControlSource;
     [attribute] string RowSource;
     [attribute] boolean Enabled;

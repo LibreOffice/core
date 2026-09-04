@@ -253,7 +253,7 @@ class SwXServiceProvider
 public:
     static OUString             GetProviderName(SwServiceType nObjectType);
     static SwServiceType        GetProviderType(std::u16string_view rServiceName);
-    static css::uno::Reference< css::uno::XInterface >  MakeInstance(SwServiceType nObjectType, SwDoc & rDoc);
+    static css::uno::Reference< cpo::uno::XInterface >  MakeInstance(SwServiceType nObjectType, SwDoc & rDoc);
     static cpo::uno::Sequence<OUString>   GetAllServiceNames();
 
 };

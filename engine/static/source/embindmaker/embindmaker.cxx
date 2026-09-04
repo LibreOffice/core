@@ -718,7 +718,7 @@ void dumpMethods(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                  OUString const& name, rtl::Reference<unoidl::InterfaceTypeEntity> const& entity,
                  std::list<OUString> const& baseTrail)
 {
-    if (name != "com.sun.star.uno.XInterface")
+    if (name != "cpo.uno.XInterface")
     {
         for (auto const& meth : entity->getDirectMethods())
         {
@@ -1187,7 +1187,7 @@ SAL_IMPLEMENT_MAIN()
                    << cppName(ifc) << ">>(\"uno_Reference_" << jsName(ifc)
                    << "\")\n"
                       "        .class_function(\"query\", "
-                      "+[](::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface> "
+                      "+[](::com::sun::star::uno::Reference<::cpo::uno::XInterface> "
                       "const & the_object) { return ::com::sun::star::uno::Reference<"
                    << cppName(ifc)
                    << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"

@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
     @version 1.0
  */
 published interface XRemoteContentProviderChangeNotifier:
-    com::sun::star::uno::XInterface
+    cpo::uno::XInterface
 {
     /** Add a listener.
 
