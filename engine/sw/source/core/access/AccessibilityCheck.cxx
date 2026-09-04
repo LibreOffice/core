@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <calbck.hxx>
 #include <charatr.hxx>
 #include <svx/xfillit0.hxx>
@@ -819,6 +820,27 @@ double minimumContrastRatio(const uno::Reference<beans::XPropertySet>& xProperti
 class TextContrastCheck : public NodeCheck
 {
 private:
+    /// The fill behind a paragraph in a table cell: the cell's own or inherited fill, else the
+    /// row's; COL_AUTO when the paragraph is not in a table or nothing there has a fill.
+    static Color getTableCellBackground(const SwTextNode& rTextNode)
+    {
+        const SwStartNode* pBoxStartNode = rTextNode.FindTableBoxStartNode();
+        const SwTableNode* pTableNode = rTextNode.FindTableNode();
+        if (!pBoxStartNode || !pTableNode)
+            return COL_AUTO;
+        const SwTableBox* pBox = pTableNode->GetTable().GetTableBox(pBoxStartNode->GetIndex());
+        if (!pBox)
+            return COL_AUTO;
+
+        Color aColor = pBox->GetFrameFormat()->GetAttrSet().Get(RES_BACKGROUND).GetColor();
+        if (aColor == COL_TRANSPARENT && pBox->GetUpper())
+            aColor
+                = pBox->GetUpper()->GetFrameFormat()->GetAttrSet().Get(RES_BACKGROUND).GetColor();
+        if (aColor == COL_TRANSPARENT)
+            return COL_AUTO;
+        return aColor;
+    }
+
     void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange,
                         uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode,
                         sal_Int32 nTextStart)
@@ -927,7 +949,13 @@ private:
         if (aForegroundColor == COL_AUTO)
             return;
 
-        // If not paragraph background color, try page color
+        // If not paragraph background color, try the fill of the table cell and its row. The
+        // fill is read through the cell's format chain, so a fill that a table style gives the
+        // cell counts as well.
+        if (aBackgroundColor == COL_AUTO)
+            aBackgroundColor = getTableCellBackground(*pTextNode);
+
+        // If not table cell color, try page color
         if (aBackgroundColor == COL_AUTO)
             aBackgroundColor = aPageBackground;
 
@@ -980,6 +1008,22 @@ public:
     }
 };
 
+/// The item a paragraph style gives a paragraph for one which id: the table style role's item
+/// when the paragraph is in a styled table and the role sets it, else the paragraph style's
+/// own item; nullptr when neither sets it.
+template <class T>
+const T* lcl_GetParagraphStyleItem(const SwTextNode& rTextNode, TypedWhichId<T> nWhich)
+{
+    if (const SwTextFormatColl* pRoleColl = rTextNode.GetTableStyleRoleColl())
+    {
+        if (const T* pItem = pRoleColl->GetItemIfSet(nWhich, false))
+            return pItem;
+    }
+    if (const SwTextFormatColl* pColl = rTextNode.GetTextColl())
+        return pColl->GetItemIfSet(nWhich, false);
+    return nullptr;
+}
+
 class TextFormattingCheck : public NodeCheck
 {
 public:
@@ -1021,11 +1065,9 @@ public:
                             TypedWhichId<SvxWeightItem>(pItem->Which()), false);
                     }
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                            TypedWhichId<SvxWeightItem>(pItem->Which()), false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(
+                            *pTextNode, TypedWhichId<SvxWeightItem>(pItem->Which()));
 
                     if (!pStyleItem)
                     {
@@ -1050,11 +1092,9 @@ public:
                             TypedWhichId<SvxPostureItem>(pItem->Which()), false);
                     }
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                            TypedWhichId<SvxPostureItem>(pItem->Which()), false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(
+                            *pTextNode, TypedWhichId<SvxPostureItem>(pItem->Which()));
 
                     if (!pStyleItem)
                     {
@@ -1077,11 +1117,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_SHADOWED, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_SHADOWED, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_SHADOWED);
 
                     if (!pStyleItem)
                     {
@@ -1104,11 +1141,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_COLOR, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_COLOR, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_COLOR);
 
                     if (!pStyleItem)
                     {
@@ -1134,11 +1168,9 @@ public:
                             TypedWhichId<SvxFontHeightItem>(pItem->Which()), false);
                     }
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                            TypedWhichId<SvxFontHeightItem>(pItem->Which()), false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(
+                            *pTextNode, TypedWhichId<SvxFontHeightItem>(pItem->Which()));
 
                     if (!pStyleItem)
                     {
@@ -1167,11 +1199,9 @@ public:
                             TypedWhichId<SvxFontItem>(pItem->Which()), false);
                     }
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                            TypedWhichId<SvxFontItem>(pItem->Which()), false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(
+                            *pTextNode, TypedWhichId<SvxFontItem>(pItem->Which()));
 
                     if (!pStyleItem)
                     {
@@ -1191,11 +1221,9 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                            RES_CHRATR_EMPHASIS_MARK, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem
+                            = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_EMPHASIS_MARK);
 
                     if (!pStyleItem)
                     {
@@ -1218,11 +1246,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_UNDERLINE, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_UNDERLINE, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_UNDERLINE);
 
                     if (!pStyleItem)
                     {
@@ -1245,11 +1270,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_OVERLINE, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_OVERLINE, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_OVERLINE);
 
                     if (!pStyleItem)
                     {
@@ -1272,11 +1294,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_CROSSEDOUT, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CROSSEDOUT, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_CROSSEDOUT);
 
                     if (!pStyleItem)
                     {
@@ -1299,11 +1318,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_RELIEF, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_RELIEF, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_RELIEF);
 
                     if (!pStyleItem)
                     {
@@ -1326,11 +1342,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_CONTOUR, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CONTOUR, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_CONTOUR);
 
                     if (!pStyleItem)
                     {
@@ -1353,11 +1366,8 @@ public:
                     if (pCharformat)
                         pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_NOHYPHEN, false);
 
-                    if (!pStyleItem && pTextNode->GetTextColl())
-                    {
-                        pStyleItem
-                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_NOHYPHEN, false);
-                    }
+                    if (!pStyleItem)
+                        pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_NOHYPHEN);
 
                     if (!pStyleItem)
                     {
@@ -1404,12 +1414,8 @@ public:
             // 3. direct formatting
             const SvxWeightItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-            {
-                // 1. paragraph format
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                    TypedWhichId<SvxWeightItem>(pItem->Which()), false);
-            }
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode,
+                                                   TypedWhichId<SvxWeightItem>(pItem->Which()));
 
             if (!pStyleItem)
             {
@@ -1430,11 +1436,8 @@ public:
         {
             const SvxPostureItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-            {
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                    TypedWhichId<SvxPostureItem>(pItem->Which()), false);
-            }
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode,
+                                                   TypedWhichId<SvxPostureItem>(pItem->Which()));
 
             if (!pStyleItem)
             {
@@ -1452,8 +1455,7 @@ public:
         {
             const SvxShadowedItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_SHADOWED, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_SHADOWED);
 
             if (!pStyleItem)
             {
@@ -1471,8 +1473,7 @@ public:
         {
             const SvxColorItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_COLOR, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_COLOR);
 
             if (!pStyleItem)
             {
@@ -1493,11 +1494,8 @@ public:
         {
             const SvxFontHeightItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-            {
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                    TypedWhichId<SvxFontHeightItem>(pItem->Which()), false);
-            }
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode,
+                                                   TypedWhichId<SvxFontHeightItem>(pItem->Which()));
 
             if (!pStyleItem)
             {
@@ -1517,11 +1515,8 @@ public:
         {
             const SvxFontItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-            {
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
-                    TypedWhichId<SvxFontItem>(pItem->Which()), false);
-            }
+            pStyleItem
+                = lcl_GetParagraphStyleItem(*pTextNode, TypedWhichId<SvxFontItem>(pItem->Which()));
 
             if (!pStyleItem)
             {
@@ -1539,11 +1534,7 @@ public:
         {
             const SvxEmphasisMarkItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-            {
-                pStyleItem
-                    = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false);
-            }
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_EMPHASIS_MARK);
 
             if (!pStyleItem)
             {
@@ -1561,8 +1552,7 @@ public:
         {
             const SvxUnderlineItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_UNDERLINE);
 
             if (!pStyleItem)
             {
@@ -1580,8 +1570,7 @@ public:
         {
             const SvxOverlineItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_OVERLINE, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_OVERLINE);
 
             if (!pStyleItem)
             {
@@ -1599,8 +1588,7 @@ public:
         {
             const SvxCrossedOutItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CROSSEDOUT, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_CROSSEDOUT);
 
             if (!pStyleItem)
             {
@@ -1618,8 +1606,7 @@ public:
         {
             const SvxCharReliefItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_RELIEF, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_RELIEF);
 
             if (!pStyleItem)
             {
@@ -1637,8 +1624,7 @@ public:
         {
             const SvxNoHyphenItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_NOHYPHEN, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_NOHYPHEN);
 
             if (!pStyleItem)
             {
@@ -1656,8 +1642,7 @@ public:
         {
             const SvxContourItem* pStyleItem = nullptr;
 
-            if (pTextNode->GetTextColl())
-                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CONTOUR, false);
+            pStyleItem = lcl_GetParagraphStyleItem(*pTextNode, RES_CHRATR_CONTOUR);
 
             if (!pStyleItem)
             {

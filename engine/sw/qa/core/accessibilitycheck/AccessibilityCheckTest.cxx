@@ -12,6 +12,15 @@
 #include <AccessibilityIssue.hxx>
 #include <OnlineAccessibilityCheck.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <ndtxt.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
+#include <itabenum.hxx>
+#include <frmfmt.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/colritem.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -336,6 +345,75 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testStylesWithHeader)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[3]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[4]->m_eIssueID);
+}
+
+namespace
+{
+size_t lcl_CountIssues(sw::AccessibilityCheck& rCheck, sfx::AccessibilityIssueID eID)
+{
+    size_t nCount = 0;
+    for (const auto& pIssue : rCheck.getIssueCollection().getIssues())
+        if (pIssue->m_eIssueID == eID)
+            ++nCount;
+    return nCount;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testTableStyleContrastAndFormatting)
+{
+    // A table whose header row takes white bold text and a blue fill from a live table style
+    // (the built-in "Grid Table 4 Accent 1"), with nothing written into the cells or
+    // paragraphs themselves.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const TableStyleName aStyleName(u"Grid Table 4 Accent 1"_ustr);
+    CPPUNIT_ASSERT(pDoc->GetTableStyles().FindAutoFormat(aStyleName));
+    SwInsertTableOptions aOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(aStyleName);
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode(), /*bResetCellFormatting=*/true);
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    pWrtShell->Insert(u"header"_ustr);
+
+    // White text on the style's blue fill has enough contrast, and formatting that comes from
+    // the style is not direct formatting.
+    {
+        sw::AccessibilityCheck aCheck(pDoc);
+        aCheck.check();
+        CPPUNIT_ASSERT_EQUAL(size_t(0),
+                             lcl_CountIssues(aCheck, sfx::AccessibilityIssueID::TEXT_CONTRAST));
+        CPPUNIT_ASSERT_EQUAL(size_t(0),
+                             lcl_CountIssues(aCheck, sfx::AccessibilityIssueID::DIRECT_FORMATTING));
+    }
+
+    // Bold set on the header paragraph itself only repeats what the style gives it, so it is
+    // no more direct formatting than bold repeated from a paragraph style would be.
+    const SwTableBox* pHeaderBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+    SwTextNode* pHeaderNode = pDoc->GetNodes()[pHeaderBox->GetSttIdx() + 1]->GetTextNode();
+    CPPUNIT_ASSERT(pHeaderNode);
+    CPPUNIT_ASSERT_EQUAL(u"header"_ustr, pHeaderNode->GetText());
+    pHeaderNode->SetAttr(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    {
+        sw::AccessibilityCheck aCheck(pDoc);
+        aCheck.check();
+        CPPUNIT_ASSERT_EQUAL(size_t(0),
+                             lcl_CountIssues(aCheck, sfx::AccessibilityIssueID::DIRECT_FORMATTING));
+    }
+
+    // Black text on that blue fill falls short of the required contrast, so the check sees the
+    // fill the style gives the cell, not the white page behind it.
+    pHeaderNode->SetAttr(SvxColorItem(COL_BLACK, RES_CHRATR_COLOR));
+    {
+        sw::AccessibilityCheck aCheck(pDoc);
+        aCheck.check();
+        CPPUNIT_ASSERT_EQUAL(size_t(1),
+                             lcl_CountIssues(aCheck, sfx::AccessibilityIssueID::TEXT_CONTRAST));
+    }
 }
 
 // Text contrast tests
