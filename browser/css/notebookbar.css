@@ -445,6 +445,7 @@ label.notebookbar.ui-checkbox-label {
 	padding: var(--spacing-s);
 }
 
+.ui-combobox[disabled],
 .unotoolbutton.notebookbar.disabled:not(.unospan-shortcutstoolbox),
 .unotoolbutton[disabled]:not(.unospan-shortcutstoolbox),
 .mobile-wizard-widebutton.disabled,
@@ -467,10 +468,12 @@ label.notebookbar.ui-checkbox-label {
 	filter: grayscale(100%) brightness(100%);
 }
 
+.ui-combobox:not([disabled]) *,
 .unotoolbutton:not(.disabled) * {
 	cursor: pointer;
 }
 
+.ui-combobox[disabled] *,
 .unotoolbutton[disabled] * {
 	cursor: not-allowed !important;
 }
