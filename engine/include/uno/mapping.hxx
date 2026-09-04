@@ -105,13 +105,13 @@ public:
         @param pMapping another mapping
         @return this mapping
     */
-    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping );
+    inline Mapping & operator = ( uno_Mapping * pMapping );
     /** Sets a given mapping.
 
         @param rMapping another mapping
         @return this mapping
     */
-    Mapping & SAL_CALL operator = ( const Mapping & rMapping )
+    Mapping & operator = ( const Mapping & rMapping )
         { return operator = ( rMapping._pMapping ); }
 
     Mapping & operator =(Mapping && other) noexcept {
@@ -127,19 +127,19 @@ public:
 
         @return UNacquired C mapping
     */
-    uno_Mapping * SAL_CALL get() const
+    uno_Mapping * get() const
         { return _pMapping; }
 
     /** Tests if a mapping is set.
 
         @return true if a mapping is set
     */
-    bool SAL_CALL is() const
+    bool is() const
         { return (_pMapping != NULL); }
 
     /** Releases a set mapping.
     */
-    inline void SAL_CALL clear();
+    inline void clear();
 
     /** Maps an interface from one environment to another.
 
@@ -147,14 +147,14 @@ public:
         @param pTypeDescr       type description of interface
         @return                 mapped interface
     */
-    inline void * SAL_CALL mapInterface( void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const;
+    inline void * mapInterface( void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const;
     /** Maps an interface from one environment to another.
 
         @param pInterface       source interface
         @param pTypeDescr       type description of interface
         @return                 mapped interface
     */
-    void * SAL_CALL mapInterface( void * pInterface, typelib_TypeDescription * pTypeDescr ) const
+    void * mapInterface( void * pInterface, typelib_TypeDescription * pTypeDescr ) const
         { return mapInterface( pInterface, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTypeDescr) ); }
 
     /** Maps an interface from one environment to another.
@@ -163,7 +163,7 @@ public:
         @param rType            type of interface
         @return                 mapped interface
     */
-    inline void * SAL_CALL mapInterface(
+    inline void * mapInterface(
         void * pInterface, const cpo::uno::Type & rType ) const;
 
     /** Maps an interface from one environment to another.
@@ -172,7 +172,7 @@ public:
         @param pInterface       source interface
         @param pTypeDescr       type description of interface
     */
-    void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const
+    void mapInterface( void ** ppOut, void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const
         { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, pTypeDescr ); }
     /** Maps an interface from one environment to another.
 
@@ -180,7 +180,7 @@ public:
         @param pInterface       source interface
         @param pTypeDescr       type description of interface
     */
-    void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_TypeDescription * pTypeDescr ) const
+    void mapInterface( void ** ppOut, void * pInterface, typelib_TypeDescription * pTypeDescr ) const
         { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTypeDescr) ); }
 
     /** Maps an interface from one environment to another.
@@ -189,7 +189,7 @@ public:
         @param pInterface       source interface
         @param rType            type of interface to be mapped
      */
-    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const cpo::uno::Type & rType ) const;
+    inline void mapInterface( void ** ppOut, void * pInterface, const cpo::uno::Type & rType ) const;
 };
 
 inline Mapping::Mapping(

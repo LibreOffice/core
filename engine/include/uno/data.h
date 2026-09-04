@@ -38,19 +38,19 @@ struct _uno_Mapping;
     @param pType demanded interface type
     @return interface pointer
 */
-typedef void * (SAL_CALL * uno_QueryInterfaceFunc)(
+typedef void * (* uno_QueryInterfaceFunc)(
     void * pInterface, struct _typelib_TypeDescriptionReference * pType );
 /** Generic function pointer declaration to acquire an interface.
 
     @param pInterface interface to be acquired
 */
-typedef void (SAL_CALL * uno_AcquireFunc)(
+typedef void (* uno_AcquireFunc)(
     void * pInterface );
 /** Generic function pointer declaration to release an interface.
 
     @param pInterface interface to be release
 */
-typedef void (SAL_CALL * uno_ReleaseFunc)(
+typedef void (* uno_ReleaseFunc)(
     void * pInterface );
 
 /** Tests if two values are equal. May compare different types (e.g., short to long).
@@ -64,7 +64,7 @@ typedef void (SAL_CALL * uno_ReleaseFunc)(
     @param release          function to release queried interfaces; defaults (0) to uno
     @return true if values are equal
 */
-CPPU_DLLPUBLIC bool SAL_CALL uno_equalData(
+CPPU_DLLPUBLIC bool uno_equalData(
     void * pVal1, struct _typelib_TypeDescription * pVal1TypeDescr,
     void * pVal2, struct _typelib_TypeDescription * pVal2TypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -80,7 +80,7 @@ CPPU_DLLPUBLIC bool SAL_CALL uno_equalData(
     @param release          function to release queried interfaces; defaults (0) to uno
     @return true if values are equal
 */
-CPPU_DLLPUBLIC bool SAL_CALL uno_type_equalData(
+CPPU_DLLPUBLIC bool uno_type_equalData(
     void * pVal1, struct _typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, struct _typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -95,7 +95,7 @@ CPPU_DLLPUBLIC bool SAL_CALL uno_type_equalData(
     @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
+CPPU_DLLPUBLIC void uno_copyData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
@@ -108,7 +108,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
     @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
+CPPU_DLLPUBLIC void uno_type_copyData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescriptionReference * pType, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
@@ -121,7 +121,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
     @param pTypeDescr       type description of source
     @param mapping          mapping to convert/ map interfaces
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
+CPPU_DLLPUBLIC void uno_copyAndConvertData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr, struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
@@ -133,7 +133,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
     @param pType            type of source
     @param mapping          mapping to convert/ map interfaces
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
+CPPU_DLLPUBLIC void uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     struct _typelib_TypeDescriptionReference * pType, struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
@@ -145,7 +145,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
     @param release          function called each time an interface pointer needs to be released;
                             defaults (0) to uno
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
+CPPU_DLLPUBLIC void uno_destructData(
     void * pValue, struct _typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Destructs a given value; does NOT free its memory!
@@ -155,7 +155,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     @param release          function called each time an interface pointer needs to be released;
                             defaults (0) to uno
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
+CPPU_DLLPUBLIC void uno_type_destructData(
     void * pValue, struct _typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
@@ -164,7 +164,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     @param pMem             pointer to memory of value to be constructed
     @param pTypeDescr       type description of value to be constructed
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_constructData(
+CPPU_DLLPUBLIC void uno_constructData(
     void * pMem, struct _typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C();
 /** Default constructs a value. All simple types are set to 0, enums are set to their default value.
@@ -172,7 +172,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_constructData(
     @param pMem             pointer to memory of value to be constructed
     @param pType            type of value to be constructed
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_type_constructData(
+CPPU_DLLPUBLIC void uno_type_constructData(
     void * pMem, struct _typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
@@ -194,7 +194,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_constructData(
                             defaults (0) to uno
     @return true if destination has been successfully assigned
 */
-CPPU_DLLPUBLIC bool SAL_CALL uno_assignData(
+CPPU_DLLPUBLIC bool uno_assignData(
     void * pDest, struct _typelib_TypeDescription * pDestTypeDescr,
     void * pSource, struct _typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -217,7 +217,7 @@ CPPU_DLLPUBLIC bool SAL_CALL uno_assignData(
                             defaults (0) to uno
     @return true if destination has been successfully assigned
 */
-CPPU_DLLPUBLIC bool SAL_CALL uno_type_assignData(
+CPPU_DLLPUBLIC bool uno_type_assignData(
     void * pDest, struct _typelib_TypeDescriptionReference * pDestType,
     void * pSource, struct _typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -237,7 +237,7 @@ CPPU_DLLPUBLIC bool SAL_CALL uno_type_assignData(
                             defaults (0) to uno
     @return true if value is destination has been successfully assigned
 */
-CPPU_DLLPUBLIC bool SAL_CALL uno_type_isAssignableFromData(
+CPPU_DLLPUBLIC bool uno_type_isAssignableFromData(
     struct _typelib_TypeDescriptionReference * pAssignable,
     void * pFrom, struct _typelib_TypeDescriptionReference * pFromType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )

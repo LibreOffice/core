@@ -40,7 +40,7 @@ namespace cpo::uno
 
     @return current context or null ref, if none is set
 */
-inline css::uno::Reference< XCurrentContext > SAL_CALL getCurrentContext()
+inline css::uno::Reference< XCurrentContext > getCurrentContext()
 {
     css::uno::Reference< XCurrentContext > xRet;
     ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
@@ -52,7 +52,7 @@ inline css::uno::Reference< XCurrentContext > SAL_CALL getCurrentContext()
     @param xContext current context to be set
     @return true, if context has been successfully set
 */
-inline bool SAL_CALL setCurrentContext(
+inline bool setCurrentContext(
     css::uno::Reference< XCurrentContext > const & xContext )
 {
     ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
@@ -87,7 +87,7 @@ public:
 
         @return the previously set context
     */
-    css::uno::Reference< XCurrentContext > SAL_CALL getPreviousContext() const
+    css::uno::Reference< XCurrentContext > getPreviousContext() const
         { return m_xPreviousContext; }
 };
 

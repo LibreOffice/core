@@ -61,27 +61,27 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Environment
 
         @param pEnv this environment
     */
-    void (SAL_CALL * acquire)( struct _uno_Environment * pEnv );
+    void (* acquire)( struct _uno_Environment * pEnv );
 
     /** Releases this environment; last release of environment will revoke the environment from
         runtime.
 
         @param pEnv this environment
     */
-    void (SAL_CALL * release)( struct _uno_Environment * pEnv );
+    void (* release)( struct _uno_Environment * pEnv );
 
     /** Acquires this environment weakly.  You can only harden a weakly held environment if it
         is still acquired hard (acquire()).
 
         @param pEnv this environment
     */
-    void (SAL_CALL * acquireWeak)( struct _uno_Environment * pEnv );
+    void (* acquireWeak)( struct _uno_Environment * pEnv );
 
     /** Releases this environment weakly in correspondence to acquireWeak().
 
         @param pEnv this environment
     */
-    void (SAL_CALL * releaseWeak)( struct _uno_Environment * pEnv );
+    void (* releaseWeak)( struct _uno_Environment * pEnv );
 
     /** Makes hard reference out of weak referenced environment. You can only harden a weakly
         held environment if it is still acquired hard (acquire()).
@@ -89,7 +89,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Environment
         @param ppHardEnv inout hard referenced environment (has to be released via release())
         @param pEnv environment (may be weak referenced)
     */
-    void (SAL_CALL * harden)(
+    void (* harden)(
         struct _uno_Environment ** ppHardEnv,
         struct _uno_Environment * pEnv );
 
@@ -98,7 +98,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Environment
 
         @param pEnv this environment
     */
-    void (SAL_CALL * dispose)( struct _uno_Environment * pEnv );
+    void (* dispose)( struct _uno_Environment * pEnv );
 
     /* ===== the following part will be late initialized by a matching bridge ===== *
      * ===== and is NOT for public use.                                       ===== */
@@ -108,7 +108,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Environment
 
         @param pEnv environment that is being disposed
     */
-    void (SAL_CALL * environmentDisposing)( struct _uno_Environment * pEnv );
+    void (* environmentDisposing)( struct _uno_Environment * pEnv );
 } uno_Environment;
 
 /** Generic function pointer declaration to free a proxy object if it is not needed by the
@@ -120,14 +120,14 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Environment
     @param pEnv environment
     @param pProxy proxy pointer
 */
-typedef void (SAL_CALL * uno_freeProxyFunc)( struct _uno_ExtEnvironment * pEnv, void * pProxy );
+typedef void (* uno_freeProxyFunc)( struct _uno_ExtEnvironment * pEnv, void * pProxy );
 
 /** Generic function pointer declaration to allocate memory. Used with getRegisteredInterfaces().
 
     @param nBytes amount of memory in bytes
     @return pointer to allocated memory
 */
-typedef void * (SAL_CALL * uno_memAlloc)( sal_Size nBytes );
+typedef void * (* uno_memAlloc)( sal_Size nBytes );
 
 /** The binary specification of a UNO environment supporting interface registration.
 */
@@ -144,7 +144,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pOId         object id of interface
         @param pTypeDescr   type description of interface
     */
-    void (SAL_CALL * registerInterface)(
+    void (* registerInterface)(
         struct _uno_ExtEnvironment * pEnv,
         void ** ppInterface,
         rtl_uString * pOId,
@@ -159,7 +159,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pOId         object id of interface
         @param pTypeDescr   type description of interface
     */
-    void (SAL_CALL * registerProxyInterface)(
+    void (* registerProxyInterface)(
         struct _uno_ExtEnvironment * pEnv,
         void ** ppProxy,
         uno_freeProxyFunc freeProxy,
@@ -172,7 +172,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pEnv         this environment
         @param pInterface   interface to be revoked
     */
-    void (SAL_CALL * revokeInterface)(
+    void (* revokeInterface)(
         struct _uno_ExtEnvironment * pEnv,
         void * pInterface );
 
@@ -181,7 +181,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param ppOut        inout oid
         @param pInterface   interface of object
     */
-    void (SAL_CALL * getObjectIdentifier)(
+    void (* getObjectIdentifier)(
         struct _uno_ExtEnvironment * pEnv,
         rtl_uString ** ppOId,
         void * pInterface );
@@ -194,7 +194,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pOId         object id of interface to be retrieved
         @param pTypeDescr   type description of interface to be retrieved
     */
-    void (SAL_CALL * getRegisteredInterface)(
+    void (* getRegisteredInterface)(
         struct _uno_ExtEnvironment * pEnv,
         void ** ppInterface,
         rtl_uString * pOId,
@@ -208,7 +208,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pnLen        out param; length of array
         @param memAlloc     function for allocating memory that is passed back
     */
-    void (SAL_CALL * getRegisteredInterfaces)(
+    void (* getRegisteredInterfaces)(
         struct _uno_ExtEnvironment * pEnv,
         void *** pppInterfaces,
         sal_Int32 * pnLen,
@@ -222,7 +222,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param ppOId        out param: computed id
         @param pInterface   an interface
     */
-    void (SAL_CALL * computeObjectIdentifier)(
+    void (* computeObjectIdentifier)(
         struct _uno_ExtEnvironment * pEnv,
         rtl_uString ** ppOId, void * pInterface );
 
@@ -231,7 +231,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pEnv         corresponding environment
         @param pInterface   an interface
     */
-    void (SAL_CALL * acquireInterface)(
+    void (* acquireInterface)(
         struct _uno_ExtEnvironment * pEnv,
         void * pInterface );
 
@@ -240,7 +240,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
         @param pEnv         corresponding environment
         @param pInterface   an interface
     */
-    void (SAL_CALL * releaseInterface)(
+    void (* releaseInterface)(
         struct _uno_ExtEnvironment * pEnv,
         void * pInterface );
 
@@ -255,16 +255,16 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
 
     @param pEnv environment to be initialized
 */
-typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
+typedef void (* uno_initEnvironmentFunc)( uno_Environment * pEnv );
 #define UNO_INIT_ENVIRONMENT "uno_initEnvironment"
 
 #ifdef DISABLE_DYNLOADING
 /* We link statically and have just the C++ environment */
-void SAL_CALL CPPU_ENV_uno_initEnvironment( uno_Environment * Env )
+void CPPU_ENV_uno_initEnvironment( uno_Environment * Env )
      SAL_THROW_EXTERN_C();
 
 /* We might also have the Java environment */
-void SAL_CALL java_uno_initEnvironment( uno_Environment * Env )
+void java_uno_initEnvironment( uno_Environment * Env )
      SAL_THROW_EXTERN_C();
 #endif
 
@@ -275,7 +275,7 @@ void SAL_CALL java_uno_initEnvironment( uno_Environment * Env )
     @param pEnvDcp      descriptor of environment
     @param pContext     some context pointer (e.g., to distinguish java vm; set 0 if not needed)
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
+CPPU_DLLPUBLIC void uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C();
 
@@ -287,7 +287,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
     @param memAlloc     function for allocating memory that is passed back
     @param pEnvDcp      descriptor of environments; 0 defaults to all
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_getRegisteredEnvironments(
+CPPU_DLLPUBLIC void uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C();
@@ -298,7 +298,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getRegisteredEnvironments(
     @param pEnvDcp      descriptor of environment
     @param pContext     context pointer (e.g., to distinguish java vm); set 0 if not needed
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
+CPPU_DLLPUBLIC void uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C();
 
@@ -308,7 +308,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     @param pEnv         environment to be dumped
     @param pFilter      if not null, filters output
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
+CPPU_DLLPUBLIC void uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const char * pFilter )
     SAL_THROW_EXTERN_C();
 /** Dumps out environment information, i.e. registered interfaces.
@@ -317,7 +317,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
     @param pEnvDcp      descriptor of environment to be dumped
     @param pFilter      if not null, filters output
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
+CPPU_DLLPUBLIC void uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvDcp, const char * pFilter )
     SAL_THROW_EXTERN_C();
 
@@ -330,12 +330,12 @@ CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
     @param ppEnv      inout parameter; a given environment will be released
     @param pTypeName  the optional type of the environment, falls back to "uno"
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
+CPPU_DLLPUBLIC void uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
     SAL_THROW_EXTERN_C();
 
 /** Typedef for variable argument function.
  */
-typedef void SAL_CALL uno_EnvCallee(va_list * pParam);
+typedef void uno_EnvCallee(va_list * pParam);
 
 /** Invoke the passed function in the given environment.
 
@@ -343,7 +343,7 @@ typedef void SAL_CALL uno_EnvCallee(va_list * pParam);
     @param pCallee  the function to call
     @param pParam   the parameter pointer passed to the function
  */
-CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
+CPPU_DLLPUBLIC void uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
     SAL_THROW_EXTERN_C();
 
 /** Invoke the passed function in the given environment.
@@ -352,14 +352,14 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, un
     @param pCallee  the function to call
     @param ...      the parameters passed to the function
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
+CPPU_DLLPUBLIC void uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
     SAL_THROW_EXTERN_C();
 
 /** Enter an environment explicitly.
 
     @param pEnv    the environment to enter; NULL leaves all environments
 */
-CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
+CPPU_DLLPUBLIC void uno_Environment_enter(uno_Environment * pEnv)
     SAL_THROW_EXTERN_C();
 
 /** Check if a particular environment is currently valid, so
@@ -369,7 +369,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
     @param pReason                 the reason, if it is not valid
     @return                        1 == valid, 0 == invalid
 */
-CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
+CPPU_DLLPUBLIC int uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
     SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus

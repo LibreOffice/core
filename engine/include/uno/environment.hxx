@@ -84,13 +84,13 @@ public:
         @param pEnv another environment
         @return this environment
     */
-    inline Environment & SAL_CALL operator = ( uno_Environment * pEnv );
+    inline Environment & operator = ( uno_Environment * pEnv );
     /** Sets a given environment, i.e. acquires given one and releases a set one.
 
         @param rEnv another environment
         @return this environment
     */
-    Environment & SAL_CALL operator = ( const Environment & rEnv )
+    Environment & operator = ( const Environment & rEnv )
         { return operator = ( rEnv._pEnv ); }
 
     Environment & operator =(Environment && other) {
@@ -106,56 +106,56 @@ public:
 
         @return UNacquired pointer to the C environment struct
     */
-    uno_Environment * SAL_CALL get() const
+    uno_Environment * get() const
         { return _pEnv; }
 
     /** Gets type name of set environment.
 
         @return type name of set environment
     */
-    ::rtl::OUString SAL_CALL getTypeName() const
+    ::rtl::OUString getTypeName() const
         { return _pEnv->pTypeName; }
 
     /** Gets free context pointer of set environment.
 
         @return free context pointer of set environment
     */
-    void * SAL_CALL getContext() const
+    void * getContext() const
         { return _pEnv->pContext; }
 
     /** Tests if an environment is set.
 
         @return true, if an environment is set, false otherwise
     */
-    bool SAL_CALL is() const
+    bool is() const
         { return (_pEnv != NULL); }
 
     /** Releases a set environment.
     */
-    inline void SAL_CALL clear();
+    inline void clear();
 
     /** Invoke the passed function in this environment.
 
         @param pCallee  the function to call
         @param pParam   the parameter pointer to be passed to the function
     */
-    inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const;
+    inline void invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const;
 
     /** Invoke the passed function in this environment.
 
         @param pCallee  the function to call
         @param ...      the parameters to be passed to the function
     */
-    inline void SAL_CALL invoke(uno_EnvCallee * pCallee, ...) const;
+    inline void invoke(uno_EnvCallee * pCallee, ...) const;
 
     /** Enter this environment explicitly.
     */
-    inline void SAL_CALL enter() const;
+    inline void enter() const;
 
     /** Checks, if it is valid to currently call objects
         belonging to this environment.
     */
-    inline int  SAL_CALL isValid(rtl::OUString * pReason) const;
+    inline int  isValid(rtl::OUString * pReason) const;
 };
 
 inline Environment::Environment( uno_Environment * pEnv )
@@ -206,13 +206,13 @@ inline Environment & Environment::operator = ( uno_Environment * pEnv )
     return *this;
 }
 
-inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const
+inline void Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const
 {
     if (_pEnv)
         uno_Environment_invoke_v(_pEnv, pCallee, pParam);
 }
 
-inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const
+inline void Environment::invoke(uno_EnvCallee * pCallee, ...) const
 {
     if (_pEnv)
     {
@@ -225,12 +225,12 @@ inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const
 
 }
 
-inline void SAL_CALL Environment::enter() const
+inline void Environment::enter() const
 {
     uno_Environment_enter(_pEnv);
 }
 
-inline int  SAL_CALL Environment::isValid(rtl::OUString * pReason) const
+inline int  Environment::isValid(rtl::OUString * pReason) const
 {
     return uno_Environment_isValid(_pEnv, &pReason->pData);
 }

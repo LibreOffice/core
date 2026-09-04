@@ -46,7 +46,7 @@ struct _uno_Interface;
                          uno_interface *, so you get it by *(uno_Interface **)pArgs[n])
     @param ppException  pointer to pointer to unconstructed any to signal an exception.
 */
-typedef void (SAL_CALL * uno_DispatchMethod)(
+typedef void (* uno_DispatchMethod)(
     struct _uno_Interface * pUnoI,
     const struct _typelib_TypeDescription * pMemberType,
     void * pReturn,
@@ -65,12 +65,12 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_Interface
 
         @param pInterface uno interface
     */
-    void (SAL_CALL * acquire)( struct _uno_Interface * pInterface );
+    void (* acquire)( struct _uno_Interface * pInterface );
     /** Releases uno interface.
 
         @param pInterface uno interface
     */
-    void (SAL_CALL * release)( struct _uno_Interface * pInterface );
+    void (* release)( struct _uno_Interface * pInterface );
     /** dispatch function
     */
     uno_DispatchMethod pDispatcher;
