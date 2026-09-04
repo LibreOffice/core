@@ -6479,12 +6479,13 @@ bool SdXImpressDocument::getSlideLinks(tools::JsonWriter& rJsonWriter)
 
 sal_Int32 SdXImpressDocument::refreshSlideLinks(const OUString& rSourceName,
                                                 const OUString& rFileUrl,
-                                                const OUString& rLastModifiedTime)
+                                                const OUString& rLastModifiedTime,
+                                                std::vector<OString>* pNotUpdated)
 {
     if (!mpDoc)
         return -1;
 
-    return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl, rLastModifiedTime);
+    return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl, rLastModifiedTime, pNotUpdated);
 }
 
 bool SdXImpressDocument::breakSlideLink(sal_Int32 nIndex)

@@ -2633,8 +2633,9 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     // returns. Each page records the source document it belongs to, and a later refresh of
     // that source reads the file it is given then.
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
-    const int count =
-        getLOKitDocument()->refreshSlideLinks(source.c_str(), url.c_str(), lastModifiedTime.c_str());
+    std::string notUpdated;
+    const int count = getLOKitDocument()->refreshSlideLinks(
+        source.c_str(), url.c_str(), lastModifiedTime.c_str(), &notUpdated);
 
     FileUtil::removeFile(sharedStagedPath, true);
 
@@ -2657,7 +2658,8 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 
     return sendTextFrame("slidelink: {\"status\":\"updated\",\"source\":\"" +
                          JsonUtil::escapeJSONValue(source) +
-                         "\",\"count\":" + std::to_string(count) + '}');
+                         "\",\"count\":" + std::to_string(count) + ",\"notUpdated\":" +
+                         (notUpdated.empty() ? "[]" : notUpdated) + '}');
 }
 
 bool ChildSession::slideLinkBreak(const StringVector& tokens)

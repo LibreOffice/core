@@ -324,7 +324,25 @@ class SlideLinks {
 			state: 'ok',
 			slides: typeof message.count === 'number' ? message.count : 0,
 		});
+		this.sayNotUpdated(message.notUpdated);
 		this.sendNext();
+	}
+
+	// The slides a refresh left as they were not available
+	private sayNotUpdated(notUpdated: any): void {
+		if (!Array.isArray(notUpdated) || notUpdated.length === 0) return;
+
+		const numbers = notUpdated
+			.filter((part: any) => typeof part === 'string')
+			.map((part: string) => String(app.impress.getIndexFromPart(part) + 1));
+		if (numbers.length === 0) return;
+
+		this.say(
+			_('Cannot update slide {0}: the source lacks matching slide').replace(
+				'{0}',
+				() => numbers.join(', '),
+			),
+		);
 	}
 
 	// An error ends the refresh in hand. An answer that names a page belongs to a break, and

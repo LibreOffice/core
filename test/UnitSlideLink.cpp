@@ -68,9 +68,10 @@ class UnitSlideLink : public UnitWSD
                      const std::string& documentURL, const std::string& stagedName)
     {
         const std::string childId = helpers::getChildId(socket, testname);
-        LOK_ASSERT_EQUAL(http::StatusCode::OK,
-                         helpers::postToInsertFile(documentURL, childId, stagedName,
-                                                   helpers::readFileAsString("setclientpart.odp")));
+        LOK_ASSERT_EQUAL(
+            http::StatusCode::OK,
+            helpers::postToInsertFile(documentURL, childId, stagedName,
+                                      helpers::readFileAsString("slide-link-source.odp")));
     }
 
     /// The insert command for the staged file, naming the source document the pages record.
@@ -277,6 +278,9 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
         LOK_ASSERT_EQUAL(std::string("updated"), replyObject->getValue<std::string>("status"));
         LOK_ASSERT_EQUAL(std::string(SourceName), replyObject->getValue<std::string>("source"));
         LOK_ASSERT_EQUAL(2, replyObject->getValue<int>("count"));
+        // Both pages were read, so the reply names no slide the source held no slide for.
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0),
+                         replyObject->getArray("notUpdated")->size());
 
         // Every page was read in place of the one it refreshed, so the deck is
         // the size it was.

@@ -437,7 +437,9 @@ public:
     /// @see vcl::ITiledRenderable::refreshSlideLinks().
     SD_DLLPUBLIC sal_Int32 refreshSlideLinks(const OUString& rSourceName,
                                              const OUString& rFileUrl,
-                                             const OUString& rLastModifiedTime) override;
+                                             const OUString& rLastModifiedTime,
+                                             std::vector<OString>* pNotUpdated
+                                             = nullptr) override;
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
 

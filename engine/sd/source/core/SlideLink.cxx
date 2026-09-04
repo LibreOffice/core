@@ -275,7 +275,8 @@ void SlideLink::WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonW
 }
 
 sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
-                             const OUString& rFileUrl, const OUString& rLastModifiedTime)
+                             const OUString& rFileUrl, const OUString& rLastModifiedTime,
+                             std::vector<OString>* pNotUpdated)
 {
     const OUString aReference = MakeSourceReference(rSourceName);
     const std::vector<sal_uInt16> aLinkedPages = getLinkedPages(rDoc, aReference);
@@ -315,6 +316,8 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
             SAL_WARN("sd", "slide link refresh: the file holds no slide "
                                << pPage->GetSourcePageGuid() << " and none named "
                                << pPage->GetBookmarkName());
+            if (pNotUpdated)
+                pNotUpdated->push_back(pPage->GetGuid().getString());
             continue;
         }
 

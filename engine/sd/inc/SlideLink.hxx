@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <string_view>
@@ -112,11 +114,16 @@ public:
         rLastModifiedTime is the time the source document was last modified now, recorded on each
         refreshed page so that its content and the time it was read from agree again.
 
+        pNotUpdated, when it is given, takes the identifier of every page the file held no
+        slide for, in document order, so that the user can be told which slides of the document
+        their source no longer holds a slide for.
+
         @return the number of pages refreshed, or -1 when no page of rDoc is linked to rSourceName,
                 when rFileUrl is not a file on this machine, or when the file could not be read.
     */
     static sal_Int32 Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
-                             const OUString& rFileUrl, const OUString& rLastModifiedTime);
+                             const OUString& rFileUrl, const OUString& rLastModifiedTime,
+                             std::vector<OString>* pNotUpdated = nullptr);
 
     /** Takes the source document off the page at nIndex in the standard page list of rDoc.
 

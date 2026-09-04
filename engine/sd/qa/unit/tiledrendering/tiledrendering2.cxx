@@ -627,14 +627,21 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkTracksSourceSlideByIdent
                          pMoved->GetSourcePageGuid());
 
     // The slide the page came from is gone from the source, and the slides standing in its place
-    // are other slides. The page keeps the content it holds.
+    // are other slides. The page keeps the content it holds, and the slide it holds is reported.
+    std::vector<OString> aNotUpdated;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
                                                               aReplacedDeck.GetURL(),
-                                                              u"2023-03-03T00:00:00Z"_ustr));
+                                                              u"2023-03-03T00:00:00Z"_ustr,
+                                                              &aNotUpdated));
     CPPUNIT_ASSERT_EQUAL(u"Source three, revised"_ustr, getSlideText(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(u"2022-02-02T00:00:00Z"_ustr,
                          pDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+
+    // The slide that was left alone is reported, so the user can be told which one it was.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aNotUpdated.size());
+    CPPUNIT_ASSERT_EQUAL(pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getString(),
+                         aNotUpdated[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkModifiedTimeRoundtrip)

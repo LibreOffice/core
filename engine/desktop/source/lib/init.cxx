@@ -1357,7 +1357,7 @@ static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
 static std::string doc_getSlideLinks(COKitDocument* pThis);
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl,
-                                 const char* pLastModifiedTime);
+                                 const char* pLastModifiedTime, std::string* pNotUpdated);
 
 static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart);
 static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char* pUrl);
@@ -1909,9 +1909,9 @@ std::string COKitDocumentImpl::getSlideLinks()
 }
 
 int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                                         const char* pLastModifiedTime)
+                                         const char* pLastModifiedTime, std::string* pNotUpdated)
 {
-    return doc_refreshSlideLinks(this, pSourceName, pUrl, pLastModifiedTime);
+    return doc_refreshSlideLinks(this, pSourceName, pUrl, pLastModifiedTime, pNotUpdated);
 }
 
 bool COKitDocumentImpl::breakSlideLink(const char* pPart)
@@ -7124,7 +7124,7 @@ static std::string doc_getSlideLinks(COKitDocument* pThis)
 }
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl,
-                                 const char* pLastModifiedTime)
+                                 const char* pLastModifiedTime, std::string* pNotUpdated)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -7139,8 +7139,26 @@ static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, 
         return -1;
     }
 
-    return pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl),
-                                   getUString(pLastModifiedTime));
+    std::vector<OString> aNotUpdated;
+    const sal_Int32 nRefreshed
+        = pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl),
+                                  getUString(pLastModifiedTime), &aNotUpdated);
+    if (nRefreshed < 0 || !pNotUpdated)
+        return nRefreshed;
+
+    OStringBuffer aSlides("[");
+    for (size_t nSlide = 0; nSlide < aNotUpdated.size(); ++nSlide)
+    {
+        if (nSlide)
+            aSlides.append(',');
+        aSlides.append('"');
+        aSlides.append(aNotUpdated[nSlide]);
+        aSlides.append('"');
+    }
+    aSlides.append(']');
+
+    *pNotUpdated = convertOStringToStdString(aSlides.makeStringAndClear());
+    return nRefreshed;
 }
 
 static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart)
