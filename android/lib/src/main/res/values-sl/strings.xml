@@ -23,4 +23,8 @@
     <string name="ask_for_convert_odf">Potrdi vrsto zapisa datoteke</string>
     <string name="convert_odf_message">Ta dokument lahko vsebuje oblikovanje ali vsebino, ki je ni možno shraniti v trenutno izbrani vrsti zapisa »Besedilo«.</string>
     <string name="use_odf">Uporabi zapis ODF</string>
+    <string name="all_files_access_title">Odprto v načinu samo za branje</string>
+    <string name="all_files_access_grant">Dovoli dostop</string>
+    <string name="do_not_ask_again">Ne sprašuj več</string>
+    <string name="failed_to_save_file">Sprememb ni možno shraniti v datoteko</string>
 </resources>
