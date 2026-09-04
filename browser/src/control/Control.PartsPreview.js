@@ -713,18 +713,34 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	_setPreviewPositionLabels: function (img, i) {
 		const link = this._pageLink(img);
 		const position = String(i + 1);
-		if (link) {
-			// One pass, with the replacement returned by a function, so a
-			// name holding a '$' pattern or a '%N' of its own goes in as it
-			// is.
+		// One pass, with the replacement returned by a function, so a name
+		// holding a '$' pattern or a '%N' of its own goes in as it is.
+		const fill = function (text, values) {
+			return text.replace(/%[123]/g, function (token) {
+				return values[token];
+			});
+		};
+		if (link && link.name) {
 			const values = { '%1': position, '%2': link.name, '%3': link.source };
-			const fill = function (text) {
-				return text.replace(/%[123]/g, function (token) {
-					return values[token];
-				});
-			};
-			img.setAttribute('alt', fill(_('preview of page %1, linked to %2 in %3')));
-			img.setAttribute('data-cooltip', fill(_('Slide %1, linked to %2 in %3')));
+			img.setAttribute(
+				'alt',
+				fill(_('preview of page %1, linked to %2 in %3'), values),
+			);
+			img.setAttribute(
+				'data-cooltip',
+				fill(_('Slide %1, linked to %2 in %3'), values),
+			);
+			return;
+		}
+		if (link) {
+			// The slide is tracked by the identifier of the slide it came
+			// from, so it names no slide of the source.
+			const values = { '%1': position, '%2': link.source };
+			img.setAttribute(
+				'alt',
+				fill(_('preview of page %1, linked to %2'), values),
+			);
+			img.setAttribute('data-cooltip', fill(_('Slide %1, linked to %2'), values));
 			return;
 		}
 		img.setAttribute('alt', _('preview of page %1').replace('%1', position));

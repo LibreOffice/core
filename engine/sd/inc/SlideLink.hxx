@@ -61,6 +61,13 @@ public:
     */
     static OUString GetOriginPage(const SdPage& rPage);
 
+    /** The name of the slide of rSourceDoc that rPage is linked to, empty when it holds none.
+
+        The name comes back because a slide is read by name, and it is the name that slide carries
+        now.
+    */
+    static OUString GetSourceSlideName(const SdDrawDocument& rSourceDoc, const SdPage& rPage);
+
     /** The source document rReference names, as the user knows it.
 
         Empty when rReference names no source document, which is the case for a page linked to a

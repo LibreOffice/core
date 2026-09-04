@@ -1678,7 +1678,9 @@ void SdGenericDrawPage::setBookmarkURL( std::u16string_view rURL )
     const OUString aFileName( rURL.substr( 0, nIndex ) );
     const OUString aBookmarkName( SdDrawPage::getUiNameFromPageApiName( OUString(rURL.substr( nIndex+1 ))  ) );
 
-    if( !aFileName.isEmpty() && !aBookmarkName.isEmpty() )
+    // A page tracked by the identifier of the slide it came from names no slide, so the reference
+    // it records is the whole of what it holds.
+    if( !aFileName.isEmpty() )
     {
         static_cast<SdPage*>(SvxDrawPage::mpPage)->DisconnectLink();
         static_cast<SdPage*>(SvxDrawPage::mpPage)->SetFileName( aFileName );

@@ -2352,6 +2352,7 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     int at = -1;
     bool keepDesign = false;
     bool link = false;
+    bool positionNames = false;
     bool haveName = false;
     bool haveSource = false;
     bool haveTime = false;
@@ -2391,6 +2392,10 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         else if (getTokenInteger(tokens[i], "link", number))
         {
             link = number != 0;
+        }
+        else if (getTokenInteger(tokens[i], "positionnames", number))
+        {
+            positionNames = number != 0;
         }
         else
         {
@@ -2470,7 +2475,8 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     std::ostringstream options;
     options << "{\"slides\":[" << joinSlideIndexList(slides)
             << "],\"at\":" << at << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
-            << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
+            << ",\"link\":" << (link ? "true" : "false") << ",\"positionNames\":"
+            << (positionNames ? "true" : "false") << ",\"source\":\""
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
             << JsonUtil::escapeJSONValue(lastModifiedTime) << "\"}";
 

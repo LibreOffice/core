@@ -138,11 +138,17 @@
 }
 
 .slide-import-keepdesign,
-.slide-import-linksource {
+.slide-import-linksource,
+.slide-import-positionnames {
 	display: flex;
 	align-items: center;
 	gap: 6px;
 	color: var(--color-text-dark);
+}
+
+/* The option belongs to the link above it, so it stands in from the edge. */
+.slide-import-positionnames {
+	padding-inline-start: 18px;
 }
 
 /* The slides carry the slide navigator's preview classes, so

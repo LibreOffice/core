@@ -50,6 +50,13 @@ bool isLocalFile(std::u16string_view rUrl)
     return aUrl.GetProtocol() == INetProtocol::File && aUrl.GetHost().isEmpty();
 }
 
+/// Whether rPage records a slide of a source document: the name of that slide, its identifier, or
+/// both. A page that records neither is a page of this document alone.
+bool recordsSourceSlide(const SdPage& rPage)
+{
+    return !rPage.GetBookmarkName().isEmpty() || !rPage.GetSourcePageGuid().isEmpty();
+}
+
 /** The pages of rDoc linked to rReference, by their index in the standard page list, in document
     order.
 */
@@ -61,7 +68,7 @@ std::vector<sal_uInt16> getLinkedPages(const SdDrawDocument& rDoc, std::u16strin
     {
         const SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
         if (pPage && std::u16string_view(pPage->GetFileName()) == rReference
-            && !pPage->GetBookmarkName().isEmpty())
+            && recordsSourceSlide(*pPage))
             aPages.push_back(nIndex);
     }
     return aPages;
@@ -71,23 +78,24 @@ std::vector<sal_uInt16> getLinkedPages(const SdDrawDocument& rDoc, std::u16strin
 const SdPage* findSourcePage(const SdDrawDocument& rSourceDoc, const SdPage& rPage)
 {
     const OUString& rSourceGuid = rPage.GetSourcePageGuid();
-    if (!rSourceGuid.isEmpty())
+    const OUString& rSourceName = rPage.GetBookmarkName();
+    const SdPage* pNamedPage = nullptr;
+
+    for (sal_uInt16 nIndex = 0, nCount = rSourceDoc.GetSdPageCount(PageKind::Standard);
+         nIndex < nCount; ++nIndex)
     {
-        for (sal_uInt16 nIndex = 0, nCount = rSourceDoc.GetSdPageCount(PageKind::Standard);
-             nIndex < nCount; ++nIndex)
-        {
-            const SdPage* pSourcePage = rSourceDoc.GetSdPage(nIndex, PageKind::Standard);
-            if (pSourcePage && pSourcePage->GetGuid().getOUString() == rSourceGuid)
-                return pSourcePage;
-        }
+        const SdPage* pSourcePage = rSourceDoc.GetSdPage(nIndex, PageKind::Standard);
+        if (!pSourcePage)
+            continue;
+
+        if (!rSourceGuid.isEmpty() && pSourcePage->GetGuid().getOUString() == rSourceGuid)
+            return pSourcePage;
+
+        if (!pNamedPage && !rSourceName.isEmpty() && pSourcePage->GetName() == rSourceName)
+            pNamedPage = pSourcePage;
     }
 
-    bool bIsMasterPage = false;
-    const sal_uInt16 nNamed = rSourceDoc.GetPageByName(rPage.GetBookmarkName(), bIsMasterPage);
-    if (nNamed == SDRPAGE_NOTFOUND || bIsMasterPage)
-        return nullptr;
-
-    return dynamic_cast<const SdPage*>(rSourceDoc.GetPage(nNamed));
+    return pNamedPage;
 }
 
 /// The undo manager of rDoc, or nothing for a document that is served without one.
@@ -193,6 +201,12 @@ OUString SlideLink::GetOriginPage(const SdPage& rPage)
     return rPage.GetBookmarkName();
 }
 
+OUString SlideLink::GetSourceSlideName(const SdDrawDocument& rSourceDoc, const SdPage& rPage)
+{
+    const SdPage* pSourcePage = findSourcePage(rSourceDoc, rPage);
+    return pSourcePage ? pSourcePage->GetName() : OUString();
+}
+
 OUString SlideLink::GetSourceName(std::u16string_view rReference)
 {
     if (!o3tl::starts_with(rReference, std::u16string_view(gSourceScheme)))
@@ -229,7 +243,7 @@ void SlideLink::WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonW
          ++nIndex)
     {
         const SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
-        if (!pPage || pPage->GetBookmarkName().isEmpty()
+        if (!pPage || !recordsSourceSlide(*pPage)
             || GetSourceName(pPage->GetFileName()).isEmpty())
             continue;
 
@@ -285,29 +299,29 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
     // The file stays with the document, so that a later update of its links reads this same file.
     rDoc.SetStagedLinkSourceFile(aReference, rFileUrl);
 
-    // The pages the file holds a slide for, by their index in the standard page list, and the slide
-    // each one is read from: its name in the file and the identifier it holds. A page whose slide
-    // the file has lost keeps the content it holds.
     std::vector<sal_uInt16> aPages;
     std::vector<OUString> aSourceNames;
     std::vector<OUString> aSourceGuids;
+    std::vector<OUString> aRecordedNames;
     for (sal_uInt16 nIndex : aLinkedPages)
     {
         const SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
         if (!pPage)
             continue;
 
-        const SdPage* pSourcePage = findSourcePage(*pSourceDoc, *pPage);
-        if (!pSourcePage)
+        const OUString aSourceName = GetSourceSlideName(*pSourceDoc, *pPage);
+        if (aSourceName.isEmpty())
         {
-            SAL_WARN("sd", "slide link refresh: no slide for the page linked to "
-                               << pPage->GetBookmarkName() << " in the file");
+            SAL_WARN("sd", "slide link refresh: the file holds no slide "
+                               << pPage->GetSourcePageGuid() << " and none named "
+                               << pPage->GetBookmarkName());
             continue;
         }
 
         aPages.push_back(nIndex);
-        aSourceNames.push_back(pSourcePage->GetName());
-        aSourceGuids.push_back(pSourcePage->GetGuid().getOUString());
+        aSourceNames.push_back(aSourceName);
+        aSourceGuids.push_back(pPage->GetSourcePageGuid());
+        aRecordedNames.push_back(pPage->GetBookmarkName().isEmpty() ? OUString() : aSourceName);
     }
 
     SfxUndoManager* pUndoManager = rDoc.beginUndoAction(SdResId(STR_UNDO_UPDATE_LINKED_SLIDES));
@@ -358,6 +372,7 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
             SdPage* pPage = rDoc.GetSdPage(aPages[nFirst + nPos], PageKind::Standard);
             if (pPage && pPage->GetGuid().getString() != aPageIds[nPos])
             {
+                pPage->SetBookmarkName(aRecordedNames[nFirst + nPos]);
                 pPage->SetSourcePageGuid(aSourceGuids[nFirst + nPos]);
                 pPage->SetSourceModifiedTime(rLastModifiedTime);
                 ++nRefreshed;

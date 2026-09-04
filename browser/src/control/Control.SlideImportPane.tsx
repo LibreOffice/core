@@ -656,6 +656,24 @@ class SlideImportPane {
               {_('Link to the source file')}
             </label>
           )}
+          {session.slideCount > 0 &&
+            session.canLink &&
+            session.linkToSource && (
+              <label class="slide-import-positionnames">
+                <input
+                  type="checkbox"
+                  checked={session.updateByPosition}
+                  onChange={(e: Event) =>
+                    session.setUpdateByPosition(
+                      (e.target as HTMLInputElement).checked,
+                    )
+                  }
+                />
+                {_(
+                  'Update by slide position for sources without slide identifiers',
+                )}
+              </label>
+            )}
           {session.slideCount > 0 && (
             <div
               class="slide-import-list"

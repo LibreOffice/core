@@ -68,6 +68,8 @@ class SlideImportSession {
 	// that they can be updated from it later. The user's choice, kept across
 	// files.
 	public linkToSource: boolean = false;
+	// Match by position
+	public updateByPosition: boolean = false;
 	// Whether the open of the current file named it as a source. Slides can
 	// only be linked to a source the open named.
 	public canLink: boolean = false;
@@ -106,6 +108,8 @@ class SlideImportSession {
 				(this.keepDesign ? '1' : '0') +
 				' link=' +
 				(link ? '1' : '0') +
+				' positionnames=' +
+				(link && this.updateByPosition ? '1' : '0') +
 				(time ? ' time=' + encodeURIComponent(time) : ''),
 		);
 	}
@@ -139,6 +143,10 @@ class SlideImportSession {
 
 	public setLinkToSource(value: boolean): void {
 		this.linkToSource = value;
+	}
+
+	public setUpdateByPosition(value: boolean): void {
+		this.updateByPosition = value;
 	}
 
 	public toggleSelection(index: number): void {

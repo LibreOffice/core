@@ -296,7 +296,10 @@ void SdPage::ConnectLink()
 
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrPage().GetLinkManager());
 
-    if (!(pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&
+    // A page that records the identifier of the slide it came from names the slide it reads by
+    // that identifier, so it holds a link of its own without naming a slide.
+    const bool bNamesSourceSlide = !maBookmarkName.isEmpty() || !maSourcePageGuid.isEmpty();
+    if (!(pLinkManager && !mpPageLink && !maFileName.isEmpty() && bNamesSourceSlide &&
         mePageKind==PageKind::Standard && !IsMasterPage() &&
         static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).IsNewOrLoadCompleted()))
         return;

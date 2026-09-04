@@ -129,10 +129,11 @@ class UnitSlideLink : public UnitWSD
         {
             Poco::JSON::Object::Ptr slide = slides->getObject(i);
             LOK_ASSERT_MESSAGE("missing slide entry", slide);
-            // The exact name is locale-dependent ("Slide 1" in English), so
-            // only check that the source slide is named at all.
-            LOK_ASSERT_MESSAGE("missing source slide name",
-                               !slide->getValue<std::string>("name").empty());
+            // The slides of the source carry no name of their own, so a page of
+            // one of them names a slide only when the insert asked to keep the
+            // name that slide holds by its position.
+            LOK_ASSERT_MESSAGE("a linked page must report a slide name entry",
+                               slide->has("name"));
             const std::string part = slide->getValue<std::string>("part");
             LOK_ASSERT_MESSAGE("a linked page must report a part", !part.empty());
             parts.push_back(part);
@@ -201,8 +202,11 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         // Each linked page reports the source time the insert named.
         Poco::JSON::Array::Ptr slides = links->getObject(0)->getArray("slides");
         for (std::size_t i = 0; i < slides->size(); ++i)
+        {
             LOK_ASSERT_EQUAL(std::string("2021-05-05T10:00:00Z"),
                              slides->getObject(i)->getValue<std::string>("lastModifiedTime"));
+            LOK_ASSERT_EQUAL(std::string(), slides->getObject(i)->getValue<std::string>("name"));
+        }
 
         // A plain copy of the same slides is no link, so the list still holds
         // the two linked pages alone.
@@ -210,6 +214,18 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         helpers::sendTextFrame(socket, insertCommand("slides=0,1 keepdesign=0 link=0"), testname);
         helpers::getResponseString(socket, "slideimport:", testname);
         getParts(getLinks(socket)->getObject(0), 2);
+
+        // An insert that asks to keep the name a slide holds by its position records that name,
+        // which is what a source keeping no slide identifiers can be matched by later.
+        stageSource(socket, documentURL, "source.odp");
+        helpers::sendTextFrame(socket,
+                               insertCommand("slides=2 at=0 keepdesign=0 link=1 positionnames=1"),
+                               testname);
+        helpers::getResponseString(socket, "slideimport:", testname);
+        Poco::JSON::Array::Ptr named = getLinks(socket)->getObject(0)->getArray("slides");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), named->size());
+        LOK_ASSERT_MESSAGE("a page keeping a position name must report it",
+                           !named->getObject(0)->getValue<std::string>("name").empty());
 
         socketPoll->joinThread();
     }

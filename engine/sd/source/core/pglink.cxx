@@ -89,12 +89,31 @@ SdPageLink::~SdPageLink()
             /******************************************************************
             * the linked page is replaced in the model
             ******************************************************************/
-            if (aBookmarkName.isEmpty())
+            const bool bNamedSource = !sd::SlideLink::GetSourceName(aFileName).isEmpty();
+            if (bNamedSource)
+            {
+                const OUString aSourceSlide
+                    = sd::SlideLink::GetSourceSlideName(*pBookmarkDoc, *pPage);
+                if (aSourceSlide.isEmpty())
+                {
+                    if (!SdDrawDocument::s_pDocLockedInsertingLinks)
+                        pDoc->CloseBookmarkDoc();
+                    return SUCCESS;
+                }
+
+                aBookmarkName = aSourceSlide;
+            }
+            else if (aBookmarkName.isEmpty())
             {
                 // no page name specified: we assume it is the first page
                 aBookmarkName = pBookmarkDoc->GetSdPage(0, PageKind::Standard)->GetName();
                 pPage->SetBookmarkName(aBookmarkName);
             }
+
+            // The page read for this one records the slide it came from, as this page does: the
+            // page read from a file records nothing of its own.
+            const OUString aRecordedName = pPage->GetBookmarkName();
+            const OUString aRecordedGuid = pPage->GetSourcePageGuid();
 
             std::vector<OUString> aBookmarkList { aBookmarkName };
             sal_uInt16 nInsertPos = pPage->GetPageNum();
@@ -112,6 +131,17 @@ SdPageLink::~SdPageLink()
             // The page keeps the source it records, so it stays linked to that source whichever
             // file its slides were read from.
             pDoc->ResolvePageLinks(aBookmarkList, nInsertPos, bNoDialogs, bCopy, aFileName);
+
+            // The standard page of slide S sits at page position 2*S+1, and the slide read for
+            // this one took its position.
+            SdPage* pReadPage = pDoc->GetSdPage((nInsertPos - 1) >> 1, PageKind::Standard);
+            if (bNamedSource && pReadPage)
+            {
+                if (aRecordedName.isEmpty())
+                    pReadPage->SetBookmarkName(OUString());
+
+                pReadPage->SetSourcePageGuid(aRecordedGuid);
+            }
 
             if (!SdDrawDocument::s_pDocLockedInsertingLinks)
                 pDoc->CloseBookmarkDoc();
