@@ -2036,11 +2036,15 @@ void XMLTextParagraphExport::exportParagraph(
 //  else
 //      rPropSetHelper.getValues( xPropSet );
 
+    // The automatic style is collected from the view of the paragraph the application offers
+    // for it, which may report more as the paragraph's own than the paragraph itself does.
+    Reference<XPropertySet> xAutoStylePropSet(getParagraphAutoStylePropertySet(xPropSet));
+
     if( bExportParagraph )
     {
         if( bAutoStyles )
         {
-            Add( XmlStyleFamily::TEXT_PARAGRAPH, rPropSetHelper, xPropSet );
+            Add( XmlStyleFamily::TEXT_PARAGRAPH, rPropSetHelper, xAutoStylePropSet );
         }
         else
         {
@@ -2077,7 +2081,7 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            OUString sAutoStyle = Find( XmlStyleFamily::TEXT_PARAGRAPH, xPropSet, sStyle );
+            OUString sAutoStyle = Find( XmlStyleFamily::TEXT_PARAGRAPH, xAutoStylePropSet, sStyle );
             if ( sAutoStyle.isEmpty() )
                 sAutoStyle = sStyle;
             if( !sAutoStyle.isEmpty() )
@@ -3942,6 +3946,12 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
 {
     if (nullptr != m_pRedlineExport)
         m_pRedlineExport->SetCurrentXText();
+}
+
+Reference<XPropertySet> XMLTextParagraphExport::getParagraphAutoStylePropertySet(
+    const Reference<XPropertySet>& rPropSet) const
+{
+    return rPropSet;
 }
 
 void XMLTextParagraphExport::exportTableAutoStyles() {}

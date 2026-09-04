@@ -1304,7 +1304,11 @@ public:
     /// item that only repeats what their style role provides. Documents written before the
     /// style was resolved live carry the style's values as direct formatting, which would
     /// otherwise win over a role change for good.
-    SW_DLLPUBLIC void StripBakedTableStyleFormatting(SwTableNode& rTableNode);
+    /// bCompleteStyleBoxes says the file was written by code that wrote a style box's
+    /// complete item set, defaults included; otherwise only the items the style defines
+    /// count as repeating it.
+    SW_DLLPUBLIC void StripBakedTableStyleFormatting(SwTableNode& rTableNode,
+                                                     bool bCompleteStyleBoxes);
 
     /// The paragraph collection carrying the table style text formatting for paragraphs
     /// with the paragraph style rBase in the cell whose section starts at rBoxStart, or

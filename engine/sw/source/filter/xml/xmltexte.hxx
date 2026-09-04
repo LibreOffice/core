@@ -65,6 +65,9 @@ protected:
 
     virtual void exportTableAutoStyles() override;
 
+    virtual cpo::uno::Reference<css::beans::XPropertySet> getParagraphAutoStylePropertySet(
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet) const override;
+
 public:
     SwXMLTextParagraphExport(
         SwXMLExport& rExp,

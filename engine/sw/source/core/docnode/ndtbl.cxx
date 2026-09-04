@@ -4241,7 +4241,7 @@ std::vector<sal_uInt16> lcl_GetItemsRepeating(const SfxItemSet& rOwnSet, const S
 
 }
 
-void SwDoc::StripBakedTableStyleFormatting(SwTableNode& rTableNode)
+void SwDoc::StripBakedTableStyleFormatting(SwTableNode& rTableNode, bool bCompleteStyleBoxes)
 {
     if (!ApplyTableStyleLive(rTableNode))
         return;
@@ -4270,7 +4270,11 @@ void SwDoc::StripBakedTableStyleFormatting(SwTableNode& rTableNode)
                                 SwTableAutoFormatUpdateFlags::Box, GetNumberFormatter());
             SfxItemSet aBakedTextSet(GetAttrPool(), aTextFormatCollSetRange);
             pStyle->UpdateToSet(nPos, nRows == 1, nCols == 1, aBakedTextSet,
-                                SwTableAutoFormatUpdateFlags::Char, nullptr);
+                                bCompleteStyleBoxes
+                                    ? SwTableAutoFormatUpdateFlags::Char
+                                    : SwTableAutoFormatUpdateFlags::Char
+                                          | SwTableAutoFormatUpdateFlags::DefinedOnly,
+                                nullptr);
 
             SwTableBoxFormat* pOwnFormat = pBox->GetFrameFormat();
             for (sal_uInt16 nWhich : { sal_uInt16(RES_BOX), sal_uInt16(RES_BACKGROUND) })

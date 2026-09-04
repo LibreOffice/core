@@ -13,6 +13,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/ColumnSeparatorStyle.hpp>
@@ -33,6 +35,13 @@
 #include <wrtsh.hxx>
 #include <rootfrm.hxx>
 #include <docsh.hxx>
+#include <ndtxt.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
+#include <itabenum.hxx>
+#include <frameformats.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -1838,6 +1847,84 @@ CPPUNIT_TEST_FIXTURE(Test, testCompatibilityFlagIsDocumentSetting)
                        "config:config-item-set[@config:name='ooo:configuration-settings']/"
                        "config:config-item[@config:name='AnchoredTextOverflowLegacy']",
                        u"true");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleLiveRoundTrip)
+{
+    // A table whose header row takes white text and a blue fill from a live table style
+    // (the built-in "Grid Table 4 Accent 1"), with nothing written into the cells or
+    // paragraphs themselves.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const TableStyleName aStyleName(u"Grid Table 4 Accent 1"_ustr);
+    CPPUNIT_ASSERT(pDoc->GetTableStyles().FindAutoFormat(aStyleName));
+    SwInsertTableOptions aOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(aStyleName);
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode(), /*bResetCellFormatting=*/true);
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    pWrtShell->Insert(u"header"_ustr);
+
+    // To everything but the ODF export, the color the style gives the header text is
+    // inherited formatting, not the paragraph's own.
+    {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xHeaderCell(
+            xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertyState> xHeaderState(
+            xHeaderCell->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                             xHeaderState->getPropertyState(u"CharColor"_ustr));
+    }
+
+    saveAndReload(TestFilter::ODT);
+
+    // A reader without table styles sees the header as designed: the paragraph's automatic
+    // style carries the text color and the cell's automatic style the fill.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    OUString aParaStyle = getXPath(
+        pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]/text:p", "style-name");
+    assertXPath(pXmlDoc,
+                OUStringToOString(Concat2View("//office:automatic-styles/style:style[@style:name='"
+                                              + aParaStyle + "']/style:text-properties"),
+                                  RTL_TEXTENCODING_UTF8),
+                "color", u"#ffffff");
+    OUString aCellStyle
+        = getXPath(pXmlDoc, "//table:table/table:table-row[1]/table:table-cell[1]", "style-name");
+    assertXPath(pXmlDoc,
+                OUStringToOString(Concat2View("//office:automatic-styles/style:style[@style:name='"
+                                              + aCellStyle + "']/style:table-cell-properties"),
+                                  RTL_TEXTENCODING_UTF8),
+                "background-color", u"#4472c4");
+
+    // Loaded back, the table follows its style live again: the color and the fill still
+    // apply, but neither sits on the paragraph or the cell itself.
+    pDoc = getSwDoc();
+    const SwTable* pLoadedTable = SwTable::FindTable((*pDoc->GetTableFrameFormats())[0]);
+    CPPUNIT_ASSERT(pLoadedTable);
+    CPPUNIT_ASSERT(pLoadedTable->GetTableStyleSettings().m_bUseFirstRowStyle);
+    CPPUNIT_ASSERT(!pLoadedTable->GetTableStyleSettings().m_bUseLastRowStyle);
+    const SwTableBox* pHeaderBox = pLoadedTable->GetTabLines()[0]->GetTabBoxes()[0];
+    const SwTextNode* pHeaderNode = pDoc->GetNodes()[pHeaderBox->GetSttIdx() + 1]->GetTextNode();
+    CPPUNIT_ASSERT(pHeaderNode);
+    CPPUNIT_ASSERT_EQUAL(u"header"_ustr, pHeaderNode->GetText());
+    CPPUNIT_ASSERT(!pHeaderNode->GetpSwAttrSet()
+                   || SfxItemState::SET
+                          != pHeaderNode->GetpSwAttrSet()->GetItemState(RES_CHRATR_COLOR, false));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pHeaderNode->GetSwAttrSet().Get(RES_CHRATR_COLOR).GetValue());
+    const SwFrameFormat* pHeaderFormat = pHeaderBox->GetFrameFormat();
+    CPPUNIT_ASSERT(SfxItemState::SET
+                   != pHeaderFormat->GetAttrSet().GetItemState(RES_BACKGROUND, false));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472C4),
+                         pHeaderFormat->GetAttrSet().Get(RES_BACKGROUND).GetColor());
 }
 
 } // end of anonymous namespace

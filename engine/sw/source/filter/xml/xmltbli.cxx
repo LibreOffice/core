@@ -2666,8 +2666,10 @@ void SwXMLTableContext::MakeTable()
 
     // The file carries the style's own formatting as direct formatting of the cells and
     // paragraphs, for readers without table styles. Here the style is live, so what only
-    // repeats it goes, and a later role change can show.
-    m_pTableNode->GetDoc().StripBakedTableStyleFormatting(*m_pTableNode);
+    // repeats it goes, and a later role change can show. A file from before the role
+    // settings were written carries the complete style boxes, defaults included.
+    m_pTableNode->GetDoc().StripBakedTableStyleFormatting(*m_pTableNode,
+                                                          /*bCompleteStyleBoxes=*/!m_bHasTemplateSettings);
 
     // now that table is complete, change into DDE table (if appropriate)
     if (m_xDDESource.is())

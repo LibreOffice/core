@@ -385,6 +385,12 @@ protected:
 
     virtual void exportTableAutoStyles();
 
+    /// The property set a paragraph's automatic style is collected from: the paragraph itself,
+    /// unless the application returns a view of it whose property states also count formatting
+    /// that the paragraph inherits but that the file has to carry as the paragraph's own.
+    virtual cpo::uno::Reference<css::beans::XPropertySet> getParagraphAutoStylePropertySet(
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet) const;
+
 public:
 
     XMLTextParagraphExport(

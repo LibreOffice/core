@@ -28,6 +28,7 @@
 #include <string_view>
 #include <vector>
 
+class SfxItemSet;
 class SwDoc;
 class SwFormat;
 class SwFrameFormat;
@@ -36,6 +37,7 @@ class SvXMLExportItemMapper;
 class SwTableLine;
 class SwTableLines;
 class SwTableBox;
+struct SwXMLCellFormat_Impl;
 class SwXMLTableColumn_Impl;
 class SwXMLTableLines_Impl;
 class SwXMLTableColumnsSortByWidth_Impl;
@@ -73,8 +75,11 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableInfo_Impl& rTableInfo,
                                  bool bTop=false );
 
+    /// Export rFormat as an automatic style. pItemSet, when given, is the item set to write
+    /// instead of the format's own: a table cell that takes its border and background from
+    /// a live table style has to write those too, for readers without table styles.
     void ExportFormat(const SwFormat& rFormat, enum ::xmloff::token::XMLTokenEnum eClass,
-            ::std::optional<OUString> const oStyleName);
+            ::std::optional<OUString> const oStyleName, const SfxItemSet* pItemSet = nullptr);
     void ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );

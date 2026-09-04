@@ -41,6 +41,13 @@
 #include <sot/exchange.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <fmtcol.hxx>
+#include <ndtxt.hxx>
+#include <unomap.hxx>
+#include <unoparagraph.hxx>
+#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -84,6 +91,124 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
 
 SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
 {
+}
+
+namespace {
+
+/// A paragraph in a cell of a live styled table, seen with the text formatting its table style
+/// role gives it as the paragraph's own. The paragraph itself reports that formatting as
+/// inherited, since it is not the paragraph's; the file has to carry it all the same, because a
+/// reader without table styles has nothing to resolve it from.
+class SwTableStyleRoleParagraph final
+    : public cppu::WeakImplHelper<css::beans::XPropertySet, css::beans::XPropertyState>
+{
+    uno::Reference<css::beans::XPropertySet> m_xParagraph;
+    uno::Reference<css::beans::XPropertyState> m_xParagraphState;
+    /// The properties the role gives the paragraph and the paragraph does not set itself.
+    std::set<OUString> m_aRoleProperties;
+
+public:
+    SwTableStyleRoleParagraph(uno::Reference<css::beans::XPropertySet> xParagraph,
+                              std::set<OUString> aRoleProperties)
+        : m_xParagraph(std::move(xParagraph))
+        , m_xParagraphState(m_xParagraph, uno::UNO_QUERY_THROW)
+        , m_aRoleProperties(std::move(aRoleProperties))
+    {
+    }
+
+    // XPropertySet
+    virtual uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
+    {
+        return m_xParagraph->getPropertySetInfo();
+    }
+    virtual void SAL_CALL setPropertyValue(const OUString& rName, const uno::Any& rValue) override
+    {
+        m_xParagraph->setPropertyValue(rName, rValue);
+    }
+    virtual uno::Any SAL_CALL getPropertyValue(const OUString& rName) override
+    {
+        return m_xParagraph->getPropertyValue(rName);
+    }
+    virtual void SAL_CALL addPropertyChangeListener(
+        const OUString& rName,
+        const uno::Reference<css::beans::XPropertyChangeListener>& xListener) override
+    {
+        m_xParagraph->addPropertyChangeListener(rName, xListener);
+    }
+    virtual void SAL_CALL removePropertyChangeListener(
+        const OUString& rName,
+        const uno::Reference<css::beans::XPropertyChangeListener>& xListener) override
+    {
+        m_xParagraph->removePropertyChangeListener(rName, xListener);
+    }
+    virtual void SAL_CALL addVetoableChangeListener(
+        const OUString& rName,
+        const uno::Reference<css::beans::XVetoableChangeListener>& xListener) override
+    {
+        m_xParagraph->addVetoableChangeListener(rName, xListener);
+    }
+    virtual void SAL_CALL removeVetoableChangeListener(
+        const OUString& rName,
+        const uno::Reference<css::beans::XVetoableChangeListener>& xListener) override
+    {
+        m_xParagraph->removeVetoableChangeListener(rName, xListener);
+    }
+
+    // XPropertyState
+    virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& rName) override
+    {
+        if (m_aRoleProperties.count(rName))
+            return css::beans::PropertyState_DIRECT_VALUE;
+        return m_xParagraphState->getPropertyState(rName);
+    }
+    virtual uno::Sequence<css::beans::PropertyState> SAL_CALL
+    getPropertyStates(const uno::Sequence<OUString>& rNames) override
+    {
+        uno::Sequence<css::beans::PropertyState> aStates
+            = m_xParagraphState->getPropertyStates(rNames);
+        css::beans::PropertyState* pStates = aStates.getArray();
+        for (sal_Int32 i = 0; i < rNames.getLength(); ++i)
+            if (m_aRoleProperties.count(rNames[i]))
+                pStates[i] = css::beans::PropertyState_DIRECT_VALUE;
+        return aStates;
+    }
+    virtual void SAL_CALL setPropertyToDefault(const OUString& rName) override
+    {
+        m_xParagraphState->setPropertyToDefault(rName);
+    }
+    virtual uno::Any SAL_CALL getPropertyDefault(const OUString& rName) override
+    {
+        return m_xParagraphState->getPropertyDefault(rName);
+    }
+};
+
+}
+
+uno::Reference<css::beans::XPropertySet>
+SwXMLTextParagraphExport::getParagraphAutoStylePropertySet(
+    const uno::Reference<css::beans::XPropertySet>& rPropSet) const
+{
+    const SwXParagraph* pParagraph = dynamic_cast<SwXParagraph*>(rPropSet.get());
+    const SwTextNode* pNode = pParagraph ? pParagraph->GetTextNode() : nullptr;
+    const SwTextFormatColl* pRoleColl = pNode ? pNode->GetTableStyleRoleColl() : nullptr;
+    if (!pRoleColl)
+        return rPropSet;
+
+    const SfxItemSet& rRoleSet = pRoleColl->GetAttrSet();
+    const SwAttrSet* pOwnSet = pNode->GetpSwAttrSet();
+    std::set<OUString> aRoleProperties;
+    for (const SfxItemPropertyMapEntry* pEntry :
+         aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH)->getPropertyMap().getPropertyEntries())
+    {
+        if (SfxItemState::SET != rRoleSet.GetItemState(pEntry->nWID, false))
+            continue;
+        if (pOwnSet && SfxItemState::SET == pOwnSet->GetItemState(pEntry->nWID, false))
+            continue;
+        aRoleProperties.insert(pEntry->aName);
+    }
+    if (aRoleProperties.empty())
+        return rPropSet;
+    return new SwTableStyleRoleParagraph(rPropSet, std::move(aRoleProperties));
 }
 
 static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,

@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <string_view>
 
 #include <com/sun/star/text/XTextTable.hpp>
@@ -182,10 +183,20 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
 
 typedef vector< SwFrameFormat* > SwXMLFrameFormats_Impl;
 
+/// A cell format together with the items its automatic style is written from, which can be
+/// more than the format's own items (see SwXMLExport::ExportFormat).
+struct SwXMLCellFormat_Impl
+{
+    SwFrameFormat* pFormat;
+    std::shared_ptr<const SfxItemSet> pItemSet;
+};
+typedef vector< SwXMLCellFormat_Impl > SwXMLCellFormats_Impl;
+
 class SwXMLTableFrameFormatsSort_Impl
 {
 private:
     SwXMLFrameFormats_Impl m_aFormatList;
+    SwXMLCellFormats_Impl m_aCellList;
     SwXMLTextParagraphExport::FormatMap & m_rFormatMap;
 
 public:
@@ -193,9 +204,30 @@ public:
         : m_rFormatMap(rFormatMap)
     {}
     ::std::optional<OUString> AddRow(SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix, sal_uInt32 nLine );
-    ::std::optional<OUString> AddCell(SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix,
-                  sal_uInt32 nCol, sal_uInt32 nRow, bool bTop );
+    /// rItemSet is the item set the cell's automatic style is written from.
+    ::std::optional<OUString> AddCell(SwFrameFormat& rFrameFormat, const SfxItemSet& rItemSet,
+                  std::u16string_view rNamePrefix, sal_uInt32 nCol, sal_uInt32 nRow, bool bTop );
 };
+
+/// The items a cell's automatic style has to carry: the cell's own, plus the border and
+/// background its live table style provides, so that a reader without table styles sees the
+/// cell as designed. Loading the file back drops what only repeats the style again.
+static SfxItemSet lcl_GetCellExportSet(const SwFrameFormat& rBoxFormat, const SwDoc& rDoc)
+{
+    SfxItemSet aSet(rBoxFormat.GetAttrSet());
+    const SwFormat* pParent = rBoxFormat.DerivedFrom();
+    if (pParent && pParent != rDoc.GetDfltFrameFormat())
+    {
+        for (sal_uInt16 nWhich : { sal_uInt16(RES_BOX), sal_uInt16(RES_BACKGROUND) })
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if (SfxItemState::SET != aSet.GetItemState(nWhich, false)
+                && SfxItemState::SET == pParent->GetAttrSet().GetItemState(nWhich, false, &pItem))
+                aSet.Put(*pItem);
+        }
+    }
+    return aSet;
+}
 
 ::std::optional<OUString> SwXMLTableFrameFormatsSort_Impl::AddRow(SwFrameFormat& rFrameFormat,
                                          std::u16string_view rNamePrefix,
@@ -324,10 +356,10 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
 }
 
 ::std::optional<OUString> SwXMLTableFrameFormatsSort_Impl::AddCell(SwFrameFormat& rFrameFormat,
+                                         const SfxItemSet& rItemSet,
                                          std::u16string_view rNamePrefix,
                                             sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
-    const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SwFormatVertOrient *pVertOrient = rItemSet.GetItemIfSet( RES_VERT_ORIENT, false );
     const SvxBrushItem *pBrush = rItemSet.GetItemIfSet( RES_BACKGROUND, false );
     const SvxBoxItem *pBox = rItemSet.GetItemIfSet( RES_BOX, false );
@@ -353,8 +385,8 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
     //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
     //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
     //           vert/brush/box/num
-    SwXMLFrameFormats_Impl::iterator i;
-    for( i = m_aFormatList.begin(); i < m_aFormatList.end(); ++i )
+    SwXMLCellFormats_Impl::iterator i;
+    for( i = m_aCellList.begin(); i < m_aCellList.end(); ++i )
     {
         const SwFormatVertOrient *pTestVertOrient = nullptr;
         const SvxBrushItem *pTestBrush = nullptr;
@@ -363,8 +395,8 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
         const SvxFrameDirectionItem *pTestFrameDir = nullptr;
         const SvXMLAttrContainerItem *pTestAttCnt = nullptr;
         const SvxPrintItem *pTestHasTextChangesOnly = rItemSet.GetItemIfSet( RES_PRINT, false);
-        const SwFrameFormat* pTestFormat = *i;
-        const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
+        const SwFrameFormat* pTestFormat = i->pFormat;
+        const SfxItemSet& rTestSet = *i->pItemSet;
         if( const SwFormatVertOrient* pItem = rTestSet.GetItemIfSet( RES_VERT_ORIENT, false ) )
         {
             if( !pVertOrient )
@@ -496,8 +528,8 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
     {
         OUString const name(lcl_xmltble_appendBoxPrefix(rNamePrefix, nCol, nRow, bTop));
         m_rFormatMap.try_emplace(&rFrameFormat, name);
-        if ( i != m_aFormatList.end() ) ++i;
-        m_aFormatList.insert( i, &rFrameFormat );
+        if ( i != m_aCellList.end() ) ++i;
+        m_aCellList.insert( i, { &rFrameFormat, std::make_shared<const SfxItemSet>(rItemSet) } );
         return ::std::optional<OUString>(name);
     }
 }
@@ -699,10 +731,11 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             if( pBoxSttNd )
             {
                 SwFrameFormat *pFrameFormat2 = pBox->GetFrameFormat();
-                if (auto oNew = rExpCells.AddCell(*pFrameFormat2, rNamePrefix, nOldCol, nLine,
-                                       bTop) )
+                const SfxItemSet aCellSet = lcl_GetCellExportSet(*pFrameFormat2, *getDoc());
+                if (auto oNew = rExpCells.AddCell(*pFrameFormat2, aCellSet, rNamePrefix, nOldCol,
+                                                  nLine, bTop) )
                 {
-                    ExportFormat(*pFrameFormat2, XML_TABLE_CELL, std::move(oNew));
+                    ExportFormat(*pFrameFormat2, XML_TABLE_CELL, std::move(oNew), &aCellSet);
                 }
 
                 rtl::Reference < SwXCell > xCell = SwXCell::CreateXCell(
