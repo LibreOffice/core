@@ -2264,7 +2264,11 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     bool bOldSpacePreserve = rWrt.IsSpacePreserve();
     if (rWrt.IsPreserveSpacesOnWritePrefSet())
         rWrt.SetSpacePreserve(NeedPreserveWhitespace(rStr, rWrt.mbReqIF));
-    OutHTML_SwFormat( rWrt, rFormat, pNd->GetpSwAttrSet(), aFormatInfo );
+    // HTML has no table styles: what a live table style gives the paragraph is written as
+    // the paragraph's own formatting.
+    const std::optional<SwAttrSet> oOwnWithRole = pNd->GetOwnAttrsWithTableStyleRole();
+    OutHTML_SwFormat( rWrt, rFormat, oOwnWithRole ? &*oOwnWithRole : pNd->GetpSwAttrSet(),
+                      aFormatInfo );
 
     // If we didn't open a new line before the paragraph tag, we do that now
     rWrt.SetLFPossible(rWrt.m_nLastParaToken == HtmlTokenId::NONE);

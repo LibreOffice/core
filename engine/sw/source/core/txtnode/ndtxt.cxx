@@ -1316,6 +1316,28 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     mpAttrSet = GetDoc().GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA, &sVal );
 }
 
+std::optional<SwAttrSet> SwTextNode::GetOwnAttrsWithTableStyleRole() const
+{
+    const SwTextFormatColl* pRoleColl = GetTableStyleRoleColl();
+    if (!pRoleColl)
+        return {};
+
+    // A paragraph without attributes of its own shows exactly the role's items.
+    if (!GetpSwAttrSet())
+        return pRoleColl->GetAttrSet();
+
+    std::optional<SwAttrSet> oSet(*GetpSwAttrSet());
+
+    // The paragraph's own value wins over the role's, as it does in the layout.
+    SfxItemIter aIter(pRoleColl->GetAttrSet());
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    {
+        if (SfxItemState::SET != oSet->GetItemState(pItem->Which(), false))
+            oSet->Put(*pItem);
+    }
+    return oSet;
+}
+
 namespace
 {
 class SwContentNodeTmp : public SwContentNode

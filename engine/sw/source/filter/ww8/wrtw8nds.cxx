@@ -420,11 +420,20 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
 
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_END - 1> aExportSet(*m_rNode.GetSwAttrSet().GetPool());
 
-    //The hard formatting properties that affect the entire paragraph
-    if (m_rNode.HasSwAttrSet())
+    //The hard formatting properties that affect the entire paragraph.
+    // What a live table style gives the paragraph counts as hard formatting for a format
+    // without table styles. DOCX has them, and its style definition carries that formatting,
+    // so a run does not repeat what the style already says.
+    const std::optional<SwAttrSet> oOwnWithRole
+        = m_rExport.GetExportFormat() != MSWordExportBase::ExportFormat::DOCX
+              ? m_rNode.GetOwnAttrsWithTableStyleRole()
+              : std::nullopt;
+    const SwAttrSet* pOwnSet
+        = oOwnWithRole ? &*oOwnWithRole : (m_rNode.HasSwAttrSet() ? m_rNode.GetpSwAttrSet() : nullptr);
+    if (pOwnSet)
     {
         // only copy hard attributes - bDeep = false
-        aExportSet.Set(m_rNode.GetSwAttrSet(), false/*bDeep*/);
+        aExportSet.Set(*pOwnSet, false/*bDeep*/);
         // get the current font item. Use rNd.GetSwAttrSet instead of aExportSet:
         const SvxFontItem &rNdFont = m_rNode.GetSwAttrSet().Get(nFontId);
         pFont = &rNdFont;

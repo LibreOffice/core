@@ -39,6 +39,7 @@
 #include <vector>
 #include <functional>
 #include <map>
+#include <optional>
 
 class SfxHint;
 class SwNumRule;
@@ -479,6 +480,13 @@ public:
     bool Convert( SwConversionArgs & );
 
     inline SwTextFormatColl *GetTextColl() const;
+
+    /// The paragraph's own attributes together with the text formatting its table style
+    /// role provides: what a reader without table styles has to see as the paragraph's own.
+    /// Empty when the paragraph is in no table style role, so that a caller keeps using the
+    /// own attribute set as it is.
+    std::optional<SwAttrSet> GetOwnAttrsWithTableStyleRole() const;
+
     virtual SwFormatColl *ChgFormatColl( SwFormatColl*, bool bSetListLevel = true ) override;
     void ChgTextCollUpdateNum(const SwTextFormatColl* pOld,
                               const SwTextFormatColl* pNew,

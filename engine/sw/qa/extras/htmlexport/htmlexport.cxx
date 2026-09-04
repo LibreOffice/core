@@ -38,6 +38,11 @@
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <doc.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
+#include <itabenum.hxx>
+#include <frmfmt.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -1676,6 +1681,38 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOpticalSizing)
 
     uno::Reference<beans::XPropertySet> xRetCursor2(getRun(getParagraph(1), 1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRetCursor2, u"CharOpticalSizing"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTableStyleLiveExport)
+{
+    // A table whose header row takes white text and a blue fill from a live table style
+    // (the built-in "Grid Table 4 Accent 1"), with nothing written into the cells or
+    // paragraphs themselves.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const TableStyleName aStyleName(u"Grid Table 4 Accent 1"_ustr);
+    CPPUNIT_ASSERT(pDoc->GetTableStyles().FindAutoFormat(aStyleName));
+    SwInsertTableOptions aOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(aStyleName);
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode(), /*bResetCellFormatting=*/true);
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    pWrtShell->Insert(u"header"_ustr);
+
+    save(TestFilter::HTML_WRITER);
+
+    // HTML has no table styles, so the header cell carries the fill and its paragraph the
+    // text color as their own formatting. This is also what a paste from the clipboard sees.
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+    assertXPath(pHtmlDoc, "(//td)[1]", "bgcolor", u"#4472c4");
+    assertXPath(pHtmlDoc, "(//td)[1]/p/font", "color", u"#ffffff");
+    assertXPath(pHtmlDoc, "(//td)[1]/p/font/b", 1);
 }
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();

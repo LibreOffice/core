@@ -40,6 +40,10 @@
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <itabenum.hxx>
+#include <doc.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
+#include <frmfmt.hxx>
 #include <frmmgr.hxx>
 #include <formatflysplit.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
@@ -1375,6 +1379,42 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134614_TOC_indent)
     CPPUNIT_ASSERT_GREATER(nFldrslt, nInnerFldrslt); // must be a different, inner \fldrslt
     CPPUNIT_ASSERT_MESSAGE("inner HYPERLINK field must close before \\par",
                            !isInsideScope(nInnerFldrslt, nParAfterLastEntry));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleLiveExport)
+{
+    // A table whose header row takes white text and a blue fill from a live table style
+    // (the built-in "Grid Table 4 Accent 1"), with nothing written into the cells or
+    // paragraphs themselves.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const TableStyleName aStyleName(u"Grid Table 4 Accent 1"_ustr);
+    CPPUNIT_ASSERT(pDoc->GetTableStyles().FindAutoFormat(aStyleName));
+    SwInsertTableOptions aOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(aStyleName);
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode(), /*bResetCellFormatting=*/true);
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    pWrtShell->Insert(u"header"_ustr);
+
+    saveAndReload(TestFilter::RTF);
+
+    // RTF has no table styles, so the header comes back with the text color on its run and
+    // the fill on its cell.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472C4), getProperty<Color>(xCell, u"BackColor"_ustr));
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCell, u"header"_ustr);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(xParagraph, 1), u"CharColor"_ustr));
 }
 
 } // end of anonymous namespace

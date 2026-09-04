@@ -406,6 +406,13 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     rWrt.m_bTextAttr = false;
     rWrt.m_bOutOpts = true;
     const SvxBrushItem *pBrushItem = rItemSet.GetItemIfSet( RES_BACKGROUND, false );
+    // A cell of a table with a live table style takes its fill from the format it derives
+    // from; HTML has no table styles, so the cell writes that fill as its own. A role that
+    // sets no fill leaves the cell to the row's or the table's background below.
+    const SwFrameFormat* pBoxFormat = pBox->GetFrameFormat();
+    if( !pBrushItem && pBoxFormat->DerivedFrom()
+        && pBoxFormat->DerivedFrom() != pBoxFormat->GetDoc().GetDfltFrameFormat() )
+        pBrushItem = pBoxFormat->DerivedFrom()->GetAttrSet().GetItemIfSet( RES_BACKGROUND, false );
     if( !pBrushItem )
         pBrushItem = pCell->GetBackground();
 
