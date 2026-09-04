@@ -1574,7 +1574,7 @@ typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pRe
                                             size_t nResultUri);
 
 /// @see COKit::registerRevealInFileManagerCallback()
-typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
+using COKitRevealInFileManagerCallback = std::function<void(const char* pUri)>;
 
 struct COKitDocument;
 
