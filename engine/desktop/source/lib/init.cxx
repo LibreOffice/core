@@ -432,6 +432,11 @@ OUString getUString(const char* pString)
     return OStringToOUString(pString, RTL_TEXTENCODING_UTF8);
 }
 
+std::string_view asStringView(std::span<const unsigned char> aBytes)
+{
+    return std::string_view(reinterpret_cast<const char*>(aBytes.data()), aBytes.size());
+}
+
 // The length is carried over, so a string with an embedded \0 survives the copy.
 std::string convertOStringToStdString(const OString &rStr)
 {
@@ -1287,14 +1292,11 @@ static void doc_postWindow(COKitDocument* pThis, unsigned nKitWindowId,
                            COKitWindowAction eAction, const char* pData);
 
 static bool doc_insertCertificate(COKitDocument* pThis,
-                                  const unsigned char* pCertificateBinary,
-                                  const int nCertificateBinarySize,
-                                  const unsigned char* pPrivateKeyBinary,
-                                  const int nPrivateKeyBinarySize);
+                                  std::span<const unsigned char> aCertificateBinary,
+                                  std::span<const unsigned char> aPrivateKeyBinary);
 
 static bool doc_addCertificate(COKitDocument* pThis,
-                                 const unsigned char* pCertificateBinary,
-                                 const int nCertificateBinarySize);
+                               std::span<const unsigned char> aCertificateBinary);
 
 static int doc_getSignatureState(COKitDocument* pThis);
 
@@ -1687,19 +1689,15 @@ void COKitDocumentImpl::paintWindowDPI(unsigned nWindowId, unsigned char* pBuffe
     doc_paintWindowDPI(this, nWindowId, pBuffer, x, y, width, height, dpiscale);
 }
 
-bool COKitDocumentImpl::insertCertificate(const unsigned char* pCertificateBinary,
-                                           const int nCertificateBinarySize,
-                                           const unsigned char* pPrivateKeyBinary,
-                                           const int nPrivateKeyBinarySize)
+bool COKitDocumentImpl::insertCertificate(std::span<const unsigned char> aCertificateBinary,
+                                          std::span<const unsigned char> aPrivateKeyBinary)
 {
-    return doc_insertCertificate(this, pCertificateBinary, nCertificateBinarySize,
-                                 pPrivateKeyBinary, nPrivateKeyBinarySize);
+    return doc_insertCertificate(this, aCertificateBinary, aPrivateKeyBinary);
 }
 
-bool COKitDocumentImpl::addCertificate(const unsigned char* pCertificateBinary,
-                                        const int nCertificateBinarySize)
+bool COKitDocumentImpl::addCertificate(std::span<const unsigned char> aCertificateBinary)
 {
-    return doc_addCertificate(this, pCertificateBinary, nCertificateBinarySize);
+    return doc_addCertificate(this, aCertificateBinary);
 }
 
 int COKitDocumentImpl::getSignatureState()
@@ -3162,11 +3160,9 @@ static std::string             lo_getVersionInfo(COKit* pThis);
 static bool                    lo_runMacro      (COKit* pThis, const char* pURL);
 
 static bool lo_signDocument(COKit* pThis,
-                                   const char* pUrl,
-                                   const unsigned char* pCertificateBinary,
-                                   const int nCertificateBinarySize,
-                                   const unsigned char* pPrivateKeyBinary,
-                                   const int nPrivateKeyBinarySize);
+                            const char* pUrl,
+                            std::span<const unsigned char> aCertificateBinary,
+                            std::span<const unsigned char> aPrivateKeyBinary);
 
 static std::string lo_extractRequest(COKit* pThis,
                                    const char* pFilePath);
@@ -3272,13 +3268,10 @@ bool COKitImpl::runMacro(const char* pURL)
     return lo_runMacro(this, pURL);
 }
 
-bool COKitImpl::signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
-                              const int nCertificateBinarySize,
-                              const unsigned char* pPrivateKeyBinary,
-                              const int nPrivateKeyBinarySize)
+bool COKitImpl::signDocument(const char* pUrl, std::span<const unsigned char> aCertificateBinary,
+                             std::span<const unsigned char> aPrivateKeyBinary)
 {
-    return lo_signDocument(this, pUrl, pCertificateBinary, nCertificateBinarySize,
-                           pPrivateKeyBinary, nPrivateKeyBinarySize);
+    return lo_signDocument(this, pUrl, aCertificateBinary, aPrivateKeyBinary);
 }
 
 void COKitImpl::runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
@@ -3911,10 +3904,8 @@ static bool lo_runMacro(COKit* pThis, const char *pURL)
 
 static bool lo_signDocument(COKit* /*pThis*/,
                             const char* pURL,
-                            const unsigned char* pCertificateBinary,
-                            const int nCertificateBinarySize,
-                            const unsigned char* pPrivateKeyBinary,
-                            const int nPrivateKeyBinarySize)
+                            std::span<const unsigned char> aCertificateBinary,
+                            std::span<const unsigned char> aPrivateKeyBinary)
 {
     comphelper::ProfileZone aZone("lo_signDocument");
 
@@ -3925,9 +3916,8 @@ static bool lo_signDocument(COKit* /*pThis*/,
     if (!xContext.is())
         return false;
 
-    std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string_view aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeyBinarySize);
-    uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
+    uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(
+        asStringView(aCertificateBinary), asStringView(aPrivateKeyBinary));
 
     if (!xCertificate.is())
         return false;
@@ -9076,8 +9066,8 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId,
 
 // CERTIFICATE AND DOCUMENT SIGNING
 static bool doc_insertCertificate(COKitDocument* pThis,
-                                  const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
-                                  const unsigned char* pPrivateKeyBinary, const int nPrivateKeySize)
+                                  std::span<const unsigned char> aCertificateBinary,
+                                  std::span<const unsigned char> aPrivateKeyBinary)
 {
     comphelper::ProfileZone aZone("doc_insertCertificate");
 
@@ -9098,9 +9088,8 @@ static bool doc_insertCertificate(COKitDocument* pThis,
     if (!pObjectShell)
         return false;
 
-    std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string_view aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeySize);
-    uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
+    uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(
+        asStringView(aCertificateBinary), asStringView(aPrivateKeyBinary));
     if (!xCertificate.is())
         return false;
 
@@ -9112,7 +9101,7 @@ static bool doc_insertCertificate(COKitDocument* pThis,
 }
 
 static bool doc_addCertificate(COKitDocument* pThis,
-                                  const unsigned char* pCertificateBinary, const int nCertificateBinarySize)
+                               std::span<const unsigned char> aCertificateBinary)
 {
     comphelper::ProfileZone aZone("doc_addCertificate");
 
@@ -9146,16 +9135,17 @@ static bool doc_addCertificate(COKitDocument* pThis,
 
     cpo::uno::Sequence<sal_Int8> aCertificateSequence;
 
-    std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string_view aCertificateBase64String = KitHelper::extractCertificate(aCertificateString);
+    std::string_view aCertificateBase64String
+        = KitHelper::extractCertificate(asStringView(aCertificateBinary));
     if (!aCertificateBase64String.empty())
     {
         comphelper::Base64::decode(aCertificateSequence, aCertificateBase64String);
     }
     else
     {
-        aCertificateSequence.realloc(nCertificateBinarySize);
-        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
+        aCertificateSequence.realloc(aCertificateBinary.size());
+        std::copy(aCertificateBinary.begin(), aCertificateBinary.end(),
+                  aCertificateSequence.getArray());
     }
 
     uno::Reference<security::XCertificate> xCertificate = KitHelper::addCertificate(xCertificateCreator, aCertificateSequence);

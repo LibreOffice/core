@@ -365,12 +365,9 @@ namespace desktop {
         std::string getPartInfo(int nPart) override;
         void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
                             const int width, const int height, const double dpiscale) override;
-        bool insertCertificate(const unsigned char* pCertificateBinary,
-                               const int nCertificateBinarySize,
-                               const unsigned char* pPrivateKeyBinary,
-                               const int nPrivateKeyBinarySize) override;
-        bool addCertificate(const unsigned char* pCertificateBinary,
-                            const int nCertificateBinarySize) override;
+        bool insertCertificate(std::span<const unsigned char> aCertificateBinary,
+                               std::span<const unsigned char> aPrivateKeyBinary) override;
+        bool addCertificate(std::span<const unsigned char> aCertificateBinary) override;
         int getSignatureState() override;
         std::vector<char> renderShapeSelection() override;
         void postWindowGestureEvent(unsigned nWindowId, const char* pType, int nX, int nY,
@@ -457,9 +454,8 @@ namespace desktop {
         void setDocumentPassword(char const* pURL, char const* pPassword) override;
         std::string getVersionInfo() override;
         bool runMacro(const char* pURL) override;
-        bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
-                          const int nCertificateBinarySize, const unsigned char* pPrivateKeyBinary,
-                          const int nPrivateKeyBinarySize) override;
+        bool signDocument(const char* pUrl, std::span<const unsigned char> aCertificateBinary,
+                          std::span<const unsigned char> aPrivateKeyBinary) override;
         void runLoop(COKitPollCallback pPollCallback, COKitWakeCallback pWakeCallback,
                      void* pData) override;
         void sendDialogEvent(unsigned long long int nKitWindowId, const char* pArguments) override;

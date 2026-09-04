@@ -4095,9 +4095,9 @@ bool ChildSession::askSignatureStatus(const char* buffer, int length, const Stri
             std::string binaryChainCertificate;
             macaron::Base64::Decode(extractCertificate(chainCertificate), binaryChainCertificate);
 
-            result = getLOKitDocument()->addCertificate(
+            result = getLOKitDocument()->addCertificate(std::span(
                 reinterpret_cast<const unsigned char*>(binaryChainCertificate.data()),
-                binaryChainCertificate.size());
+                binaryChainCertificate.size()));
 
             if (!result)
                 return false;

@@ -3669,13 +3669,13 @@ void DesktopKitTest::testGetSignatureState_Signed()
     std::vector<unsigned char> aCertificate;
     {
         readFileIntoByteVector(u"rootCA.der", aCertificate);
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"intermediateRootCA.der", aCertificate);
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3713,14 +3713,14 @@ void DesktopKitTest::testInsertCertificate_DER_ODT()
     {
         readFileIntoByteVector(u"rootCA.der", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"intermediateRootCA.der", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3728,8 +3728,7 @@ void DesktopKitTest::testInsertCertificate_DER_ODT()
         readFileIntoByteVector(u"certificate.der", aCertificate);
         readFileIntoByteVector(u"certificatePrivateKey.der", aPrivateKey);
 
-        bool bResult = pDocument->insertCertificate(aCertificate.data(), int(aCertificate.size()),
-                            aPrivateKey.data(), int(aPrivateKey.size()));
+        bool bResult = pDocument->insertCertificate(aCertificate, aPrivateKey);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3757,21 +3756,21 @@ void DesktopKitTest::testInsertCertificate_PEM_ODT()
     {
         readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3779,8 +3778,7 @@ void DesktopKitTest::testInsertCertificate_PEM_ODT()
         readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
         readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
-        bool bResult = pDocument->insertCertificate(aCertificate.data(), int(aCertificate.size()),
-                            aPrivateKey.data(), int(aPrivateKey.size()));
+        bool bResult = pDocument->insertCertificate(aCertificate, aPrivateKey);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3807,21 +3805,21 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
     {
         readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3829,8 +3827,7 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
         readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
         readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
-        bool bResult = pDocument->insertCertificate(aCertificate.data(), int(aCertificate.size()),
-                            aPrivateKey.data(), int(aPrivateKey.size()));
+        bool bResult = pDocument->insertCertificate(aCertificate, aPrivateKey);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3855,21 +3852,21 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
     {
         readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
     {
         readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
-        bool bResult = pDocument->addCertificate(aCertificate.data(), int(aCertificate.size()));
+        bool bResult = pDocument->addCertificate(aCertificate);
         CPPUNIT_ASSERT(bResult);
     }
 
@@ -3883,9 +3880,7 @@ void DesktopKitTest::testSignDocument_PEM_PDF()
     readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
     COKitImpl aOffice;
-    bool bResult = aOffice.signDocument(maTempFile.GetURL().toUtf8().getStr(),
-                                         aCertificate.data(), int(aCertificate.size()),
-                                         aPrivateKey.data(), int(aPrivateKey.size()));
+    bool bResult = aOffice.signDocument(maTempFile.GetURL().toUtf8().getStr(), aCertificate, aPrivateKey);
 
     CPPUNIT_ASSERT(bResult);
 }

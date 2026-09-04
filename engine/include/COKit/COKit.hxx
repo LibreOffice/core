@@ -1625,10 +1625,9 @@ struct COKit
     /**
      * Exports the document and signs its content.
      */
-    virtual bool signDocument(const char* pUrl, const unsigned char* pCertificateBinary,
-                               const int nCertificateBinarySize,
-                               const unsigned char* pPrivateKeyBinary,
-                               const int nPrivateKeyBinarySize) = 0;
+    virtual bool signDocument(const char* pUrl,
+                              std::span<const unsigned char> aCertificateBinary,
+                              std::span<const unsigned char> aPrivateKeyBinary) = 0;
 
     /**
      * Runs the main-loop in the current thread. To trigger this
@@ -2277,17 +2276,14 @@ struct COKitDocument
     /**
      *  Insert certificate (in binary form) to the certificate store.
      */
-    virtual bool insertCertificate(const unsigned char* pCertificateBinary,
-                                   const int nCertificateBinarySize,
-                                   const unsigned char* pPrivateKeyBinary,
-                                   const int nPrivateKeyBinarySize) = 0;
+    virtual bool insertCertificate(std::span<const unsigned char> aCertificateBinary,
+                                   std::span<const unsigned char> aPrivateKeyBinary) = 0;
 
     /**
      *  Add the certificate (in binary form) to the certificate store.
      *
      */
-    virtual bool addCertificate(const unsigned char* pCertificateBinary,
-                                const int nCertificateBinarySize) = 0;
+    virtual bool addCertificate(std::span<const unsigned char> aCertificateBinary) = 0;
 
     /**
      *  Verify signature of the document.
