@@ -285,7 +285,10 @@ void SmDocShell::ArrangeFormula()
     pOutDev->Pop();
 
     if (bSupportsMath)
+    {
+        pOutDev->SetFont(rFormat.GetFont(FNT_MATH));
         mpTree->ArrangeOpenType(*pOutDev, rFormat);
+    }
     else
         mpTree->Arrange(*pOutDev, rFormat);
 

@@ -51,6 +51,86 @@ void SmTableNode::ArrangeOpenType(OutputDevice& rDev, const SmFormat& rFormat)
         }
     }
 
+    bool bIsTextmode = rFormat.IsTextmode();
+    tools::Long nGapMin;
+
+    if (!bIsTextmode)
+        nGapMin = rDev.GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::StackDisplayStyleGapMin);
+    else
+        nGapMin = rDev.GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::StackGapMin);
+
+    if (nSize == 2 && GetSubNode(0) != nullptr && GetSubNode(1) != nullptr)
+    {
+        SmNode *pNum = GetSubNode(0), *pDenom = GetSubNode(1);
+
+        // Math Constants for Stack (it's like fractions without thickness) uses in binom.
+        tools::Long nNumShiftUp, nDenomShiftDown, nGap, nGapDiff, nGapDelta, nNumAscent,
+            nDenomAscent, nNumDescent, nNumBaseline, nDenomBaseline, nMathAscent;
+
+        if (!bIsTextmode)
+        {
+            nNumShiftUp = rDev.GetOpenTypeMathConstant(
+                vcl::OpenTypeMathConstant::StackTopDisplayStyleShiftUp);
+            nDenomShiftDown = rDev.GetOpenTypeMathConstant(
+                vcl::OpenTypeMathConstant::StackBottomDisplayStyleShiftDown);
+        }
+        else
+        {
+            nNumShiftUp = rDev.GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::StackTopShiftUp);
+            nDenomShiftDown
+                = rDev.GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::StackBottomShiftDown);
+        }
+
+        nNumBaseline = pNum->HasBaseline() ? pNum->GetBaseline() : pNum->GetCenterY();
+        nDenomBaseline = pDenom->HasBaseline() ? pDenom->GetBaseline() : pDenom->GetCenterY();
+
+        nNumAscent = nNumBaseline - pNum->GetTop();
+        nDenomAscent = nDenomBaseline - pDenom->GetTop();
+        nNumDescent = pNum->GetBottom() - nNumBaseline;
+
+        nGap = nDenomShiftDown - nDenomAscent + nNumShiftUp - nNumDescent;
+        if (nGap < nGapMin)
+        {
+            nGapDiff = nGapMin - nGap;
+            nGapDelta = nGapDiff / 2;
+            nNumShiftUp += nGapDelta;
+            nDenomShiftDown += nGapDiff - nGapDelta;
+        }
+
+        nMathAscent
+            = std::max<tools::Long>(nNumShiftUp + nNumAscent, -nDenomShiftDown + nDenomAscent);
+
+        SmRect aReferenceRect(nMaxWidth, 1);
+
+        const SmNode* pLM = pNum->GetLeftMost();
+        RectHorAlign eHorAlign = pLM->GetRectHorAlign();
+
+        // move numerator to its position
+        Point aPos = pNum->AlignTo(aReferenceRect, RectPos::Top, eHorAlign, RectVerAlign::Top);
+        aPos.setY(nMathAscent - nNumShiftUp - nNumAscent);
+        pNum->MoveTo(aPos);
+
+        // get horizontal alignment for denominator
+        pLM = pDenom->GetLeftMost();
+        eHorAlign = pLM->GetRectHorAlign();
+        aPos = pDenom->AlignTo(aReferenceRect, RectPos::Bottom, eHorAlign, RectVerAlign::Top);
+
+        // move denominator to its position
+        aPos.setY(nMathAscent + nDenomShiftDown - nDenomAscent);
+        pDenom->MoveTo(aPos);
+
+        SmRect::operator=(*pNum);
+        ExtendBy(*pDenom, RectCopyMBL::None);
+
+        mnFormulaBaseline = nMathAscent;
+
+        return;
+    }
+    else
+    {
+        nDist = nGapMin;
+    }
+
     Point aPos;
     SmRect::operator=(SmRect(nMaxWidth, 1));
     for (size_t i = 0; i < nSize; ++i)
@@ -223,8 +303,8 @@ void SmBinVerNode::ArrangeOpenType(OutputDevice& rDev, const SmFormat& rFormat)
     tools::Long nThick, nNumShiftUp, nDenomShiftDown, nNumGapMin, nDenomGapMin, nNumDist,
         nDenomDist;
 
-    nThick = rDev.GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::FractionRuleThickness);
-
+    nThick = std::round(
+        rDev.GetOpenTypeMathConstant(vcl::OpenTypeMathConstant::FractionRuleThickness));
     if (!bIsTextmode)
     {
         nNumShiftUp = rDev.GetOpenTypeMathConstant(
@@ -285,8 +365,9 @@ void SmBinVerNode::ArrangeOpenType(OutputDevice& rDev, const SmFormat& rFormat)
     aPos.setY(nMathAxisY + (nDenomDist + nAxisHeight) - nDenomBaselineOffset);
     pDenom->MoveTo(aPos);
 
-    SmRect::operator=(*pNum);
-    ExtendBy(*pDenom, RectCopyMBL::None).ExtendBy(*pLine, RectCopyMBL::None, pLine->GetCenterY());
+    SmRect::operator=(*pLine);
+    ExtendBy(*pNum, RectCopyMBL::None);
+    ExtendBy(*pDenom, RectCopyMBL::None, pLine->GetCenterY());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
