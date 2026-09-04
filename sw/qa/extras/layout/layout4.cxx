@@ -2117,6 +2117,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959ManyBlanks)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // The same centred line ending in many blanks, this time exported to PDF with tagging off.
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -2128,9 +2132,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
              u"FilterData"_ustr,
              comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(false) } })) });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
-    if (!pPdf)
-        return;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
     int nText = 0;
     int nPath = 0;
@@ -2159,6 +2161,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf32181)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // A justified, underlined paragraph: the attachment of tdf#32181 / i68503, with its font
     // changed to a bundled one. Justification stretches the blank each line ends in, and the blank
     // used to be underlined, so the underline ran off to the right well past the margin.
@@ -2168,9 +2174,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf32181)
              u"FilterData"_ustr,
              comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(false) } })) });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
-    if (!pPdf)
-        return;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
 
     // The page is 21 cm wide with a 2 cm right margin, so text ends here. An underline is drawn a

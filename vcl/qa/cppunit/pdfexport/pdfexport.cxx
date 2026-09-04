@@ -69,8 +69,6 @@ public:
         maMemory.WriteStream(aFile);
 
         std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-        if (!pPDFium)
-            return nullptr;
         return pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), OString());
     }
 #endif
@@ -87,7 +85,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPopupRectangleSize)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
     CPPUNIT_ASSERT(pPdfPage);
 
@@ -202,7 +201,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testCommentAnnotation)
     CPPUNIT_ASSERT_EQUAL("OBJR"_ostr, pOType->GetValue());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
@@ -367,7 +367,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -538,7 +539,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -565,7 +567,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142741)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     CPPUNIT_ASSERT_EQUAL(2,
                          pPdfDocument->getPageCount()); // To ensure that exported pdf has 2 pages
@@ -840,7 +843,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148706)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1020,7 +1024,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1489,7 +1494,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1a)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1524,7 +1530,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -1552,7 +1559,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -1584,7 +1592,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -1610,7 +1619,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf160401)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -1643,7 +1653,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has two page.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -1690,7 +1701,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -1725,7 +1737,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf156685)
     save(TestFilter::PDF_WRITER);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -2078,7 +2091,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2203,7 +2217,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157679)
     // Import the bugdoc and export as PDF.
     loadFromFile(u"tdf157679.pptx");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2231,7 +2246,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128445)
     // Import the bugdoc and export as PDF.
     loadFromFile(u"tdf128445.odp");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2255,7 +2271,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
     // Import the bugdoc and export as PDF.
     loadFromFile(u"tdf128630.odp");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2289,7 +2306,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
     loadFromFile(u"tdf106702.odt");
     save(TestFilter::PDF_WRITER);
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -2346,7 +2364,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
     loadFromFile(u"tdf113143.odp");
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
     // The document has two pages.
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -2430,7 +2449,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 {
     loadFromFile(u"tdf115262.ods");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(8, pPdfDocument->getPageCount());
 
     // Get the 6th page.
@@ -2469,7 +2489,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 {
     loadFromFile(u"tdf121962.odt");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -2493,7 +2514,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139065)
 {
     loadFromFile(u"tdf139065.odt");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -3910,7 +3932,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 {
     loadFromFile(u"tdf115967.odt");
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -3944,7 +3967,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf167659)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
     CPPUNIT_ASSERT(pPdfPage);
     std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();

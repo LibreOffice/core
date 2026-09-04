@@ -802,7 +802,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
 
     // Then: count the # of shapes on the signature widget/annotation.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());

@@ -81,7 +81,8 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
          /*pPassword*/ "secret");
 
     // Load the exported result in PDFium
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get(), "secret"_ostr);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
@@ -99,7 +100,8 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
          /*pPassword*/ "secret");
 
     // Load the exported result in PDFium
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get(), "secret"_ostr);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(20, nFileVersion);
@@ -133,7 +135,8 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0_PaddingB
     xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
 
     // Load the exported result in PDFium and read the link target back
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get(), "secret"_ostr);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
     CPPUNIT_ASSERT(pPdfPage);

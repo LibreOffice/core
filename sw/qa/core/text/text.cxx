@@ -285,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure the field links the source.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     // Without the accompanying fix in place, this test would have failed, the field was not
     // clickable (while it was clickable on the UI).
@@ -323,7 +323,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport2)
 
     // Then make sure the field links when the Target URL is set
     //  (this test is important, isn't the same as the one above)
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
@@ -358,7 +358,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport3)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure there are no links since UseTargetURL is not set
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(!pPdfPage->hasLinks());
 }
@@ -394,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport4)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure the field links when the Target URL is set
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport5)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure the mark links to the table when table is present
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
@@ -534,7 +534,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport6)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure the mark links to the table even when format contains tab stop
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
@@ -1064,7 +1064,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a fillable form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1095,7 +1095,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a fillable form widget is emitted with the expected value:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
     std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
@@ -1123,7 +1123,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a checkbox form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1153,7 +1153,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a dropdown form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1179,7 +1179,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
     save(TestFilter::PDF_WRITER);
 
     // Make sure that a dropdown form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
 
     CPPUNIT_ASSERT_EQUAL(4, pPage->getAnnotationCount());
@@ -1208,7 +1208,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a date form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1246,7 +1246,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that the widget in the PDF result has that custom font size:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     pPage->onAfterLoadPage(pPdfDocument.get());
     CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
@@ -1274,7 +1274,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a combo box form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1317,7 +1317,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a single fillable form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1340,7 +1340,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
     save(TestFilter::PDF_WRITER);
 
     // Then make sure that a fillable form widget is emitted:
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -1708,7 +1708,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf161990)
 
     // When exporting to PDF:
     save(TestFilter::PDF_WRITER);
-    auto pPdfDocument = parsePDFExport();
+    auto pPdfDocument = parsePDFExport(pPDFium);
 
     // Check that both subscripts are positioned correctly relative to the non-subscript runs
     double expectedOffset = 0;

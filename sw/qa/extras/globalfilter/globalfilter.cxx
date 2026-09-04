@@ -1414,12 +1414,10 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
-    // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
-
-    // Non-NULL pPdfDocument means pdfium is available.
-    if (pPdfDocument != nullptr)
+    if (std::shared_ptr<vcl::pdf::PDFium> pPDFium
+        = vcl::pdf::PDFiumLibrary::get()) // This part will be skipped without PDFium
     {
+        auto pPdfDocument = parsePDFExport(pPDFium);
         // The document has one page.
         CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
         std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -1802,6 +1800,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     // TOC is expected to have alt. text set (written to /Contents key), PDF/UA conformance tests
     // will fail. TOC links can't be set by the user.
 
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     createSwDoc("SimpleTOC.odt");
 
     // Let's update TOC first
@@ -1821,11 +1823,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
-
-    // Non-NULL pPdfDocument means pdfium is available.
-    if (!pPdfDocument)
-        return;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());

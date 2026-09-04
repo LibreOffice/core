@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
                                      comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
                                  });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131728)
                                      comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
                                  });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -761,7 +761,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
                                      comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
                                  });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
@@ -814,7 +814,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
                                      comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
                                  });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(3, pPdfDocument->getPageCount());
 
     int nCommentsCount(0);

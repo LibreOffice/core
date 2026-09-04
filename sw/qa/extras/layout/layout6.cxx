@@ -1613,6 +1613,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16067_footnoteSpaceFreedBySplit)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16071_footnoteTailKeptWhenTruncated)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // The first row's footnote fills the footnote area of the page it ends up on, and the last
     // row travels between pages carrying a footnote of three lines. That leaves the lines after
     // the first formatted against a footnote area with no room for them.
@@ -1620,9 +1624,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16071_footnoteTailKeptWhenTruncate
     // A layout dump would format what it reads, and that alone repairs the frame: measure the
     // export instead.
     save(TestFilter::PDF_WRITER);
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
-    if (!pPdf)
-        return;
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport(pPDFium);
 
     // the last word of the last footnote, on its third line
     bool bTailExported = false;

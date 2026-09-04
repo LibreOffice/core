@@ -573,8 +573,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
                                comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()) };
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 
-    if (auto pPdfDocument = parsePDFExport()) // This part will be skipped without PDFium
+    if (std::shared_ptr<vcl::pdf::PDFium> pPDFium
+        = vcl::pdf::PDFiumLibrary::get()) // This part will be skipped without PDFium
     {
+        auto pPdfDocument = parsePDFExport(pPDFium);
         CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
         auto pPage = pPdfDocument->openPage(0);
         CPPUNIT_ASSERT(pPage);
@@ -694,8 +696,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf111880RtlPageCommentsOnLeftSide)
                                comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()) };
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 
-    if (auto pPdfDocument = parsePDFExport()) // This part will be skipped without PDFium
+    if (std::shared_ptr<vcl::pdf::PDFium> pPDFium
+        = vcl::pdf::PDFiumLibrary::get()) // This part will be skipped without PDFium
     {
+        auto pPdfDocument = parsePDFExport(pPDFium);
         CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
         auto pPage = pPdfDocument->openPage(0);
         CPPUNIT_ASSERT(pPage);

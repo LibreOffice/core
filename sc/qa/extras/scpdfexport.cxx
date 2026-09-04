@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testHiddenSheetsWithPrintRange)
 
     // Only the two visible sheets reach the PDF, one page each.
     // Without the fix the hidden sheets were exported too, giving 4 pages.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
@@ -243,7 +243,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSinglePagesWithHiddenSheets)
 
     // One page per visible sheet, in sheet order.
     // Without the fix the hidden sheets were exported too, giving 4 pages.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
@@ -271,7 +271,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPopupRectangleSize_Tdf162955)
     exportToPDF(xModel, aRange);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -777,7 +777,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf143978)
     ScRange range1(0, 0, 0, 0, 1, 0);
     exportToPDF(xModel, range1);
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -834,7 +834,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf120190)
     exportToPDF(xModel, range1);
 
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf84012)
     ScRange range1(0, 0, 0, 0, 0, 0);
     exportToPDF(xModel, range1);
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -920,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf78897)
     ScRange range1(2, 2, 0, 3, 2, 0);
     exportToPDF(xModel, range1);
     // Parse the export result with pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
@@ -970,7 +970,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf156893)
     exportToPDF(xModel, range, { comphelper::makePropertyValue(u"SinglePageSheets"_ustr, true) });
 
     // Parse the export result
-    auto pPdfDocument = parsePDFExport();
+    auto pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page

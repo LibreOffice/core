@@ -183,7 +183,9 @@ public:
                        const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
                        const char* pPassword = nullptr);
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
+    std::unique_ptr<vcl::pdf::PDFiumDocument>
+    parsePDFExport(const std::shared_ptr<vcl::pdf::PDFium>& rPDFium,
+                   const OString& rPassword = OString());
 
     void createTempCopy(std::u16string_view fileName);
 

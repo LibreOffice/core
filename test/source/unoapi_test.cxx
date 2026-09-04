@@ -403,20 +403,17 @@ void UnoApiTest::saveAndReload(TestFilter eFilter,
     loadFromURL(maTempFile.GetURL(), rParams, pPassword);
 }
 
-std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OString& rPassword)
+std::unique_ptr<vcl::pdf::PDFiumDocument>
+UnoApiTest::parsePDFExport(const std::shared_ptr<vcl::pdf::PDFium>& rPDFium,
+                           const OString& rPassword)
 {
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
-    if (!pPDFium)
-    {
-        return nullptr;
-    }
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), rPassword);
+        = rPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), rPassword);
     if (!pPdfDocument)
     {
-        OString aError = OUStringToOString(pPDFium->getLastError(), RTL_TEXTENCODING_UTF8);
+        OString aError = OUStringToOString(rPDFium->getLastError(), RTL_TEXTENCODING_UTF8);
         CPPUNIT_ASSERT_MESSAGE(aError.getStr(), pPdfDocument);
     }
     return pPdfDocument;

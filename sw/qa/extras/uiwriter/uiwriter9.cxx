@@ -767,6 +767,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969B)
 #if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     createSwDoc("section-table-section.fodt");
 
     uno::Sequence<beans::PropertyValue> aFilterData(
@@ -778,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
                                      comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
                                  });
 
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 }
 #endif

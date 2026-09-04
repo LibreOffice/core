@@ -34,6 +34,10 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given a Calc document with a chart in it:
     loadFromFile(u"chart.ods");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
@@ -48,11 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
     // Then make sure we get a valid, non-empty PDF:
     // Without the accompanying fix in place, this test would have failed, because the output was
     // empty (0 bytes).
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
-    if (!pPdfDocument)
-    {
-        return;
-    }
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     int nPageCount = pPdfDocument->getPageCount();
     CPPUNIT_ASSERT_GREATER(0, nPageCount);
 }

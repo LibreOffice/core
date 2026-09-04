@@ -116,7 +116,8 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
 
     // Then: count the # of shapes on the signature widget/annotation.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     if (!pPdfDocument)
         return;
     // Last page.

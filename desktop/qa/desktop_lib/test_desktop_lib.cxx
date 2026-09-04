@@ -692,7 +692,7 @@ void DesktopLOKTest::testSaveAsJsonOptions()
 
     // Then make sure the resulting PDF has 2 pages:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = parsePDFExport();
+        = parsePDFExport(pPDFium);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 3

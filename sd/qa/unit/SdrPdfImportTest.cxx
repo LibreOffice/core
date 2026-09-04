@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         saveAndReload(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
         // Check PDF for annotations
-        auto pPDFDocument = parsePDFExport();
+        auto pPDFDocument = parsePDFExport(pPdfium);
         CPPUNIT_ASSERT(pPDFDocument);
         CPPUNIT_ASSERT_EQUAL(1, pPDFDocument->getPageCount());
 
