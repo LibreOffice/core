@@ -993,6 +993,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testExportPages)
 
     xWritten->dispose();
 
+    // A page can be found by the identifier it keeps
+    const OUString aGuid = pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getOUString();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pXImpressDocument->getSlideIndexOfGuid(aGuid));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
+                         pXImpressDocument->getSlideIndexOfGuid(
+                             u"{99999999-9999-9999-9999-999999999999}"_ustr));
+
     // A page the document does not hold is written by nobody.
     utl::TempFileNamed aRefused(u"", true, u".odp");
     aRefused.EnableKillingFile();

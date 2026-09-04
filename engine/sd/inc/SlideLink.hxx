@@ -91,6 +91,7 @@ public:
 
         {"links":[{"source":"<source document>",
                    "slides":[{"part":"<page id>","name":"<source page>",
+                              "sourceGuid":"<source slide identifier>",
                               "lastModifiedTime":"<source time at the last read>"},...]},...]}
 
         The sources come in the order their first page appears and the pages of one source in

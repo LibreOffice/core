@@ -533,6 +533,11 @@ public:
         (Impress only function) */
     virtual bool breakSlideLink(sal_Int32 /*nIndex*/) { return false; }
 
+    /** The index in the page list of the standard pages of the page holding the identifier
+        rGuid, a braced GUID string as ODF keeps it; -1 when no standard page of the document
+        holds it (Impress only function) */
+    virtual sal_Int32 getSlideIndexOfGuid(const OUString& /*rGuid*/) { return -1; }
+
     /** Writes the given pages out as a document of their own, in the order they are given.
         The pages are named by their index in the page list of the standard pages, and an
         empty list writes every page. rFileUrl names the file to write and its extension

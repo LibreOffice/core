@@ -7205,14 +7205,27 @@ static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char
     }
 
     // The pages are named the way the boundary names the parts of this document, which for a
-    // presentation is the page identifier of each page. A token that names no page of the
-    // document names no page at all.
+    // presentation is the page identifier of each page, or the identifier a page keeps in ODF,
+    // which is a braced GUID string. A token that names no page of the document names no page at
+    // all.
     std::vector<sal_Int32> aPages;
     const std::string_view aParts(pParts ? pParts : "");
     sal_Int32 nTokenPos = aParts.empty() ? -1 : 0;
+    bool bByGuid = false;
     while (nTokenPos >= 0)
     {
         const std::string_view aPart = o3tl::getToken(aParts, 0, ',', nTokenPos);
+
+        if (!aPart.empty() && aPart.front() == '{')
+        {
+            bByGuid = true;
+            const sal_Int32 nGuidIndex = pDoc->getSlideIndexOfGuid(
+                OStringToOUString(aPart, RTL_TEXTENCODING_UTF8));
+            if (nGuidIndex >= 0)
+                aPages.push_back(nGuidIndex);
+
+            continue;
+        }
 
         const int nIndex = pDoc->getPartIndex(aPart, 0);
         if (nIndex < 0)
@@ -7220,6 +7233,9 @@ static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char
 
         aPages.push_back(nIndex);
     }
+
+    if (bByGuid && aPages.empty())
+        return false;
 
     return pDoc->exportPages(aPages, getUString(pUrl));
 }

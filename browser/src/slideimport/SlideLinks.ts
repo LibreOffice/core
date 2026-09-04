@@ -34,8 +34,12 @@ interface SlideLinkPage {
 	// The linked page, by its part identifier.
 	part: string;
 	// The slide of the source the page was made from, as the user sees it
-	// in that source.
+	// in that source. Empty for a page tracked by the identifier of its
+	// source slide alone.
 	name: string;
+	// The identifier of the page which names that slide wherever it stands
+	// in the source. Empty for a page that records none.
+	sourceGuid: string;
 	// The time the source was last modified when the page was read from it,
 	// empty when none was recorded.
 	lastModifiedTime: string;
@@ -53,13 +57,21 @@ interface SlideLinkRefresh {
 	// Whether the server has taken this refresh on, which it reports before
 	// it reads anything.
 	accepted: boolean;
+	// Whether the source was asked for the slides the pages record the
+	// identifiers of, rather than for its whole deck.
+	byIdentifier: boolean;
 }
 
 class SlideLinks {
 	private map: any;
 	private pages: Map<
 		string,
-		{ source: string; name: string; lastModifiedTime: string }
+		{
+			source: string;
+			name: string;
+			sourceGuid: string;
+			lastModifiedTime: string;
+		}
 	> = new Map();
 	// The sources the document links to, in the order the list reports them.
 	private sources: string[] = [];
@@ -186,6 +198,7 @@ class SlideLinks {
 				this.pages.set(slide.part, {
 					source: entry.source,
 					name: slide.name,
+					sourceGuid: slide.sourceGuid || '',
 					lastModifiedTime: slide.lastModifiedTime || '',
 				});
 		}
@@ -208,7 +221,7 @@ class SlideLinks {
 	}
 
 	private enqueue(source: string): void {
-		this.queue.push({ source: source, accepted: false });
+		this.queue.push({ source: source, accepted: false, byIdentifier: false });
 		this.sendNext();
 	}
 
@@ -258,10 +271,28 @@ class SlideLinks {
 		else SlideImportSession.subscribeRelatedDocument(related.wopiSrc);
 	}
 
+	// The source is asked for the slides the pages of this document came from.
 	private askForPages(wopiSrc: string): void {
 		if (this.running === null) return;
 		this.running.accepted = true;
-		SlideImportSession.sendRemoteCommand(wopiSrc, 'exportslides');
+		const guids = this.sourceGuids(this.running.source);
+		this.running.byIdentifier = guids !== null;
+		SlideImportSession.sendRemoteCommand(
+			wopiSrc,
+			guids === null ? 'exportslides' : 'exportslides guids=' + guids.join(','),
+		);
+	}
+
+	// The identifiers the pages linked to a source record for their slides, or null when a page
+	// of that source records none or is read by the name of its slide.
+	private sourceGuids(source: string): string[] | null {
+		const guids: string[] = [];
+		for (const link of this.pages.values()) {
+			if (link.source !== source) continue;
+			if (!link.sourceGuid || link.name) return null;
+			guids.push(link.sourceGuid);
+		}
+		return guids.length > 0 ? guids : null;
 	}
 
 	// A source this run is waiting on has come up, so it is asked for its pages.
@@ -290,9 +321,13 @@ class SlideLinks {
 			const refresh = this.running;
 			this.running = null;
 			this.say(
-				_(
-					'The slides of {0} could not be read into this presentation.',
-				).replace('{0}', () => refresh.source),
+				refresh.byIdentifier
+					? _(
+							'Cannot update the slides of {0} : source lacks the original slides or slide identifiers',
+						).replace('{0}', () => refresh.source)
+					: _(
+							'The slides of {0} could not be read into this presentation.',
+						).replace('{0}', () => refresh.source),
 			);
 			this.sendNext();
 			return;

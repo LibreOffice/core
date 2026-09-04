@@ -269,6 +269,7 @@ void SlideLink::WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonW
             auto aSlideNode = rJsonWriter.startStruct();
             rJsonWriter.put("part", pPage->GetGuid().getString());
             rJsonWriter.put("name", pPage->GetBookmarkName());
+            rJsonWriter.put("sourceGuid", pPage->GetSourcePageGuid());
             rJsonWriter.put("lastModifiedTime", pPage->GetSourceModifiedTime());
         }
     }

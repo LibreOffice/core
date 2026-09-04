@@ -6686,6 +6686,22 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     return true;
 }
 
+sal_Int32 SdXImpressDocument::getSlideIndexOfGuid(const OUString& rGuid)
+{
+    if (!mpDoc || rGuid.isEmpty())
+        return -1;
+
+    for (sal_uInt16 nIndex = 0, nCount = mpDoc->GetSdPageCount(PageKind::Standard); nIndex < nCount;
+         ++nIndex)
+    {
+        const SdPage* pPage = mpDoc->GetSdPage(nIndex, PageKind::Standard);
+        if (pPage && pPage->GetGuid().getOUString() == rGuid)
+            return nIndex;
+    }
+
+    return -1;
+}
+
 bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const OUString& rFileUrl)
 {
     if (!mpDoc || !mpDocShell || rFileUrl.isEmpty())

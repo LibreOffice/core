@@ -2625,7 +2625,7 @@ struct COKitDocument
      * Writes the given pages out as a document of their own, in the order they are given.
      *
      * @param pParts a comma separated list of the pages to write, named the way this document
-     *        names its parts; an empty list writes every page.
+     *        names its parts or by the identifier a page keeps in ODF
      * @param pUrl the file the document is written to, as a URL, whose extension chooses the
      *        filter it is written with.
      * @return whether the document was written.

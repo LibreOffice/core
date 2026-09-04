@@ -65,6 +65,7 @@
 #include <cassert>
 #include <climits>
 #include <fstream>
+#include <cctype>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -2240,6 +2241,60 @@ bool parseSlideIndexList(const std::string& list, std::vector<int>& indices)
     return true;
 }
 
+/// Whether entry is the identifier a slide keeps in ODF: a braced GUID string.
+bool isSlideGuid(const std::string& entry)
+{
+    if (entry.size() != 38 || entry.front() != '{' || entry.back() != '}')
+        return false;
+
+    for (std::size_t i = 1; i + 1 < entry.size(); ++i)
+    {
+        // The groups of a GUID stand apart at these places.
+        if (i == 9 || i == 14 || i == 19 || i == 24)
+        {
+            if (entry[i] != '-')
+                return false;
+
+            continue;
+        }
+
+        if (!std::isxdigit(static_cast<unsigned char>(entry[i])))
+            return false;
+    }
+
+    return true;
+}
+
+/// Parses a comma separated list of slide identifiers, each a braced GUID string. Returns false on
+/// an empty list or an entry that is no identifier.
+bool parseSlideGuidList(const std::string& list, std::vector<std::string>& guids)
+{
+    const StringVector entries = StringVector::tokenize(list, ',');
+    if (entries.empty())
+        return false;
+
+    guids.reserve(entries.size());
+    for (std::size_t i = 0; i < entries.size(); ++i)
+    {
+        const std::string entry = entries[i];
+        if (!isSlideGuid(entry))
+            return false;
+
+        guids.push_back(entry);
+    }
+
+    return true;
+}
+
+/// Joins slide identifiers into a comma separated list.
+std::string joinSlideGuidList(const std::vector<std::string>& guids)
+{
+    std::ostringstream list;
+    for (std::size_t i = 0; i < guids.size(); ++i)
+        list << (i ? "," : "") << guids[i];
+    return list.str();
+}
+
 /// Joins 0-based slide indices into a comma separated list.
 std::string joinSlideIndexList(const std::vector<int>& indices)
 {
@@ -2283,9 +2338,14 @@ std::string joinPartIdList(const std::vector<std::string>& parts)
 
 bool ChildSession::exportSlides(const StringVector& tokens)
 {
+    // The pages to write are named either by their part, which is what a client picking slides
+    // of this document holds, or by the identifier each one keeps in ODF, which is what a
+    // document holding pages read from this one records for them.
     std::string slideList;
+    std::string guidList;
     if (tokens.size() > 2 ||
-        (tokens.size() == 2 && !getTokenString(tokens[1], "slides", slideList)))
+        (tokens.size() == 2 && !getTokenString(tokens[1], "slides", slideList) &&
+         !getTokenString(tokens[1], "guids", guidList)))
     {
         sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
         return false;
@@ -2294,6 +2354,13 @@ bool ChildSession::exportSlides(const StringVector& tokens)
     // No list of pages at all writes every page of the document out.
     std::vector<std::string> slides;
     if (!slideList.empty() && !parsePartIdList(slideList, slides))
+    {
+        sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
+        return false;
+    }
+
+    std::vector<std::string> guids;
+    if (!guidList.empty() && !parseSlideGuidList(guidList, guids))
     {
         sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
         return false;
@@ -2310,8 +2377,9 @@ bool ChildSession::exportSlides(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     const std::string url = Poco::URI(Poco::Path(path)).toString();
-    const bool written =
-        getLOKitDocument()->exportPages(joinPartIdList(slides).c_str(), url.c_str());
+    const std::string pages =
+        guids.empty() ? joinPartIdList(slides) : joinSlideGuidList(guids);
+    const bool written = getLOKitDocument()->exportPages(pages.c_str(), url.c_str());
 
     std::vector<char> answer;
     if (written)

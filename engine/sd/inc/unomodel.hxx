@@ -443,6 +443,8 @@ public:
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
 
+    /// @see vcl::ITiledRenderable::getSlideIndexOfGuid().
+    SD_DLLPUBLIC sal_Int32 getSlideIndexOfGuid(const OUString& rGuid) override;
     /// @see vcl::ITiledRenderable::exportPages().
     SD_DLLPUBLIC bool exportPages(const std::vector<sal_Int32>& rPages,
                                   const OUString& rFileUrl) override;
