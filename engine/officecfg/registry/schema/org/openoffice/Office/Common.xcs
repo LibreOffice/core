@@ -1441,11 +1441,6 @@
           <desc>Specifies the URL opened per click on the brand image at the start center.</desc>
         </info>
       </prop>
-      <prop oor:name="DocumentationURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the URL used with the UNO command Documentation (SID_DOCUMENTATION).</desc>
-        </info>
-      </prop>
       <prop oor:name="InstallJavaURL" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the URL used for Install Java message box.</desc>

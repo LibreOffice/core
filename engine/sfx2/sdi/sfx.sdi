@@ -4968,21 +4968,6 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem Documentation SID_DOCUMENTATION
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
 SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ()
 [

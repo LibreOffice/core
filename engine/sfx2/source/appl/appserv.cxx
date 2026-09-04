@@ -56,7 +56,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svl/visitem.hxx>
 
-#include <unotools/configmgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
@@ -109,7 +108,6 @@
 #include <unotools/confignode.hxx>
 #include <memory>
 
-#include <openuriexternally.hxx>
 
 #include "getbasctlfunction.hxx"
 
@@ -524,14 +522,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_DOCUMENTATION:
-        {
-            // Open documentation page based on locales
-            OUString sURL(officecfg::Office::Common::Menus::DocumentationURL::get() + //https://hub.libreoffice.org/documentation/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
-            break;
-        }
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());

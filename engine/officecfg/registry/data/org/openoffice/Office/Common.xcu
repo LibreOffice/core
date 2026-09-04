@@ -262,9 +262,6 @@
         </prop>
       </node>
     </node>
-    <prop oor:name="DocumentationURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/documentation/</value>
-    </prop>
     <prop oor:name="InstallJavaURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/InstallJava/</value>
     </prop>
