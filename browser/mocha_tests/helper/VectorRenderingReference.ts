@@ -9,9 +9,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/// Load a wire-format JSON reference written by the engine.
-/// If the file is missing, the engine test must be run first
-/// (make CppunitTest_sd_vector_rendering).
+/// Load a wire-format JSON reference written by the engine test
+/// CppunitTest_sd_vector_rendering into the engine workdir.
 function loadVectorRenderingReference(name: string): any {
 	const fs = require('fs');
 	const path = require('path');
@@ -23,5 +22,19 @@ function loadVectorRenderingReference(name: string): any {
 		'VectorRenderingReference',
 		name + '.json',
 	);
-	return JSON.parse(fs.readFileSync(referencePath, 'utf8'));
+	let json: string;
+	try {
+		json = fs.readFileSync(referencePath, 'utf8');
+	} catch (error) {
+		if (error.code !== 'ENOENT') throw error;
+		throw new Error(
+			'Missing vector rendering reference ' +
+				referencePath +
+				'. The engine test that writes these files has not run yet. ' +
+				'Run "make CppunitTest_sd_vector_rendering" in the engine ' +
+				'directory, or point ENGINE_WORKDIR at an engine workdir ' +
+				'that already has them, then re-run the mocha tests.',
+		);
+	}
+	return JSON.parse(json);
 }
