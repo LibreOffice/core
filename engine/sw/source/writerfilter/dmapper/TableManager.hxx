@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
 #include <stack>
 
@@ -45,7 +46,8 @@ class TableManager : public virtual SvRefBase
     class TableManagerState final
     {
         /**
-         properties of the current cell
+         properties set directly on the current cell, without the table exception properties
+         of its row
          */
         TablePropertyMapPtr mpCellProps;
 
@@ -55,9 +57,21 @@ class TableManager : public virtual SvRefBase
         TablePropertyMapPtr mpRowProps;
 
         /**
-         table exception properties of the current row
+         table exception properties (tblPrEx) of the current row of the current table level
          */
         TablePropertyMapPtr mpTableExceptionProps;
+
+        /**
+         table exception properties of the current row of each enclosing table level, innermost
+         on top
+         */
+        std::stack<TablePropertyMapPtr> mSavedTableExceptionProperties;
+
+        /**
+         table exception properties of the first row of a table whose level has not started yet,
+         keyed by the depth of that table
+         */
+        std::map<sal_uInt32, TablePropertyMapPtr> mPendingTableExceptionProperties;
 
         /**
          properties of the current table
@@ -88,15 +102,44 @@ class TableManager : public virtual SvRefBase
         {
         }
 
-        void startLevel()
+        /**
+         Start the table level at the given depth. The enclosing row keeps its table exception
+         properties for when this level ends. The first row of the new table starts with the
+         exception properties that arrived for this depth before the level started.
+         */
+        void startLevel(sal_uInt32 nDepth)
         {
             TablePropertyMapPtr pProps;
             mTableProps.push(pProps);
+            mSavedTableExceptionProperties.push(mpTableExceptionProps);
+            mpTableExceptionProps.clear();
+            auto aPending = mPendingTableExceptionProperties.find(nDepth);
+            if (aPending != mPendingTableExceptionProperties.end())
+            {
+                mpTableExceptionProps = aPending->second;
+                mPendingTableExceptionProperties.erase(aPending);
+            }
         }
 
         void endLevel()
         {
             mTableProps.pop();
+            mpTableExceptionProps = mSavedTableExceptionProperties.top();
+            mSavedTableExceptionProperties.pop();
+        }
+
+        /**
+         Store table exception properties of the first row of a table at the given depth, whose
+         level has not started yet.
+         */
+        void addPendingTableExceptionProperties(sal_uInt32 nDepth,
+                                                const TablePropertyMapPtr& pProps)
+        {
+            TablePropertyMapPtr& rPending = mPendingTableExceptionProperties[nDepth];
+            if (rPending.is())
+                rPending->InsertProps(pProps.get());
+            else
+                rPending = pProps;
         }
 
         /**
@@ -111,14 +154,7 @@ class TableManager : public virtual SvRefBase
 
         void resetCellProps()
         {
-            // copy tblPrEx table exception properties, if they exist
-            if (getTableExceptionProps().is())
-            {
-                mpCellProps = new TablePropertyMap;
-                mpCellProps->InsertProps(getTableExceptionProps().get());
-            }
-            else
-                mpCellProps.clear();
+            mpCellProps.clear();
         }
 
         void setCellProps(const TablePropertyMapPtr& pProps)
@@ -131,10 +167,24 @@ class TableManager : public virtual SvRefBase
             return mpCellProps;
         }
 
+        /**
+         Return the properties of the current cell with the table exception properties of its
+         row filled in. A property set on the cell itself wins over the row exception.
+         */
+        TablePropertyMapPtr getCellPropertiesWithExceptions() const
+        {
+            if (!mpTableExceptionProps.is())
+                return mpCellProps;
+
+            TablePropertyMapPtr pResult(new TablePropertyMap);
+            pResult->InsertProps(mpTableExceptionProps.get());
+            if (mpCellProps.is())
+                pResult->InsertProps(mpCellProps.get());
+            return pResult;
+        }
+
         void resetRowProps()
         {
-            // reset also table exception and
-            // its copy set by the previous resetCellProps()
             mpTableExceptionProps.clear();
             resetCellProps();
             mpRowProps.clear();
@@ -153,8 +203,6 @@ class TableManager : public virtual SvRefBase
         void setTableExceptionProps(const TablePropertyMapPtr& pProps)
         {
             mpTableExceptionProps = pProps;
-            // set table exception properties of the first cell
-            resetCellProps();
         }
 
         const TablePropertyMapPtr& getTableExceptionProps() const
@@ -292,6 +340,12 @@ private:
         depth of the previous cell
     */
     sal_uInt32 mnTableDepth;
+
+    /**
+       depth of the table whose row the table exception properties that arrive next belong to,
+       counted the same way as the cell depth. Zero until the first row with such properties.
+     */
+    sal_uInt32 mnTableExceptionDepth;
 
     /**
        stack of table data

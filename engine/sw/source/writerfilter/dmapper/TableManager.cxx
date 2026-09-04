@@ -210,14 +210,23 @@ void TableManager::tableExceptionProps(const TablePropertyMapPtr& pProps)
     TagLogger::getInstance().startElement("tablemanager.tableExceptionProps");
 #endif
 
-    if (getTableExceptionProps())
-    {
-        getTableExceptionProps()->InsertProps(pProps.get());
-        assert(getCellProps() && "setTableExceptionProps creates cellProps");
-        getCellProps()->InsertProps(pProps.get());
-    }
+    // The tblPrEx of a row arrives at the start of the row, right after the depth of the table
+    // the row belongs to. That table level starts only with the first paragraph of its first
+    // cell, so for the first row of a nested table the properties arrive before the level
+    // exists and wait for it.
+    sal_uInt32 nDepth = mnTableExceptionDepth;
+    sal_uInt32 nCurrentDepth = mTableDataStack.empty() ? 0 : mTableDataStack.back()->getDepth();
+    if (nDepth > nCurrentDepth)
+        mState.addPendingTableExceptionProperties(nDepth, pProps);
     else
-        mState.setTableExceptionProps(pProps);
+    {
+        SAL_WARN_IF(nDepth < nCurrentDepth, "writerfilter",
+                    "table exception properties for a level that already ended");
+        if (getTableExceptionProps())
+            getTableExceptionProps()->InsertProps(pProps.get());
+        else
+            mState.setTableExceptionProps(pProps);
+    }
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
@@ -283,6 +292,12 @@ bool TableManager::sprm(Sprm& rSprm)
         case NS_ooxml::LN_tblRow:
             endRow();
             break;
+        case NS_ooxml::LN_tblPrExDepth:
+        {
+            const Value* pValue = rSprm.getValue();
+            mnTableExceptionDepth = pValue ? pValue->getInt() : 0;
+        }
+        break;
         default:
             bRet = false;
     }
@@ -365,7 +380,7 @@ void TableManager::endParagraphGroup()
 
     else if (isInCell())
     {
-        ensureOpenCell(getCellProps());
+        ensureOpenCell(mState.getCellPropertiesWithExceptions());
 
         if (mState.isCellEnd())
         {
@@ -632,7 +647,7 @@ void TableManager::startLevel()
     }
 
     mTableDataStack.push_back(pTableData2);
-    mState.startLevel();
+    mState.startLevel(pTableData2->getDepth());
 }
 
 bool TableManager::isInTable()
@@ -746,6 +761,7 @@ void TableManager::setCellLastParaAfterAutospacing(bool bIsAfterAutospacing)
 TableManager::TableManager()
     : mnTableDepthNew(0)
     , mnTableDepth(0)
+    , mnTableExceptionDepth(0)
     , mbKeepUnfinishedRow(false)
 {
     setRowEnd(false);

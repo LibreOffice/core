@@ -51,6 +51,7 @@
   <token tokenid="ooxml:inTbl"/>
   <token tokenid="ooxml:tblCell"/>
   <token tokenid="ooxml:tblRow"/>
+  <token tokenid="ooxml:tblPrExDepth"/>
 
   <token tokenid="ooxml:ffdata"/>
   <token tokenid="ooxml:starmath"/>
@@ -18866,6 +18867,7 @@
       <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_TblPrEx" resource="Properties">
+        <action name="start" action="sendTableExceptionDepth"/>
         <element name="tblPrExChange" tokenid="ooxml:CT_TblPrEx_tblPrExChange"/>
         <element name="tblBorders" tokenid="ooxml:CT_TblPrEx_tblBorders"/>
         <element name="tblCellMar" tokenid="ooxml:CT_TblPrEx_tblCellMar"/>

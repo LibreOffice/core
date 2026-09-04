@@ -366,6 +366,20 @@ void OOXMLFastContextHandler::sendTableDepth() const
     mpStream->props(pProps.get());
 }
 
+void OOXMLFastContextHandler::sendTableExceptionDepth() const
+{
+    if (mnTableDepth <= 0)
+        return;
+
+    // The depth of the table whose row carries the exception properties. It travels on its own
+    // token, so the paragraph group that is still open before the row keeps its cell state.
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+    OOXMLValue aValue = OOXMLValue::createInteger(mnTableDepth);
+    pProps->add(NS_ooxml::LN_tblPrExDepth, aValue, OOXMLProperty::SPRM);
+
+    mpStream->props(pProps.get());
+}
+
 void OOXMLFastContextHandler::setHandle()
 {
     mpParserState->setHandle();

@@ -126,6 +126,7 @@ public:
     const OOXMLParserState::Pointer_t& getParserState() const { return mpParserState;}
 
     void sendTableDepth() const;
+    void sendTableExceptionDepth() const;
     void setHandle();
 
     void startSectionGroup();

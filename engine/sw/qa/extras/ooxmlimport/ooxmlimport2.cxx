@@ -27,7 +27,9 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
@@ -1567,6 +1569,72 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineVmlLineWithoutExtent)
     CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), xShape->getSize().Height);
     CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"Visible"_ustr));
     CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"Printable"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNestedTableWithoutBordersInTblPrExRow)
+{
+    // The outer table row carries tblPrEx borders and holds a nested table that declares no
+    // borders at all.
+    createSwDoc("nested-table-tblprex-borders.docx");
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xTablesSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xInnerTable(xTables->getByName(u"Table1"_ustr),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XText> xInnerCell(xInnerTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"inner cell"_ustr, xInnerCell->getString());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 18
+    // The cells of the nested table were drawn with the borders of the outer row.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+                         getProperty<table::BorderLine2>(xInnerCell, u"LeftBorder"_ustr).LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+                         getProperty<table::BorderLine2>(xInnerCell, u"TopBorder"_ustr).LineWidth);
+
+    // The outer cell keeps the borders of its row.
+    uno::Reference<text::XTextTable> xOuterTable(xTables->getByName(u"Table2"_ustr),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XText> xOuterCell(xOuterTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(18),
+                         getProperty<table::BorderLine2>(xOuterCell, u"LeftBorder"_ustr).LineWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNestedTableFirstInCellWithTblPrExRows)
+{
+    // The outer row carries tblPrEx borders of 1.5pt, wider than the 0.5pt table borders. Its
+    // first cell starts with a nested table, whose row carries a tblPrEx cell margin of 200 twips
+    // and no borders. The second outer cell has two paragraphs and a cell margin of 300 twips.
+    createSwDoc("nested-table-first-in-cell-tblprex.docx");
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xTablesSupplier->getTextTables();
+
+    // The nested table keeps to its own row: no borders, and its own cell margin.
+    uno::Reference<text::XTextTable> xInnerTable(xTables->getByName(u"Table1"_ustr),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XText> xInnerCell(xInnerTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"inner cell"_ustr, xInnerCell->getString());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+                         getProperty<table::BorderLine2>(xInnerCell, u"LeftBorder"_ustr).LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
+                         getProperty<sal_Int32>(xInnerCell, u"TopBorderDistance"_ustr));
+
+    // Both cells of the outer row have the row's 1.5pt borders, the cell that holds the nested
+    // table and the cell after it alike.
+    uno::Reference<text::XTextTable> xOuterTable(xTables->getByName(u"Table2"_ustr),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XText> xFirstCell(xOuterTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(53),
+                         getProperty<table::BorderLine2>(xFirstCell, u"LeftBorder"_ustr).LineWidth);
+    uno::Reference<text::XText> xSecondCell(xOuterTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"second cell\nsecond paragraph"_ustr, xSecondCell->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(53),
+        getProperty<table::BorderLine2>(xSecondCell, u"LeftBorder"_ustr).LineWidth);
+    // A cell with more than one paragraph keeps the margin set on the cell itself.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(529),
+                         getProperty<sal_Int32>(xSecondCell, u"TopBorderDistance"_ustr));
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
