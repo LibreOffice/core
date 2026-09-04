@@ -122,6 +122,10 @@ struct ShapeTypeModel
     explicit            ShapeTypeModel();
 
     void                assignUsed( const ShapeTypeModel& rSource );
+
+    /** Returns true when the shape sits in the text flow, without a position of its own. */
+    bool                isInline() const
+                            { return maPosition != "absolute" && maPosition != "relative"; }
 };
 
 

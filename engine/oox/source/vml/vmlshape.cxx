@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <cstdlib>
 
 #include <optional>
 
@@ -683,7 +684,7 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
     }
 
     // if the anchor is not inline, and is relative to left or right, then apply the margins
-    bool bHonorMargins = rTypeModel.maPosition == "relative" || rTypeModel.maPosition == "absolute";
+    bool bHonorMargins = !rTypeModel.isInline();
     if ( rTypeModel.maPositionHorizontal == "center" )
     {
         rPropSet.setAnyProperty(PROP_HoriOrient, Any(text::HoriOrientation::CENTER));
@@ -1207,6 +1208,18 @@ Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxSh
     // The MirroredX and MirroredY properties (in the CustomShapeGeometry property) are not
     // supported for the LineShape by UNO, so we have to make the mirroring here.
     handleMirroring(maTypeModel, xShape);
+    // An inline line with a zero width and height has no extent to draw in. The shape is
+    // hidden, so its stroke width paints nothing on the fallback extent of 1 x 1 hundredths
+    // of a millimetre (hmm).
+    // The rectangle is the one the shape was inserted with, so a line inside a group, whose
+    // extent comes from its from and to points, keeps its own size here.
+    if (xShape.is() && maTypeModel.isInline() && std::abs(rShapeRect.Width) <= 1
+        && std::abs(rShapeRect.Height) <= 1)
+    {
+        PropertySet aPropertySet(xShape);
+        aPropertySet.setAnyProperty(PROP_Visible, cpo::uno::Any(false));
+        aPropertySet.setAnyProperty(PROP_Printable, cpo::uno::Any(false));
+    }
     return xShape;
 }
 
@@ -1216,11 +1229,38 @@ awt::Rectangle LineShape::getAbsRectangle() const
     awt::Rectangle aShapeRect;
     sal_Int32 nIndex = 0;
 
-    aShapeRect.X = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex), 0, true, true);
-    aShapeRect.Y = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex), 0, false, true);
+    const sal_Int32 nFromX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex), 0, true, true);
+    const sal_Int32 nFromY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex), 0, false, true);
     nIndex = 0;
-    aShapeRect.Width = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex), 0, true, true) - aShapeRect.X;
-    aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex), 0, false, true) - aShapeRect.Y;
+    const sal_Int32 nToX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex), 0, true, true);
+    const sal_Int32 nToY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex), 0, false, true);
+
+    // An inline line sits in the text flow with the extent of its style width and height, the
+    // same as any other inline shape. The from and to points only describe the line inside that
+    // extent. A zero width and height gives the 1 x 1 hmm fallback extent.
+    if (maTypeModel.isInline())
+    {
+        aShapeRect = ShapeType::getAbsRectangle();
+        if (aShapeRect.Width <= 1 && aShapeRect.Height <= 1)
+            return aShapeRect;
+
+        // A line that runs to the left and down, or to the right and up, rises inside its
+        // extent. A negative height gives that direction, so the line starts at the bottom
+        // left corner of the extent and ends at its top right corner.
+        const bool bToTheLeft = nToX < nFromX;
+        const bool bUpwards = nToY < nFromY;
+        if (bToTheLeft != bUpwards)
+        {
+            aShapeRect.Y += aShapeRect.Height;
+            aShapeRect.Height = -aShapeRect.Height;
+        }
+        return aShapeRect;
+    }
+
+    aShapeRect.X = nFromX;
+    aShapeRect.Y = nFromY;
+    aShapeRect.Width = nToX - nFromX;
+    aShapeRect.Height = nToY - nFromY;
     return aShapeRect;
 }
 
@@ -1552,7 +1592,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     {
         Reference<XShape> xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
         // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
-        if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
+        if ( maTypeModel.isInline() )
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, Any(text::VertOrientation::TOP));
 
         // Apply stroke props from the type model.

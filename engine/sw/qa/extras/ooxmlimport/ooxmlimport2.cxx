@@ -22,6 +22,7 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -1544,6 +1545,28 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlTextboxAutoWidth)
     CPPUNIT_ASSERT_GREATER(sal_Int32(4000), nWidth);
     // It must not fall back to the full column width either.
     CPPUNIT_ASSERT_LESS(sal_Int32(6000), nWidth);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineVmlLineWithoutExtent)
+{
+    // A paragraph holds a VML line without a style, so the line is placed in the text flow and
+    // has no width and height of its own. Its from and to points span 256.65pt by 5pt with a
+    // 5pt stroke.
+    createSwDoc("inline-vml-line.docx");
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(xShape, u"AnchorType"_ustr));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less or equal: 2
+    // - Actual  : 9110
+    // The line took the size of its from and to points and was drawn as a wide bar across
+    // the paragraph, while it has no extent in the text flow. The fallback extent is 1 x 1
+    // hundredths of a millimetre (hmm), read back through twips as 2 x 2.
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), xShape->getSize().Width);
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), xShape->getSize().Height);
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"Visible"_ustr));
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, u"Printable"_ustr));
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
