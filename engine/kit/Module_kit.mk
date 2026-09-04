@@ -22,7 +22,6 @@ ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,kit,\
     Library_kitgtk \
     Executable_gtktiledviewer \
-    $(if $(INTROSPECTION_SCANNER),CustomTarget_introspection) \
 ))
 endif # ($(ENABLE_GTK3),)
 

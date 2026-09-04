@@ -630,11 +630,6 @@ SRC_ROOT=`pwd`
 cd $BUILDDIR
 x_Cygwin=[\#]
 
-dnl ======================================
-dnl Required GObject introspection version
-dnl ======================================
-INTROSPECTION_REQUIRED_VERSION=1.32.0
-
 dnl ===================================================================
 dnl Search all the common names for GNU Make
 dnl ===================================================================
@@ -1834,11 +1829,6 @@ libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,test "${test_gtk3}" = no -o "${enable_gtk3+set}" = set || enable_gtk3=yes)
-
-AC_ARG_ENABLE(introspection,
-    AS_HELP_STRING([--enable-introspection],
-        [Generate files for GObject introspection.  Requires --enable-gtk3.  (Typically used by
-         Linux distributions.)]))
 
 AC_ARG_ENABLE(split-app-modules,
     AS_HELP_STRING([--enable-split-app-modules],
@@ -11578,14 +11568,6 @@ if test "$ENABLE_GTK3" = "TRUE"; then
 fi
 AC_SUBST(LIBINTL_LIBS)
 AC_SUBST(USE_LIBINTL)
-
-if test "$enable_introspection" = yes; then
-    if test "$ENABLE_GTK3" = "TRUE"; then
-        GOBJECT_INTROSPECTION_REQUIRE(INTROSPECTION_REQUIRED_VERSION)
-    else
-        AC_MSG_ERROR([--enable-introspection requires --enable-gtk3])
-    fi
-fi
 
 dnl ===================================================================
 dnl check for dbus support
