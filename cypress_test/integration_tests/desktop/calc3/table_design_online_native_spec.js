@@ -12,23 +12,30 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/testfile.xlsx');
 		desktopHelper.switchUIToNotebookbar();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	// Turn a range into a styled table, which switches the context to Table and
 	// reveals the contextual Table Design tab.
-	function insertTable(range) {
+	function insertTable(win, range) {
 		calcHelper.selectCellsInRange(range || 'A1:C3');
-		cy.getFrameWindow().then(function(win) {
+		cy.then(function() {
 			win.app.socket.sendMessage('uno .uno:InsertCalcTable');
 		});
 		cy.cGet('#tablerangedialog').should('be.visible');
 		cy.cGet('#tablerangedialog #ok').click();
 		cy.cGet('#tablerangedialog').should('not.exist');
 		cy.cGet('#Table-tab-label').should('be.visible');
+		// The Table tab arrives before the styles reach the gallery, and the gallery
+		// lays out again as it brings the style of the new table into view.
+		cy.cGet('#tablestyles_design .ui-iconview-entry').should('have.length.greaterThan', 10);
+		helper.processToIdle(win);
 	}
 
 	it('the browser-drawn gallery is populated and grouped into families', function() {
-		insertTable();
+		insertTable(this.win);
 		cy.cGet('#tablestyles_design .ui-iconview-entry').should('have.length.greaterThan', 10);
 		cy.cGet('#tablestyles_design').contains('.ui-iconview-separator', 'Light').should('exist');
 		cy.cGet('#tablestyles_design').contains('.ui-iconview-separator', 'Medium').should('exist');
@@ -36,12 +43,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	});
 
 	it('the New and Clear Table Style entries are present in the expanded gallery', function() {
-		insertTable();
-		// Let the gallery updates that follow the table insert settle, so the
-		// expanded dropdown is not rebuilt away while the test uses it.
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+		insertTable(this.win);
 		cy.cGet('#tablestyles_design-iconview-list-expand-button').click();
 		cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] [modelid="new-table-style"]').should('exist');
 		cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] [modelid="clear-table-style"]').should('exist');
@@ -60,7 +62,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	});
 
 	it('right-clicking a style offers Set as Default at the pointer', function() {
-		insertTable();
+		insertTable(this.win);
 		// The gallery slides the style of the table at the cursor into view, so the
 		// entry sitting at a given visible position changes while that settles. The
 		// id is taken once and every later step addresses that one entry.
@@ -86,12 +88,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	});
 
 	it('right-clicking a style inside the expanded gallery offers Set as Default', function() {
-		insertTable();
-		// Let the gallery updates that follow the table insert settle, so the
-		// expanded dropdown is not rebuilt away while the test uses it.
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+		insertTable(this.win);
 		cy.cGet('#tablestyles_design-iconview-list-expand-button').click();
 		// Capture the entry position first: opening the context menu closes the
 		// expanded gallery, so the entry cannot be measured afterwards.
@@ -116,7 +113,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	});
 
 	it('a table inserted after Set as Default comes up in that style', function() {
-		insertTable();
+		insertTable(this.win);
 		// The gallery marks the style the table at the cursor uses. Pick a
 		// different one as the default, so the check cannot pass by accident.
 		var startingEntryId = null;
@@ -133,27 +130,22 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 			cy.cGet('#' + defaultEntryId).rightclick();
 		});
 		cy.cGet('body').contains('Set as Default').should('be.visible').click();
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+		helper.processToIdle(this.win);
 
 		// A second table, clear of the first, comes up in the style just chosen.
-		insertTable('E1:G3');
+		insertTable(this.win, 'E1:G3');
 		cy.cGet('#tablestyles_design .ui-iconview-entry.selected').should(function(entry) {
 			expect(entry[0].id).to.equal(defaultEntryId);
 		});
 	});
 
 	it('Clear Style leaves the table with no style applied', function() {
-		insertTable();
+		insertTable(this.win);
 		// The table starts out with a style, which is the state Clear Style undoes.
 		// The None entry is the one the gallery marks when nothing is applied.
 		var noneEntryId = 'tablestyles_design_-1';
 		cy.cGet('#tablestyles_design .ui-iconview-entry.selected').should(function(entry) {
 			expect(entry[0].id).to.not.equal(noneEntryId);
-		});
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
 		});
 		cy.cGet('#tablestyles_design-iconview-list-expand-button').click();
 		cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] [modelid="clear-table-style"] button').click();
@@ -164,7 +156,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	});
 
 	it('duplicating a style adds one copy the gallery shows straight away', function() {
-		insertTable();
+		insertTable(this.win);
 
 		// Count every entry, not just the ones on screen: the strip renders only as
 		// many as fit and re-lays out after an update.
@@ -181,10 +173,7 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	});
 
 	it('the New Table Style entry opens the create dialog', function() {
-		insertTable();
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+		insertTable(this.win);
 		cy.cGet('#tablestyles_design-iconview-list-expand-button').click();
 		cy.cGet('[id^="tablestyles_design-iconview-list-dropdown"] [modelid="new-table-style"] button').click();
 		cy.cGet('#NewTableStyleDialog').should('be.visible');
