@@ -1434,30 +1434,10 @@ bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
     return UpdateTableStyleFormatting(pTableNode, false, &aStyleName);
 }
 
-static bool lcl_ApplyTableStyleLive(SwFEShell& rShell, SwTableNode& rTableNode,
-        std::unique_ptr<SwUndoTableStyleLive> pUndo, bool bResetCellFormatting)
-{
-    SwDoc* pDoc = rShell.GetDoc();
-    IDocumentUndoRedo& rUndoRedo = pDoc->GetIDocumentUndoRedo();
-    bool const bUndo(pUndo != nullptr);
-    if (bUndo)
-    {
-        rUndoRedo.AppendUndo(std::move(pUndo));
-        // The granular attribute changes ApplyTableStyleLive makes below are an
-        // implementation detail of applying the (style, settings) pair, not separate user
-        // actions; undoing is reapplying the previous pair (see SwUndoTableStyleLive), not
-        // replaying each attribute change.
-        rUndoRedo.DoUndo(false);
-    }
-
-    bool bRet = pDoc->ApplyTableStyleLive(rTableNode, bResetCellFormatting);
-
-    if (bUndo)
-        rUndoRedo.DoUndo(true);
-
-    return bRet;
-}
-
+/// Resolve the table's style live, recording pUndo (when given) as the single undo step.
+/// bApplyTableProperties also gives the table the style's own properties (repeat heading,
+/// splitting, collapsing borders, shadow), which belong to choosing a style, not to a
+/// structural change.
 bool SwFEShell::SetTableStyleLive(const TableStyleName& rStyleName)
 {
     SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
@@ -1468,11 +1448,12 @@ bool SwFEShell::SetTableStyleLive(const TableStyleName& rStyleName)
     StartAllAction();
     std::unique_ptr<SwUndoTableStyleLive> pUndo;
     if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
-        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode);
+        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode, /*bSaveFormatting=*/true);
     pTableNode->GetTable().SetTableStyleName(rStyleName);
     // Choosing a style replaces what the cells carried from the previous look.
-    bool bRet = lcl_ApplyTableStyleLive(*this, *pTableNode, std::move(pUndo),
-                                        /*bResetCellFormatting=*/true);
+    bool bRet = GetDoc()->ApplyTableStyleLiveWithUndo(*pTableNode, std::move(pUndo),
+                                        /*bResetCellFormatting=*/true,
+                                        /*bApplyTableProperties=*/true);
     EndAllActionAndCall();
     return bRet;
 }
@@ -1487,10 +1468,11 @@ bool SwFEShell::SetTableStyleSettingsLive(const SwTableStyleSettings& rSettings)
     StartAllAction();
     std::unique_ptr<SwUndoTableStyleLive> pUndo;
     if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
-        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode);
+        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode, /*bSaveFormatting=*/false);
     pTableNode->GetTable().SetTableStyleSettings(rSettings);
-    bool bRet = lcl_ApplyTableStyleLive(*this, *pTableNode, std::move(pUndo),
-                                        /*bResetCellFormatting=*/false);
+    bool bRet = GetDoc()->ApplyTableStyleLiveWithUndo(*pTableNode, std::move(pUndo),
+                                        /*bResetCellFormatting=*/false,
+                                        /*bApplyTableProperties=*/false);
     EndAllActionAndCall();
     return bRet;
 }
@@ -1516,14 +1498,15 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     if (pStyleName)
     {
         if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
-            pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode);
+            pUndo = std::make_unique<SwUndoTableStyleLive>(*pTableNode, /*bSaveFormatting=*/true);
         pTableNode->GetTable().SetTableStyleName(*pStyleName);
     }
     // Setting a style, or clearing direct formatting, replaces a cell's own border and
     // background with the style's. A structural change only re-resolves which role each
     // cell and paragraph is in, and leaves a cell's own formatting alone.
-    lcl_ApplyTableStyleLive(*this, *pTableNode, std::move(pUndo),
-                            /*bResetCellFormatting=*/pStyleName != nullptr || bResetDirect);
+    GetDoc()->ApplyTableStyleLiveWithUndo(*pTableNode, std::move(pUndo),
+                            /*bResetCellFormatting=*/pStyleName != nullptr || bResetDirect,
+                            /*bApplyTableProperties=*/pStyleName != nullptr && !pStyleName->isEmpty());
     EndAllActionAndCall();
     return true;
 }

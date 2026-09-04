@@ -94,6 +94,7 @@
 #include <editeng/keepitem.hxx>
 #include <fmtlsplt.hxx>
 #include <swundo.hxx>
+#include <UndoTable.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <frmatr.hxx>
 #include <sortopt.hxx>
@@ -2459,21 +2460,26 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), this);
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFormat), this);
-    const SwTableAutoFormatTable& rAutoFormatTable = SwModule::get()->GetAutoFormatTable();
-    for (size_t i = rAutoFormatTable.size(); i;)
-        if( sAutoFormatName == rAutoFormatTable[ --i ].GetName() )
-        {
-            SwSelBoxes aBoxes;
-            const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-            for (size_t n = 0; n < rTBoxes.size(); ++n)
-            {
-                SwTableBox* pBox = rTBoxes[ n ];
-                aBoxes.insert( pBox );
-            }
-            UnoActionContext aContext( &pFormat->GetDoc() );
-            pFormat->GetDoc().SetTableAutoFormat( aBoxes, rAutoFormatTable[i] );
-            break;
-        }
+    SwDoc& rDoc = pFormat->GetDoc();
+    const TableStyleName aStyleName(sAutoFormatName);
+    if (!rDoc.GetTableStyles().FindAutoFormat(aStyleName))
+    {
+        const SwTableAutoFormatTable& rAutoFormatTable = SwModule::get()->GetAutoFormatTable();
+        const SwTableAutoFormat* pPreset = rAutoFormatTable.FindAutoFormat(aStyleName);
+        if (!pPreset)
+            return;
+        rDoc.GetTableStyles().AddAutoFormat(*pPreset);
+    }
+
+    UnoActionContext aContext( &rDoc );
+    std::unique_ptr<SwUndoTableStyleLive> pUndo;
+    if (rDoc.GetIDocumentUndoRedo().DoesUndo())
+        pUndo = std::make_unique<SwUndoTableStyleLive>(*pTable->GetTableNode(),
+                                                       /*bSaveFormatting=*/true);
+    pTable->SetTableStyleName(aStyleName);
+    rDoc.ApplyTableStyleLiveWithUndo(*pTable->GetTableNode(), std::move(pUndo),
+                                     /*bResetCellFormatting=*/true,
+                                     /*bApplyTableProperties=*/true);
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextTable::getPropertySetInfo()

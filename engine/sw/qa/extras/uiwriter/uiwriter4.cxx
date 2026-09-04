@@ -1339,6 +1339,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleChgUpdatesLiveCells)
     CPPUNIT_ASSERT(bool(pTopLeftBox->GetFrameFormat()->GetFormatAttr(RES_BACKGROUND) == aBackground2));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleLiveUndoRestoresOwnFormatting)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    SwTableAutoFormat* pStyle = pDoc->MakeTableStyle(TableStyleName(u"Test Style"_ustr));
+    pStyle->GetBoxFormat(0).GetProps().SetBackground(SvxBrushItem(COL_LIGHTMAGENTA, RES_BACKGROUND));
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableBox* pTopLeftBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+
+    // The first cell has its own shading and two rows repeat as header before a style is
+    // chosen; the style replaces both.
+    pTopLeftBox->ClaimFrameFormat()->SetFormatAttr(SvxBrushItem(COL_LIGHTGREEN, RES_BACKGROUND));
+    rMutableTable.SetRowsToRepeat(2);
+    // With the first column role on, the top left cell is the style's first box.
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    aSettings.m_bUseFirstColumnStyle = true;
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    CPPUNIT_ASSERT(pWrtShell->SetTableStyleLive(TableStyleName(u"Test Style"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA,
+                         pTopLeftBox->GetFrameFormat()->GetAttrSet().Get(RES_BACKGROUND).GetColor());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), rMutableTable.GetRowsToRepeat());
+
+    // Undo brings back the cell's own shading and the repeated rows along with the style.
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(rMutableTable.GetTableStyleName().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET,
+                         pTopLeftBox->GetFrameFormat()->GetAttrSet().GetItemState(RES_BACKGROUND, false));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN,
+                         pTopLeftBox->GetFrameFormat()->GetAttrSet().Get(RES_BACKGROUND).GetColor());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rMutableTable.GetRowsToRepeat());
+
+    // Redo applies the style again.
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(u"Test Style"_ustr, rMutableTable.GetTableStyleName().toString());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTMAGENTA,
+                         pTopLeftBox->GetFrameFormat()->GetAttrSet().Get(RES_BACKGROUND).GetColor());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), rMutableTable.GetRowsToRepeat());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleLiveSurvivesParagraphStyleDeletion)
 {
     // A table whose header row takes white text from a live table style (the built-in

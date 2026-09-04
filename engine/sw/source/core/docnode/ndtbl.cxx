@@ -3795,192 +3795,6 @@ bool SwNodes::MergeTable( SwNode& rPos, bool bWithPrev )
 
 namespace {
 
-// Use the PtrArray's ForEach method
-struct SetAFormatTabPara
-{
-    SwTableAutoFormat& rTableFormat;
-    SwUndoTableAutoFormat* pUndo;
-    sal_uInt16 nEndBox, nCurBox;
-    sal_uInt8 nAFormatLine, nAFormatBox;
-    bool bSingleRowTable;
-
-    explicit SetAFormatTabPara( const SwTableAutoFormat& rNew )
-        : rTableFormat( const_cast<SwTableAutoFormat&>(rNew) ), pUndo( nullptr ),
-        nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 ), bSingleRowTable(false)
-    {}
-};
-
-}
-
-// Forward declare so that the Lines and Boxes can use recursion
-static bool lcl_SetAFormatBox(FndBox_ &, SetAFormatTabPara *pSetPara);
-static bool lcl_SetAFormatLine(FndLine_ &, SetAFormatTabPara *pPara);
-
-static bool lcl_SetAFormatLine(FndLine_ & rLine, SetAFormatTabPara *pPara)
-{
-    for (auto const& it : rLine.GetBoxes())
-    {
-        lcl_SetAFormatBox(*it, pPara);
-    }
-    return true;
-}
-
-static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara)
-{
-    if (!rBox.GetUpper()->GetUpper()) // Box on first level?
-    {
-        if( !pSetPara->nCurBox )
-            pSetPara->nAFormatBox = 0;
-        else if( pSetPara->nCurBox == pSetPara->nEndBox )
-            pSetPara->nAFormatBox = 3;
-        else //Even column(1) or Odd column(2)
-            pSetPara->nAFormatBox = static_cast<sal_uInt8>(1 + ((pSetPara->nCurBox-1) & 1));
-    }
-
-    if (rBox.GetBox()->GetSttNd())
-    {
-        SwTableBox* pSetBox = rBox.GetBox();
-        {
-            SwDoc& rDoc = pSetBox->GetFrameFormat()->GetDoc();
-            SfxItemSet aCharSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>(rDoc.GetAttrPool()));
-            SfxItemSet aBoxSet(rDoc.GetAttrPool(), aTableBoxSetRange);
-            sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
-            const bool bSingleRowTable = pSetPara->bSingleRowTable;
-            const bool bSingleColTable = pSetPara->nEndBox == 0;
-            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aCharSet, SwTableAutoFormatUpdateFlags::Char, nullptr);
-            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, rDoc.GetNumberFormatter());
-
-            if (aCharSet.Count())
-            {
-                SwNodeOffset nSttNd = pSetBox->GetSttIdx()+1;
-                SwNodeOffset nEndNd = pSetBox->GetSttNd()->EndOfSectionIndex();
-                for (; nSttNd < nEndNd; ++nSttNd)
-                {
-                    SwContentNode* pNd = rDoc.GetNodes()[ nSttNd ]->GetContentNode();
-                    if (pNd)
-                        pNd->SetAttr(aCharSet);
-                }
-            }
-
-            if (aBoxSet.Count())
-            {
-                if (pSetPara->pUndo && SfxItemState::SET == aBoxSet.GetItemState(RES_BOXATR_FORMAT))
-                    pSetPara->pUndo->SaveBoxContent( *pSetBox );
-
-                pSetBox->ClaimFrameFormat()->SetFormatAttr(aBoxSet);
-            }
-        }
-    }
-    else
-    {
-        // Not sure how this situation can occur, but apparently we have some kind of table in table.
-        // I am guessing at how to best handle singlerow in this situation.
-        const bool bOrigSingleRowTable = pSetPara->bSingleRowTable;
-        pSetPara->bSingleRowTable = rBox.GetLines().size() == 1;
-        for (auto const& rpFndLine : rBox.GetLines())
-        {
-            lcl_SetAFormatLine(*rpFndLine, pSetPara);
-        }
-        pSetPara->bSingleRowTable = bOrigSingleRowTable;
-    }
-
-    if (!rBox.GetUpper()->GetUpper()) // a BaseLine
-        ++pSetPara->nCurBox;
-    return true;
-}
-
-bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
-        const SwTableAutoFormat& rNew,
-        TableStyleName const*const pStyleNameToSet)
-{
-    OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
-    SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-    if( !pTableNd )
-        return false;
-
-    // Find all Boxes/Lines
-    FndBox_ aFndBox( nullptr, nullptr );
-    {
-        FndPara aPara( rBoxes, &aFndBox );
-        ForEach_FndLineCopyCol( pTableNd->GetTable().GetTabLines(), &aPara );
-    }
-    if( aFndBox.GetLines().empty() )
-        return false;
-
-    SwTable &table = pTableNd->GetTable();
-    table.SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
-
-    FndBox_* pFndBox = &aFndBox;
-    while( 1 == pFndBox->GetLines().size() &&
-            1 == pFndBox->GetLines().front()->GetBoxes().size())
-    {
-        pFndBox = pFndBox->GetLines().front()->GetBoxes()[0].get();
-    }
-
-    if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
-        pFndBox = pFndBox->GetUpper()->GetUpper();
-
-    // Disable Undo, but first store parameters
-    SwUndoTableAutoFormat* pUndo = nullptr;
-    bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
-    if (bUndo)
-    {
-        pUndo = new SwUndoTableAutoFormat( *pTableNd, rNew );
-        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
-        GetIDocumentUndoRedo().DoUndo(false);
-    }
-
-    if (pStyleNameToSet)
-    {   // tdf#98226 do this here where undo can record it
-        pTableNd->GetTable().SetTableStyleName(*pStyleNameToSet);
-    }
-
-    rNew.RestoreTableProperties(table);
-
-    SetAFormatTabPara aPara( rNew );
-    FndLines_t& rFLns = pFndBox->GetLines();
-    aPara.bSingleRowTable = rFLns.size() == 1;
-
-    for (FndLines_t::size_type n = 0; n < rFLns.size(); ++n)
-    {
-        FndLine_* pLine = rFLns[n].get();
-
-        // Set Upper to 0 (thus simulate BaseLine)
-        FndBox_* pSaveBox = pLine->GetUpper();
-        pLine->SetUpper( nullptr );
-
-        if( !n )
-            aPara.nAFormatLine = 0;
-        else if (static_cast<size_t>(n+1) == rFLns.size())
-            aPara.nAFormatLine = 3;
-        else
-            aPara.nAFormatLine = static_cast<sal_uInt8>(1 + ((n-1) & 1 ));
-
-        aPara.nAFormatBox = 0;
-        aPara.nCurBox = 0;
-        aPara.nEndBox = pLine->GetBoxes().size()-1;
-        aPara.pUndo = pUndo;
-        for (auto const& it : pLine->GetBoxes())
-        {
-            lcl_SetAFormatBox(*it, &aPara);
-        }
-
-        pLine->SetUpper( pSaveBox );
-    }
-
-    if( pUndo )
-    {
-        GetIDocumentUndoRedo().DoUndo(bUndo);
-    }
-
-    getIDocumentState().SetModified();
-    getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
-
-    return true;
-}
-
-namespace {
-
 /// One id for a role position together with the single-row and single-column variants, which
 /// select different boxes of the style for the same position.
 sal_uInt8 lcl_TableStyleRoleKey(sal_uInt8 nPos, bool bSingleRow, bool bSingleCol)
@@ -4216,9 +4030,43 @@ bool SwDoc::ApplyTableStyleLive(SwTableNode& rTableNode, bool bResetCellFormatti
     rTable.SetTableStyleRoleCacheFor(rStyleName, rSettings);
 
     if (bChangedAnyBox)
+    {
+        // The cached HTML layout was computed from cell borders that just changed.
+        rTable.SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());
         getIDocumentState().SetModified();
+    }
 
     return pStyle != nullptr;
+}
+
+bool SwDoc::ApplyTableStyleLiveWithUndo(SwTableNode& rTableNode,
+                                        std::unique_ptr<SwUndoTableStyleLive> pUndo,
+                                        bool bResetCellFormatting, bool bApplyTableProperties)
+{
+    IDocumentUndoRedo& rUndoRedo = GetIDocumentUndoRedo();
+    const bool bUndo = pUndo != nullptr;
+    if (bUndo)
+    {
+        rUndoRedo.AppendUndo(std::move(pUndo));
+        // The attribute changes made below are part of applying the style and settings pair,
+        // not actions of their own: undoing puts the previous pair back, see
+        // SwUndoTableStyleLive, rather than replaying each change.
+        rUndoRedo.DoUndo(false);
+    }
+
+    if (bApplyTableProperties)
+    {
+        SwTable& rTable = rTableNode.GetTable();
+        if (const SwTableAutoFormat* pStyle
+            = GetTableStyles().FindAutoFormat(rTable.GetTableStyleName()))
+            pStyle->RestoreTableProperties(rTable);
+    }
+
+    const bool bRet = ApplyTableStyleLive(rTableNode, bResetCellFormatting);
+
+    if (bUndo)
+        rUndoRedo.DoUndo(true);
+    return bRet;
 }
 
 namespace {

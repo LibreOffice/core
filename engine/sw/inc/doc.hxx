@@ -96,6 +96,7 @@ class SwTableBoxFormat;
 class SwTableFormat;
 class SwTableLineFormat;
 class SwTableNode;
+class SwUndoTableStyleLive;
 class SwTextBlocks;
 class SwURLStateChanged;
 class SwUnoCursor;
@@ -1284,9 +1285,6 @@ public:
 
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
-    /// AutoFormat for table/table selection.
-    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, TableStyleName const* pStyleNameToSet = nullptr);
-
     /// Resolve the whole table's current table style name and settings (SwTable::
     /// GetTableStyleName/GetTableStyleSettings) live: every cell derives its border and
     /// background from a shared per-role frame format, and every paragraph gets the role
@@ -1299,6 +1297,15 @@ public:
     /// Returns false if the table has no style set.
     SW_DLLPUBLIC bool ApplyTableStyleLive(SwTableNode& rTableNode, bool bResetCellFormatting = false,
                                           bool bStyleDefinitionChanged = false);
+
+    /// Applies the table's style as one undo step. The undo action given, if any, stands for
+    /// the whole application, so the attribute changes made on the way record nothing of their
+    /// own. With bApplyTableProperties the style's own table properties, the repeated heading
+    /// rows among them, are put on the table first.
+    SW_DLLPUBLIC bool ApplyTableStyleLiveWithUndo(SwTableNode& rTableNode,
+                                                  std::unique_ptr<SwUndoTableStyleLive> pUndo,
+                                                  bool bResetCellFormatting,
+                                                  bool bApplyTableProperties);
 
     /// Resolve the table's style live and then drop from its cells and paragraphs every own
     /// item that only repeats what their style role provides. Documents written before the

@@ -140,7 +140,6 @@ public:
     void NewFrameFormatForBox(const SwTableBox&, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat);
 
     void RestoreAttr( SwTable& rTable, bool bModifyBox = false );
-    void SaveContentAttrs( SwDoc& rDoc );
     void CreateNew( SwTable& rTable, bool bCreateFrames = true,
                     bool bRestoreChart = true );
     bool IsNewModel() const { return m_bNewModel; }
@@ -165,7 +164,6 @@ public:
     ~SaveLine();
 
     void RestoreAttr( SwTableLine& rLine, SaveTable& rSTable );
-    void SaveContentAttrs( SwDoc& rDoc );
 
     void CreateNew( SwTable& rTable, SwTableBox& rParent, SaveTable& rSTable  );
 };
@@ -178,18 +176,14 @@ class SaveBox
     SwNodeOffset m_nStartNode;
     sal_Int32 m_nRowSpan;
     sal_uInt16 m_nItemSet;
-    union
-    {
-        SfxItemSets* pContentAttrs;
-        SaveLine* pLine;
-    } m_Ptrs;
+    /// The lines of a box that holds a nested table; null for a box with content.
+    SaveLine* m_pLine;
 
 public:
     SaveBox( SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable );
     ~SaveBox();
 
     void RestoreAttr( SwTableBox& rBox, SaveTable& rSTable );
-    void SaveContentAttrs( SwDoc& rDoc );
 
     void CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTable );
 };
@@ -226,13 +220,6 @@ private:
     SwTableToTextSave& operator=(const SwTableToTextSave&) = delete;
 
 };
-
-WhichRangesContainer const aSave_BoxContentSet(svl::Items<
-    RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
-    RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
-    RES_CHRATR_SHADOWED, RES_CHRATR_WEIGHT,
-    RES_PARATR_ADJUST, RES_PARATR_ADJUST>);
 
 SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTableOpts,
@@ -1002,11 +989,6 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
     }
 }
 
-void SaveTable::SaveContentAttrs( SwDoc& rDoc )
-{
-    m_pLine->SaveContentAttrs(rDoc);
-}
-
 void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
                             bool bRestoreChart )
 {
@@ -1163,13 +1145,6 @@ void SaveLine::RestoreAttr( SwTableLine& rLine, SaveTable& rSTable )
     }
 }
 
-void SaveLine::SaveContentAttrs( SwDoc& rDoc )
-{
-    m_pBox->SaveContentAttrs(rDoc);
-    if (m_pNext)
-        m_pNext->SaveContentAttrs(rDoc);
-}
-
 void SaveLine::CreateNew( SwTable& rTable, SwTableBox& rParent, SaveTable& rSTable )
 {
     SwTableLineFormat* pFormat
@@ -1196,7 +1171,7 @@ SaveBox::SaveBox(SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable)
     , m_nStartNode(NODE_OFFSET_MAX)
     , m_nRowSpan(0)
 {
-    m_Ptrs.pLine = nullptr;
+    m_pLine = nullptr;
 
     if( pPrev )
         pPrev->m_pNext = this;
@@ -1210,9 +1185,9 @@ SaveBox::SaveBox(SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable)
     }
     else
     {
-        m_Ptrs.pLine = new SaveLine(nullptr, *rBox.GetTabLines()[0], rSTable);
+        m_pLine = new SaveLine(nullptr, *rBox.GetTabLines()[0], rSTable);
 
-        SaveLine* pLn = m_Ptrs.pLine;
+        SaveLine* pLn = m_pLine;
         for( size_t n = 1; n < rBox.GetTabLines().size(); ++n )
             pLn = new SaveLine( pLn, *rBox.GetTabLines()[ n ], rSTable );
     }
@@ -1220,10 +1195,7 @@ SaveBox::SaveBox(SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable)
 
 SaveBox::~SaveBox()
 {
-    if (NODE_OFFSET_MAX == m_nStartNode) // no EndBox
-        delete m_Ptrs.pLine;
-    else
-        delete m_Ptrs.pContentAttrs;
+    delete m_pLine;
     delete m_pNext;
 }
 
@@ -1239,7 +1211,7 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
         }
         else
         {
-            SaveLine* pLn = m_Ptrs.pLine;
+            SaveLine* pLn = m_pLine;
             for (size_t n = 0; n < rBox.GetTabLines().size(); ++n, pLn = pLn->m_pNext)
             {
                 if( !pLn )
@@ -1252,67 +1224,10 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
             }
         }
     }
-    else if (rBox.GetSttNd() && rBox.GetSttIdx() == m_nStartNode)
-    {
-        if (m_Ptrs.pContentAttrs)
-        {
-            SwNodes& rNds = rBox.GetFrameFormat()->GetDoc().GetNodes();
-            sal_uInt16 nSet = 0;
-            SwNodeOffset nEnd = rBox.GetSttNd()->EndOfSectionIndex();
-            for (SwNodeOffset n = m_nStartNode + 1; n < nEnd; ++n)
-            {
-                SwContentNode* pCNd = rNds[ n ]->GetContentNode();
-                if( pCNd )
-                {
-                    std::shared_ptr<SfxItemSet> pSet((*m_Ptrs.pContentAttrs)[nSet++]);
-                    if( pSet )
-                    {
-                        for( const WhichPair& rPair : aSave_BoxContentSet )
-                            pCNd->ResetAttr( rPair.first, rPair.second );
-                        pCNd->SetAttr( *pSet );
-                    }
-                    else
-                        pCNd->ResetAllAttr();
-                }
-            }
-        }
-    }
-    else
+    else if (!rBox.GetSttNd() || rBox.GetSttIdx() != m_nStartNode)
     {
         OSL_ENSURE( false, "Box not anymore at the same node" );
     }
-}
-
-void SaveBox::SaveContentAttrs( SwDoc& rDoc )
-{
-    if (NODE_OFFSET_MAX == m_nStartNode) // no EndBox
-    {
-        // continue in current line
-        m_Ptrs.pLine->SaveContentAttrs(rDoc);
-    }
-    else
-    {
-        SwNodeOffset nEnd = rDoc.GetNodes()[m_nStartNode]->EndOfSectionIndex();
-        m_Ptrs.pContentAttrs = new SfxItemSets;
-        for (SwNodeOffset n = m_nStartNode + 1; n < nEnd; ++n)
-        {
-            SwContentNode* pCNd = rDoc.GetNodes()[ n ]->GetContentNode();
-            if( pCNd )
-            {
-                std::shared_ptr<SfxItemSet> pSet;
-                if( pCNd->HasSwAttrSet() )
-                {
-                    pSet = std::make_shared<SfxItemSet>( rDoc.GetAttrPool(),
-                                            aSave_BoxContentSet );
-                    pSet->Put( *pCNd->GetpSwAttrSet() );
-                }
-
-                m_Ptrs.pContentAttrs->push_back(std::move(pSet));
-            }
-        }
-    }
-    if (m_pNext)
-        m_pNext->SaveContentAttrs(rDoc);
 }
 
 void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTable )
@@ -1331,7 +1246,7 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
         SwTableBox* pNew = new SwTableBox( pFormat, 1, &rParent );
         rParent.GetTabBoxes().push_back( pNew );
 
-        m_Ptrs.pLine->CreateNew(rTable, *pNew, rSTable);
+        m_pLine->CreateNew(rTable, *pNew, rSTable);
     }
     else
     {
@@ -1396,84 +1311,18 @@ void SwUndoAttrTable::RedoImpl(::sw::UndoRedoContext & rContext)
     UndoImpl(rContext);
 }
 
-// UndoObject for AutoFormat on Table
-SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
-                                    const SwTableAutoFormat& rAFormat )
-    : SwUndo( SwUndoId::TABLE_AUTOFMT, rTableNd.GetDoc() )
-    , m_TableStyleName(rTableNd.GetTable().GetTableStyleName())
-    , m_nStartNode( rTableNd.GetIndex() )
-    , m_bSaveContentAttr( false )
-    , m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
-{
-    m_pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
-
-    if( rAFormat.IsFont() || rAFormat.IsJustify() )
-    {
-        // then also go over the ContentNodes of the EndBoxes and collect
-        // all paragraph attributes
-        m_pSaveTable->SaveContentAttrs( const_cast<SwDoc&>(rTableNd.GetDoc()) );
-        m_bSaveContentAttr = true;
-    }
-}
-
-SwUndoTableAutoFormat::~SwUndoTableAutoFormat()
-{
-}
-
-void SwUndoTableAutoFormat::SaveBoxContent( const SwTableBox& rBox )
-{
-    m_Undos.push_back(std::make_shared<SwUndoTableNumFormat>(rBox));
-}
-
-void
-SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
-{
-    SwDoc & rDoc = rContext.GetDoc();
-    SwTableNode* pTableNd = rDoc.GetNodes()[ m_nStartNode ]->GetTableNode();
-    OSL_ENSURE( pTableNd, "no TableNode" );
-
-    SwTable& table = pTableNd->GetTable();
-    if (table.GetTableStyleName() != m_TableStyleName)
-    {
-        TableStyleName const temp(table.GetTableStyleName());
-        table.SetTableStyleName(m_TableStyleName);
-        m_TableStyleName = temp;
-    }
-    SaveTable* pOrig = new SaveTable( table );
-    // then go also over the ContentNodes of the EndBoxes and collect
-    // all paragraph attributes
-    if( m_bSaveContentAttr )
-        pOrig->SaveContentAttrs( rDoc );
-
-    if (bUndo)
-    {
-        for (size_t n = m_Undos.size(); 0 < n; --n)
-        {
-            m_Undos.at(n-1)->UndoImpl(rContext);
-        }
-
-        table.SetRowsToRepeat(m_nRepeatHeading);
-    }
-
-    m_pSaveTable->RestoreAttr( pTableNd->GetTable(), !bUndo );
-    m_pSaveTable.reset( pOrig );
-}
-
-void SwUndoTableAutoFormat::UndoImpl(::sw::UndoRedoContext & rContext)
-{
-    UndoRedo(true, rContext);
-}
-
-void SwUndoTableAutoFormat::RedoImpl(::sw::UndoRedoContext & rContext)
-{
-    UndoRedo(false, rContext);
-}
-
-SwUndoTableStyleLive::SwUndoTableStyleLive( const SwTableNode& rTableNd )
+SwUndoTableStyleLive::SwUndoTableStyleLive( const SwTableNode& rTableNd, bool bSaveFormatting )
     : SwUndo( SwUndoId::TABLE_STYLE, rTableNd.GetDoc() )
     , m_nStartNode( rTableNd.GetIndex() )
     , m_TableStyleName( rTableNd.GetTable().GetTableStyleName() )
     , m_TableStyleSettings( rTableNd.GetTable().GetTableStyleSettings() )
+    , m_nRowsToRepeat( rTableNd.GetTable().GetRowsToRepeat() )
+{
+    if( bSaveFormatting )
+        m_pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
+}
+
+SwUndoTableStyleLive::~SwUndoTableStyleLive()
 {
 }
 
@@ -1488,13 +1337,27 @@ void SwUndoTableStyleLive::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTable& rTable = pTableNd->GetTable();
     TableStyleName aCurrentName( rTable.GetTableStyleName() );
     SwTableStyleSettings aCurrentSettings( rTable.GetTableStyleSettings() );
+    const sal_uInt16 nCurrentRowsToRepeat = rTable.GetRowsToRepeat();
+    std::unique_ptr<SaveTable> pCurrent;
+    if( m_pSaveTable )
+        pCurrent.reset( new SaveTable( rTable ) );
 
     rTable.SetTableStyleName( m_TableStyleName );
     rTable.SetTableStyleSettings( m_TableStyleSettings );
+    if( m_pSaveTable )
+    {
+        // The cells' and the table's own formatting from before the style was chosen; the
+        // style is resolved on top of it again below.
+        m_pSaveTable->RestoreAttr( rTable );
+        rTable.SetRowsToRepeat( m_nRowsToRepeat );
+    }
     rDoc.ApplyTableStyleLive( *pTableNd );
 
     m_TableStyleName = aCurrentName;
     m_TableStyleSettings = aCurrentSettings;
+    m_nRowsToRepeat = nCurrentRowsToRepeat;
+    if( pCurrent )
+        m_pSaveTable = std::move( pCurrent );
 }
 
 void SwUndoTableStyleLive::RedoImpl(::sw::UndoRedoContext & rContext)

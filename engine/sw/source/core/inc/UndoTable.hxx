@@ -147,42 +147,22 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-class SwUndoTableNumFormat;
-
-class SwUndoTableAutoFormat final : public SwUndo
-{
-    TableStyleName m_TableStyleName;
-    SwNodeOffset m_nStartNode;
-    std::unique_ptr<SaveTable> m_pSaveTable;
-    std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
-    bool m_bSaveContentAttr;
-    sal_uInt16 m_nRepeatHeading;
-
-    void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
-
-public:
-    SwUndoTableAutoFormat( const SwTableNode& rTableNd, const SwTableAutoFormat& );
-
-    virtual ~SwUndoTableAutoFormat() override;
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
-    virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
-
-    void SaveBoxContent( const SwTableBox& rBox );
-};
-
-/// Undo for SwFEShell::SetTableStyleLive/SetTableStyleSettingsLive. Unlike
-/// SwUndoTableAutoFormat, this never touches cell content: applying a (style, settings) pair
-/// live never writes into hand-formatted cells, so undo is simply reapplying the previous
-/// (style, settings) pair, swapping it with the current one so redo reverses it again.
+/// Undo for applying a table style or its role settings live. Applying a (style, settings)
+/// pair never writes into the cells' content, so undo is reapplying the previous (style,
+/// settings) pair, swapping it with the current one so redo reverses it again. Choosing a
+/// style also replaces the cells' own border and background and the table's own properties
+/// with the style's; with bSaveFormatting the undo keeps those too and gives them back.
 class SwUndoTableStyleLive final : public SwUndo
 {
     SwNodeOffset m_nStartNode;
     TableStyleName m_TableStyleName;
     SwTableStyleSettings m_TableStyleSettings;
+    std::unique_ptr<SaveTable> m_pSaveTable;
+    sal_uInt16 m_nRowsToRepeat;
 
 public:
-    SwUndoTableStyleLive( const SwTableNode& rTableNd );
+    SwUndoTableStyleLive( const SwTableNode& rTableNd, bool bSaveFormatting );
+    virtual ~SwUndoTableStyleLive() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
