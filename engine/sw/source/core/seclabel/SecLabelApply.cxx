@@ -40,7 +40,7 @@ namespace sw::seclabel
 namespace
 {
 uno::Reference<xml::dom::XDocument>
-parseToDom(const uno::Reference<uno::XComponentContext>& xContext, std::u16string_view rXml)
+parseToDom(const uno::Reference<cpo::uno::XComponentContext>& xContext, std::u16string_view rXml)
 {
     const OString aUtf8 = OUStringToOString(rXml, RTL_TEXTENCODING_UTF8);
     SvMemoryStream aStream;
@@ -171,7 +171,7 @@ void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_
     if (!xInfo.is() || !xInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
         return;
 
-    const uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     comphelper::SequenceAsHashMap aGrabBag(xModelProps->getPropertyValue(u"InteropGrabBag"_ustr));
 
