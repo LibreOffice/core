@@ -319,10 +319,6 @@ sub get_download_platformname
     {
         $platformname = "Linux";
     }
-    elsif ( $installer::globals::issolarisbuild )
-    {
-        $platformname = "Solaris";
-    }
     elsif ( $installer::globals::isfreebsdbuild )
     {
         $platformname = "FreeBSD";
@@ -347,15 +343,7 @@ sub get_download_architecture
 {
     my $arch = "";
 
-    if ( $installer::globals::issolarissparcbuild )
-    {
-        $arch = "Sparc";
-    }
-    elsif ( $installer::globals::issolarisx86build )
-    {
-        $arch = "x86";
-    }
-    elsif ( $installer::globals::cpuname eq 'INTEL' )
+    if ( $installer::globals::cpuname eq 'INTEL' )
     {
         $arch = "x86";
     }
@@ -638,9 +626,9 @@ sub create_download_sets
     $downloadname = set_download_filename($languagestringref, $allvariableshashref);
 
 
-    # whether to use fakeroot (only required for Solaris and Linux)
+    # whether to use fakeroot (only required for Linux)
     my $usefakeroot = 0;
-    if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $usefakeroot = 1; }
+    if ( $installer::globals::islinuxbuild ) { $usefakeroot = 1; }
 
     my $downloadfile = create_tar_gz_file_from_directory($installationdir, $usefakeroot, $downloaddir, $downloadname);
     return $downloaddir;

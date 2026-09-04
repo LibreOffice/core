@@ -5787,13 +5787,12 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        bsd | deb | pkg | rpm | archive | dmg | installed | emscripten)
+        bsd | deb | rpm | archive | dmg | installed | emscripten)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
 bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 deb - Debian software distribution
-pkg - Solaris software distribution
 rpm - RedHat software distribution
 
 Collabora Office additionally supports:
@@ -5806,8 +5805,8 @@ installed - installation tree
         esac
     done
     # fakeroot is needed to ensure correct file ownerships/permissions
-    # inside deb packages and tar archives created on Linux and Solaris.
-    if test "$OS" = "LINUX" || test "$OS" = "SOLARIS"; then
+    # inside deb packages and tar archives created on Linux.
+    if test "$OS" = "LINUX"; then
         AC_PATH_PROG(FAKEROOT, fakeroot, no)
         if test "$FAKEROOT" = "no"; then
             AC_MSG_ERROR(
@@ -9433,8 +9432,7 @@ if test "$enable_epm" = "yes"; then
             AC_MSG_ERROR([dpkg needed for deb creation. Install dpkg.])
         fi
     fi
-    if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null || \
-       echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
+    if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null; then
         if test "$with_epm" = "no" -a "$_os" != "Darwin"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
                 AC_MSG_CHECKING([whether epm is patched for Collabora Office's needs])
@@ -9442,15 +9440,10 @@ if test "$enable_epm" = "yes"; then
                     AC_MSG_RESULT([yes])
                 else
                     AC_MSG_RESULT([no])
-                    if echo "$PKGFORMAT" | $GREP -q rpm; then
-                        _pt="rpm"
-                        AC_MSG_WARN([the rpms will need to be installed with --nodeps])
-                        add_warning "the rpms will need to be installed with --nodeps"
-                    else
-                        _pt="pkg"
-                    fi
-                    AC_MSG_WARN([the ${_pt}s will not be relocatable])
-                    add_warning "the ${_pt}s will not be relocatable"
+                    AC_MSG_WARN([the rpms will need to be installed with --nodeps])
+                    add_warning "the rpms will need to be installed with --nodeps"
+                    AC_MSG_WARN([the rpms will not be relocatable])
+                    add_warning "the rpms will not be relocatable"
                     AC_MSG_WARN([if you want to make sure installation without --nodeps and
                                  relocation will work, you need to patch your epm with the
                                  patch in epm/epm-3.7.patch or build with
@@ -9459,19 +9452,12 @@ if test "$enable_epm" = "yes"; then
             fi
         fi
     fi
-    if echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
-        AC_PATH_PROG(PKGMK, pkgmk, no)
-        if test "$PKGMK" = "no"; then
-            AC_MSG_ERROR([pkgmk needed for Solaris pkg creation. Install it.])
-        fi
-    fi
     AC_SUBST(RPM)
     AC_SUBST(DPKG)
-    AC_SUBST(PKGMK)
 else
     for i in $PKGFORMAT; do
         case "$i" in
-        bsd | deb | pkg | rpm | native | portable)
+        bsd | deb | rpm | native | portable)
             AC_MSG_ERROR(
                 [--with-package-format='$PKGFORMAT' requires --enable-epm])
             ;;
@@ -14280,7 +14266,7 @@ rm -f a.out a.wasm a.out.js a.out.wasm
 dnl cspell:ignore Randr Xext alignof altlinuxhyph appex bzlib ccached coreutils createmsi cxxabi
 dnl cspell:ignore cygdrive devel devenv dlsym dtrace emconfigure fpch frobozz gnucp
 dnl cspell:ignore ifdef ifndef libc libdl libjpipe libstdc longjmp memcpy msicreator
-dnl cspell:ignore msiglobal mspdb msys nmake omindex optimised pagein pkgmk qconfig qtbase
+dnl cspell:ignore msiglobal mspdb msys nmake omindex optimised pagein qconfig qtbase
 dnl cspell:ignore quadrigraph rbbi rpms sccache strbuf stringop tosvg ucrt ustring uuidgen vclplugs
 dnl cspell:ignore vswhere werror wilangid xcent xcrun
 

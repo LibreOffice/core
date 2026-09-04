@@ -21,9 +21,6 @@
 # Start
 # scpModule
 # shellscript file (optional)
-# solarispackagename
-# solarisrequires (optional)
-# solarisprovides (optional)
 # packagename
 # linuxreplaces (optional)
 # requires (optional)
@@ -36,13 +33,10 @@
 
 Start
 module = "gid_Module_Langpack_Basis"
-solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
-solarisrequires = "%BASISPACKAGEPREFIX-core"
 packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
 provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
 vendor = "Collabora Productivity Ltd."
 description = "Language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
 destpath = "/opt"

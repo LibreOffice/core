@@ -584,9 +584,7 @@ sub get_packinfo
             {
                 # Some keys require "-" instead of "_" for example in "en-US". All package names do not use underlines.
                 my $locallang = $onelanguage;
-                if (( $onekey eq "solarispackagename" ) ||
-                   ( $onekey eq "solarisrequires" ) ||
-                   ( $onekey eq "packagename" ) ||
+                if (( $onekey eq "packagename" ) ||
                    ( $onekey eq "requires" )) { $locallang =~ s/_/-/g; } # avoiding illegal package abbreviation
                 $onepackage->{$onekey} =~ s/\%LANGUAGESTRING/$locallang/g;
             }

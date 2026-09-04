@@ -232,24 +232,6 @@ sub setglobalvariables
     # makefile calling the perl program.
     $installer::globals::installertypedir = $installer::globals::packageformat;
 
-    if ( $installer::globals::os eq 'SOLARIS')
-    {
-        $installer::globals::issolarisbuild = 1;
-        if ( $installer::globals::packageformat eq "pkg" )
-        {
-            $installer::globals::issolarispkgbuild = 1;
-            $installer::globals::epmoutpath = "packages";
-        }
-        if ( $installer::globals::cpuname eq 'INTEL')
-        {
-            $installer::globals::issolarisx86build = 1;
-        }
-        else
-        {
-            $installer::globals::issolarissparcbuild = 1;
-        }
-    }
-
     if ( $installer::globals::os eq 'MACOSX' )
     {
         $installer::globals::ismacbuild = 1;

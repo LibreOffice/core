@@ -33,11 +33,9 @@ difference for those between an installation set and the instdir method)
 VARIABLE NAME                   USAGE
 -------------------------------------------------------------------------------
 BASISPACKAGEPREFIX              name prefix for the installation packages
-                                for Linux/Solaris platforms
+                                for Linux platforms
 UREPACKAGEPREFIX                name prefix for the URE installation packages
                                 for Linux platforms
-SOLSUREPACKAGEPREFIX            name prefix for the URE installation packages
-                                for Solaris platforms
 
 UPDATEURL                       URL for the application update functionality
 

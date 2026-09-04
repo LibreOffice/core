@@ -32,9 +32,6 @@ linenum=LINENUMBERPLACEHOLDER
 platform=`uname -s`
 
 case $platform in
-SunOS)
-  tail_prog="tail"
-  ;;
 Linux)
   tail_prog="tail -n"
   ;;
@@ -62,19 +59,6 @@ while [ x$agreed = x ]; do
 done
 
 case $platform in
-SunOS)
-  SEARCHPACKAGENAME="BASISPACKAGEPREFIXPLACEHOLDERPRODUCTVERSIONPLACEHOLDER-core01"
-  echo
-  echo "Searching for the FULLPRODUCTNAMELONGPLACEHOLDER installation ..."
-  PACKAGENAME=`pkginfo -x | grep $SEARCHPACKAGENAME | sed "s/ .*//"`
-  if [ "x$PACKAGENAME" != "x" ]
-  then
-    PRODUCTINSTALLLOCATION="`pkginfo -r $PACKAGENAME`"
-  else
-    echo "FULLPRODUCTNAMELONGPLACEHOLDER not installed (no package $SEARCHPACKAGENAME installed)"
-    exit 1
-  fi
-  ;;
 Linux)
   SEARCHPACKAGENAME="BASISPACKAGEPREFIXPLACEHOLDERPRODUCTVERSIONPLACEHOLDER-core01"
   FIXPATH="/openoffice.org"
@@ -146,12 +130,6 @@ echo "Unpacking and installing..."
 #fi
 
 case $platform in
-SunOS)
-  $tail_prog +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
-  adminfile=$outdir/admin.$$
-  echo "basedir=$PRODUCTINSTALLLOCATION" > $adminfile
-INSTALLLINES
-  ;;
 Linux)
   $tail_prog +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
 INSTALLLINES

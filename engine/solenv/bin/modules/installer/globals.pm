@@ -50,10 +50,6 @@ BEGIN
     $installer::globals::islinuxbuild = 0;
     $installer::globals::isrpmbuild = 0;
     $installer::globals::isdebbuild = 0;
-    $installer::globals::issolarisbuild = 0;
-    $installer::globals::issolarispkgbuild = 0;
-    $installer::globals::issolarissparcbuild = 0;
-    $installer::globals::issolarisx86build = 0;
     $installer::globals::isfreebsdbuild = 0;
     $installer::globals::isfreebsdpkgbuild = 0;
     $installer::globals::ismacbuild = 0;
@@ -91,10 +87,6 @@ BEGIN
     $installer::globals::globalblock = "Globals";
     $installer::globals::rootmodulegid = "";
     %installer::globals::alllangmodules = ();
-    $installer::globals::englishlicenseset = 0;
-    $installer::globals::englishlicense = "";
-    $installer::globals::englishsolarislicensename = "LICENSE"; # _en-US";
-    $installer::globals::solarisdontcompress = 0;
     $installer::globals::patharray = "";
 
     $installer::globals::is_special_epm = 0;
@@ -126,7 +118,6 @@ BEGIN
     %installer::globals::alluniquefilenames = ();
     %installer::globals::alllcuniquefilenames = ();
     %installer::globals::uniquefilenamesequence = ();
-    %installer::globals::dependfilenames = ();
     $installer::globals::manufacturer = "";
     $installer::globals::longmanufacturer = "";
     @installer::globals::allddffiles = ();
@@ -195,7 +186,7 @@ BEGIN
     $installer::globals::postprocess_standardepm = 0;
     $installer::globals::mergemodules_analyzed = 0;
 
-    @installer::globals::packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
+    @installer::globals::packagelistitems = ("module", "packagename", "copyright", "vendor", "description" );
     @installer::globals::featurecollector =();
     $installer::globals::macinstallfilename = $ENV{'WORKDIR'} . "/CustomTarget/setup_native/mac/macinstall.ulf";
     $installer::globals::extensioninstalldir = "gid_Dir_Share_Extension_Install";

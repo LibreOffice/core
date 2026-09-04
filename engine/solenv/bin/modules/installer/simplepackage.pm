@@ -456,9 +456,9 @@ sub create_package
     }
     else
     {
-        # use fakeroot (only required for Solaris and Linux)
+        # use fakeroot (only required for Linux)
         my $fakerootstring = "";
-        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild ))
+        if ( $installer::globals::islinuxbuild )
         {
             $fakerootstring = "fakeroot";
         }

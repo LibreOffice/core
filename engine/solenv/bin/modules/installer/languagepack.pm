@@ -122,7 +122,7 @@ sub put_license_file_into_script
 }
 
 #########################################################
-# Creating a tar.gz file from a Solaris package
+# Creating a tar.gz file from the packages
 #########################################################
 
 sub create_tar_gz_file
@@ -207,22 +207,6 @@ sub determine_packagename
         $allnames = $rpmfiles;
     }
 
-    if ( $installer::globals::issolarisbuild )
-    {
-        # determining the Solaris package file in directory $installdir
-        my $alldirs = installer::systemactions::get_all_directories($installdir);
-
-        if ( ! ( $#{$alldirs} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
-        my $alldirssav = [@{$alldirs}];
-        for ( my $i = 0; $i <= $#{$alldirs}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$alldirs}[$i]); }
-
-        $packagename = get_packagename_from_packagelist($alldirs, $allvariables, $languagestringref);
-        my $packagestring = installer::converter::convert_array_to_space_separated_string($alldirs);
-        $packagename = create_tar_gz_file($installdir, $packagename, $packagestring);   # only a file (not a directory) can be included into the shell script
-        for ( my $i = 0; $i <= $#{$alldirssav}; $i++ ) { installer::systemactions::remove_complete_directory(${$alldirssav}[$i], 1); }
-        $allnames = $alldirs;
-    }
-
     my $infoline = "Found package in installation directory $installdir : $packagename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
@@ -245,14 +229,10 @@ sub put_packagename_into_script
 
     my $installline = "";
 
-    if ( $installer::globals::issolarisbuild ) { $installline = "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile"; }
-
     if ( $installer::globals::isrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION --replacepkgs -i"; }
 
     for ( my $i = 0; $i <= $#{$allnames}; $i++ )
     {
-        if ( $installer::globals::issolarisbuild ) { $installline = $installline . " ${$allnames}[$i]"; }
-
         if ( $installer::globals::isrpmbuild ) { $installline = $installline . " \$outdir/${$allnames}[$i]"; }
     }
 
@@ -317,8 +297,6 @@ sub put_searchpackage_into_script
 
     my $basispackageprefix = $variableshashref->{'BASISPACKAGEPREFIX'};
     my $productversion = $variableshashref->{'PRODUCTVERSION'};
-
-    if ( $installer::globals::issolarisbuild ) { $productversion =~ s/\.//g; } # "3.0" -> "30"
 
     my $infoline = "Adding basis package prefix $basispackageprefix into language pack script\n";
     push( @installer::globals::logfileinfo, $infoline);

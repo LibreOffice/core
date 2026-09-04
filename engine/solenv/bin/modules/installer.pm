@@ -257,7 +257,6 @@ sub run {
 
     if (( ! $installer::globals::isrpmbuild ) &&
         ( ! $installer::globals::isdebbuild ) &&
-        ( ! $installer::globals::issolarispkgbuild ) &&
         ( $installer::globals::packageformat ne "installed" ) &&
         ( $installer::globals::packageformat ne "dmg" ) &&
         ( $installer::globals::packageformat ne "archive" ))
@@ -704,13 +703,6 @@ sub run {
         my $listfiledir = installer::systemactions::create_directories("listfile", $languagestringref);
         my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
 
-        ####################################################
-        # Reading for Solaris all package descriptions
-        # from file defined in property PACKAGEMAP
-        ####################################################
-
-        if (  $installer::globals::issolarisbuild ) { installer::epmfile::read_packagemap($allvariableshashref, $includepatharrayref, $languagesarrayref); }
-
         ###########################################
         # Checking epm state
         ###########################################
@@ -750,14 +742,7 @@ sub run {
 
             my $packagename = "";
 
-            if ( $installer::globals::issolarisbuild )   # only for Solaris
-            {
-                if ( $onepackage->{'solarispackagename'} ) { $packagename = $onepackage->{'solarispackagename'}; }
-            }
-            else # not Solaris
-            {
-                if ( $onepackage->{'packagename'} ) { $packagename = $onepackage->{'packagename'}; }
-            }
+            if ( $onepackage->{'packagename'} ) { $packagename = $onepackage->{'packagename'}; }
 
             if (!($packagename eq ""))
             {
@@ -924,7 +909,6 @@ sub run {
                 # ... replacing the variable PRODUCTDIRECTORYNAME in the shellscriptfile by $staticpath
 
                 installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "PRODUCTDIRECTORYNAME", $staticpath);
-                installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "SOLSUREPACKAGEPREFIX", $allvariableshashref->{'SOLSUREPACKAGEPREFIX'});
                 installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "UREPACKAGEPREFIX", $allvariableshashref->{'UREPACKAGEPREFIX'});
                 installer::files::save_file($completeepmfilename ,\@epmfile);
 
@@ -952,13 +936,12 @@ sub run {
 
                     # With a patched epm, it is now possible to set the relocatable directory, change
                     # the directory in which the packages are created, setting "requires" and "provides"
-                    # (Linux) or creating the "depend" file (Solaris) and finally to begin
+                    # (Linux) and finally to begin
                     # the packaging process with standard tooling and standard parameter
                     # Linux: Adding into the spec file: Prefix: /opt
-                    # Solaris: Adding into the pkginfo file: BASEDIR=/opt
                     # Attention: Changing of the path can influence the shell scripts
 
-                    if (( $installer::globals::is_special_epm ) && ( ($installer::globals::isrpmbuild) || ($installer::globals::issolarispkgbuild) ))   # special handling only for Linux RPMs and Solaris Packages
+                    if (( $installer::globals::is_special_epm ) && ( $installer::globals::isrpmbuild ))   # special handling only for Linux RPMs
                     {
                         if ( $installer::globals::call_epm )    # only do something, if epm is really executed
                         {
@@ -977,7 +960,6 @@ sub run {
                             installer::epmfile::remove_temporary_epm_files($newepmdir, $loggingdir, $packagename);
 
                             # Installation:
-                            # Install: pkgadd -a myAdminfile -d ./SUNWso8m34.pkg
                             # Install: rpm -i --prefix=/opt/special --nodeps so8m35.rpm
 
                             installer::epmfile::create_new_directory_structure($newepmdir);
@@ -996,7 +978,7 @@ sub run {
                         }
                     }
 
-                    else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
+                    else    # this is the standard epm (not relocatable) or nonlinux
                     {
                         installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "\$\$PRODUCTINSTALLLOCATION", $relocatablepath);
                         installer::files::save_file($completeepmfilename ,\@epmfile);   # Warning for pool, content of epm file is changed.
@@ -1020,7 +1002,7 @@ sub run {
                                 installer::epmfile::call_epm($epmexecutable, $completedbgepmfilename, $packagename . "-debuginfo", $includepatharrayref);
                             }
 
-                            if (($installer::globals::isrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
+                            if (($installer::globals::isrpmbuild) || ($installer::globals::debian))
                             {
                                 $installer::globals::postprocess_standardepm = 1;
                             }
@@ -1083,8 +1065,6 @@ sub run {
 
             chdir($currentdir); # changing back into start directory
         }
-
-        if (( $installer::globals::issolarispkgbuild ) && ( $allvariableshashref->{'COLLECT_PKGMAP'} )) { installer::worker::collectpackagemaps($installdir, $languagestringref, $allvariableshashref); }
 
         #######################################################
         # Analyzing the log file

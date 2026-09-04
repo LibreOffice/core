@@ -119,7 +119,6 @@ sub set_global_environment_variables
     if ( $ENV{'MAX_LANG_LENGTH'} ) { $installer::globals::max_lang_length = $ENV{'MAX_LANG_LENGTH'}; }
 
     if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
-    if ( $ENV{'DONTCOMPRESS'} ) { $installer::globals::solarisdontcompress = 1; }
     if ( $ENV{'IGNORE_ERROR_IN_LOGFILE'} ) { $installer::globals::ignore_error_in_logfile = 1; }
     if (!( $ENV{'ENABLE_SYMBOLS_FOR'} ) || !( $ENV{'ENABLE_SYMBOLS_FOR'} ne '' )) { $installer::globals::strip = 1; } # it is 0 by default
 

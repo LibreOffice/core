@@ -13,7 +13,6 @@ Globals
             PACKAGEPREFIX
             BASISPACKAGEPREFIX collaboraofficebasis
             UREPACKAGEPREFIX collaboraoffice
-            SOLSUREPACKAGEPREFIX libreoffice
             PROGRESSBARCOLOR 0,0,0
             PROGRESSSIZE 460,6
             PROGRESSSIZEHIGH 617,12
@@ -23,7 +22,6 @@ Globals
             PROGRESSTEXTBASELINE 230
             PROGRESSTEXTCOLOR 255,255,255
             NATIVEPROGRESS false
-            PACKAGEMAP package_names.txt,package_names_ext.txt
             OOOVENDOR Collabora Productivity Ltd.
         }
     }

@@ -596,10 +596,7 @@ sub copy_complete_directory
             }
             if ( -d $source ) # recursive
             {
-                if ((!( $source =~ /packages\/SUNW/ )) && (!( $source =~ /packages\/OOO/ ))) # do not copy complete Solaris packages!
-                {
-                    copy_complete_directory($source, $dest);
-                }
+                copy_complete_directory($source, $dest);
             }
         }
     }

@@ -181,8 +181,6 @@ sub add_lowercase_productname_setupscriptvariable
                 push(@{$variablesref} ,$newline);
                 $newline = "\%WITHOUTDOTUNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
-                $newline = "\%SOLARISBRANDPACKAGENAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
                 $value = $original;
             }
             elsif  ( $key eq "PRODUCTEXTENSION" )
@@ -465,12 +463,11 @@ sub replace_preset_properties
 {
     my ($allvariables) = @_;
 
-    # SOLARISBRANDPACKAGENAME
+    # SYSTEMINTUNIXPACKAGENAME
     # needs to be replaced by
-    # PRESETSOLARISBRANDPACKAGENAME
+    # PRESETSYSTEMINTUNIXPACKAGENAME
 
     my @presetproperties = ();
-    push(@presetproperties, "SOLARISBRANDPACKAGENAME");
 
 
     foreach my $property ( @presetproperties )
