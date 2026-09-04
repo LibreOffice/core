@@ -403,22 +403,6 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="extensions">
-                        <property name="label" translatable="yes" context="startcenter|extensions">E_xtensions</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <property name="use-underline">True</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

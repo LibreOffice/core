@@ -29,7 +29,6 @@
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <unotools/configmgr.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
@@ -41,7 +40,6 @@
 #include <sfx2/app.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -51,8 +49,6 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
@@ -149,7 +145,6 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mxBrandImage(new BrandImage)
     , mxBrandImageWeld(new weld::CustomWeld(*m_xBuilder, u"daBrand"_ustr, *mxBrandImage))
     , mxHelpButton(m_xBuilder->weld_button(u"help"_ustr))
-    , mxExtensionsButton(m_xBuilder->weld_button(u"extensions"_ustr))
     , mxAllButtonsBox(m_xBuilder->weld_container(u"all_buttons_box"_ustr))
     , mxButtonsBox(m_xBuilder->weld_container(u"buttons_box"_ustr))
     , mxSmallButtonsBox(m_xBuilder->weld_container(u"small_buttons_box"_ustr))
@@ -232,7 +227,6 @@ void BackingWindow::dispose()
     mxBrandImageWeld.reset();
     mxBrandImage.reset();
     mxHelpButton.reset();
-    mxExtensionsButton.reset();
     mxAllButtonsBox.reset();
     mxButtonsBox.reset();
     mxSmallButtonsBox.reset();
@@ -285,8 +279,6 @@ void BackingWindow::initControls()
     mxLocalView->ShowTooltips( true );
 
     checkInstalledModules();
-
-    mxExtensionsButton->connect_clicked(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     mxOpenButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
 
@@ -516,26 +508,6 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
     css::uno::Reference<XFramesSupplier> xFramesSupplier(mxDesktopDispatchProvider, UNO_QUERY);
     if (xFramesSupplier)
         xFramesSupplier->setActiveFrame(mxFrame);
-}
-
-IMPL_STATIC_LINK_NOARG(BackingWindow, ExtLinkClickHdl, weld::Button&, void)
-{
-    try
-    {
-        OUString sURL = officecfg::Office::Common::Menus::ExtensionsURL::get() +
-                "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
-
-        Reference<css::system::XSystemShellExecute> const
-            xSystemShellExecute(
-                css::system::SystemShellExecute::create(
-                    ::comphelper::getProcessComponentContext()));
-        xSystemShellExecute->execute(sURL, OUString(),
-            css::system::SystemShellExecuteFlags::URIS_ONLY);
-    }
-    catch (const cpo::uno::Exception&)
-    {
-    }
 }
 
 void BackingWindow::applyFilter()

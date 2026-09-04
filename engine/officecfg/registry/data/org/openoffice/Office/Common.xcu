@@ -268,9 +268,6 @@
     <prop oor:name="VolunteerURL" oor:type="xs:string">
       <value>https://hub.libreoffice.org/volunteersupport/</value>
     </prop>
-    <prop oor:name="ExtensionsURL" oor:type="xs:string">
-      <value>https://hub.libreoffice.org/extensions/</value>
-    </prop>
   </node>
   <node oor:name="Forms">
     <node oor:name="ControlLayout">
