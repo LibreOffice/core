@@ -314,16 +314,18 @@ class SlideLinks {
 		const textMsg = e.textMsg || '';
 		if (!textMsg.startsWith('exportslides:')) return;
 
-		const stagedName = SlideImportSession.stagedExportName(
-			textMsg.substring('exportslides:'.length),
-		);
+		const body = textMsg.substring('exportslides:'.length);
+		const stagedName = SlideImportSession.stagedExportName(body);
 		if (!stagedName) {
 			const refresh = this.running;
 			this.running = null;
+			const missing =
+				refresh.byIdentifier &&
+				SlideImportSession.exportFailureKind(body) === 'failed';
 			this.say(
-				refresh.byIdentifier
+				missing
 					? _(
-							'Cannot update the slides of {0} : source lacks the original slides or slide identifiers',
+							'Cannot update the slides of {0}: source lacks the matching slides',
 						).replace('{0}', () => refresh.source)
 					: _(
 							'The slides of {0} could not be read into this presentation.',

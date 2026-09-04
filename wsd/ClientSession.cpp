@@ -1553,8 +1553,9 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         if (!allowsCleanExport())
         {
             LOG_WRN("Refusing to write the pages of a document out: the host allows no export");
-            sendTextFrameAndLogError("error: cmd=exportslides kind=failed");
-            return false;
+            // The request is answered by the frame that answers every request for these pages,
+            // so a view waiting on them hears the answer to its own request.
+            return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"noexport\"}");
         }
 
         return forwardToChild(firstLine, docBroker);

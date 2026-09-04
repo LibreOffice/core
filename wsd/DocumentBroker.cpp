@@ -5143,14 +5143,26 @@ void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
     static constexpr std::string_view ExportPrefix = "exportslides: ";
     if (COOLProtocol::matchPrefix(ExportPrefix, payload))
     {
-        const std::string stagedName = stageExportedSlides(
-            std::string_view(payload.data() + ExportPrefix.size(),
-                             payload.size() - ExportPrefix.size()));
-        const std::string answer =
-            "remotedoccommandresult: wopisrc=" + encodedWopiSrc + "\nexportslides: " +
-            (stagedName.empty() ? std::string("{\"status\":\"failed\"}")
-                                : "{\"status\":\"staged\",\"name\":\"" +
-                                      JsonUtil::escapeJSONValue(stagedName) + "\"}");
+        const std::string_view body(payload.data() + ExportPrefix.size(),
+                                    payload.size() - ExportPrefix.size());
+        const std::string stagedName = stageExportedSlides(body);
+        std::string status = "{\"status\":\"failed\"}";
+        if (!stagedName.empty())
+        {
+            status = "{\"status\":\"staged\",\"name\":\"" +
+                     JsonUtil::escapeJSONValue(stagedName) + "\"}";
+        }
+        else if (!body.empty() && body.size() <= 256 &&
+                 body.find('\n') == std::string_view::npos)
+        {
+            // A source that wrote no pages says why in its answer, which is one line and the
+            // whole of it. An answer carrying pages holds a header line and then the file, so
+            // one that could not be staged tells the client that much and no more.
+            status = std::string(body);
+        }
+
+        const std::string answer = "remotedoccommandresult: wopisrc=" + encodedWopiSrc +
+                                   "\nexportslides: " + status;
         it->second->sendTextFrame(answer);
         return;
     }

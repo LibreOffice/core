@@ -2338,6 +2338,9 @@ std::string joinPartIdList(const std::vector<std::string>& parts)
 
 bool ChildSession::exportSlides(const StringVector& tokens)
 {
+    // Every request for the pages of this document is answered by an exportslides frame,
+    // whether the pages were written or not, so that a view waiting on the pages of a document
+    // it reads through a remote link hears the answer to its own request.
     // The pages to write are named either by their part, which is what a client picking slides
     // of this document holds, or by the identifier each one keeps in ODF, which is what a
     // document holding pages read from this one records for them.
@@ -2347,23 +2350,23 @@ bool ChildSession::exportSlides(const StringVector& tokens)
         (tokens.size() == 2 && !getTokenString(tokens[1], "slides", slideList) &&
          !getTokenString(tokens[1], "guids", guidList)))
     {
-        sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
-        return false;
+        LOG_ERR("exportslides: the request names no pages this document can write");
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"syntax\"}");
     }
 
     // No list of pages at all writes every page of the document out.
     std::vector<std::string> slides;
     if (!slideList.empty() && !parsePartIdList(slideList, slides))
     {
-        sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
-        return false;
+        LOG_ERR("exportslides: [" << slideList << "] is no list of parts");
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"syntax\"}");
     }
 
     std::vector<std::string> guids;
     if (!guidList.empty() && !parseSlideGuidList(guidList, guids))
     {
-        sendTextFrameAndLogError("error: cmd=exportslides kind=syntax");
-        return false;
+        LOG_ERR("exportslides: [" << guidList << "] is no list of slide identifiers");
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"syntax\"}");
     }
 
     // The presentation is written in a directory of this document's own and travels back as
@@ -2395,8 +2398,10 @@ bool ChildSession::exportSlides(const StringVector& tokens)
 
     if (answer.empty())
     {
-        sendTextFrameAndLogError("error: cmd=exportslides kind=failed");
-        return false;
+        // The pages could not be written, which is what a document holding none of the slides
+        // that were asked for by identifier comes to.
+        LOG_ERR("exportslides: the pages of this document were not written");
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"failed\"}");
     }
 
     return sendBinaryFrame(answer.data(), answer.size());

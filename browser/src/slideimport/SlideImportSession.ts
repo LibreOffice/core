@@ -227,6 +227,17 @@ class SlideImportSession {
 		this.setError({ message: message, retry: null });
 	}
 
+	public exportFailed(): void {
+		if (this.pendingInserts > 0) this.pendingInserts--;
+		const insert = this.pendingInsert;
+		this.pendingInsert = null;
+		if (this.state === 'inserting') this.setState('ready');
+		this.setError({
+			message: _('The slides of the source could not be read.'),
+			retry: insert ? () => this.requestInsert(insert.slides, insert.at) : null,
+		});
+	}
+
 	private setError(error: SlideImportError | null): void {
 		if (error === null && this.error === null) return;
 		this.error = error;
@@ -368,6 +379,17 @@ class SlideImportSession {
 		app.socket.sendMessage(
 			'remotedoccommand wopisrc=' + encodeURIComponent(wopiSrc) + ' ' + inner,
 		);
+	}
+
+	public static exportFailureKind(json: string): string {
+		try {
+			const written = JSON.parse(json);
+			return written && written.status === 'failed' && written.kind
+				? written.kind
+				: '';
+		} catch {
+			return '';
+		}
 	}
 
 	// The name the server staged an exported presentation under, from the

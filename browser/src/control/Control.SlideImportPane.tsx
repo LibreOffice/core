@@ -269,7 +269,7 @@ class SlideImportPane {
 
     const stagedName = SlideImportSession.stagedExportName(json);
     if (!stagedName) {
-      app.events.fire('slideimport:error', {});
+      this.session.exportFailed();
       return;
     }
 
