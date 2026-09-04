@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-01 16:27+0200\n"
-"PO-Revision-Date: 2026-08-22 08:51+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
+"PO-Revision-Date: 2026-09-04 06:51+0000\n"
+"Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.9\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -490,38 +490,40 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:542
 msgid "Invalid request"
-msgstr ""
+msgstr "Ogiltig begäran"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:543
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Ogiltig API-nyckel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:544
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "API-nyckeln saknar tillstånd"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:547
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Denna AI-värd finns inte i serverns tillåtna värdlista (lok_allow.host). "
+"Fråga om din administratör kan tillåta den."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Åtkomstbegränsad - prova igen senare"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:550
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API-serverfel - prova igen senare"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Tjänsten är tillfälligt otillgänglig"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:609
 msgid "Signature Certificate"
@@ -585,7 +587,7 @@ msgstr "Automatisk stavningskontroll"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:627
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Använd serverns skalningsinställningar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:628
 msgid "Smart Zoom"
@@ -940,13 +942,15 @@ msgstr "Ställ in gränssnittspreferenser."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1379
 #: admin/src/integrator/AdminIntegratorSettings.ts:3444
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Skalningsbeteende"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1524
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"När aktiv, öppnas textdokument med den skalning som servern väljer. "
+"Avaktivera för att välja skalning själv."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1530
 msgid ""
@@ -1354,11 +1358,11 @@ msgstr "Tabellstilar"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Ange som standard"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Duplicera stil"
 
 #: src/canvas/sections/CommentListSection.ts:2025
 #: src/canvas/sections/CommentListSection.ts:2038
@@ -1986,189 +1990,200 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "Request too large"
-msgstr ""
+msgstr "Begäran är för stor"
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
-msgstr ""
+msgstr "Ogiltigt format på begäran"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Begäran ersattes av en nyare begäran"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "Inga meddelanden tillhandahölls"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Meddelandet är för stort"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "AI-funktionerna är inaktiverade av administratören"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "AI-funktionerna är inte tillgängliga för gäster"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "AI-funktionerna är inaktiverade för detta dokument"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "AI-funktionerna är inte konfigurerade"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "URL:en till AI-leverantören är ogiltig, kontrollera AI-inställningarna"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
 msgstr ""
+"URL:en till AI-bildleverantören är ogiltig, kontrollera AI-inställningarna"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"Värd \"{0}\" är inte i den tillåtna värdlistan, kontakta din administratör"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Nätverksfel - kontrollera din anslutning"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Kunde inte ansluta till AI-leverantören"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "Inget svar från AI-tjänsten"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "AI-tjänsten använde för många verktygssteg"
 
 #: src/control/Control.AIChatSidebar.ts:2169
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"Modellen har inte tillräckligt med tokens för att slutföra produktionen. "
+"Prova en mindre omfattande fråga eller välj en modell med en större budget."
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"Modellen returnerade ett tomt svar (inga tokens genererade). Detta är "
+"vanligtvis ett tillfälligt problem hos leverantören - prova igen eller välj "
+"en annan modell."
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "Bildgenerering misslyckades: ingen prompt från modellen"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "Dokumentet är inte tillgängligt"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "Den redigerade översikten är inte giltig: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2179
 msgid "Could not build any slides from the outline. Please try again."
-msgstr ""
+msgstr "Kunde inte bygga några bilder från översikten. Försök igen."
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "AI-bildfunktionerna är inte konfigurerade"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "Bildmodellen är inte konfigurerad"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Bildgenerering misslyckades: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "Ingen bild genererad"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Misslyckades med att läsa in AI-svaret"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "AI-leverantören avvisade begäran som ogiltig"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "API-fel ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Extraherar länkmålen ..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Utvärderar formeln ..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Läser in funktionskatalogen ..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Arbetar ..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Arbetar ..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Skapar formler ..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Skapar bild {0} av {1} ..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Hoppar över bild {0} ..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Skapar bild {0} av {1} ..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Dokumentet är för stort för att läsa i sin helhet. Välj ett avsnitt att "
+"fokusera på:"
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Kalkylbladsarket är för stort för att läsa i sin helhet. För att begränsa "
+"det, kan du:"
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
-msgstr ""
+msgstr "Välj en rad celler i arket, ställ sedan din fråga igen"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
-msgstr ""
+msgstr "Svara med ett intervall att fokusera på, till exempel \"A1:D100\""
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
-msgstr ""
+msgstr "Din bildhög är klar: {0} bilder skapades från den godkända översikten."
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "{0} bilder kunde inte skapas och hoppades därför över."
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
-msgstr ""
+msgstr "bilder kunde inte skapas och visar därför en platshållare."
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -4233,7 +4248,7 @@ msgstr "Tabell design"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Verktyg"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4425,29 +4440,28 @@ msgid "Animations"
 msgstr "Animeringar"
 
 #: src/control/Control.Notebookbar.js:581
-#, fuzzy
 msgid "Start:"
-msgstr "Starta"
+msgstr "Börja:"
 
 #: src/control/Control.Notebookbar.js:581
 msgid "End:"
-msgstr ""
+msgstr "Sluta:"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Påbörja stil för pilhuvud"
 
 #: src/control/Control.Notebookbar.js:594
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Avsluta stil för pilhuvud"
 
 #: src/control/Control.Notebookbar.js:669
 msgid "Line Width"
-msgstr ""
+msgstr "Linjebredd"
 
 #: src/control/Control.Notebookbar.js:694
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Linjetransparens:"
 
 #: src/control/Control.NotebookbarBuilder.js:203
 #: src/control/Control.NotebookbarBuilder.js:784
@@ -5498,19 +5512,19 @@ msgstr "Ange nytt bladnamn"
 
 #: src/control/Control.Tabs.js:735
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Skydda bladet"
 
 #: src/control/Control.Tabs.js:735
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Ange ett lösenord för att skydda bladet"
 
 #: src/control/Control.Tabs.js:739
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Avskydda bladet"
 
 #: src/control/Control.Tabs.js:739
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Ange lösenordet för att avskydda bladet"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -5567,11 +5581,11 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2709
 msgid "Confirm password"
-msgstr ""
+msgstr "Bekräfta lösenordet"
 
 #: src/control/Control.UIManager.ts:2755
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Bekräftelsen matchar inte lösenordet"
 
 #: src/control/Control.UIManager.ts:2973
 msgid "Copy error details"
@@ -5847,9 +5861,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Felaktigt lösenord. Försök igen."
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "För att kunna visa dokumentet krävs ett lösenord."
+msgstr "För att kunna redigera dokumentet krävs ett lösenord."
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6483,59 +6496,59 @@ msgstr "Infoga anteckning"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Mörk 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Ljus 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Mörk 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Ljus 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Accent 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Accent 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Accent 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Accent 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Accent 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Accent 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Länk"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Följd länk"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2 % ljusare"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2 % mörkare"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -6736,11 +6749,11 @@ msgstr "Kantlinjer"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Ny tabellstil ..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Rensa stil"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -6911,11 +6924,11 @@ msgstr "Endast dokumentägaren kan ändra lösenordet."
 
 #: src/app/Socket.ts:2454
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Du har inte behörighet att redigera detta dokument."
 
 #: src/app/Socket.ts:2455
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Dokumentet kunde inte göras redigerbart."
 
 #: src/app/Socket.ts:2500 src/app/Socket.ts:2511
 msgid "Missing Fonts"
@@ -7046,13 +7059,15 @@ msgstr "Fel eller saknad WOPISrc parameter, kontakta support."
 
 #: src/errormessages.js:31
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "Din session kommer att sluta om {time}. Läs om sidan för att fortsätta."
 
 #: src/errormessages.js:32
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Din session har löpt ut. Ytterligare ändringar av dokumentet kanske inte "
+"sparas. Läs om sidan för att fortsätta."
 
 #: src/errormessages.js:33
 msgid ""
@@ -7590,26 +7605,24 @@ msgid "End Show"
 msgstr "Avsluta showen"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Paus"
+msgstr "Pausad"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Återuppta"
+msgstr "Återupptaget"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animation: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animation: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Övergång: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7720,7 +7733,7 @@ msgstr "Sluta följa"
 
 #: src/control/Control.Extension.ts:471
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Utökningskommandot misslyckades: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
