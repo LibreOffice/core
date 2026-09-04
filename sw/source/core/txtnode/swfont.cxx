@@ -71,6 +71,23 @@ void SwFont::SetBackColor( std::optional<Color> xNewColor )
     m_aSub[SwFontScript::Latin].m_nFontCacheId = m_aSub[SwFontScript::CJK].m_nFontCacheId = m_aSub[SwFontScript::CTL].m_nFontCacheId = nullptr;
 }
 
+void SwFont::SetBorder(const SvxBoxItem* pBoxItem)
+{
+    if(!pBoxItem) return;
+    SetTopBorder(pBoxItem->GetTop());
+    SetBottomBorder(pBoxItem->GetBottom());
+    SetRightBorder(pBoxItem->GetRight());
+    SetLeftBorder(pBoxItem->GetLeft());
+}
+
+void SwFont::ClearBorders()
+{
+    SetTopBorder(nullptr);
+    SetBottomBorder(nullptr);
+    SetRightBorder(nullptr);
+    SetLeftBorder(nullptr);
+}
+
 void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
 {
     if( pTopBorder )
@@ -648,14 +665,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetHighlightColor(pItem->GetColor());
         if( const SvxBoxItem* pBoxItem = pAttrSet->GetItemIfSet( RES_CHRATR_BOX ) )
         {
-            SetTopBorder(pBoxItem->GetTop());
-            SetBottomBorder(pBoxItem->GetBottom());
-            SetRightBorder(pBoxItem->GetRight());
-            SetLeftBorder(pBoxItem->GetLeft());
-            SetTopBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::TOP));
-            SetBottomBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::BOTTOM));
-            SetRightBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::RIGHT));
-            SetLeftBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::LEFT));
+            SetBorder(pBoxItem);
+            SetBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::TOP),
+                          pBoxItem->GetDistance(SvxBoxItemLine::BOTTOM),
+                          pBoxItem->GetDistance(SvxBoxItemLine::RIGHT),
+                          pBoxItem->GetDistance(SvxBoxItemLine::LEFT));
         }
         if( const SvxShadowItem* pShadowItem = pAttrSet->GetItemIfSet( RES_CHRATR_SHADOW ) )
         {
@@ -818,25 +832,16 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetHighlightColor(COL_TRANSPARENT);
     if( const SvxBoxItem* pBoxItem = pAttrSet->GetItemIfSet( RES_CHRATR_BOX ) )
     {
-        SetTopBorder(pBoxItem->GetTop());
-        SetBottomBorder(pBoxItem->GetBottom());
-        SetRightBorder(pBoxItem->GetRight());
-        SetLeftBorder(pBoxItem->GetLeft());
-        SetTopBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::TOP));
-        SetBottomBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::BOTTOM));
-        SetRightBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::RIGHT));
-        SetLeftBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::LEFT));
+        SetBorder(pBoxItem);
+        SetBorderDist(pBoxItem->GetDistance(SvxBoxItemLine::TOP),
+                      pBoxItem->GetDistance(SvxBoxItemLine::BOTTOM),
+                      pBoxItem->GetDistance(SvxBoxItemLine::RIGHT),
+                      pBoxItem->GetDistance(SvxBoxItemLine::LEFT));
     }
     else
     {
-        SetTopBorder(nullptr);
-        SetBottomBorder(nullptr);
-        SetRightBorder(nullptr);
-        SetLeftBorder(nullptr);
-        SetTopBorderDist(0);
-        SetBottomBorderDist(0);
-        SetRightBorderDist(0);
-        SetLeftBorderDist(0);
+        ClearBorders();
+        SetBorderDist(0,0,0,0);
     }
 
     if( const SvxShadowItem* pShadowItem = pAttrSet->GetItemIfSet( RES_CHRATR_SHADOW ) )

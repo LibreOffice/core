@@ -39,6 +39,7 @@ class SwDoCapitals;     // DoCapitals
 class SwScriptInfo;     // GetTextSize_
 class SwViewShell;
 class IDocumentSettingAccess;
+class SvxBoxItem;
 enum class SvxShadowItemSide;
 
 const sal_Unicode CH_BLANK = ' ';   // ' ' blank spaces
@@ -354,6 +355,8 @@ public:
     void Invalidate()
         { m_bFontChg = m_bOrgChg = true; }
 
+    void SetBorder(const SvxBoxItem* pBoxItem);
+    void ClearBorders();
     void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );
     void SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder );
     void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
@@ -378,6 +381,10 @@ public:
     void SetBottomBorderDist( const sal_uInt16 nBottomDist );
     void SetRightBorderDist( const sal_uInt16 nRightDist );
     void SetLeftBorderDist( const sal_uInt16 nLeftDist );
+    void SetBorderDist(const sal_uInt16 nTopDist,
+                       const sal_uInt16 nBottomDist,
+                       const sal_uInt16 nRightDist,
+                       const sal_uInt16 nLeftDist);
 
     sal_uInt16 GetTopBorderDist() const { return m_nTopBorderDist; }
     sal_uInt16 GetBottomBorderDist() const { return m_nBottomBorderDist; }
@@ -906,6 +913,14 @@ inline void SwFont::SetLeftBorderDist( const sal_uInt16 nLeftDist )
     m_nLeftBorderDist = nLeftDist;
     m_bFontChg = true;
     m_aSub[SwFontScript::Latin].m_nFontCacheId = m_aSub[SwFontScript::CJK].m_nFontCacheId = m_aSub[SwFontScript::CTL].m_nFontCacheId = nullptr;
+}
+
+inline void SwFont::SetBorderDist(const sal_uInt16 nTopDist, const sal_uInt16 nBottomDist, const sal_uInt16 nRightDist, const sal_uInt16 nLeftDist)
+{
+    SetTopBorderDist(nTopDist);
+    SetBottomBorderDist(nBottomDist);
+    SetRightBorderDist(nRightDist);
+    SetLeftBorderDist(nLeftDist);
 }
 
 inline sal_uInt16 SwFont::GetTopBorderSpace() const
