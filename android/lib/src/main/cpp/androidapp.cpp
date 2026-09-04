@@ -357,7 +357,6 @@ Java_org_libreoffice_androidlib_LOActivity_getClipboardContent(JNIEnv *env, jobj
     const char** mimeTypes = nullptr;
     std::vector<std::string> outMimeTypes;
     std::vector<std::vector<char>> outStreams;
-    bool bResult = false;
 
     jclass jclazz = env->FindClass("java/util/ArrayList");
     jmethodID methodId_ArrayList_Add = env->GetMethodID(jclazz, "add", "(Ljava/lang/Object;)Z");
@@ -370,77 +369,71 @@ Java_org_libreoffice_androidlib_LOActivity_getClipboardContent(JNIEnv *env, jobj
     jclass class_LokClipboardData = env->GetObjectClass(lokClipboardData);
     jfieldID fieldId_LokClipboardData_clipboardEntries = env->GetFieldID(class_LokClipboardData , "clipboardEntries", "Ljava/util/ArrayList;");
 
-    if (getLOKDocumentForAndroidOnly()->getClipboard(mimeTypes, outMimeTypes, outStreams))
+    auto items = getLOKDocumentForAndroidOnly()->getClipboard(mimeTypes);
+    if (items.empty())
     {
-        // return early
-        if (outMimeTypes.size() == 0)
-            return bResult;
-
-        for (size_t i = 0; i < outMimeTypes.size(); ++i)
-        {
-            // Create new LokClipboardEntry instance
-            jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
-
-            jstring mimeType = env->NewStringUTF(outMimeTypes[i].c_str());
-            // clipboardEntry.mime= mimeType
-            env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
-            env->DeleteLocalRef(mimeType);
-
-            size_t aByteArraySize = outStreams[i].size();
-            jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
-            // Copy char* to bytearray
-            env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) outStreams[i].data());
-            // clipboardEntry.data = aByteArray
-            env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
-
-            // clipboardData.clipboardEntries
-            jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
-
-            // clipboardEntries.add(clipboardEntry)
-            env->CallBooleanMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_Add, clipboardEntry);
-        }
-        bResult = true;
-    }
-    else
         LOG_DBG("failed to fetch mime-types");
+        return false;
+    }
+
+    for (const auto& item : items)
+    {
+        // Create new LokClipboardEntry instance
+        jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
+
+        jstring mimeType = env->NewStringUTF(item.aMimeType.c_str());
+        // clipboardEntry.mime= mimeType
+        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
+        env->DeleteLocalRef(mimeType);
+
+        const size_t aByteArraySize = item.aData.size();
+        jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
+        // Copy char* to bytearray
+        env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) item.aData.data());
+        // clipboardEntry.data = aByteArray
+        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
+
+        // clipboardData.clipboardEntries
+        jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
+
+        // clipboardEntries.add(clipboardEntry)
+        env->CallBooleanMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_Add, clipboardEntry);
+    }
 
     const char* mimeTypesHTML[] = { "text/plain;charset=utf-8", "text/html", nullptr };
 
-    if (getLOKDocumentForAndroidOnly()->getClipboard(mimeTypesHTML, outMimeTypes, outStreams))
+    items = getLOKDocumentForAndroidOnly()->getClipboard(mimeTypesHTML);
+    if (items.empty())
     {
-        // return early
-        if (outMimeTypes.size() == 0)
-            return bResult;
-
-        for (size_t i = 0; i < outMimeTypes.size(); ++i)
-        {
-            // Create new LokClipboardEntry instance
-            jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
-
-            jstring mimeType = env->NewStringUTF(outMimeTypes[i].c_str());
-            // clipboardEntry.mime= mimeType
-            env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
-            env->DeleteLocalRef(mimeType);
-
-            size_t aByteArraySize = outStreams[i].size();
-            jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
-            // Copy char* to bytearray
-            env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) outStreams[i].data());
-            // clipboardEntry.data = aByteArray
-            env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
-
-            // clipboardData.clipboardEntries
-            jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
-
-            // clipboardEntries.add(clipboardEntry)
-            env->CallBooleanMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_Add, clipboardEntry);
-        }
-        bResult = true;
-    }
-    else
         LOG_DBG("failed to fetch mime-types");
+        return false;
+    }
 
-    return bResult;
+    for (const auto& item : items)
+    {
+        // Create new LokClipboardEntry instance
+        jobject clipboardEntry = env->NewObject(class_LokClipboardEntry, methodId_LokClipboardEntry_Constructor);
+
+        jstring mimeType = env->NewStringUTF(item.aMimeType.c_str());
+        // clipboardEntry.mime= mimeType
+        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Mime, mimeType);
+        env->DeleteLocalRef(mimeType);
+
+        size_t aByteArraySize = item.aData.size();
+        jbyteArray aByteArray = env->NewByteArray(aByteArraySize);
+        // Copy char* to bytearray
+        env->SetByteArrayRegion(aByteArray, 0, aByteArraySize, (jbyte*) item.aData.data());
+        // clipboardEntry.data = aByteArray
+        env->SetObjectField(clipboardEntry, fieldId_LokClipboardEntry_Data, aByteArray);
+
+        // clipboardData.clipboardEntries
+        jobject lokClipboardData_clipboardEntries = env->GetObjectField(lokClipboardData, fieldId_LokClipboardData_clipboardEntries);
+
+        // clipboardEntries.add(clipboardEntry)
+        env->CallBooleanMethod(lokClipboardData_clipboardEntries, methodId_ArrayList_Add, clipboardEntry);
+    }
+
+    return true;
 }
 
 extern "C"

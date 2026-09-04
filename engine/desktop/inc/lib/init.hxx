@@ -379,9 +379,7 @@ namespace desktop {
         void selectPart(const char* pPart, int nSelect) override;
         void moveSelectedParts(int nPosition, bool bDuplicate, int nIntoSection) override;
         void resizeWindow(unsigned nWindowId, const int width, const int height) override;
-        bool getClipboard(const char **pMimeTypes,
-                          std::vector<std::string>& rOutMimeTypes,
-                          std::vector<std::vector<char>>& rOutStreams) override;
+        std::vector<COKitClipboardItem> getClipboard(const char **pMimeTypes) override;
         bool setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
                           const size_t  *pInSizes, const char   **pInStreams) override;
         COKitSelectionType getSelectionType() override;

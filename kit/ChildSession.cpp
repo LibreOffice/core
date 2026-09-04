@@ -1918,8 +1918,6 @@ bool ChildSession::getClipboard(const StringVector& tokens)
     std::vector<std::string> specifics;
     const char **mimeTypes = nullptr; // fetch all for now.
     std::vector<const char*> inMimeTypes;
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
 
     std::string tagName;
     if (tokens.size() < 2 || !getTokenString(tokens[1], "name", tagName))
@@ -1943,12 +1941,11 @@ bool ChildSession::getClipboard(const StringVector& tokens)
 
     SigUtil::addActivity(getId(), "getClipboard");
 
-    bool success = false;
     getLOKitDocument()->setView(_viewId);
 
-    success = getLOKitDocument()->getClipboard(mimeTypes, outMimeTypes, outStreams);
+    const std::vector<COKitClipboardItem> items = getLOKitDocument()->getClipboard(mimeTypes);
 
-    if (!success || outMimeTypes.size() == 0)
+    if (items.empty())
     {
         LOG_WRN("Get clipboard failed " << getLOKitLastError());
         sendTextFrame("clipboardcontent: error");
@@ -1956,33 +1953,34 @@ bool ChildSession::getClipboard(const StringVector& tokens)
     }
 
     size_t outGuess = 32;
-    for (size_t i = 0; i < outMimeTypes.size(); ++i)
-        outGuess += outStreams[i].size() + outMimeTypes[i].length() + 10;
+    for (const auto& item : items)
+        outGuess += item.aData.size() + item.aMimeType.length() + 10;
 
     std::vector<char> output;
     output.reserve(outGuess);
 
     bool json = !specifics.empty();
     Poco::JSON::Object selectionObject;
-    LOG_TRC("Building clipboardcontent: " << outMimeTypes.size() << " items");
-    for (size_t i = 0; i < outMimeTypes.size(); ++i)
+    LOG_TRC("Building clipboardcontent: " << items.size() << " items");
+    for (size_t i = 0; i < items.size(); ++i)
     {
-        LOG_TRC("\t[" << i << " - type " << outMimeTypes[i] << " size " << outStreams[i].size());
+        const COKitClipboardItem& item = items[i];
+        LOG_TRC("\t[" << i << " - type " << item.aMimeType << " size " << item.aData.size());
         if (json)
         {
-            std::string selection(outStreams[i].data(), outStreams[i].size());
-            selectionObject.set(outMimeTypes[i], selection);
+            std::string selection(item.aData.data(), item.aData.size());
+            selectionObject.set(item.aMimeType, selection);
         }
         else
         {
-            Util::vectorAppend(output, outMimeTypes[i].c_str());
+            Util::vectorAppend(output, item.aMimeType.c_str());
             Util::vectorAppend(output, "\n", 1);
             std::stringstream sstream;
-            sstream << std::hex << outStreams[i].size();
+            sstream << std::hex << item.aData.size();
             std::string hex = sstream.str();
             Util::vectorAppend(output, hex.data(), hex.size());
             Util::vectorAppend(output, "\n", 1);
-            Util::vectorAppend(output, outStreams[i].data(), outStreams[i].size());
+            Util::vectorAppend(output, item.aData.data(), item.aData.size());
             Util::vectorAppend(output, "\n", 1);
         }
     }

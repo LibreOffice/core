@@ -917,22 +917,21 @@ void DesktopKitTest::testClipboardMarkdownFlavor()
     CPPUNIT_ASSERT(pDocument->setClipboard(1, pInMimeTypes, pInSizes, pInStreams));
 
     // When getting the clipboard content:
-    std::vector<std::string> aOutMimeTypes;
-    std::vector<std::vector<char>> aOutStreams;
-    CPPUNIT_ASSERT(pDocument->getClipboard(nullptr, aOutMimeTypes, aOutStreams));
+    const std::vector<COKitClipboardItem> aItems = pDocument->getClipboard(nullptr);
+    CPPUNIT_ASSERT(!aItems.empty());
 
     // Then make sure the plain text data is also advertised as markdown:
     bool bHasPlain = false;
     bool bHasMarkdown = false;
     OString aMarkdownContent;
-    for (size_t i = 0; i < aOutMimeTypes.size(); ++i)
+    for (const COKitClipboardItem& rItem : aItems)
     {
-        if (aOutMimeTypes[i] == "text/plain;charset=utf-8")
+        if (rItem.aMimeType == "text/plain;charset=utf-8")
             bHasPlain = true;
-        else if (aOutMimeTypes[i] == "text/markdown")
+        else if (rItem.aMimeType == "text/markdown")
         {
             bHasMarkdown = true;
-            aMarkdownContent = OString(aOutStreams[i].data(), aOutStreams[i].size());
+            aMarkdownContent = OString(rItem.aData.data(), rItem.aData.size());
         }
     }
     CPPUNIT_ASSERT(bHasPlain);

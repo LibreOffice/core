@@ -1228,10 +1228,8 @@ static void doc_setTextSelection (COKitDocument* pThis,
 static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view aMimeType);
 static COKitSelectionType doc_getSelectionType(COKitDocument* pThis);
 static COKitSelection doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType);
-static bool doc_getClipboard (COKitDocument* pThis,
-                              const char **pMimeTypes,
-                              std::vector<std::string>& rOutMimeTypes,
-                              std::vector<std::vector<char>>& rOutStreams);
+static std::vector<COKitClipboardItem> doc_getClipboard (COKitDocument* pThis,
+                                                         const char **pMimeTypes);
 static bool doc_setClipboard (COKitDocument* pThis,
                               const size_t   nInCount,
                               const char   **pInMimeTypes,
@@ -1729,11 +1727,9 @@ void COKitDocumentImpl::resizeWindow(unsigned nWindowId, const int width, const 
     doc_resizeWindow(this, nWindowId, width, height);
 }
 
-bool COKitDocumentImpl::getClipboard(const char **pMimeTypes,
-                                      std::vector<std::string>& rOutMimeTypes,
-                                      std::vector<std::vector<char>>& rOutStreams)
+std::vector<COKitClipboardItem> COKitDocumentImpl::getClipboard(const char **pMimeTypes)
 {
-    return doc_getClipboard(this, pMimeTypes, rOutMimeTypes, rOutStreams);
+    return doc_getClipboard(this, pMimeTypes);
 }
 
 bool COKitDocumentImpl::setClipboard(const size_t   nInCount, const char   **pInMimeTypes,
@@ -7540,15 +7536,13 @@ static COKitSelection doc_getSelectionTypeAndText(COKitDocument* pThis, const ch
 // clipboard is whichever getClipboardForCurView returns: the per-view one on
 // the collaborative server, or the single shared one in the desktop app.
 // Returns true on success, false when there is nothing on the clipboard.
-static bool fetchClipboardContents(const char **pMimeTypes,
-                                   std::vector<std::string>& rOutMimeTypes,
-                                   std::vector<std::vector<char>>& rOutStreams)
+static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMimeTypes)
 {
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
     if (!xClip.is())
     {
         SetLastExceptionMsg(u"No clipboard available"_ustr);
-        return false;
+        return {};
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
@@ -7556,7 +7550,7 @@ static bool fetchClipboardContents(const char **pMimeTypes,
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No clipboard content available"_ustr);
-        return false;
+        return {};
     }
 
     std::vector<OString> aMimeTypes;
@@ -7566,7 +7560,7 @@ static bool fetchClipboardContents(const char **pMimeTypes,
         if (!flavors.getLength())
         {
             SetLastExceptionMsg(u"Flavourless selection"_ustr);
-            return false;
+            return {};
         }
         for (const auto &it : flavors)
             aMimeTypes.push_back(OUStringToOString(it.MimeType, RTL_TEXTENCODING_UTF8));
@@ -7577,34 +7571,25 @@ static bool fetchClipboardContents(const char **pMimeTypes,
             aMimeTypes.push_back(OString(pMimeTypes[i]));
     }
 
-    rOutMimeTypes.resize(aMimeTypes.size());
-    rOutStreams.resize(aMimeTypes.size());
+    std::vector<COKitClipboardItem> aItems(aMimeTypes.size());
     for (size_t i = 0; i < aMimeTypes.size(); ++i)
     {
         if (aMimeTypes[i] == "text/plain;charset=utf-16")
-            rOutMimeTypes[i] = "text/plain;charset=utf-8";
+            aItems[i].aMimeType = "text/plain;charset=utf-8";
         else
-            rOutMimeTypes[i] = aMimeTypes[i];
+            aItems[i].aMimeType = aMimeTypes[i];
 
         OString aRet;
-        bool bSuccess = getFromTransferable(xTransferable, rOutMimeTypes[i], aRet);
-        if (!bSuccess || aRet.getLength() < 1)
-        {
-            rOutStreams[i].clear();
-        }
-        else
-        {
-            rOutStreams[i] = std::vector<char>(aRet.getStr(), aRet.getStr() + aRet.getLength());
-        }
+        bool bSuccess = getFromTransferable(xTransferable, aItems[i].aMimeType, aRet);
+        if (bSuccess && aRet.getLength() >= 1)
+            aItems[i].aData = std::vector<char>(aRet.getStr(), aRet.getStr() + aRet.getLength());
     }
 
-    return true;
+    return aItems;
 }
 
-static bool doc_getClipboard(COKitDocument* pThis,
-                             const char **pMimeTypes,
-                             std::vector<std::string>& rOutMimeTypes,
-                             std::vector<std::vector<char>>& rOutStreams)
+static std::vector<COKitClipboardItem> doc_getClipboard(COKitDocument* pThis,
+                                                        const char **pMimeTypes)
 {
     comphelper::ProfileZone aZone("doc_getClipboard");
 
@@ -7615,10 +7600,10 @@ static bool doc_getClipboard(COKitDocument* pThis,
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return false;
+        return {};
     }
 
-    return fetchClipboardContents(pMimeTypes, rOutMimeTypes, rOutStreams);
+    return fetchClipboardContents(pMimeTypes);
 }
 
 // Office-level clipboard read for the desktop app's one shared clipboard. It
@@ -7635,7 +7620,18 @@ static bool lo_getGlobalClipboard(COKit* /*pThis*/,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    return fetchClipboardContents(pMimeTypes, rOutMimeTypes, rOutStreams);
+    const std::vector<COKitClipboardItem> aItems = fetchClipboardContents(pMimeTypes);
+    if (aItems.empty())
+        return false;
+
+    rOutMimeTypes.reserve(aItems.size());
+    rOutStreams.reserve(aItems.size());
+    for (const auto& rItem : aItems)
+    {
+        rOutMimeTypes.push_back(rItem.aMimeType);
+        rOutStreams.push_back(rItem.aData);
+    }
+    return true;
 }
 
 static bool doc_setClipboard(COKitDocument* pThis,

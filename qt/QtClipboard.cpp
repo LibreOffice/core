@@ -75,19 +75,16 @@ std::unique_ptr<QMimeData> fetchClipboardData(unsigned appDocId,
     if (!loKitDoc || !selectDocViewAsCurrent(loKitDoc))
         return nullptr;
 
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
-
-    if (!loKitDoc->getClipboard(pMimeTypes, outMimeTypes, outStreams)
-        || outMimeTypes.size() == 0)
+    const std::vector<COKitClipboardItem> items = loKitDoc->getClipboard(pMimeTypes);
+    if (items.empty())
         return nullptr;
 
     auto mimeData = std::make_unique<QMimeData>();
-    for (size_t i = 0; i < outMimeTypes.size(); ++i)
+    for (const COKitClipboardItem& item : items)
     {
-        if (outStreams[i].size() > 0)
-            mimeData->setData(QString::fromUtf8(outMimeTypes[i].c_str()),
-                              QByteArray(outStreams[i].data(), static_cast<int>(outStreams[i].size())));
+        if (!item.aData.empty())
+            mimeData->setData(QString::fromUtf8(item.aMimeType.c_str()),
+                              QByteArray(item.aData.data(), static_cast<int>(item.aData.size())));
     }
 
     return mimeData;

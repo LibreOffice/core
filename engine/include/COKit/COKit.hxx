@@ -102,6 +102,14 @@ struct COKitDataArea
     int64_t nLastRow = 1;
 };
 
+/// One format on the clipboard: its mime type and the bytes in that format.
+/// The bytes can be empty for a type the clipboard offers but cannot produce.
+struct COKitClipboardItem
+{
+    std::string aMimeType;
+    std::vector<char> aData;
+};
+
 /// A size in pixels.
 struct COKitPixelSize
 {
@@ -2321,19 +2329,13 @@ struct COKitDocument
     virtual void resizeWindow(unsigned nWindowId, const int width, const int height) = 0;
 
     /**
-     * Gets the content on the clipboard for the current view as a series of binary streams.
+     * Gets the content on the clipboard for the current view.
      *
-     * NB. returns a complete set of possible selection types if nullptr is passed for pMimeTypes.
-     *
-     * @param pMimeTypes passes in a nullptr terminated list of mime types to fetch
-     * @param rOutMimeTypes returns an array of mime types
-     * @param rOutStreams   the content of each mime-type
-     *
-     * @returns: true on success, false on error.
+     * @param pMimeTypes a nullptr terminated list of mime types to fetch, or
+     *        nullptr for every type the clipboard offers.
+     * @return one item per format, empty when the clipboard has nothing to give.
      */
-    virtual bool getClipboard(const char **pMimeTypes,
-                              std::vector<std::string>& rOutMimTypes,
-                              std::vector<std::vector<char>>& rOutStreams) = 0;
+    virtual std::vector<COKitClipboardItem> getClipboard(const char **pMimeTypes) = 0;
 
     /**
      * Populates the clipboard for this view with multiple types of content.
