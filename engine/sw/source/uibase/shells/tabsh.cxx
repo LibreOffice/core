@@ -2019,6 +2019,7 @@ void SwTableShell::GetTableDesignStyleState(SfxItemSet &rSet)
                             continue;
                         auto aStyleStruct = aJson.startStruct();
                         aJson.put("Name", rStyle.GetName().toString());
+                        aJson.put("DisplayName", rStyle.GetUIName().toString());
                         // The browser falls back to a placeholder icon if this is empty,
                         // so one style's rendering failure doesn't blank the whole list.
                         OString aDataUri;

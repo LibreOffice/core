@@ -236,6 +236,47 @@
 #define STR_COLUMN_ICONVIEW_ITEM4               NC_("STR_COLUMN_ICONVIEW_ITEM4", "2 columns with different size (left < right)")
 // Table styles, Writer internal, others are taken from Svx
 #define STR_TABSTYLE_DEFAULT                    NC_("STR_TABSTYLE_DEFAULT", "Default Table Style")
+// The built-in table style catalog names are composed of a family, an optional number, an
+// optional variant and an optional accent: "Grid Table 4 Accent 1", "List Table 7 Colorful".
+#define STR_TABSTYLE_CATALOG_COLORFUL_GRID      NC_("STR_TABSTYLE_CATALOG_COLORFUL_GRID", "Colorful Grid")
+#define STR_TABSTYLE_CATALOG_COLORFUL_LIST      NC_("STR_TABSTYLE_CATALOG_COLORFUL_LIST", "Colorful List")
+#define STR_TABSTYLE_CATALOG_COLORFUL_SHADING   NC_("STR_TABSTYLE_CATALOG_COLORFUL_SHADING", "Colorful Shading")
+#define STR_TABSTYLE_CATALOG_DARK_LIST          NC_("STR_TABSTYLE_CATALOG_DARK_LIST", "Dark List")
+#define STR_TABSTYLE_CATALOG_GRID_TABLE         NC_("STR_TABSTYLE_CATALOG_GRID_TABLE", "Grid Table")
+#define STR_TABSTYLE_CATALOG_GRID_TABLE_LIGHT   NC_("STR_TABSTYLE_CATALOG_GRID_TABLE_LIGHT", "Grid Table Light")
+#define STR_TABSTYLE_CATALOG_LIGHT_GRID         NC_("STR_TABSTYLE_CATALOG_LIGHT_GRID", "Light Grid")
+#define STR_TABSTYLE_CATALOG_LIGHT_LIST         NC_("STR_TABSTYLE_CATALOG_LIGHT_LIST", "Light List")
+#define STR_TABSTYLE_CATALOG_LIGHT_SHADING      NC_("STR_TABSTYLE_CATALOG_LIGHT_SHADING", "Light Shading")
+#define STR_TABSTYLE_CATALOG_LIST_TABLE         NC_("STR_TABSTYLE_CATALOG_LIST_TABLE", "List Table")
+#define STR_TABSTYLE_CATALOG_MEDIUM_GRID        NC_("STR_TABSTYLE_CATALOG_MEDIUM_GRID", "Medium Grid")
+#define STR_TABSTYLE_CATALOG_MEDIUM_LIST        NC_("STR_TABSTYLE_CATALOG_MEDIUM_LIST", "Medium List")
+#define STR_TABSTYLE_CATALOG_MEDIUM_SHADING     NC_("STR_TABSTYLE_CATALOG_MEDIUM_SHADING", "Medium Shading")
+#define STR_TABSTYLE_CATALOG_NORMAL_TABLE       NC_("STR_TABSTYLE_CATALOG_NORMAL_TABLE", "Normal Table")
+#define STR_TABSTYLE_CATALOG_PLAIN_TABLE        NC_("STR_TABSTYLE_CATALOG_PLAIN_TABLE", "Plain Table")
+#define STR_TABSTYLE_CATALOG_TABLE_3D_EFFECTS   NC_("STR_TABSTYLE_CATALOG_TABLE_3D_EFFECTS", "Table 3D effects")
+#define STR_TABSTYLE_CATALOG_TABLE_CLASSIC      NC_("STR_TABSTYLE_CATALOG_TABLE_CLASSIC", "Table Classic")
+#define STR_TABSTYLE_CATALOG_TABLE_COLORFUL     NC_("STR_TABSTYLE_CATALOG_TABLE_COLORFUL", "Table Colorful")
+#define STR_TABSTYLE_CATALOG_TABLE_COLUMNS      NC_("STR_TABSTYLE_CATALOG_TABLE_COLUMNS", "Table Columns")
+#define STR_TABSTYLE_CATALOG_TABLE_CONTEMPORARY NC_("STR_TABSTYLE_CATALOG_TABLE_CONTEMPORARY", "Table Contemporary")
+#define STR_TABSTYLE_CATALOG_TABLE_ELEGANT      NC_("STR_TABSTYLE_CATALOG_TABLE_ELEGANT", "Table Elegant")
+#define STR_TABSTYLE_CATALOG_TABLE_GRID         NC_("STR_TABSTYLE_CATALOG_TABLE_GRID", "Table Grid")
+#define STR_TABSTYLE_CATALOG_TABLE_LIST         NC_("STR_TABSTYLE_CATALOG_TABLE_LIST", "Table List")
+#define STR_TABSTYLE_CATALOG_TABLE_PROFESSIONAL NC_("STR_TABSTYLE_CATALOG_TABLE_PROFESSIONAL", "Table Professional")
+#define STR_TABSTYLE_CATALOG_TABLE_SIMPLE       NC_("STR_TABSTYLE_CATALOG_TABLE_SIMPLE", "Table Simple")
+#define STR_TABSTYLE_CATALOG_TABLE_SUBTLE       NC_("STR_TABSTYLE_CATALOG_TABLE_SUBTLE", "Table Subtle")
+#define STR_TABSTYLE_CATALOG_TABLE_THEME        NC_("STR_TABSTYLE_CATALOG_TABLE_THEME", "Table Theme")
+#define STR_TABSTYLE_CATALOG_TABLE_WEB          NC_("STR_TABSTYLE_CATALOG_TABLE_WEB", "Table Web")
+// Variant word after the number: "Grid Table 1 Light", "Grid Table 5 Dark", "List Table 6 Colorful"
+#define STR_TABSTYLE_CATALOG_VARIANT_LIGHT      NC_("STR_TABSTYLE_CATALOG_VARIANT_LIGHT", "Light")
+#define STR_TABSTYLE_CATALOG_VARIANT_DARK       NC_("STR_TABSTYLE_CATALOG_VARIANT_DARK", "Dark")
+#define STR_TABSTYLE_CATALOG_VARIANT_COLORFUL   NC_("STR_TABSTYLE_CATALOG_VARIANT_COLORFUL", "Colorful")
+// %1 is the number of the theme's accent color, 1 to 6
+#define STR_TABSTYLE_CATALOG_ACCENT             NC_("STR_TABSTYLE_CATALOG_ACCENT", "Accent %1")
+// The order of the parts of a catalog name. %FAMILY is a family such as "Grid Table", %NUMBER
+// its number, %VARIANT a variant word such as "Light" and %ACCENT the translated "Accent %1".
+// The number, the variant and the accent can each be missing, and their place is then dropped
+// together with the spaces around it. Keep all four placeholders.
+#define STR_TABSTYLE_CATALOG_NAME               NC_("STR_TABSTYLE_CATALOG_NAME", "%FAMILY %NUMBER %VARIANT %ACCENT")
 
 #define STR_PARAGRAPHSTYLEFAMILY                NC_("STR_PARAGRAPHSTYLEFAMILY", "Paragraph Styles")
 #define STR_CHARACTERSTYLEFAMILY                NC_("STR_CHARACTERSTYLEFAMILY", "Character Styles")

@@ -215,7 +215,7 @@ void SwConvertTableDlg::Init()
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
-        m_xLbFormat->append_text(rFormat.GetName().toString());
+        m_xLbFormat->append_text(rFormat.GetUIName().toString());
         if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
             m_nIndex = i;
     }

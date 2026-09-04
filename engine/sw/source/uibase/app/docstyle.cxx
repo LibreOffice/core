@@ -486,13 +486,23 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
     return pRule;
 }
 
+/// A table style sheet carries the style's name in the UI language, which for a built-in
+/// catalog style differs from the name in the model. Find the style by either.
+static SwTableAutoFormat* lcl_FindTableStyleByAnyName(SwDoc& rDoc, const OUString& rName)
+{
+    SwTableAutoFormat* pFormat = rDoc.GetTableStyles().FindAutoFormat(TableStyleName(rName));
+    if (!pFormat)
+        pFormat = rDoc.GetTableStyles().FindAutoFormatByUIName(UIName(rName));
+    return pFormat;
+}
+
 static SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const TableStyleName& rName, SwDocStyleSheet *pStyle = nullptr, bool bCreate = true)
 {
     SwTableAutoFormat* pFormat = nullptr;
 
     if (!rName.isEmpty())
     {
-        pFormat = rDoc.GetTableStyles().FindAutoFormat(rName);
+        pFormat = lcl_FindTableStyleByAnyName(rDoc, rName.toString());
         if (!pFormat && bCreate)
         {
             SwTableAutoFormat aNew(rName);
@@ -833,7 +843,7 @@ void SwDocStyleSheet::SetHidden( bool bValue )
 
         case SfxStyleFamily::Table:
             {
-                SwTableAutoFormat* pTableAutoFormat = m_rDoc.GetTableStyles().FindAutoFormat( TableStyleName(aName) );
+                SwTableAutoFormat* pTableAutoFormat = lcl_FindTableStyleByAnyName( m_rDoc, aName );
                 if ( pTableAutoFormat )
                 {
                     pTableAutoFormat->SetHidden( bValue );
@@ -892,7 +902,7 @@ bool SwDocStyleSheet::IsHidden( ) const
             break;
         case SfxStyleFamily::Table:
             {
-                SwTableAutoFormat* pTableAutoFormat = m_rDoc.GetTableStyles().FindAutoFormat( TableStyleName(aName) );
+                SwTableAutoFormat* pTableAutoFormat = lcl_FindTableStyleByAnyName( m_rDoc, aName );
                 bRet = pTableAutoFormat && pTableAutoFormat->IsHidden( );
             }
             break;
@@ -2811,7 +2821,8 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
 
     case SfxStyleFamily::Table:
         {
-            m_rDoc.DelTableStyle(TableStyleName(sName.toString()));
+            if (const SwTableAutoFormat* pFormat = lcl_FindTableStyleByAnyName(m_rDoc, sName.toString()))
+                m_rDoc.DelTableStyle(pFormat->GetName());
         }
         break;
 
@@ -3329,7 +3340,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     continue;
             }
 
-            m_aLst.Append( SfxStyleFamily::Table, UIName(rTableStyle.GetName().toString()) );
+            m_aLst.Append( SfxStyleFamily::Table, rTableStyle.GetUIName() );
         }
     }
 

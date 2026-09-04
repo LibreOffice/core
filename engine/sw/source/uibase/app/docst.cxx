@@ -279,7 +279,10 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 {
                     const SwTableNode *pTableNd = pShell->IsCursorInTable();
                     if( pTableNd )
-                        aName = UIName(pTableNd->GetTable().GetTableStyleName().toString());
+                    {
+                        aName = SwTableAutoFormat::GetUIName(
+                            pTableNd->GetTable().GetTableStyleName());
+                    }
 
                     rSet.Put(SfxTemplateItem(nWhich, aName.toString()));
                 }
@@ -1364,7 +1367,10 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
         }
         case SfxStyleFamily::Table:
         {
-            pSh->SetTableStyle(TableStyleName(pStyle->GetName()));
+            // The sheet name is the name shown in the UI language, the format holds the model
+            // name that the table refers to.
+            if (const SwTableAutoFormat* pTableFormat = pStyle->GetTableFormat())
+                pSh->SetTableStyle(pTableFormat->GetName());
             break;
         }
         default:
@@ -1519,11 +1525,16 @@ void SwDocShell::UpdateStyle(const UIName &rName, SfxStyleFamily nFamily, SwWrtS
                     pFEShell->TableCursorToCursor();
                 }
             }
-            SwTableAutoFormat aFormat(TableStyleName(rName.toString()));
+            const SwTableAutoFormat* pTableFormat = pStyle->GetTableFormat();
+            if (!pTableFormat)
+                break;
+            // rName is the name shown in the UI language, the format holds the model name.
+            const TableStyleName aModelName = pTableFormat->GetName();
+            SwTableAutoFormat aFormat(aModelName);
             if (pCurrWrtShell->GetTableAutoFormat(aFormat))
             {
                 pCurrWrtShell->StartAllAction();
-                pCurrWrtShell->GetDoc()->ChgTableStyle(TableStyleName(rName.toString()), aFormat);
+                pCurrWrtShell->GetDoc()->ChgTableStyle(aModelName, aFormat);
                 pCurrWrtShell->EndAllAction();
             }
 

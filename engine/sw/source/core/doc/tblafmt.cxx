@@ -35,11 +35,15 @@
 #include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <hintids.hxx>
+#include <strings.hrc>
 #include "tblwordstylesdata.hxx"
 #include <docsh.hxx>
 #include <algorithm>
 #include <span>
 #include <o3tl/safeint.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
@@ -62,6 +66,8 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -429,6 +435,8 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
 
     m_aName = rNew.m_aName;
     m_nStrResId = rNew.m_nStrResId;
+    m_aCachedUIName = rNew.m_aCachedUIName;
+    m_aCachedUILanguage = rNew.m_aCachedUILanguage;
     m_bInclFont = rNew.m_bInclFont;
     m_bInclJustify = rNew.m_bInclJustify;
     m_bInclFrame = rNew.m_bInclFrame;
@@ -1094,6 +1102,165 @@ SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const TableStyleName& 
     }
 
     return nullptr;
+}
+
+SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormatByUIName(const UIName& rUIName) const
+{
+    for (const auto &rFormat : m_pImpl->m_AutoFormats)
+    {
+        if (rFormat->GetUIName() == rUIName)
+            return rFormat.get();
+    }
+
+    return nullptr;
+}
+
+namespace
+{
+struct CatalogNamePart
+{
+    std::u16string_view aEnglish;
+    TranslateId aTranslateId;
+};
+
+// The families a built-in catalog style name starts with.
+const CatalogNamePart g_aCatalogFamilies[] = {
+    { u"Colorful Grid", STR_TABSTYLE_CATALOG_COLORFUL_GRID },
+    { u"Colorful List", STR_TABSTYLE_CATALOG_COLORFUL_LIST },
+    { u"Colorful Shading", STR_TABSTYLE_CATALOG_COLORFUL_SHADING },
+    { u"Dark List", STR_TABSTYLE_CATALOG_DARK_LIST },
+    { u"Grid Table", STR_TABSTYLE_CATALOG_GRID_TABLE },
+    { u"Grid Table Light", STR_TABSTYLE_CATALOG_GRID_TABLE_LIGHT },
+    { u"Light Grid", STR_TABSTYLE_CATALOG_LIGHT_GRID },
+    { u"Light List", STR_TABSTYLE_CATALOG_LIGHT_LIST },
+    { u"Light Shading", STR_TABSTYLE_CATALOG_LIGHT_SHADING },
+    { u"List Table", STR_TABSTYLE_CATALOG_LIST_TABLE },
+    { u"Medium Grid", STR_TABSTYLE_CATALOG_MEDIUM_GRID },
+    { u"Medium List", STR_TABSTYLE_CATALOG_MEDIUM_LIST },
+    { u"Medium Shading", STR_TABSTYLE_CATALOG_MEDIUM_SHADING },
+    { u"Normal Table", STR_TABSTYLE_CATALOG_NORMAL_TABLE },
+    { u"Plain Table", STR_TABSTYLE_CATALOG_PLAIN_TABLE },
+    { u"Table 3D effects", STR_TABSTYLE_CATALOG_TABLE_3D_EFFECTS },
+    { u"Table Classic", STR_TABSTYLE_CATALOG_TABLE_CLASSIC },
+    { u"Table Colorful", STR_TABSTYLE_CATALOG_TABLE_COLORFUL },
+    { u"Table Columns", STR_TABSTYLE_CATALOG_TABLE_COLUMNS },
+    { u"Table Contemporary", STR_TABSTYLE_CATALOG_TABLE_CONTEMPORARY },
+    { u"Table Elegant", STR_TABSTYLE_CATALOG_TABLE_ELEGANT },
+    { u"Table Grid", STR_TABSTYLE_CATALOG_TABLE_GRID },
+    { u"Table List", STR_TABSTYLE_CATALOG_TABLE_LIST },
+    { u"Table Professional", STR_TABSTYLE_CATALOG_TABLE_PROFESSIONAL },
+    { u"Table Simple", STR_TABSTYLE_CATALOG_TABLE_SIMPLE },
+    { u"Table Subtle", STR_TABSTYLE_CATALOG_TABLE_SUBTLE },
+    { u"Table Theme", STR_TABSTYLE_CATALOG_TABLE_THEME },
+    { u"Table Web", STR_TABSTYLE_CATALOG_TABLE_WEB },
+};
+
+// The variant word that can follow the family and its number.
+const CatalogNamePart g_aCatalogVariants[] = {
+    { u"Light", STR_TABSTYLE_CATALOG_VARIANT_LIGHT },
+    { u"Dark", STR_TABSTYLE_CATALOG_VARIANT_DARK },
+    { u"Colorful", STR_TABSTYLE_CATALOG_VARIANT_COLORFUL },
+};
+
+bool lcl_IsNumber(std::u16string_view rToken)
+{
+    return !rToken.empty()
+           && std::all_of(rToken.begin(), rToken.end(),
+                          [](sal_Unicode c) { return rtl::isAsciiDigit(c); });
+}
+}
+
+UIName SwTableAutoFormat::GetUIName() const
+{
+    // Composing the name takes several translated strings, and a style list looks up every
+    // style by its shown name, so the name is composed once per UI language.
+    const OUString aLanguage = SvtSysLocale().GetUILanguageTag().getBcp47();
+    if (m_aCachedUILanguage != aLanguage)
+    {
+        m_aCachedUIName = GetUIName(m_aName);
+        m_aCachedUILanguage = aLanguage;
+    }
+    return m_aCachedUIName;
+}
+
+UIName SwTableAutoFormat::GetUIName(const TableStyleName& rName)
+{
+    const OUString& rModelName = rName.toString();
+
+    // The longest family that starts the name wins, so that "Grid Table Light" is one family
+    // and not "Grid Table" with a variant.
+    const CatalogNamePart* pFamily = nullptr;
+    for (const CatalogNamePart& rFamily : g_aCatalogFamilies)
+    {
+        if (!rModelName.startsWith(rFamily.aEnglish))
+            continue;
+        if (rModelName.getLength() > sal_Int32(rFamily.aEnglish.size())
+            && rModelName[rFamily.aEnglish.size()] != ' ')
+            continue;
+        if (!pFamily || rFamily.aEnglish.size() > pFamily->aEnglish.size())
+            pFamily = &rFamily;
+    }
+    if (!pFamily)
+        return UIName(rModelName);
+
+    // What follows the family is a number, a variant and an accent, each of them optional
+    // and in this order; anything else means the name is not from the catalog.
+    std::vector<std::u16string_view> aTokens;
+    std::u16string_view aRest = rModelName.subView(pFamily->aEnglish.size());
+    for (size_t nPos = 0; nPos < aRest.size();)
+    {
+        aTokens.push_back(o3tl::getToken(aRest, u' ', nPos));
+        if (aTokens.back().empty())
+            aTokens.pop_back();
+    }
+
+    OUString aNumber;
+    OUString aVariant;
+    OUString aAccent;
+    size_t nToken = 0;
+    if (nToken < aTokens.size() && lcl_IsNumber(aTokens[nToken]))
+    {
+        aNumber = aTokens[nToken];
+        ++nToken;
+    }
+    if (nToken < aTokens.size())
+    {
+        for (const CatalogNamePart& rVariant : g_aCatalogVariants)
+        {
+            if (aTokens[nToken] == rVariant.aEnglish)
+            {
+                aVariant = SwResId(rVariant.aTranslateId);
+                ++nToken;
+                break;
+            }
+        }
+    }
+    if (nToken + 1 < aTokens.size() && aTokens[nToken] == u"Accent"
+        && lcl_IsNumber(aTokens[nToken + 1]))
+    {
+        aAccent = SwResId(STR_TABSTYLE_CATALOG_ACCENT).replaceFirst("%1", aTokens[nToken + 1]);
+        nToken += 2;
+    }
+    if (nToken != aTokens.size())
+        return UIName(rModelName);
+
+    // The translation decides the order of the parts. A missing part leaves two spaces next
+    // to each other, or one at an end, and those are collapsed and trimmed.
+    const OUString aPattern = SwResId(STR_TABSTYLE_CATALOG_NAME)
+                                  .replaceFirst("%FAMILY", SwResId(pFamily->aTranslateId))
+                                  .replaceFirst("%NUMBER", aNumber)
+                                  .replaceFirst("%VARIANT", aVariant)
+                                  .replaceFirst("%ACCENT", aAccent);
+    OUStringBuffer aUIName(aPattern.getLength());
+    for (sal_Int32 i = 0; i < aPattern.getLength(); ++i)
+    {
+        if (aPattern[i] == ' ' && (aUIName.isEmpty() || aUIName[aUIName.getLength() - 1] == ' '))
+            continue;
+        aUIName.append(aPattern[i]);
+    }
+    if (!aUIName.isEmpty() && aUIName[aUIName.getLength() - 1] == ' ')
+        aUIName.setLength(aUIName.getLength() - 1);
+    return UIName(aUIName.makeStringAndClear());
 }
 
 SwTableAutoFormatTable::~SwTableAutoFormatTable() = default;

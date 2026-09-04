@@ -141,7 +141,7 @@ void SwInsTableDlg::InitAutoTableFormat()
             i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
-        m_xLbFormat->append_text(rFormat.GetName().toString());
+        m_xLbFormat->append_text(rFormat.GetUIName().toString());
         if (m_xTAutoFormat && rFormat.GetName() == m_xTAutoFormat->GetName())
             m_lbIndex = i;
     }

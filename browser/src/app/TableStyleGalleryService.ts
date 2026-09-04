@@ -17,7 +17,8 @@
  */
 
 interface TableStyleGalleryEntry {
-	Name: string;
+	Name: string; // the style's name in the document model, the key for applying it
+	DisplayName?: string; // the name in the UI language, if it differs from Name
 	Image: string; // data:image/png;base64,... rendered by the engine
 }
 
@@ -85,7 +86,7 @@ class TableStyleGalleryService {
 			entries: this.styles.map((style, index) => {
 				return {
 					row: index,
-					text: style.Name,
+					text: style.DisplayName || style.Name,
 					// The engine falls back to an empty string per-style if
 					// rendering that one style's preview failed - don't let
 					// that show as a broken image.

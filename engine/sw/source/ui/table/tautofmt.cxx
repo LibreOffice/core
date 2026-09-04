@@ -127,7 +127,7 @@ void SwAutoFormatDlg::Init(const SwTableAutoFormat* pSelFormat)
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
-        m_xLbFormat->append_text(rFormat.GetName().toString());
+        m_xLbFormat->append_text(rFormat.GetUIName().toString());
         if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
             m_nIndex = i;
     }
@@ -210,9 +210,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, weld::Button&, void)
 
             if (!aFormatName.isEmpty())
             {
+                // A new name must not clash with a style's model name or its shown name.
                 size_t n;
                 for (n = 0; n < m_xTableTable->size(); ++n)
-                    if ((*m_xTableTable)[n].GetName() == aFormatName)
+                    if ((*m_xTableTable)[n].GetName() == aFormatName
+                        || (*m_xTableTable)[n].GetUIName() == aFormatName)
                         break;
 
                 if (n >= m_xTableTable->size())
@@ -304,9 +306,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
 
             if (!aFormatName.isEmpty())
             {
+                // A new name must not clash with a style's model name or its shown name.
                 size_t n;
                 for (n = 0; n < m_xTableTable->size(); ++n)
-                    if ((*m_xTableTable)[n].GetName() == aFormatName)
+                    if ((*m_xTableTable)[n].GetName() == aFormatName
+                        || (*m_xTableTable)[n].GetUIName() == aFormatName)
                         break;
 
                 if (n >= m_xTableTable->size())

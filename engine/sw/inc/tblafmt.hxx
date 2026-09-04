@@ -177,6 +177,10 @@ class SW_DLLPUBLIC SwTableAutoFormat
 
     TableStyleName m_aName; // note that this could be a ProgName __or__ a UIName
     sal_uInt16 m_nStrResId;
+    // The name shown in the UI language, and the BCP 47 tag of the UI language it was made
+    // for. An empty tag means that no shown name is cached yet.
+    mutable UIName m_aCachedUIName;
+    mutable OUString m_aCachedUILanguage;
 
     // Common flags of Calc and Writer.
     bool m_bInclFont : 1;
@@ -218,8 +222,20 @@ public:
     SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos );
     static const SwBoxAutoFormat& GetDefaultBoxFormat();
 
-    void SetName( const TableStyleName& rNew ) { m_aName = rNew; m_nStrResId = USHRT_MAX; }
+    void SetName( const TableStyleName& rNew )
+    {
+        m_aName = rNew;
+        m_nStrResId = USHRT_MAX;
+        m_aCachedUILanguage.clear();
+    }
     const TableStyleName& GetName() const { return m_aName; }
+
+    /// The name to show in the UI language. A built-in catalog style has an English name in
+    /// the model, "Grid Table 4 Accent 1", which the DOCX style id and the ODF template name
+    /// are made from; the UI shows it composed from translated parts. Any other name is
+    /// shown as it is.
+    UIName GetUIName() const;
+    static UIName GetUIName(const TableStyleName& rName);
 
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter const * );
@@ -346,6 +362,9 @@ public:
 
     /// Find table style with the provided name, return nullptr when not found.
     SwTableAutoFormat* FindAutoFormat(const TableStyleName& rName) const;
+    /// Find the table style whose name in the UI language is rUIName, return nullptr when
+    /// not found.
+    SwTableAutoFormat* FindAutoFormatByUIName(const UIName& rUIName) const;
 
     bool Save() const;
 };

@@ -1299,6 +1299,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBuiltInWordTableStyleCatalog)
     CPPUNIT_ASSERT(rStyles.FindAutoFormat(TableStyleName(u"Light Shading Accent 1"_ustr)));
     CPPUNIT_ASSERT(rStyles.FindAutoFormat(TableStyleName(u"List Table 7 Colorful Accent 6"_ustr)));
 
+    // A catalog name is shown composed from its translated parts, which in the English UI
+    // gives the name itself back, and the shown name finds the style again. A name that is
+    // not from the catalog is shown as it is.
+    for (const OUString& rName : { u"Grid Table 4 Accent 1"_ustr, u"Grid Table Light"_ustr,
+                                   u"List Table 7 Colorful Accent 6"_ustr, u"Table 3D effects 1"_ustr,
+                                   u"Plain Table 1"_ustr })
+    {
+        CPPUNIT_ASSERT_EQUAL(rName, SwTableAutoFormat::GetUIName(TableStyleName(rName)).toString());
+        const SwTableAutoFormat* pByUIName = rStyles.FindAutoFormatByUIName(UIName(rName));
+        CPPUNIT_ASSERT(pByUIName);
+        CPPUNIT_ASSERT_EQUAL(rName, pByUIName->GetName().toString());
+    }
+    CPPUNIT_ASSERT_EQUAL(u"My Table"_ustr,
+                         SwTableAutoFormat::GetUIName(TableStyleName(u"My Table"_ustr)).toString());
+    CPPUNIT_ASSERT_EQUAL(u"Grid Table 4 Accent 1 Wide"_ustr,
+                         SwTableAutoFormat::GetUIName(TableStyleName(u"Grid Table 4 Accent 1 Wide"_ustr))
+                             .toString());
+    CPPUNIT_ASSERT_EQUAL(u"Grid Table Accent 1"_ustr,
+                         SwTableAutoFormat::GetUIName(TableStyleName(u"Grid Table Accent 1"_ustr))
+                             .toString());
+
     // And the colors resolve against the stock Office theme, so a first-row header cell of
     // "Grid Table 4 Accent 1" is filled with the theme's accent1 blue, not with whatever
     // theme the document the catalog was extracted from happened to use.
