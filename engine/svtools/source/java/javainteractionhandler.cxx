@@ -21,7 +21,6 @@
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
-#include <com/sun/star/java/JavaNotFoundException.hpp>
 #include <com/sun/star/java/InvalidJavaSettingsException.hpp>
 #include <com/sun/star/java/JavaDisabledException.hpp>
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
@@ -35,8 +34,6 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
-#include <unotools/configmgr.hxx>
-#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star::uno;
 using namespace cpo::uno;
@@ -47,14 +44,12 @@ namespace
 struct JavaEvents {
     bool bDisabledHandled : 1;
     bool bInvalidSettingsHandled : 1;
-    bool bNotFoundHandled : 1;
     bool bVMCreationFailureHandled : 1;
     bool bRestartRequiredHandled : 1;
     sal_uInt16 nResult_JavaDisabled = RET_NO;
     JavaEvents()
         : bDisabledHandled(false)
         , bInvalidSettingsHandled(false)
-        , bNotFoundHandled(false)
         , bVMCreationFailureHandled(false)
         , bRestartRequiredHandled(false)
     {}
@@ -119,40 +114,7 @@ void JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Req
     // react accordingly.
     sal_uInt16      nResult = RET_CANCEL;
 
-    if (css::java::JavaNotFoundException e1; anyExc >>= e1)
-    {
-        SolarMutexGuard aSolarGuard;
-        if( !g_JavaEvents.bNotFoundHandled )
-        {
-           // No suitable JRE found
-            OUString sPrimTex;
-            OUString urlLink(officecfg::Office::Common::Menus::InstallJavaURL::get() + // https://hub.libreoffice.org/InstallJava/
-                "?LOlocale=" + utl::ConfigManager::getUILocale());
-            g_JavaEvents.bNotFoundHandled = true;
-#if defined(MACOSX)
-            sPrimTex = SvtResId(STR_WARNING_JAVANOTFOUND_MAC);
-#elif defined(_WIN32)
-            sPrimTex = SvtResId(STR_WARNING_JAVANOTFOUND_WIN);
-#if defined(_WIN64)
-            sPrimTex = sPrimTex.replaceAll("%BITNESS", "64");
-#else
-            sPrimTex = sPrimTex.replaceAll("%BITNESS", "32");
-#endif
-#else
-            sPrimTex = SvtResId(STR_WARNING_JAVANOTFOUND);
-#endif
-            sPrimTex = sPrimTex.replaceAll("%FAQLINK", urlLink);
-            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(
-                nullptr, VclMessageType::Warning, VclButtonsType::Ok, sPrimTex));
-            xWarningBox->set_title(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
-            nResult = xWarningBox->run();
-        }
-        else
-        {
-            nResult = RET_OK;
-        }
-    }
-    else if (css::java::InvalidJavaSettingsException e2; anyExc >>= e2)
+    if (css::java::InvalidJavaSettingsException e2; anyExc >>= e2)
     {
         SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bInvalidSettingsHandled )
