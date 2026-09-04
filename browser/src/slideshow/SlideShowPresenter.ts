@@ -506,8 +506,11 @@ class SlideShowPresenter {
 					.clientHeight;
 			}
 		} else if (this.isFullscreen()) {
-			winWidth = window.screen.width;
-			winHeight = window.screen.height;
+			// The styles below are in CSS pixels, so measure the full screen
+			// element itself. Browser zoom scales that box, and the screen
+			// dimensions do not follow it.
+			winWidth = this._fullscreen.clientWidth;
+			winHeight = this._fullscreen.clientHeight;
 		}
 
 		if (!winWidth || !winHeight) return;
