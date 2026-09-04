@@ -63,17 +63,17 @@ ResultSetImplHelper::~ResultSetImplHelper()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL ResultSetImplHelper::getImplementationName()
+OUString ResultSetImplHelper::getImplementationName()
 {
     return u"ResultSetImplHelper"_ustr;
 }
 
-bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName )
+bool ResultSetImplHelper::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ResultSetImplHelper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ResultSetImplHelper::getSupportedServiceNames()
 {
     return { DYNAMICRESULTSET_SERVICE_NAME };
 }
@@ -82,7 +82,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ResultSetImplHelper::getSupportedService
 
 
 // virtual
-void SAL_CALL ResultSetImplHelper::dispose()
+void ResultSetImplHelper::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -96,7 +96,7 @@ void SAL_CALL ResultSetImplHelper::dispose()
 
 
 // virtual
-void SAL_CALL ResultSetImplHelper::addEventListener(
+void ResultSetImplHelper::addEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -106,7 +106,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
 
 
 // virtual
-void SAL_CALL ResultSetImplHelper::removeEventListener(
+void ResultSetImplHelper::removeEventListener(
         const uno::Reference< lang::XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -119,7 +119,7 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 
 
 // virtual
-uno::Reference< sdbc::XResultSet > SAL_CALL
+uno::Reference< sdbc::XResultSet >
 ResultSetImplHelper::getStaticResultSet()
 {
     std::unique_lock aGuard( m_aMutex );
@@ -133,7 +133,7 @@ ResultSetImplHelper::getStaticResultSet()
 
 
 // virtual
-void SAL_CALL ResultSetImplHelper::setListener(
+void ResultSetImplHelper::setListener(
         const uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -174,7 +174,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
 
 
 // virtual
-sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
+sal_Int16 ResultSetImplHelper::getCapabilities()
 {
     // ! css::ucb::ContentResultSetCapability::SORTED
     return 0;
@@ -182,7 +182,7 @@ sal_Int16 SAL_CALL ResultSetImplHelper::getCapabilities()
 
 
 // virtual
-void SAL_CALL ResultSetImplHelper::connectToCache(
+void ResultSetImplHelper::connectToCache(
         const uno::Reference< css::ucb::XDynamicResultSet > & xCache )
 {
     {

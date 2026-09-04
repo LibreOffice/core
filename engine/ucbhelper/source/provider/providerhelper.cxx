@@ -73,14 +73,14 @@ ContentProviderImplHelper::~ContentProviderImplHelper()
 }
 
 // virtual
-bool SAL_CALL ContentProviderImplHelper::supportsService(
+bool ContentProviderImplHelper::supportsService(
                                             const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // virtual
-sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
+sal_Int32 ContentProviderImplHelper::compareContentIds(
         const uno::Reference< css::ucb::XContentIdentifier >& Id1,
         const uno::Reference< css::ucb::XContentIdentifier >& Id2 )
 {

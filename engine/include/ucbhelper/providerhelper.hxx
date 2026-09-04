@@ -137,11 +137,11 @@ public:
     // XServiceInfo
 
 
-    virtual OUString SAL_CALL
+    virtual OUString
     getImplementationName() override = 0;
-    virtual bool SAL_CALL
+    virtual bool
     supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override = 0;
 
 
@@ -159,9 +159,9 @@ public:
       * - Return the possibly existing content.Create and return a new
       *   content, otherwise
       */
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XContent >
     queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override = 0;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     compareContentIds( const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
                        const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 

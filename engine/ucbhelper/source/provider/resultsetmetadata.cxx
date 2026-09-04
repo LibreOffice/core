@@ -103,14 +103,14 @@ ResultSetMetaData::~ResultSetMetaData()
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getColumnCount()
+sal_Int32 ResultSetMetaData::getColumnCount()
 {
     return m_aProps.getLength();
 }
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
 {
     /*
         Checks whether column is automatically numbered, which makes it
@@ -121,7 +121,7 @@ bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
         return false;
@@ -131,35 +131,35 @@ bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isCurrency( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 /*column*/ )
+sal_Int32 ResultSetMetaData::isNullable( sal_Int32 /*column*/ )
 {
     return ColumnValue::NULLABLE;
 }
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isSigned( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 /*column*/ )
+sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 /*column*/ )
 {
     /*
         Gets the normal maximum width in characters for column.
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 /*column*/
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
+OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
 {
     /*
         Gets the suggested column title for column, to be used in print-
@@ -184,7 +184,7 @@ OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getColumnName( sal_Int32 column )
+OUString ResultSetMetaData::getColumnName( sal_Int32 column )
 {
     /*
         Gets the name of column.
@@ -198,7 +198,7 @@ OUString SAL_CALL ResultSetMetaData::getColumnName( sal_Int32 column )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
+OUString ResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
     /*
         Gets the schema name for the table from which column of this
@@ -211,21 +211,21 @@ OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 /*column*/ )
+sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 /*column*/ )
 {
     return -1;
 }
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 /*column*/ )
+sal_Int32 ResultSetMetaData::getScale( sal_Int32 /*column*/ )
 {
     return 0;
 }
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 /*column*/ )
+OUString ResultSetMetaData::getTableName( sal_Int32 /*column*/ )
 {
     /*
         Gets the name of the table from which column of this result set
@@ -238,7 +238,7 @@ OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 /*column*/ )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
+OUString ResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
     /*
         Gets the catalog name for the table from which column of this
@@ -251,7 +251,7 @@ OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
+sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
 {
     /*
         Gets the JDBC type for the value stored in column. ... The STRUCT
@@ -349,7 +349,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
+OUString ResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 {
     /*
         Gets the type name used by this particular data source for the
@@ -362,28 +362,28 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
 {
     return true;
 }
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isWritable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
+bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
+OUString ResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     /*
           Returns the fully-qualified name of the service whose instances

@@ -119,7 +119,7 @@ public:
       *
       * @return the length of the property sequence.
       */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getColumnCount() override;
     /**
       * Checks whether column is automatically numbered, which makes it
@@ -129,7 +129,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if column is automatically numbered.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isAutoIncrement( sal_Int32 column ) override;
     /**
       * Checks whether column is case sensitive.
@@ -138,7 +138,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if column is case sensitive.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isCaseSensitive( sal_Int32 column ) override;
     /**
       * Checks whether the value stored in column can be used in a
@@ -148,7 +148,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the column is searchable.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isSearchable( sal_Int32 column ) override;
     /**
       * Checks whether column is a cash value.
@@ -157,7 +157,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the column is a cash value.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isCurrency( sal_Int32 column ) override;
     /**
       * Checks whether a NULL can be stored in column.
@@ -169,7 +169,7 @@ public:
       * @return css::sdbc::ColumnValue::NULLABLE, if a NULL
       *         can be stored in the column.
       */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     isNullable( sal_Int32 column ) override;
     /**
       * Checks whether the value stored in column is a signed number.
@@ -178,7 +178,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the value stored in column is a signed number.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isSigned( sal_Int32 column ) override;
     /**
       * Gets the normal maximum width in characters for column.
@@ -187,7 +187,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the normal maximum width in characters for column.
       */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getColumnDisplaySize( sal_Int32 column ) override;
     /**
       * Gets the suggested column title for column, to be used in print-
@@ -197,7 +197,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the column label.
       */
-    virtual OUString SAL_CALL
+    virtual OUString
     getColumnLabel( sal_Int32 column ) override;
     /**
       * Gets the name of column.
@@ -206,7 +206,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the name of the property that corresponds to column.
       */
-    virtual OUString SAL_CALL
+    virtual OUString
     getColumnName( sal_Int32 column ) override;
     /**
       * Gets the schema name for the table from which column of this
@@ -218,7 +218,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the schema name of column or an empty string.
       */
-    virtual OUString SAL_CALL
+    virtual OUString
     getSchemaName( sal_Int32 column ) override;
     /**
       * For number types, getprecision gets the number of decimal digits
@@ -231,7 +231,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the precision for the column.
       */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getPrecision( sal_Int32 column ) override;
     /**
       * Gets the number of digits to the right of the decimal point for
@@ -241,7 +241,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the scale of the column.
       */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getScale( sal_Int32 column ) override;
     /**
       * Gets the name of the table from which column of this result set
@@ -253,9 +253,9 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the table name for column or an empty string.
       */
-    virtual OUString SAL_CALL
+    virtual OUString
     getTableName( sal_Int32 column ) override;
-    virtual OUString SAL_CALL
+    virtual OUString
     /**
       * Gets the catalog name for the table from which column of this
       * result set was derived.
@@ -278,7 +278,7 @@ public:
       * @return the type of the property that corresponds to column - mapped
       *         from UNO-Type to SQL-Type.
       */
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getColumnType( sal_Int32 column ) override;
     /**
       * Gets the type name used by this particular data source for the
@@ -290,7 +290,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the column type name.
       */
-    virtual OUString SAL_CALL
+    virtual OUString
     getColumnTypeName( sal_Int32 column ) override;
     /**
       * Indicates whether a column is definitely not writable.
@@ -299,7 +299,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if the column is definitely not writable.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isReadOnly( sal_Int32 column ) override;
     /**
       * Indicates whether it is possible for a write on the column to succeed.
@@ -308,7 +308,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if it is possible for a write to succeed.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isWritable( sal_Int32 column ) override;
     /**
       * Indicates whether a write on the column will definitely succeed.
@@ -317,7 +317,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return true, if a write on the column will definitely succeed.
       */
-    virtual bool SAL_CALL
+    virtual bool
     isDefinitelyWritable( sal_Int32 column ) override;
     /**
       * Returns the fully-qualified name of the service whose instances
@@ -330,7 +330,7 @@ public:
       * @return the service name for column or an empty string, if no service
       *         is applicable.
       */
-    virtual OUString SAL_CALL
+    virtual OUString
     getColumnServiceName( sal_Int32 column ) override;
 };
 

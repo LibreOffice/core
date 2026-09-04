@@ -44,10 +44,10 @@ class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) ActiveDataSink final : public Active
 
 public:
     // XActiveDataSink methods.
-    virtual void SAL_CALL
+    virtual void
     setInputStream(const css::uno::Reference<css::io::XInputStream>& aStream) override;
 
-    virtual css::uno::Reference<css::io::XInputStream> SAL_CALL getInputStream() override;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStream() override;
 };
 
 } /* namespace ucbhelper */

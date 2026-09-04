@@ -27,13 +27,13 @@ namespace ucbhelper
 // XActiveDataSink methods.
 
 // virtual
-void SAL_CALL ActiveDataSink::setInputStream(const uno::Reference<io::XInputStream>& aStream)
+void ActiveDataSink::setInputStream(const uno::Reference<io::XInputStream>& aStream)
 {
     m_xStream = aStream;
 }
 
 // virtual
-uno::Reference<io::XInputStream> SAL_CALL ActiveDataSink::getInputStream() { return m_xStream; }
+uno::Reference<io::XInputStream> ActiveDataSink::getInputStream() { return m_xStream; }
 
 } // namespace ucbhelper
 

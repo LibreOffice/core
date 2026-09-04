@@ -67,9 +67,9 @@ public:
 
     // XCommandEnvironment
     virtual css::uno::Reference<css::task::XInteractionHandler>
-        SAL_CALL getInteractionHandler() override;
+        getInteractionHandler() override;
 
-    virtual css::uno::Reference<css::ucb::XProgressHandler> SAL_CALL getProgressHandler() override;
+    virtual css::uno::Reference<css::ucb::XProgressHandler> getProgressHandler() override;
 };
 
 } /* namespace ucbhelper */

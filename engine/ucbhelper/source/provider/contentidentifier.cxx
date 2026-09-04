@@ -73,14 +73,14 @@ ContentIdentifier::~ContentIdentifier()
 
 
 // virtual
-OUString SAL_CALL ContentIdentifier::getContentIdentifier()
+OUString ContentIdentifier::getContentIdentifier()
 {
     return m_pImpl->m_aContentId;
 }
 
 
 // virtual
-OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
+OUString ContentIdentifier::getContentProviderScheme()
 {
     return m_pImpl->m_aProviderScheme;
 }

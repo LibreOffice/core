@@ -89,9 +89,9 @@ public:
         const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
 
     // XInteractionRequest
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
     getContinuations() override;
 
     // Non-interface methods.
@@ -164,7 +164,7 @@ public:
     : InteractionAbort_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 };
 
 
@@ -183,7 +183,7 @@ public:
     : InteractionRetry_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 };
 
 
@@ -202,7 +202,7 @@ public:
     : InteractionApprove_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 };
 
 
@@ -221,7 +221,7 @@ public:
     : InteractionDisapprove_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 };
 
 
@@ -299,45 +299,45 @@ public:
                     bool bCanUseSystemCredentials );
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 
     // XInteractionSupplyAuthentication
-    virtual bool SAL_CALL
+    virtual bool
     canSetRealm() override;
-    virtual void SAL_CALL
+    virtual void
     setRealm( const OUString& Realm ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     canSetUserName() override;
-    virtual void SAL_CALL
+    virtual void
     setUserName( const OUString& UserName ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     canSetPassword() override;
-    virtual void SAL_CALL
+    virtual void
     setPassword( const OUString& Password ) override;
 
     virtual cpo::uno::Sequence<
-                css::ucb::RememberAuthentication > SAL_CALL
+                css::ucb::RememberAuthentication >
     getRememberPasswordModes(
             css::ucb::RememberAuthentication& Default ) override;
-    virtual void SAL_CALL
+    virtual void
     setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     canSetAccount() override;
-    virtual void SAL_CALL
+    virtual void
     setAccount( const OUString& Account ) override;
 
-    virtual cpo::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::RememberAuthentication >
     getRememberAccountModes(
             css::ucb::RememberAuthentication& Default ) override;
-    virtual void SAL_CALL
+    virtual void
     setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
 
     // XInteractionSupplyAuthentication2
-    virtual bool SAL_CALL canUseSystemCredentials( bool& Default ) override;
-    virtual void SAL_CALL setUseSystemCredentials( bool UseSystemCredentials ) override;
+    virtual bool canUseSystemCredentials( bool& Default ) override;
+    virtual void setUseSystemCredentials( bool UseSystemCredentials ) override;
 
     // Non-interface methods.
 
@@ -422,7 +422,7 @@ public:
     : InteractionReplaceExistingData_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 };
 
 using InteractionAuthFallback_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
@@ -437,10 +437,10 @@ public:
     : InteractionAuthFallback_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 
     // XAuthFallback
-    virtual void SAL_CALL setCode( const OUString& code ) override;
+    virtual void setCode( const OUString& code ) override;
     /// @throws cpo::uno::RuntimeException
     const OUString& getCode() const;
 };

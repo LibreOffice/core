@@ -81,13 +81,13 @@ namespace {
 class EmptyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
 public:
-    virtual sal_Int32 SAL_CALL readBytes(
+    virtual sal_Int32 readBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes(
+    virtual sal_Int32 readSomeBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
+    virtual void skipBytes( sal_Int32 nBytesToSkip ) override;
+    virtual sal_Int32 available() override;
+    virtual void closeInput() override;
 };
 
 }
@@ -133,17 +133,17 @@ public:
         : m_rContent( rContent ) {}
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XContentEventListener
-    virtual void SAL_CALL contentEvent( const ContentEvent& evt ) override;
+    virtual void contentEvent( const ContentEvent& evt ) override;
 
     // XEventListener ( base of XContentEventListener )
-    virtual void SAL_CALL disposing( const EventObject& Source ) override;
+    virtual void disposing( const EventObject& Source ) override;
 };
 
 }
@@ -1288,19 +1288,19 @@ void Content_Impl::inserted()
 
 // XInterface methods.
 
-void SAL_CALL ContentEventListener_Impl::acquire()
+void ContentEventListener_Impl::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentEventListener_Impl::release()
+void ContentEventListener_Impl::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentEventListener_Impl::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XContentEventListener* >(this),
@@ -1313,7 +1313,7 @@ cpo::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const cpo::uno
 
 
 // virtual
-void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
+void ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
 {
     if ( evt.Source != m_rContent.m_xContent )
         return;
@@ -1338,7 +1338,7 @@ void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
 
 
 // virtual
-void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
+void ContentEventListener_Impl::disposing( const EventObject& Source )
 {
     m_rContent.disposing(Source);
 }

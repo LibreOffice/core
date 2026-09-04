@@ -241,7 +241,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             @param  xRequest
                     the interaction request, which should be intercepted.
          */
-        virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
+        virtual void handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 
     // helper

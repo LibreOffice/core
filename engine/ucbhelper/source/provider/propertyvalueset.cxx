@@ -229,7 +229,7 @@ T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
 
 
 // virtual
-bool SAL_CALL PropertyValueSet::wasNull()
+bool PropertyValueSet::wasNull()
 {
     // This method can not be implemented correctly!!! Imagine different
     // threads doing a getXYZ - wasNull calling sequence on the same
@@ -239,63 +239,63 @@ bool SAL_CALL PropertyValueSet::wasNull()
 
 
 // virtual
-OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
+OUString PropertyValueSet::getString( sal_Int32 columnIndex )
 {
     return getValue<OUString, &ucbhelper_impl::PropertyValue::aString>(PropsSet::String, columnIndex);
 }
 
 
 // virtual
-bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
+bool PropertyValueSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue<bool, &ucbhelper_impl::PropertyValue::bBoolean>(PropsSet::Boolean, columnIndex);
 }
 
 
 // virtual
-sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
+sal_Int8 PropertyValueSet::getByte( sal_Int32 columnIndex )
 {
     return getValue<sal_Int8, &ucbhelper_impl::PropertyValue::nByte>(PropsSet::Byte, columnIndex);
 }
 
 
 // virtual
-sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
+sal_Int16 PropertyValueSet::getShort( sal_Int32 columnIndex )
 {
     return getValue<sal_Int16, &ucbhelper_impl::PropertyValue::nShort>(PropsSet::Short, columnIndex);
 }
 
 
 // virtual
-sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
+sal_Int32 PropertyValueSet::getInt( sal_Int32 columnIndex )
 {
     return getValue<sal_Int32, &ucbhelper_impl::PropertyValue::nInt>(PropsSet::Int, columnIndex);
 }
 
 
 // virtual
-sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
+sal_Int64 PropertyValueSet::getLong( sal_Int32 columnIndex )
 {
     return getValue<sal_Int64, &ucbhelper_impl::PropertyValue::nLong>(PropsSet::Long, columnIndex);
 }
 
 
 // virtual
-float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
+float PropertyValueSet::getFloat( sal_Int32 columnIndex )
 {
     return getValue<float, &ucbhelper_impl::PropertyValue::nFloat>(PropsSet::Float, columnIndex);
 }
 
 
 // virtual
-double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
+double PropertyValueSet::getDouble( sal_Int32 columnIndex )
 {
     return getValue<double, &ucbhelper_impl::PropertyValue::nDouble>(PropsSet::Double, columnIndex);
 }
 
 
 // virtual
-Sequence< sal_Int8 > SAL_CALL
+Sequence< sal_Int8 >
 PropertyValueSet::getBytes( sal_Int32 columnIndex )
 {
     return getValue<Sequence< sal_Int8 >, &ucbhelper_impl::PropertyValue::aBytes>(PropsSet::Bytes, columnIndex);
@@ -303,28 +303,28 @@ PropertyValueSet::getBytes( sal_Int32 columnIndex )
 
 
 // virtual
-Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
+Date PropertyValueSet::getDate( sal_Int32 columnIndex )
 {
     return getValue<Date, &ucbhelper_impl::PropertyValue::aDate>(PropsSet::Date, columnIndex);
 }
 
 
 // virtual
-Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
+Time PropertyValueSet::getTime( sal_Int32 columnIndex )
 {
     return getValue<Time, &ucbhelper_impl::PropertyValue::aTime>(PropsSet::Time, columnIndex);
 }
 
 
 // virtual
-DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
+DateTime PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
 {
     return getValue<DateTime, &ucbhelper_impl::PropertyValue::aTimestamp>(PropsSet::Timestamp, columnIndex);
 }
 
 
 // virtual
-Reference< XInputStream > SAL_CALL
+Reference< XInputStream >
 PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
 {
     return getValue<Reference< XInputStream >, &ucbhelper_impl::PropertyValue::xBinaryStream>(PropsSet::BinaryStream, columnIndex);
@@ -332,7 +332,7 @@ PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
 
 
 // virtual
-Reference< XInputStream > SAL_CALL
+Reference< XInputStream >
 PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
 {
     return getValue<Reference< XInputStream >, &ucbhelper_impl::PropertyValue::xCharacterStream>(PropsSet::CharacterStream, columnIndex);
@@ -462,7 +462,7 @@ Any PropertyValueSet::getObjectImpl(const std::unique_lock<std::mutex>& /*rGuard
 }
 
 // virtual
-Any SAL_CALL PropertyValueSet::getObject(sal_Int32 columnIndex, const Reference<XNameAccess>&)
+Any PropertyValueSet::getObject(sal_Int32 columnIndex, const Reference<XNameAccess>&)
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -470,28 +470,28 @@ Any SAL_CALL PropertyValueSet::getObject(sal_Int32 columnIndex, const Reference<
 }
 
 // virtual
-Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
+Reference< XRef > PropertyValueSet::getRef( sal_Int32 columnIndex )
 {
     return getValue<Reference< XRef >, &ucbhelper_impl::PropertyValue::xRef>(PropsSet::Ref, columnIndex);
 }
 
 
 // virtual
-Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > PropertyValueSet::getBlob( sal_Int32 columnIndex )
 {
     return getValue<Reference< XBlob >, &ucbhelper_impl::PropertyValue::xBlob>(PropsSet::Blob, columnIndex);
 }
 
 
 // virtual
-Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
+Reference< XClob > PropertyValueSet::getClob( sal_Int32 columnIndex )
 {
     return getValue<Reference< XClob >, &ucbhelper_impl::PropertyValue::xClob>(PropsSet::Clob, columnIndex);
 }
 
 
 // virtual
-Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
+Reference< XArray > PropertyValueSet::getArray( sal_Int32 columnIndex )
 {
     return getValue<Reference< XArray >, &ucbhelper_impl::PropertyValue::xArray>(PropsSet::Array, columnIndex);
 }
@@ -501,7 +501,7 @@ Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
 
 
 // virtual
-sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
+sal_Int32 PropertyValueSet::findColumn( const OUString& columnName )
 {
     std::unique_lock aGuard( m_aMutex );
 

@@ -43,8 +43,8 @@ public:
     virtual ~ContentIdentifier() override;
 
     // XContentIdentifier
-    virtual OUString SAL_CALL getContentIdentifier() override;
-    virtual OUString SAL_CALL getContentProviderScheme() override;
+    virtual OUString getContentIdentifier() override;
+    virtual OUString getContentProviderScheme() override;
 
 private:
     std::unique_ptr<ContentIdentifier_Impl> m_pImpl;

@@ -32,14 +32,14 @@
 
 
 #define XTYPEPROVIDER_COMMON_IMPL( Class )                                  \
-cpo::uno::Sequence< sal_Int8 > SAL_CALL                          \
+cpo::uno::Sequence< sal_Int8 >                          \
 Class::getImplementationId()          \
 {                                                                           \
       return cpo::uno::Sequence<sal_Int8>();                                \
 }
 
 #define GETTYPES_IMPL_START( Class )                                        \
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL         \
+cpo::uno::Sequence< cpo::uno::Type >         \
 Class::getTypes()          \
 {                                                                           \
     static cppu::OTypeCollection collection(

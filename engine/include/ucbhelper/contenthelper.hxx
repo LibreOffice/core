@@ -307,70 +307,70 @@ public:
     virtual ~ContentImplHelper() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override
     { cppu::OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
     getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type >
     getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL
+    virtual OUString
     getImplementationName() override = 0;
-    virtual bool SAL_CALL
+    virtual bool
     supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override = 0;
 
     // XComponent
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XContent
-    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XContentIdentifier >
     getIdentifier() override;
-    virtual OUString SAL_CALL
+    virtual OUString
     getContentType() override = 0;
-    virtual void SAL_CALL
+    virtual void
     addContentEventListener(
         const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeContentEventListener(
         const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
 
     // XCommandProcessor
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     createCommandIdentifier() override;
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override = 0;
-    virtual void SAL_CALL
+    virtual void
     abort( sal_Int32 CommandId ) override = 0;
 
     // XPropertiesChangeNotifier
-    virtual void SAL_CALL
+    virtual void
     addPropertiesChangeListener(
         const cpo::uno::Sequence< OUString >& PropertyNames,
          const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removePropertiesChangeListener(
         const cpo::uno::Sequence< OUString >& PropertyNames,
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
     // XCommandInfoChangeNotifier
-    virtual void SAL_CALL
+    virtual void
     addCommandInfoChangeListener(
         const css::uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeCommandInfoChangeListener(
         const css::uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener ) override;
 
@@ -386,7 +386,7 @@ public:
       * Don't forget to return the meta data for these properties in your
       * implementation of getPropertyInfoTable.
       */
-    virtual void SAL_CALL
+    virtual void
     addProperty( const OUString& Name,
                  sal_Int16 Attributes,
                  const cpo::uno::Any& DefaultValue ) override;
@@ -401,14 +401,14 @@ public:
       * Don't forget to return the meta data for these properties in your
       * implementation of getPropertyInfoTable.
       */
-    virtual void SAL_CALL
+    virtual void
     removeProperty( const OUString& Name ) override;
 
     // XPropertySetInfoChangeNotifier
-    virtual void SAL_CALL
+    virtual void
     addPropertySetInfoChangeListener(
         const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removePropertySetInfoChangeListener(
         const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
@@ -419,13 +419,13 @@ public:
       * if such a parent exists. The implementation of this method uses your
       * implementation of getParentURL.
       */
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< cpo::uno::XInterface >
     getParent() override;
 
     /**
       * The implementation of this method always throws a NoSupportException.
       */
-    virtual void SAL_CALL
+    virtual void
     setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 

@@ -60,13 +60,13 @@ CommandEnvironment::~CommandEnvironment()
 // XCommandEnvironment methods.
 
 // virtual
-Reference< XInteractionHandler > SAL_CALL CommandEnvironment::getInteractionHandler()
+Reference< XInteractionHandler > CommandEnvironment::getInteractionHandler()
 {
     return m_pImpl->m_xInteractionHandler;
 }
 
 // virtual
-Reference< XProgressHandler > SAL_CALL CommandEnvironment::getProgressHandler()
+Reference< XProgressHandler > CommandEnvironment::getProgressHandler()
 {
     return m_pImpl->m_xProgressHandler;
 }

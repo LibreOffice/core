@@ -123,31 +123,31 @@ public:
     virtual ~ResultSetImplHelper() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XComponent ( base class of XDynamicResultSet )
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XDynamicResultSet
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSet >
     getStaticResultSet() override;
-    virtual void SAL_CALL
+    virtual void
     setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
 
     /**
       * The implementation of this method always returns 0. Override this
       * method, if necessary.
       */
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
     getCapabilities() override;
 
 };

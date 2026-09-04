@@ -44,10 +44,10 @@ public:
     : InteractionSupplyName_BASE( pRequest ) {}
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 
     // XInteractionSupplyName
-    virtual void SAL_CALL setName( const OUString& Name ) override;
+    virtual void setName( const OUString& Name ) override;
 
     // Non-interface methods.
 
@@ -60,12 +60,12 @@ public:
     const OUString & getName() const { return m_aName; }
 };
 
-void SAL_CALL InteractionSupplyName::select()
+void InteractionSupplyName::select()
 {
     recordSelection();
 }
 
-void SAL_CALL
+void
 InteractionSupplyName::setName( const OUString& Name )
 {
     m_aName = Name;
