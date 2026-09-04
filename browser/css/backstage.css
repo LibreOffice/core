@@ -372,7 +372,7 @@
 	justify-content: center;
 	align-items: end;
 	background: transparent;
-	flex: 1;
+	flex: 0 0 auto;
 }
 
 .template-thumbnail img {
@@ -396,9 +396,10 @@
 	font-weight: 500;
 	margin-top: 10px;
 	width: 100%;
-	white-space: nowrap;
+	white-space: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	text-wrap: balance;
 }
 
 .backstage-template-explorer {
