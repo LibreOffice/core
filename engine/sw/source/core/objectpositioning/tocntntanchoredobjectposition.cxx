@@ -966,14 +966,19 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         aRelPos.setY( nTmpRelPosY );
                         GetAnchoredObj().SetObjTop( nTopOfAnch + aRelPos.Y() );
                     }
-                    // If the anchor frame is the first content of the table cell
+                    // If the anchor frame has no follow
                     // and the object still doesn't fit, the table frame is notified,
                     // that the object doesn't fit into the table cell.
+                    // The cell area is valid outside a row split. While the table rebuilds the
+                    // last line of a row split, the cell has the height of the split row, so
+                    // the distance to its bottom is meaningful there as well.
                     nDist = aRectFnSet.BottomDist( GetAnchoredObj().GetObjRect(),
                         aRectFnSet.GetPrtBottom(*pUpperOfOrientFrame) );
                     if ( nDist < 0 &&
-                         pOrientFrame == &rAnchorTextFrame && !pOrientFrame->GetIndPrev() &&
-                         pUpperOfOrientFrame->isFrameAreaDefinitionValid() )
+                         pOrientFrame == &rAnchorTextFrame &&
+                         !pOrientFrame->GetFollow() &&
+                         ( pUpperOfOrientFrame->isFrameAreaDefinitionValid() ||
+                           pOrientFrame->FindTabFrame()->IsRebuildLastLine() ) )
                     {
                         const_cast<SwTabFrame*>(pOrientFrame->FindTabFrame())
                                                         ->SetDoesObjsFit( false );
@@ -1087,6 +1092,22 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     else
                         bMoveable = false;
                 }
+            }
+        }
+        else if ( !bIgnoreVertLayoutInCell && DoesObjFollowsTextFlow() &&
+                  pOrientFrame->IsInTab() )
+        {
+            // Aligned at a page area inside a table cell: the cell is the page area of an object
+            // that follows the text flow, so the object has to fit the cell. The position stays
+            // as it is. When the object does not fit, the table frame is told so.
+            nDist = aRectFnSet.BottomDist( GetAnchoredObj().GetObjRect(),
+                aRectFnSet.GetPrtBottom(*pUpperOfOrientFrame) );
+            if ( nDist < 0 &&
+                 pOrientFrame == &rAnchorTextFrame &&
+                 !pOrientFrame->GetFollow() )
+            {
+                const_cast<SwTabFrame*>(pOrientFrame->FindTabFrame())
+                                                ->SetDoesObjsFit( false );
             }
         }
 

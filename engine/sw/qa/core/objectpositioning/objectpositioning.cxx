@@ -712,6 +712,37 @@ CPPUNIT_TEST_FIXTURE(Test, testRightAlignedShapeBesideFly)
     }
     CPPUNIT_ASSERT(bFound);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFlyInSplitRowMovesWithRow)
+{
+    // A table row starts near the page bottom. Its cell holds an empty paragraph, a paragraph
+    // that anchors a text frame following the text flow and aligned to the top of the cell, and
+    // a nested table below the frame. The frame is taller than the space left on the page.
+    createSwDoc("fly-in-split-row.docx");
+    uno::Reference<text::XTextFramesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xFrames->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<bool>(xFrame, u"IsFollowingTextFlow"_ustr));
+
+    // The row moves to the next page as a whole and the frame keeps its full height there.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // The row was split, the anchor paragraph stayed in the part on the first page and the
+    // frame was cut at the page bottom, showing 4385 of its 6000 twips.
+    assertXPath(pXmlDoc, "//page[1]//anchored/fly", 0);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row/cell/txt/anchored/fly/infos/bounds", "height",
+                u"6000");
+    sal_Int32 nFlyBottom
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/txt/anchored/fly/infos/bounds",
+                   "bottom")
+              .toInt32();
+    sal_Int32 nBodyBottom
+        = getXPath(pXmlDoc, "//page[2]/body/infos/bounds", "bottom").toInt32();
+    CPPUNIT_ASSERT_LESS(nBodyBottom, nFlyBottom);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
