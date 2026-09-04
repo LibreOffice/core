@@ -954,6 +954,12 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testForcepoint97)
 #if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf156893)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Given a spreadsheet with a large number of rows, the whole-sheet export to PDF should export
     // all rows.
     loadFromFile(u"23000_rows.fods");
