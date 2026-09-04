@@ -527,6 +527,41 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     }
                     return (nil, nil)
                 }
+                else if body.hasPrefix("extensionsavefile ") {
+                    // A JS extension (see browser Control.Extension.ts) generated a
+                    // file - e.g. LibreLogo's PICTURE "x.svg" export - and asked to
+                    // save it to the filesystem. The bytes travel base64 in the
+                    // message; write them to a temp file and offer a save panel,
+                    // mirroring the exportfile flow.
+                    var name = "file"
+                    var base64: String?
+                    for item in body.dropFirst("extensionsavefile ".count).components(separatedBy: " ") {
+                        if item.hasPrefix("name=") {
+                            name = String(item.dropFirst("name=".count)).removingPercentEncoding ?? "file"
+                        } else if item.hasPrefix("data=") {
+                            base64 = String(item.dropFirst("data=".count))
+                        }
+                        // mime= is accepted but not needed for a filesystem save
+                    }
+                    guard let base64 = base64, let data = Data(base64Encoded: base64) else {
+                        COWrapper.LOG_ERR("extensionsavefile: missing or invalid data")
+                        return (nil, nil)
+                    }
+                    let sanitized = (name as NSString).lastPathComponent
+                    let savePanel = NSSavePanel()
+                    savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+                    savePanel.nameFieldStringValue = sanitized.isEmpty ? "file" : sanitized
+                    savePanel.begin { result in
+                        if result == .OK, let dstURL = savePanel.url {
+                            do {
+                                try data.write(to: dstURL)
+                            } catch {
+                                COWrapper.LOG_ERR("extensionsavefile: write failed: \(error)")
+                            }
+                        }
+                    }
+                    return (nil, nil)
+                }
                 else if body.hasPrefix("TEXTCLIPBOARD ") {
                     let text = String(body.dropFirst("TEXTCLIPBOARD ".count))
                     NSPasteboard.general.clearContents()

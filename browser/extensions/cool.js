@@ -302,6 +302,60 @@
 	// cool.dialog.cancel to dismiss itself.  It can also use cool.callRemote etc.
 	//
 	// opts: { url, title, width, height }.  url is relative to the extension's base URL.
+	// cool.onCommand = function (id) {...}: receives `panel: true` commands
+	// from the notebookbar, menus and shortcuts. Commands posted before the
+	// handler exists are queued and delivered on assignment.
+	let commandHandler = null;
+	const pendingCommands = [];
+	function deliverCommand(id) {
+		try {
+			commandHandler(id);
+		} catch (err) {
+			console.warn('cool.onCommand threw:', err);
+		}
+	}
+	Object.defineProperty(window.cool, 'onCommand', {
+		enumerable: true,
+		get: function () { return commandHandler; },
+		set: function (fn) {
+			commandHandler = (typeof fn === 'function') ? fn : null;
+			if (!commandHandler) return;
+			while (pendingCommands.length) deliverCommand(pendingCommands.shift());
+		}
+	});
+	// Save a file the extension generated (e.g. an exported SVG). COOL saves it
+	// the platform way: a download or a save to the WOPI host in Online, a
+	// filesystem save in the desktop app. `content` is a string (text files) or
+	// a Uint8Array / number[] of bytes; `mimeType` defaults to
+	// application/octet-stream. Resolves with how it was saved ("download",
+	// "host", "filesystem") or rejects if it could not be saved.
+	let nextSaveId = 0;
+	const pendingSaves = Object.create(null);
+	window.cool.saveFile = function (filename, content, mimeType) {
+		const saveId = 's' + (nextSaveId++);
+		let bytes;
+		if (typeof content === 'string') {
+			bytes = Array.from(new TextEncoder().encode(content));
+		} else if (content instanceof Uint8Array) {
+			bytes = Array.from(content);
+		} else if (Array.isArray(content)) {
+			bytes = content;
+		} else {
+			return Promise.reject(new Error('saveFile: content must be a string or bytes'));
+		}
+		const promise = new Promise(function (resolve, reject) {
+			pendingSaves[saveId] = { resolve: resolve, reject: reject };
+		});
+		window.parent.postMessage(JSON.stringify({
+			msgId: 'Extension_SaveFile',
+			saveId: saveId,
+			filename: filename,
+			mimeType: mimeType || 'application/octet-stream',
+			bytes: bytes,
+		}), '*');
+		return promise;
+	};
+
 	window.cool.dialog = {
 		open: function (opts) {
 			const dialogId = 'd' + (nextDialogId++);
@@ -483,6 +537,22 @@
 					console.warn('cool.document.' + handlerName + ' threw:', err);
 				}
 			}
+		} else if (data.msgId === 'Extension_Command') {
+			// A `panel: true` command from the notebookbar, a menu or a
+			// shortcut: the extension handles it with cool.onCommand(id).
+			// The command that opened the panel can arrive before the page's
+			// scripts have assigned the handler; keep it until they do.
+			if (typeof commandHandler === 'function') {
+				deliverCommand(data.commandId);
+			} else {
+				pendingCommands.push(data.commandId);
+			}
+		} else if (data.msgId === 'Extension_SaveFileResult') {
+			const entry = pendingSaves[data.saveId];
+			if (!entry) return;
+			delete pendingSaves[data.saveId];
+			if (data.err !== undefined) entry.reject(new Error(data.err));
+			else entry.resolve(data.how);
 		} else if (data.msgId === 'Extension_DialogResult') {
 			const entry = pendingDialogs[data.dialogId];
 			if (!entry) {

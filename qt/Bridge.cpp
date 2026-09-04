@@ -1135,6 +1135,42 @@ QVariant Bridge::cool(const QString& messageStr)
                                    QFile::remove(srcPath);
                            });
     }
+    else if (tokens.equals(0, "extensionsavefile"))
+    {
+        // A JS extension (see browser Control.Extension.ts) generated a file -
+        // e.g. LibreLogo's PICTURE "x.svg" export - and asked to save it. The
+        // bytes travel base64 in the message; write them to a temp file and
+        // reuse the same save dialog as exportfile.
+        std::string name, data;
+        COOLProtocol::getTokenString(tokens, "name", name);
+        if (!COOLProtocol::getTokenString(tokens, "data", data))
+        {
+            LOG_ERR("extensionsavefile: no data= specified");
+            return {};
+        }
+        QString suggestedName = QUrl::fromPercentEncoding(QByteArray::fromStdString(name));
+        suggestedName = QFileInfo(suggestedName).fileName();
+        if (suggestedName.isEmpty())
+            suggestedName = QStringLiteral("file");
+        const QByteArray bytes = QByteArray::fromBase64(QByteArray::fromStdString(data));
+
+        QString tmpPath = QDir(QDir::tempPath()).filePath(suggestedName);
+        QFile tmp(tmpPath);
+        if (!tmp.open(QIODevice::WriteOnly) || tmp.write(bytes) != bytes.size())
+        {
+            LOG_ERR("extensionsavefile: could not write temp file: " << tmpPath.toStdString());
+            return {};
+        }
+        tmp.close();
+
+        showSaveFileDialog(_webView, QObject::tr("Save File"), suggestedName,
+                           tmpPath.toStdString(),
+                           [tmpPath](bool /*ok*/)
+                           {
+                               // The dialog copies to the chosen path; drop the temp either way.
+                               QFile::remove(tmpPath);
+                           });
+    }
     else if (tokens.equals(0, "HYPERLINK"))
     {
         QString qurl = QString::fromStdString(tokens.substrFromToken(1));

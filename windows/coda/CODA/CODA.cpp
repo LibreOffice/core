@@ -3394,6 +3394,64 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
                     LOG_INF("exportfile: saved image to " << destPath);
             }
         }
+        else if (s.starts_with(L"extensionsavefile "))
+        {
+            // A JS extension (see browser Control.Extension.ts) generated a file
+            // - e.g. LibreLogo's PICTURE "x.svg" export - and asked to save it.
+            // The bytes travel base64 in the message; decode them and write to
+            // the user's chosen path, reusing the exportfile save dialog.
+            auto const ns = Util::wide_string_to_string(s);
+            auto const tokens = StringVector::tokenize(ns);
+            std::string encodedName, base64;
+            COOLProtocol::getTokenString(tokens, "name", encodedName);
+            if (!COOLProtocol::getTokenString(tokens, "data", base64))
+            {
+                LOG_ERR("extensionsavefile: no data= in message '" << ns << "'");
+                return;
+            }
+            std::string name;
+            Poco::URI::decode(encodedName, name);
+            if (name.empty())
+                name = "file";
+
+            // Decode the base64 payload.
+            DWORD cbBinary = 0;
+            if (!CryptStringToBinaryA(base64.c_str(), static_cast<DWORD>(base64.size()),
+                                      CRYPT_STRING_BASE64, nullptr, &cbBinary, nullptr, nullptr))
+            {
+                LOG_ERR("extensionsavefile: base64 decode sizing failed: " << GetLastError());
+                return;
+            }
+            std::vector<BYTE> bytes(cbBinary);
+            if (!CryptStringToBinaryA(base64.c_str(), static_cast<DWORD>(base64.size()),
+                                      CRYPT_STRING_BASE64, bytes.data(), &cbBinary, nullptr, nullptr))
+            {
+                LOG_ERR("extensionsavefile: base64 decode failed: " << GetLastError());
+                return;
+            }
+
+            auto const extension = Poco::Path(name).getExtension();
+            auto filenameAndUri = fileSaveDialog(
+                Poco::Path(name).getFileName(), "",
+                extension.empty()
+                    ? std::vector<COMDLG_FILTERSPEC>{}
+                    : std::vector<COMDLG_FILTERSPEC>{
+                          { Util::string_to_wide_string(extension).c_str(),
+                            Util::string_to_wide_string("*." + extension).c_str() } });
+
+            if (filenameAndUri.filename != "")
+            {
+                auto destPath = Poco::URI(filenameAndUri.uri).getPath();
+                // The usual hack to strip the leading slash before the drive letter.
+                if (destPath.length() > 4 && destPath[0] == '/' && destPath[2] == ':' && destPath[3] == '/')
+                    destPath = destPath.substr(1);
+                std::ofstream out(destPath, std::ios::binary | std::ios::trunc);
+                if (!out || !out.write(reinterpret_cast<const char*>(bytes.data()), bytes.size()))
+                    LOG_ERR("extensionsavefile: failed to write '" << destPath << "'");
+                else
+                    LOG_INF("extensionsavefile: saved " << destPath);
+            }
+        }
         else if (s.starts_with(L"loaddocument "))
         {
             // "loaddocument url=file:///path/to/file.ext"

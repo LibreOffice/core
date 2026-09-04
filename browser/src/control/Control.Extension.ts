@@ -114,8 +114,14 @@ interface ExtensionCommand {
 	id: string;
 	title: string;
 	icon?: string;
-	script: string;
+	// Kit-side command: the script file holding the `commands` object.
+	script?: string;
 	source?: string;
+	// Panel command: instead of running a script in the kit, open the
+	// extension's sidebar panel (if it isn't open) and deliver the command
+	// id to it as an Extension_Command postMessage; cool.js hands it to
+	// cool.onCommand. For extensions whose logic lives in the panel.
+	panel?: boolean;
 }
 
 // One notebookbar button, referencing a command declared in
@@ -276,6 +282,14 @@ interface ExtensionShowDialogMessage {
 	height?: number;
 }
 
+interface ExtensionSaveFileMessage {
+	msgId: 'Extension_SaveFile';
+	saveId: string;
+	filename: string;
+	mimeType: string;
+	bytes: number[];
+}
+
 interface ExtensionDialogCloseMessage {
 	msgId: 'Extension_DialogClose';
 	value: unknown;
@@ -291,7 +305,8 @@ type ExtensionSidebarMessage =
 	| ExtensionProxyReturnMessage
 	| ExtensionTeardownDoneMessage
 	| ExtensionResizeMessage
-	| ExtensionShowDialogMessage;
+	| ExtensionShowDialogMessage
+	| ExtensionSaveFileMessage;
 
 type ExtensionDialogMessage =
 	| ExtensionDialogCloseMessage
@@ -445,6 +460,10 @@ window.L.Control.Extension = window.L.Control.extend({
 			: undefined;
 		const command =
 			commands && commands.find((c: ExtensionCommand) => c.id === commandId);
+		if (command && command.panel) {
+			this.invokePanelCommand(commandId);
+			return;
+		}
 		if (!command || command.source === undefined) {
 			console.warn(
 				'extension ' + this.options.id + ': unknown command ' + commandId,
@@ -503,6 +522,29 @@ window.L.Control.Extension = window.L.Control.extend({
 				JSON.stringify(commandContext()) +
 				']);',
 		);
+	},
+
+	// A `panel: true` command: make sure the sidebar panel is showing, then
+	// hand the command id to the iframe. The iframe may still be loading, in
+	// which case the message goes out once it has loaded.
+	invokePanelCommand: function (commandId: string): void {
+		const sidebar = this.map.sidebar;
+		if (!sidebar) return;
+		const deliver = () => {
+			this._postToIframe({ msgId: 'Extension_Command', commandId: commandId });
+		};
+		if (sidebar.hasExtensionDeck(this) && this._iframe) {
+			deliver();
+			return;
+		}
+		if (this._panel) this._finishRemovePanel();
+		this._showPanel();
+		if (!this._panel) return;
+		sidebar.takeExtensionDeckSlot(this);
+		this._setToolitemHighlight(true);
+		if (this._iframe) {
+			this._iframe.addEventListener('load', deliver, { once: true });
+		}
 	},
 
 	// Dispatcher entry point.  The notebookbar Extensions tab fires
@@ -703,9 +745,69 @@ window.L.Control.Extension = window.L.Control.extend({
 			case 'Extension_ShowDialog':
 				this._openDialog(msg);
 				break;
+			case 'Extension_SaveFile':
+				this._saveFile(msg);
+				break;
 			default:
 				console.warn('unexpected msgId: ' + (msg as any).msgId);
 				break;
+		}
+	},
+
+	// Save a file an extension generated. In the desktop app (CODA) it goes to
+	// the native side, which shows a save panel; in the browser it downloads.
+	// The result ("download" / "filesystem") is posted back so the extension's
+	// cool.saveFile promise settles.
+	_saveFile: function (msg: ExtensionSaveFileMessage) {
+		const reply = (how: string, err?: string) => {
+			this._postToIframe({
+				msgId: 'Extension_SaveFileResult',
+				saveId: msg.saveId,
+				how: how,
+				err: err,
+			});
+		};
+		let bytes: Uint8Array;
+		try {
+			bytes = Uint8Array.from(msg.bytes || []);
+		} catch (e) {
+			reply(undefined, 'invalid file content');
+			return;
+		}
+		const filename = (msg.filename || 'file').replace(/^.*[\\/]/, '');
+		if ((window as any).ThisIsAMobileApp) {
+			// Hand the bytes to the native app (see the CODA/iOS extensionsavefile
+			// handler), base64 so the message stays text.
+			let binary = '';
+			for (let i = 0; i < bytes.length; i++)
+				binary += String.fromCharCode(bytes[i]);
+			(window as any).postMobileMessage(
+				'extensionsavefile name=' +
+					encodeURIComponent(filename) +
+					' mime=' +
+					encodeURIComponent(msg.mimeType || 'application/octet-stream') +
+					' data=' +
+					btoa(binary),
+			);
+			// The native side owns the save panel; report the platform, not success.
+			reply('filesystem');
+			return;
+		}
+		try {
+			const blob = new Blob([bytes], {
+				type: msg.mimeType || 'application/octet-stream',
+			});
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = filename;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			setTimeout(() => URL.revokeObjectURL(url), 10000);
+			reply('download');
+		} catch (e) {
+			reply(undefined, (e as Error).message);
 		}
 	},
 
@@ -1111,6 +1213,18 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 				if (manifest.contributes && manifest.contributes.commands) {
 					await Promise.all(
 						manifest.contributes.commands.map(async (command) => {
+							// Panel commands have no kit-side script to fetch.
+							if (command.panel) return;
+							if (!command.script) {
+								console.warn(
+									'extension ' +
+										id +
+										': command ' +
+										command.id +
+										' has neither script nor panel',
+								);
+								return;
+							}
 							try {
 								const scriptResp = await fetch(
 									app.LOUtil.getURL(baseRel + command.script),

@@ -82,6 +82,22 @@ ui.json:
 
   More than one command may name the same `script` file - add another key to its
   `commands` object rather than giving each command a one-function file of its own.
+
+  A command may instead set `"panel": true` and omit `script`. Choosing it opens
+  the extension's sidebar panel (`entry`) if it is not showing and posts the
+  command id to the iframe, where `cool.js` calls `cool.onCommand(id)`:
+
+  ```js
+  cool.onCommand = function (id) {
+      if (id === 'run') runProgram();
+  };
+  ```
+
+  Use this when the extension's logic lives in the panel (an interpreter, an
+  editor, anything with state or UI) rather than in the kit. Panel commands
+  still get their label and icon from `contributes.commands` and can be placed
+  on the ribbon, in menus, in the context menu and on key bindings like any other
+  command; only the target differs.
   A referenced function runs when its command is chosen from the menu or
   notebookbar. It only has access to the UNO API shown above - no DOM, no network,
   no other browser capability - and it runs without ever loading a visible panel,
@@ -253,6 +269,16 @@ Files:
 
 `com.collaboraoffice.demo-commands` (ribbon and menu strings) and
 `com.collaboraoffice.demo-wordcloud` (a panel) show the pattern.
+
+## Saving a generated file
+
+`cool.saveFile(filename, content, mimeType)` hands a file the extension built to
+COOL, which saves it the platform way: a download in the browser (Online), a
+native save panel in the desktop app (CODA). `content` is a string (text) or a
+`Uint8Array` / `number[]` of bytes. It returns a promise resolving to how it was
+saved (`"download"`, `"filesystem"`). Only the base name of `filename` is used.
+
+    await cool.saveFile('picture.svg', svgText, 'image/svg+xml');
 
 ## Local testing
 
