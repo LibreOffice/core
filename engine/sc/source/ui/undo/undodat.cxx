@@ -989,15 +989,15 @@ void ScUndoTableTotals::Undo()
     const SCROW nClearEndRow
         = bResize ? nRestoreEndRow
                   : ((mbInPlace && nNewEndRow > aParam.nRow2) ? nNewEndRow : aParam.nRow2);
+    if (xUndoDB)
+        rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
+
     rDoc.DeleteAreaTab( aParam.nCol1, aParam.nRow1+1, aParam.nCol2, nClearEndRow, nTab, InsertDeleteFlags::ALL );
 
     xUndoDoc->CopyToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, nRestoreEndRow, nTab,
                                                             InsertDeleteFlags::NONE, false, rDoc);
     xUndoDoc->UndoToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, nRestoreEndRow, nTab,
                                                             InsertDeleteFlags::ALL, false, rDoc);
-
-    if (xUndoDB)
-        rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )

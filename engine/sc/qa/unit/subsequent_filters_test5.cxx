@@ -1037,6 +1037,68 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)
     CPPUNIT_ASSERT(!pDBData->HasTotals());
 }
 
+namespace
+{
+SCROW getTotalRowTableEnd(ScDocument* pDoc, const OUString& rName = u"Table2"_ustr)
+{
+    ScDBData* pLive = findDBData(pDoc, rName);
+    CPPUNIT_ASSERT(pLive);
+    ScRange aArea;
+    pLive->GetArea(aArea);
+    return aArea.aEnd.Row();
+}
+} // anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoResizeRestoresSubtotal)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScDocShell* pDocSh = getScDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Styled table A1:B12 - header row 1, data rows 2 to 11, total row 12.
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 1, 11,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    pDoc->SetString(1, 0, 0, u"B"_ustr);
+    for (SCROW nRow = 1; nRow <= 8; ++nRow)
+    {
+        pDoc->SetString(0, nRow, 0, u"TATA"_ustr);
+        pDoc->SetValue(1, nRow, 0, 1.0);
+    }
+    pDoc->SetValue(1, 9, 0, 45.0);
+    pDoc->SetValue(1, 10, 0, 34.0);
+    pData->RefreshTableColumnNames(pDoc);
+
+    pDoc->SetString(0, 11, 0, u"Total"_ustr);
+    pDoc->SetString(1, 11, 0, u"=SUBTOTAL(109;Table1[B])"_ustr);
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(87.0, pDoc->GetValue(1, 11, 0));
+
+    // Shrink by two rows: the total relocates to row 10, 45 and 34 fall outside the table.
+    ScDBData* pLive = findDBData(pDoc, u"Table1"_ustr);
+    CPPUNIT_ASSERT(pLive);
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocSh).ResizeTable(*pLive, ScRange(0, 0, 0, 1, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(SCROW(9), getTotalRowTableEnd(pDoc, u"Table1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(1, 9, 0));
+
+    // Undo: the table spans its old rows again, so the total must read 87 once more.
+    pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(SCROW(11), getTotalRowTableEnd(pDoc, u"Table1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(87.0, pDoc->GetValue(1, 11, 0));
+
+    // Redo: back to the shrunk extent and its result.
+    pDoc->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL(SCROW(9), getTotalRowTableEnd(pDoc, u"Table1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(1, 9, 0));
+}
+
 // Two tables stacked, the bottom (Table1) wider than the top (Table2). Toggling Total
 // Row ON on the top would, with a plain column-bounded shift, tear Table1 (its D/E
 // columns wouldn't move). The fix takes the in-place path: write the total-row cells
