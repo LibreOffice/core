@@ -47,6 +47,7 @@ $(eval $(call gb_Executable_use_externals,coolwsd, \
 
 $(eval $(call gb_Executable_add_libs,coolwsd, \
     -Wl$(COMMA)--whole-archive \
+    $(call gb_StaticLibrary_get_target,wsd) \
     $(call gb_StaticLibrary_get_target,shared) \
     $(foreach lib,$(online_poco_whole_libs),$(call gb_StaticLibrary_get_target,$(lib))) \
     -Wl$(COMMA)--no-whole-archive \
@@ -54,6 +55,7 @@ $(eval $(call gb_Executable_add_libs,coolwsd, \
     $(if $(filter LINUX,$(OS)),-lrt) \
 ))
 $(call gb_Executable_get_target,coolwsd) : \
+    $(call gb_StaticLibrary_get_target,wsd) \
     $(call gb_StaticLibrary_get_target,shared) \
     $(foreach lib,$(online_poco_whole_libs),$(call gb_StaticLibrary_get_target,$(lib)))
 
@@ -62,44 +64,8 @@ $(eval $(call gb_Executable_add_ldflags,coolwsd,-Wl$(COMMA)-E))
 endif
 
 $(eval $(call gb_Executable_add_generated_exception_objects,coolwsd, \
-    wsd/AIChatSession \
-    wsd/AIUtil \
-    wsd/Admin \
-    wsd/AdminModel \
-    wsd/Auth \
     wsd/COOLWSD \
-    wsd/CacheUtil \
-    wsd/ClientRequestDispatcher \
-    wsd/ClientSession \
-    wsd/CollabBroker \
-    wsd/CollabFileProxy \
-    wsd/CollabSocketHandler \
-    wsd/ContentType \
-    wsd/DeckSpec \
-    wsd/DocumentBroker \
-    wsd/FileServer \
-    wsd/FileServerUtil \
-    wsd/HealthCheck \
-    wsd/HostUtil \
-    wsd/ProofKey \
-    wsd/ProxyProtocol \
-    wsd/ProxyRequestHandler \
-    wsd/QuarantineUtil \
-    wsd/RemoteConfig \
-    wsd/RequestDetails \
-    wsd/RequestVettingStation \
-    wsd/ServerAuditUtil \
-    wsd/SlideCache \
-    wsd/SpecialBrokers \
-    wsd/Storage \
-    wsd/TileCache \
-    wsd/Unzip \
     wsd/coolwsd-fork \
-    wsd/dumpWsdState \
-    wsd/wopi/CheckFileInfo \
-    wsd/wopi/StorageConnectionManager \
-    wsd/wopi/WopiProxy \
-    wsd/wopi/WopiStorage \
 ))
 
 # vim: set noet sw=4 ts=4:

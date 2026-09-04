@@ -10,45 +10,6 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-coolwsd_sources = \
-                  ../wsd/Admin.cpp \
-                  ../wsd/AdminModel.cpp \
-                  ../wsd/AIChatSession.cpp \
-                  ../wsd/AIUtil.cpp \
-                  ../wsd/Auth.cpp \
-                  ../wsd/COOLWSD.cpp \
-                  ../wsd/CacheUtil.cpp \
-                  ../wsd/ClientRequestDispatcher.cpp \
-                  ../wsd/ClientSession.cpp \
-                  ../wsd/CollabBroker.cpp \
-                  ../wsd/CollabFileProxy.cpp \
-                  ../wsd/CollabSocketHandler.cpp \
-                  ../wsd/ContentType.cpp \
-                  ../wsd/DeckSpec.cpp \
-                  ../wsd/DocumentBroker.cpp \
-                  ../wsd/FileServer.cpp \
-                  ../wsd/FileServerUtil.cpp \
-                  ../wsd/HealthCheck.cpp \
-                  ../wsd/HostUtil.cpp \
-                  ../wsd/ProofKey.cpp \
-                  ../wsd/ProxyProtocol.cpp \
-                  ../wsd/ProxyRequestHandler.cpp \
-                  ../wsd/QuarantineUtil.cpp \
-                  ../wsd/RemoteConfig.cpp \
-                  ../wsd/RequestDetails.cpp \
-                  ../wsd/RequestVettingStation.cpp \
-                  ../wsd/ServerAuditUtil.cpp \
-                  ../wsd/SlideCache.cpp \
-                  ../wsd/SpecialBrokers.cpp \
-                  ../wsd/Storage.cpp \
-                  ../wsd/TileCache.cpp \
-                  ../wsd/Unzip.cpp \
-                  ../wsd/dumpWsdState.cpp \
-                  ../wsd/wopi/CheckFileInfo.cpp \
-                  ../wsd/wopi/StorageConnectionManager.cpp \
-                  ../wsd/wopi/WopiProxy.cpp \
-                  ../wsd/wopi/WopiStorage.cpp
-
 coolforkit_sources = \
                      ../kit/ChildSession.cpp \
                      ../kit/ForKit.cpp \
@@ -58,7 +19,7 @@ coolforkit_sources = \
 common_fuzzer_sources = \
                        Common.cpp \
                        ../common/DummyTraceEventEmitter.cpp \
-                       $(coolwsd_sources) \
+                       ../wsd/COOLWSD.cpp \
                        ../wsd/coolwsd-inproc.cpp \
                        ../wsd/KitWSDGlobals.cpp \
                        $(coolforkit_sources)
@@ -114,19 +75,21 @@ LIBFUZZER_CFI_FLAGS = -fsanitize=cfi -fno-sanitize=cfi-derived-cast,cfi-unrelate
 endif
 LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
 
-# Pull in code produced by gbuild already.
+# Pull in code produced by gbuild already: the static libraries.
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
-GBUILD_SHARED_WHOLE = -Wl,--whole-archive,$(GBUILD_SHARED_LIB),--no-whole-archive
+GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
+GBUILD_WHOLE = -Wl,--whole-archive,$(GBUILD_WSD_LIB),$(GBUILD_SHARED_LIB),--no-whole-archive
 
-LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS) $(GBUILD_SHARED_WHOLE)
+LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS) $(GBUILD_WHOLE)
 
 # Dependency for code produced by gbuild.
-EXTRA_admin_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
-EXTRA_clientrequest_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
-EXTRA_clientsession_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
-EXTRA_collab_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
-EXTRA_httpresponse_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
-EXTRA_httpecho_fuzzer_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+GBUILD_LIBS = $(GBUILD_SHARED_LIB) $(GBUILD_WSD_LIB)
+EXTRA_admin_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
+EXTRA_clientrequest_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
+EXTRA_clientsession_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
+EXTRA_collab_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
+EXTRA_httpresponse_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
+EXTRA_httpecho_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
 
 # When configure found the static Poco archives (@POCO_FUZZER_STATIC_LIBS@), link
 # them into every fuzzer to avoid cross-DSO CFI aborts against the

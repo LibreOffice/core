@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_targets,gbuild, \
     StaticLibrary_kitglobals \
     StaticLibrary_shared \
     StaticLibrary_simd \
+    StaticLibrary_wsd \
     StaticLibrary_wsdglobals \
 ))
 
