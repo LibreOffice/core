@@ -1302,8 +1302,6 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             pNew->SetFormatAttr( rNew );
             aFormatCmp.push_back(std::make_unique<SwTableFormatCmp>(pOld, pNew, 0));
         }
-
-        pBox->SetDirectFormatting(true);
     }
 
     SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();

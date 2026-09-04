@@ -37,6 +37,12 @@
 #include <svx/svxids.hrc>
 #include <officecfg/Office/Compatibility.hxx>
 #include <test/commontesttools.hxx>
+#include <tblafmt.hxx>
+#include <swtable.hxx>
+#include <itabenum.hxx>
+#include <fmtcol.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -2085,6 +2091,125 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf166012)
 
     CPPUNIT_ASSERT_EQUAL(short(4),
                          getProperty<short>(getRun(getParagraph(1), 1), u"CharScriptHint"_ustr));
+}
+
+namespace
+{
+/// A table style that right-aligns every cell's text at 14pt.
+void lcl_MakeRightAligned14ptStyle(SwDoc& rDoc)
+{
+    SwTableAutoFormat* pStyle = rDoc.MakeTableStyle(TableStyleName(u"Test Style"_ustr));
+    for (sal_uInt8 i = 0; i < 16; ++i)
+    {
+        pStyle->GetBoxFormat(i).GetProps().SetAdjust(
+            SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST));
+        pStyle->GetBoxFormat(i).GetProps().SetHeight(
+            SvxFontHeightItem(280, 100, RES_CHRATR_FONTSIZE));
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTableStyleInsertRowKeepsDirectFormatting)
+{
+    // Given a table with a style applied, and direct alignment and font size formatting
+    // covering every cell, overriding the style:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    lcl_MakeRightAligned14ptStyle(*pDoc);
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+
+    // Select the whole table and center it with a 10pt font, the same way the toolbar
+    // and the character dialog do, so the document's own default (left, 12pt) and the
+    // style (right, 14pt) are both distinguishable from this direct formatting.
+    pWrtShell->SelTable();
+    dispatchCommand(mxComponent, u".uno:CenterPara"_ustr, {});
+    cpo::uno::Sequence<beans::PropertyValue> aFontHeightArgs = comphelper::InitPropertySequence({
+        { u"FontHeight.Height"_ustr, cpo::uno::Any(static_cast<float>(10)) },
+    });
+    dispatchCommand(mxComponent, u".uno:FontHeight"_ustr, aFontHeightArgs);
+
+    SwTableBox* pTopLeftBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+    SwContentNode* pContentNode
+        = pDoc->GetNodes()[pTopLeftBox->GetSttIdx() + 1]->GetContentNode();
+    CPPUNIT_ASSERT(pContentNode);
+
+    // Sanity check: the direct formatting is really in place before the insert.
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center,
+                         pContentNode->GetAttr(RES_PARATR_ADJUST).GetAdjust());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(200),
+                         pContentNode->GetAttr(RES_CHRATR_FONTSIZE).GetHeight());
+
+    // When inserting a row with the cursor at a single point in one cell, not a real
+    // table selection:
+    pWrtShell->TableCursorToCursor();
+    dispatchCommand(mxComponent, u".uno:InsertRowsAfter"_ustr, {});
+
+    // Then a cell the insert did not touch keeps the direct formatting instead of getting
+    // the table style's alignment and font size.
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center,
+                         pContentNode->GetAttr(RES_PARATR_ADJUST).GetAdjust());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(200),
+                         pContentNode->GetAttr(RES_CHRATR_FONTSIZE).GetHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTableStyleInsertRowKeepsLoadedFormatting)
+{
+    // Given a table with a style applied, and direct alignment and font size formatting
+    // set directly on the content node, the way an import filter sets it, rather than
+    // through the shell:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    lcl_MakeRightAligned14ptStyle(*pDoc);
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    rMutableTable.SetTableStyleName(TableStyleName(u"Test Style"_ustr));
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode());
+
+    SwTableBox* pTopLeftBox = rMutableTable.GetTabLines()[0]->GetTabBoxes()[0];
+    SwContentNode* pContentNode
+        = pDoc->GetNodes()[pTopLeftBox->GetSttIdx() + 1]->GetContentNode();
+    CPPUNIT_ASSERT(pContentNode);
+
+    pContentNode->SetAttr(SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST));
+    pContentNode->SetAttr(SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE));
+
+    // When inserting a row with the cursor at a single point in one cell, not a real
+    // table selection:
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    dispatchCommand(mxComponent, u".uno:InsertRowsAfter"_ustr, {});
+
+    // Then a cell the insert did not touch keeps the loaded formatting instead of getting
+    // the table style's alignment and font size.
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center,
+                         pContentNode->GetAttr(RES_PARATR_ADJUST).GetAdjust());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(200),
+                         pContentNode->GetAttr(RES_CHRATR_FONTSIZE).GetHeight());
+
+    // The new row's cell is in a style role too (its own attributes, copied from the row
+    // above, are a separate matter): the role provides the style's alignment and size.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rMutableTable.GetTabLines().size());
+    SwTableBox* pNewRowBox = rMutableTable.GetTabLines()[1]->GetTabBoxes()[0];
+    SwContentNode* pNewNode = pDoc->GetNodes()[pNewRowBox->GetSttIdx() + 1]->GetContentNode();
+    CPPUNIT_ASSERT(pNewNode);
+    const SwTextFormatColl* pRoleColl = pNewNode->GetTableStyleRoleColl();
+    CPPUNIT_ASSERT(pRoleColl);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right,
+                         pRoleColl->GetAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(280),
+                         pRoleColl->GetAttrSet().Get(RES_CHRATR_FONTSIZE).GetHeight());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

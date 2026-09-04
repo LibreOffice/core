@@ -743,10 +743,12 @@ public:
     SW_DLLPUBLIC bool SetTableStyle(const SwTableAutoFormat& rNew);
     SW_DLLPUBLIC bool ResetTableStyle();
 
-    /// Update the direct formatting according to the current table style.
+    /// Resolve the table's style live again (SwDoc::ApplyTableStyleLive), after a
+    /// structural change or to apply another style.
     /// @param pTableNode Table node to update.  When nullptr, current cursor position is used.
-    /// @param bResetDirect Reset direct formatting that might be applied to the cells.
-    /// @param pStyleName new style to apply
+    /// @param bResetDirect Replace the cells' own border and background with the style's.
+    /// @param pStyleName new style to apply (an empty name removes the style); nullptr keeps
+    ///        the current one. Applying a style resets the cells like bResetDirect does.
     bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false, TableStyleName const* pStyleName = nullptr);
 
     SW_DLLPUBLIC bool GetTableAutoFormat( SwTableAutoFormat& rGet );

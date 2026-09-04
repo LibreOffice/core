@@ -43,6 +43,7 @@
 #include <frmtool.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
+#include <tblafmt.hxx>
 #include <tblsel.hxx>
 #include <fldbas.hxx>
 #include <rowfrm.hxx>
@@ -2082,9 +2083,19 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
 
     pTableNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );
 
-    pNewTable->SetTableStyleName(pTableNd->GetTable().GetTableStyleName());
-
     pTableNd->GetTable().SetTableStyleName(rStyleName);
+    if (!rStyleName.isEmpty())
+    {
+        // The copy takes the role settings along with the style name, and the style's
+        // definition too when the target document does not have it yet.
+        pTableNd->GetTable().SetTableStyleSettings(GetTableStyleSettings());
+        if (!rInsDoc.GetTableStyles().FindAutoFormat(rStyleName))
+        {
+            if (const SwTableAutoFormat* pSourceStyle
+                = GetFrameFormat()->GetDoc().GetTableStyles().FindAutoFormat(rStyleName))
+                rInsDoc.GetTableStyles().AddAutoFormat(*pSourceStyle);
+        }
+    }
     if( auto pSwDDETable = dynamic_cast<const SwDDETable*>(this) )
     {
         // A DDE-Table is being copied
@@ -2182,6 +2193,11 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
         lcl_CheckRowSpan( *pNewTable );
     // Clean up
     pNewTable->GCLines();
+
+    // The copied cells carry only their own formatting; what came from the style is
+    // resolved again for the new table.
+    if (!rStyleName.isEmpty())
+        rInsDoc.ApplyTableStyleLive(*pTableNd);
 
     pTableNd->MakeOwnFrames();  // re-generate the Frames
 

@@ -22,6 +22,7 @@
 #include <node.hxx>
 #include <frmfmt.hxx>
 #include <swtable.hxx>
+#include <tblafmt.hxx>
 #include <ndtxt.hxx>
 #include <swtblfmt.hxx>
 #include <cellatr.hxx>
@@ -330,6 +331,20 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
 
     if( pDDEType )
         pDDEType->IncRefCnt();
+
+    // The copied cells carry only their own formatting; what came from the style has to be
+    // resolved again in the target, which needs the style definition first.
+    const TableStyleName& rStyleName = GetTable().GetTableStyleName();
+    if (!rStyleName.isEmpty())
+    {
+        if (!rDoc.GetTableStyles().FindAutoFormat(rStyleName))
+        {
+            if (const SwTableAutoFormat* pSourceStyle
+                = GetDoc().GetTableStyles().FindAutoFormat(rStyleName))
+                rDoc.GetTableStyles().AddAutoFormat(*pSourceStyle);
+        }
+        rDoc.ApplyTableStyleLive(*pTableNd);
+    }
 
     CHECK_TABLE( GetTable() );
     return pTableNd;

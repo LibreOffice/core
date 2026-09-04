@@ -1285,15 +1285,26 @@ public:
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
     /// AutoFormat for table/table selection.
-    /// @param bResetDirect Reset direct formatting that might be applied to the cells.
-    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, TableStyleName const* pStyleNameToSet = nullptr);
+    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, TableStyleName const* pStyleNameToSet = nullptr);
 
     /// Resolve the whole table's current table style name and settings (SwTable::
-    /// GetTableStyleName/GetTableStyleSettings) live: cells without direct formatting derive
-    /// their box border and background from shared per-role frame formats instead of having
-    /// those values baked in, so a later settings or style change takes effect without
-    /// touching cell content again. Returns false if the table has no style set.
-    SW_DLLPUBLIC bool ApplyTableStyleLive(SwTableNode& rTableNode);
+    /// GetTableStyleName/GetTableStyleSettings) live: every cell derives its border and
+    /// background from a shared per-role frame format, and every paragraph gets the role
+    /// collection of its cell (see GetTableStyleRoleColl), so a later settings or style
+    /// change takes effect without touching cell content. A cell's own border and background
+    /// stay in place unless bResetCellFormatting asks for the style's to replace them. The
+    /// shared role formats and collections are rebuilt when the style name or settings differ
+    /// from those they were built for, or when bStyleDefinitionChanged says the style itself
+    /// was edited; otherwise only cells and paragraphs whose role moved are touched.
+    /// Returns false if the table has no style set.
+    SW_DLLPUBLIC bool ApplyTableStyleLive(SwTableNode& rTableNode, bool bResetCellFormatting = false,
+                                          bool bStyleDefinitionChanged = false);
+
+    /// Resolve the table's style live and then drop from its cells and paragraphs every own
+    /// item that only repeats what their style role provides. Documents written before the
+    /// style was resolved live carry the style's values as direct formatting, which would
+    /// otherwise win over a role change for good.
+    SW_DLLPUBLIC void StripBakedTableStyleFormatting(SwTableNode& rTableNode);
 
     /// The paragraph collection carrying the table style text formatting for paragraphs
     /// with the paragraph style rBase in the cell whose section starts at rBoxStart, or

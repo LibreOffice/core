@@ -1157,45 +1157,38 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
                 m_aTemplateName = sValue;
                 break;
             case XML_ELEMENT(TABLE, XML_USE_FIRST_ROW_STYLES):
-            {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
-                    m_aTemplateSettings.m_bUseFirstRowStyle = bTmp;
-                break;
-            }
             case XML_ELEMENT(TABLE, XML_USE_LAST_ROW_STYLES):
-            {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
-                    m_aTemplateSettings.m_bUseLastRowStyle = bTmp;
-                break;
-            }
             case XML_ELEMENT(TABLE, XML_USE_FIRST_COLUMN_STYLES):
-            {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
-                    m_aTemplateSettings.m_bUseFirstColumnStyle = bTmp;
-                break;
-            }
             case XML_ELEMENT(TABLE, XML_USE_LAST_COLUMN_STYLES):
-            {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
-                    m_aTemplateSettings.m_bUseLastColumnStyle = bTmp;
-                break;
-            }
             case XML_ELEMENT(TABLE, XML_USE_BANDING_ROWS_STYLES):
-            {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
-                    m_aTemplateSettings.m_bUseRowBandingStyle = bTmp;
-                break;
-            }
             case XML_ELEMENT(TABLE, XML_USE_BANDING_COLUMNS_STYLES):
             {
+                m_bHasTemplateSettings = true;
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, sValue))
-                    m_aTemplateSettings.m_bUseColumnBandingStyle = bTmp;
+                {
+                    switch (aIter.getToken())
+                    {
+                        case XML_ELEMENT(TABLE, XML_USE_FIRST_ROW_STYLES):
+                            m_aTemplateSettings.m_bUseFirstRowStyle = bTmp;
+                            break;
+                        case XML_ELEMENT(TABLE, XML_USE_LAST_ROW_STYLES):
+                            m_aTemplateSettings.m_bUseLastRowStyle = bTmp;
+                            break;
+                        case XML_ELEMENT(TABLE, XML_USE_FIRST_COLUMN_STYLES):
+                            m_aTemplateSettings.m_bUseFirstColumnStyle = bTmp;
+                            break;
+                        case XML_ELEMENT(TABLE, XML_USE_LAST_COLUMN_STYLES):
+                            m_aTemplateSettings.m_bUseLastColumnStyle = bTmp;
+                            break;
+                        case XML_ELEMENT(TABLE, XML_USE_BANDING_ROWS_STYLES):
+                            m_aTemplateSettings.m_bUseRowBandingStyle = bTmp;
+                            break;
+                        default:
+                            m_aTemplateSettings.m_bUseColumnBandingStyle = bTmp;
+                            break;
+                    }
+                }
                 break;
             }
             case XML_ELEMENT(XML, XML_ID):
@@ -2538,6 +2531,16 @@ void SwXMLTableContext::MakeTable()
     UIName sStyleName;
     SwStyleNameMapper::FillUIName( ProgName(m_aTemplateName), sStyleName, SwGetPoolIdFromName::TableStyle );
     m_pTableNode->GetTable().SetTableStyleName( TableStyleName(sStyleName.toString()) );
+    if (!m_aTemplateName.isEmpty() && !m_bHasTemplateSettings)
+    {
+        // Written before the roles could be switched off: every role of the template applied.
+        m_aTemplateSettings.m_bUseFirstRowStyle = true;
+        m_aTemplateSettings.m_bUseLastRowStyle = true;
+        m_aTemplateSettings.m_bUseFirstColumnStyle = true;
+        m_aTemplateSettings.m_bUseLastColumnStyle = true;
+        m_aTemplateSettings.m_bUseRowBandingStyle = true;
+        m_aTemplateSettings.m_bUseColumnBandingStyle = true;
+    }
     m_pTableNode->GetTable().SetTableStyleSettings( m_aTemplateSettings );
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );
@@ -2660,6 +2663,11 @@ void SwXMLTableContext::MakeTable()
 
     for (std::unique_ptr<SwXMLTableRow_Impl> & rRow : *m_pRows)
         rRow->Dispose();
+
+    // The file carries the style's own formatting as direct formatting of the cells and
+    // paragraphs, for readers without table styles. Here the style is live, so what only
+    // repeats it goes, and a later role change can show.
+    m_pTableNode->GetDoc().StripBakedTableStyleFormatting(*m_pTableNode);
 
     // now that table is complete, change into DDE table (if appropriate)
     if (m_xDDESource.is())

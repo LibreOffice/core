@@ -228,6 +228,7 @@ std::vector<SwTableBoxFormat*> SwTable::TakeTableStyleRoleFormats()
     for (auto& [nKey, pFormat] : m_TableStyleRoleFormats)
         aFormats.push_back(pFormat);
     m_TableStyleRoleFormats.clear();
+    m_bRoleCacheValid = false;
     return aFormats;
 }
 
@@ -266,6 +267,7 @@ std::vector<SwTextFormatColl*> SwTable::TakeTableStyleRoleColls()
     for (auto& [aKey, pColl] : m_TableStyleRoleColls)
         aColls.push_back(pColl);
     m_TableStyleRoleColls.clear();
+    m_bRoleCacheValid = false;
     return aColls;
 }
 
@@ -2138,7 +2140,6 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLin
     , m_pUpper(pUp)
     , mnRowSpan(1)
     , mbDummyFlag(false)
-    , mbDirectFormatting(false)
 {
     m_aLines.reserve( nLines );
     CheckBoxFormat( pFormat )->Add(*this);
@@ -2151,7 +2152,6 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
     , m_pUpper(pUp)
     , mnRowSpan(1)
     , mbDummyFlag(false)
-    , mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add(*this);
 
@@ -2173,7 +2173,6 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
     , m_pUpper(pUp)
     , mnRowSpan(1)
     , mbDummyFlag(false)
-    , mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add(*this);
 

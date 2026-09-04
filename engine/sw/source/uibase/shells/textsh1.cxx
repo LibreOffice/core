@@ -1215,14 +1215,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aAttribs.insert( i );
             }
 
-            // also clear the direct formatting flag inside SwTableBox(es)
+            // also give the cells back the table style's border and background
             if (SwFEShell* pFEShell = GetView().GetDocShell()->GetFEShell())
                 pFEShell->UpdateTableStyleFormatting(nullptr, true);
 
             // tdf#160801 fix crash by delaying resetting of attributes
             // Calling SwWrtShell::ResetAttr() will sometimes delete the
-            // current SwTextShell instance so call it after clearing the
-            // direct formatting flag.
+            // current SwTextShell instance so call it after the table
+            // style has been reapplied.
             rWrtSh.ResetAttr( aAttribs );
 
             rReq.Done();

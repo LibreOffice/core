@@ -169,6 +169,12 @@ protected:
     /// currently uses a live style that defines text formatting.
     std::map<std::pair<sal_uInt8, const SwTextFormatColl*>, SwTextFormatColl*> m_TableStyleRoleColls;
 
+    /// The style name and role settings the two caches above were built for. Both caches are
+    /// only meaningful for that exact combination.
+    TableStyleName m_aRoleCacheStyleName;
+    SwTableStyleSettings m_aRoleCacheSettings;
+    bool m_bRoleCacheValid = false;
+
     bool        m_bModifyLocked   :1;
     bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
 
@@ -237,6 +243,22 @@ public:
 
     /// Set which of the table style's row/column roles apply to this table.
     void SetTableStyleSettings(const SwTableStyleSettings& rNew) { maTableStyleSettings = rNew; }
+
+    /// Whether the cached role formats and collections were built for this style name and
+    /// these role settings, and so can be reused as they are.
+    bool HasTableStyleRoleCacheFor(const TableStyleName& rName, const SwTableStyleSettings& rSettings) const
+    {
+        return m_bRoleCacheValid && m_aRoleCacheStyleName == rName && m_aRoleCacheSettings == rSettings;
+    }
+
+    /// Record which style name and role settings the cached role formats and collections
+    /// belong to.
+    void SetTableStyleRoleCacheFor(const TableStyleName& rName, const SwTableStyleSettings& rSettings)
+    {
+        m_aRoleCacheStyleName = rName;
+        m_aRoleCacheSettings = rSettings;
+        m_bRoleCacheValid = true;
+    }
 
     /// Look up a cached shared frame format for a live table-style role, or nullptr if this
     /// table hasn't needed that role/single-row/single-column combination yet.
@@ -532,9 +554,6 @@ class SW_DLLPUBLIC SwTableBox final : public SwClient      //Client of FrameForm
     sal_Int32 mnRowSpan;
     bool mbDummyFlag;
 
-    /// Do we contain any direct formatting?
-    bool mbDirectFormatting;
-
     // In case Format contains formulas/values already,
     // a new one must be created for the new box.
     static SwTableBoxFormat* CheckBoxFormat( SwTableBoxFormat* );
@@ -555,12 +574,6 @@ public:
 
     SwTableBoxFormat* GetFrameFormat()       { return static_cast<SwTableBoxFormat*>(GetRegisteredIn()); }
     SwTableBoxFormat* GetFrameFormat() const { return const_cast<SwTableBoxFormat*>(static_cast<const SwTableBoxFormat*>(GetRegisteredIn())); }
-
-    /// Set that this table box contains formatting that is not set by the table style.
-    void SetDirectFormatting(bool bDirect) { mbDirectFormatting = bDirect; }
-
-    /// Do we contain any direct formatting (ie. something not affected by the table style)?
-    bool HasDirectFormatting() const { return mbDirectFormatting; }
 
     // Creates its own FrameFormat if more boxes depend on it.
     SwTableBoxFormat* ClaimFrameFormat();

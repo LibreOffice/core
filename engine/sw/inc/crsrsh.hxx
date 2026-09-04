@@ -360,7 +360,7 @@ public:
     ///< delete the current cursor and make the following into the current
     SW_DLLPUBLIC void DestroyCursor();
     ///< transform TableCursor to normal cursor, nullify Tablemode
-    void TableCursorToCursor();
+    SW_DLLPUBLIC void TableCursorToCursor();
     ///< enter block mode, change normal cursor into block cursor
     void CursorToBlockCursor();
     ///< leave block mode, change block cursor into normal cursor

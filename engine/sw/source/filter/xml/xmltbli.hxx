@@ -52,9 +52,11 @@ class SwXMLTableContext : public XMLTextTableContext
     OUString     m_aStyleName;
     OUString     m_aDfltCellStyleName;
     OUString     m_aTemplateName;
-    /// Which of the template's row/column roles apply. Defaults (see SwTableStyleSettings)
-    /// match what a table without these attributes at all should look like.
+    /// Which of the template's row/column roles apply.
     SwTableStyleSettings m_aTemplateSettings;
+    /// Whether the table element carried any of the table:use-*-styles attributes. Files
+    /// written before those were saved applied every role of the template.
+    bool m_bHasTemplateSettings = false;
 
     //! Holds basic information about a column's width.
     struct ColumnWidthInfo {

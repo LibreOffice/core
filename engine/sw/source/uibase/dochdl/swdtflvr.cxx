@@ -4199,7 +4199,12 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
             // restore cursor position
             if (bNeedTrack && pMark != nullptr)
+            {
                 rSh.GotoMark( pMark );
+                // The walk below moves the cursor through the pasted rows by their position
+                // on the page, and they have no layout yet.
+                rSh.CalcLayout();
+            }
 
             if ( !bNeedTrack && !bPasteIntoTable )
             {
