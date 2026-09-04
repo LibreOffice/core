@@ -7,7 +7,7 @@ window.CODA_TEMPLATES = [
 		"type": "writer",
 		"category": "writer",
 		"path": "templates/files/text/Modern_business_letter_sans_serif.odt",
-		"basename": _("Business Letter"),
+		"basename": _("Modern Business Letter"),
 		"preview": "templates/previews/text/writer-modern-business-letter-sans-serif.png",
 		"featured": true
 	},
@@ -17,7 +17,7 @@ window.CODA_TEMPLATES = [
 		"type": "writer",
 		"category": "writer",
 		"path": "templates/files/text/Modern_business_letter_serif.odt",
-		"basename": _("Business Letter"),
+		"basename": _("Modern Business Letter"),
 		"preview": "templates/previews/text/writer-modern-business-letter-serif.png",
 		"featured": true
 	},
