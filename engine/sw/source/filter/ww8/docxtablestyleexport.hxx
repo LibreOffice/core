@@ -33,11 +33,17 @@ public:
     void CnfStyle(const cpo::uno::Sequence<css::beans::PropertyValue>& rAttributeList);
 
     void SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
-    DocxTableStyleExport(SwDoc& rDoc, const sax_fastparser::FSHelperPtr& pSerializer);
+    /// bEcma: the file is written in the first ECMA edition of the format, which spells
+    /// alignment as left and right rather than start and end.
+    DocxTableStyleExport(SwDoc& rDoc, const sax_fastparser::FSHelperPtr& pSerializer, bool bEcma);
     ~DocxTableStyleExport();
 
     // This function only returns useful/cached results after EndStyles - i.e. in WriteMainText
     bool FirstRowHasTblHeader(const OUString& rStyleId) const;
+
+    /// The style id a table refers to a table style by: the id the style came into the
+    /// document with, when it was loaded from DOCX, else the id its name gives.
+    OUString GetDocxStyleId(std::u16string_view rStyleName) const;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXTABLESTYLEEXPORT_HXX

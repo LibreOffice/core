@@ -13,6 +13,16 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <editeng/colritem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <docsh.hxx>
+#include <frameformats.hxx>
+#include <itabenum.hxx>
+#include <ndtxt.hxx>
+#include <swtable.hxx>
+#include <tblafmt.hxx>
+#include <wrtsh.hxx>
+
 using namespace css;
 using namespace ::cpo;
 using namespace ::cpo::uno;
@@ -490,13 +500,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 1);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b",
-                           "val");
-    // This was 0
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b",
-                           "val");
+    // The bold of the runs in rows 2 and 3 comes from the table style's first column role
+    // alone, as in the source file. It stays with the style and is not repeated on the runs;
+    // a reader applies it from the style.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 0);
+    // Row 4 switches bold off on the run itself; that is the run's own and stays.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", "val",
                 u"false");
@@ -946,6 +955,69 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145542_imageSizeRotatedAndStretched)
     // (the unstretched 3cm).
     const sal_Int64 nCx = getXPath(pXmlDoc, "//wp:inline/wp:extent", "cx").toInt64();
     CPPUNIT_ASSERT_GREATER(sal_Int64(5000000), nCx);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleLiveDocxRoundTrip)
+{
+    // A table using the built-in "Grid Table 4 Accent 1" live: bold white header text on a
+    // blue fill, with nothing written into the paragraphs themselves.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const TableStyleName aStyleName(u"Grid Table 4 Accent 1"_ustr);
+    CPPUNIT_ASSERT(pDoc->GetTableStyles().FindAutoFormat(aStyleName));
+    SwInsertTableOptions aOptions(SwInsertTableFlags::DefaultBorder, 0);
+    const SwTable& rTable = pWrtShell->InsertTable(aOptions, /*nRows=*/2, /*nCols=*/2);
+    SwTable& rMutableTable = rTable.GetTableNode()->GetTable();
+    SwTableStyleSettings aSettings;
+    aSettings.m_bUseFirstRowStyle = true;
+    rMutableTable.SetTableStyleName(aStyleName);
+    rMutableTable.SetTableStyleSettings(aSettings);
+    pDoc->ApplyTableStyleLive(*rTable.GetTableNode(), /*bResetCellFormatting=*/true);
+    pWrtShell->GotoTable(rMutableTable.GetFrameFormat()->GetName());
+    pWrtShell->Insert(u"header"_ustr);
+
+    saveAndReload(TestFilter::DOCX);
+
+    // The style definition in the file carries the header row's text formatting, so a
+    // reader takes it from the style, the way the document was designed. Its id follows the
+    // built-in DOCX naming, and the table refers to it by that id.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='GridTable4-Accent1']/w:name", "val",
+                u"Grid Table 4 Accent 1");
+    assertXPath(pXmlDoc,
+                "/w:styles/w:style[@w:styleId='GridTable4-Accent1']"
+                "/w:tblStylePr[@w:type='firstRow']/w:rPr/w:b",
+                "val", u"1");
+    // The style defines bold for complex text as well, and that goes out as its own element.
+    assertXPath(pXmlDoc,
+                "/w:styles/w:style[@w:styleId='GridTable4-Accent1']"
+                "/w:tblStylePr[@w:type='firstRow']/w:rPr/w:bCs",
+                "val", u"1");
+    assertXPath(pXmlDoc,
+                "/w:styles/w:style[@w:styleId='GridTable4-Accent1']"
+                "/w:tblStylePr[@w:type='firstRow']/w:rPr/w:color",
+                "val", u"FFFFFF");
+    xmlDocUniquePtr pDocumentXml = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pDocumentXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblStyle", "val",
+                u"GridTable4-Accent1");
+
+    // Loaded back, the header follows its style live again: bold and white apply, but
+    // neither sits on the paragraph itself.
+    pDoc = getSwDoc();
+    const SwTable* pLoadedTable = SwTable::FindTable((*pDoc->GetTableFrameFormats())[0]);
+    CPPUNIT_ASSERT(pLoadedTable);
+    CPPUNIT_ASSERT(!pLoadedTable->GetTableStyleName().isEmpty());
+    const SwTableBox* pHeaderBox = pLoadedTable->GetTabLines()[0]->GetTabBoxes()[0];
+    const SwTextNode* pHeaderNode = pDoc->GetNodes()[pHeaderBox->GetSttIdx() + 1]->GetTextNode();
+    CPPUNIT_ASSERT(pHeaderNode);
+    CPPUNIT_ASSERT_EQUAL(u"header"_ustr, pHeaderNode->GetText());
+    CPPUNIT_ASSERT(pHeaderNode->GetTableStyleRoleColl());
+    CPPUNIT_ASSERT(!pHeaderNode->GetpSwAttrSet()
+                   || SfxItemState::SET
+                          != pHeaderNode->GetpSwAttrSet()->GetItemState(RES_CHRATR_WEIGHT, false));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pHeaderNode->GetSwAttrSet().Get(RES_CHRATR_WEIGHT).GetWeight());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pHeaderNode->GetSwAttrSet().Get(RES_CHRATR_COLOR).GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

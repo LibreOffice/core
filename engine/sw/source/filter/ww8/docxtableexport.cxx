@@ -315,8 +315,16 @@ void DocxAttributeOutput::TableDefinition(
         }
     }
 
+    // The table's style is the one it has now, which need not be the one it was loaded with.
+    const OUString sLiveStyleName = pTable->GetTableStyleName().toString();
+    if (!sLiveStyleName.isEmpty())
+    {
+        const OString sStyleId = OUStringToOString(
+            m_pTableStyleExport->GetDocxStyleId(sLiveStyleName), RTL_TEXTENCODING_UTF8);
+        m_pSerializer->singleElementNS(XML_w, XML_tblStyle, FSNS(XML_w, XML_val), sStyleId);
+    }
+
     // Extract properties from grab bag
-    bool bHasGrabBagStyleName = false;
     bool bHasGrabBagStyleLook = false;
     std::optional<sal_Int16> oStyleHoriOrient;
     for (const auto& rGrabBagElement : rGrabBag)
@@ -328,10 +336,15 @@ void DocxAttributeOutput::TableDefinition(
         }
         if (rGrabBagElement.first == "TableStyleName")
         {
-            bHasGrabBagStyleName = true;
-            OString sStyleName
-                = OUStringToOString(rGrabBagElement.second.get<OUString>(), RTL_TEXTENCODING_UTF8);
-            m_pSerializer->singleElementNS(XML_w, XML_tblStyle, FSNS(XML_w, XML_val), sStyleName);
+            // A style the import could not resolve into a live one is still referred to by
+            // the id the file gave it.
+            if (sLiveStyleName.isEmpty())
+            {
+                OString sStyleName = OUStringToOString(rGrabBagElement.second.get<OUString>(),
+                                                       RTL_TEXTENCODING_UTF8);
+                m_pSerializer->singleElementNS(XML_w, XML_tblStyle, FSNS(XML_w, XML_val),
+                                               sStyleName);
+            }
         }
         else if (rGrabBagElement.first == "TableStyleTopBorder")
             rTableStyleConf[SvxBoxItemLine::TOP] = rGrabBagElement.second.get<table::BorderLine2>();
@@ -444,22 +457,11 @@ void DocxAttributeOutput::TableDefinition(
                                    << rGrabBagElement.first);
     }
 
-    // A table style with no InteropGrabBag entry never went through a DOCX import - e.g. it
-    // originated in ODF, or was created directly in Writer. Reference and describe it from its
-    // live SwTable state instead of leaving it unreferenced; DocxTableStyleExport::TableStyles
-    // synthesizes a matching w:style for it in styles.xml.
-    if (!bHasGrabBagStyleName && !pTable->GetTableStyleName().toString().isEmpty())
-    {
-        OString sStyleName
-            = OUStringToOString(pTable->GetTableStyleName().toString(), RTL_TEXTENCODING_UTF8);
-        m_pSerializer->singleElementNS(XML_w, XML_tblStyle, FSNS(XML_w, XML_val), sStyleName);
-    }
-
     // Write w:tblLook exactly once: whenever the table had one on import, or whenever it now
     // has a live style to describe, whether or not that style is the same as on import (the
     // two conditions can both hold at once, e.g. a DOCX table style applied through the UI
     // after an import that only had w:tblLook and no w:tblStyle of its own).
-    if (bHasGrabBagStyleLook || !pTable->GetTableStyleName().toString().isEmpty())
+    if (bHasGrabBagStyleLook || !sLiveStyleName.isEmpty())
         lcl_WriteTblLook(m_pSerializer, pTable->GetTableStyleSettings());
 
     // Output the table alignment

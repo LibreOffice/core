@@ -51,7 +51,6 @@
 #include "util.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <o3tl/string_view.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -67,6 +66,15 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/memberids.h>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <svl/memberid.h>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -1591,16 +1599,66 @@ sal_Int32 lcl_GetTableStyleCnfMask(sal_uInt8 nRowRole, sal_uInt8 nColRole)
     return nMask;
 }
 
-/// Fill in the border and background a grid position resolves to for a DOCX table style,
-/// leaving every other item at the sensible defaults SwAutoFormatProps' own constructor
-/// already set - character formatting stays out of scope here, matching the same box-level
-/// boundary SwDoc::ApplyTableStyleLive already draws for live resolution.
+/// Put the value of the property eId, when the style has it, into aItem and set that item on
+/// rProps through fnSet, so that it counts as defined by the style.
+template <class ItemT>
+void lcl_PutTextItem(const PropertyMapPtr& pProps, PropertyIds eId, ItemT aItem,
+                     sal_uInt8 nMemberId, SwAutoFormatProps& rProps,
+                     void (AutoFormatBase::*fnSet)(const ItemT&))
+{
+    const std::optional<PropertyMap::Property> oProp = pProps->getProperty(eId);
+    if (oProp && aItem.PutValue(oProp->second, nMemberId))
+        (rProps.*fnSet)(aItem);
+}
+
+/// Fill in the border, background and text formatting a grid position resolves to for a
+/// DOCX table style. Only what the style says is set, so that every other item stays
+/// undefined and the paragraph style shows through for it.
 void lcl_FillBoxAutoFormat(SwBoxAutoFormat& rBoxFormat, const PropertyMapPtr& pProps)
 {
     if (!pProps)
         return;
 
     SwAutoFormatProps& rProps = rBoxFormat.GetProps();
+
+    lcl_PutTextItem(pProps, PROP_CHAR_WEIGHT, SvxWeightItem(WEIGHT_NORMAL, RES_CHRATR_WEIGHT),
+                    MID_WEIGHT, rProps, &AutoFormatBase::SetWeight);
+    lcl_PutTextItem(pProps, PROP_CHAR_WEIGHT_ASIAN,
+                    SvxWeightItem(WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT), MID_WEIGHT, rProps,
+                    &AutoFormatBase::SetCJKWeight);
+    lcl_PutTextItem(pProps, PROP_CHAR_WEIGHT_COMPLEX,
+                    SvxWeightItem(WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT), MID_WEIGHT, rProps,
+                    &AutoFormatBase::SetCTLWeight);
+    lcl_PutTextItem(pProps, PROP_CHAR_POSTURE, SvxPostureItem(ITALIC_NONE, RES_CHRATR_POSTURE),
+                    MID_POSTURE, rProps, &AutoFormatBase::SetPosture);
+    lcl_PutTextItem(pProps, PROP_CHAR_POSTURE_ASIAN,
+                    SvxPostureItem(ITALIC_NONE, RES_CHRATR_CJK_POSTURE), MID_POSTURE, rProps,
+                    &AutoFormatBase::SetCJKPosture);
+    lcl_PutTextItem(pProps, PROP_CHAR_POSTURE_COMPLEX,
+                    SvxPostureItem(ITALIC_NONE, RES_CHRATR_CTL_POSTURE), MID_POSTURE, rProps,
+                    &AutoFormatBase::SetCTLPosture);
+    lcl_PutTextItem(pProps, PROP_CHAR_HEIGHT, SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE),
+                    MID_FONTHEIGHT | CONVERT_TWIPS, rProps, &AutoFormatBase::SetHeight);
+    lcl_PutTextItem(pProps, PROP_CHAR_HEIGHT_ASIAN,
+                    SvxFontHeightItem(240, 100, RES_CHRATR_CJK_FONTSIZE),
+                    MID_FONTHEIGHT | CONVERT_TWIPS, rProps, &AutoFormatBase::SetCJKHeight);
+    lcl_PutTextItem(pProps, PROP_CHAR_HEIGHT_COMPLEX,
+                    SvxFontHeightItem(240, 100, RES_CHRATR_CTL_FONTSIZE),
+                    MID_FONTHEIGHT | CONVERT_TWIPS, rProps, &AutoFormatBase::SetCTLHeight);
+    lcl_PutTextItem(pProps, PROP_CHAR_FONT_NAME, SvxFontItem(RES_CHRATR_FONT),
+                    MID_FONT_FAMILY_NAME, rProps, &AutoFormatBase::SetFont);
+    lcl_PutTextItem(pProps, PROP_CHAR_FONT_NAME_ASIAN, SvxFontItem(RES_CHRATR_CJK_FONT),
+                    MID_FONT_FAMILY_NAME, rProps, &AutoFormatBase::SetCJKFont);
+    lcl_PutTextItem(pProps, PROP_CHAR_FONT_NAME_COMPLEX, SvxFontItem(RES_CHRATR_CTL_FONT),
+                    MID_FONT_FAMILY_NAME, rProps, &AutoFormatBase::SetCTLFont);
+    lcl_PutTextItem(pProps, PROP_CHAR_UNDERLINE,
+                    SvxUnderlineItem(LINESTYLE_NONE, RES_CHRATR_UNDERLINE), MID_TL_STYLE,
+                    rProps, &AutoFormatBase::SetUnderline);
+    lcl_PutTextItem(pProps, PROP_CHAR_STRIKEOUT,
+                    SvxCrossedOutItem(STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT), MID_CROSS_OUT,
+                    rProps, &AutoFormatBase::SetCrossedOut);
+    lcl_PutTextItem(pProps, PROP_PARA_ADJUST, SvxAdjustItem(SvxAdjust::Left, RES_PARATR_ADJUST),
+                    MID_PARA_ADJUST, rProps, &AutoFormatBase::SetAdjust);
 
     SvxBoxItem aBox(RES_BOX);
     bool bHasBorder = false;
@@ -1685,20 +1743,9 @@ TableStyleName lcl_FindBuiltInTableStyle(const SwDoc& rDoc, std::u16string_view 
     for (size_t i = 0; i < rStyles.size(); ++i)
     {
         const TableStyleName& rName = rStyles[i].GetName();
-        const OUString sId
-            = rName.toString().replaceAll(u" Accent ", u"-Accent").replaceAll(u" ", u"");
-        if (sId.equalsIgnoreAsciiCase(rStyleId))
+        if (SwTableAutoFormat::MakeDocxStyleId(rName.toString()).equalsIgnoreAsciiCase(rStyleId))
             return rName;
     }
-
-    // The one id that does not follow the rule.
-    if (o3tl::equalsIgnoreAsciiCase(rStyleId, u"TableGridLight"))
-    {
-        const TableStyleName aName(u"Grid Table Light"_ustr);
-        if (rStyles.FindAutoFormat(aName))
-            return aName;
-    }
-
     return TableStyleName();
 }
 
@@ -1847,10 +1894,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                             aSettings.m_bUseColumnBandingStyle = !(aTableInfo.nOriginalTblLook & 0x400);
                             pTable->SetTableStyleSettings(aSettings);
 
-                            // A style the file only refers to has put nothing into the cells
-                            // during import, so resolve it into them now.
-                            if (!aTableInfo.pTableStyle)
-                                rDoc.ApplyTableStyleLive(*pTable->GetTableNode());
+                            // The import above wrote the style's formatting into the cells
+                            // and paragraphs as the file's own. Resolve the style live and
+                            // drop what only repeats it, so a later role change shows.
+                            rDoc.StripBakedTableStyleFormatting(*pTable->GetTableNode(),
+                                                                /*bCompleteStyleBoxes=*/false);
                         }
                     }
 

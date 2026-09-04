@@ -11307,7 +11307,9 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_postitFieldsMaxId( 0 ),
       m_nextFontId( 1 ),
       m_bIgnoreNextFill(false),
-      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(rExport.m_rDoc, pSerializer)),
+      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(
+          rExport.m_rDoc, pSerializer,
+          rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),

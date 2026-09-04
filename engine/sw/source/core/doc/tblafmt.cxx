@@ -991,6 +991,13 @@ sal_uInt8 SwTableAutoFormat::GetTableStyleColRole(size_t nCol, size_t nCols,
     return static_cast<sal_uInt8>(eRole);
 }
 
+OUString SwTableAutoFormat::MakeDocxStyleId(std::u16string_view rName)
+{
+    if (rName == u"Grid Table Light")
+        return u"TableGridLight"_ustr;
+    return OUString(rName).replaceAll(u" Accent ", u"-Accent").replaceAll(u" ", u"");
+}
+
 void SwTableAutoFormat::SetXObject(rtl::Reference<SwXTextTableStyle> const& xObject)
 {
     m_xUnoTextTableStyle = xObject.get();

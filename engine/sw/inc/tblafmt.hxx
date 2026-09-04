@@ -310,6 +310,12 @@ public:
     /// line's box count can differ from another line's in the presence of merged cells).
     static sal_uInt8 GetTableStyleColRole(size_t nCol, size_t nCols,
                                           const SwTableStyleSettings& rSettings);
+
+    /// The DOCX style id for a table style name, following the rule the built-in DOCX
+    /// styles use: spaces dropped, the accent set off with a hyphen, so "Grid Table 4
+    /// Accent 1" is "GridTable4-Accent1". "Grid Table Light" is the one id that does not
+    /// follow it, "TableGridLight".
+    static OUString MakeDocxStyleId(std::u16string_view rName);
 };
 
 class SW_DLLPUBLIC SwTableAutoFormatTable

@@ -4227,6 +4227,8 @@ namespace {
 std::vector<sal_uInt16> lcl_GetItemsRepeating(const SfxItemSet& rOwnSet, const SfxItemSet& rBakedSet)
 {
     std::vector<sal_uInt16> aRepeated;
+    if (!rBakedSet.Count())
+        return aRepeated;
     SfxItemIter aIter(rBakedSet);
     for (const SfxPoolItem* pBakedItem = aIter.GetCurItem(); pBakedItem;
          pBakedItem = aIter.NextItem())
