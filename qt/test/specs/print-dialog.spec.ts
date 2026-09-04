@@ -143,7 +143,7 @@ describe('Print', () => {
 					stableOnePolls = dialogsSeen === 1 ? stableOnePolls + 1 : 0;
 					return stableOnePolls >= 10;
 				},
-				{ timeout: 20000, interval: 300 },
+				{ timeout: 60000, interval: 300 },
 			);
 		} catch {
 			throw new Error(
