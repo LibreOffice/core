@@ -1039,6 +1039,49 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)
 
 namespace
 {
+// Fixture for the Total Row undo-band tests below: a styled table A1:D5 (header row 1, data
+// rows 2 to 5) with a marker at A8, so a row shift under the table shows up too.
+constexpr SCCOL nBandLastCol = 3;
+constexpr SCROW nBandLastRow = 8;
+
+void insertTotalRowBandTable(ScDocument* pDoc)
+{
+    ScDBData* pData = new ScDBData(u"Table2"_ustr, /*nTab*/ 0, 0, 0, nBandLastCol, 4,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ false);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    for (SCCOL nCol = 0; nCol <= nBandLastCol; ++nCol)
+        pDoc->SetString(nCol, 0, 0, u"H"_ustr + OUString::number(nCol));
+    for (SCROW nRow = 1; nRow <= 4; ++nRow)
+        for (SCCOL nCol = 0; nCol <= nBandLastCol; ++nCol)
+            pDoc->SetValue(nCol, nRow, 0, nRow * 10.0 + nCol);
+    pData->RefreshTableColumnNames(pDoc);
+    pDoc->SetString(0, 7, 0, u"below"_ustr);
+}
+
+// Everything a Total Row change could disturb: the table, the rows under it and the marker.
+std::vector<OUString> snapshotTotalRowBand(ScDocument* pDoc)
+{
+    std::vector<OUString> aCells;
+    for (SCROW nRow = 0; nRow <= nBandLastRow; ++nRow)
+        for (SCCOL nCol = 0; nCol <= nBandLastCol; ++nCol)
+            aCells.push_back(pDoc->GetString(nCol, nRow, 0));
+    return aCells;
+}
+
+void assertTotalRowBandRestored(ScDocument* pDoc, const std::vector<OUString>& rBefore)
+{
+    size_t nIdx = 0;
+    for (SCROW nRow = 0; nRow <= nBandLastRow; ++nRow)
+        for (SCCOL nCol = 0; nCol <= nBandLastCol; ++nCol, ++nIdx)
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("changed col " + std::to_string(nCol) + " row "
+                                             + std::to_string(nRow),
+                                         rBefore[nIdx], pDoc->GetString(nCol, nRow, 0));
+}
+
 SCROW getTotalRowTableEnd(ScDocument* pDoc, const OUString& rName = u"Table2"_ustr)
 {
     ScDBData* pLive = findDBData(pDoc, rName);
@@ -1046,6 +1089,13 @@ SCROW getTotalRowTableEnd(ScDocument* pDoc, const OUString& rName = u"Table2"_us
     ScRange aArea;
     pLive->GetArea(aArea);
     return aArea.aEnd.Row();
+}
+
+void switchTotalRowOn(ScDocument* pDoc, ScTabViewShell* pViewShell)
+{
+    dispatchDatabaseTotalRow(pViewShell, true);
+    CPPUNIT_ASSERT_EQUAL(SCROW(5), getTotalRowTableEnd(pDoc));
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(0, 5, 0));
 }
 } // anonymous namespace
 
@@ -1097,6 +1147,104 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoResizeRestoresSubtotal)
     pDoc->GetUndoManager()->Redo();
     CPPUNIT_ASSERT_EQUAL(SCROW(9), getTotalRowTableEnd(pDoc, u"Table1"_ustr));
     CPPUNIT_ASSERT_EQUAL(8.0, pDoc->GetValue(1, 9, 0));
+}
+
+// Toggle ON shifts a row in; Undo's DeleteRow has to take it back out.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoBandToggleOn)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    insertTotalRowBandTable(pDoc);
+
+    const std::vector<OUString> aBefore = snapshotTotalRowBand(pDoc);
+
+    goToCell(u"A2"_ustr);
+    switchTotalRowOn(pDoc, pViewShell);
+
+    pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), getTotalRowTableEnd(pDoc));
+    assertTotalRowBandRestored(pDoc, aBefore);
+}
+
+// Toggle OFF drops the total row; Undo has to insert it back and refill it.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoBandToggleOff)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    insertTotalRowBandTable(pDoc);
+
+    goToCell(u"A2"_ustr);
+    switchTotalRowOn(pDoc, pViewShell);
+    const std::vector<OUString> aBefore = snapshotTotalRowBand(pDoc);
+
+    goToCell(u"A2"_ustr);
+    dispatchDatabaseTotalRow(pViewShell, false);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), getTotalRowTableEnd(pDoc));
+
+    pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(SCROW(5), getTotalRowTableEnd(pDoc));
+    assertTotalRowBandRestored(pDoc, aBefore);
+}
+
+// Growing relocates the total to the new bottom and absorbs the row below.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoBandResizeGrow)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScDocShell* pDocSh = getScDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    insertTotalRowBandTable(pDoc);
+
+    goToCell(u"A2"_ustr);
+    switchTotalRowOn(pDoc, pViewShell);
+    const std::vector<OUString> aBefore = snapshotTotalRowBand(pDoc);
+
+    ScDBData* pLive = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pLive);
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocSh).ResizeTable(*pLive, ScRange(0, 0, 0, nBandLastCol, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), getTotalRowTableEnd(pDoc));
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(0, 6, 0));
+
+    pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(SCROW(5), getTotalRowTableEnd(pDoc));
+    assertTotalRowBandRestored(pDoc, aBefore);
+}
+
+// Shrinking pushes the last data row out below the table, so the band spans both rows.
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoBandResizeShrink)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScDocShell* pDocSh = getScDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    insertTotalRowBandTable(pDoc);
+
+    goToCell(u"A2"_ustr);
+    switchTotalRowOn(pDoc, pViewShell);
+    const std::vector<OUString> aBefore = snapshotTotalRowBand(pDoc);
+
+    ScDBData* pLive = findDBData(pDoc, u"Table2"_ustr);
+    CPPUNIT_ASSERT(pLive);
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocSh).ResizeTable(*pLive, ScRange(0, 0, 0, nBandLastCol, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), getTotalRowTableEnd(pDoc));
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(0, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"40"_ustr, pDoc->GetString(0, 5, 0));
+
+    pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(SCROW(5), getTotalRowTableEnd(pDoc));
+    assertTotalRowBandRestored(pDoc, aBefore);
 }
 
 // Two tables stacked, the bottom (Table1) wider than the top (Table2). Toggling Total

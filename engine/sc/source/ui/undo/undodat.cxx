@@ -44,6 +44,8 @@
 #include <chgtrack.hxx>
 #include <refundo.hxx>
 #include <markdata.hxx>
+
+#include <algorithm>
 #include <utility>
 
 // Show or hide outline groups
@@ -966,8 +968,7 @@ void ScUndoTableTotals::Undo()
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    // A resize is net-0 rows, so Undo must NOT shift rows (that would corrupt content below).
-    // Only the toggle (net +-1, never in-place) shifts here.
+    // A resize is net zero rows, so Undo has no shift to reverse.
     const bool bResize = aParam.bReplace && !aParam.bRemoveOnly;
     if (!mbInPlace && !bResize)
     {
@@ -981,6 +982,9 @@ void ScUndoTableTotals::Undo()
         }
     }
 
+    // Same band as the snapshot in ScDBDocFunc::DoTableSubTotals.
+    const SCROW nBandStartRow = std::min(aParam.nRow2, nNewEndRow);
+
     // Restore down to the lower of the two bottoms (so absorbed content returns). For an
     // in-place ON, the clear extends past the restore range to wipe the total cells Do wrote
     // (empty before, nothing to restore).
@@ -992,12 +996,13 @@ void ScUndoTableTotals::Undo()
     if (xUndoDB)
         rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
 
-    rDoc.DeleteAreaTab( aParam.nCol1, aParam.nRow1+1, aParam.nCol2, nClearEndRow, nTab, InsertDeleteFlags::ALL );
+    rDoc.DeleteAreaTab(aParam.nCol1, nBandStartRow, aParam.nCol2, nClearEndRow, nTab,
+                       InsertDeleteFlags::ALL);
 
-    xUndoDoc->CopyToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, nRestoreEndRow, nTab,
-                                                            InsertDeleteFlags::NONE, false, rDoc);
-    xUndoDoc->UndoToDocument(aParam.nCol1, aParam.nRow1 + 1, nTab, aParam.nCol2, nRestoreEndRow, nTab,
-                                                            InsertDeleteFlags::ALL, false, rDoc);
+    xUndoDoc->CopyToDocument(aParam.nCol1, nBandStartRow, nTab, aParam.nCol2, nRestoreEndRow, nTab,
+                             InsertDeleteFlags::NONE, false, rDoc);
+    xUndoDoc->UndoToDocument(aParam.nCol1, nBandStartRow, nTab, aParam.nCol2, nRestoreEndRow, nTab,
+                             InsertDeleteFlags::ALL, false, rDoc);
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNumber();
     if ( nVisTab != nTab )

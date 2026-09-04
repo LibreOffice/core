@@ -1489,8 +1489,9 @@ bool ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
 {
     bool bDo = !rParam.bRemoveOnly; // false = only delete
     // A resize (extend/shrink) relocates the total row: bReplace && bDo, unlike the toggle
-    // (ON: bReplace=false; OFF: bRemoveOnly=true). It is net-0 rows, which drives the tear
-    // refusal and Undo/Redo handling below.
+    // (ON: bReplace=false; OFF: bRemoveOnly=true). It deletes that row where it was and
+    // inserts it at the new bottom, so the row count comes out unchanged - which drives the
+    // tear refusal and Undo/Redo handling below.
     const bool bResize = rParam.bReplace && bDo;
 
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -1559,10 +1560,12 @@ bool ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     ScSubTotalParam aNewParam;
     rNewData.GetSubTotalParam(aNewParam); // end of range is being changed (new bottom)
 
-    // Snapshot down to the lower of the old/new bottom, so content absorbed below the old
-    // total row is captured for undo.
-    const SCROW nCaptureEndRow
-        = (bResize && aNewParam.nRow2 > rParam.nRow2) ? aNewParam.nRow2 : rParam.nRow2;
+    // Do only writes, removes or relocates the one total row, so nothing above the band
+    // between the old and the new bottom changes. Keep in step with ScUndoTableTotals::Undo.
+    const SCROW nNewBottomRow
+        = bResize ? aNewParam.nRow2 : (bDo ? rParam.nRow2 + 1 : rParam.nRow2 - 1);
+    const SCROW nBandStartRow = std::min(rParam.nRow2, nNewBottomRow);
+    const SCROW nBandEndRow = std::max(rParam.nRow2, nNewBottomRow);
 
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDBCollection> pUndoDB;
@@ -1571,17 +1574,12 @@ bool ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     {
         bool bOldFilter = bDo && rParam.bDoSort;
 
-        SCTAB nTabCount = rDoc.GetTableCount();
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
         pUndoDoc->InitUndo(rDoc, nTab, nTab, false, bOldFilter);
 
         //  secure data range - incl. filtering result
-        rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, nCaptureEndRow, nTab,
+        rDoc.CopyToDocument(rParam.nCol1, nBandStartRow, nTab, rParam.nCol2, nBandEndRow, nTab,
                             InsertDeleteFlags::ALL, false, *pUndoDoc);
-
-        //  all formulas because of references
-        rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount - 1,
-                            InsertDeleteFlags::FORMULA, false, *pUndoDoc);
 
         //  ranges of DB
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
