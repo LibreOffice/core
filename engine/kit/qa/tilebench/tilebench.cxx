@@ -219,7 +219,7 @@ static void testTile( COKitDocument *pDocument, int max_parts,
         {
             // whole part; meaningful only for non-writer documents.
             aTimes.emplace_back("render whole part");
-            pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+            pDocument->paintTile(vBuffer, nTilePixelWidth, nTilePixelHeight,
                                  nWidth/2, 2000, 1000, 1000);
             aTimes.emplace_back();
             if (dump)
@@ -240,7 +240,7 @@ static void testTile( COKitDocument *pDocument, int max_parts,
                         nY = nHeight;
                         break;
                     }
-                    pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                    pDocument->paintTile(vBuffer, nTilePixelWidth, nTilePixelHeight,
                                          nX, nY, nTilePixelWidth, nTilePixelHeight);
                     nTiles++;
                     fprintf (stderr, "   rendered 1:1 tile %d at %ld, %ld\n",
@@ -265,7 +265,7 @@ static void testTile( COKitDocument *pDocument, int max_parts,
                         nY = nHeight;
                         break;
                     }
-                    pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                    pDocument->paintTile(vBuffer, nTilePixelWidth, nTilePixelHeight,
                                          nX, nY, nTileTwipWidth, nTileTwipHeight);
                     nTiles++;
                     fprintf (stderr, "   rendered scaled tile %d at %ld, %ld\n",
@@ -358,7 +358,7 @@ static std::vector<unsigned char> paintTile( COKitDocument *pDocument,
 //    long e = 0; // tweak if we suspect an overlap / visibility issue.
 //    pDocument->setClientVisibleArea( nX - e, nY - e, nTileTwipWidth + e, nTileTwipHeight + e );
     std::vector<unsigned char> vData( nTilePixelWidth * nTilePixelHeight * 4 );
-    pDocument->paintTile( vData.data(), nTilePixelWidth, nTilePixelHeight,
+    pDocument->paintTile( vData, nTilePixelWidth, nTilePixelHeight,
                           nX, nY, nTileTwipWidth, nTileTwipHeight );
     return vData;
 }
@@ -526,14 +526,12 @@ static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pDa
 
     aTimes.emplace_back(); // complete wait for dialog
 
-    unsigned char *pBuffer = new unsigned char[nWidth * nHeight * 4];
+    std::vector<unsigned char> aBuffer(static_cast<size_t>(nWidth) * nHeight * 4);
 
     aTimes.emplace_back("render dialog");
-    pDocument->paintWindowForView(nDialogId, pBuffer, 0, 0, nWidth, nHeight, 1.0, -1);
-    dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), pBuffer);
+    pDocument->paintWindowForView(nDialogId, aBuffer, 0, 0, nWidth, nHeight, 1.0, -1);
+    dumpTile("dialog", nWidth, nHeight, pDocument->getTileMode(), aBuffer.data());
     aTimes.emplace_back();
-
-    delete[] pBuffer;
 
     bDialogRendered = true;
 }

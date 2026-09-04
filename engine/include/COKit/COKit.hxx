@@ -2014,17 +2014,18 @@ struct COKitDocument
      * rendering at different zoom levels, as the number of rendered pixels and
      * the rendered rectangle of the document are independent.
      *
-     * @param pBuffer pointer to the buffer, its size is determined by nCanvasWidth and nCanvasHeight.
-     * @param nCanvasWidth number of pixels in a row of pBuffer.
-     * @param nCanvasHeight number of pixels in a column of pBuffer.
+     * @param aBuffer where the pixels go, four bytes each, so nCanvasWidth times
+     *        nCanvasHeight times four bytes long.
+     * @param nCanvasWidth number of pixels in a row of aBuffer.
+     * @param nCanvasHeight number of pixels in a column of aBuffer.
      * @param nTilePosX logical X position of the top left corner of the rendered rectangle, in TWIPs.
      * @param nTilePosY logical Y position of the top left corner of the rendered rectangle, in TWIPs.
      * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
      * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
      */
-    virtual void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
-                           const int nTilePosX, const int nTilePosY, const int nTileWidth,
-                           const int nTileHeight) = 0;
+    virtual void paintTile(std::span<unsigned char> aBuffer, const int nCanvasWidth,
+                           const int nCanvasHeight, const int nTilePosX, const int nTilePosY,
+                           const int nTileWidth, const int nTileHeight) = 0;
 
     /**
      * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
@@ -2227,7 +2228,7 @@ struct COKitDocument
      * presentation or drawing document hides its editing grid for the duration of such a render.
      * @see paintTile.
      */
-    virtual void paintPartTile(unsigned char* pBuffer, const char* pPart, const int nMode,
+    virtual void paintPartTile(std::span<unsigned char> aBuffer, const char* pPart, const int nMode,
                                const int nCanvasWidth, const int nCanvasHeight,
                                const int nTilePosX, const int nTilePosY, const int nTileWidth,
                                const int nTileHeight, bool bIsPreview = false) = 0;
@@ -2251,8 +2252,8 @@ struct COKitDocument
     virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) = 0;
 
     /// Paints window with given id to the buffer
-    virtual void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
-                             const int width, const int height) = 0;
+    virtual void paintWindow(unsigned nWindowId, std::span<unsigned char> aBuffer, const int x,
+                             const int y, const int width, const int height) = 0;
 
     /**
      * Posts a command to the window (dialog, popup, etc.) with given id
@@ -2310,7 +2311,7 @@ struct COKitDocument
     /// Paints window with given id to the buffer with the give DPI scale
     /// (every pixel is dpiscale-times larger).
     /// @see COKitDocument::paintWindow().
-    virtual void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
+    virtual void paintWindowDPI(unsigned nWindowId, std::span<unsigned char> aBuffer, const int x,
                                 const int y, const int width, const int height,
                                 const double dpiscale) = 0;
 
@@ -2458,8 +2459,8 @@ struct COKitDocument
      *                 200x200 width x height), so that it is easy to compute
      *                 the buffer sizes etc.
      */
-    virtual void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x,
-                                    const int y, const int width, const int height,
+    virtual void paintWindowForView(unsigned nWindowId, std::span<unsigned char> aBuffer,
+                                    const int x, const int y, const int width, const int height,
                                     const double dpiscale, int viewId) = 0;
 
     /**

@@ -141,7 +141,7 @@ protected:
 
                 std::vector<unsigned char> pixmap(canvasWidth*canvasHeight*4);
                 loKitDocument->setPart(partId.c_str());
-                loKitDocument->paintTile(pixmap.data(), canvasWidth, canvasHeight, tilePosX, tilePosY, tileWidth, tileHeight);
+                loKitDocument->paintTile(pixmap, canvasWidth, canvasHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 
                 if (!Util::windowingAvailable())
                     continue;

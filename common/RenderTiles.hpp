@@ -24,30 +24,6 @@
 #include <vector>
 namespace RenderTiles
 {
-    struct Buffer {
-        unsigned char *_data;
-        Buffer()
-        {
-            _data = nullptr;
-        }
-        Buffer(size_t x, size_t y) :
-            Buffer()
-        {
-            allocate(x, y);
-        }
-        void allocate(size_t x, size_t y)
-        {
-            assert(!_data);
-            _data = static_cast<unsigned char *>(calloc(x * y, 4));
-        }
-        ~Buffer()
-        {
-            if (_data)
-                free (_data);
-        }
-        unsigned char *data() { return _data; }
-    };
-
     // FIXME: we should perhaps increment only on a plausible edit
     static TileWireId getCurrentWireId(bool increment = false)
     {
@@ -120,7 +96,7 @@ namespace RenderTiles
                     << " (" << tilesByX << 'x' << tilesByY << " tiles to serve " << tiles.size() << " tiles: "
                     << (tiles.size() * 100)/(tilesByX * tilesByY) << "% in " << (tilesByX*tilesByY*0.25) << "MB");
 
-        RenderTiles::Buffer pixmap(pixmapWidth, pixmapHeight);
+        std::vector<unsigned char> pixmap(4 * pixmapWidth * pixmapHeight);
 
         // Render the whole area
         const double area = pixmapWidth * pixmapHeight;
@@ -128,7 +104,7 @@ namespace RenderTiles
         LOG_TRC("Calling paintPartTile(" << static_cast<void*>(pixmap.data()) << ')');
         // A preview request is always a single tile, never combined with others.
         const bool isPreview = tiles.size() == 1 && tiles.front().isPreview();
-        document->paintPartTile(pixmap.data(),
+        document->paintPartTile(pixmap,
                                 tileCombined.getPart().c_str(),
                                 tileCombined.getEditMode(),
                                 pixmapWidth, pixmapHeight,

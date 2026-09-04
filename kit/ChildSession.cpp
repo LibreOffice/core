@@ -539,7 +539,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         const auto mode = getLOKitDocument()->getTileMode();
 
         std::vector<unsigned char> thumbnail(width * height * 4);
-        getLOKitDocument()->paintTile(thumbnail.data(), width, height, x - offsetXTwips, y - offsetYTwips, widthTwips, heightTwips);
+        getLOKitDocument()->paintTile(thumbnail, width, height, x - offsetXTwips, y - offsetYTwips, widthTwips, heightTwips);
 
         std::vector<char> pngThumbnail;
         if (Png::encodeBufferToPNG(thumbnail.data(), width, height, pngThumbnail, mode))
@@ -3909,7 +3909,7 @@ bool ChildSession::renderWindow(const StringVector& tokens)
     const int width = bufferWidth;
     const int height = bufferHeight;
     const auto start = std::chrono::steady_clock::now();
-    getLOKitDocument()->paintWindowForView(winId, pixmap.data(), startX, startY, width, height,
+    getLOKitDocument()->paintWindowForView(winId, pixmap, startX, startY, width, height,
                                            dpiScale, _viewId);
     const double area = width * height;
 

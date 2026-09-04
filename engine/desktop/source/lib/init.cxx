@@ -1150,12 +1150,12 @@ OUString desktop::extractParameter(OUString& rOptions, std::u16string_view rName
 static bool doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 static COKitDocumentType doc_getDocumentType(COKitDocument* pThis);
 static void doc_paintTile(COKitDocument* pThis,
-                          unsigned char* pBuffer,
+                          std::span<unsigned char> aBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
 static void doc_paintPartTile(COKitDocument* pThis,
-                              unsigned char* pBuffer,
+                              std::span<unsigned char> aBuffer,
                               const OString& rPart,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
@@ -1273,16 +1273,19 @@ static COKitBitmap doc_renderFontOrientation(COKitDocument* pThis,
                           int nRequestedHeight,
                           int nOrientation);
 
-static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
+static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId,
+                            std::span<unsigned char> aBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
-static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
+static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nKitWindowId,
+                               std::span<unsigned char> aBuffer,
                                const int nX, const int nY,
                                const int nWidth, const int nHeight,
                                const double fDPIScale);
 
-static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
+static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
+                                   std::span<unsigned char> aBuffer,
                                    const int nX, const int nY,
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId);
@@ -1514,11 +1517,11 @@ COKitDocumentType COKitDocumentImpl::getDocumentType()
     return doc_getDocumentType(this);
 }
 
-void COKitDocumentImpl::paintTile(unsigned char* pBuffer, const int nCanvasWidth,
-                                   const int nCanvasHeight, const int nTilePosX,
-                                   const int nTilePosY, const int nTileWidth, const int nTileHeight)
+void COKitDocumentImpl::paintTile(std::span<unsigned char> aBuffer, const int nCanvasWidth,
+                                  const int nCanvasHeight, const int nTilePosX,
+                                  const int nTilePosY, const int nTileWidth, const int nTileHeight)
 {
-    doc_paintTile(this, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth,
+    doc_paintTile(this, aBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth,
                   nTileHeight);
 }
 
@@ -1625,13 +1628,13 @@ int COKitDocumentImpl::getViewsCount()
     return doc_getViewsCount(this);
 }
 
-void COKitDocumentImpl::paintPartTile(unsigned char* pBuffer, const char* pPart, const int nMode,
-                                       const int nCanvasWidth, const int nCanvasHeight,
-                                       const int nTilePosX, const int nTilePosY,
-                                       const int nTileWidth, const int nTileHeight,
-                                       bool bIsPreview)
+void COKitDocumentImpl::paintPartTile(std::span<unsigned char> aBuffer, const char* pPart,
+                                      const int nMode, const int nCanvasWidth,
+                                      const int nCanvasHeight, const int nTilePosX,
+                                      const int nTilePosY, const int nTileWidth,
+                                      const int nTileHeight, bool bIsPreview)
 {
-    doc_paintPartTile(this, pBuffer, pPart ? OString(pPart) : OString(), nMode, nCanvasWidth,
+    doc_paintPartTile(this, aBuffer, pPart ? OString(pPart) : OString(), nMode, nCanvasWidth,
                       nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight, bIsPreview);
 }
 
@@ -1645,10 +1648,10 @@ void COKitDocumentImpl::setOutlineState(bool bColumn, int nLevel, int nIndex, bo
     doc_setOutlineState(this, bColumn, nLevel, nIndex, bHidden);
 }
 
-void COKitDocumentImpl::paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x,
-                                     const int y, const int width, const int height)
+void COKitDocumentImpl::paintWindow(unsigned nWindowId, std::span<unsigned char> aBuffer,
+                                    const int x, const int y, const int width, const int height)
 {
-    doc_paintWindow(this, nWindowId, pBuffer, x, y, width, height);
+    doc_paintWindow(this, nWindowId, aBuffer, x, y, width, height);
 }
 
 void COKitDocumentImpl::postWindow(unsigned nWindowId, COKitWindowAction eAction,
@@ -1681,11 +1684,11 @@ void COKitDocumentImpl::postWindowExtTextInputEvent(unsigned nWindowId,
     doc_postWindowExtTextInputEvent(this, nWindowId, eType, pText);
 }
 
-void COKitDocumentImpl::paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x,
-                                        const int y, const int width, const int height,
-                                        const double dpiscale)
+void COKitDocumentImpl::paintWindowDPI(unsigned nWindowId, std::span<unsigned char> aBuffer,
+                                       const int x, const int y, const int width, const int height,
+                                       const double dpiscale)
 {
-    doc_paintWindowDPI(this, nWindowId, pBuffer, x, y, width, height, dpiscale);
+    doc_paintWindowDPI(this, nWindowId, aBuffer, x, y, width, height, dpiscale);
 }
 
 bool COKitDocumentImpl::insertCertificate(std::span<const unsigned char> aCertificateBinary,
@@ -1759,11 +1762,11 @@ COKitBitmap COKitDocumentImpl::renderFontOrientation(const char* pFontName, cons
     return doc_renderFontOrientation(this, pFontName, pChar, nRequestedWidth, nRequestedHeight, nOrientation);
 }
 
-void COKitDocumentImpl::paintWindowForView(unsigned nWindowId, unsigned char* pBuffer,
-                                            const int x, const int y, const int width,
-                                            const int height, const double dpiscale, int viewId)
+void COKitDocumentImpl::paintWindowForView(unsigned nWindowId, std::span<unsigned char> aBuffer,
+                                           const int x, const int y, const int width,
+                                           const int height, const double dpiscale, int viewId)
 {
-    doc_paintWindowForView(this, nWindowId, pBuffer, x, y, width, height, dpiscale, viewId);
+    doc_paintWindowForView(this, nWindowId, aBuffer, x, y, width, height, dpiscale, viewId);
 }
 
 void COKitDocumentImpl::completeFunction(const char* pFunctionName)
@@ -5049,7 +5052,7 @@ int COKitDocumentImpl::getEditMode()
 }
 
 static void doc_paintTile(COKitDocument* pThis,
-                          unsigned char* pBuffer,
+                          std::span<unsigned char> aBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight)
@@ -5084,7 +5087,7 @@ static void doc_paintTile(COKitDocument* pThis,
 
     // Online uses COKitTileMode::RGBA by default so flip the normal flags
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
-    CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
+    CGContextRef pCGContext = CGBitmapContextCreate(aBuffer.data(), nCanvasWidth, nCanvasHeight, 8,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
                                                     uint32_t(kCGImageAlphaPremultipliedLast) | uint32_t(kCGImageByteOrder32Big));
 
@@ -5115,7 +5118,7 @@ static void doc_paintTile(COKitDocument* pThis,
 
     pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(
                 Size(nCanvasWidth, nCanvasHeight), 1.0, Point(),
-                pBuffer);
+                aBuffer.data());
 
     pDoc->paintTile(*pDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -5133,15 +5136,15 @@ static void doc_paintTile(COKitDocument* pThis,
     }
 
 #if defined(_WIN32) && !USE_HEADLESS_CODE
-    // pBuffer was not used there
+    // aBuffer was not used there
     pDevice->EnableMapMode(false);
     Bitmap aBmp(pDevice->GetBitmap({ 0, 0 }, { nCanvasWidth, nCanvasHeight }));
-    vcl::bitmap::fillWithData(pBuffer, aBmp);
+    vcl::bitmap::fillWithData(aBuffer.data(), aBmp);
 #endif
 #endif
 
 #else
-    (void) pBuffer;
+    (void) aBuffer;
 #endif
 
     // Inform all views with the same view render state about the paint, so they know if makes sense
@@ -5248,7 +5251,7 @@ inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRendera
 }
 
 static void doc_paintPartTile(COKitDocument* pThis,
-                              unsigned char* pBuffer,
+                              std::span<unsigned char> aBuffer,
                               const OString& rPart,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
@@ -5379,7 +5382,8 @@ static void doc_paintPartTile(COKitDocument* pThis,
             pDoc->setPaintTextEdit(bPaintTextEdit);
         }
 
-        doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+        doc_paintTile(pThis, aBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY,
+                      nTileWidth, nTileHeight);
 
         if (!isText)
         {
@@ -8949,24 +8953,24 @@ COKitBitmap doc_renderFontOrientation(SAL_UNUSED_PARAMETER COKitDocument* /*pThi
 
 
 static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId,
-                            unsigned char* pBuffer,
+                            std::span<unsigned char> aBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
 {
-    doc_paintWindowDPI(pThis, nKitWindowId, pBuffer, nX, nY, nWidth, nHeight, 1.0);
+    doc_paintWindowDPI(pThis, nKitWindowId, aBuffer, nX, nY, nWidth, nHeight, 1.0);
 }
 
 static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nKitWindowId,
-                               unsigned char* pBuffer,
+                               std::span<unsigned char> aBuffer,
                                const int nX, const int nY,
                                const int nWidth, const int nHeight,
                                const double fDPIScale)
 {
-    doc_paintWindowForView(pThis, nKitWindowId, pBuffer, nX, nY, nWidth, nHeight, fDPIScale, -1);
+    doc_paintWindowForView(pThis, nKitWindowId, aBuffer, nX, nY, nWidth, nHeight, fDPIScale, -1);
 }
 
 static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
-                                   unsigned char* pBuffer, const int nX, const int nY,
+                                   std::span<unsigned char> aBuffer, const int nX, const int nY,
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId)
 {
@@ -8996,7 +9000,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
 #if defined(IOS)
     // Online uses COKitTileMode::RGBA by default so flip the normal flags
     // to kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big
-    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), uint32_t(kCGImageAlphaNoneSkipLast) | uint32_t(kCGImageByteOrder32Big));
+    CGContextRef cgc = CGBitmapContextCreate(aBuffer.data(), nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), uint32_t(kCGImageAlphaNoneSkipLast) | uint32_t(kCGImageByteOrder32Big));
 
     CGContextTranslateCTM(cgc, 0, nHeight);
     CGContextScaleCTM(cgc, fDPIScale, -fDPIScale);
@@ -9022,7 +9026,8 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nWidth, nHeight), 1.0, Point(), pBuffer);
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nWidth, nHeight), 1.0, Point(),
+                                                       aBuffer.data());
 
     MapMode aMapMode(pDevice->GetMapMode());
     aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
@@ -9291,7 +9296,7 @@ static COKitBitmap doc_renderSearchResult(COKitDocument* pThis, const char* pSea
 
     std::vector<unsigned char> aPixels(nByteSize);
 
-    doc_paintTile(pThis, aPixels.data(),
+    doc_paintTile(pThis, aPixels,
         aPixelWidth, aPixelHeight,
         aRangeUnion.getMinX(), aRangeUnion.getMinY(),
         aRangeUnion.getWidth(), aRangeUnion.getHeight());

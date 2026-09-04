@@ -106,7 +106,9 @@ gtv_kit_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(priv->kitdocview));
-    pDocument->paintWindow(priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
+    pDocument->paintWindow(priv->dialogid,
+                           std::span(pBuffer, static_cast<size_t>(nWidth) * nHeight * 4),
+                           aRect.x, aRect.y, nWidth, nHeight);
 
     gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), priv->m_nWidth, priv->m_nHeight);
 
@@ -484,7 +486,10 @@ gtv_kit_dialog_floating_win_draw(GtkWidget* pDrawingArea, cairo_t* pCairo, gpoin
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, priv->m_nChildWidth, priv->m_nChildHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(priv->kitdocview));
-    pDocument->paintWindow(priv->m_nChildId, pBuffer, 0, 0, priv->m_nChildWidth, priv->m_nChildHeight);
+    pDocument->paintWindow(priv->m_nChildId,
+                           std::span(pBuffer, static_cast<size_t>(priv->m_nChildWidth)
+                                                  * priv->m_nChildHeight * 4),
+                           0, 0, priv->m_nChildWidth, priv->m_nChildHeight);
 
     gtk_widget_set_size_request(GTK_WIDGET(pDrawingArea), priv->m_nChildWidth, priv->m_nChildHeight);
     //gtk_widget_set_size_request(GTK_WIDGET(pDialog), nWidth, nHeight);

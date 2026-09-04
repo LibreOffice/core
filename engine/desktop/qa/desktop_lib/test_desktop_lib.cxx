@@ -692,7 +692,7 @@ void DesktopKitTest::testPaintTile()
     // This used to crash: paintTile() implementation did not handle
     // nCanvasWidth != nCanvasHeight correctly, as usually both are just always
     // 256.
-    pDocument->paintTile(aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDocument->paintTile(aBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     // This crashed in OutputDevice::DrawDeviceAlphaBitmap().
     nCanvasWidth = 200;
@@ -700,7 +700,7 @@ void DesktopKitTest::testPaintTile()
     nTileWidth = 4000;
     nTileHeight = 4000;
     aBuffer.resize(nCanvasWidth * nCanvasHeight * 4);
-    pDocument->paintTile(aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    pDocument->paintTile(aBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 void DesktopKitTest::testSaveAs()
@@ -2544,7 +2544,7 @@ void DesktopKitTest::testPaintTileOmitInvalidate()
     const int nCanvasWidth = 256;
     const int nCanvasHeight = 256;
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
-    pDocument->paintTile(aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
+    pDocument->paintTile(aPixels, nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
     Scheduler::ProcessEventsToIdle();
     aView.m_bTilesInvalidated = false;
 
@@ -2568,7 +2568,7 @@ void DesktopKitTest::testCreateViewOmitInvalidate()
     const int nCanvasWidth = 256;
     const int nCanvasHeight = 256;
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
-    pDocument->paintTile(aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
+    pDocument->paintTile(aPixels, nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
     pDocument->createView();
     pDocument->initializeForRendering(nullptr);
     ViewCallback aView2(pDocument);
@@ -2611,13 +2611,13 @@ void DesktopKitTest::testPaintPartTileHidesGridOnOtherPart()
     // has to temporarily borrow the only view to paint a page it is not
     // editing. This is a preview request, the way the slide panel asks for
     // a thumbnail of a slide other than the one being edited.
-    pDocument->paintPartTile(aWithoutGrid.data(), aSecondSlide.c_str(), 0, nCanvasWidth,
+    pDocument->paintPartTile(aWithoutGrid, aSecondSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
 
     // Turn the grid on, as if the user enabled it while editing the first slide.
     dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
-    pDocument->paintPartTile(aWithGridOnEditedPart.data(), aSecondSlide.c_str(), 0, nCanvasWidth,
+    pDocument->paintPartTile(aWithGridOnEditedPart, aSecondSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
 
     // The grid is an editing aid for the page being edited, not part of a
@@ -2642,20 +2642,20 @@ void DesktopKitTest::testPaintPartTileHidesGridOnActivePartPreview()
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPreviewWithGrid;
 
     // Baseline: grid off, a tile of the (only) active slide.
-    pDocument->paintPartTile(aWithoutGrid.data(), aFirstSlide.c_str(), 0, nCanvasWidth,
+    pDocument->paintPartTile(aWithoutGrid, aFirstSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840);
 
     dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // The editing viewport's own tile of the active slide still shows the
     // grid the user turned on: this is not a preview.
-    pDocument->paintPartTile(aViewportWithGrid.data(), aFirstSlide.c_str(), 0, nCanvasWidth,
+    pDocument->paintPartTile(aViewportWithGrid, aFirstSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/false);
     CPPUNIT_ASSERT(!(aWithoutGrid == aViewportWithGrid));
 
     // A preview of that same active slide must not carry the grid along,
     // even though the tile is otherwise identical to the viewport's own.
-    pDocument->paintPartTile(aPreviewWithGrid.data(), aFirstSlide.c_str(), 0, nCanvasWidth,
+    pDocument->paintPartTile(aPreviewWithGrid, aFirstSlide.c_str(), 0, nCanvasWidth,
                               nCanvasHeight, 0, 0, 3840, 3840, /*bIsPreview=*/true);
     CPPUNIT_ASSERT(operator==(aWithoutGrid, aPreviewWithGrid));
 }
@@ -2720,11 +2720,11 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
 
     // Both parts should be painted with dark scheme
-    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels, aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     Color aPixel(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
-    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels, aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
 
@@ -2732,11 +2732,11 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     pDocument->setView(nView1);
 
     // Both parts should be painted with light scheme
-    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels, aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 
-    pDocument->paintPartTile(aPixels.data(), aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    pDocument->paintPartTile(aPixels, aFirstSlide.c_str(), 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
     aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 }

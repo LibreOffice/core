@@ -2500,7 +2500,8 @@ paintTile(KitDocumentViewPrivate& priv,
     std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
 
-    priv->m_pDocument->paintTile(pBuffer,
+    priv->m_pDocument->paintTile(std::span(pBuffer, static_cast<size_t>(nTileSizePixelsScaled)
+                                                        * nTileSizePixelsScaled * 4),
                                          nTileSizePixelsScaled, nTileSizePixelsScaled,
                                          rTileRectangle.x, rTileRectangle.y,
                                          pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor),

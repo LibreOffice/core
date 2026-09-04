@@ -320,9 +320,9 @@ namespace desktop {
         void setPart(const char* pPart) override;
         std::string getPartName(int nPart) override;
         void setPartMode(COKitPartMode eMode) override;
-        void paintTile(unsigned char* pBuffer, const int nCanvasWidth, const int nCanvasHeight,
-                       const int nTilePosX, const int nTilePosY, const int nTileWidth,
-                       const int nTileHeight) override;
+        void paintTile(std::span<unsigned char> aBuffer, const int nCanvasWidth,
+                       const int nCanvasHeight, const int nTilePosX, const int nTilePosY,
+                       const int nTileWidth, const int nTileHeight) override;
         COKitTileMode getTileMode() override;
         COKitSize getDocumentSize() override;
         void initializeForRendering(const char* pArguments) override;
@@ -346,14 +346,14 @@ namespace desktop {
         void setView(int nId) override;
         int getView() override;
         int getViewsCount() override;
-        void paintPartTile(unsigned char* pBuffer, const char* pPart, const int nMode,
+        void paintPartTile(std::span<unsigned char> aBuffer, const char* pPart, const int nMode,
                            const int nCanvasWidth, const int nCanvasHeight, const int nTilePosX,
                            const int nTilePosY, const int nTileWidth, const int nTileHeight,
                            bool bIsPreview = false) override;
         std::vector<int> getViewIds() override;
         void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
-        void paintWindow(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
-                         const int width, const int height) override;
+        void paintWindow(unsigned nWindowId, std::span<unsigned char> aBuffer, const int x,
+                         const int y, const int width, const int height) override;
         void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData) override;
         void postWindowKeyEvent(unsigned nWindowId, COKitKeyEventType eType, int nCharCode,
                                 int nKeyCode) override;
@@ -363,8 +363,9 @@ namespace desktop {
         void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
                                          const char* pText) override;
         std::string getPartInfo(int nPart) override;
-        void paintWindowDPI(unsigned nWindowId, unsigned char* pBuffer, const int x, const int y,
-                            const int width, const int height, const double dpiscale) override;
+        void paintWindowDPI(unsigned nWindowId, std::span<unsigned char> aBuffer, const int x,
+                            const int y, const int width, const int height,
+                            const double dpiscale) override;
         bool insertCertificate(std::span<const unsigned char> aCertificateBinary,
                                std::span<const unsigned char> aPrivateKeyBinary) override;
         bool addCertificate(std::span<const unsigned char> aCertificateBinary) override;
@@ -385,7 +386,7 @@ namespace desktop {
         COKitBitmap renderFontOrientation(const char* pFontName, const char* pChar,
                                           int nRequestedWidth, int nRequestedHeight,
                                           int nOrientation) override;
-        void paintWindowForView(unsigned nWindowId, unsigned char* pBuffer, const int x,
+        void paintWindowForView(unsigned nWindowId, std::span<unsigned char> aBuffer, const int x,
                                 const int y, const int width, const int height,
                                 const double dpiscale, int viewId) override;
         void completeFunction(const char* pFunctionName) override;
