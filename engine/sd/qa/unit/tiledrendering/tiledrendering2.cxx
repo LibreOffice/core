@@ -467,6 +467,53 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNamesTheSourceSlide)
+{
+    // A slide travels to another presentation in a file written out of its own deck, and a slide
+    // that carries no name of its own is known by its position. The link records the slide of the
+    // source deck, which is not the position that slide took in the file it travelled in.
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-source.fodp"));
+    SdXImpressDocument* pSourceDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pSourceDocument);
+    pSourceDocument->initializeForTiledRendering({});
+
+    // The third slide of the source travels on its own, so it stands first in the file it goes in.
+    utl::TempFileNamed aOneSlide(u"", true, u".odp");
+    aOneSlide.EnableKillingFile();
+    CPPUNIT_ASSERT(pSourceDocument->exportPages({ 2 }, aOneSlide.GetURL()));
+
+    // A refresh reads the whole source deck, so the pages stand there as they do in the source.
+    utl::TempFileNamed aWholeDeck(u"", true, u".odp");
+    aWholeDeck.EnableKillingFile();
+    CPPUNIT_ASSERT(pSourceDocument->exportPages({}, aWholeDeck.GetURL()));
+
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aOneSlide.GetURL(), "{\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+
+    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"Source three"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pLinked->GetBookmarkName());
+
+    // The slide the link names is the one the source deck offers under that name, so a refresh
+    // reading the whole deck finds it and reads the page again.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
+                                                              aWholeDeck.GetURL(),
+                                                              u"2021-01-01T00:00:00Z"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Source three"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr,
+                         pDoc->GetSdPage(1, PageKind::Standard)->GetBookmarkName());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkModifiedTimeRoundtrip)
 {
     loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));

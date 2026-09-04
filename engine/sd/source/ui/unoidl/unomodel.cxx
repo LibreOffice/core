@@ -6541,6 +6541,34 @@ void clearInsertedPageLinks(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uI
     }
 }
 
+/// Names on the pages the name of the source document's slides each one came from.
+void nameInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
+                             const std::vector<OUString>& rReadPages, sal_uInt16 nFirstSlide,
+                             sal_uInt16 nSlideCount)
+{
+    if (rReadPages.size() != static_cast<size_t>(nSlideCount))
+        return;
+
+    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
+    {
+        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
+        if (!pPage)
+            continue;
+
+        bool bIsMasterPage = false;
+        const sal_uInt16 nRead
+            = rSource.GetPageByName(rReadPages[nSlide - nFirstSlide], bIsMasterPage);
+        if (nRead == SDRPAGE_NOTFOUND || bIsMasterPage)
+            continue;
+
+        const SdPage* pReadPage = dynamic_cast<const SdPage*>(rSource.GetPage(nRead));
+        const OUString aOriginPage
+            = pReadPage ? sd::SlideLink::GetOriginPage(*pReadPage) : OUString();
+        if (!aOriginPage.isEmpty())
+            pPage->SetBookmarkName(aOriginPage);
+    }
+}
+
 /// Records on the pages of a run the time the source document was last modified, so each linked
 /// page carries when its source was last seen.
 void stampInsertedPageSource(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uInt16 nSlideCount,
@@ -6629,8 +6657,14 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     const sal_uInt16 nInsertedCount = mpDoc->GetSdPageCount(PageKind::Standard) - nSlidesBefore;
     if (!bLink)
         clearInsertedPageLinks(*mpDoc, nFirstSlide, nInsertedCount);
-    else if (!aLastModifiedTime.isEmpty())
-        stampInsertedPageSource(*mpDoc, nFirstSlide, nInsertedCount, aLastModifiedTime);
+    else
+    {
+        // A linked page records the slide of the source document it came from, which is the slide
+        // the file was written from rather than the page it holds in the file.
+        nameInsertedPageSources(*mpDoc, *pSource, aBookmarkList, nFirstSlide, nInsertedCount);
+        if (!aLastModifiedTime.isEmpty())
+            stampInsertedPageSource(*mpDoc, nFirstSlide, nInsertedCount, aLastModifiedTime);
+    }
 
     return true;
 }
@@ -6679,6 +6713,20 @@ bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const
         pTarget->RemovePage(nPageNum);
         if (nPageNum < pTarget->GetPageCount())
             pTarget->RemovePage(nPageNum);
+    }
+
+    const sal_uInt16 nWritten = pTarget->GetSdPageCount(PageKind::Standard);
+    if (aPageNames.size() == static_cast<size_t>(nWritten))
+    {
+        for (sal_uInt16 nPage = 0; nPage < nWritten; ++nPage)
+        {
+            SdPage* pPage = pTarget->GetSdPage(nPage, PageKind::Standard);
+            if (!pPage)
+                continue;
+
+            pPage->SetFileName(sd::SlideLink::OriginReference());
+            pPage->SetBookmarkName(aPageNames[nPage]);
+        }
     }
 
     try

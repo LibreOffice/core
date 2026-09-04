@@ -20,6 +20,7 @@ namespace tools
 class JsonWriter;
 }
 class SdDrawDocument;
+class SdPage;
 
 namespace sd
 {
@@ -42,6 +43,23 @@ public:
         open, which is what matching a page against its source rests on.
     */
     static OUString MakeSourceReference(const OUString& rSourceName);
+
+    /** The reference the pages of a written presentation record, which names no document.
+
+        A presentation written out of a document holds pages of its own, named by the position each
+        one takes in it, so the name a page carries there says nothing about the slide it was
+        written from. Every written page records that slide as a link under this reference, so that
+        whoever reads the pages back learns which slide of the writing document each one came from.
+        The reference names no document and nothing resolves it.
+    */
+    static OUString OriginReference();
+
+    /** The slide of the writing document rPage was written from, as that document names it.
+
+        Empty for a page that records none: only a page a document wrote out of itself records the
+        slide it came from.
+    */
+    static OUString GetOriginPage(const SdPage& rPage);
 
     /** The source document rReference names, as the user knows it.
 

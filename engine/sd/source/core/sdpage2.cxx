@@ -40,6 +40,7 @@
 #include <drawdoc.hxx>
 #include <stlpool.hxx>
 #include <pglink.hxx>
+#include <SlideLink.hxx>
 
 #include <strings.hxx>
 #include <DrawDocShell.hxx>
@@ -287,6 +288,12 @@ bool SdPage::IsReadOnly() const
 
 void SdPage::ConnectLink()
 {
+    // A page written out of a presentation records the slide of that presentation it came from,
+    // under a reference that names no document. Such a record is read off the page as it stands
+    // and there is nothing to resolve behind it.
+    if (maFileName == sd::SlideLink::OriginReference())
+        return;
+
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrPage().GetLinkManager());
 
     if (!(pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&

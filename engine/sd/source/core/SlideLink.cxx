@@ -40,6 +40,9 @@ namespace
 /// The scheme a source document is named under.
 constexpr OUString gSourceScheme = u"vnd.collabora.slide-source:"_ustr;
 
+/// The reference the pages of a written presentation record, which names no document.
+constexpr OUString gOriginReference = u"vnd.collabora.slide-origin:"_ustr;
+
 /// Whether rUrl names a file on this machine.
 bool isLocalFile(std::u16string_view rUrl)
 {
@@ -155,6 +158,16 @@ OUString SlideLink::MakeSourceReference(const OUString& rSourceName)
     const OUString aEscaped = rtl::Uri::encode(rSourceName, rtl_UriCharClassPchar,
                                                rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
     return gSourceScheme + rtl::Uri::decode(aEscaped, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+}
+
+OUString SlideLink::OriginReference() { return gOriginReference; }
+
+OUString SlideLink::GetOriginPage(const SdPage& rPage)
+{
+    if (rPage.GetFileName() != gOriginReference)
+        return OUString();
+
+    return rPage.GetBookmarkName();
 }
 
 OUString SlideLink::GetSourceName(std::u16string_view rReference)
