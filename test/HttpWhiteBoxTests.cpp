@@ -39,6 +39,7 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST(testHeader);
     CPPUNIT_TEST(testHeaderFieldWithControlCharacter);
+    CPPUNIT_TEST(testRequestLineWithControlCharacter);
     CPPUNIT_TEST(testCookies);
 
     CPPUNIT_TEST(testRequestParserValidComplete);
@@ -60,6 +61,7 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testStatusLineSerialize();
     void testHeader();
     void testHeaderFieldWithControlCharacter();
+    void testRequestLineWithControlCharacter();
     void testCookies();
     void testRequestParserValidComplete();
     void testRequestParserValidIncomplete();
@@ -247,6 +249,38 @@ void HttpWhiteBoxTests::testHeaderFieldWithControlCharacter()
     const std::string wire(out.data(), out.size());
     LOK_ASSERT(wire.find("If-Modified-Since") == std::string::npos);
     LOK_ASSERT(wire.find("X-Sample") == std::string::npos);
+}
+
+void HttpWhiteBoxTests::testRequestLineWithControlCharacter()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A target carrying a carriage return and a newline sends nothing at all, so the bytes that
+    // follow them cannot arrive as a request line of their own.
+    http::Request split("/one.svg?a=1\r\nGET /two.svg HTTP/1.1\r\nHost: example\r\n\r\n");
+    Buffer splitOut;
+    LOK_ASSERT(!split.writeData(splitOut, INT_MAX));
+    LOK_ASSERT_EQUAL(0UL, splitOut.size());
+
+    // The request line separates its three fields with a space, so a target holding one is
+    // refused as well.
+    http::Request spaced("/one.svg HTTP/1.1");
+    Buffer spacedOut;
+    LOK_ASSERT(!spaced.writeData(spacedOut, INT_MAX));
+    LOK_ASSERT_EQUAL(0UL, spacedOut.size());
+
+    // The verb and the version get the same test as the target.
+    http::Request verbed("/one.svg", "GET\r\nX-Injected: yes");
+    Buffer verbedOut;
+    LOK_ASSERT(!verbed.writeData(verbedOut, INT_MAX));
+    LOK_ASSERT_EQUAL(0UL, verbedOut.size());
+
+    // A target of the ordinary shape still goes out.
+    http::Request plain("/one.svg?a=1&b=2");
+    Buffer plainOut;
+    LOK_ASSERT(plain.writeData(plainOut, INT_MAX));
+    const std::string wire(plainOut.data(), plainOut.size());
+    LOK_ASSERT(wire.starts_with("GET /one.svg?a=1&b=2 HTTP/1.1\r\n"));
 }
 
 void HttpWhiteBoxTests::testCookies()

@@ -335,6 +335,16 @@ bool Request::writeData(Buffer& out, std::size_t capacity)
     const std::size_t buffered_size = out.size();
     if (stage() == Stage::RequestLine)
     {
+        if (!hasOnlyValidRequestLineBytes(getVerb()) || !hasOnlyValidRequestLineBytes(getUrl()) ||
+            !hasOnlyValidRequestLineBytes(getVersion()))
+        {
+            LOG_ERR("Not sending a request whose request line holds a byte it cannot carry: ["
+                    << HexUtil::stringifyHexLine(
+                           getUrl(), 0, std::min(getUrl().size(), Header::MaxLoggedFieldBytes))
+                    << ']');
+            return false;
+        }
+
         LOG_TRC("performWrites (request header)");
 
         out.append(getVerb());

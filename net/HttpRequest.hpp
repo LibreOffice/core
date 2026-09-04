@@ -706,6 +706,20 @@ public:
                Finished ///< Done.
     );
 
+    /// True when the given string holds only the bytes RFC 9112 section 3 allows in a field of
+    /// the request line, which separates its method, target and version with single spaces. That
+    /// leaves out space itself, the control characters and DEL, none of which RFC 3986 allows in
+    /// a URI either.
+    [[nodiscard]] static bool hasOnlyValidRequestLineBytes(const std::string_view field)
+    {
+        return std::none_of(field.begin(), field.end(),
+                            [](const char ch) -> bool
+                            {
+                                const unsigned char byte = static_cast<unsigned char>(ch);
+                                return byte <= 0x20 || byte == 0x7f;
+                            });
+    }
+
     /// Get the request URL.
     const std::string& getUrl() const { return _url; }
     /// Set the request URL. Necessary to decode hexified URLs.
