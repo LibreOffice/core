@@ -850,7 +850,8 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	// ClipboardContent.getType() callback: used with the Paste button
-	_navigatorClipboardGetTypeCallback: async function(clipboardContent, blob, type) {
+	// extraBlobs is a { mime: content } map of additional formats, optional
+	_navigatorClipboardGetTypeCallback: async function(clipboardContent, blob, type, extraBlobs) {
 		if (type == 'image/png') {
 			this._pasteTypedBlob(type, blob);
 			return;
@@ -865,7 +866,7 @@ window.L.Clipboard = window.L.Class.extend({
 		}
 
 		if (type !== 'text/html' || !this.isHtmlImage(text)) {
-			this._navigatorClipboardTextCallback(text, type);
+			this._navigatorClipboardTextCallback(Object.assign({ [type]: text }, extraBlobs));
 			return;
 		}
 
@@ -876,7 +877,7 @@ window.L.Clipboard = window.L.Class.extend({
 		} catch (error) {
 			window.app.console.log('clipboardContent.getType(image/png) failed: ' + error.message);
 			// No image blob for the <img> HTML, send it as text/uri-list.
-			this._navigatorClipboardTextCallback(text, type);
+			this._navigatorClipboardTextCallback({ [type]: text });
 			return;
 		}
 
@@ -884,20 +885,22 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	// Clipboard blob text() callback for the text/html and text/plain cases
-	_navigatorClipboardTextCallback: function(text, textType) {
+	// texts is a { mime: content } map
+	_navigatorClipboardTextCallback: function(texts) {
 		// paste() wants to work with a paste event, so construct one.
+		const types = Object.keys(texts);
 		var ev = {
 			clipboardData: {
 				// Used early by paste().
 				getData: function(type) {
-					if (type === textType) {
-						return text;
+					if (types.includes(type)) {
+						return texts[type];
 					}
 
 					return '';
 				},
 				// Used by _readContentSyncToBlob().
-				types: [textType],
+				types: types,
 			},
 			preventDefault: function() {
 			},
@@ -1173,7 +1176,18 @@ window.L.Clipboard = window.L.Class.extend({
 				window.app.console.log('clipboardContent.getType(text/html) failed: ' + error.message);
 				return;
 			}
-			this._navigatorClipboardGetTypeCallback(clipboardContent, blob, 'text/html');
+			// Also fetch text/plain if the source clipboard has it.
+			const extraBlobs = {};
+			if (clipboardContent.types.includes('text/plain')) {
+				try {
+					const plainBlob = await clipboardContent.getType('text/plain');
+					extraBlobs['text/plain'] = await plainBlob.text();
+				} catch (error) {
+					window.app.console.log('clipboardContent.getType(text/plain) alongside html failed: ' + error.message);
+					// Fall through to just text/html.
+				}
+			}
+			this._navigatorClipboardGetTypeCallback(clipboardContent, blob, 'text/html', extraBlobs);
 		} else if (clipboardContent.types.includes('text/plain')) {
 			let blob;
 			try {

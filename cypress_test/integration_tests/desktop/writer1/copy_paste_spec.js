@@ -249,6 +249,56 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 			});
 	});
 
+	it('Async paste special offers both HTML and plain text when the clipboard has both', function() {
+		// Given a Writer document and a fake async clipboard exposing both
+		// text/html and text/plain:
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+
+		cy.getFrameWindow().then(function(win) {
+			const clip = win.app.map._clip;
+			const html = '<p>html content</p>';
+			const plainText = 'plain text content';
+			const clipboardItem = {
+				types: ['text/html', 'text/plain'],
+				getType: function(type) {
+					return {
+						then: function(resolve, reject) {
+							if (type === 'text/html') {
+								resolve(new Blob([html]));
+							} else if (type === 'text/plain') {
+								resolve(new Blob([plainText]));
+							} else {
+								reject({ message: 'no ' + type });
+							}
+						},
+					};
+				},
+			};
+			clip._dummyClipboard = {
+				read: function() {
+					return {
+						then: function(resolve) {
+							resolve([clipboardItem]);
+						},
+					};
+				},
+			};
+
+			// When triggering async paste special:
+			clip.filterExecCopyPaste('.uno:PasteSpecial');
+		});
+
+		// Then the paste-special dialog offers both formats:
+		cy.cGet('#PasteSpecialDialog').should('be.visible');
+		cy.cGet('#PasteSpecialDialog .ui-treeview-cell-text:contains("HTML")')
+			.should('exist');
+		// Without the accompanying fix in place, this test would have failed with:
+		// expected #PasteSpecialDialog .ui-treeview-cell-text:contains("Unformatted text") to exist in the DOM
+		// i.e. the plain text item was missing from the format list in the dialog.
+		cy.cGet('#PasteSpecialDialog .ui-treeview-cell-text:contains("Unformatted text")')
+			.should('exist');
+	});
+
 	it('Cross-document paste failure shows the reason from the source stub.', function() {
 		helper.setupAndLoadDocument('writer/copy_paste.odt');
 
