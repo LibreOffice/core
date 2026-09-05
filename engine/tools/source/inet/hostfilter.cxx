@@ -23,6 +23,7 @@
 #include <ws2tcpip.h>
 #include <postwin.h>
 #else
+#include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #endif
