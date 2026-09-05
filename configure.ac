@@ -1822,7 +1822,15 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true"],
       if test -n "$with_lo_path"; then
           # strip trailing '/' from LO_PATH, 'ln -s' with such path will otherwise fail
           if test "$ENABLE_WINDOWSAPP" != "true"; then
-              LO_PATH=`readlink -f ${with_lo_path%/}`
+              # The path may not exist yet when a package is built, and
+              # BSD readlink prints nothing for a missing path, so only
+              # canonicalize what is there.
+              lo_path_given=${with_lo_path%/}
+              if test -e "$lo_path_given"; then
+                  LO_PATH=`readlink -f "$lo_path_given"`
+              else
+                  LO_PATH=$lo_path_given
+              fi
           else
               # LO_PATH is the path used at run-time to find the
               # CollaboraOffice shared libraries. When running configure
