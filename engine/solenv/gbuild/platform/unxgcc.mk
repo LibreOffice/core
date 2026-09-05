@@ -135,12 +135,7 @@ $(if $(call gb_LinkTarget__WantLock,$2), \
 )
 	+$(if $(filter EMSCRIPTEN,$(OS)),unset PYTHONWARNINGS &&) \
 $(call gb_Helper_abbreviate_dirs,\
-	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter Executable,$(TARGETTYPE)),$(if $(ENABLE_HARDENING_FLAGS),$(HARDENING_EXECUTABLE_LDFLAGS))) \
-		$(T_LTOFLAGS) \
-		$(subst \d,$$,$(RPATH)) \
-		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \
+	RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$(2)), \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
@@ -148,7 +143,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENASMOBJECTS),$(call gb_GenAsmObject_get_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
-		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist)))) && \
+	$(if $(call gb_LinkTarget__NeedsCxxLinker),$(or $(T_CXX),$(gb_CXX)) $(gb_CXX_LINKFLAGS),$(or $(T_CC),$(gb_CC))) \
+		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Executable,$(TARGETTYPE)),$(if $(ENABLE_HARDENING_FLAGS),$(HARDENING_EXECUTABLE_LDFLAGS))) \
+		$(T_LTOFLAGS) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_USE_LD) $(T_LDFLAGS) $(foreach pre_js,$(T_PREJS), --pre-js $(pre_js)) \
+		@$${RESPONSEFILE} \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 		    -Wl$(COMMA)--start-group \
 			$(shell echo -n \
@@ -169,7 +171,7 @@ $(call gb_Helper_abbreviate_dirs,\
                 ) \
 		-o $(1) \
 	$(if $(filter EMSCRIPTEN,$(OS)),$(if $(call gb_target_symbols_enabled,$(1)),$(if $(filter TRUE,$(HAVE_EXTERNAL_DWARF)),&& emdwp -e $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm,$(1)) -o $(patsubst %$(gb_Executable_EXT),%.wasm.debug.wasm.dwp,$(1))))) \
-	$(if $(call gb_LinkTarget__WantLock,$(2)),; RC=$$? ; rm -f $(gb_LinkTarget__Lock); if test $$RC -ne 0; then exit $$RC; fi))
+	; RC=$$? ; rm -f $${RESPONSEFILE} $(if $(call gb_LinkTarget__WantLock,$(2)),$(gb_LinkTarget__Lock)); if test $$RC -ne 0; then exit $$RC; fi)
 
 $(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
     $(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
