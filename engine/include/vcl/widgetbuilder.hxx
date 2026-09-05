@@ -238,9 +238,7 @@ protected:
                     aItems = handleItems(reader);
                 else if (name == "style")
                 {
-                    std::vector<vcl::EnumContext::Context> aContext = handleStyle(reader);
-                    if (!aContext.empty())
-                        setContext(pCurrentChild, std::move(aContext));
+                    handleStyle(reader);
                 }
                 else
                 {
@@ -356,7 +354,7 @@ protected:
         if (!pParent)
             return;
 
-        applyTabChildProperties(pParent, sIDs, context, aProperties, aAtkProperties);
+        applyTabChildProperties(pParent, sIDs, aProperties, aAtkProperties);
     }
 
     void handleMenu(xmlreader::XmlReader& reader, const OUString& rID)
@@ -526,7 +524,6 @@ protected:
                                         const stringmap& rPackingProperties)
         = 0;
     virtual void applyTabChildProperties(Widget* pParent, const std::vector<OUString>& rIDs,
-                                         std::vector<vcl::EnumContext::Context>& rContext,
                                          stringmap& rProperties, stringmap& rAtkProperties)
         = 0;
     virtual void insertComboBoxOrListBoxItems(Widget* pWidget, stringmap& rMap,
@@ -545,7 +542,6 @@ protected:
     virtual void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) = 0;
     virtual void setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)
         = 0;
-    virtual void setContext(Widget* pWidget, std::vector<vcl::EnumContext::Context>&& aContext) = 0;
 
     // Whether the given widget is a horizontal, i.e. non-vertical tab control
     virtual bool isHorizontalTabControl(Widget* pWidget) = 0;

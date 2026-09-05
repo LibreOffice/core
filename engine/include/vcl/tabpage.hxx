@@ -22,13 +22,10 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <vcl/IContext.hxx>
 
 class ScrollBar;
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TabPage final
-    : public vcl::Window
-    , public vcl::IContext
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TabPage final : public vcl::Window
 {
 private:
     using Window::ImplInit;

@@ -2446,7 +2446,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window* pParent, const OUStrin
 }
 
 void VclBuilder::applyTabChildProperties(vcl::Window* pParent, const std::vector<OUString>& rIDs,
-                                         std::vector<vcl::EnumContext::Context>& rContext, stringmap& rProperties,
+                                         stringmap& rProperties,
                                          stringmap& rAtkProperties)
 {
     TabControl* pTabControl = isHorizontalTabControl(pParent) ? static_cast<TabControl*>(pParent) : nullptr;
@@ -2463,11 +2463,6 @@ void VclBuilder::applyTabChildProperties(vcl::Window* pParent, const std::vector
             pTabControl->SetPageText(nPageId, aFind->second);
             pTabControl->SetPageName(nPageId, rIDs.back());
             pTabControl->SetHelpText(nPageId, sTooltip);
-            if (!rContext.empty())
-            {
-                TabPage* pPage = pTabControl->GetTabPage(nPageId);
-                pPage->SetContext(std::move(rContext));
-            }
 
             for (auto const& [ rKey, rValue ] : rAtkProperties)
             {
@@ -2926,14 +2921,6 @@ void VclBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUStr
             std::stable_sort(pOther->m_xGroup->begin(), pOther->m_xGroup->end(), sortIntoBestTabTraversalOrder(this));
         }
     }
-}
-
-void VclBuilder::setContext(vcl::Window* pWindow, std::vector<vcl::EnumContext::Context>&& aContext)
-{
-    vcl::IContext* pContextControl = dynamic_cast<vcl::IContext*>(pWindow);
-    SAL_WARN_IF(!pContextControl, "vcl", "context set for not supported item");
-    if (pContextControl)
-        pContextControl->SetContext(std::move(aContext));
 }
 
 bool VclBuilder::isHorizontalTabControl(vcl::Window* pWindow)

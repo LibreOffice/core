@@ -18,7 +18,6 @@
 #include <vcl/event.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/IContext.hxx>
 #include <vcl/commandevent.hxx>
 #include <set>
 
@@ -26,8 +25,7 @@ class ScrollBar;
 class ScrollBarBox;
 class Splitter;
 
-class VCL_DLLPUBLIC VclContainer : public vcl::Window,
-                                   public vcl::IContext
+class VCL_DLLPUBLIC VclContainer : public vcl::Window
 {
 public:
     VclContainer(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);

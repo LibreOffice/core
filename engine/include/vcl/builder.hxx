@@ -263,7 +263,7 @@ private:
     void applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
                                 const stringmap& rPackingProperties) override;
     virtual void applyTabChildProperties(vcl::Window* pParent, const std::vector<OUString>& rIDs,
-                                         std::vector<vcl::EnumContext::Context>& rContext, stringmap& rProperties,
+                                         stringmap& rProperties,
                                          stringmap& rAtkProperties) override;
 
     void insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const OUString& rClass,
@@ -276,8 +276,6 @@ private:
 
     void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) override;
     void setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId) override;
-    void setContext(vcl::Window* pWindow,
-                    std::vector<vcl::EnumContext::Context>&& aContext) override;
 
     virtual bool isHorizontalTabControl(vcl::Window* pWindow) override;
 
