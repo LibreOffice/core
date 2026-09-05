@@ -99,8 +99,7 @@ bool isJsonWS(sal_Unicode c) { return c == ' ' || c == '\t' || c == '\n' || c ==
 // returns std::nullopt otherwise:
 template <typename T> std::optional<T> parseJsonNumberAs(OUString const& json)
 {
-#if (defined __ANDROID__ /*TODO: drop once Android NDK supports it*/ \
-     && defined _LIBCPP_VERSION && !_LIBCPP_AVAILABILITY_HAS_FROM_CHARS_FLOATING_POINT) \
+#if (defined _LIBCPP_VERSION && !_LIBCPP_AVAILABILITY_HAS_FROM_CHARS_FLOATING_POINT) \
     || (defined __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ \
         && __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ < 260000) \
     || (defined __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ \
