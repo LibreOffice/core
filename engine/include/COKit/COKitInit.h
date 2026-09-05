@@ -69,8 +69,16 @@ extern "C"
 #if !defined(IOS)
         static void *cok_loadlib(const char *pFN)
     {
+        // FreeBSD's C++ runtime, libcxxrt, matches a thrown exception against
+        // a catch clause by comparing type_info object addresses, not type
+        // names. The office libraries each carry their own weak copy of the
+        // UNO exception RTTI, so they must all resolve it to one copy, which
+        // needs the library loaded here to be in the global symbol scope like
+        // the component libraries that cppuhelper loads later. Otherwise a
+        // catch (uno::Exception&) in one library misses an exception thrown
+        // by another, and for instance loading a Writer document fails.
         return dlopen(pFN, RTLD_LAZY
-#if defined KIT_LOADLIB_GLOBAL
+#if defined KIT_LOADLIB_GLOBAL || defined __FreeBSD__
                       | RTLD_GLOBAL
 #endif
                       );
