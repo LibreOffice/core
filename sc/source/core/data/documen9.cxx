@@ -258,6 +258,23 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
     return const_cast<Color*>(&(xColorList->GetColor(nColorIndex)->GetColor()));
 }
 
+IMPL_LINK(ScDocument, GetUserDefinedColorIndex, const Color&, rColor, sal_Int32)
+{
+    rtl::Reference<XColorList> xColorList;
+    if (mpDrawLayer)
+        xColorList = mpDrawLayer->GetColorList();
+    else
+    {
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
+        if (!pColorList.is())
+            pColorList = XColorList::CreateStdColorList();
+        xColorList = pColorList;
+    }
+
+    return xColorList->GetIndexOfColor(rColor);
+}
+
+
 bool ScDocument::DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const
 {
     return mpDrawLayer->GetPrintArea( rRange, bSetHor, bSetVer );

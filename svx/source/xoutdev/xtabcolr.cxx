@@ -158,6 +158,12 @@ Bitmap XColorList::CreateBitmapForUI( tools::Long /*nIndex*/ )
 
 tools::Long XColorList::GetIndexOfColor( const Color& rColor ) const
 {
+    if (mbListDirty)
+    {
+        if (!const_cast<XColorList*>(this)->Load())
+            return -1;
+    }
+
     for( tools::Long i = 0, n = maList.size(); i < n; ++i )
     {
         const Color aColor = static_cast<XColorEntry*>( maList[i].get() )->GetColor();

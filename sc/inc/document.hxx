@@ -709,6 +709,7 @@ public:
     SC_DLLPUBLIC sal_uInt64  GetFormulaGroupCount() const;       // all cells
     sal_uInt64               GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16, Color* );
+    DECL_LINK( GetUserDefinedColorIndex, const Color&, sal_Int32 );
 
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
