@@ -2033,8 +2033,10 @@ AS_IF([test "$ENABLE_QTAPP" = true],
        PKG_CHECK_MODULES([QT6], [Qt6Core >= 6.6 Qt6Widgets Qt6Gui Qt6Network Qt6WebSockets Qt6WebEngineCore Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport])
 
        dnl Locate qtpaths6 for Qt6 tool discovery
+       dnl FreeBSD ports keep the Qt tools out of the PATH, under
+       dnl /usr/local/lib/qt6/bin.
        AC_PATH_PROG([QTPATHS6], [qtpaths6], [no],
-             [$PATH$PATH_SEPARATOR/usr/lib/qt6/bin])
+             [$PATH$PATH_SEPARATOR/usr/lib/qt6/bin$PATH_SEPARATOR/usr/local/lib/qt6/bin])
        if test "x$QTPATHS6" = "xno"; then
              AC_MSG_ERROR([qtpaths6 not found. Install Qt6 development tools.])
        fi
