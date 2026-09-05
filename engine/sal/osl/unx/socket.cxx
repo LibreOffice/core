@@ -40,7 +40,7 @@
 #include <fcntl.h>
 #include <netdb.h>
 #ifdef FREEBSD
-#include <netinet/ip.h>
+#include <netinet/in.h>
 #endif
 #include <netinet/tcp.h>
 #include <poll.h>
