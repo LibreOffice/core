@@ -15,6 +15,7 @@ doc/cpp/**
 **/.clangd
 **/.cache
 Makefile
+!qt/freebsd/editors/*/Makefile
 !/gbuild/Makefile
 Makefile.in
 coolkitconfig.xcu
