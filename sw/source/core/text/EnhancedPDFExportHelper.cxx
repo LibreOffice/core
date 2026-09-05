@@ -176,6 +176,8 @@ struct SwEnhancedPDFState
 
     ::std::optional<Span> m_oCurrentSpan;
     std::optional<Link> m_oCurrentLink;
+    // left open for a following portion, innermost last
+    std::vector<sal_Int32> m_DeferredTags;
 
     SwEnhancedPDFState(LanguageType const eLanguageDefault)
         : m_eLanguageDefault(eLanguageDefault)
@@ -495,8 +497,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
                                       const Frame_Info* pFrameInfo,
                                       const Por_Info* pPorInfo,
                                       OutputDevice const & rOut )
-  : m_nEndStructureElement( 0 ),
-    m_nRestoreCurrentTag( -1 ),
+  : m_nRestoreCurrentTag( -1 ),
     mpNumInfo( pNumInfo ),
     mpFrameInfo( pFrameInfo ),
     mpPorInfo( pPorInfo )
@@ -636,7 +637,7 @@ void SwTaggedPDFHelper::OpenTagImpl(void const*const pKey)
 {
     sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(pKey);
     mpPDFExtOutDevData->BeginStructureElement(id);
-    ++m_nEndStructureElement;
+    m_aOpenedTags.push_back(id);
 
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.push_back( 99 );
@@ -650,7 +651,7 @@ sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
     const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
     mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
     mpPDFExtOutDevData->BeginStructureElement(nId);
-    ++m_nEndStructureElement;
+    m_aOpenedTags.push_back(nId);
 
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.push_back( o3tl::narrowing<sal_uInt16>(eType) );
@@ -725,6 +726,44 @@ void SwTaggedPDFHelper::EndTag()
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.pop_back();
 #endif
+}
+
+// let a following portion merge into or close it
+void SwTaggedPDFHelper::DeferTag()
+{
+    assert(!m_aOpenedTags.empty());
+    assert(mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.empty());
+    assert(mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan
+           || mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
+    mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.push_back(m_aOpenedTags.back());
+    m_aOpenedTags.pop_back();
+}
+
+bool SwTaggedPDFHelper::IsDeferredTagCurrent() const
+{
+    const auto& rDeferredTags(mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags);
+    return !rDeferredTags.empty()
+           && rDeferredTags.back() == mpPDFExtOutDevData->GetCurrentStructureElement();
+}
+
+void SwTaggedPDFHelper::EndDeferredTag()
+{
+    assert(IsDeferredTagCurrent());
+    auto& rState(*mpPDFExtOutDevData->GetSwPDFState());
+    assert(!rState.m_oCurrentSpan || !rState.m_oCurrentLink); // one reset covers both
+    rState.m_oCurrentSpan.reset();
+    rState.m_oCurrentLink.reset();
+    rState.m_DeferredTags.pop_back();
+    EndTag();
+}
+
+// an outer one is not this helper's to close; it outlives the ruby or the fly
+void SwTaggedPDFHelper::EndDeferredTags()
+{
+    while (IsDeferredTagCurrent())
+    {
+        EndDeferredTag();
+    }
 }
 
 namespace {
@@ -1908,22 +1947,15 @@ void SwTaggedPDFHelper::EndStructureElements()
 {
     if (mpFrameInfo != nullptr)
     {
-        if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
-        {   // close span at end of paragraph
-            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
-            ++m_nEndStructureElement;
-        }
-        if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
-        {   // close link at end of paragraph
-            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
-            ++m_nEndStructureElement;
-        }
+        EndDeferredTags(); // a span or link of this frame ends with it
     }
 
-    while ( m_nEndStructureElement > 0 )
+    while (!m_aOpenedTags.empty())
     {
+        EndDeferredTags(); // one deferred inside this tag ends with it
+        assert(m_aOpenedTags.back() == mpPDFExtOutDevData->GetCurrentStructureElement());
+        m_aOpenedTags.pop_back();
         EndTag();
-        --m_nEndStructureElement;
     }
 
     CheckRestoreTag();
@@ -1931,20 +1963,16 @@ void SwTaggedPDFHelper::EndStructureElements()
 
 void SwTaggedPDFHelper::EndCurrentAll()
 {
-    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
+    // a ruby is content of the link, so only the span is closed
+    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan && IsDeferredTagCurrent())
     {
-        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
-    }
-    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
-    {
-        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+        EndCurrentSpan();
     }
 }
 
 void SwTaggedPDFHelper::EndCurrentSpan()
 {
-    mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
-    EndTag(); // close span
+    EndDeferredTag();
 }
 
 void SwTaggedPDFHelper::CreateCurrentSpan(
@@ -1961,8 +1989,6 @@ void SwTaggedPDFHelper::CreateCurrentSpan(
             rInf.GetFont()->GetActual(),
             rInf.GetFont()->GetLanguage(),
             rStyleName});
-    // leave it open to let next portion decide to merge or close
-    --m_nEndStructureElement;
 }
 
 bool SwTaggedPDFHelper::CheckContinueSpan(
@@ -1982,14 +2008,19 @@ bool SwTaggedPDFHelper::CheckContinueSpan(
         }
         else
         {
-            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
-            EndTag();
+            if (IsDeferredTagCurrent()) // a ruby leaves it to the paragraph
+            {
+                EndDeferredTag();
+            }
             return false;
         }
     }
     if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan && pInetFormatAttr)
     {
-        EndCurrentSpan();
+        if (IsDeferredTagCurrent()) // a fly leaves it to the paragraph
+        {
+            EndCurrentSpan();
+        }
         return false;
     }
 
@@ -2006,7 +2037,7 @@ bool SwTaggedPDFHelper::CheckContinueSpan(
                 && rCurrent.nScript == rInf.GetFont()->GetActual()
                 && rCurrent.nLang == rInf.GetFont()->GetLanguage()
                 && rCurrent.StyleName == rStyleName);
-    if (!ret)
+    if (!ret && IsDeferredTagCurrent()) // a fly leaves it to the paragraph
     {
         EndCurrentSpan();
     }
@@ -2044,8 +2075,13 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     // note: ILSE may be nested, so only end the span if needed to start new one
     bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName.toString(), pInetFormatAttr));
 
+    const auto& rDeferredTags(mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags);
+    // only one tag waits for the next portion; a ruby closes the rest with itself
+    const bool bCanDefer(rDeferredTags.empty());
     sal_uInt16 nPDFType = USHRT_MAX;
     OUString aPDFType;
+    bool bDeferTag(false);
+    bool bDeferSpan(false);
 
     switch ( pPor->GetWhichPor() )
     {
@@ -2081,11 +2117,13 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                         aPDFType = aLinkString;
-                        assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
-                        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(
-                            SwEnhancedPDFState::Link{ pInetFormatAttr, -1, {} });
-                        // leave it open to let next portion decide to merge or close
-                        --m_nEndStructureElement;
+                        if (bCanDefer)
+                        {
+                            assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
+                            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(
+                                SwEnhancedPDFState::Link{ pInetFormatAttr, -1, {} });
+                            bDeferTag = true;
+                        }
                     }
                     else
                     {
@@ -2102,7 +2140,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Emphasis);
                         aPDFType = constEmphasisStyleName;
-                        CreateCurrentSpan(rInf, sStyleName.toString());
+                        bDeferSpan = bCanDefer;
                     }
                 }
                 // Strong
@@ -2112,7 +2150,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Strong);
                         aPDFType = constStrongEmphasisStyleName;
-                        CreateCurrentSpan(rInf, sStyleName.toString());
+                        bDeferSpan = bCanDefer;
                     }
                 }
                 // Check for Quote/Code character style:
@@ -2122,7 +2160,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Quote);
                         aPDFType = aQuoteString;
-                        CreateCurrentSpan(rInf, sStyleName.toString());
+                        bDeferSpan = bCanDefer;
                     }
                 }
                 else if (sStyleName == aSourceText)
@@ -2131,7 +2169,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Code);
                         aPDFType = aCodeString;
-                        CreateCurrentSpan(rInf, sStyleName.toString());
+                        bDeferSpan = bCanDefer;
                     }
                 }
                 else if (!isContinueSpan)
@@ -2154,7 +2192,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                             aPDFType = sStyleName.toString();
                         else
                             aPDFType = aSpanString;
-                        CreateCurrentSpan(rInf, sStyleName.toString());
+                        bDeferSpan = bCanDefer;
                     }
                 }
             }
@@ -2267,6 +2305,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     if ( USHRT_MAX != nPDFType )
     {
         BeginTag( static_cast<vcl::pdf::StructElement>(nPDFType), aPDFType );
+        if (bDeferSpan)
+        {
+            CreateCurrentSpan(rInf, sStyleName.toString());
+            bDeferTag = true;
+        }
+        if (bDeferTag)
+        {
+            DeferTag();
+        }
     }
 }
 
@@ -3129,6 +3176,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
         }
         rBookmarks.clear();
         assert(pPDFExtOutDevData->GetSwPDFState());
+        assert(pPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.empty());
         delete pPDFExtOutDevData->GetSwPDFState();
         pPDFExtOutDevData->SetSwPDFState(nullptr);
     }
