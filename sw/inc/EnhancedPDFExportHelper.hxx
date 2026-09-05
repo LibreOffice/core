@@ -180,8 +180,6 @@ class SwTaggedPDFHelper
     SwTaggedPDFHelper( const Num_Info* pNumInfo, const Frame_Info* pFrameInfo, const Por_Info* pPorInfo,
                        OutputDevice const & rOut );
     ~SwTaggedPDFHelper();
-
-    static void EndCurrentLink(OutputDevice const&);
 };
 
 /*
