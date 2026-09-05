@@ -32,9 +32,14 @@ using namespace cpo::uno;
 /* static */ bool KitClipboardFactory::gHasGlobalProvider = false;
 static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>& getClipboards()
 {
-    static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>
-        gClipboards{};
-    return gClipboards;
+    // Allocated once and never freed. Static destructors elsewhere still ask
+    // for a clipboard while the process exits, and a destroyed DeleteOnDeinit
+    // keeps reporting the map it used to hold, so get() would hand out a dead
+    // map. Leaving the object alive keeps get() truthful: DeInitVCL empties it
+    // through doCleanup, and from then on it answers nullptr.
+    static auto* const pClipboards =
+        new tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>{};
+    return *pClipboards;
 }
 
 rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
