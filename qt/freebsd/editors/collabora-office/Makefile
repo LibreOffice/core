@@ -29,8 +29,10 @@ LICENSE=	MPL20
 
 ONLY_FOR_ARCHS=	aarch64 amd64
 
+# clucene is only checked by configure; nothing links it while help is disabled
 BUILD_DEPENDS=	bash:shells/bash \
 		cppunit-config:devel/cppunit \
+		${LOCALBASE}/libdata/pkgconfig/libclucene-core.pc:textproc/clucene \
 		fast_float>=0:math/fast_float \
 		frozen>=1:devel/frozen \
 		gpatch:devel/patch \
@@ -52,7 +54,6 @@ LIB_DEPENDS=	libCoinMP.so:math/coinmp \
 		libabw-0.1.so:textproc/libabw \
 		libboost_date_time.so:devel/boost-libs \
 		libcdr-0.1.so:graphics/libcdr01 \
-		libclucene-core.so:textproc/clucene \
 		libcmis-0.6.so:net/libcmis \
 		libcurl.so:ftp/curl \
 		libe-book-0.1.so:textproc/libe-book \
@@ -116,9 +117,10 @@ RUN_DEPENDS=	${LOCALBASE}/share/fonts/Alef/Alef-Bold.ttf:x11-fonts/alef \
 
 USES=		autoreconf:build bison compiler:c++20-lang desktop-file-utils \
 		gettext-tools gmake gnome ninja:build perl5 pkgconfig python \
-		qt:6 shebangfix sqlite ssl tar:xz
+		qt:6 shebangfix ssl tar:xz
 USE_GNOME=	libxml2 libxslt
-USE_QT=		base tools:build webchannel webengine websockets
+# configure checks for Qt WebSockets, but the app does not end up linked to it
+USE_QT=		base tools:build webchannel webengine websockets:build
 
 SHEBANG_GLOB=	*.py
 BINARY_ALIAS=	make=gmake
