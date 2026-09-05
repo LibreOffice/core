@@ -67,7 +67,18 @@ poudriere bulk -j 151amd64 -p default -O /path/to/online/qt/freebsd editors/coll
 
 To test a tarball that is not published yet, put it into
 `${DISTDIR}/collabora-office/` by hand; fetch skips files that are already
-there, and `makesum` records their checksums.
+there, and `makesum` records their checksums. Override the version on the
+command line, `make DISTVERSION=26.04.4-test1 ...`, when the tarball is not a
+release. Two more things worth knowing for local tests outside poudriere:
+
+- `make stage` installs missing run-time dependencies from source, which
+  needs root; pass `NO_DEPENDS=yes` to skip that when the build tools are
+  already installed. Packages built that way only record the dependencies
+  that happen to be installed, so judge the dependency list from a poudriere
+  build.
+- `check-plist` and `package` read the temporary packing list generated
+  during `stage`. After changing `pkg-plist`, run `make generate-plist` before
+  them, and remove `work/.package_done.*` to rebuild the package.
 
 ## Layout of the installed package
 
@@ -95,7 +106,8 @@ there, and `makesum` records their checksums.
 
 ## Not done yet
 
-- `distinfo` and `pkg-plist` are generated once the first release tarball is
-  published; until then they are made locally from a test tarball.
+- `distinfo` is generated once the first release tarball is published;
+  `pkg-plist` was generated from a test tarball and needs regenerating with
+  `makeplist` whenever the installed file set changes.
 - Submission to the FreeBSD ports tree as `editors/collabora-office`, with
   releng@collaboraoffice.com as maintainer.
