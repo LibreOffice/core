@@ -601,18 +601,6 @@ $(eval $(call gb_Library_add_libs,pdfium,\
     -lrt \
 ))
 
-ifeq ($(SYSTEM_OPENJPEG2),TRUE)
-$(eval $(call gb_Library_add_libs,pdfium,\
-    $(OPENJPEG2_LIBS) \
-))
-endif
-
-ifeq ($(SYSTEM_ABSEIL),TRUE)
-$(eval $(call gb_Library_add_libs,pdfium,\
-    $(ABSEIL_LIBS) \
-))
-endif
-
 $(eval $(call gb_Library_use_external,pdfium,freetype))
 $(eval $(call gb_Library_use_external,pdfium,libpng))
 $(eval $(call gb_Library_add_defs,pdfium,\
@@ -652,6 +640,18 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/freetype/src/src/type1/type1 \
     UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftdebug \
     UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftfstype \
+))
+endif
+
+ifeq ($(SYSTEM_OPENJPEG2),TRUE)
+$(eval $(call gb_Library_add_libs,pdfium,\
+    $(OPENJPEG2_LIBS) \
+))
+endif
+
+ifeq ($(SYSTEM_ABSEIL),TRUE)
+$(eval $(call gb_Library_add_libs,pdfium,\
+    $(ABSEIL_LIBS) \
 ))
 endif
 
