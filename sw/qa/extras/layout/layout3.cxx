@@ -915,7 +915,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    // 53 hyphenations on 5 pages using compond-based smart hyphenation
+    // 53 hyphenations on 5 pages using compound-based smart hyphenation
     // This was 67 without smart hyphenation and 53 without compound-based smart hyphenation
     // (using only the plain or interoperable smart hyphenation).
 
