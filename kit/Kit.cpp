@@ -4603,7 +4603,7 @@ void lokit_main(
 #endif
 
 #if MOBILEAPP
-#if (defined(__linux__) && !defined(__ANDROID__) && !defined(QTAPP)) || defined(__FreeBSD__)
+#if (defined(__linux__) || defined(__FreeBSD__)) && !defined(__ANDROID__) && !defined(QTAPP)
         Poco::URI userInstallationURI("file", LO_PATH);
         COKit *kit = cok_init_2(LO_PATH "/program", userInstallationURI.toString().c_str());
 #elif defined(IOS) // In the iOS app we call cok_init_2() just once, when the app starts
