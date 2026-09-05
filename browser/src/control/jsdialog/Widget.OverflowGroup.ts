@@ -59,7 +59,7 @@ function createMoreButton(
 ): HTMLElement {
 	// The group's own label, not its id: a screen reader read out
 	// "More options for home-font".
-	const groupName = groupLabel?.textContent?.trim() || id;
+	const groupName = groupLabel.textContent?.trim() || id;
 	const moreOptionsLabel = _('More options for {1}').replace('{1}', groupName);
 
 	const moreOptionsButton = document.createElement('button');
