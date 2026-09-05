@@ -78,6 +78,7 @@ LIB_DEPENDS=	libCoinMP.so:math/coinmp \
 		libnss3.so:security/nss \
 		libnumbertext-1.0.so:textproc/libnumbertext \
 		libodfgen-0.1.so:textproc/libodfgen01 \
+		libopenblas.so:math/openblas \
 		libopenjp2.so:graphics/openjpeg \
 		liborcus-0.21.so:devel/liborcus \
 		libpagemaker-0.0.so:print/libpagemaker \
