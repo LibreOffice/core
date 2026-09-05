@@ -247,17 +247,6 @@ sub setglobalvariables
             $installer::globals::epmoutpath = "openbsd";
     }
 
-    if ( $installer::globals::os eq 'FREEBSD')
-    {
-        $installer::globals::isfreebsdbuild = 1;
-
-        if ( $installer::globals::packageformat eq "bsd" )
-        {
-            $installer::globals::epmoutpath = "freebsd";
-            $installer::globals::isfreebsdpkgbuild = 1;
-        }
-    }
-
     if ($installer::globals::os eq 'LINUX')
     {
         $installer::globals::islinuxbuild = 1;

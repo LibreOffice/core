@@ -2221,7 +2221,7 @@ AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
         [Specify package format(s) for Collabora Office installation sets. The
          implicit --without-package-format leads to no installation sets being
-         generated. Possible values: archive, bsd, deb, dmg, emscripten,
+         generated. Possible values: archive, deb, dmg, emscripten,
          installed, msi, pkg, and rpm.
          Example: --with-package-format='deb rpm']),
 ,)
@@ -5811,11 +5811,10 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        bsd | deb | rpm | archive | dmg | installed | emscripten)
+        deb | rpm | archive | dmg | installed | emscripten)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
-bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 deb - Debian software distribution
 rpm - RedHat software distribution
 

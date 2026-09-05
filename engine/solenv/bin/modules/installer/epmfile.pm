@@ -383,22 +383,11 @@ sub create_epm_header
 
     # including the directives for %requires and %provides
 
-    my $provides = "";
-    my $requires = "";
+    my $provides = "provides";         # the name in the packagelist
+    my $requires = "requires";         # the name in the packagelist
 
-    if ( $installer::globals::isfreebsdpkgbuild )
-    {
-        $provides = "freebsdprovides";   # the name in the packagelist
-        $requires = "freebsdrequires";   # the name in the packagelist
-    }
-    else
-    {
-        $provides = "provides";         # the name in the packagelist
-        $requires = "requires";         # the name in the packagelist
-    }
-
-        my $isdict = 0;
-        if ( $onepackage->{'packagename'} =~ /-dict-/ ) { $isdict = 1;  }
+    my $isdict = 0;
+    if ( $onepackage->{'packagename'} =~ /-dict-/ ) { $isdict = 1;  }
 
     if ( $onepackage->{$provides} )
     {

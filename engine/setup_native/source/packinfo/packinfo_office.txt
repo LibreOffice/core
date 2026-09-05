@@ -21,8 +21,6 @@
 # Start
 # scpModule
 # shellscript file (optional)
-# freebsdrequires (optional)
-# freebsdprovides (optional)
 # packagename
 # linuxreplaces (optional)
 # linuxincompat (optional)
@@ -37,7 +35,6 @@
 Start
 module = "gid_Module_Optional_Gnome"
 packagename = "%BASISPACKAGEPREFIX-gnome-integration"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 findrequires = ""
 copyright = "2026 Collabora Productivity Ltd."
@@ -54,7 +51,6 @@ packagename = "%BASISPACKAGEPREFIX-core"
 linuxreplaces = "%BASISPACKAGEPREFIX-core01, %BASISPACKAGEPREFIX-core02, %BASISPACKAGEPREFIX-core03, %BASISPACKAGEPREFIX-core04, %BASISPACKAGEPREFIX-core05, %BASISPACKAGEPREFIX-core06, %BASISPACKAGEPREFIX-core07, %BASISPACKAGEPREFIX-libreofficekit-data, %BASISPACKAGEPREFIX-graphicfilter-debuginfo, %BASISPACKAGEPREFIX-base, %BASISPACKAGEPREFIX-base-debuginfo"
 linuxincompat = "%BASISPACKAGEPREFIX-libreofficekit-data, %BASISPACKAGEPREFIX-graphicfilter-debuginfo, %BASISPACKAGEPREFIX-base, %BASISPACKAGEPREFIX-base-debuginfo"
 requires = "%UREPACKAGEPREFIX-ure %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION, %BASISPACKAGEPREFIX-ooofonts %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-freebsdrequires = "%BASISPACKAGEPREFIX-ooofonts"
 findrequires = "find-requires-x11.sh"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -67,7 +63,6 @@ End
 Start
 module = "gid_Module_Prg_Wrt_Bin"
 packagename = "%BASISPACKAGEPREFIX-writer"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -79,7 +74,6 @@ End
 Start
 module = "gid_Module_Prg_Calc_Bin"
 packagename = "%BASISPACKAGEPREFIX-calc"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -91,7 +85,6 @@ End
 Start
 module = "gid_Module_Prg_Draw_Bin"
 packagename = "%BASISPACKAGEPREFIX-draw"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -103,7 +96,6 @@ End
 Start
 module = "gid_Module_Prg_Impress_Bin"
 packagename = "%BASISPACKAGEPREFIX-impress"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -115,7 +107,6 @@ End
 Start
 module = "gid_Module_Prg_Math_Bin"
 packagename = "%BASISPACKAGEPREFIX-math"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -127,7 +118,6 @@ End
 Start
 module = "gid_Module_Optional_Grfflt"
 packagename = "%BASISPACKAGEPREFIX-graphicfilter"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -139,7 +129,6 @@ End
 Start
 module = "gid_Module_Optional_Xsltfiltersamples"
 packagename = "%BASISPACKAGEPREFIX-xsltfilter"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -151,7 +140,6 @@ End
 Start
 module = "gid_Module_Pyuno"
 packagename = "%BASISPACKAGEPREFIX-pyuno"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -163,7 +151,6 @@ End
 Start
 module = "gid_Module_Optional_Pyuno_LibreLogo"
 packagename = "%BASISPACKAGEPREFIX-librelogo"
-freebsdrequires = "%BASISPACKAGEPREFIX-pyuno,%BASISPACKAGEPREFIX-writer"
 requires = "%BASISPACKAGEPREFIX-pyuno %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-writer %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -176,7 +163,6 @@ Start
 module = "gid_Module_Script_Provider_For_Python"
 packagename = "%BASISPACKAGEPREFIX-python-script-provider"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
 description = "Script provider for Python for %PRODUCTNAME %PRODUCTVERSION"
@@ -187,7 +173,6 @@ End
 Start
 module = "gid_Module_Root_Files_Images"
 packagename = "%BASISPACKAGEPREFIX-images"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -199,7 +184,6 @@ End
 Start
 module = "gid_Module_Root_Fonts_OOo_Hidden"
 packagename = "%BASISPACKAGEPREFIX-ooofonts"
-freebsdrequires = ""
 requires = ""
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."
@@ -211,7 +195,6 @@ End
 Start
 module = "gid_Module_Oo_Linguistic"
 packagename = "%BASISPACKAGEPREFIX-ooolinguistic"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 copyright = "2026 Collabora Productivity Ltd."
 vendor = "Collabora Productivity Ltd."

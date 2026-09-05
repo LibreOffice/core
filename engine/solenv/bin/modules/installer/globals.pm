@@ -50,8 +50,6 @@ BEGIN
     $installer::globals::islinuxbuild = 0;
     $installer::globals::isrpmbuild = 0;
     $installer::globals::isdebbuild = 0;
-    $installer::globals::isfreebsdbuild = 0;
-    $installer::globals::isfreebsdpkgbuild = 0;
     $installer::globals::ismacbuild = 0;
     $installer::globals::ismacdmgbuild = 0;
     $installer::globals::unpackpath = "";
