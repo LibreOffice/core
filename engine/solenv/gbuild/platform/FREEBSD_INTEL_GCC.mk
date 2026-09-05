@@ -13,4 +13,8 @@ gb_CPUDEFS := -DX86
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+# ports install their libraries under /usr/local, which the linker does not
+# search by default
+gb_LinkTarget_LDFLAGS += -L/usr/local/lib
+
 # vim: set noet sw=4:

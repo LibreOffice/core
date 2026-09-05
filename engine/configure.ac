@@ -5276,6 +5276,13 @@ freebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
+    dnl Ports install under /usr/local, which neither the compiler nor the
+    dnl linker searches by default. The header and library checks below
+    dnl need the paths, and so does the build, via SOLARINC and the
+    dnl FreeBSD gbuild platform files.
+    SOLARINC="$SOLARINC -I/usr/local/include"
+    CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+    LDFLAGS="$LDFLAGS -L/usr/local/lib"
     ;;
 
 haiku*)
@@ -11096,7 +11103,7 @@ else
         save_CXXFLAGS=$CXXFLAGS
         save_IFS=$IFS
         IFS=$P_SEP
-        for i in $CPLUS_INCLUDE_PATH /usr/include; do
+        for i in $CPLUS_INCLUDE_PATH /usr/include /usr/local/include; do
             dnl Reset IFS as soon as possible, to avoid unexpected side effects (and the
             dnl "/usr/include" fallback makes sure we get here at least once; resetting rather than
             dnl unsetting follows the advice at <https://git.savannah.gnu.org/gitweb/?p=autoconf.git;
