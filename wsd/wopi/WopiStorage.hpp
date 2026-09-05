@@ -68,6 +68,10 @@ public:
         {
             /// The remote document's WOPISrc.
             std::string wopiSrc;
+            /// The remote document as the user knows it, from the BaseFileName
+            /// of the entry. Empty when the integrator named none, and the
+            /// file name at the end of the WOPISrc stands for it then.
+            std::string name;
             /// The time the remote document was last modified, as the
             /// integrator reported it. Empty when none was provided.
             std::string lastModifiedTime;

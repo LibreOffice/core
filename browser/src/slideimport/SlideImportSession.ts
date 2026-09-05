@@ -344,6 +344,35 @@ class SlideImportSession {
 		}
 	}
 
+	// The related document as the user knows it: the name the server gave it, or
+	// the file name at the end of its address when the server gave none.
+	public static documentName(doc: { wopiSrc: string; name?: string }): string {
+		if (doc.name) return doc.name;
+		return doc.wopiSrc
+			? SlideImportSession.relatedDocumentName(doc.wopiSrc)
+			: '';
+	}
+
+	// Whether a related document is the one a source names.
+	public static matchesDocument(
+		doc: { wopiSrc: string; name?: string },
+		source: string,
+	): boolean {
+		if (SlideImportSession.documentName(doc) === source) return true;
+		return (
+			!!doc.wopiSrc &&
+			SlideImportSession.relatedDocumentName(doc.wopiSrc) === source
+		);
+	}
+
+	// The document at the given address as the user knows it
+	public static documentNameOf(wopiSrc: string): string {
+		const doc = SlideImportSession.findRelatedDocument(wopiSrc);
+		return doc
+			? SlideImportSession.documentName(doc)
+			: SlideImportSession.relatedDocumentName(wopiSrc);
+	}
+
 	// The time the related document of the given name was last modified now, as
 	// the storage announced it, or empty when the storage named no such
 	// document or gave it no time.
@@ -351,7 +380,7 @@ class SlideImportSession {
 		if (!source) return '';
 		for (const doc of app.relatedDocuments || []) {
 			if (
-				SlideImportSession.relatedDocumentName(doc.wopiSrc) === source &&
+				SlideImportSession.matchesDocument(doc, source) &&
 				doc.lastModifiedTime
 			)
 				return doc.lastModifiedTime;

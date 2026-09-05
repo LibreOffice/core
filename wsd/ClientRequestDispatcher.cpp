@@ -2303,11 +2303,12 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
     // CheckFileInfo RelatedDocuments entry does:
     //   { "Nonce": "<the view's one-time related-document token>",
     //     "RelatedDocument": { "WOPISrc": "...", "AccessToken": "...",
-    //                          "LastModifiedTime": "..." } }
+    //                          "BaseFileName": "...", "LastModifiedTime": "..." } }
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string oneTimeToken;
     std::string remoteWopiSrc;
     std::string remoteAccessToken;
+    std::string remoteName;
     std::string remoteLastModifiedTime;
     Poco::JSON::Object::Ptr object;
     if (JsonUtil::parseJSON(body, object))
@@ -2317,6 +2318,7 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         {
             JsonUtil::findJSONValue(relatedDocument, "WOPISrc", remoteWopiSrc);
             JsonUtil::findJSONValue(relatedDocument, "AccessToken", remoteAccessToken);
+            JsonUtil::findJSONValue(relatedDocument, "BaseFileName", remoteName);
             JsonUtil::findJSONValue(relatedDocument, "LastModifiedTime", remoteLastModifiedTime);
         }
     }
@@ -2352,10 +2354,10 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
     docBroker->setupTransfer(
         disposition,
         [docBroker, oneTimeToken = std::move(oneTimeToken),
-         remoteWopiSrc = std::move(remoteWopiSrc),
-         remoteAccessToken = std::move(remoteAccessToken),
-         remoteLastModifiedTime = std::move(remoteLastModifiedTime)](
-            const std::shared_ptr<Socket>& moveSocket)
+         remoteWopiSrc = std::move(remoteWopiSrc), remoteAccessToken = std::move(remoteAccessToken),
+         remoteName = std::move(remoteName),
+         remoteLastModifiedTime =
+             std::move(remoteLastModifiedTime)](const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
@@ -2363,7 +2365,8 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
             // holds the one-time token. A request that carries no view's
             // current token is refused, and the token is consumed on success.
             if (!docBroker->registerRemoteDocumentToken(oneTimeToken, remoteWopiSrc,
-                                                        remoteAccessToken, remoteLastModifiedTime))
+                                                        remoteAccessToken, remoteName,
+                                                        remoteLastModifiedTime))
             {
                 LOG_ERR_S("RelatedDocument request for [" << docBroker->getDocKey()
                                                           << "] with an invalid one-time token");

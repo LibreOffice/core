@@ -370,6 +370,65 @@ describe('SlideLinks', function () {
 		nodeassert.deepEqual(sent, []);
 	});
 
+	it('marks a page as broken when its source has no address to reach it at', function () {
+		// The server reports the source by name alone, which is what the slides of this
+		// document name it, and gives it no address because the storage listed none.
+		(app as any).relatedDocuments = [
+			{ wopiSrc: '', name: 'Sales deck.odp', state: 'missing' },
+			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+		];
+		documentHoldsLinks();
+
+		nodeassert.equal(links.isPageBroken(numbersPart), true);
+		nodeassert.equal(links.isPageBroken(ticketsPart), false);
+
+		// Such a source is asked for nothing, and the user is told why.
+		links.updateAll();
+		nodeassert.ok(told[0].indexOf('currently not accessible') >= 0);
+		nodeassert.deepEqual(sent, [exportOf('Support deck.odp')]);
+	});
+
+	it('knows a source by the name the storage gave it rather than by its address', function () {
+		// The address ends in an opaque id, so the name the storage gave the document is the
+		// only thing that says which source the slides of this document came from.
+		(app as any).relatedDocuments = [
+			{
+				wopiSrc: 'https://host/wopi/files/1234',
+				name: 'Sales deck.odp',
+				state: 'connected',
+			},
+		];
+		documentHoldsLinks();
+		links.updateAll();
+
+		nodeassert.deepEqual(sent, [
+			'remotedoccommand wopisrc=' +
+				encodeURIComponent('https://host/wopi/files/1234') +
+				' exportslides',
+		]);
+	});
+
+	it('drops a refresh the connection took with it', function () {
+		documentHoldsLinks();
+		links.updateAll();
+		nodeassert.equal(sent.length, 1);
+
+		// The connection goes down before the source answered, and comes back.
+		// The reloaded document drops the refresh in flight rather than waiting
+		// forever behind one nothing will answer.
+		deliver('docloaded', { status: false });
+		sent = [];
+		deliver('docloaded', { status: true });
+		nodeassert.deepEqual(sent, ['slidelink list']);
+
+		// The document reads its links again, and an update starts over from
+		// the first source.
+		deliver('slidelinks', { message: list });
+		sent = [];
+		links.updateAll();
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+	});
+
 	it('goes on to the next source when the document refuses the pages', function () {
 		documentHoldsLinks();
 		links.updateAll();

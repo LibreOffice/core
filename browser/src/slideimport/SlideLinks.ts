@@ -248,12 +248,14 @@ class SlideLinks {
 
 	// The related document a source names, as the storage announced it, or null when this
 	// document is related to no document of that name.
-	private relatedDocument(
-		source: string,
-	): { wopiSrc: string; state: string; lastModifiedTime?: string } | null {
+	private relatedDocument(source: string): {
+		wopiSrc: string;
+		name?: string;
+		state: string;
+		lastModifiedTime?: string;
+	} | null {
 		for (const doc of app.relatedDocuments || []) {
-			if (SlideImportSession.relatedDocumentName(doc.wopiSrc) === source)
-				return doc;
+			if (SlideImportSession.matchesDocument(doc, source)) return doc;
 		}
 		return null;
 	}
@@ -270,6 +272,18 @@ class SlideLinks {
 			this.say(
 				_(
 					'{0} is not one of the documents this one is related to, so the server cannot read it.',
+				).replace('{0}', () => next.source),
+			);
+			this.sendNext();
+			return;
+		}
+
+		if (!related.wopiSrc) {
+			// The slides of this document name the source, and that is all that is known of
+			// it: the storage gave no address to reach it at.
+			this.say(
+				_(
+					'These slides come from {0} which is currently not accessible.',
 				).replace('{0}', () => next.source),
 			);
 			this.sendNext();
@@ -417,9 +431,18 @@ class SlideLinks {
 		}
 	}
 
+	// The source of this document the given address belongs to, or empty when it belongs to none.
+	private sourceOf(wopiSrc: string): string {
+		for (const source of this.sources) {
+			const related = this.relatedDocument(source);
+			if (related && related.wopiSrc === wopiSrc) return source;
+		}
+		return '';
+	}
+
 	// The slides a source holds, as it reports them.
 	private onSourceSlides(wopiSrc: string, json: string): void {
-		const source = SlideImportSession.relatedDocumentName(wopiSrc);
+		const source = this.sourceOf(wopiSrc);
 		const asked = this.sourceSlides.get(source);
 		if (!asked) return;
 
@@ -442,7 +465,7 @@ class SlideLinks {
 		if (!Array.isArray(notUpdated) || notUpdated.length === 0) return;
 
 		const numbers = notUpdated
-			.filter((part: any) => typeof part === 'string')
+			.filter((part: string) => typeof part === 'string')
 			.map((part: string) => String(app.impress.getIndexFromPart(part) + 1));
 		if (numbers.length === 0) return;
 

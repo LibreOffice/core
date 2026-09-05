@@ -4487,7 +4487,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
             // The source list and last-modified times are public, the same for
             // every view. This view's access tokens are private to it.
             for (const auto& related : wopiFileInfo->getRelatedDocuments())
-                setRemoteDocumentSource(related.wopiSrc, related.lastModifiedTime);
+                setRemoteDocumentSource(related.wopiSrc, related.name, related.lastModifiedTime);
 
             for (const auto& token : wopiFileInfo->getRelatedDocumentTokens())
                 setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);
@@ -5041,10 +5041,15 @@ bool DocumentBroker::sendTextFrameToKit(const std::string& message)
 }
 
 #if !MOBILEAPP
-void DocumentBroker::setRemoteDocumentSource(const std::string& wopiSrc,
+void DocumentBroker::setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
                                              const std::string& lastModifiedTime)
 {
-    _relatedDocuments.setSource(*this, wopiSrc, lastModifiedTime);
+    _relatedDocuments.setSource(*this, wopiSrc, name, lastModifiedTime);
+}
+
+void DocumentBroker::setRemoteDocumentNamedSources(std::vector<std::string> names)
+{
+    _relatedDocuments.setNamedSources(*this, std::move(names));
 }
 
 void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
@@ -5057,6 +5062,7 @@ void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
 bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
                                                  const std::string& wopiSrc,
                                                  const std::string& accessToken,
+                                                 const std::string& name,
                                                  const std::string& lastModifiedTime)
 {
     ASSERT_CORRECT_THREAD();
@@ -5068,7 +5074,7 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
     {
         if (it.second->matchesRelatedDocumentToken(oneTimeToken))
         {
-            setRemoteDocumentSource(wopiSrc, lastModifiedTime);
+            setRemoteDocumentSource(wopiSrc, name, lastModifiedTime);
             setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
             // Consume the one-time token and hand the view its next one.
             it.second->rotateRelatedDocumentToken(/*notifyClient=*/true);

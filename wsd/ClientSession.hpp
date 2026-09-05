@@ -322,6 +322,13 @@ public:
     /// Handle presentation info request
     bool handlePresentationInfo(const std::shared_ptr<Message>& payload, const std::shared_ptr<DocumentBroker>& docBroker);
 
+#if !MOBILEAPP
+    /// Takes the source documents named by the slide links the document reports, so that a
+    /// source the storage listed no related document for is still known by its name.
+    void recordSlideLinkSources(const std::shared_ptr<Message>& payload,
+                                const std::shared_ptr<DocumentBroker>& docBroker);
+#endif // !MOBILEAPP
+
     /// Handle a clipboard fetch / put request.
     void handleClipboardRequest(DocumentBroker::ClipboardRequest     type,
                                 const std::shared_ptr<StreamSocket> &socket,

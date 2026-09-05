@@ -3070,6 +3070,55 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
     return forwardToClient(payload);
 }
 
+#if !MOBILEAPP
+void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& payload,
+                                           const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    // The list names every source the document is linked to, so it is the whole of what the
+    // document names and replaces what was taken from it before.
+    const std::string message(payload->data().data(), payload->size());
+    const std::size_t jsonStart = message.find('{');
+    if (jsonStart == std::string::npos)
+        return;
+
+    std::vector<std::string> names;
+    Poco::JSON::Object::Ptr rootObject;
+    try
+    {
+        if (!JsonUtil::parseJSON(message.substr(jsonStart), rootObject))
+            return;
+
+        Poco::JSON::Array::Ptr links = rootObject->getArray("links");
+        if (links.isNull())
+            return;
+
+        // The names come out of the document's own content, so a document holding many links, or
+        // a long name, names no more than this.
+        constexpr std::size_t MaxSources = 64;
+        constexpr std::size_t MaxNameLength = 256;
+        for (std::size_t i = 0; i < links->size() && names.size() < MaxSources; ++i)
+        {
+            Poco::JSON::Object::Ptr link = links->getObject(i);
+            if (link.isNull())
+                continue;
+
+            const std::string source = JsonUtil::getJSONValue<std::string>(link, "source");
+            if (source.empty() || source.size() > MaxNameLength)
+                continue;
+
+            names.push_back(source);
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Ignoring the slide links of [" << docBroker->getDocKey() << "]: " << exc.what());
+        return;
+    }
+
+    docBroker->setRemoteDocumentNamedSources(std::move(names));
+}
+#endif // !MOBILEAPP
+
 bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& payload)
 {
     LOG_TRC("handling kit-to-client [" << payload->abbr() << ']');
@@ -3304,6 +3353,13 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
     }
     else if (tokens.equals(0, "slidesections:"))
     {
+        return forwardToClient(payload);
+    }
+    else if (tokens.equals(0, "slidelinks:"))
+    {
+#if !MOBILEAPP
+        recordSlideLinkSources(payload, docBroker);
+#endif // !MOBILEAPP
         return forwardToClient(payload);
     }
     else if (tokens.equals(0, "clipboardcontent:"))

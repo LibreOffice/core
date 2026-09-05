@@ -32,7 +32,7 @@
 #include <sstream>
 
 void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
-                                 const std::string& lastModifiedTime)
+                                 const std::string& name, const std::string& lastModifiedTime)
 {
     docBroker.assertCorrectThread();
 
@@ -43,6 +43,10 @@ void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& w
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
         _entries[docKey].wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
         _entries[docKey].lastModifiedTime = lastModifiedTime;
+        // A report that names no document leaves the name it is known by as it is, so a later
+        // report of the time alone keeps the name the integrator gave it.
+        if (!name.empty())
+            _entries[docKey].name = name;
         refreshAllViews(docBroker);
     }
     catch (const std::exception& exc)
@@ -50,6 +54,22 @@ void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& w
         LOG_ERR("Ignoring the invalid related document WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
     }
+}
+
+void RelatedDocuments::setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names)
+{
+    docBroker.assertCorrectThread();
+
+    // A source nothing can reach is reported where a document reads related documents at all, and
+    // left alone on a server that serves none.
+    if (!RemoteDocumentBroker::isEnabled())
+        return;
+
+    if (names == _namedSources)
+        return;
+
+    _namedSources = std::move(names);
+    refreshAllViews(docBroker);
 }
 
 void RelatedDocuments::setViewToken(DocumentBroker& docBroker, const std::string& tag,
@@ -202,7 +222,7 @@ void RelatedDocuments::onRemoteEvent(DocumentBroker& docBroker, const std::strin
         std::string time;
         if (arguments.size() > 1)
             COOLProtocol::getTokenString(arguments[1], "time", time);
-        setSource(docBroker, Uri::decode(encodedWopiSrc), Uri::decode(time));
+        setSource(docBroker, Uri::decode(encodedWopiSrc), std::string(), Uri::decode(time));
         return;
     }
 
@@ -402,6 +422,19 @@ void RelatedDocuments::sendError(DocumentBroker& docBroker, const std::string& t
                                  " event=error kind=" + kind);
 }
 
+std::string RelatedDocuments::documentName(const std::string& wopiSrc)
+{
+    const std::string path = wopiSrc.substr(0, wopiSrc.find('?'));
+    const std::size_t lastSlash = path.rfind('/');
+    const std::string name = lastSlash == std::string::npos ? path : path.substr(lastSlash + 1);
+    return Uri::decode(name);
+}
+
+std::string RelatedDocuments::entryName(const Entry& entry)
+{
+    return entry.name.empty() ? documentName(entry.wopiSrc) : entry.name;
+}
+
 std::string RelatedDocuments::buildJson(const std::string& tag) const
 {
     const auto itView = _views.find(tag);
@@ -425,8 +458,30 @@ std::string RelatedDocuments::buildJson(const std::string& tag) const
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("wopiSrc", it.second.wopiSrc);
+        entry->set("name", entryName(it.second));
         entry->set("state", state);
         entry->set("lastModifiedTime", it.second.lastModifiedTime);
+        documents->add(entry);
+    }
+
+    // A source the document names that the storage listed no related document for is reported
+    // under its name alone: it says what this document was made from, and there is no address to
+    // reach it at and no token to read it with.
+    for (const std::string& name : _namedSources)
+    {
+        // A source is one the storage listed when either spelling of that document's name is the
+        // one recorded, so slides imported before the integrator named a document stay with it.
+        const bool listed = std::any_of(
+            _entries.begin(), _entries.end(), [&name](const auto& it)
+            { return entryName(it.second) == name || documentName(it.second.wopiSrc) == name; });
+        if (listed)
+            continue;
+
+        Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+        entry->set("wopiSrc", std::string());
+        entry->set("name", name);
+        entry->set("state", "missing");
+        entry->set("lastModifiedTime", std::string());
         documents->add(entry);
     }
 
@@ -471,7 +526,11 @@ void RelatedDocuments::dumpState(std::ostream& os) const
 {
     os << "\n  related document sources: " << _entries.size();
     for (const auto& it : _entries)
-        os << "\n    " << it.first << " last modified: " << it.second.lastModifiedTime;
+        os << "\n    " << it.first << " name: " << Anonymizer::anonymize(it.second.name)
+           << " last modified: " << it.second.lastModifiedTime;
+    os << "\n  sources the document names: " << _namedSources.size();
+    for (const std::string& name : _namedSources)
+        os << "\n    " << Anonymizer::anonymize(name);
     os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();
     for (const std::string& docKey : _incomingDocKeyChain)
         os << "\n    " << docKey;

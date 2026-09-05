@@ -153,9 +153,10 @@ class SlideImportPane {
     if (this.visible) this.render();
   }
 
-  // The file name part of a related document's WOPISrc.
-  private relatedDocumentName(wopiSrc: string): string {
-    return SlideImportSession.relatedDocumentName(wopiSrc);
+  // A related document as the user knows it, which for one the storage
+  // announced no address for is the name alone.
+  private documentName(doc: { wopiSrc: string; name?: string }): string {
+    return SlideImportSession.documentName(doc);
   }
 
   // Asks the server to open a live link to the related document; the state
@@ -210,7 +211,7 @@ class SlideImportPane {
     this.anchorIndex = 0;
 
     // The pages of a link insert record the document they came from, as the user knows it.
-    this.session.setSource(this.relatedDocumentName(wopiSrc));
+    this.session.setSource(SlideImportSession.documentNameOf(wopiSrc));
 
     this.sendRemoteCommand(wopiSrc, 'getpresentationinfo');
     this.sendRemoteCommand(wopiSrc, 'getslidesections');
@@ -425,47 +426,45 @@ class SlideImportPane {
           class="slide-import-related-list"
           aria-label={_('Related documents')}
         >
-          {documents.map((doc: { wopiSrc: string; state: string }) => (
-            <li
-              class="slide-import-related-item"
-              data-state={doc.state}
-              title={this.relatedDocumentName(doc.wopiSrc)}
-            >
-              <span class="slide-import-related-name">
-                {this.relatedDocumentName(doc.wopiSrc)}
-              </span>
-              {doc.state === 'available' ? (
-                <button
-                  class="button slide-import-related-subscribe"
-                  aria-label={
-                    _('Subscribe to') +
-                    ' ' +
-                    this.relatedDocumentName(doc.wopiSrc)
-                  }
-                  onClick={() => this.subscribeRelatedDocument(doc.wopiSrc)}
-                >
-                  {_('Subscribe')}
-                </button>
-              ) : doc.state === 'connected' ? (
-                <button
-                  class="button slide-import-related-open"
-                  aria-pressed={
-                    this.selectedRemote === doc.wopiSrc ? 'true' : 'false'
-                  }
-                  aria-label={
-                    _('Open') + ' ' + this.relatedDocumentName(doc.wopiSrc)
-                  }
-                  onClick={() => this.openRemoteDocument(doc.wopiSrc)}
-                >
-                  {_('Open')}
-                </button>
-              ) : (
-                <span class="slide-import-related-state">
-                  {this.relatedDocumentStateLabel(doc.state)}
+          {documents.map(
+            (doc: { wopiSrc: string; name?: string; state: string }) => (
+              <li
+                class="slide-import-related-item"
+                data-state={doc.state}
+                title={this.documentName(doc)}
+              >
+                <span class="slide-import-related-name">
+                  {this.documentName(doc)}
                 </span>
-              )}
-            </li>
-          ))}
+                {doc.state === 'available' ? (
+                  <button
+                    class="button slide-import-related-subscribe"
+                    aria-label={
+                      _('Subscribe to') + ' ' + this.documentName(doc)
+                    }
+                    onClick={() => this.subscribeRelatedDocument(doc.wopiSrc)}
+                  >
+                    {_('Subscribe')}
+                  </button>
+                ) : doc.state === 'connected' ? (
+                  <button
+                    class="button slide-import-related-open"
+                    aria-pressed={
+                      this.selectedRemote === doc.wopiSrc ? 'true' : 'false'
+                    }
+                    aria-label={_('Open') + ' ' + this.documentName(doc)}
+                    onClick={() => this.openRemoteDocument(doc.wopiSrc)}
+                  >
+                    {_('Open')}
+                  </button>
+                ) : (
+                  <span class="slide-import-related-state">
+                    {this.relatedDocumentStateLabel(doc.state)}
+                  </span>
+                )}
+              </li>
+            ),
+          )}
         </ul>
       </div>
     );

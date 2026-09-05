@@ -234,6 +234,9 @@ interface AppInterface {
 	serverAudit: any;
 	relatedDocuments: Array<{
 		wopiSrc: string;
+		// The document as the user knows it. A document the storage listed no
+		// address for holds a name and nothing else.
+		name?: string;
 		state: string;
 		lastModifiedTime?: string;
 	}>;

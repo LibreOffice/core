@@ -837,22 +837,28 @@ downloadas: jail=<jail directory> dir=<a tmp dir> name=<name> port=<port> filena
 relateddocuments: <json>
 
     The related documents the server tracks for this document, from the
-    RelatedDocuments field of CheckFileInfo and from POST
-    /cool/relateddocument. Built for the receiving view: the source list and
+    RelatedDocuments field of CheckFileInfo, from POST
+    /cool/relateddocument, and from the sources the document's own slide
+    links name. Built for the receiving view: the source list and
     last-modified times are the same for every view, but the state is that
     view's own. Sent to a view when it joins and again when the shared list
     or that view's own access or subscription state changes. Access tokens
     are never included. The JSON carries a documents array of entries:
 
         { "wopiSrc": "<decoded WOPISrc, no query>",
+          "name": "<the BaseFileName the integrator gave the document, or the
+                    file name at the end of its WOPISrc>",
           "lastModifiedTime": "<time or empty>",
           "state": "noaccess|available|subscribed|connected|disconnected|failed|missing" }
 
     'noaccess' means the view holds no token for the source. 'available'
     means the view holds a token but has no live subscription. The other
     values follow the remotedocevent states of the view's subscription.
-    'missing' means the source could not be read from storage, so the links
-    to it are broken.
+    'missing' means the source cannot be read: either it could not be read
+    from storage, or it is a document the open one names as the source of
+    its slides that the storage listed no related document for. Such an
+    entry carries an empty wopiSrc and its name alone, so it says what the
+    slides were made from while nothing can reach it.
 
 remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
 

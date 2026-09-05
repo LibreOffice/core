@@ -34,11 +34,16 @@ class DocumentBroker;
 class RelatedDocuments
 {
 public:
-    /// Records the public part of a related document: its source and the time
-    /// it was last modified. The same for every view. The latest report per
-    /// WOPISrc wins.
-    void setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
+    /// Records the public part of a related document: its source, the document as the user knows
+    /// it and the time it was last modified. The same for every view. The latest report per
+    /// WOPISrc wins, and a report that carries no name keeps the recorded one.
+    void setSource(DocumentBroker& docBroker, const std::string& wopiSrc, const std::string& name,
                    const std::string& lastModifiedTime);
+
+    /// Records the source documents the open document's own content names, which is the whole of
+    /// what it names: a name reported here and nowhere else stands for a document the storage
+    /// listed no related document for, so nothing can reach it. The same for every view.
+    void setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names);
 
     /// Records the access token one view holds for a related document. Private
     /// to that view.
@@ -83,7 +88,7 @@ public:
     void sendTo(const std::shared_ptr<ClientSession>& session);
 
     /// True when no related document source is known.
-    bool empty() const { return _entries.empty(); }
+    bool empty() const { return _entries.empty() && _namedSources.empty(); }
 
     void dumpState(std::ostream& os) const;
 
@@ -93,6 +98,9 @@ private:
     {
         /// The remote document's WOPISrc, decoded, without query parameters.
         std::string wopiSrc;
+        /// The remote document as the user knows it, as the integrator named
+        /// it. Empty when the integrator named none.
+        std::string name;
         /// The time the remote document was last modified, as the integrator
         /// reported it. Empty when the integrator did not provide one.
         std::string lastModifiedTime;
@@ -121,6 +129,13 @@ private:
         std::string lastClientMessage;
     };
 
+    /// The document a WOPISrc names, as the user knows it: the last part of its path, decoded.
+    static std::string documentName(const std::string& wopiSrc);
+
+    /// The document one entry stands for, as the user knows it: the name the integrator gave it,
+    /// or the one its WOPISrc names when the integrator gave none.
+    static std::string entryName(const Entry& entry);
+
     /// Answers one view's remote document subscription with an error event.
     static void sendError(DocumentBroker& docBroker, const std::string& tag,
                           const std::string& encodedWopiSrc, const std::string& kind);
@@ -137,6 +152,11 @@ private:
 
     /// The related document sources the document knows, keyed by their docKey.
     std::map<std::string, Entry> _entries;
+
+    /// The source documents the open document's own content names, as the user knows them, in the
+    /// order the document names them. One the storage listed as a related document is reported as
+    /// that document; any other is reported as a document nothing can reach.
+    std::vector<std::string> _namedSources;
 
     /// docKeys of the documents connected into this document through headless
     /// sessions, from the remotechain option of the sessions' load messages.

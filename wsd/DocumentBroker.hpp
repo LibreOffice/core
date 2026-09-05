@@ -463,7 +463,12 @@ public:
 
 #if !MOBILEAPP
     /// Records the public part of a related document, the same for every view
-    void setRemoteDocumentSource(const std::string& wopiSrc, const std::string& lastModifiedTime);
+    void setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
+                                 const std::string& lastModifiedTime);
+
+    /// Records the source documents this document's own content names, the whole of what it
+    /// names, so that a source the storage listed no related document for is still reported.
+    void setRemoteDocumentNamedSources(std::vector<std::string> names);
 
     /// Records the access token one view holds for a related document. Private.
     void setRemoteDocumentViewToken(const std::string& tag, const std::string& wopiSrc,
@@ -474,7 +479,7 @@ public:
     /// Consumes and rotates that view's token. Returns false when no view holds
     /// the token, so the request is refused and nothing is recorded.
     bool registerRemoteDocumentToken(const std::string& oneTimeToken, const std::string& wopiSrc,
-                                     const std::string& accessToken,
+                                     const std::string& accessToken, const std::string& name,
                                      const std::string& lastModifiedTime);
 
     /// Opens or drops one view's subscription to a remote document. The view
