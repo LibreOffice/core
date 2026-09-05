@@ -82,6 +82,7 @@ std::unique_ptr<SvNumberFormatter> ScPoolHelper::CreateNumberFormatter() const
     }
     assert(mxStylePool->GetDocument());
     p->SetColorLink( LINK(mxStylePool->GetDocument(), ScDocument, GetUserDefinedColor));
+    p->SetColorIndexLink( LINK(mxStylePool->GetDocument(), ScDocument, GetUserDefinedColorIndex));
     p->SetEvalDateFormat(NfEvalDateFormat::InternationalThenFormat);
 
     sal_uInt16 d,m;
@@ -98,7 +99,10 @@ void ScPoolHelper::SourceDocumentGone()
     //  reset all pointers to the source document
     mxStylePool->SetDocument( nullptr );
     if ( pFormTable )
+    {
         pFormTable->SetColorLink( Link<sal_uInt16,Color*>() );
+        pFormTable->SetColorIndexLink(Link<const Color&, sal_Int32>());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,6 +55,10 @@ public:
     /// Do the CallBack to ColorTable
     Color* GetUserDefColor(sal_uInt16 nIndex) const;
 
+    /// Idem but in reverse (we want the index from Color)
+    void SetColorIndexLink(const Link<const Color&, sal_Int32>& rColorIndexCallBack);
+    sal_Int32 GetUserDefColorIndex(const Color& rColor) const;
+
     /// Change language/country, also input and format scanner
     void ChangeIntl(LanguageType eLnge);
     /// Change the reference null date
@@ -556,6 +560,7 @@ private:
     SvNFLanguageData m_aCurrentLanguage;
     OnDemandNativeNumberWrapper m_xNatNum; // Native number service loaded on demand
     Link<sal_uInt16, Color*> aColorLink; // User defined color table CallBack
+    Link<const Color&, sal_Int32> aColorIndexLink; // User defined color table Callback (reverse)
 
     SVL_DLLPRIVATE static sal_uInt16 nSystemCurrencyPosition;
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;

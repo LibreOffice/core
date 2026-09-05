@@ -491,6 +491,21 @@ Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex) const
     }
 }
 
+void SvNumberFormatter::SetColorIndexLink(const Link<const Color&, sal_Int32>& rColorIndexCallBack)
+{
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    aColorIndexLink = rColorIndexCallBack;
+}
+
+sal_Int32 SvNumberFormatter::GetUserDefColorIndex(const Color& rColor) const
+{
+    ::osl::MutexGuard aGuard(GetInstanceMutex());
+    if (aColorIndexLink.IsSet())
+        return aColorIndexLink.Call(rColor);
+
+    return -1;
+}
+
 void SvNumberFormatter::ChangeNullDate(sal_uInt16 nDay,
                                        sal_uInt16 nMonth,
                                        sal_Int16 nYear)

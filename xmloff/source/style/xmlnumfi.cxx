@@ -2207,6 +2207,17 @@ void SvXMLNumFormatContext::AddColor( Color const nColor )
             break;
         }
 
+    if (aColName.isEmpty())
+    {
+        const sal_Int32 nColorIndex = pFormatter->GetUserDefColorIndex(nColor);
+        if (nColorIndex >= 0)
+        {
+            // COLOR<n> is 1-based, while XColorList is 0-based.
+            aColName.append(pFormatter->GetKeyword(m_nFormatLang, NF_KEY_COLOR));
+            aColName.append(nColorIndex + 1);
+        }
+    }
+
     if ( !aColName.isEmpty() )
     {
         aColName.insert( 0, '[' );
