@@ -39,6 +39,7 @@ BUILD_DEPENDS=	bash:shells/bash \
 		nasm:devel/nasm \
 		node:www/node \
 		npm:www/npm \
+		rsync:net/rsync \
 		zip:archivers/zip \
 		${LOCALBASE}/include/glm/glm.hpp:math/glm \
 		${LOCALBASE}/include/sane/sane.h:graphics/sane-backends \
@@ -127,11 +128,12 @@ MAKE_ENV+=	container=port
 BRAND_VERSION=	26.04.2.3
 BRAND_WRKSRC=	${WRKDIR}/collabora-office-brand
 ENGINE_WRKSRC=	${WRKSRC}/engine
-ENGINE_INST=	${ENGINE_WRKSRC}/inst
+# The engine's distro-pack-install puts it under ${PREFIX}/lib/collaboraoffice,
+# which is what the app is configured with as --with-lo-path.
 LO_PATH=	${PREFIX}/lib/collaboraoffice
 
 ENGINE_CONFIGURE_ARGS=	--with-distro=CPFreeBSDQt \
-			--prefix=${ENGINE_INST} \
+			--prefix=${PREFIX} \
 			--with-external-tar=${DISTDIR}/${DIST_SUBDIR} \
 			--disable-fetch-external \
 			--with-parallelism=${MAKE_JOBS_NUMBER} \
@@ -164,15 +166,13 @@ do-configure:
 	cd ${ENGINE_WRKSRC} && ${SETENV} ${MAKE_ENV} ./autogen.sh ${ENGINE_CONFIGURE_ARGS}
 
 do-build:
-	cd ${ENGINE_WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD} && \
-		${SETENV} ${MAKE_ENV} ${MAKE_CMD} distro-pack-install
+	cd ${ENGINE_WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD}
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ./autogen.sh && \
 		${SETENV} ${MAKE_ENV} ${CONFIGURE_ENV} ./configure ${APP_CONFIGURE_ARGS} && \
 		${SETENV} ${MAKE_ENV} ${MAKE_CMD} ${_MAKE_JOBS}
 
 do-install:
-	${MKDIR} ${STAGEDIR}${PREFIX}/lib
-	${CP} -a ${ENGINE_INST}/lib/collaboraoffice ${STAGEDIR}${PREFIX}/lib/
+	cd ${ENGINE_WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD} DESTDIR=${STAGEDIR} distro-pack-install
 	${MKDIR} ${STAGEDIR}${LO_PATH}/share/theme_definitions
 	${CP} -a ${BRAND_WRKSRC}/online-theme ${STAGEDIR}${LO_PATH}/share/theme_definitions/online
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD} DESTDIR=${STAGEDIR} install

@@ -73,7 +73,7 @@ prefix tracks the default Python version of your ports branch.
 sudo pkg install autoconf automake bash bison ccache cppunit git gmake gperf \
     libtool nasm ninja node npm p5-Archive-Zip patch pkgconf png python3 \
     py312-lxml py312-polib qt6-base qt6-tools qt6-webchannel qt6-webengine \
-    qt6-websockets zip zstd
+    qt6-websockets rsync zip zstd
 ```
 
 The engine is configured with `--with-distro=CPFreeBSDQt`, which takes these
