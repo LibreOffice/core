@@ -613,6 +613,8 @@ struct PDFStructureElement
     std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
                                                         m_aAttributes;
     ::std::vector<sal_Int32>                            m_AnnotIds;
+    // a Link has one annotation per line, and per fly gap
+    std::vector<sal_Int32> m_LinkAnnotIds;
     tools::Rectangle                                    m_aBBox;
     OUString                                            m_aActualText;
     OUString                                            m_aAltText;

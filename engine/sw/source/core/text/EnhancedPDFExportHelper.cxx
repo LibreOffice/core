@@ -19,6 +19,8 @@
 
 #include <EnhancedPDFExportHelper.hxx>
 
+#include <algorithm>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -164,8 +166,16 @@ struct SwEnhancedPDFState
         OUString StyleName;
     };
 
+    struct Link
+    {
+        const SwTextAttr* pAttr;
+        sal_Int32 nStructElement;
+        // the annotations already nested in it
+        std::vector<sal_Int32> AnnotIds;
+    };
+
     ::std::optional<Span> m_oCurrentSpan;
-    ::std::optional<SwTextAttr const*> m_oCurrentLink;
+    std::optional<Link> m_oCurrentLink;
 
     SwEnhancedPDFState(LanguageType const eLanguageDefault)
         : m_eLanguageDefault(eLanguageDefault)
@@ -685,15 +695,34 @@ namespace {
     // link the link annotation to the link structured element
     void LinkLinkLink(vcl::PDFExtOutDevData & rPDFExtOutDevData, SwRect const& rRect)
     {
+        const sal_Int32 nCurrentSE(rPDFExtOutDevData.GetCurrentStructureElement());
+        auto& roCurrentLink(rPDFExtOutDevData.GetSwPDFState()->m_oCurrentLink);
+        if (roCurrentLink && roCurrentLink->nStructElement == -1)
+        {
+            // the first call after opening a link is for the link's own SE
+            roCurrentLink->nStructElement = nCurrentSE;
+        }
+
         const LinkIdMap& rLinkIdMap(rPDFExtOutDevData.GetSwPDFState()->m_LinkIdMap);
         const Point aCenter = rRect.Center();
         auto aIter = std::find_if(rLinkIdMap.begin(), rLinkIdMap.end(),
             [&aCenter](const IdMapEntry& rEntry) { return rEntry.first.Contains(aCenter); });
-        if (aIter != rLinkIdMap.end())
+        if (aIter == rLinkIdMap.end())
+            return;
+
+        sal_Int32 nLinkId = (*aIter).second;
+        if (roCurrentLink && roCurrentLink->nStructElement == nCurrentSE) // not a nested SE
         {
-            sal_Int32 nLinkId = (*aIter).second;
-            rPDFExtOutDevData.SetStructureAttributeNumerical(vcl::pdf::PDFWriter::LinkAnnotation, nLinkId);
+            // every portion of a line finds that line's annotation again
+            if (std::find(roCurrentLink->AnnotIds.begin(), roCurrentLink->AnnotIds.end(), nLinkId)
+                != roCurrentLink->AnnotIds.end())
+            {
+                return;
+            }
+            roCurrentLink->AnnotIds.push_back(nLinkId);
         }
+        rPDFExtOutDevData.SetStructureAttributeNumerical(vcl::pdf::PDFWriter::LinkAnnotation,
+                                                         nLinkId);
     }
 }
 
@@ -1863,20 +1892,6 @@ void SwTaggedPDFHelper::EndStructureElements()
     CheckRestoreTag();
 }
 
-void SwTaggedPDFHelper::EndCurrentLink(OutputDevice const& rOut)
-{
-    vcl::PDFExtOutDevData *const pPDFExtOutDevData(
-        dynamic_cast<vcl::PDFExtOutDevData *>(rOut.GetExtOutDevData()));
-    if (pPDFExtOutDevData && pPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
-    {
-        pPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
-        pPDFExtOutDevData->EndStructureElement();
-#if OSL_DEBUG_LEVEL > 1
-    aStructStack.pop_back();
-#endif
-    }
-}
-
 void SwTaggedPDFHelper::EndCurrentAll()
 {
     if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
@@ -1923,7 +1938,8 @@ bool SwTaggedPDFHelper::CheckContinueSpan(
         || !mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
     if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
     {
-        if (pInetFormatAttr && pInetFormatAttr == *mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+        if (pInetFormatAttr
+            && pInetFormatAttr == mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink->pAttr)
         {
             return true;
         }
@@ -2013,17 +2029,6 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             aPDFType = aSpanString;
             break;
 
-        case PortionType::Fly:
-            // if a link is split by a fly overlap, then there will be multiple
-            // annotations for the link, and hence there must be multiple SEs,
-            // so every annotation has its own SE.
-            if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
-            {
-                mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
-                EndTag();
-            }
-            break;
-
         case PortionType::Lay :
         case PortionType::Text :
         case PortionType::Para :
@@ -2036,9 +2041,17 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                         aPDFType = aLinkString;
                         assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
-                        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(pInetFormatAttr);
+                        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(
+                            SwEnhancedPDFState::Link{ pInetFormatAttr, -1, {} });
                         // leave it open to let next portion decide to merge or close
                         --m_nEndStructureElement;
+                    }
+                    else
+                    {
+                        // attach this portion's annotation
+                        SwRect aPorRect;
+                        rInf.CalcRect(*pPor, &aPorRect);
+                        LinkLinkLink(*mpPDFExtOutDevData, aPorRect);
                     }
                 }
                 // Emphasis

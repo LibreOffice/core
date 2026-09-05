@@ -920,30 +920,6 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
         {
             appendStructureAttributeLine( attribute.first, attribute.second, aTable, false );
         }
-        else if( attribute.first == PDFWriter::LinkAnnotation )
-        {
-            sal_Int32 nLink = attribute.second.nValue;
-            std::map< sal_Int32, sal_Int32 >::const_iterator link_it =
-                m_aLinkPropertyMap.find( nLink );
-            if( link_it != m_aLinkPropertyMap.end() )
-                nLink = link_it->second;
-            if( nLink >= 0 && o3tl::make_unsigned(nLink) < m_aLinks.size() )
-            {
-                AppendAnnotKid(i_rEle, m_aLinks[nLink]);
-            }
-            else
-            {
-                OSL_FAIL( "unresolved link id for Link structure" );
-                SAL_INFO("vcl.pdfwriter", "unresolved link id " << nLink << " for Link structure");
-                if (g_bDebugDisableCompression)
-                {
-                    OString aLine = "unresolved link id " +
-                            OString::number( nLink ) +
-                            " for Link structure";
-                    emitComment( aLine.getStr() );
-                }
-            }
-        }
         else if (attribute.first == PDFWriter::NoteAnnotation)
         {
             sal_Int32 nNote = attribute.second.nValue;
@@ -1223,6 +1199,27 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             {
                 assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aScreens.size());
                 AppendAnnotKid(rEle, m_aScreens[it->second]);
+            }
+        }
+    }
+    for (const auto id : rEle.m_LinkAnnotIds)
+    {
+        sal_Int32 nLink(id);
+        const auto it(m_aLinkPropertyMap.find(nLink));
+        if (it != m_aLinkPropertyMap.end())
+            nLink = it->second;
+        if (0 <= nLink && o3tl::make_unsigned(nLink) < m_aLinks.size())
+        {
+            AppendAnnotKid(rEle, m_aLinks[nLink]);
+        }
+        else
+        {
+            SAL_WARN("vcl.pdfwriter", "unresolved link id " << nLink << " for Link structure");
+            if (g_bDebugDisableCompression)
+            {
+                const OString aComment
+                    = "unresolved link id " + OString::number(nLink) + " for Link structure";
+                emitComment(aComment.getStr());
             }
         }
     }
@@ -10995,8 +10992,18 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
         }
     }
 
-    if( bInsert )
-        m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( nValue );
+    if (bInsert)
+    {
+        if (eAttr == PDFWriter::LinkAnnotation)
+        {
+            m_aStructure[m_nCurrentStructElement].m_LinkAnnotIds.push_back(nValue);
+        }
+        else
+        {
+            m_aStructure[m_nCurrentStructElement].m_aAttributes[eAttr]
+                = PDFStructureAttribute(nValue);
+        }
+    }
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
         SAL_INFO("vcl.pdfwriter",
                  "rejecting setStructureAttributeNumerical( " << getAttributeTag( eAttr )
