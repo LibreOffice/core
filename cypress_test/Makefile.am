@@ -267,7 +267,9 @@ endef
 # Use 'ulimit' to intentionally reduce the maximum number of open file descriptors: if 1024 is not
 # enough, then probably we leak them.
 define start_coolwsd_instance
-	$(eval FREE_PORT:=$(shell $(GET_PORT_BINARY) --host=127.0.0.1 $(ALLOWED_PORTS)))
+# get-port-cli colours its output when FORCE_COLOR is set, even into a pipe, and the
+# escapes then reach coolwsd as part of --port. NO_COLOR is ignored when FORCE_COLOR is set.
+	$(eval FREE_PORT:=$(shell FORCE_COLOR=0 $(GET_PORT_BINARY) --host=127.0.0.1 $(ALLOWED_PORTS)))
 	$(if $(findstring php-proxy, $(CYPRESS_INTEGRATION)),\
 		$(if $(findstring $(PHP_PROXY_PORT),$(FREE_PORT)),,$(error CypressError: $(PHP_PROXY_PORT) port is unavailable!)))
 	$(if $(findstring nextcloud, $(CYPRESS_INTEGRATION)),\
