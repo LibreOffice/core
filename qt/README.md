@@ -63,6 +63,45 @@ sudo zypper install autoconf automake cppunit-devel fontconfig-devel gcc-c++ \
     qt6-webenginecore-devel qt6-webenginewidgets-devel qt6-websockets-devel
 ```
 
+### FreeBSD
+
+Targets FreeBSD 15.1 (amd64); this is work in progress, see the
+`feature/freebsd` branch. Package names follow the ports tree; the `py312-`
+prefix tracks the default Python version of your ports branch.
+
+```bash
+sudo pkg install autoconf automake bash bison cppunit git gmake gperf libtool \
+    node npm p5-Archive-Zip patch pkgconf png python3 py312-lxml py312-polib \
+    qt6-base qt6-tools qt6-webchannel qt6-webengine qt6-websockets zip zstd
+```
+
+The engine is configured with `--with-distro=CPFreeBSDQt`, which takes these
+libraries from ports instead of building the bundled copies:
+
+```bash
+sudo pkg install CoinMP abseil boost-libs clucene curl expat fast_float \
+    fontconfig freetype2 frozen glm graphite2 harfbuzz harfbuzz-icu hunspell \
+    hyphen icu lcms2 libabw libcdr01 libe-book libepubgen libetonyek01 \
+    libexttextcat libfreehand liblangtag libmspub01 libmwaw03 libnumbertext \
+    libodfgen01 liborcus libpagemaker libqxp librevenge libstaroffice \
+    libvisio01 libwpd010 libwpg03 libwps libxml2 libxslt libzmf md4c mdds \
+    mythes nss openjpeg redland sane-backends sqlite3 tiff unixODBC webp \
+    xmlsec1 zxing-cpp
+```
+
+OpenSSL, PAM, iconv and libexecinfo come from the base system. There is no
+libcap on FreeBSD; configure detects that and skips the capability code.
+
+Build notes for the steps below: use `gmake` wherever the Linux instructions
+say `make`, replace `$(nproc)` with `$(sysctl -n hw.ncpu)`, and configure the
+engine with
+
+```bash
+./autogen.sh --with-distro=CPFreeBSDQt --without-package-format
+```
+
+instead of the `CPLinux-LOKit` line.
+
 ### General notes
 
 A C++ compiler with full C++20 support is required, including `std::format` (GCC 13+ or Clang 17+).
