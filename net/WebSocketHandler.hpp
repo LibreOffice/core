@@ -53,7 +53,8 @@ private:
     bool _inFragmentBlock;
     [[maybe_unused]] unsigned char _lastFlags; ///< The flags in the last frame.
     std::atomic<bool> _shuttingDown;
-    const bool _isClient;
+    // Consulted only by the !MOBILEAPP paths and by asserts.
+    [[maybe_unused]] const bool _isClient;
 
     // Last member.
     /// The UnitBase instance. We capture it here since
