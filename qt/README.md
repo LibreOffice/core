@@ -94,8 +94,9 @@ OpenSSL, PAM, iconv and libexecinfo come from the base system. There is no
 libcap on FreeBSD; configure detects that and skips the capability code.
 
 Build notes for the steps below: use `gmake` wherever the Linux instructions
-say `make`, replace `$(nproc)` with `$(sysctl -n hw.ncpu)`, and configure the
-engine with
+say `make`, replace `$(nproc)` with `$(sysctl -n hw.ncpu)`, add `MAKE=gmake`
+to the top-level configure line so automake's dependency tracking probes GNU
+make rather than the BSD make in base, and configure the engine with
 
 ```bash
 ./autogen.sh --with-distro=CPFreeBSDQt --without-package-format
