@@ -2962,6 +2962,262 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), pAnnots->GetElements().size());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithRuby)
+{
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"LinkWithRuby.fodt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+    // the ruby is content of the link, so the link is one annotation and one SE
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
+    auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotRef);
+    auto pAnnot = pAnnotRef->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+
+    vcl::filter::PDFObjectElement* pLinkSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Link")
+        {
+            CPPUNIT_ASSERT_MESSAGE("a ruby must not split the link", !pLinkSE);
+            pLinkSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pLinkSE);
+
+    // the text before and after the ruby, the ruby itself, and the annotation
+    auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pLinkSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pKids);
+    size_t nMCID(0);
+    size_t nMCIDBeforeRuby(0);
+    vcl::filter::PDFObjectElement* pRubySE(nullptr);
+    size_t nOBJR(0);
+    for (const auto pElement : pKids->GetElements())
+    {
+        if (dynamic_cast<vcl::filter::PDFNumberElement*>(pElement))
+        {
+            ++nMCID;
+            continue;
+        }
+        if (auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement))
+        {
+            auto pKid = pRef->LookupObject();
+            CPPUNIT_ASSERT(pKid);
+            auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+            CPPUNIT_ASSERT(pKidS);
+            CPPUNIT_ASSERT_EQUAL("Ruby"_ostr, pKidS->GetValue());
+            CPPUNIT_ASSERT(!pRubySE);
+            pRubySE = pKid;
+            nMCIDBeforeRuby = nMCID;
+            continue;
+        }
+        auto pObjR = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pElement);
+        CPPUNIT_ASSERT(pObjR);
+        auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->LookupElement("Type"_ostr));
+        CPPUNIT_ASSERT(pOType);
+        CPPUNIT_ASSERT_EQUAL("OBJR"_ostr, pOType->GetValue());
+        auto pRef
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->LookupElement("Obj"_ostr));
+        CPPUNIT_ASSERT(pRef);
+        CPPUNIT_ASSERT_EQUAL(pAnnot, pRef->LookupObject());
+        ++nOBJR;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(2), nMCID);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nOBJR);
+    CPPUNIT_ASSERT(pRubySE);
+    // the ruby reads between the text before it and the text after it
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nMCIDBeforeRuby);
+
+    // the base and the ruby text, each with its own content; RB before RT would
+    // be the reading order, but the paint order puts RT first
+    auto pRubyKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pRubySE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pRubyKids);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pRubyKids->GetElements().size());
+    std::vector<OString> aRubyKids;
+    for (const auto pElement : pRubyKids->GetElements())
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pRef);
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        aRubyKids.push_back(pKidS->GetValue());
+        auto pKidKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pKid->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pKidKids);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pKidKids->GetElements().size());
+        CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(pKidKids->GetElement(0)));
+    }
+    CPPUNIT_ASSERT(std::find(aRubyKids.begin(), aRubyKids.end(), "RB"_ostr) != aRubyKids.end());
+    CPPUNIT_ASSERT(std::find(aRubyKids.begin(), aRubyKids.end(), "RT"_ostr) != aRubyKids.end());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpanWithFly)
+{
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"SpanWithFly.fodt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // the frame opens its tags inside the span, so the span is not what closes at the
+    // frame's own paragraph - one span, and the frame nested in it
+    vcl::filter::PDFObjectElement* pSpanSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Span")
+        {
+            CPPUNIT_ASSERT_MESSAGE("a frame must not split the span", !pSpanSE);
+            pSpanSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pSpanSE);
+
+    // the text before and after the frame, and the frame between them
+    auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pSpanSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pKids);
+    size_t nMCID(0);
+    size_t nDiv(0);
+    for (const auto pElement : pKids->GetElements())
+    {
+        if (dynamic_cast<vcl::filter::PDFNumberElement*>(pElement))
+        {
+            ++nMCID;
+            continue;
+        }
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pRef);
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        CPPUNIT_ASSERT_EQUAL("Div"_ostr, pKidS->GetValue());
+        ++nDiv;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nDiv);
+    CPPUNIT_ASSERT_GREATER(size_t(1), nMCID);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testRubyWithSpan)
+{
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"RubyWithSpan.fodt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    vcl::filter::PDFObjectElement* pRubySE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Ruby")
+        {
+            CPPUNIT_ASSERT(!pRubySE);
+            pRubySE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pRubySE);
+
+    // the character style on the base is a tag inside the RB and closes with it, so
+    // only RB and RT are content of the Ruby
+    auto pRubyKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pRubySE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pRubyKids);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pRubyKids->GetElements().size());
+    vcl::filter::PDFObjectElement* pEmInRB(nullptr);
+    for (const auto pElement : pRubyKids->GetElements())
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pRef);
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        auto pKidKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pKid->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pKidKids);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pKidKids->GetElements().size());
+        if (pKidS->GetValue() == "RT")
+        {
+            CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(pKidKids->GetElement(0)));
+            continue;
+        }
+        CPPUNIT_ASSERT_EQUAL("RB"_ostr, pKidS->GetValue());
+        auto pEmRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidKids->GetElement(0));
+        CPPUNIT_ASSERT(pEmRef);
+        pEmInRB = pEmRef->LookupObject();
+        CPPUNIT_ASSERT(pEmInRB);
+        auto pEmS = dynamic_cast<vcl::filter::PDFNameElement*>(pEmInRB->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pEmS);
+        CPPUNIT_ASSERT_EQUAL("Emphasis"_ostr, pEmS->GetValue());
+    }
+    CPPUNIT_ASSERT(pEmInRB);
+
+    // the text after the ruby keeps a tag of its own, a sibling of the Ruby
+    auto pParaRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pRubySE->Lookup("P"_ostr));
+    CPPUNIT_ASSERT(pParaRef);
+    auto pPara = pParaRef->LookupObject();
+    CPPUNIT_ASSERT(pPara);
+    auto pParaKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pPara->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pParaKids);
+    size_t nRuby(0);
+    size_t nEmAfter(0);
+    for (const auto pElement : pParaKids->GetElements())
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        if (!pRef)
+            continue;
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        if (pKid == pRubySE)
+        {
+            ++nRuby;
+            continue;
+        }
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        CPPUNIT_ASSERT_EQUAL("Emphasis"_ostr, pKidS->GetValue());
+        CPPUNIT_ASSERT(pKid != pEmInRB);
+        ++nEmAfter;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nRuby);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nEmAfter);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf163240)
 {
     // Enable PDF/UA

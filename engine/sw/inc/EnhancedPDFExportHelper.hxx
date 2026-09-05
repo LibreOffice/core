@@ -137,9 +137,8 @@ class SwTaggedPDFHelper
 {
     private:
 
-    // This will be incremented for each BeginTag() call.
-    // It denotes the number of tags to close during EndStructureElements();
-    sal_uInt8 m_nEndStructureElement;
+    // opened by this helper, innermost last
+    std::vector<sal_Int32> m_aOpenedTags;
 
     //  If an already existing tag is reopened for follows of flow frames,
     // this value stores the tag id which has to be restored.
@@ -155,6 +154,10 @@ class SwTaggedPDFHelper
     sal_Int32 BeginTagImpl(void const* pKey,vcl::pdf::StructElement aTagRole, const OUString& rTagName);
     void BeginTag(vcl::pdf::StructElement aTagRole, const OUString& rTagName);
     void EndTag();
+    void DeferTag();
+    bool IsDeferredTagCurrent() const;
+    void EndDeferredTag();
+    void EndDeferredTags();
 
     void SetAttributes(vcl::pdf::StructElement eType);
 
