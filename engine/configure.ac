@@ -10462,7 +10462,11 @@ dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
 MDDS_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/mdds/include"
-libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-3.0 >= 3.0.0])
+dnl The FreeBSD package of mdds 3.1 names its pkg-config file after the
+dnl release, mdds-3.1, while upstream keeps the 3.0 API name for the same
+dnl headers. Accept either.
+PKG_CHECK_EXISTS([mdds-3.1], [mdds_pc_name=mdds-3.1], [mdds_pc_name=mdds-3.0])
+libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[$mdds_pc_name >= 3.0.0])
 
 dnl ===================================================================
 dnl Check for system dragonbox
