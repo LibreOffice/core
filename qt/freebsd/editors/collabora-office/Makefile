@@ -185,5 +185,9 @@ post-install:
 		\( -name '*.so' -o -name '*.so.*' -o -name '*.bin' \) \
 		-exec ${STRIP_CMD} {} +
 	${STRIP_CMD} ${STAGEDIR}${PREFIX}/bin/coda-qt
+# The zip tool in ports leaves its archives (autotext, autocorrect lists,
+# templates) readable by the build user only, and the engine's installer keeps
+# those modes. Root owns the files in the package, so open them up.
+	${FIND} ${STAGEDIR}${LO_PATH} -type f -exec ${CHMOD} a+r {} +
 
 .include <bsd.port.mk>
