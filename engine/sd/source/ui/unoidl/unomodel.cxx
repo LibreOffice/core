@@ -2244,6 +2244,7 @@ namespace
 {
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
+constexpr sal_Int32 constVectorModeMasterPages = 1;
 
 /// The views render the changed part from vector primitives only if
 /// they asked for them, so each view's callback handler decides itself
@@ -2257,6 +2258,19 @@ void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPa
             pShell->viewVectorPartChanged(nPart, nMode);
         pShell = SfxViewShell::GetNext(*pShell, false);
     }
+}
+
+/// Position of a master page in the master-page list of the standard
+/// pages, or -1 when the document does not hold it.
+sal_Int32 findMasterPageIndex(SdDrawDocument& rDocument, const SdPage* pMasterPage)
+{
+    const sal_uInt16 nCount = rDocument.GetMasterSdPageCount(PageKind::Standard);
+    for (sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex)
+    {
+        if (rDocument.GetMasterSdPage(nIndex, PageKind::Standard) == pMasterPage)
+            return nIndex;
+    }
+    return -1;
 }
 
 /// Count the part's version up and record the change under the top-level
@@ -2280,6 +2294,14 @@ void recordObjectChange(SdXImpressDocument::VectorPartState& rState, const SdrOb
         rState.maObjectChangeVersions.erase(nObjectId);
     else
         rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
+}
+
+/// Count the part's version up and remember it as the version the master
+/// content last changed at.
+void recordMasterChange(SdXImpressDocument::VectorPartState& rState)
+{
+    ++rState.mnVersion;
+    rState.mnMasterChangeVersion = rState.mnVersion;
 }
 
 // A slide's presentation info changed, so tell every view of the document.
@@ -2320,10 +2342,7 @@ void bumpMasterChangeForUsers(
         if (pStandardPage && pStandardPage->TRG_HasMasterPage()
             && &pStandardPage->TRG_GetMasterPage() == pMasterPage)
         {
-            SdXImpressDocument::VectorPartState& rState
-                = rVectorParts[{ nPage, constVectorModeSlides }];
-            ++rState.mnVersion;
-            rState.mnMasterChangeVersion = rState.mnVersion;
+            recordMasterChange(rVectorParts[{ nPage, constVectorModeSlides }]);
             notifyViewsVectorPartChanged(pDocShell, nPage, constVectorModeSlides);
         }
     }
@@ -2366,7 +2385,19 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         if (pPage->IsMasterPage())
                         {
+                            // The master shows on every slide that uses it,
+                            // and is a part of its own in master view.
                             bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
+
+                            const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
+                            if (nMasterPart >= 0)
+                            {
+                                recordObjectChange(
+                                    maVectorParts[{ nMasterPart, constVectorModeMasterPages }],
+                                    pObject, eKind);
+                                notifyViewsVectorPartChanged(mpDocShell, nMasterPart,
+                                                             constVectorModeMasterPages);
+                            }
                         }
                         else if (pPage->GetPageNum() > 0)
                         {
@@ -2402,13 +2433,22 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (pPage->IsMasterPage())
                     {
                         bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
+
+                        // In master view the master is the page itself, so its
+                        // background is part of its own master-page content.
+                        const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
+                        if (nMasterPart >= 0)
+                        {
+                            recordMasterChange(
+                                maVectorParts[{ nMasterPart, constVectorModeMasterPages }]);
+                            notifyViewsVectorPartChanged(mpDocShell, nMasterPart,
+                                                         constVectorModeMasterPages);
+                        }
                     }
                     else if (pPage->GetPageNum() > 0)
                     {
                         const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-                        VectorPartState& rState = maVectorParts[{ nPart, constVectorModeSlides }];
-                        ++rState.mnVersion;
-                        rState.mnMasterChangeVersion = rState.mnVersion;
+                        recordMasterChange(maVectorParts[{ nPart, constVectorModeSlides }]);
                         notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
                     }
                 }
@@ -2498,7 +2538,8 @@ private:
     /// not serve.
     SdPage* resolveCurrentPage()
     {
-        if (mnMode != constVectorModeSlides)
+        const bool bMasterPages = mnMode == constVectorModeMasterPages;
+        if (mnMode != constVectorModeSlides && !bMasterPages)
             return nullptr;
 
         sal_uInt16 nCurrentPage = 0;
@@ -2515,7 +2556,16 @@ private:
             if (pViewSh)
             {
                 SdPage* pActualPage = pViewSh->GetActualPage();
-                if (pActualPage)
+                if (pActualPage && bMasterPages)
+                {
+                    // In master view the active page is the master being
+                    // edited, and the parts are the master pages.
+                    const sal_Int32 nMasterIndex = findMasterPageIndex(*mpDocument, pActualPage);
+                    if (nMasterIndex < 0)
+                        return nullptr;
+                    nCurrentPage = static_cast<sal_uInt16>(nMasterIndex);
+                }
+                else if (pActualPage)
                 {
                     // Slide and notes pages are interleaved; this is the slides.
                     nCurrentPage = (pActualPage->GetPageNum() - 1) / 2;
@@ -2523,6 +2573,8 @@ private:
             }
         }
         mnResolvedPage = nCurrentPage;
+        if (bMasterPages)
+            return mpDocument->GetMasterSdPage(nCurrentPage, PageKind::Standard);
         return mpDocument->GetSdPage(nCurrentPage, PageKind::Standard);
     }
 

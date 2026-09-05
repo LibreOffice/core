@@ -384,6 +384,88 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnMasterChange)
     CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewCarriesTheMasterObjects)
+{
+    // In master view the master page is the page being shown, so its own
+    // objects come back as the page objects rather than as master content
+    // behind a slide.
+    createBlankDoc();
+    CPPUNIT_ASSERT(page(1)->TRG_HasMasterPage());
+
+    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    const size_t nPlaceholderCount = rMasterPage.GetObjCount();
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    rMasterPage.NbcInsertObject(pRect.get());
+
+    auto aMaster = getVectorPrimitives(u"testMasterView", -1, 1);
+    assertJsonPath(aMaster, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), aMaster.getInt("/mode").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(nPlaceholderCount + 1, aMaster.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int64>(pRect->GetUniqueID()),
+        aMaster
+            .getInt(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nPlaceholderCount))
+                                     + "/id"))
+            .value_or(-1));
+
+    // The slide itself is still blank, and says so in the slide mode.
+    auto aSlide = getVectorPrimitives(u"testMasterViewSlide");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aSlide.getInt("/mode").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aSlide.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterEditRaisesBothVersions)
+{
+    // An edit on a master shows in master view and on every slide that uses
+    // the master, so both parts report a higher version.
+    createBlankDoc();
+    CPPUNIT_ASSERT(page(1)->TRG_HasMasterPage());
+
+    const sal_Int64 nMasterBefore
+        = getVectorPrimitives(u"testMasterPartVersion", -1, 1).getInt("/version").value_or(-1);
+    const sal_Int64 nSlideBefore
+        = getVectorPrimitives(u"testMasterPartVersionSlide").getInt("/version").value_or(-1);
+
+    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    rMasterPage.NbcInsertObject(pRect.get());
+    pRect->BroadcastObjectChange();
+
+    CPPUNIT_ASSERT_GREATER(
+        nMasterBefore,
+        getVectorPrimitives(u"testMasterPartVersion", -1, 1).getInt("/version").value_or(-1));
+    CPPUNIT_ASSERT_GREATER(
+        nSlideBefore,
+        getVectorPrimitives(u"testMasterPartVersionSlide").getInt("/version").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObject)
+{
+    // A delta in master view behaves as it does for a slide: the order lists
+    // every object, only the changed one carries content.
+    createBlankDoc();
+    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    rMasterPage.NbcInsertObject(pRect.get());
+    pRect->BroadcastObjectChange();
+
+    auto aFull = getVectorPrimitives(u"testMasterDeltaFull", -1, 1);
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    const size_t nObjectCount = aFull.getSize("/objects").value_or(0);
+
+    pRect->BroadcastObjectChange();
+
+    auto aDelta = getVectorPrimitives(u"testMasterDeltaSince", nVersion, 1);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_EQUAL(nObjectCount, aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pRect->GetUniqueID()),
+                         aDelta.getInt("/objects/0/id").value_or(-1));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
 {
     // A mode outside the page lists the command serves gets an empty response
