@@ -70,9 +70,10 @@ Targets FreeBSD 15.1 (amd64); this is work in progress, see the
 prefix tracks the default Python version of your ports branch.
 
 ```bash
-sudo pkg install autoconf automake bash bison cppunit git gmake gperf libtool \
-    node npm p5-Archive-Zip patch pkgconf png python3 py312-lxml py312-polib \
-    qt6-base qt6-tools qt6-webchannel qt6-webengine qt6-websockets zip zstd
+sudo pkg install autoconf automake bash bison ccache cppunit git gmake gperf \
+    libtool nasm ninja node npm p5-Archive-Zip patch pkgconf png python3 \
+    py312-lxml py312-polib qt6-base qt6-tools qt6-webchannel qt6-webengine \
+    qt6-websockets zip zstd
 ```
 
 The engine is configured with `--with-distro=CPFreeBSDQt`, which takes these
