@@ -100,7 +100,7 @@ USE_QT=		base tools:build webchannel webengine websockets
 USE_GITHUB=	yes
 GH_ACCOUNT=	CollaboraOnline
 GH_PROJECT=	online.mirror
-GH_TAGNAME=	f296948dddb652057e1380a472fbae96596300e2
+GH_TAGNAME=	005b94a15d61e8c307bfc48f9168c9c688233dd7
 
 SHEBANG_GLOB=	*.py
 BINARY_ALIAS=	make=gmake
