@@ -191,6 +191,7 @@ selectbackground name=<name>
 
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
                    [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]
+                   [sourcepositions=<p0,p1,...>]
 
     Inserts pages of a presentation staged in the jail into the open document.
     Only Impress documents are served. The staged name is the file a related
@@ -209,7 +210,14 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     inserted pages bound to it, so that they can be refreshed from it later;
     link=0, or no link at all, inserts plain copies. <source time> is the time
     the source was last modified now, percent-encoded, recorded on the linked
-    pages so a later comparison tells whether they are up to date. The reply is
+    pages so a later comparison tells whether they are up to date.
+
+    <sourcepositions> names the position each inserted page's slide holds in
+    the source, counted from one, in the order the staged file holds the pages:
+    one position per page or none at all. A page inserted with a position is
+    linked to that position rather than to one slide, so an update reads
+    whichever slide stands there; a page inserted without one is linked to the
+    identifier of the slide it came from. The reply is
         slideimport: {"status":"inserted","count":<K>}
 
     Errors are reported as
@@ -219,11 +227,13 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     for, and nosource means an insert that asks for links without naming a
     source document.
 
-exportslides [slides=<p0,p1,...>]
+exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
 
     Writes the given pages of this document out as a presentation of their own,
-    named by the part identifiers a presentationinfo: reports. No list at all writes
-    every page out. The reply is the presentation itself, as a binary frame
+    named by the part identifiers a presentationinfo: reports, or by the
+    identifier each page keeps in ODF, which is what a document holding pages
+    read from this one records for them. No list at all writes every page out.
+    The reply is the presentation itself, as a binary frame
         exportslides: {"status":"written"}\n<the file>
     so a document is reached the same way whichever node serves it.
 

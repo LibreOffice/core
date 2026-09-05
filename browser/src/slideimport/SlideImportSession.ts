@@ -69,8 +69,9 @@ class SlideImportSession {
 	// that they can be updated from it later. The user's choice, kept across
 	// files.
 	public linkToSource: boolean = false;
-	// Match by position
-	public updateByPosition: boolean = false;
+	// Whether the inserted slides are linked to the position their slides hold in the source
+	// rather than to the slides themselves. The user's choice, kept across files.
+	public linkByPosition: boolean = false;
 	// Whether the open of the current file named it as a source. Slides can
 	// only be linked to a source the open named.
 	public canLink: boolean = false;
@@ -99,6 +100,12 @@ class SlideImportSession {
 		// A linked page records the time its source was last modified now, so a
 		// later comparison tells whether it is up to date.
 		const time = link ? SlideImportSession.sourceModifiedTime(source) : '';
+		// A page linked by position records the place its slide holds in the source, which is
+		// the slide this insert asked the source for, counted from one.
+		const positions =
+			link && this.linkByPosition && this.pendingInsert
+				? this.pendingInsert.slides.map((index: number) => index + 1)
+				: [];
 		app.socket.sendMessage(
 			'slideimport insert file=' +
 				encodeURIComponent(stagedName) +
@@ -109,8 +116,7 @@ class SlideImportSession {
 				(this.keepDesign ? '1' : '0') +
 				' link=' +
 				(link ? '1' : '0') +
-				' positionnames=' +
-				(link && this.updateByPosition ? '1' : '0') +
+				(positions.length ? ' sourcepositions=' + positions.join(',') : '') +
 				(time ? ' time=' + encodeURIComponent(time) : ''),
 		);
 	}
@@ -146,8 +152,8 @@ class SlideImportSession {
 		this.linkToSource = value;
 	}
 
-	public setUpdateByPosition(value: boolean): void {
-		this.updateByPosition = value;
+	public setLinkByPosition(value: boolean): void {
+		this.linkByPosition = value;
 	}
 
 	public toggleSelection(index: number): void {

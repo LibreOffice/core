@@ -32,6 +32,7 @@
 #include <sdresid.hxx>
 #include <sdundo.hxx>
 #include <strings.hrc>
+#include <unopage.hxx>
 
 namespace sd
 {
@@ -42,6 +43,9 @@ constexpr OUString gSourceScheme = u"vnd.collabora.slide-source:"_ustr;
 
 /// The reference the pages of a written presentation record, which names no document.
 constexpr OUString gOriginReference = u"vnd.collabora.slide-origin:self"_ustr;
+
+/// The name ODF keeps for a slide of no name of its own, before the position of the slide.
+constexpr OUString gPositionNamePrefix = u"page"_ustr;
 
 /// Whether rUrl names a file on this machine.
 bool isLocalFile(std::u16string_view rUrl)
@@ -79,23 +83,37 @@ const SdPage* findSourcePage(const SdDrawDocument& rSourceDoc, const SdPage& rPa
 {
     const OUString& rSourceGuid = rPage.GetSourcePageGuid();
     const OUString& rSourceName = rPage.GetBookmarkName();
-    const SdPage* pNamedPage = nullptr;
+    const sal_uInt16 nCount = rSourceDoc.GetSdPageCount(PageKind::Standard);
 
-    for (sal_uInt16 nIndex = 0, nCount = rSourceDoc.GetSdPageCount(PageKind::Standard);
-         nIndex < nCount; ++nIndex)
+    if (!rSourceGuid.isEmpty())
     {
-        const SdPage* pSourcePage = rSourceDoc.GetSdPage(nIndex, PageKind::Standard);
-        if (!pSourcePage)
-            continue;
-
-        if (!rSourceGuid.isEmpty() && pSourcePage->GetGuid().getOUString() == rSourceGuid)
-            return pSourcePage;
-
-        if (!pNamedPage && !rSourceName.isEmpty() && pSourcePage->GetName() == rSourceName)
-            pNamedPage = pSourcePage;
+        for (sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            const SdPage* pSourcePage = rSourceDoc.GetSdPage(nIndex, PageKind::Standard);
+            if (pSourcePage && pSourcePage->GetGuid().getOUString() == rSourceGuid)
+                return pSourcePage;
+        }
     }
 
-    return pNamedPage;
+    // A page linked to the position of a slide reads the slide standing there, whatever that
+    // slide is named now.
+    const sal_Int32 nPosition = SlideLink::GetNamedPosition(rSourceName);
+    if (nPosition > 0)
+        return nPosition <= nCount ? rSourceDoc.GetSdPage(static_cast<sal_uInt16>(nPosition - 1),
+                                                          PageKind::Standard)
+                                   : nullptr;
+
+    if (!rSourceName.isEmpty())
+    {
+        for (sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            const SdPage* pSourcePage = rSourceDoc.GetSdPage(nIndex, PageKind::Standard);
+            if (pSourcePage && pSourcePage->GetName() == rSourceName)
+                return pSourcePage;
+        }
+    }
+
+    return nullptr;
 }
 
 /// The undo manager of rDoc, or nothing for a document that is served without one.
@@ -199,6 +217,38 @@ OUString SlideLink::GetOriginPage(const SdPage& rPage)
         return OUString();
 
     return rPage.GetBookmarkName();
+}
+
+OUString SlideLink::MakePositionName(sal_Int32 nPosition)
+{
+    const OUString aApiName = gPositionNamePrefix + OUString::number(nPosition);
+    return SdDrawPage::getUiNameFromPageApiName(aApiName);
+}
+
+sal_Int32 SlideLink::GetNamedPosition(const OUString& rName)
+{
+    // A name of a slide's own is kept as it is, and a name of a position is the prefix ODF keeps
+    // for one and the number of the position.
+    const OUString aApiName = SdDrawPage::getPageApiNameFromUiName(rName);
+    if (aApiName == rName || !aApiName.startsWith(gPositionNamePrefix))
+        return 0;
+
+    const std::u16string_view aPosition = aApiName.subView(gPositionNamePrefix.getLength());
+    return aPosition.find_first_not_of(u"0123456789") == std::u16string_view::npos
+               ? o3tl::toInt32(aPosition)
+               : 0;
+}
+
+OUString SlideLink::GetRefreshedSlideName(const SdPage& rPage, const OUString& rReadName)
+{
+    const OUString& rRecordedName = rPage.GetBookmarkName();
+    if (rRecordedName.isEmpty())
+        return OUString();
+
+    if (rPage.GetSourcePageGuid().isEmpty() && GetNamedPosition(rRecordedName) > 0)
+        return rRecordedName;
+
+    return rReadName;
 }
 
 OUString SlideLink::GetSourceSlideName(const SdDrawDocument& rSourceDoc, const SdPage& rPage)
@@ -325,7 +375,7 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
         aPages.push_back(nIndex);
         aSourceNames.push_back(aSourceName);
         aSourceGuids.push_back(pPage->GetSourcePageGuid());
-        aRecordedNames.push_back(pPage->GetBookmarkName().isEmpty() ? OUString() : aSourceName);
+        aRecordedNames.push_back(GetRefreshedSlideName(*pPage, aSourceName));
     }
 
     SfxUndoManager* pUndoManager = rDoc.beginUndoAction(SdResId(STR_UNDO_UPDATE_LINKED_SLIDES));

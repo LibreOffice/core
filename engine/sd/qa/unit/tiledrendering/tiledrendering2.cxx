@@ -467,11 +467,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
 }
 
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNamesTheSourceSlide)
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkFollowsSourceSlidePosition)
 {
-    // A slide travels to another presentation in a file written out of its own deck, and a slide
-    // that carries no name of its own is known by its position. The link records the slide of the
-    // source deck, which is not the position that slide took in the file it travelled in.
+    // A slide travels to another presentation in a file written out of its own deck. An insert
+    // that names the position the slide holds in the source links the page to that position: the
+    // position in the source deck, not the one the slide took in the file it travelled in.
     loadFromURL(
         m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-source.fodp"));
     SdXImpressDocument* pSourceDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -499,7 +499,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNamesTheSourceSlide)
     aMovedDeck.EnableKillingFile();
     CPPUNIT_ASSERT(pMovedDocument->exportPages({}, aMovedDeck.GetURL()));
 
-    // A deck of three slides of its own, standing where the slides of the source deck stood.
+    // A deck of three slides of its own, standing where the slides of the source deck stood, and
+    // the same again with a name of its own on every slide.
     loadFromURL(
         m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-replaced.fodp"));
     SdXImpressDocument* pReplacedDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -509,17 +510,26 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNamesTheSourceSlide)
     aReplacedDeck.EnableKillingFile();
     CPPUNIT_ASSERT(pReplacedDocument->exportPages({}, aReplacedDeck.GetURL()));
 
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-named-replaced.fodp"));
+    SdXImpressDocument* pNamedDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pNamedDocument);
+    pNamedDocument->initializeForTiledRendering({});
+    utl::TempFileNamed aNamedDeck(u"", true, u".odp");
+    aNamedDeck.EnableKillingFile();
+    CPPUNIT_ASSERT(pNamedDocument->exportPages({}, aNamedDeck.GetURL()));
+
     loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     pXImpressDocument->initializeForTiledRendering({});
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
 
-    // The slide carries no name of its own, so the insert asks for the name it holds by its
-    // position, which is what a source keeping no slide identifiers can be matched by.
+    // The third slide of the source travelled on its own, so it stands first in the file the
+    // insert reads. The insert names the position it holds in the source, which is the third.
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aOneSlide.GetURL(),
-        "{\"at\":1,\"link\":true,\"positionNames\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+        "{\"at\":1,\"link\":true,\"sourcePositions\":[3],\"source\":\"Q3 deck.odp\"}"_ostr));
 
     SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
     CPPUNIT_ASSERT(pLinked);
@@ -527,12 +537,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNamesTheSourceSlide)
     CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
     CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pLinked->GetBookmarkName());
 
-    // The page records the identifier of the slide it came from, which names that slide wherever
-    // it stands in the source.
-    CPPUNIT_ASSERT_EQUAL(u"{33333333-3333-3333-3333-333333333333}"_ustr,
-                         pLinked->GetSourcePageGuid());
+    // The page is linked to the position and to no identifier, so nothing but the position says
+    // which slide it reads.
+    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetSourcePageGuid());
 
-    // A refresh reading the whole source deck finds the slide the page records and reads it again.
+    // A refresh reading the whole source deck reads the slide standing at that position, which is
+    // the slide the page came from as long as the source holds it there.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
                                                               aWholeDeck.GetURL(),
@@ -541,28 +551,36 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNamesTheSourceSlide)
     CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr,
                          pDoc->GetSdPage(1, PageKind::Standard)->GetBookmarkName());
 
-    // The slide moved to the front of the source, so the name it carried belongs to another slide
-    // now. The refresh follows the identifier and reads the same slide as before, and the page
-    // names the slide where it stands now.
+    // The slide the page came from moved to the front of the source, so another slide stands at
+    // the position the page follows, and that is the slide it reads. The page keeps the position.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
                                                               aMovedDeck.GetURL(),
                                                               u"2022-02-02T00:00:00Z"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Source three, revised"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 1));
     SdPage* pMoved = pDoc->GetSdPage(1, PageKind::Standard);
     CPPUNIT_ASSERT(pMoved);
-    CPPUNIT_ASSERT_EQUAL(u"Slide 1"_ustr, pMoved->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(u"{33333333-3333-3333-3333-333333333333}"_ustr,
-                         pMoved->GetSourcePageGuid());
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pMoved->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pMoved->GetSourcePageGuid());
 
-    // The slide the page came from is gone from the source, which holds other slides in the same
-    // places. The page records the name of a position, which is what it was asked to keep, so the
-    // slide standing at that position is read: what the position names is what the page follows.
+    // The slides of the source are other slides now, and the page reads the one standing at its
+    // position.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
                                                               aReplacedDeck.GetURL(),
                                                               u"2023-03-03T00:00:00Z"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Other one"_ustr, getSlideText(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(u"Other three"_ustr, getSlideText(*pDoc, 1));
+
+    // The slide standing at that position carries a name of its own. The page follows the
+    // position rather than a name, so it reads that slide and keeps the position it records.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pXImpressDocument->refreshSlideLinks(
+                                                        u"Q3 deck.odp"_ustr, aNamedDeck.GetURL(),
+                                                        u"2024-04-04T00:00:00Z"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Named three"_ustr, getSlideText(*pDoc, 1));
+    SdPage* pNamed = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pNamed);
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pNamed->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pNamed->GetSourcePageGuid());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkTracksSourceSlideByIdentifier)

@@ -6544,19 +6544,18 @@ void clearInsertedPageLinks(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uI
     }
 }
 
-/// Whether rName is the name a slide holds by its position rather than a name of its own. The
-/// conversion to the name ODF keeps reads that form in whichever language the name was built.
-bool isPositionName(const OUString& rName)
-{
-    return SdDrawPage::getPageApiNameFromUiName(rName) != rName;
-}
-
-/// Marks on the pages the id of the source document's slides each one came from.
+/// Marks on the pages the slide of the source document each one came from: the position that slide
+/// holds in the source when the run names the positions, and the identifier of the slide otherwise.
 void recordInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
                                const std::vector<OUString>& rReadPages, sal_uInt16 nFirstSlide,
-                               sal_uInt16 nSlideCount, bool bPositionNames)
+                               sal_uInt16 nSlideCount,
+                               const std::vector<sal_Int32>& rSourcePositions)
 {
     if (rReadPages.size() != static_cast<size_t>(nSlideCount))
+        return;
+
+    // The run names the position of every page it inserts or of none of them.
+    if (!rSourcePositions.empty() && rSourcePositions.size() != static_cast<size_t>(nSlideCount))
         return;
 
     for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
@@ -6564,6 +6563,16 @@ void recordInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
         SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
         if (!pPage)
             continue;
+
+        if (!rSourcePositions.empty())
+        {
+            // The page is linked to the position its slide holds in the source and to no
+            // identifier, so an update reads whichever slide stands there.
+            pPage->SetBookmarkName(
+                sd::SlideLink::MakePositionName(rSourcePositions[nSlide - nFirstSlide]));
+            pPage->SetSourcePageGuid(OUString());
+            continue;
+        }
 
         bool bIsMasterPage = false;
         const OUString& rReadName = rReadPages[nSlide - nFirstSlide];
@@ -6579,8 +6588,8 @@ void recordInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
         const OUString aSourceName = aOriginPage.isEmpty() ? rReadName : aOriginPage;
 
         // empty name is intentional here
-        pPage->SetBookmarkName(bPositionNames || !isPositionName(aSourceName) ? aSourceName
-                                                                        : OUString());
+        const bool bOwnName = sd::SlideLink::GetNamedPosition(aSourceName) == 0;
+        pPage->SetBookmarkName(bOwnName ? aSourceName : OUString());
         pPage->SetSourcePageGuid(pReadPage->GetGuid().getOUString());
     }
 }
@@ -6607,10 +6616,10 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     sal_Int32 nAt = -1;
     bool bKeepDesign = false;
     bool bLink = false;
-    bool bPositionNames = false;
     OUString aSourceName;
     OUString aLastModifiedTime;
     std::vector<sal_Int32> aPages;
+    std::vector<sal_Int32> aSourcePositions;
     try
     {
         std::stringstream aStream((std::string(rJsonOptions)));
@@ -6619,7 +6628,6 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         nAt = aTree.get<sal_Int32>("at", -1);
         bKeepDesign = aTree.get<bool>("keepDesign", false);
         bLink = aTree.get<bool>("link", false);
-        bPositionNames = aTree.get<bool>("positionNames", false);
         aSourceName = OStringToOUString(aTree.get<std::string>("source", ""),
                                         RTL_TEXTENCODING_UTF8);
         aLastModifiedTime = OStringToOUString(aTree.get<std::string>("lastModifiedTime", ""),
@@ -6628,6 +6636,17 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         {
             for (const auto& rPage : *oPages)
                 aPages.push_back(rPage.second.get_value<sal_Int32>());
+        }
+        if (auto oPositions = aTree.get_child_optional("sourcePositions"))
+        {
+            for (const auto& rPosition : *oPositions)
+            {
+                const sal_Int32 nPosition = rPosition.second.get_value<sal_Int32>();
+                if (nPosition < 1)
+                    return false;
+
+                aSourcePositions.push_back(nPosition);
+            }
         }
     }
     catch (const boost::property_tree::ptree_error&)
@@ -6680,7 +6699,7 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         // A linked page records the slide of the source document it came from, which is the slide
         // the file was written from rather than the page it holds in the file.
         recordInsertedPageSources(*mpDoc, *pSource, aBookmarkList, nFirstSlide, nInsertedCount,
-                                  bPositionNames);
+                                  aSourcePositions);
         if (!aLastModifiedTime.isEmpty())
             stampInsertedPageSource(*mpDoc, nFirstSlide, nInsertedCount, aLastModifiedTime);
     }

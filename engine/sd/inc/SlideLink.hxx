@@ -63,6 +63,27 @@ public:
     */
     static OUString GetOriginPage(const SdPage& rPage);
 
+    /** The name a slide holds by the position nPosition in its document, counted from one.
+
+        A slide with no name of its own is known by its position, so a page linked to such a name
+        is linked to the position rather than to one slide: an update reads whichever slide stands
+        there. It is the name ODF keeps for a slide of no name, so the link is one any reader of
+        the format resolves.
+    */
+    static OUString MakePositionName(sal_Int32 nPosition);
+
+    /** The position rName names, counted from one, or 0 when rName is a name of a slide's own.
+    */
+    static sal_Int32 GetNamedPosition(const OUString& rName);
+
+    /** The source slide a page refreshed from the slide named rReadName records.
+
+        A page linked to the position of a slide keeps that position, and a page that records no
+        name records none still. Any other page takes rReadName, the name the slide it read carries
+        now, so that a slide renamed in its source stays within reach.
+    */
+    static OUString GetRefreshedSlideName(const SdPage& rPage, const OUString& rReadName);
+
     /** The name of the slide of rSourceDoc that rPage is linked to, empty when it holds none.
 
         The name comes back because a slide is read by name, and it is the name that slide carries

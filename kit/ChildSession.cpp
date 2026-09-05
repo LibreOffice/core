@@ -2422,10 +2422,12 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     // later comparison tells whether they are up to date. Optional.
     std::string encodedTime;
     std::string slideList;
+    // The positions the slides of a linked insert hold in the source, which links each page to a
+    // position rather than to one slide. Optional.
+    std::string sourcePositionList;
     int at = -1;
     bool keepDesign = false;
     bool link = false;
-    bool positionNames = false;
     bool haveName = false;
     bool haveSource = false;
     bool haveTime = false;
@@ -2454,6 +2456,10 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         {
             slideList = std::move(value);
         }
+        else if (getTokenString(tokens[i], "sourcepositions", value))
+        {
+            sourcePositionList = std::move(value);
+        }
         else if (getTokenInteger(tokens[i], "at", number))
         {
             at = number;
@@ -2466,10 +2472,6 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         {
             link = number != 0;
         }
-        else if (getTokenInteger(tokens[i], "positionnames", number))
-        {
-            positionNames = number != 0;
-        }
         else
         {
             malformed = true;
@@ -2478,6 +2480,10 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     std::vector<int> slides;
     if (!slideList.empty() && !parseSlideIndexList(slideList, slides))
+        malformed = true;
+
+    std::vector<int> sourcePositions;
+    if (!sourcePositionList.empty() && !parseSlideIndexList(sourcePositionList, sourcePositions))
         malformed = true;
 
     std::string name;
@@ -2546,10 +2552,10 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     std::ostringstream options;
-    options << "{\"slides\":[" << joinSlideIndexList(slides)
-            << "],\"at\":" << at << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
-            << ",\"link\":" << (link ? "true" : "false") << ",\"positionNames\":"
-            << (positionNames ? "true" : "false") << ",\"source\":\""
+    options << "{\"slides\":[" << joinSlideIndexList(slides) << "],\"sourcePositions\":["
+            << joinSlideIndexList(sourcePositions) << "],\"at\":" << at
+            << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
+            << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
             << JsonUtil::escapeJSONValue(lastModifiedTime) << "\"}";
 

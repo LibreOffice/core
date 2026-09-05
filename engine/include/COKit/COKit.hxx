@@ -2570,7 +2570,11 @@ struct COKitDocument
      *        page, the slide to insert before as "at", whether the pages keep the design of
      *        the file they came from as "keepDesign", whether they stay linked to the
      *        document named by "source" as "link", and the time that source was last
-     *        modified as "lastModifiedTime", recorded on each linked page.
+     *        modified as "lastModifiedTime", recorded on each linked page. "sourcePositions"
+     *        names the position each inserted page's slide holds in the source, counted from
+     *        one, one for every page inserted or none at all: a page given a position is
+     *        linked to that position rather than to one slide, so a refresh reads whichever
+     *        slide stands there.
      * @return whether the pages were inserted.
      */
     virtual bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) = 0;

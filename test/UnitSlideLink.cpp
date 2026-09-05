@@ -216,17 +216,18 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         helpers::getResponseString(socket, "slideimport:", testname);
         getParts(getLinks(socket)->getObject(0), 2);
 
-        // An insert that asks to keep the name a slide holds by its position records that name,
-        // which is what a source keeping no slide identifiers can be matched by later.
+        // An insert that names the position a slide holds in the source links the page to that
+        // position, which is what a source keeping no slide identifiers can be matched by later.
         stageSource(socket, documentURL, "source.odp");
-        helpers::sendTextFrame(socket,
-                               insertCommand("slides=2 at=0 keepdesign=0 link=1 positionnames=1"),
-                               testname);
+        helpers::sendTextFrame(
+            socket, insertCommand("slides=2 at=0 keepdesign=0 link=1 sourcepositions=3"), testname);
         helpers::getResponseString(socket, "slideimport:", testname);
         Poco::JSON::Array::Ptr named = getLinks(socket)->getObject(0)->getArray("slides");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), named->size());
-        LOK_ASSERT_MESSAGE("a page keeping a position name must report it",
+        LOK_ASSERT_MESSAGE("a page linked to a position must report the name of that position",
                            !named->getObject(0)->getValue<std::string>("name").empty());
+        LOK_ASSERT_MESSAGE("a page linked to a position must record no slide identifier",
+                           named->getObject(0)->getValue<std::string>("sourceGuid").empty());
 
         socketPoll->joinThread();
     }

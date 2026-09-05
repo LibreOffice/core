@@ -111,8 +111,9 @@ SdPageLink::~SdPageLink()
             }
 
             // The page read for this one records the slide it came from, as this page does: the
-            // page read from a file records nothing of its own.
-            const OUString aRecordedName = pPage->GetBookmarkName();
+            // page read from a file records nothing of its own. The resolution below puts the page
+            // read in place of this one, so what it records is taken while this page is still here.
+            const OUString aKeptName = sd::SlideLink::GetRefreshedSlideName(*pPage, aBookmarkName);
             const OUString aRecordedGuid = pPage->GetSourcePageGuid();
 
             std::vector<OUString> aBookmarkList { aBookmarkName };
@@ -137,9 +138,7 @@ SdPageLink::~SdPageLink()
             SdPage* pReadPage = pDoc->GetSdPage((nInsertPos - 1) >> 1, PageKind::Standard);
             if (bNamedSource && pReadPage)
             {
-                if (aRecordedName.isEmpty())
-                    pReadPage->SetBookmarkName(OUString());
-
+                pReadPage->SetBookmarkName(aKeptName);
                 pReadPage->SetSourcePageGuid(aRecordedGuid);
             }
 

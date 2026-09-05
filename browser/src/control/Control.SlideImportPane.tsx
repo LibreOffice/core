@@ -542,6 +542,13 @@ class SlideImportPane {
       this.session.selection.size === 0 || this.session.state !== 'ready';
   }
 
+  private updateLinkByPosition(): void {
+    const checkbox = this.panel.querySelector(
+      '.slide-import-linkposition input',
+    ) as HTMLInputElement | null;
+    if (checkbox) checkbox.disabled = !this.session.linkToSource;
+  }
+
   private statusText(): string {
     if (this.session.state === 'opening') return _('Opening file...');
     if (this.session.state === 'inserting') return _('Inserting slides...');
@@ -647,33 +654,31 @@ class SlideImportPane {
               <input
                 type="checkbox"
                 checked={session.linkToSource}
-                onChange={(e: Event) =>
+                onChange={(e: Event) => {
                   session.setLinkToSource(
                     (e.target as HTMLInputElement).checked,
-                  )
-                }
+                  );
+                  this.updateLinkByPosition();
+                }}
               />
               {_('Link to the source file')}
             </label>
           )}
-          {session.slideCount > 0 &&
-            session.canLink &&
-            session.linkToSource && (
-              <label class="slide-import-positionnames">
-                <input
-                  type="checkbox"
-                  checked={session.updateByPosition}
-                  onChange={(e: Event) =>
-                    session.setUpdateByPosition(
-                      (e.target as HTMLInputElement).checked,
-                    )
-                  }
-                />
-                {_(
-                  'Update by slide position for sources without slide identifiers',
-                )}
-              </label>
-            )}
+          {session.slideCount > 0 && session.canLink && (
+            <label class="slide-import-linkposition">
+              <input
+                type="checkbox"
+                checked={session.linkByPosition}
+                disabled={!session.linkToSource}
+                onChange={(e: Event) =>
+                  session.setLinkByPosition(
+                    (e.target as HTMLInputElement).checked,
+                  )
+                }
+              />
+              {_('Link by slide position')}
+            </label>
+          )}
           {session.slideCount > 0 && (
             <div
               class="slide-import-list"
