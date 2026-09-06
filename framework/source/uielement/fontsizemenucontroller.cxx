@@ -24,19 +24,15 @@
 #include <services.h>
 
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/print.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/ctrltool.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <osl/mutex.hxx>
-#include <memory>
 #include <cppuhelper/supportsservice.hxx>
 
 //  Defines
@@ -44,9 +40,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-using namespace com::sun::star::view;
 
 namespace framework
 {
@@ -73,35 +67,6 @@ FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::
 
 FontSizeMenuController::~FontSizeMenuController()
 {
-}
-
-// private function
-OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame )
-{
-    OUString aPrinterName;
-
-    if ( rFrame.is() )
-    {
-        Reference< XController > xController = m_xFrame->getController();
-        if ( xController.is() )
-        {
-            Reference< XPrintable > xPrintable( xController->getModel(), UNO_QUERY );
-            if ( xPrintable.is() )
-            {
-                const Sequence< PropertyValue > aPrinterSeq = xPrintable->getPrinter();
-                for ( PropertyValue const & prop : aPrinterSeq )
-                {
-                    if ( prop.Name == "Name" )
-                    {
-                        prop.Value >>= aPrinterName;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    return aPrinterName;
 }
 
 // private function
@@ -133,23 +98,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 {
     resetPopupMenu( rPopupMenu );
 
-    std::unique_ptr<FontList> pFontList;
-    ScopedVclPtr<Printer>  pInfoPrinter;
-    OUString   aPrinterName;
-
     SolarMutexGuard aSolarMutexGuard;
-
-    // try to retrieve printer name of document
-    aPrinterName = retrievePrinterName( m_xFrame );
-    if ( !aPrinterName.isEmpty() )
-    {
-        pInfoPrinter.disposeAndReset(VclPtr<Printer>::Create( aPrinterName ));
-        if ( pInfoPrinter && pInfoPrinter->GetFontFaceCollectionCount() > 0 )
-            pFontList.reset(new FontList( pInfoPrinter.get() ));
-    }
-
-    if ( !pFontList )
-        pFontList.reset(new FontList( Application::GetDefaultDevice() ));
 
     // setup font size array
     m_aHeightArray.clear();
