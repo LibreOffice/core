@@ -33,6 +33,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -1277,15 +1278,33 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testSecurityLabel)
     const std::vector<bool> aSelected{ true, true };
     const svx::seclabel::StanagLabel aLabel = aPolicy.buildLabel(
         u"SECRET"_ustr, aSelected, u"2026-06-21T10:00:00Z"_ustr, u"2027-06-21T10:00:00Z"_ustr);
+    // Applying the label must flag the document modified (so it prompts to save).
+    uno::Reference<util::XModifiable> xModifiable(xModel, uno::UNO_QUERY_THROW);
+    xModifiable->setModified(false);
     svx::seclabel::storeLabelPart(
         xModel, aLabel.toBindingXml(),
         svx::seclabel::buildItemProps(u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr,
                                       svx::seclabel::STANAG_BINDING_SCHEMA));
+    CPPUNIT_ASSERT(xModifiable->isModified());
 
     saveAndReload(TestFilter::PPTX);
 
-    // The customXml part survived the round-trip.
-    CPPUNIT_ASSERT(parseExport(u"customXml/item1.xml"_ustr));
+    // The exported customXml part carries a spec-conformant 4774 label (generic
+    // exportCustomFragments path). local-name() XPath sidesteps the STANAG default
+    // namespaces.
+    xmlDocUniquePtr pXml = parseExport(u"customXml/item1.xml"_ustr);
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "//*[local-name()='PolicyIdentifier']", "URI",
+                u"urn:oid:1.2.826.0.1310.1.2.0");
+    assertXPathContent(pXml, "//*[local-name()='PolicyIdentifier']", u"SPIF Collabora");
+    assertXPathContent(pXml, "//*[local-name()='Classification']", u"SECRET");
+    assertXPath(pXml, "//*[local-name()='Category']", "TagName", u"Releasable To");
+    assertXPath(pXml, "//*[local-name()='Category']", "Type", u"PERMISSIVE");
+    assertXPathContent(pXml, "(//*[local-name()='GenericValue'])[1]", u"CANADA");
+    assertXPathContent(pXml, "(//*[local-name()='GenericValue'])[2]", u"UNITED KINGDOM");
+    assertXPathContent(pXml, "//*[local-name()='CreationDateTime']", u"2026-06-21T10:00:00Z");
+    assertXPath(pXml, "//*[local-name()='OriginatorConfidentialityLabel']", "ReviewDateTime",
+                u"2027-06-21T10:00:00Z");
 
     // Read the label back out of the reloaded document.
     uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
