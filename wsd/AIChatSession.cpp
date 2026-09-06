@@ -1770,7 +1770,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
                 std::string outlineStr;
                 JsonUtil::findJSONValue(argsObj, "outline", outlineStr);
                 if (!outlineStr.empty())
-                    JsonUtil::parseJSON(outlineStr, outlineObj);
+                    (void)JsonUtil::parseJSON(outlineStr, outlineObj);
             }
             if (!outlineObj && argsObj->has("slides"))
                 outlineObj = std::move(argsObj);
@@ -2215,7 +2215,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
             // stored outline when the browser sends none.
             Poco::JSON::Object::Ptr outline = obj->getObject("outline");
             if (!outline)
-                JsonUtil::parseJSON(_toolLoop->pendingTransformArgs, outline);
+                (void)JsonUtil::parseJSON(_toolLoop->pendingTransformArgs, outline);
 
             if (auto outlineErr = DeckSpec::validateOutline(outline, _toolLoop->budgets))
             {
