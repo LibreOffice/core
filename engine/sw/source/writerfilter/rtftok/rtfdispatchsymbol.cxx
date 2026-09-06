@@ -144,6 +144,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                                         pCurrentBuffer->begin(), pCurrentBuffer->end(),
                                         [](auto const& it) {
                                             return ::std::get<0>(it) == RTFBufferTypes::PAR
+                                                   || ::std::get<0>(it) == RTFBufferTypes::CellEnd
                                                    || (::std::get<0>(it) == RTFBufferTypes::Props
                                                        && ::std::get<1>(it)->getSprms().find(
                                                               NS_ooxml::LN_inTbl)
