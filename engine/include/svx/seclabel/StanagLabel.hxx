@@ -43,6 +43,10 @@ public:
     std::vector<StanagCategory> aCategories;
     OUString aCreationDateTime; ///< CreationDateTime child element (mandatory for validity)
     OUString aReviewDateTime; ///< ReviewDateTime root attribute (required when no SuccessionHandling)
+    /// The derived visual marking, cached in the 4778 binding (NOT the authoritative
+    /// 4774 label) so the banner can render it when the label's policy is not
+    /// provisioned this session. Empty when not stored; the label stays authoritative.
+    OUString aMarking;
 
     /// Serialize to the STANAG 4774 OriginatorConfidentialityLabel XML.
     OUString toXml() const;

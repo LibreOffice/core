@@ -474,17 +474,20 @@ void SvxSecurityLabelDialog::applyLabel(const OUString& rClassification,
     DateTime aReview(aNow);
     aReview.AddYears(1);
 
-    const svx::seclabel::StanagLabel aLabel
+    svx::seclabel::StanagLabel aLabel
         = m_pPolicy->buildLabel(rClassification, rSelected, utl::toISO8601(aNow.GetUNODateTime()),
                                 utl::toISO8601(aReview.GetUNODateTime()));
+    // Cache the derived marking in the 4778 binding so the banner is correct even when
+    // this policy is not provisioned on a later open (the label stays authoritative).
+    const OUString sMarking = m_pPolicy->deriveMarking(aLabel);
+    aLabel.aMarking = sMarking;
     const OUString sItemProps
         = svx::seclabel::buildItemProps(makeGuid(), svx::seclabel::STANAG_BINDING_SCHEMA);
     svx::seclabel::storeLabelPart(xModel, aLabel.toBindingXml(), sItemProps);
 
-    // Derive the marking + placements from the policy; the target renders them. The
-    // marking comes from the label just stored (the authoritative source).
+    // The target renders the marking + placements. The marking is the one just cached.
     svx::seclabel::LabelPlacement aPlacement;
-    aPlacement.aMarking = m_pPolicy->deriveMarking(aLabel);
+    aPlacement.aMarking = sMarking;
     for (const auto& rClass : m_pPolicy->aClassifications)
     {
         if (rClass.aName == rClassification)

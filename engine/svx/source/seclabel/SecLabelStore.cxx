@@ -227,12 +227,16 @@ OUString readMarking(const uno::Reference<frame::XModel>& xModel)
     if (!readLabel(xModel, aLabel))
         return OUString();
 
-    // Render with the policy the label was created under (matched by OID). When it is
-    // not provisioned this session, the label is self-describing: use its summary.
+    // Render with the policy the label was created under (matched by OID) -- the
+    // authoritative source. When it is not provisioned this session, fall back to the
+    // marking cached in the 4778 binding at apply time, and only if that is absent to
+    // the label's self-describing summary.
     SpifPolicySet aPolicies;
     aPolicies.loadProvisioned();
     if (const SpifPolicy* pPolicy = aPolicies.findByLabel(aLabel))
         return pPolicy->deriveMarking(aLabel);
+    if (!aLabel.aMarking.isEmpty())
+        return aLabel.aMarking;
     return aLabel.summary();
 }
 

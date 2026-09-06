@@ -50,6 +50,7 @@ svx::seclabel::StanagLabel makeSampleLabel()
     aLabel.aClassification = u"SECRET"_ustr;
     aLabel.aCreationDateTime = u"2026-06-21T10:00:00Z"_ustr;
     aLabel.aReviewDateTime = u"2027-06-21T10:00:00Z"_ustr;
+    aLabel.aMarking = u"SPIF Collabora SECRET CANADA // UNITED KINGDOM."_ustr;
 
     svx::seclabel::StanagCategory aCategory;
     aCategory.aTagName = u"Releasable To"_ustr;
@@ -64,6 +65,8 @@ void StanagLabelTest::testToXml()
 {
     const OUString aXml = makeSampleLabel().toXml();
 
+    // The cached marking is a 4778-binding concern; the 4774 label proper omits it.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aXml.indexOf(u"VisualMarking"));
     CPPUNIT_ASSERT(aXml.indexOf(u"urn:nato:stanag:4774:confidentialitymetadatalabel:1:0") != -1);
     CPPUNIT_ASSERT(aXml.indexOf(u"ConfidentialityLabelVersion=\"1\"") != -1);
     CPPUNIT_ASSERT(aXml.indexOf(u"ReviewDateTime=\"2027-06-21T10:00:00Z\"") != -1);
@@ -92,6 +95,13 @@ void StanagLabelTest::testToBindingXml()
     CPPUNIT_ASSERT(aXml.indexOf(u"<OriginatorConfidentialityLabel") != -1);
     CPPUNIT_ASSERT(aXml.indexOf(u"urn:nato:stanag:4774:confidentialitymetadatalabel:1:0") != -1);
     CPPUNIT_ASSERT(aXml.indexOf(u">SECRET<") != -1);
+
+    // The derived marking is cached in its own namespace, before the label (so a reader
+    // capturing it during descent meets it first) and outside the 4774 label.
+    const sal_Int32 nMarking = aXml.indexOf(u"urn:collabora:seclabel:marking:1:0");
+    CPPUNIT_ASSERT(nMarking != -1);
+    CPPUNIT_ASSERT(aXml.indexOf(u">SPIF Collabora SECRET CANADA // UNITED KINGDOM.<") != -1);
+    CPPUNIT_ASSERT(nMarking < aXml.indexOf(u"<OriginatorConfidentialityLabel"));
 }
 
 void StanagLabelTest::testItemProps()
@@ -131,6 +141,9 @@ void StanagLabelTest::testParseRoundTrip()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aParsed.aCategories[0].aValues.size());
     CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, aParsed.aCategories[0].aValues[0]);
     CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, aParsed.aCategories[0].aValues[1]);
+    // The cached marking round-trips from the 4778 binding (read back when the policy
+    // is unavailable).
+    CPPUNIT_ASSERT_EQUAL(u"SPIF Collabora SECRET CANADA // UNITED KINGDOM."_ustr, aParsed.aMarking);
 
     // Standalone label form (root is the label, no binding wrapper).
     const OString aLabel = OUStringToOString(makeSampleLabel().toXml(), RTL_TEXTENCODING_UTF8);

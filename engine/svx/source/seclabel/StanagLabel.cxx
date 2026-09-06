@@ -26,15 +26,24 @@ OUString streamToString(SvMemoryStream& rStream)
 OUString toOU(std::string_view rStr) { return OStringToOUString(rStr, RTL_TEXTENCODING_UTF8); }
 
 // Position rWalker at the OriginatorConfidentialityLabel element, descending through
-// any wrapper (e.g. a 4778 binding). Returns false if it is not present.
-bool descendToLabel(tools::XmlWalker& rWalker)
+// any wrapper (e.g. a 4778 binding). Returns false if it is not present. Any
+// VisualMarking element met on the way (our 4778-binding cache of the derived marking,
+// written before the label) is captured into rMarking.
+bool descendToLabel(tools::XmlWalker& rWalker, OUString& rMarking)
 {
     if (rWalker.name() == "OriginatorConfidentialityLabel")
         return true;
+    if (rWalker.name() == "VisualMarking")
+    {
+        // A text leaf carrying the cached marking; no label beneath it, so capture and
+        // keep scanning siblings (avoids descending / mixing content() with children()).
+        rMarking = toOU(rWalker.content());
+        return false;
+    }
     rWalker.children();
     while (rWalker.isValid())
     {
-        if (descendToLabel(rWalker))
+        if (descendToLabel(rWalker, rMarking))
             return true;
         rWalker.next();
     }
@@ -113,6 +122,17 @@ OUString StanagLabel::toBindingXml() const
         aWriter.startElement("MetadataBindingContainer");
         aWriter.startElement("MetadataBinding");
 
+        // Cache the derived visual marking in our own namespace, before the label so a
+        // reader capturing it during descent meets it first. Not part of the 4774 label
+        // (which stays authoritative); read back only when the policy is unavailable.
+        if (!aMarking.isEmpty())
+        {
+            aWriter.startElement("VisualMarking");
+            aWriter.attribute("xmlns", u"urn:collabora:seclabel:marking:1:0");
+            aWriter.content(aMarking);
+            aWriter.endElement(); // VisualMarking
+        }
+
         aWriter.startElement("Metadata");
         writeTo(aWriter); // the 4774 label re-declares its own default namespace
         aWriter.endElement(); // Metadata
@@ -162,11 +182,12 @@ bool StanagLabel::parse(SvStream& rStream)
     aCreationDateTime.clear();
     aReviewDateTime.clear();
     aCategories.clear();
+    aMarking.clear();
 
     tools::XmlWalker aWalker;
     if (!aWalker.open(&rStream))
         return false;
-    if (!descendToLabel(aWalker))
+    if (!descendToLabel(aWalker, aMarking))
         return false;
 
     aReviewDateTime = toOU(aWalker.attribute("ReviewDateTime"_ostr));

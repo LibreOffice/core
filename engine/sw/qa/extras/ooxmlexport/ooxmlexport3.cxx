@@ -96,8 +96,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     const std::vector<bool> aSelected{ true, true };
-    const svx::seclabel::StanagLabel aLabel = aPolicy.buildLabel(
+    svx::seclabel::StanagLabel aLabel = aPolicy.buildLabel(
         u"SECRET"_ustr, aSelected, u"2026-06-21T10:00:00Z"_ustr, u"2027-06-21T10:00:00Z"_ustr);
+    // Cache the derived marking in the binding (for policy-free banner read-back).
+    aLabel.aMarking = aPolicy.deriveMarking(aLabel);
     // Applying the label must flag the document modified (the grab-bag write alone
     // doesn't reliably dirty it), so the user is prompted to save.
     uno::Reference<util::XModifiable> xModifiable(xModel, uno::UNO_QUERY_THROW);
@@ -147,6 +149,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
     CPPUNIT_ASSERT_EQUAL(size_t(2), aReadBack.aCategories[0].aValues.size());
     CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, aReadBack.aCategories[0].aValues[0]);
     CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, aReadBack.aCategories[0].aValues[1]);
+    // The cached marking survives the DOCX round-trip, so the banner is correct even
+    // without the policy provisioned.
+    CPPUNIT_ASSERT_EQUAL(u"SPIF Collabora SECRET CANADA // UNITED KINGDOM."_ustr, aReadBack.aMarking);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelReplace)
