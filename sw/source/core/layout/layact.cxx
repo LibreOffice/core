@@ -1854,12 +1854,20 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             // it's the format for this interrupt
             // pass correct page frame
             // to the object formatter.
+            SfxDeleteListener aContentDeleteListener(*const_cast<SwContentFrame*>(pContent));
             if ( !IsAgain() &&
                  ( !IsInterrupt() || mbFormatContentOnInterrupt ) &&
                  pContent->IsTextFrame() &&
                  !SwObjectFormatter::FormatObjsAtFrame( *const_cast<SwContentFrame*>(pContent),
                                                       *(pContent->FindPageFrame()), this ) )
             {
+                return false;
+            }
+
+            // Formatting an anchored object can join this frame into its master and destroy it.
+            if (aContentDeleteListener.WasDeleted())
+            {
+                SAL_WARN("sw", "Content was deleted");
                 return false;
             }
 
