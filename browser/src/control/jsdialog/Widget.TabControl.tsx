@@ -98,7 +98,7 @@ function getPageFillTabInfo(widget: WidgetJSON): PageFill | null {
   const tabs = notebook && widget.type === 'tabcontrol' ? notebook.tabs : null;
   const noneIndex = tabs ? tabs.findIndex(isNoneFillTab) : -1;
 
-  if (noneIndex >= 0) {
+  if (tabs && noneIndex >= 0) {
     const selectedIndex = tabs.findIndex(function (tab) {
       return notebook.selected == tab.id;
     });
