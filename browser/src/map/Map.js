@@ -383,10 +383,25 @@ window.L.Map = window.L.Evented.extend({
 		});
 
 		this.on('commandstatechanged', function(e) {
-			// Live updates when a label is applied/removed mid-session (pushed by
-			// the engine as a .uno:SecurityLabel state change).
-			if (e.commandName === '.uno:SecurityLabel')
-				this._updateSecurityLabelBanner(e.state && e.state.marking);
+			// Live label apply/change/remove, broadcast by wsd to every session (see
+			// the .uno:SecurityLabel handling in ClientSession). Update this client's
+			// banner and notify the host integration.
+			if (e.commandName !== '.uno:SecurityLabel')
+				return;
+			var state = e.state || {};
+			this._updateSecurityLabelBanner(state.marking);
+			// The postMessage carries the whole lifecycle event (a different shape from
+			// the wire message); only the action-bearing state changes fire it, not the
+			// on-load commandvalues that seed the banner.
+			if (state.action) {
+				this.fire('postMessage', {msgId: 'Security_Label_Changed', args: {
+					action: state.action,
+					classification: state.classification || '',
+					marking: state.marking || '',
+					oldClassification: state.oldClassification || '',
+					oldMarking: state.oldMarking || '',
+				}});
+			}
 		}, this);
 
 		this.on('docloaded', function(e) {
