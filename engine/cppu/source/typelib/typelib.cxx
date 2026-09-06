@@ -1522,6 +1522,7 @@ extern "C" void typelib_typedescription_register(
 
             typelib_typedescription_release( *ppNewDescription );
             // pTDR was acquired by getByName(), so it must not be acquired again
+            // coverity[deref_after_free : FALSE] - getByName() still holds a reference here
             *ppNewDescription = pTDR->pType;
             return;
         }
