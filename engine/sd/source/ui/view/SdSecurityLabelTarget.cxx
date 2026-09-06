@@ -66,18 +66,23 @@ void SdSecurityLabelTarget::clearMarkings()
     setFooterOnAllSlides(m_rViewShell.GetDoc(), OUString(), false);
 }
 
-void SdSecurityLabelTarget::notify(const OUString& rMarking)
+void SdSecurityLabelTarget::notify(const svx::seclabel::LabelChange& rChange)
 {
     if (!comphelper::COKit::isActive())
         return;
 
-    // Same shape as SdXImpressDocument::getCommandValues(".uno:SecurityLabel"): the
-    // browser banner reads state.marking (empty => hide the banner).
+    // The enriched .uno:SecurityLabel statechanged payload: the browser banner reads
+    // state.marking (empty => hide) and fires a Security_Label_Changed postMessage from
+    // state.action + old/new. wsd broadcasts this to every session.
     tools::JsonWriter aJson;
     aJson.put("commandName", ".uno:SecurityLabel");
     {
         auto aState = aJson.startNode("state");
-        aJson.put("marking", rMarking);
+        aJson.put("action", rChange.aAction);
+        aJson.put("marking", rChange.aMarking);
+        aJson.put("classification", rChange.aClassification);
+        aJson.put("oldMarking", rChange.aOldMarking);
+        aJson.put("oldClassification", rChange.aOldClassification);
     }
     m_rViewShell.GetViewShellBase().viewCallback(COKitCallbackType::STATE_CHANGED,
                                                  aJson.finishAndGetAsOString());

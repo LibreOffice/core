@@ -872,6 +872,23 @@ statechanged: <key>=<value>
     Notifies client of state changed events of <key>.
     Eg: 'statechanged: .uno:Undo=enabled'
 
+    The security-label lifecycle event is a special statechanged whose value is a
+    JSON object rather than a scalar, and which coolwsd broadcasts to every session
+    of the document (the classification banner it drives is client-side chrome, not
+    document content). It is emitted when a label is applied, changed or removed:
+
+        statechanged: {"commandName":".uno:SecurityLabel","state":{
+            "action":"applied"|"changed"|"removed",
+            "classification":<new classification, empty on removed>,
+            "marking":<new visual marking, empty on removed>,
+            "oldClassification":<prior classification, empty on applied>,
+            "oldMarking":<prior visual marking, empty on applied>}}
+
+    The client updates its banner from "marking" and, for an action-bearing change,
+    posts a Security_Label_Changed message to the host integration (see the SDK
+    postMessage API). The separate on-load 'commandvalues command=.uno:SecurityLabel'
+    seeds the banner without an action and is not broadcast.
+
 textselectioncontent:
 <JSON>
 

@@ -3202,6 +3202,16 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
         return forwardToClient(payload);
     }
 #endif
+    else if (tokens.equals(0, "statechanged:") &&
+             firstLine.find(".uno:SecurityLabel") != std::string::npos)
+    {
+        // A security-label lifecycle event (apply/change/remove). The banner it drives
+        // is client-side chrome, not document content, so it must reach EVERY session,
+        // not just the originating view: broadcast rather than forward. The originating
+        // view is included, so this replaces the single forward below.
+        docBroker->broadcastMessage(firstLine);
+        return true;
+    }
     else if (tokens.size() == 2 && tokens.equals(0, "statechanged:"))
     {
         StringVector stateTokens(StringVector::tokenize(tokens[1], '='));

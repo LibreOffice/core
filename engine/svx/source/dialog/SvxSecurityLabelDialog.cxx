@@ -502,9 +502,25 @@ void SvxSecurityLabelDialog::applyLabel(const OUString& rClassification,
     aPlacement.bWatermark = m_pPolicy->wantsWatermark(rClassification, rSelected);
     m_pTarget->applyMarking(aPlacement);
 
-    // Push the derived marking (what the banner shows on load), not the label's
-    // generic summary, so the just-applied banner matches the dialog preview.
-    m_pTarget->notify(aPlacement.aMarking);
+    // Broadcast the lifecycle event: applied when the document had no label, else
+    // changed (carrying the prior classification + marking).
+    svx::seclabel::LabelChange aChange;
+    aChange.aAction = m_bHasLabel ? u"changed"_ustr : u"applied"_ustr;
+    aChange.aClassification = rClassification;
+    aChange.aMarking = sMarking;
+    if (m_bHasLabel)
+    {
+        aChange.aOldClassification = m_aLabel.aClassification;
+        aChange.aOldMarking = priorMarking();
+    }
+    m_pTarget->notify(aChange);
+}
+
+OUString SvxSecurityLabelDialog::priorMarking() const
+{
+    if (!m_bHasLabel)
+        return OUString();
+    return m_aLabel.aMarking.isEmpty() ? m_aLabel.summary() : m_aLabel.aMarking;
 }
 
 IMPL_LINK_NOARG(SvxSecurityLabelDialog, PolicyHdl, weld::ComboBox&, void)
@@ -544,7 +560,14 @@ IMPL_LINK_NOARG(SvxSecurityLabelDialog, RemoveHdl, weld::Button&, void)
         return;
     svx::seclabel::removeLabelPart(xModel); // the customXml part
     m_pTarget->clearMarkings(); // header/footer, body, watermark
-    m_pTarget->notify(OUString()); // empty => banner hides
+
+    // Broadcast the removal, carrying the prior classification + marking; the empty
+    // new marking hides the banner.
+    svx::seclabel::LabelChange aChange;
+    aChange.aAction = u"removed"_ustr;
+    aChange.aOldClassification = m_aLabel.aClassification;
+    aChange.aOldMarking = priorMarking();
+    m_pTarget->notify(aChange);
     m_xDialog->response(RET_OK);
 }
 

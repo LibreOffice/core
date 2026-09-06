@@ -106,6 +106,10 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
 
     std::vector<bool> collectSelection() const;
     void applyLabel(const OUString& rClassification, const std::vector<bool>& rSelected);
+    // The marking the banner was showing before this action (for a change/remove
+    // event): the label's cached marking, or its self-describing summary for pre-cache
+    // documents. Empty when the document had no label.
+    OUString priorMarking() const;
     void PopulatePolicies();
     void PopulateClassifications();
     void PopulateCategories();

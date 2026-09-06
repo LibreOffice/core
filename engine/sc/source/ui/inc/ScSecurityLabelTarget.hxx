@@ -29,7 +29,7 @@ public:
     css::uno::Reference<css::frame::XModel> getModel() const override;
     void applyMarking(const svx::seclabel::LabelPlacement& rPlacement) override;
     void clearMarkings() override;
-    void notify(const OUString& rMarking) override;
+    void notify(const svx::seclabel::LabelChange& rChange) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

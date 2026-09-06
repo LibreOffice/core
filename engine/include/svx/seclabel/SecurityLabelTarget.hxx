@@ -33,6 +33,19 @@ struct LabelPlacement
     bool bWatermark = false; ///< waterMark
 };
 
+/// A security-label lifecycle event, pushed to the browser so every client's banner
+/// updates and the host receives a postMessage. The wire form is the enriched
+/// `.uno:SecurityLabel` statechanged JSON (broadcast at the wsd layer).
+struct LabelChange
+{
+    /// "applied" (no prior label), "changed" (prior label replaced), or "removed".
+    OUString aAction;
+    OUString aClassification; ///< the new classification (empty on removed)
+    OUString aMarking; ///< the new visual marking (empty on removed)
+    OUString aOldClassification; ///< the prior classification (empty on applied)
+    OUString aOldMarking; ///< the prior visual marking (empty on applied)
+};
+
 /// App-specific placement of a security-label marking. The (app-agnostic) dialog
 /// computes the marking + placements from the SPIF policy and drives one of these;
 /// each app (Writer/Calc/Impress) renders the marking its own way. Label storage is
@@ -51,9 +64,9 @@ public:
     /// Clear all label markings this target renders (page/body/watermark).
     virtual void clearMarkings() = 0;
 
-    /// Push the document's current marking to any live UI (the classification
-    /// banner); an empty string means the label was removed. No-op off-line.
-    virtual void notify(const OUString& rMarking) = 0;
+    /// Push a label lifecycle event to any live UI: every client's classification
+    /// banner (broadcast) and a host postMessage. No-op off-line.
+    virtual void notify(const LabelChange& rChange) = 0;
 };
 
 } // namespace svx::seclabel
