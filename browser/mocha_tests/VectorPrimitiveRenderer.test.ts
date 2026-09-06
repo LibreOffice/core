@@ -1407,6 +1407,25 @@ describe('VectorPrimitiveRenderer', function () {
 		);
 	});
 
+	// Only a width of exactly 0 asks for a hairline. A thin line keeps the
+	// width the engine sent, even when that is under a device pixel.
+	it('keeps a thin stroke width as given under a scaled context', function () {
+		const renderer = new cool.VectorPrimitiveRenderer();
+		const recorder = new CanvasRecorder(200, 150);
+
+		const scale = 0.05;
+		recorder.scale(scale, scale);
+		renderer.renderPrimitive(recorder as any, {
+			type: 'polygonStroke',
+			path: 'm0 0h1000v1000h-1000z',
+			line: { color: '#000000', width: 5 },
+		} as any);
+
+		const stroke = recorder.calls.find((call: any) => call.method === 'stroke');
+		nodeassert.ok(stroke, 'nothing was stroked');
+		nodeassert.strictEqual(stroke.properties.lineWidth, 5);
+	});
+
 	describe('Bold and italic text', function () {
 		// weight 8 is bold on the wire, with a face of its own.
 		const boldItalic: any = {

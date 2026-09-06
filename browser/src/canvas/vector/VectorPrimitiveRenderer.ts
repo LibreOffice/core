@@ -209,11 +209,10 @@ namespace cool {
 
 			context.save();
 			context.strokeStyle = line.color ?? '#000000';
-			// Width 0 means a hairline.
-			context.lineWidth = Math.max(
-				line.width ?? 0,
-				this._hairlineWidth(context),
-			);
+			// Width 0 means a hairline. Any other width is drawn as given,
+			// even when that is thinner than a device pixel.
+			const width = line.width ?? 0;
+			context.lineWidth = width === 0 ? this._hairlineWidth(context) : width;
 			// The wire format can carry "none" and "unknown" for linejoin
 			// and linecap. Canvas has no matching option, so fall back
 			// to "miter" and "butt".
