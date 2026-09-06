@@ -231,8 +231,7 @@ static int ItalicMatchValue(FontSelectPattern const& rFSP, FontItalic eItalic)
 
 bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, int& rnBestMatch) const
 {
-    int nMatch = MatchFamilyName(rFSP.maTargetName) ? 240000 : 0;
-    nMatch += StyleNameMatchValue(rFSP, *this);
+    int nMatch = StyleNameMatchValue(rFSP, *this);
     nMatch += PitchMatchValue(rFSP, GetPitch());
     nMatch += WidthMatchValue(rFSP, GetWidthType());
     nMatch += WeightMatchValue(rFSP, GetWeight());

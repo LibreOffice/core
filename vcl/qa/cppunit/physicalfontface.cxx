@@ -281,7 +281,6 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
     aFSP.SetPitch(FontPitch::PITCH_VARIABLE);
     aFSP.maTargetName = "DejaVu Sans";
 
-    const int EXPECTED_FAMILY = 240'000;
     const int EXPECTED_STYLE = 120'000;
     const int EXPECTED_PITCH = 20'000;
     const int EXPECTED_WIDTHTYPE = 400;
@@ -289,9 +288,8 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
     const int EXPECTED_ITALIC = 900;
     const int EXPECTED_ORIENTATION = 80;
 
-    const int EXPECTED_MATCH = EXPECTED_FAMILY + EXPECTED_STYLE + EXPECTED_PITCH
-                               + EXPECTED_WIDTHTYPE + EXPECTED_WEIGHT + EXPECTED_ITALIC
-                               + EXPECTED_ORIENTATION;
+    const int EXPECTED_MATCH = EXPECTED_STYLE + EXPECTED_PITCH + EXPECTED_WIDTHTYPE
+                               + EXPECTED_WEIGHT + EXPECTED_ITALIC + EXPECTED_ORIENTATION;
 
     CPPUNIT_ASSERT(aTestedFontFace->IsBetterMatch(aFSP, nFaceMatch));
     CPPUNIT_ASSERT_EQUAL(EXPECTED_MATCH, nFaceMatch);
