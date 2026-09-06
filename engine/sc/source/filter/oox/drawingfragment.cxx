@@ -282,6 +282,13 @@ void DrawingFragment::onEndElement()
             {
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
 
+                // In these two ranges of angles the anchor rectangle describes the bounding
+                // box of the rotated shape, so its width and height are exchanged
+                const sal_Int32 nRotation = mxShape->getRotation();
+                const bool bQuarterTurn
+                    = ((nRotation >= 45 * PER_DEGREE && nRotation < 135 * PER_DEGREE)
+                       || (nRotation >= 225 * PER_DEGREE && nRotation < 315 * PER_DEGREE));
+
                 // For twoCellAnchor we should set the size and anchor based on the `editAs` attribute (ISO-IEC-29500-1 2016 [20.5.3.2])
                 if (mxAnchor->getAnchorType() == ShapeAnchor::ANCHOR_TWOCELL
                     && (mxAnchor->getEditAs() == ShapeAnchor::ANCHOR_ONECELL
@@ -290,16 +297,14 @@ void DrawingFragment::onEndElement()
                     const css::awt::Size& rShapeSize = mxShape->getSize();
                     if (rShapeSize.Width > 0 && rShapeSize.Height > 0)
                     {
-                        aShapeRectEmu.Width = rShapeSize.Width;
-                        aShapeRectEmu.Height = rShapeSize.Height;
+                        aShapeRectEmu.Width = bQuarterTurn ? rShapeSize.Height : rShapeSize.Width;
+                        aShapeRectEmu.Height = bQuarterTurn ? rShapeSize.Width : rShapeSize.Height;
                     }
                 }
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
-                    const sal_Int32 aRotation = mxShape->getRotation();
-                    if ((aRotation >= 45  * PER_DEGREE && aRotation < 135 * PER_DEGREE)
-                     || (aRotation >= 225 * PER_DEGREE && aRotation < 315 * PER_DEGREE))
+                    if (bQuarterTurn)
                     {
                         // When rotating any shape in MSO Excel within the range of degrees given above,
                         // Excel changes the cells in which the shape is anchored. The new position of

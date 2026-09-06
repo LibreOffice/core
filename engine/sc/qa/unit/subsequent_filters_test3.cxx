@@ -2073,6 +2073,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTwoCellAnchorEditAsOneCell)
     tools::Rectangle aRect = pObj->GetSnapRect();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12091.0, static_cast<double>(aRect.GetWidth()), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7620.0, static_cast<double>(aRect.GetHeight()), 1.0);
+
+    pPage = pDrawLayer->GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+
+    // bounding box must correctly reflect rotation, 120 degrees CCW (240 degrees CW in Excel)
+    CPPUNIT_ASSERT_EQUAL((12000_deg100).get(), pObj->GetRotateAngle().get());
+    aRect = pObj->GetSnapRect();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(11302.0, static_cast<double>(aRect.GetWidth()), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(12252.0, static_cast<double>(aRect.GetHeight()), 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testThreadedCommentImport)
