@@ -49,6 +49,7 @@ template <class... Args> void PutToTypeSeq(Type* p, const Type& t, Args... args)
 template <class... Args> Sequence<Type> InitTypeSeq(Args... args)
 {
     Sequence<Type> s(TypeSeqLen(args...));
+    // coverity[deref_arg : FALSE] - args keeps its own reference to each type
     PutToTypeSeq(s.getArray(), args...);
     return s;
 }

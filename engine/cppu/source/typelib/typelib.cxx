@@ -1515,6 +1515,7 @@ extern "C" void typelib_typedescription_register(
                     typelib_typedescription_release( pTDR->pType );
                 }
 
+                // coverity[deref_after_free : FALSE] - pTDR->pType is pTDR, held by getByName()
                 pTDR->pType->bOnDemand = (*ppNewDescription)->bOnDemand;
                 // initialized
                 pTDR->pType->pWeakRef = pTDR;

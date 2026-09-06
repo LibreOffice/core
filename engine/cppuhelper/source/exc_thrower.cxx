@@ -305,6 +305,7 @@ Any getCaughtException()
     uno_type_any_constructAndConvert(
         &ret, exc->pData, exc->pType, uno2cpp.get() );
     uno_any_destruct( exc, nullptr );
+    // coverity[deref_arg : FALSE] - ret holds its own reference to the type
     return ret;
 #endif
 }
