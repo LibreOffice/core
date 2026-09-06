@@ -21,6 +21,9 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <cstdlib>
+#include <string>
+
 /// HostUtilTests unit-tests.
 class HostUtilTests : public CPPUNIT_NS::TestFixture
 {
@@ -31,6 +34,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
     CPPUNIT_TEST(testGetNewUriBracketsIPv6Host);
     CPPUNIT_TEST(testHostListWithGaps);
+    CPPUNIT_TEST(testEveryAllowedKitHostIsAccepted);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -39,6 +43,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testFirstHostTrustedOnlyInFirstMode();
     void testGetNewUriBracketsIPv6Host();
     void testHostListWithGaps();
+    void testEveryAllowedKitHostIsAccepted();
 
 public:
     /// Clear the parsed host state, matching the empty state it starts with, and
@@ -247,6 +252,35 @@ void HostUtilTests::testHostListWithGaps()
     LOK_ASSERT(!HostUtil::allowedWopiHost("denied.example"));
     LOK_ASSERT(!HostUtil::allowedWopiHost("garbage.example"));
     LOK_ASSERT(!HostUtil::allowedWopiHost("garbage2.example"));
+}
+
+void HostUtilTests::testEveryAllowedKitHostIsAccepted()
+{
+    constexpr std::string_view testname = __func__;
+
+    const char* previous = std::getenv("KIT_HOST_ALLOWLIST");
+    const std::string saved = previous ? previous : std::string();
+
+    ::setenv("KIT_HOST_ALLOWLIST", "192.168.0.0/16\n127.0.0.1/32\n::1/128\nlocalhost", 1);
+
+    // Every entry of the list allows its hosts, whether it is the first one or the last.
+    LOK_ASSERT(!HostUtil::isForbiddenKitHost("192.168.1.5"));
+    LOK_ASSERT(!HostUtil::isForbiddenKitHost("127.0.0.1"));
+    LOK_ASSERT(!HostUtil::isForbiddenKitHost("::1"));
+    LOK_ASSERT(!HostUtil::isForbiddenKitHost("localhost"));
+
+    // A host the list does not name stays forbidden.
+    LOK_ASSERT(HostUtil::isForbiddenKitHost("example.com"));
+    LOK_ASSERT(HostUtil::isForbiddenKitHost("10.0.0.1"));
+
+    // An empty list allows every host.
+    ::setenv("KIT_HOST_ALLOWLIST", "", 1);
+    LOK_ASSERT(!HostUtil::isForbiddenKitHost("example.com"));
+
+    if (previous)
+        ::setenv("KIT_HOST_ALLOWLIST", saved.c_str(), 1);
+    else
+        ::unsetenv("KIT_HOST_ALLOWLIST");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HostUtilTests);

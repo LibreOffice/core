@@ -26,7 +26,7 @@
 #include <common/IpNetwork.hpp>
 #include <common/Log.hpp>
 #include <common/RegexUtil.hpp>
-#include <common/StringVector.hpp>
+#include <common/Util.hpp>
 
 #include <map>
 #include <optional>
@@ -372,10 +372,9 @@ bool HostUtil::isForbiddenKitHost(const std::string& host)
         return false;
 
     std::string regex;
-    const StringVector entries = StringVector::tokenize(std::string(allowlist), '\n');
-    for (std::size_t i = 0; i < entries.size(); ++i)
+    for (const std::string& entry : Util::splitStringToVector(allowlist, '\n'))
     {
-        if (std::optional<Util::IpNetwork> network = Util::IpNetwork::parse(entries[i]))
+        if (std::optional<Util::IpNetwork> network = Util::IpNetwork::parse(entry))
         {
             if (network->contains(host))
                 return false;
@@ -384,7 +383,7 @@ bool HostUtil::isForbiddenKitHost(const std::string& host)
         {
             if (!regex.empty())
                 regex += '|';
-            regex += entries[i];
+            regex += entry;
         }
     }
 
