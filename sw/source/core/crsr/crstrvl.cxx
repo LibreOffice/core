@@ -1113,12 +1113,9 @@ SwField* SwCursorShell::GetCurField( const bool bIncludeInputFieldAtStart ) cons
 
 bool SwCursorShell::CursorInsideInputField() const
 {
-    for(SwPaM& rCursor : GetCursor()->GetRingContainer())
-    {
-        if (dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, ::sw::GetTextAttrMode::Parent)))
-            return true;
-    }
-    return false;
+    return std::ranges::any_of(GetCursor()->GetRingContainer(), [](SwPaM& rCursor){
+        return dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, ::sw::GetTextAttrMode::Parent));
+    });
 }
 
 SwTextContentControl* SwCursorShell::CursorInsideContentControl() const
