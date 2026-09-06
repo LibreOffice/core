@@ -4569,6 +4569,7 @@ int COOLWSD::cleanup(int returnValue)
     return returnValue;
 }
 
+// coverity[root_function] : don't warn about uncaught exceptions
 int COOLWSD::main(const std::vector<std::string>& /*args*/)
 {
     SigUtil::resetTerminationFlags();
