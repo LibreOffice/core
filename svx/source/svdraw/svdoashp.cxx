@@ -837,7 +837,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
     MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-    const sal_Int32* pDefData = nullptr;
+    std::span<const sal_Int32> pDefData;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
@@ -851,11 +851,12 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     const uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
-    if ( pDefCustomShape && pDefData )  // now check if we have to default some adjustment values
+    if ( pDefCustomShape && !pDefData.empty() )  // now check if we have to default some adjustment values
     {
         // first check if there are adjustment values are to be appended
         sal_Int32 i, nAdjustmentValues = seqAdjustmentValues.getLength();
-        sal_Int32 nAdjustmentDefaults = *pDefData++;
+        sal_Int32 nAdjustmentDefaults = pDefData[0];
+        pDefData = pDefData.subspan(1);
         if ( nAdjustmentDefaults > nAdjustmentValues )
             seqAdjustmentValues.realloc( nAdjustmentDefaults );
         auto pseqAdjustmentValues = seqAdjustmentValues.getArray();
@@ -942,9 +943,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Path/Segments
     static constexpr OUString sSegments( u"Segments"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
-    if ( !pAny && pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
+    if ( !pAny && pDefCustomShape && !pDefCustomShape->pElements.empty() )
     {
-        sal_Int32 i, nCount = pDefCustomShape->nElements;
+        sal_Int32 i, nCount = pDefCustomShape->pElements.size();
         uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments( nCount );
         auto pseqSegments = seqSegments.getArray();
         for ( i = 0; i < nCount; i++ )
@@ -1177,9 +1178,9 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                 uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments1;
                 if ( *pAny >>= seqSegments1 )
                 {
-                    if ( pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
+                    if ( pDefCustomShape && !pDefCustomShape->pElements.empty())
                     {
-                        sal_Int32 i, nCount = pDefCustomShape->nElements;
+                        sal_Int32 i, nCount = pDefCustomShape->pElements.size();
                         if ( nCount )
                         {
                             uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments2( nCount );
@@ -1208,7 +1209,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                     }
                 }
             }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nElements == 0 ) || ( pDefCustomShape->pElements == nullptr ) ) )
+            else if ( pDefCustomShape && pDefCustomShape->pElements.empty() )
                 bIsDefaultGeometry = true;
         }
         break;
