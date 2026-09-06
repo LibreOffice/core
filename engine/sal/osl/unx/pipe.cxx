@@ -513,6 +513,7 @@ sal_Int32 osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n)
         pBuffer= static_cast< char const* >(pBuffer) + RetVal;
     }
 
+    // coverity[return_overflow : FALSE] - send writes at most BytesToSend, so BytesSend stays within n
     return BytesSend;
 }
 
@@ -535,6 +536,7 @@ sal_Int32 osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
         pBuffer= static_cast< char* >(pBuffer) + RetVal;
     }
 
+    // coverity[return_overflow : FALSE] - recv reads at most BytesToRead, so BytesRead stays within n
     return BytesRead;
 }
 
