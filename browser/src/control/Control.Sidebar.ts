@@ -139,6 +139,10 @@ class Sidebar extends SidebarBase {
 			'A11yCheckDeck',
 		];
 
+		if (!decks.includes(currentDeck)) {
+			return;
+		}
+
 		const deckPref: { [key: string]: string } = {};
 		decks.forEach((deck: string) => {
 			deckPref[deck] = currentDeck === deck ? 'true' : 'false';
