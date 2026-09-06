@@ -11,8 +11,8 @@
 #
 # Run from a checkout of the online repository that has the translations
 # repository cloned at engine/translations. The tag name minus its product
-# prefix becomes the version, so cp-26.04.3-2 gives
-# collabora-office-26.04.3-2.tar.xz.
+# prefix becomes the version, so coda-26.04.4.1-1 gives
+# collabora-office-26.04.4.1-1.tar.xz.
 
 set -e
 

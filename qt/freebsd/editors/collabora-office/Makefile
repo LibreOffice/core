@@ -1,5 +1,5 @@
 PORTNAME=	collabora-office
-DISTVERSION=	26.04.3-2
+DISTVERSION=	26.04.4.1-1
 CATEGORIES=	editors
 # The source tarball is made by scripts/make-source-tarball.sh from the
 # release tag and published next to the branding tarball.

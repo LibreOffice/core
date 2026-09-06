@@ -20,12 +20,12 @@ tag plus the translations repository, which carries the same tag, at
 there:
 
 ```sh
-scripts/make-source-tarball.sh cp-26.04.3-2 /tmp/out
+scripts/make-source-tarball.sh coda-26.04.4.1-1 /tmp/out
 ```
 
 The tag's product prefix is dropped for the version, so the example gives
-`collabora-office-26.04.3-2.tar.xz`, and the port's `DISTVERSION` is
-`26.04.3-2`. Publish the tarball under
+`collabora-office-26.04.4.1-1.tar.xz`, and the port's `DISTVERSION` is
+`26.04.4.1-1`. Publish the tarball under
 `https://www.collaboraoffice.com/downloads/collabora-office/src/`, the
 `MASTER_SITES` entry the port fetches from.
 
