@@ -106,8 +106,25 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
 
     saveAndReload(TestFilter::DOCX);
 
-    // The customXml part survived the round-trip.
-    CPPUNIT_ASSERT(parseExport(u"customXml/item1.xml"_ustr));
+    // The exported customXml part carries a spec-conformant 4774 label: assert the
+    // serialized fields directly (not just the re-parsed model), so a serialization
+    // regression is caught. local-name() XPath sidesteps the STANAG default namespaces.
+    xmlDocUniquePtr pXml = parseExport(u"customXml/item1.xml"_ustr);
+    CPPUNIT_ASSERT(pXml);
+    // PolicyIdentifier: 4774 requires the policy name text; we also assert the OID URI.
+    assertXPath(pXml, "//*[local-name()='PolicyIdentifier']", "URI",
+                u"urn:oid:1.2.826.0.1310.1.2.0");
+    assertXPathContent(pXml, "//*[local-name()='PolicyIdentifier']", u"SPIF Collabora");
+    assertXPathContent(pXml, "//*[local-name()='Classification']", u"SECRET");
+    // Category: TagName + Type both mandatory; values via GenericValue only, order preserved.
+    assertXPath(pXml, "//*[local-name()='Category']", "TagName", u"Releasable To");
+    assertXPath(pXml, "//*[local-name()='Category']", "Type", u"PERMISSIVE");
+    assertXPathContent(pXml, "(//*[local-name()='GenericValue'])[1]", u"CANADA");
+    assertXPathContent(pXml, "(//*[local-name()='GenericValue'])[2]", u"UNITED KINGDOM");
+    // Timestamps: CreationDateTime element (mandatory), ReviewDateTime attribute.
+    assertXPathContent(pXml, "//*[local-name()='CreationDateTime']", u"2026-06-21T10:00:00Z");
+    assertXPath(pXml, "//*[local-name()='OriginatorConfidentialityLabel']", "ReviewDateTime",
+                u"2027-06-21T10:00:00Z");
 
     // The marking is in the (shared) page-style header.
     uno::Reference<text::XText> xHeader = getProperty<uno::Reference<text::XText>>(
