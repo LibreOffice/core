@@ -1239,7 +1239,8 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
         ocUDExternal,
         ocDde,
         ocWebservice,
-        ocGetPivotData
+        ocGetPivotData,
+        ocSpill
     });
 
     // Don't enable threading once we decided to disable it.
