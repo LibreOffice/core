@@ -112,9 +112,6 @@ race:salhelper::Timer
 # from multiple threads. I am nervous to randomly add locks because it is performance sensitive.
 race:LanguageTag::
 
-# harmless race on m_storedTypeRefs
-race:cppu::getTypeEntries
-
 # double-checked locking in our 
 #    inline ::cpo::uno::Type const & cppu_detail_getUnoType(css:uno:Foo const *)
 # generated code

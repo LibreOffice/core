@@ -20,6 +20,8 @@
 #ifndef INCLUDED_CPPUHELPER_IMPLBASE7_HXX
 #define INCLUDED_CPPUHELPER_IMPLBASE7_HXX
 
+#include <atomic>
+
 #include "cppuhelper/implbase_ex.hxx"
 #include "rtl/instance.hxx"
 #include "cppuhelper/weak.hxx"
@@ -33,7 +35,7 @@ namespace cppu
     struct class_data7
     {
         sal_Int16 m_nTypes;
-        bool m_storedTypeRefs;
+        std::atomic<bool> m_storedTypeRefs;
         bool m_storedId;
         sal_Int8 m_id[ 16 ];
         type_entry m_typeEntries[ 7 + 1 ];

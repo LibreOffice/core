@@ -22,6 +22,7 @@
 
 #include "sal/config.h"
 
+#include <atomic>
 #include <cstddef>
 #include <utility>
 
@@ -50,7 +51,7 @@ namespace detail {
 
 template<std::size_t N> struct class_dataN {
     sal_Int16 m_nTypes;
-    bool m_storedTypeRefs;
+    std::atomic<bool> m_storedTypeRefs;
     bool m_storedId;
     sal_Int8 m_id[16];
     type_entry m_typeEntries[N + 1];

@@ -89,13 +89,8 @@ type_entry * getTypeEntries( class_data * cd )
                 // ref is statically held by getCppuType()
                 pEntry->m_type.typeRef = rType.getTypeLibType();
             }
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             cd->m_storedTypeRefs = true;
         }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return pEntries;
 }
