@@ -167,10 +167,19 @@ class SwTaggedPDFHelper
     void BeginInlineStructureElements();
     void EndStructureElements();
 
+    // what an open link or span leaves for this portion to do
+    enum class Continuation
+    {
+        None, // nothing is open that covers it
+        Whole, // the open tag covers it, so no new tag
+        SpanInLink // the link goes on, but its properties do not
+    };
+
     void EndCurrentAll();
     void EndCurrentSpan();
     void CreateCurrentSpan(SwTextPaintInfo const& rInf, OUString const& rStyleName);
-    bool CheckContinueSpan(SwTextPaintInfo const& rInf, std::u16string_view rStyleName, SwTextAttr const* pInetFormatAttr);
+    Continuation CheckContinuation(SwTextPaintInfo const& rInf, OUString const& rStyleName,
+                                   SwTextAttr const* pInetFormatAttr);
 
     bool CheckReopenTag();
     void CheckRestoreTag() const;

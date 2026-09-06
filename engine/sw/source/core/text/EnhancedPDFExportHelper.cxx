@@ -164,6 +164,8 @@ struct SwEnhancedPDFState
         SwFontScript nScript;
         LanguageType nLang;
         OUString StyleName;
+
+        bool operator==(const Span&) const = default;
     };
 
     struct Link
@@ -172,6 +174,8 @@ struct SwEnhancedPDFState
         sal_Int32 nStructElement;
         // the annotations already nested in it
         std::vector<sal_Int32> AnnotIds;
+        // the properties the Link's own tag carries
+        Span aSpan;
     };
 
     ::std::optional<Span> m_oCurrentSpan;
@@ -695,7 +699,7 @@ void SwTaggedPDFHelper::EndTag()
 void SwTaggedPDFHelper::DeferTag()
 {
     assert(!m_aOpenedTags.empty());
-    assert(mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.empty());
+    assert(mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.size() <= 1); // a span in a link
     assert(mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan
            || mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
     mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.push_back(m_aOpenedTags.back());
@@ -713,9 +717,18 @@ void SwTaggedPDFHelper::EndDeferredTag()
 {
     assert(IsDeferredTagCurrent());
     auto& rState(*mpPDFExtOutDevData->GetSwPDFState());
-    assert(!rState.m_oCurrentSpan || !rState.m_oCurrentLink); // one reset covers both
-    rState.m_oCurrentSpan.reset();
-    rState.m_oCurrentLink.reset();
+    // one deferred tag per open span or link
+    assert(rState.m_DeferredTags.size()
+           == (rState.m_oCurrentSpan ? 1u : 0u) + (rState.m_oCurrentLink ? 1u : 0u));
+    // a span is inside the link, so it is the innermost of the two
+    if (rState.m_oCurrentSpan)
+    {
+        rState.m_oCurrentSpan.reset();
+    }
+    else
+    {
+        rState.m_oCurrentLink.reset();
+    }
     rState.m_DeferredTags.pop_back();
     EndTag();
 }
@@ -750,7 +763,11 @@ namespace {
             return;
 
         sal_Int32 nLinkId = (*aIter).second;
-        if (roCurrentLink && roCurrentLink->nStructElement == nCurrentSE) // not a nested SE
+        // a Link of its own, for a footnote or a fly, is not the link being subdivided
+        const auto& rDeferredTags(rPDFExtOutDevData.GetSwPDFState()->m_DeferredTags);
+        const bool bInSpanOfLink(roCurrentLink && rPDFExtOutDevData.GetSwPDFState()->m_oCurrentSpan
+                                 && !rDeferredTags.empty() && rDeferredTags.back() == nCurrentSE);
+        if (roCurrentLink && (roCurrentLink->nStructElement == nCurrentSE || bInSpanOfLink))
         {
             // every portion of a line finds that line's annotation again
             if (std::find(roCurrentLink->AnnotIds.begin(), roCurrentLink->AnnotIds.end(), nLinkId)
@@ -759,6 +776,15 @@ namespace {
                 return;
             }
             roCurrentLink->AnnotIds.push_back(nLinkId);
+            if (bInSpanOfLink)
+            {
+                // vcl accepts the attribute on a Link, so set it on the link
+                rPDFExtOutDevData.SetCurrentStructureElement(roCurrentLink->nStructElement);
+                rPDFExtOutDevData.SetStructureAttributeNumerical(
+                    vcl::pdf::PDFWriter::LinkAnnotation, nLinkId);
+                rPDFExtOutDevData.SetCurrentStructureElement(nCurrentSE);
+                return;
+            }
         }
         rPDFExtOutDevData.SetStructureAttributeNumerical(vcl::pdf::PDFWriter::LinkAnnotation,
                                                          nLinkId);
@@ -1938,73 +1964,78 @@ void SwTaggedPDFHelper::EndCurrentSpan()
     EndDeferredTag();
 }
 
+namespace
+{
+// the properties a Span tag would carry for this portion
+SwEnhancedPDFState::Span MakeSpan(const SwTextPaintInfo& rInf, const OUString& rStyleName)
+{
+    return { .eUnderline = rInf.GetFont()->GetUnderline(),
+             .eOverline = rInf.GetFont()->GetOverline(),
+             .eStrikeout = rInf.GetFont()->GetStrikeout(),
+             .eFontEmphasis = rInf.GetFont()->GetEmphasisMark(),
+             .nEscapement = rInf.GetFont()->GetEscapement(),
+             .nScript = rInf.GetFont()->GetActual(),
+             .nLang = rInf.GetFont()->GetLanguage(),
+             .StyleName = rStyleName };
+}
+}
+
 void SwTaggedPDFHelper::CreateCurrentSpan(
         SwTextPaintInfo const& rInf, OUString const& rStyleName)
 {
     assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan);
-    mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.emplace(
-        SwEnhancedPDFState::Span{
-            rInf.GetFont()->GetUnderline(),
-            rInf.GetFont()->GetOverline(),
-            rInf.GetFont()->GetStrikeout(),
-            rInf.GetFont()->GetEmphasisMark(),
-            rInf.GetFont()->GetEscapement(),
-            rInf.GetFont()->GetActual(),
-            rInf.GetFont()->GetLanguage(),
-            rStyleName});
+    mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.emplace(MakeSpan(rInf, rStyleName));
 }
 
-bool SwTaggedPDFHelper::CheckContinueSpan(
-        SwTextPaintInfo const& rInf, std::u16string_view const rStyleName,
-        SwTextAttr const*const pInetFormatAttr)
+SwTaggedPDFHelper::Continuation
+SwTaggedPDFHelper::CheckContinuation(SwTextPaintInfo const& rInf, OUString const& rStyleName,
+                                     SwTextAttr const* const pInetFormatAttr)
 {
-    // for now, don't create span inside of link - this should be very rare
-    // situation and it looks complicated to implement.
-    assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan
-        || !mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
-    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+    auto& rState(*mpPDFExtOutDevData->GetSwPDFState());
+    if (rState.m_oCurrentLink)
     {
-        if (pInetFormatAttr
-            && pInetFormatAttr == mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink->pAttr)
+        if (!pInetFormatAttr || pInetFormatAttr != rState.m_oCurrentLink->pAttr)
         {
-            return true;
-        }
-        else
-        {
-            if (IsDeferredTagCurrent()) // a ruby leaves it to the paragraph
+            // the span is inside the link, so it closes first
+            if (rState.m_oCurrentSpan && IsDeferredTagCurrent())
+            {
+                EndCurrentSpan();
+            }
+            if (IsDeferredTagCurrent())
             {
                 EndDeferredTag();
             }
-            return false;
+            return Continuation::None;
         }
-    }
-    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan && pInetFormatAttr)
-    {
-        if (IsDeferredTagCurrent()) // a fly leaves it to the paragraph
+        // the link goes on; a property change subdivides it instead of splitting it
+        const SwEnhancedPDFState::Span aSpan(MakeSpan(rInf, rStyleName));
+        if (rState.m_oCurrentSpan)
         {
-            EndCurrentSpan();
+            if (aSpan == *rState.m_oCurrentSpan)
+            {
+                return Continuation::Whole;
+            }
+            if (IsDeferredTagCurrent())
+            {
+                EndCurrentSpan();
+            }
         }
-        return false;
+        return aSpan == rState.m_oCurrentLink->aSpan ? Continuation::Whole
+                                                     : Continuation::SpanInLink;
     }
-
-    if (!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
-        return false;
-
-    SwEnhancedPDFState::Span const& rCurrent(*mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan);
-
-    bool const ret(rCurrent.eUnderline == rInf.GetFont()->GetUnderline()
-                && rCurrent.eOverline == rInf.GetFont()->GetOverline()
-                && rCurrent.eStrikeout == rInf.GetFont()->GetStrikeout()
-                && rCurrent.eFontEmphasis == rInf.GetFont()->GetEmphasisMark()
-                && rCurrent.nEscapement == rInf.GetFont()->GetEscapement()
-                && rCurrent.nScript == rInf.GetFont()->GetActual()
-                && rCurrent.nLang == rInf.GetFont()->GetLanguage()
-                && rCurrent.StyleName == rStyleName);
-    if (!ret && IsDeferredTagCurrent()) // a fly leaves it to the paragraph
+    if (!rState.m_oCurrentSpan)
+    {
+        return Continuation::None;
+    }
+    if (!pInetFormatAttr && MakeSpan(rInf, rStyleName) == *rState.m_oCurrentSpan)
+    {
+        return Continuation::Whole;
+    }
+    if (IsDeferredTagCurrent()) // a fly in the span leaves it to the paragraph
     {
         EndCurrentSpan();
     }
-    return ret;
+    return Continuation::None;
 }
 
 void SwTaggedPDFHelper::BeginInlineStructureElements()
@@ -2035,12 +2066,14 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
     }
 
+    const OUString aStyleName(sStyleName.toString());
     // note: ILSE may be nested, so only end the span if needed to start new one
-    bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName.toString(), pInetFormatAttr));
+    const Continuation eContinuation(CheckContinuation(rInf, aStyleName, pInetFormatAttr));
 
+    const sal_Int32 nParentSE(mpPDFExtOutDevData->GetCurrentStructureElement());
     const auto& rDeferredTags(mpPDFExtOutDevData->GetSwPDFState()->m_DeferredTags);
-    // only one tag waits for the next portion; a ruby closes the rest with itself
-    const bool bCanDefer(rDeferredTags.empty());
+    // a span may be deferred inside its link, but not inside a ruby
+    const bool bCanDefer(rDeferredTags.empty() || rDeferredTags.back() == nParentSE);
     sal_uInt16 nPDFType = USHRT_MAX;
     OUString aPDFType;
     bool bDeferTag(false);
@@ -2072,7 +2105,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 // Check for Link:
                 if( pInetFormatAttr )
                 {
-                    if (!isContinueSpan)
+                    if (eContinuation == Continuation::None)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                         aPDFType = aLinkString;
@@ -2080,7 +2113,8 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         {
                             assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
                             mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(
-                                SwEnhancedPDFState::Link{ pInetFormatAttr, -1, {} });
+                                SwEnhancedPDFState::Link{
+                                    pInetFormatAttr, -1, {}, MakeSpan(rInf, aStyleName) });
                             bDeferTag = true;
                         }
                     }
@@ -2090,12 +2124,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         SwRect aPorRect;
                         rInf.CalcRect(*pPor, &aPorRect);
                         LinkLinkLink(*mpPDFExtOutDevData, aPorRect);
+                        if (eContinuation == Continuation::SpanInLink)
+                        {
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::Span);
+                            aPDFType = aSpanString;
+                            bDeferSpan = bCanDefer;
+                        }
                     }
                 }
                 // Emphasis
                 else if (sStyleName == constEmphasisStyleName)
                 {
-                    if (!isContinueSpan)
+                    if (eContinuation == Continuation::None)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Emphasis);
                         aPDFType = constEmphasisStyleName;
@@ -2105,7 +2145,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 // Strong
                 else if (sStyleName == constStrongEmphasisStyleName)
                 {
-                    if (!isContinueSpan)
+                    if (eContinuation == Continuation::None)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Strong);
                         aPDFType = constStrongEmphasisStyleName;
@@ -2115,7 +2155,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 // Check for Quote/Code character style:
                 else if (sStyleName == aQuotation)
                 {
-                    if (!isContinueSpan)
+                    if (eContinuation == Continuation::None)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Quote);
                         aPDFType = u"Quote"_ustr;
@@ -2124,14 +2164,14 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 }
                 else if (sStyleName == aSourceText)
                 {
-                    if (!isContinueSpan)
+                    if (eContinuation == Continuation::None)
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Code);
                         aPDFType = u"Code"_ustr;
                         bDeferSpan = bCanDefer;
                     }
                 }
-                else if (!isContinueSpan)
+                else if (eContinuation == Continuation::None)
                 {
                     const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
                     const SwFontScript nFont = rInf.GetFont()->GetActual();
@@ -2233,7 +2273,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
         // for FootnoteNum, is called twice: outer generates Lbl, inner Link
         case PortionType::FootnoteNum:
-            assert(!isContinueSpan); // is at start
+            assert(eContinuation == Continuation::None); // is at start
             if (mpPorInfo->m_Mode == 0)
             {   // tdf#152218 link both directions
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
@@ -2244,7 +2284,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::Number:
         case PortionType::Bullet:
         case PortionType::GrfNum:
-            assert(!isContinueSpan); // is at start
+            assert(eContinuation == Continuation::None); // is at start
             if (mpPorInfo->m_Mode == 1)
             {   // only works for multiple lines via wrapper from PaintSwFrame
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::LILabel);
@@ -2266,7 +2306,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         BeginTag( static_cast<vcl::pdf::StructElement>(nPDFType), aPDFType );
         if (bDeferSpan)
         {
-            CreateCurrentSpan(rInf, sStyleName.toString());
+            CreateCurrentSpan(rInf, aStyleName);
             bDeferTag = true;
         }
         if (bDeferTag)

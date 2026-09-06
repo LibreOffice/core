@@ -3070,6 +3070,139 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithRuby)
     CPPUNIT_ASSERT(std::find(aRubyKids.begin(), aRubyKids.end(), "RT"_ostr) != aRubyKids.end());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithSpan)
+{
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"LinkWithSpan.fodt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    vcl::filter::PDFObjectElement* pLinkSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Link")
+        {
+            CPPUNIT_ASSERT_MESSAGE("a language change must not split the link", !pLinkSE);
+            pLinkSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pLinkSE);
+
+    // the link keeps the language of its first portion, so the German must not be on it
+    auto pLinkLang
+        = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pLinkSE->Lookup("Lang"_ostr));
+    if (pLinkLang)
+    {
+        CPPUNIT_ASSERT(pLinkLang->GetValue() != "de-DE"_ostr);
+    }
+
+    // the run that differs is a Span inside it, not a second Link
+    auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pLinkSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pKids);
+    size_t nMCID(0);
+    size_t nMCIDBeforeSpan(0);
+    vcl::filter::PDFObjectElement* pSpanSE(nullptr);
+    for (const auto pElement : pKids->GetElements())
+    {
+        if (dynamic_cast<vcl::filter::PDFNumberElement*>(pElement))
+        {
+            ++nMCID;
+            continue;
+        }
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        if (!pRef)
+            continue; // the OBJR for the annotation
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        CPPUNIT_ASSERT_EQUAL("Span"_ostr, pKidS->GetValue());
+        CPPUNIT_ASSERT(!pSpanSE);
+        pSpanSE = pKid;
+        nMCIDBeforeSpan = nMCID;
+    }
+    CPPUNIT_ASSERT(pSpanSE);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), nMCID);
+    // it reads between the text before it and the text after it
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nMCIDBeforeSpan);
+
+    auto pSpanLang
+        = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pSpanSE->Lookup("Lang"_ostr));
+    CPPUNIT_ASSERT(pSpanLang);
+    CPPUNIT_ASSERT_EQUAL("de-DE"_ostr, pSpanLang->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkSpanWithFly)
+{
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"LinkSpanWithFly.fodt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // the frame's own paragraph is current when the link ends, so neither the span nor
+    // the link closes there - one link, one span, and the frame nested in the span
+    vcl::filter::PDFObjectElement* pLinkSE(nullptr);
+    vcl::filter::PDFObjectElement* pSpanSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pType || pType->GetValue() != "StructElem" || !pS)
+            continue;
+        if (pS->GetValue() == "Link")
+        {
+            CPPUNIT_ASSERT_MESSAGE("a frame must not split the link", !pLinkSE);
+            pLinkSE = pObject;
+        }
+        else if (pS->GetValue() == "Span")
+        {
+            CPPUNIT_ASSERT_MESSAGE("a frame must not split the span", !pSpanSE);
+            pSpanSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pLinkSE);
+    CPPUNIT_ASSERT(pSpanSE);
+
+    // the span is a kid of the link, and the frame a kid of the span
+    auto pSpanParent = dynamic_cast<vcl::filter::PDFReferenceElement*>(pSpanSE->Lookup("P"_ostr));
+    CPPUNIT_ASSERT(pSpanParent);
+    CPPUNIT_ASSERT_EQUAL(pLinkSE, pSpanParent->LookupObject());
+    auto pSpanKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pSpanSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pSpanKids);
+    size_t nDiv(0);
+    for (const auto pElement : pSpanKids->GetElements())
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        if (!pRef)
+            continue;
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        CPPUNIT_ASSERT_EQUAL("Div"_ostr, pKidS->GetValue());
+        ++nDiv;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nDiv);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpanWithFly)
 {
     cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
@@ -3123,6 +3256,95 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpanWithFly)
     }
     CPPUNIT_ASSERT_EQUAL(size_t(1), nDiv);
     CPPUNIT_ASSERT_GREATER(size_t(1), nMCID);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkSpanWraps)
+{
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"LinkSpanWraps.fodt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    // how many lines the link takes does not matter, only that the styled run breaks
+    CPPUNIT_ASSERT_GREATER(size_t(1), pAnnots->GetElements().size());
+
+    vcl::filter::PDFObjectElement* pLinkSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Link")
+        {
+            CPPUNIT_ASSERT_MESSAGE("a wrapped span must not split the link", !pLinkSE);
+            pLinkSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pLinkSE);
+
+    // both lines' annotations reach the Link, although the span is what is open
+    // across the break
+    auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pLinkSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pKids);
+    std::vector<vcl::filter::PDFObjectElement*> aKidAnnots;
+    for (const auto pElement : pKids->GetElements())
+    {
+        auto pObjR = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pElement);
+        if (!pObjR)
+            continue;
+        auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->LookupElement("Type"_ostr));
+        CPPUNIT_ASSERT(pOType);
+        CPPUNIT_ASSERT_EQUAL("OBJR"_ostr, pOType->GetValue());
+        auto pRef
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->LookupElement("Obj"_ostr));
+        CPPUNIT_ASSERT(pRef);
+        aKidAnnots.push_back(pRef->LookupObject());
+    }
+    CPPUNIT_ASSERT_EQUAL(pAnnots->GetElements().size(), aKidAnnots.size());
+    CPPUNIT_ASSERT_EQUAL(aKidAnnots.size(), std::set(aKidAnnots.begin(), aKidAnnots.end()).size());
+
+    // the span is what straddles the break, so it holds a run of text on each line
+    vcl::filter::PDFObjectElement* pSpanSE(nullptr);
+    for (const auto pElement : pKids->GetElements())
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        if (!pRef)
+            continue;
+        auto pKid = pRef->LookupObject();
+        CPPUNIT_ASSERT(pKid);
+        auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKid->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pKidS);
+        CPPUNIT_ASSERT_EQUAL("Span"_ostr, pKidS->GetValue());
+        CPPUNIT_ASSERT(!pSpanSE);
+        pSpanSE = pKid;
+    }
+    CPPUNIT_ASSERT(pSpanSE);
+    auto pSpanKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pSpanSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pSpanKids);
+    CPPUNIT_ASSERT_GREATER(size_t(1), pSpanKids->GetElements().size());
+
+    // and every annotation carries a StructParent and is one of the Link's OBJR kids
+    for (const auto pElement : pAnnots->GetElements())
+    {
+        auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pAnnotRef);
+        auto pAnnot = pAnnotRef->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        CPPUNIT_ASSERT_MESSAGE("every annotation needs a StructParent",
+                               pAnnot->Lookup("StructParent"_ostr));
+        CPPUNIT_ASSERT(std::find(aKidAnnots.begin(), aKidAnnots.end(), pAnnot) != aKidAnnots.end());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testRubyWithSpan)
