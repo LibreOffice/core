@@ -11,6 +11,7 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -97,10 +98,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
     const std::vector<bool> aSelected{ true, true };
     const svx::seclabel::StanagLabel aLabel = aPolicy.buildLabel(
         u"SECRET"_ustr, aSelected, u"2026-06-21T10:00:00Z"_ustr, u"2027-06-21T10:00:00Z"_ustr);
+    // Applying the label must flag the document modified (the grab-bag write alone
+    // doesn't reliably dirty it), so the user is prompted to save.
+    uno::Reference<util::XModifiable> xModifiable(xModel, uno::UNO_QUERY_THROW);
+    xModifiable->setModified(false);
     svx::seclabel::storeLabelPart(
         xModel, aLabel.toBindingXml(),
         svx::seclabel::buildItemProps(u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr,
                                      u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr));
+    CPPUNIT_ASSERT(xModifiable->isModified());
     sw::seclabel::applyMarking(xModel, aPolicy.deriveMarking(aLabel),
                                svx::seclabel::resolveColor(u"red"_ustr), u"Standard"_ustr);
 
@@ -252,8 +258,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelRemove)
     CPPUNIT_ASSERT(svx::seclabel::readLabel(xModel, aBefore));
 
     // Removal is two steps (as the dialog RemoveHdl does): drop the customXml part
-    // (app-agnostic) then clear the Writer markings.
+    // (app-agnostic) then clear the Writer markings. It must flag the doc modified.
+    uno::Reference<util::XModifiable> xModifiable(xModel, uno::UNO_QUERY_THROW);
+    xModifiable->setModified(false);
     svx::seclabel::removeLabelPart(xModel);
+    CPPUNIT_ASSERT(xModifiable->isModified());
     sw::seclabel::removeLabel(xModel, u"Standard"_ustr);
 
     // The STANAG part is gone and the header is cleared.

@@ -18,6 +18,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
@@ -138,6 +139,15 @@ void eraseDomAt(comphelper::SequenceAsHashMap& rGrabBag, const OUString& rKey, s
     }
     rGrabBag[rKey] <<= aOut;
 }
+
+// Storing or removing the label is a document change; mark it modified so the user is
+// prompted to save. The grab-bag write alone does not reliably dirty the document, and
+// a no-op marking placement would otherwise leave it clean.
+void markModified(const uno::Reference<frame::XModel>& xModel)
+{
+    if (uno::Reference<util::XModifiable> xModifiable{ xModel, uno::UNO_QUERY })
+        xModifiable->setModified(true);
+}
 }
 
 void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_view rBindingXml,
@@ -168,6 +178,7 @@ void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_
     appendDom(aGrabBag, u"OOXCustomXmlProps"_ustr, parseToDom(xContext, rItemPropsXml));
     xModelProps->setPropertyValue(u"InteropGrabBag"_ustr,
                                   cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    markModified(xModel);
 }
 
 void removeLabelPart(const uno::Reference<frame::XModel>& xModel)
@@ -187,6 +198,7 @@ void removeLabelPart(const uno::Reference<frame::XModel>& xModel)
     eraseDomAt(aGrabBag, u"OOXCustomXmlProps"_ustr, nIndex);
     xModelProps->setPropertyValue(u"InteropGrabBag"_ustr,
                                   cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    markModified(xModel);
 }
 
 bool readLabel(const uno::Reference<frame::XModel>& xModel, StanagLabel& rLabel)
