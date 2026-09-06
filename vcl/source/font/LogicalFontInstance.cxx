@@ -30,6 +30,127 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+static constexpr hb_codepoint_t ImplGetReplacementUnicodeForHyphens(const hb_codepoint_t aUnicode)
+{
+    if (aUnicode == 0x2010 || aUnicode == 0x2011)
+        return 0x002D;
+
+    return 0x0;
+}
+
+static hb_bool_t ImplHbNominalGlyphFunction(SAL_UNUSED_PARAMETER hb_font_t*, void* pFontData,
+                                            hb_codepoint_t aUnicode, hb_codepoint_t* pGlyphIndex,
+                                            SAL_UNUSED_PARAMETER void*)
+{
+    assert(pFontData && pGlyphIndex);
+
+    hb_font_t* pHbParentFont = static_cast<hb_font_t*>(pFontData);
+    hb_bool_t bRet = hb_font_get_nominal_glyph(pHbParentFont, aUnicode, pGlyphIndex);
+    if (!bRet)
+    {
+        hb_codepoint_t aReplacementUnicode = ImplGetReplacementUnicodeForHyphens(aUnicode);
+        if (aReplacementUnicode)
+            bRet = hb_font_get_nominal_glyph(pHbParentFont, aReplacementUnicode, pGlyphIndex);
+    }
+
+    return bRet;
+}
+
+static unsigned int
+ImplHbNominalGlyphsFunction(SAL_UNUSED_PARAMETER hb_font_t* pHbFont, void* pFontData,
+                            unsigned int nCount, const hb_codepoint_t* pFirstUnicode,
+                            unsigned int nUnicodeStride, hb_codepoint_t* pFirstGlyph,
+                            unsigned int nGlyphStride, SAL_UNUSED_PARAMETER void*)
+{
+    assert(pFontData && pFirstGlyph);
+
+    hb_font_t* pHbParentFont = static_cast<hb_font_t*>(pFontData);
+    unsigned int nRet = hb_font_get_nominal_glyphs(pHbParentFont, nCount, pFirstUnicode,
+                                                   nUnicodeStride, pFirstGlyph, nGlyphStride);
+    if (nRet < nCount)
+    {
+        const char* pFailedUnicodeByte
+            = reinterpret_cast<const char*>(pFirstUnicode) + (nRet * nUnicodeStride);
+        char* pFailedGlyphByte = reinterpret_cast<char*>(pFirstGlyph) + (nRet * nGlyphStride);
+        const hb_codepoint_t* pFailedUnicode
+            = reinterpret_cast<const hb_codepoint_t*>(pFailedUnicodeByte);
+        hb_codepoint_t* pFailedGlyph = reinterpret_cast<hb_codepoint_t*>(pFailedGlyphByte);
+
+        // Try to replace failed character with replacement character
+        if (ImplHbNominalGlyphFunction(pHbFont, pHbParentFont, *pFailedUnicode, pFailedGlyph,
+                                       nullptr))
+        {
+            nRet++;
+            if (nRet < nCount)
+            {
+                const char* pNextUnicodeByte
+                    = reinterpret_cast<const char*>(pFirstUnicode) + (nRet * nUnicodeStride);
+                const hb_codepoint_t* pNextUnicode
+                    = reinterpret_cast<const hb_codepoint_t*>(pNextUnicodeByte);
+                char* pNextGlyphByte = reinterpret_cast<char*>(pFirstGlyph) + (nRet * nGlyphStride);
+                hb_codepoint_t* pNextGlyph = reinterpret_cast<hb_codepoint_t*>(pNextGlyphByte);
+
+                // Process characters after replaced character
+                nRet += ImplHbNominalGlyphsFunction(pHbFont, pFontData, nCount - nRet, pNextUnicode,
+                                                    nUnicodeStride, pNextGlyph, nGlyphStride,
+                                                    nullptr);
+            }
+        }
+    }
+
+    return nRet;
+}
+
+static hb_bool_t ImplHbVariationGlyphFunction(SAL_UNUSED_PARAMETER hb_font_t*, void* pFontData,
+                                              hb_codepoint_t aUnicode,
+                                              hb_codepoint_t aVariationSelector,
+                                              hb_codepoint_t* pGlyphIndex,
+                                              SAL_UNUSED_PARAMETER void*)
+{
+    assert(pFontData && pGlyphIndex);
+
+    hb_font_t* pHbParentFont = static_cast<hb_font_t*>(pFontData);
+    hb_bool_t bRet
+        = hb_font_get_variation_glyph(pHbParentFont, aUnicode, aVariationSelector, pGlyphIndex);
+    if (!bRet)
+    {
+        hb_codepoint_t aReplacementUnicode = ImplGetReplacementUnicodeForHyphens(aUnicode);
+        if (aReplacementUnicode)
+            bRet = hb_font_get_variation_glyph(pHbParentFont, aReplacementUnicode,
+                                               aVariationSelector, pGlyphIndex);
+    }
+
+    return bRet;
+}
+
+// tdf#171555 if no glyph for hyphen characters use minus character
+// On at least on macOS, HarfBuzz will not return a glyph for the
+// Unicode hyphen characters for some fonts such as Courier New
+// and Apple LiGothic but the native text layout functions will
+// return the minus character's glyph. So replace the hyphens
+// with minus to avoid marking the hyphens as needing fallback.
+static void ImplHbSetGlyphFunctions(hb_font_t* pHbFont)
+{
+    static hb_font_funcs_t* pHbFontFuncs = nullptr;
+
+    if (!pHbFontFuncs)
+    {
+        pHbFontFuncs = hb_font_funcs_create();
+
+        hb_font_funcs_set_nominal_glyph_func(pHbFontFuncs, ImplHbNominalGlyphFunction, nullptr,
+                                             nullptr);
+        hb_font_funcs_set_nominal_glyphs_func(pHbFontFuncs, ImplHbNominalGlyphsFunction, nullptr,
+                                              nullptr);
+        hb_font_funcs_set_variation_glyph_func(pHbFontFuncs, ImplHbVariationGlyphFunction, nullptr,
+                                               nullptr);
+    }
+
+    // The parent font is already retained for the life of the font so pass
+    // the parent font pointer to avoid repeated lookups every time one of
+    // the font functions are called
+    hb_font_set_funcs(pHbFont, pHbFontFuncs, hb_font_get_parent(pHbFont), nullptr);
+}
+
 LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace,
                                          const vcl::font::FontSelectPattern& rFontSelData)
     : mxFontMetric(new FontMetricData(rFontSelData))
@@ -115,6 +236,12 @@ hb_font_t* LogicalFontInstance::InitHbFont()
         hb_font_set_synthetic_slant(pHbFont, ARTIFICIAL_ITALIC_SKEW);
 
     ImplInitHbFont(pHbFont);
+
+    // Related: tdf#171555 create subfont and set nominal glyph function
+    hb_font_t* pHbParentFont = pHbFont;
+    pHbFont = hb_font_create_sub_font(pHbParentFont);
+    ImplHbSetGlyphFunctions(pHbFont);
+    hb_font_destroy(pHbParentFont);
 
     return pHbFont;
 }
