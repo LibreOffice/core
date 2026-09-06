@@ -1992,6 +1992,67 @@ void ScOutputData::FindChanged()
     mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
+ScOutputData::RangeEdges ScOutputData::GetRangeEdges(SCCOL nStartX, SCROW nStartY,
+                                                     SCCOL nEndX, SCROW nEndY) const
+{
+    RangeEdges aEdges;
+    aEdges.nMinX = mnScrX;
+    aEdges.nMinY = mnScrY;
+    aEdges.nMaxX = mnScrX + mnScrW - 1;
+    aEdges.nMaxY = mnScrY + mnScrH - 1;
+    if ( mbLayoutRTL )
+        std::swap( aEdges.nMinX, aEdges.nMaxX );
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
+
+    tools::Long nPosY = mnScrY;
+    bool bNoStartY = ( mnY1 < nStartY );
+    bool bNoEndY   = false;
+    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++) // loop to end for bNoEndY check
+    {
+        SCROW nY = mpRowInfo[nArrY].nRowNo;
+
+        if ( nY==nStartY || (nY>nStartY && bNoStartY) )
+        {
+            aEdges.nMinY = nPosY;
+            aEdges.bTop = true;
+        }
+        if ( nY==nEndY )
+        {
+            aEdges.nMaxY = nPosY + mpRowInfo[nArrY].nHeight - 2;
+            aEdges.bBottom = true;
+        }
+        if ( nY>nEndY && bNoEndY )
+        {
+            aEdges.nMaxY = nPosY-2;
+            aEdges.bBottom = true;
+        }
+        bNoStartY = ( nY < nStartY );
+        bNoEndY   = ( nY < nEndY );
+        nPosY += mpRowInfo[nArrY].nHeight;
+    }
+
+    tools::Long nPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nPosX += mnMirrorW - 1; // always in pixels
+
+    for (SCCOL nX=mnX1; nX<=mnX2; nX++)
+    {
+        if ( nX==nStartX )
+        {
+            aEdges.nMinX = nPosX;
+            aEdges.bLeft = true;
+        }
+        if ( nX==nEndX )
+        {
+            aEdges.nMaxX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
+            aEdges.bRight = true;
+        }
+        nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+    }
+
+    return aEdges;
+}
+
 ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStartY,
                                 SCCOL nRefEndX, SCROW nRefEndY, const Color& rColor)
 {
@@ -2006,74 +2067,16 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
     if ( nRefStartX <= mnVisX2 && nRefEndX >= mnVisX1 &&
          nRefStartY <= mnVisY2 && nRefEndY >= mnVisY1 )
     {
-        tools::Long nMinX = mnScrX;
-        tools::Long nMinY = mnScrY;
-        tools::Long nMaxX = mnScrX + mnScrW - 1;
-        tools::Long nMaxY = mnScrY + mnScrH - 1;
-        if ( mbLayoutRTL )
-            std::swap( nMinX, nMaxX );
-        tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
+        RangeEdges aEdges = GetRangeEdges(nRefStartX, nRefStartY, nRefEndX, nRefEndY);
 
-        bool bTop    = false;
-        bool bBottom = false;
-        bool bLeft   = false;
-        bool bRight  = false;
-
-        tools::Long nPosY = mnScrY;
-        bool bNoStartY = ( mnY1 < nRefStartY );
-        bool bNoEndY   = false;
-        for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)      // loop to end for bNoEndY check
-        {
-            SCROW nY = mpRowInfo[nArrY].nRowNo;
-
-            if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
-            {
-                nMinY = nPosY;
-                bTop = true;
-            }
-            if ( nY==nRefEndY )
-            {
-                nMaxY = nPosY + mpRowInfo[nArrY].nHeight - 2;
-                bBottom = true;
-            }
-            if ( nY>nRefEndY && bNoEndY )
-            {
-                nMaxY = nPosY-2;
-                bBottom = true;
-            }
-            bNoStartY = ( nY < nRefStartY );
-            bNoEndY   = ( nY < nRefEndY );
-            nPosY += mpRowInfo[nArrY].nHeight;
-        }
-
-        tools::Long nPosX = mnScrX;
-        if ( mbLayoutRTL )
-            nPosX += mnMirrorW - 1;      // always in pixels
-
-        for (SCCOL nX=mnX1; nX<=mnX2; nX++)
-        {
-            if ( nX==nRefStartX )
-            {
-                nMinX = nPosX;
-                bLeft = true;
-            }
-            if ( nX==nRefEndX )
-            {
-                nMaxX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
-                bRight = true;
-            }
-            nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
-        }
-
-        if (bTop && bBottom && bLeft && bRight)
+        if (aEdges.bTop && aEdges.bBottom && aEdges.bLeft && aEdges.bRight)
         {
             // mnPPT[XY] already has the factor aZoom[XY] in it.
-            aResult = ReferenceMark( nMinX / mnPPTX,
-                                     nMinY / mnPPTY,
-                                     ( nMaxX - nMinX ) / mnPPTX,
-                                     ( nMaxY - nMinY ) / mnPPTY,
-                                     mnTab,
-                                     rColor );
+            aResult = ReferenceMark(aEdges.nMinX / mnPPTX,
+                                    aEdges.nMinY / mnPPTY,
+                                    (aEdges.nMaxX - aEdges.nMinX) / mnPPTX,
+                                    (aEdges.nMaxY - aEdges.nMinY) / mnPPTY,
+                                     mnTab, rColor);
         }
     }
 
@@ -2097,64 +2100,17 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
          nRefStartY <= mnVisY2 && nRefEndY >= mnVisY1) )
         return;
 
-    tools::Long nMinX = mnScrX;
-    tools::Long nMinY = mnScrY;
-    tools::Long nMaxX = mnScrX + mnScrW - 1;
-    tools::Long nMaxY = mnScrY + mnScrH - 1;
-    if ( mbLayoutRTL )
-        std::swap( nMinX, nMaxX );
     tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    bool bTop    = false;
-    bool bBottom = false;
-    bool bLeft   = false;
-    bool bRight  = false;
-
-    tools::Long nPosY = mnScrY;
-    bool bNoStartY = ( mnY1 < nRefStartY );
-    bool bNoEndY   = false;
-    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)      // loop to end for bNoEndY check
-    {
-        SCROW nY = mpRowInfo[nArrY].nRowNo;
-
-        if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
-        {
-            nMinY = nPosY;
-            bTop = true;
-        }
-        if ( nY==nRefEndY )
-        {
-            nMaxY = nPosY + mpRowInfo[nArrY].nHeight - 2;
-            bBottom = true;
-        }
-        if ( nY>nRefEndY && bNoEndY )
-        {
-            nMaxY = nPosY-2;
-            bBottom = true;
-        }
-        bNoStartY = ( nY < nRefStartY );
-        bNoEndY   = ( nY < nRefEndY );
-        nPosY += mpRowInfo[nArrY].nHeight;
-    }
-
-    tools::Long nPosX = mnScrX;
-    if ( mbLayoutRTL )
-        nPosX += mnMirrorW - 1;      // always in pixels
-
-    for (SCCOL nX=mnX1; nX<=mnX2; nX++)
-    {
-        if ( nX==nRefStartX )
-        {
-            nMinX = nPosX;
-            bLeft = true;
-        }
-        if ( nX==nRefEndX )
-        {
-            nMaxX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
-            bRight = true;
-        }
-        nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
-    }
+    const RangeEdges aEdges = GetRangeEdges( nRefStartX, nRefStartY, nRefEndX, nRefEndY );
+    const tools::Long nMinX = aEdges.nMinX;
+    const tools::Long nMinY = aEdges.nMinY;
+    const tools::Long nMaxX = aEdges.nMaxX;
+    const tools::Long nMaxY = aEdges.nMaxY;
+    const bool bTop = aEdges.bTop;
+    const bool bBottom = aEdges.bBottom;
+    const bool bLeft = aEdges.bLeft;
+    const bool bRight = aEdges.bRight;
 
     if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
         return;

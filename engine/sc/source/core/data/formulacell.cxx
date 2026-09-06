@@ -3349,6 +3349,11 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     return aResult.GetMatrix().get();
 }
 
+ScConstMatrixRef ScFormulaCell::GetRawResultMatrix() const
+{
+    return aResult.GetMatrixIgnoringError();
+}
+
 bool ScFormulaCell::GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const
 {
     switch ( cMatrixFlag )

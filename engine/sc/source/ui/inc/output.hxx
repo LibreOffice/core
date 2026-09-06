@@ -331,6 +331,20 @@ private:
                            tools::Long nLayoutSign,
                            KernArray& aDX);
 
+    // Pixel edges of a cell range, with a flag per edge that lies inside the painted area.
+    struct RangeEdges
+    {
+        tools::Long nMinX = 0;
+        tools::Long nMinY = 0;
+        tools::Long nMaxX = 0;
+        tools::Long nMaxY = 0;
+        bool bTop = false;
+        bool bBottom = false;
+        bool bLeft = false;
+        bool bRight = false;
+    };
+    RangeEdges GetRangeEdges( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY ) const;
+
 public:
 
     /**
@@ -408,6 +422,7 @@ public:
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
+
     /// Draws reference mark and returns its properties
     void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,

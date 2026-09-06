@@ -13,7 +13,7 @@
  * Calc tile layer is used to display a spreadsheet document
  */
 
-/* global app RenderManager cool FocusCellSection SplitterLinesSection */
+/* global app RenderManager cool CellRangeMarkerSection FocusCellSection SplitterLinesSection */
 
 window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	options: {
@@ -82,6 +82,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		app.sectionContainer.addSection(new app.definitions.CellFillMarkerSection());
 		app.sectionContainer.addSection(new SplitterLinesSection());
+
+		this._cellRangeMarkerSection = new CellRangeMarkerSection();
+		app.sectionContainer.addSection(this._cellRangeMarkerSection);
 
 		this.insertMode = false;
 		this._resetInternalState();
@@ -1014,9 +1017,33 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		else if (e.commandName === 'SparklineGroup') {
 			this._onSparklineGroupMsg(e.state);
 		}
+		else if (e.commandName === 'CellRangeMarker') {
+			this._onCellRangeMarkerMsg(e.state);
+		}
 		else if (e.commandName === 'CellFormulaError') {
 			this._onCellFormulaError(e.state);
 		}
+	},
+
+	// Cells the engine wants marked out. A kind of marker owns the ranges under its name, each
+	// given as "startColumn, startRow, endColumn, endRow". No ranges clears the kind.
+	_onCellRangeMarkerMsg: function (state) {
+		if (!state || !state.name)
+			return;
+
+		if (!state.cellRanges || !state.cellRanges.length) {
+			this._cellRangeMarkerSection.clearMarkers(state.name);
+			return;
+		}
+
+		const cellRanges = state.cellRanges.map(function (cellRange) {
+			return this._parseCellRange(cellRange);
+		}, this);
+
+		this._cellRangeMarkerSection.setMarkers(state.name, cellRanges, state.part, {
+			color: '#' + state.color,
+			dashed: state.dashed,
+			fillOpacity: state.fillOpacity });
 	},
 
 	// One handle per mark (one per visible styled table), pooled by name so we

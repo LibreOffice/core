@@ -563,6 +563,10 @@ void ScTabView::CellContentChanged()
 
     InvalidateAttribs();                    // attributes updates
 
+    // A recalculation can resize the dynamic array the cursor is in.
+    if (ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get())
+        pWin->NotifyDynamicArrayBorder();
+
     aViewData.GetViewShell()->UpdateInputHandler();
 }
 

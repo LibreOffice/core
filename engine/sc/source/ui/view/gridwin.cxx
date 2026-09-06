@@ -6399,6 +6399,7 @@ void ScGridWindow::CursorChanged()
     UpdateDatabaseOverlay();
     UpdateAutoFillOverlay();
     UpdateSparklineGroupOverlay();
+    NotifyDynamicArrayBorder();
 }
 
 void ScGridWindow::ImpCreateOverlayObjects()
@@ -6413,6 +6414,7 @@ void ScGridWindow::ImpCreateOverlayObjects()
     UpdateHeaderOverlay();
     UpdateShrinkOverlay();
     UpdateSparklineGroupOverlay();
+    NotifyDynamicArrayBorder();
 }
 
 void ScGridWindow::ImpDestroyOverlayObjects()
@@ -6730,6 +6732,50 @@ void updateCOKitTableHandles(const ScViewData& rViewData,
         }
     }
     pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, writer.finishAndGetAsOString());
+}
+
+// One kind of cell marker: its name, the ranges it marks out on the sheet nPart, and how they
+// are drawn. A fFillOpacity fills the ranges with the color, otherwise they get a border in it.
+struct CellRangeMarkerOptions
+{
+    OString aName;
+    std::vector<ScRange> aCellRanges;
+    SCTAB nPart = 0;
+    Color aColor = COL_AUTO;
+    bool bDashed = false;
+    double fFillOpacity = 0.0;
+};
+
+// Send a marker to the client. It replaces the ranges under its name, and none clears the kind.
+void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOptions& rOptions)
+{
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (!pViewShell)
+        return;
+
+    tools::JsonWriter aWriter;
+    aWriter.put("commandName", "CellRangeMarker");
+    {
+        const auto aStateNode = aWriter.startNode("state");
+        aWriter.put("name", rOptions.aName);
+        aWriter.put("part", static_cast<sal_Int32>(rOptions.nPart));
+        if (rOptions.aColor != COL_AUTO)
+            aWriter.put("color", rOptions.aColor.AsRGBHexString());
+        if (rOptions.bDashed)
+            aWriter.put("dashed", true);
+        if (rOptions.fFillOpacity > 0.0)
+            aWriter.put("fillOpacity", rOptions.fFillOpacity);
+        const auto aRangesArray = aWriter.startArray("cellRanges");
+        for (auto const& rCellRange : rOptions.aCellRanges)
+        {
+            const OUString aCells = OUString::number(rCellRange.aStart.Col()) + ", "
+                                    + OUString::number(rCellRange.aStart.Row()) + ", "
+                                    + OUString::number(rCellRange.aEnd.Col()) + ", "
+                                    + OUString::number(rCellRange.aEnd.Row());
+            aWriter.putSimpleValue(aCells);
+        }
+    }
+    pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aWriter.finishAndGetAsOString());
 }
 
 } //end anonymous namespace
@@ -7756,6 +7802,29 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
             }
         }
     }
+}
+
+// The dynamic array the cell cursor is in gets a border: the range an expanded array fills, or
+// the one a #SPILL! master wants, dashed. No range means the cursor is in no dynamic array.
+void ScGridWindow::NotifyDynamicArrayBorder()
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    const ScAddress aCursor = mrViewData.GetCurPos();
+
+    CellRangeMarkerOptions aOptions;
+    aOptions.aName = "DynamicArray"_ostr;
+    aOptions.nPart = aCursor.Tab();
+    aOptions.aColor = Color(0x2A, 0x7A, 0xE4);
+
+    ScRange aCellRange;
+    bool bBlocked = false;
+    if (mrViewData.GetDocument().FindDynamicArrayRangeAt(aCursor, aCellRange, bBlocked))
+        aOptions.aCellRanges.push_back(aCellRange);
+    aOptions.bDashed = bBlocked;
+
+    notifyCellRangeMarker(mrViewData, aOptions);
 }
 
 // #i70788# central method to get the OverlayManager safely

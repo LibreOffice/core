@@ -1003,6 +1003,16 @@ public:
     /// one of its reference cells.
     SC_DLLPUBLIC bool HasMatrixBlocker(const ScRange& rRange) const;
 
+    /// The output range of the dynamic array master at rOrigin. For a #SPILL! master this is
+    /// the wanted range and rBlocked is set. False if there is no multi-cell master there.
+    SC_DLLPUBLIC bool GetDynamicArrayOutputRange(const ScAddress& rOrigin, ScRange& rRange,
+                                                 bool& rBlocked) const;
+
+    /// Like GetDynamicArrayOutputRange, for the array that contains rCell. A #SPILL! master
+    /// matches only at its origin cell.
+    SC_DLLPUBLIC bool FindDynamicArrayRangeAt(const ScAddress& rCell, ScRange& rRange,
+                                              bool& rBlocked) const;
+
     // Pending matrix resize tracking (expand, contract, or collapse-on-spill).
     void MarkPendingMatrixResize(const ScAddress& rPos) { maPendingMatrixResizes.insert(rPos); }
     bool HasPendingMatrixResizes() const { return !maPendingMatrixResizes.empty(); }

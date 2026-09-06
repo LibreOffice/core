@@ -297,6 +297,67 @@ std::vector<ScAddress> ScDocument::CollectExpandedDynamicArraysInRange(
     return aResult;
 }
 
+bool ScDocument::GetDynamicArrayOutputRange(const ScAddress& rOrigin, ScRange& rRange,
+                                            bool& rBlocked) const
+{
+    const ScFormulaCell* pCell = GetFormulaCell(rOrigin);
+    if (!pCell || pCell->GetMatrixFlag() != ScMatrixMode::Formula)
+        return false;
+
+    SCCOL nColumns = 0;
+    SCROW nRows = 0;
+    rBlocked = maSpilledFormulaCells.contains(rOrigin);
+    if (rBlocked)
+    {
+        // The blocked master keeps its full result matrix, so its dimensions give the wanted
+        // range.
+        ScConstMatrixRef pMatrix = pCell->GetRawResultMatrix();
+        if (!pMatrix)
+            return false;
+        SCSIZE nMatrixColumns = 0;
+        SCSIZE nMatrixRows = 0;
+        pMatrix->GetDimensions(nMatrixColumns, nMatrixRows);
+        nColumns = static_cast<SCCOL>(
+            std::min<SCSIZE>(nMatrixColumns, MaxCol() - rOrigin.Col() + 1));
+        nRows = static_cast<SCROW>(std::min<SCSIZE>(nMatrixRows, MaxRow() - rOrigin.Row() + 1));
+    }
+    else
+    {
+        if (!maExpandedDynamicArrays.contains(rOrigin))
+            return false;
+        pCell->GetMatColsRows(nColumns, nRows);
+    }
+
+    if (nColumns < 1 || nRows < 1 || (nColumns == 1 && nRows == 1))
+        return false;
+
+    rRange = ScRange(rOrigin.Col(), rOrigin.Row(), rOrigin.Tab(),
+                     rOrigin.Col() + nColumns - 1, rOrigin.Row() + nRows - 1, rOrigin.Tab());
+    return true;
+}
+
+bool ScDocument::FindDynamicArrayRangeAt(const ScAddress& rCell, ScRange& rRange,
+                                         bool& rBlocked) const
+{
+    for (const auto* pOrigins : { &maExpandedDynamicArrays, &maSpilledFormulaCells })
+    {
+        for (const ScAddress& rOrigin : *pOrigins)
+        {
+            if (rOrigin.Tab() != rCell.Tab())
+                continue;
+            if (rOrigin.Col() > rCell.Col() || rOrigin.Row() > rCell.Row())
+                continue;
+            if (!GetDynamicArrayOutputRange(rOrigin, rRange, rBlocked))
+                continue;
+            // A blocked master owns only its origin cell, the rest belongs to the cells that
+            // block it.
+            if (rBlocked ? rOrigin == rCell : rRange.Contains(rCell))
+                return true;
+        }
+    }
+    return false;
+}
+
 bool ScDocument::HasMatrixBlocker(const ScRange& rRange) const
 {
     const ScAddress& rOrigin = rRange.aStart;

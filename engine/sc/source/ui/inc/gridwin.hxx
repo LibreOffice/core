@@ -530,6 +530,7 @@ public:
 
     void UpdateSparklineGroupOverlay();
     void DeleteSparklineGroupOverlay();
+    void NotifyDynamicArrayBorder();
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();
     void            DeleteCursorOverlay();

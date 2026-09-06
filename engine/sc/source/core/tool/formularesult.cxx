@@ -594,6 +594,13 @@ ScConstMatrixRef ScFormulaResult::GetMatrix() const
     return nullptr;
 }
 
+ScConstMatrixRef ScFormulaResult::GetMatrixIgnoringError() const
+{
+    if (mbToken && mpToken && mpToken->GetType() == formula::svMatrixCell)
+        return static_cast<const ScMatrixCellResultToken*>(mpToken)->GetMatrix();
+    return nullptr;
+}
+
 OUString ScFormulaResult::GetHybridFormula() const
 {
     if (GetType() == formula::svHybridCell)

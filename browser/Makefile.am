@@ -516,6 +516,7 @@ COOL_JS_LST =\
 	src/canvas/sections/ShapeHandleScalingSubSection.ts \
 	src/canvas/sections/ValidityInputHelpSection.ts \
 	src/canvas/sections/CellCursorSection.ts \
+	src/canvas/sections/CellRangeMarkerSection.ts \
 	src/canvas/sections/CellSelectionHandleSection.ts \
 	src/canvas/sections/CalcValidityDropDownSection.ts \
 	src/canvas/sections/FormulaErrorHelpSection.ts \

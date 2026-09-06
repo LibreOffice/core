@@ -192,6 +192,9 @@ public:
     /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
     ScConstMatrixRef GetMatrix() const;
 
+    /** Return the stored matrix even while a result error is set, else NULL. */
+    ScConstMatrixRef GetMatrixIgnoringError() const;
+
     /** Return formula string if type formula::svHybridCell, else empty string. */
     OUString GetHybridFormula() const;
 
