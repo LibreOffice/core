@@ -493,9 +493,20 @@ void ScDocShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
         case FID_HARD_RECALC:
-            DoHardRecalc();
+        {
+            // The return value holds how long the calculation took, in whole
+            // microseconds. A recalculation that did not run answers without one.
+            std::optional<std::chrono::nanoseconds> oCalcDuration = DoHardRecalc();
+            if (oCalcDuration)
+            {
+                const sal_Int64 nMicroseconds
+                    = std::chrono::duration_cast<std::chrono::microseconds>(*oCalcDuration).count();
+                rReq.SetReturnValue(
+                    SfxStringItem(FID_HARD_RECALC, OUString::number(nMicroseconds)));
+            }
             rReq.Done();
             break;
+        }
         case FID_CALCULATE_SHEET:
         {
             const SfxInt32Item* pTabItem = rReq.GetArg<SfxInt32Item>(FID_CALCULATE_SHEET);
@@ -1890,14 +1901,13 @@ void ScDocShell::UpdateAfterRecalc(ScTabViewShell* pViewShell)
         PostDataChanged();
 }
 
-void ScDocShell::DoHardRecalc()
+std::optional<std::chrono::nanoseconds> ScDocShell::DoHardRecalc()
 {
     if (m_pDocument->IsInDocShellRecalc())
     {
         SAL_WARN("sc","ScDocShell::DoHardRecalc tries re-entering while in Recalc; probably Forms->BASIC->Dispatcher.");
-        return;
+        return std::nullopt;
     }
-    auto start = std::chrono::steady_clock::now();
     ScDocShellRecalcGuard aGuard(*m_pDocument);
     weld::WaitObject aWaitObj( GetActiveDialogParent() );
     ScTabViewShell* pSh = GetBestViewShell();
@@ -1906,7 +1916,9 @@ void ScDocShell::DoHardRecalc()
         ScTabView::UpdateInputLine();     // InputEnterHandler
         pSh->UpdateInputHandler();
     }
+    auto aStart = std::chrono::steady_clock::now();
     m_pDocument->CalcAll();
+    const std::chrono::nanoseconds aCalcDuration = std::chrono::steady_clock::now() - aStart;
     GetDocFunc().DetectiveRefresh();    // creates own Undo
     if ( pSh )
         pSh->UpdateCharts(true);
@@ -1929,8 +1941,8 @@ void ScDocShell::DoHardRecalc()
         m_pDocument->SetStreamValid(nTab, false);
 
     PostPaintGridAll();
-    auto end = std::chrono::steady_clock::now();
-    SAL_INFO("sc.timing", "ScDocShell::DoHardRecalc(): took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms");
+    SAL_INFO("sc.timing", "ScDocShell::DoHardRecalc(): calculation took " << std::chrono::duration_cast<std::chrono::milliseconds>(aCalcDuration).count() << "ms");
+    return aCalcDuration;
 }
 
 std::optional<std::chrono::nanoseconds> ScDocShell::DoHardRecalcSheet(SCTAB nTab)

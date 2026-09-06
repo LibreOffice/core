@@ -298,7 +298,9 @@ public:
     bool            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRecord );
 
     SC_DLLPUBLIC void DoRecalc( bool bApi );
-    SC_DLLPUBLIC void DoHardRecalc();
+    /// Recalculates every formula in the document. Returns the time the
+    /// calculation alone took, or nothing when a calculation is already running.
+    SC_DLLPUBLIC std::optional<std::chrono::nanoseconds> DoHardRecalc();
     /// Marks every formula on one sheet dirty and calculates it. Returns the
     /// time the calculation alone took, or nothing when there is no such sheet
     /// or a calculation is already running.

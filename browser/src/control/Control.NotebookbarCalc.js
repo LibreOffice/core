@@ -2360,6 +2360,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'menu': [
 									{ type: 'comboboxentry', id: 'formula-calculate-all', text: _UNO('.uno:Calculate', 'spreadsheet'), uno: '.uno:Calculate' },
 									{ type: 'comboboxentry', id: 'formula-calculate-sheet', text: _UNO('.uno:CalculateSheet', 'spreadsheet'), uno: '.uno:CalculateSheet' },
+									{ type: 'comboboxentry', id: 'formula-calculate-hard', text: _UNO('.uno:CalculateHard', 'spreadsheet'), uno: '.uno:CalculateHard' },
 								]
 							}
 						]
