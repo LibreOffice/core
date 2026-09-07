@@ -145,10 +145,27 @@ class A11yValidator {
 		}
 	}
 
+	/// The widget an image belongs to, which is the nearest one the walk
+	/// validates on its own.
+	private owningWidget(image: Element): Element | null {
+		let at = image.parentElement;
+		while (at) {
+			if (this._directlyValidatedElements?.has(at)) return at;
+			at = at.parentElement;
+		}
+		return null;
+	}
+
 	private checkImageAltAttribute(type: string, element: HTMLElement): void {
 		const images = element.querySelectorAll('img');
 
 		images.forEach((img, index) => {
+			// Every widget with an id is validated on its own, so an image
+			// inside another one is that widget's to answer for. Without this
+			// one image is reported once per ancestor it sits under.
+			const owner = this.owningWidget(img);
+			if (owner && owner !== element) return;
+
 			const hasAlt = img.hasAttribute('alt');
 			const altValue = img.getAttribute('alt');
 
