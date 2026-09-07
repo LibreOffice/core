@@ -129,8 +129,18 @@ EXTRA_DIST = tools/add-release.py
 
 ### --- Qt translations integration begin ---
 
-# List of translation languages
-LANGS = ar ca cs cy da de el es eu fi fr ga gl he hr hu hy id is it ja kk ko nl pl pt pt_BR ro ru sk sl sq sv tr uk zh_CN zh_TW
+# The shipped languages come from engine/distro-configs/Langs.conf, the single
+# curated list - edit that file to add or drop a language. Qt catalog names use
+# the underscore form (pt_BR, zh_CN), and English is the source language, so it
+# has no catalog. In a dist tarball the engine is absent, so fall back to the
+# catalogs we ship.
+LANGS_CONF = $(abs_top_srcdir)/engine/distro-configs/Langs.conf
+CONF_LANGS = $(shell test ! -f "$(LANGS_CONF)" || sed -n 's/^--with-lang=//p' "$(LANGS_CONF)" | tr ' ' '\n' | grep -v '^en-' | tr '-' '_')
+
+# The catalogs we actually have. A language added to Langs.conf ships no Qt
+# translation until "make update-translations" has created its catalog.
+CATALOG_LANGS = $(patsubst $(srcdir)/translations/coda_%.ts,%,$(wildcard $(srcdir)/translations/coda_*.ts))
+LANGS = $(if $(CONF_LANGS),$(filter $(CONF_LANGS),$(CATALOG_LANGS)),$(CATALOG_LANGS))
 
 # Translation source (.ts) and compiled (.qm) files
 TS_FILES = $(addprefix translations/coda_,$(addsuffix .ts,$(LANGS)))
@@ -141,9 +151,11 @@ QM_FILES = $(TS_FILES:.ts=.qm)
 	mkdir -p $(dir $@)
 	@$(LRELEASE) $< -qm $@
 
-# Update .ts files from source code (Qt app only)
+# Update .ts files from source code (Qt app only). Creates a catalog for any
+# language in Langs.conf that has none yet; -no-obsolete drops the entries of
+# strings that are gone from the source instead of keeping them as vanished.
 update-translations:
-	@$(LUPDATE) $(srcdir) -ts $(TS_FILES)
+	@$(LUPDATE) -no-obsolete $(srcdir) -ts $(addprefix $(srcdir)/translations/coda_,$(addsuffix .ts,$(CONF_LANGS)))
 
 # Build all translations
 translations: $(QM_FILES)
@@ -157,7 +169,7 @@ translationsdir = $(datadir)/coda-qt/translations
 translations_DATA = $(QM_FILES)
 
 # Distribute sources and clean up generated files
-EXTRA_DIST += $(TS_FILES) run-from-build.in
+EXTRA_DIST += $(addprefix translations/coda_,$(addsuffix .ts,$(CATALOG_LANGS))) run-from-build.in
 CLEANFILES += $(QM_FILES)
 
 ### --- Qt translations integration end ---
