@@ -88,14 +88,6 @@ struct SAL_WARN_UNUSED class_data
     */
     std::atomic<bool> m_storedTypeRefs;
 
-    /** determines whether an implementation id was created in m_id
-    */
-    bool m_createdId;
-
-    /** implementation id
-     */
-    sal_Int8 m_id[ 16 ];
-
     /** type, object offset
     */
     type_entry m_typeEntries[ 1 ];

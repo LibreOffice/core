@@ -52,15 +52,13 @@ namespace detail {
 template<std::size_t N> struct class_dataN {
     sal_Int16 m_nTypes;
     std::atomic<bool> m_storedTypeRefs;
-    bool m_storedId;
-    sal_Int8 m_id[16];
     type_entry m_typeEntries[N + 1];
 };
 
 template<typename Impl, typename... Ifc> struct ImplClassData {
     class_data * operator ()() {
         static class_dataN<sizeof... (Ifc)> s_cd = {
-            sizeof... (Ifc) + 1, false, false, {},
+            sizeof... (Ifc) + 1, false,
             {
                 { { Ifc::static_type },
                   (reinterpret_cast<sal_IntPtr>(

@@ -24,8 +24,7 @@
 
 #define __DEF_CLASS_DATA_INIT_EX( N, class_cast ) \
 { \
-N +1, false, false, \
-{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+N +1, false, \
 { \
 __IFC_EX_TYPE_INIT##N( class_cast ), \
 __IFC_EX_TYPE_INIT_NAME( class_cast, css::lang::XTypeProvider ) \
@@ -39,8 +38,6 @@ struct class_data##N \
 { \
     sal_Int16 m_nTypes; \
     std::atomic<bool> m_storedTypeRefs; \
-    bool m_storedId; \
-    sal_Int8 m_id[ 16 ]; \
     type_entry m_typeEntries[ N + 1 ]; \
 }; \
 template< __CLASS_IFC##N > \

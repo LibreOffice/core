@@ -36,8 +36,6 @@ namespace cppu
     {
         sal_Int16 m_nTypes;
         std::atomic<bool> m_storedTypeRefs;
-        bool m_storedId;
-        sal_Int8 m_id[ 16 ];
         type_entry m_typeEntries[ 2 + 1 ];
     };
 
@@ -47,8 +45,7 @@ namespace cppu
         {
             static class_data2 s_cd =
             {
-                2 +1, false, false,
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                2 +1, false,
                 {
                     CPPUHELPER_DETAIL_TYPEENTRY(Ifc1),
                     CPPUHELPER_DETAIL_TYPEENTRY(Ifc2),
