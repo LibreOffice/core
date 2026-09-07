@@ -214,24 +214,24 @@ public:
     SAL_DLLPRIVATE virtual ~TempFileFastService () override;
 
     // XInputStream
-    virtual ::sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
-    SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
-    SAL_DLLPRIVATE virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
-    SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL available(  ) override;
-    SAL_DLLPRIVATE virtual void SAL_CALL closeInput(  ) override;
+    virtual ::sal_Int32 readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    SAL_DLLPRIVATE virtual ::sal_Int32 readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    SAL_DLLPRIVATE virtual void skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    SAL_DLLPRIVATE virtual ::sal_Int32 available(  ) override;
+    SAL_DLLPRIVATE virtual void closeInput(  ) override;
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
-    SAL_DLLPRIVATE virtual void SAL_CALL flush(  ) override;
-    virtual void SAL_CALL closeOutput(  ) override;
+    virtual void writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
+    SAL_DLLPRIVATE virtual void flush(  ) override;
+    virtual void closeOutput(  ) override;
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) override;
-    virtual sal_Int64 SAL_CALL getPosition(  ) override;
-    SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getLength(  ) override;
+    virtual void seek( sal_Int64 location ) override;
+    virtual sal_Int64 getPosition(  ) override;
+    SAL_DLLPRIVATE virtual sal_Int64 getLength(  ) override;
     // XStream
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
+    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
     // XTruncate
-    SAL_DLLPRIVATE virtual void SAL_CALL truncate() override;
+    SAL_DLLPRIVATE virtual void truncate() override;
 
     // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;

@@ -63,53 +63,53 @@ public:
 
     //Methods
     //  XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
     //  XServiceInfo
-    virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual bool supportsService(const OUString& sServiceName) override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     //  XTempFile
-    virtual bool SAL_CALL getRemoveFile() override;
-    virtual void SAL_CALL setRemoveFile( bool _removefile ) override;
-    virtual OUString SAL_CALL getUri() override;
-    virtual OUString SAL_CALL getResourceName() override;
+    virtual bool getRemoveFile() override;
+    virtual void setRemoveFile( bool _removefile ) override;
+    virtual OUString getUri() override;
+    virtual OUString getResourceName() override;
 
     // XInputStream
-    virtual ::sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
-    virtual ::sal_Int32 SAL_CALL available(  ) override;
-    virtual void SAL_CALL closeInput(  ) override;
+    virtual ::sal_Int32 readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual void skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    virtual ::sal_Int32 available(  ) override;
+    virtual void closeInput(  ) override;
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
-    virtual void SAL_CALL flush(  ) override;
-    virtual void SAL_CALL closeOutput(  ) override;
+    virtual void writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual void flush(  ) override;
+    virtual void closeOutput(  ) override;
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) override;
-    virtual sal_Int64 SAL_CALL getPosition(  ) override;
-    virtual sal_Int64 SAL_CALL getLength(  ) override;
+    virtual void seek( sal_Int64 location ) override;
+    virtual sal_Int64 getPosition(  ) override;
+    virtual sal_Int64 getLength(  ) override;
     // XStream
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
+    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
     // XTruncate
-    virtual void SAL_CALL truncate() override;
+    virtual void truncate() override;
 
     // XPropertySet
-    virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
-    virtual ::cpo::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
     // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::uno::Any& aValue ) override;
-    virtual ::cpo::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) override;
+    virtual void setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::uno::Any& aValue ) override;
+    virtual ::cpo::uno::Any getFastPropertyValue( ::sal_Int32 nHandle ) override;
     // XPropertyAccess
-    virtual ::cpo::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues( const ::cpo::uno::Sequence< ::css::beans::PropertyValue >& aProps ) override;
+    virtual ::cpo::uno::Sequence< ::css::beans::PropertyValue > getPropertyValues() override;
+    virtual void setPropertyValues( const ::cpo::uno::Sequence< ::css::beans::PropertyValue >& aProps ) override;
 
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 

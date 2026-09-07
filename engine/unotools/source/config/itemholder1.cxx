@@ -71,7 +71,7 @@ void ItemHolder1::holdConfigItem(EItem eItem)
     pHolder->impl_addItem(eItem);
 }
 
-void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
+void ItemHolder1::disposing(const css::lang::EventObject&)
 {
     css::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
     impl_releaseAllItems();

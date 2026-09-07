@@ -78,9 +78,9 @@ public:
     explicit ChangeListener (Impl& rParent): m_rParent(rParent) { }
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) override;
+    virtual void changesOccurred (util::ChangesEvent const& Event) override;
     // XEventListener
-    virtual void SAL_CALL disposing (lang::EventObject const& Source) override;
+    virtual void disposing (lang::EventObject const& Source) override;
 
 private:
     Impl& m_rParent;

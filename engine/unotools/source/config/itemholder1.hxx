@@ -43,7 +43,7 @@ class ItemHolder1 : public ::cppu::WeakImplHelper< css::lang::XEventListener >
     // uno interface
     public:
 
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+        virtual void disposing(const css::lang::EventObject& aEvent) override;
 
     // helper
     private:

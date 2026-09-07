@@ -110,7 +110,7 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    rtl::Reference<interface_type> SAL_CALL get() const
+    rtl::Reference<interface_type> get() const
 #if !(defined __clang__ && __clang_major__ <= 15)
         requires(!cppu::detail::isUnoInterfaceType<interface_type>)
 #endif

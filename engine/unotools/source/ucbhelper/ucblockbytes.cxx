@@ -89,16 +89,16 @@ public:
     {}
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
-    virtual void SAL_CALL   start() override {}
-    virtual void SAL_CALL   terminate() override
+    virtual void   addListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
+    virtual void   removeListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
+    virtual void   start() override {}
+    virtual void   terminate() override
                             { m_xLockBytes->terminate(); }
 
     // XActiveDataSink.
-    virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) override
+    virtual void   setInputStream ( const Reference<XInputStream> &rxInputStream) override
                             { m_xLockBytes->setInputStream(rxInputStream); }
-    virtual Reference<XInputStream> SAL_CALL getInputStream() override
+    virtual Reference<XInputStream> getInputStream() override
                             { return m_xLockBytes->getInputStream(); }
 };
 
@@ -116,16 +116,16 @@ public:
     {}
 
     // XActiveDataControl.
-    virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
-    virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
-    virtual void SAL_CALL   start() override {}
-    virtual void SAL_CALL   terminate() override
+    virtual void   addListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
+    virtual void   removeListener ( const Reference<XStreamListener> &/*rxListener*/) override {}
+    virtual void   start() override {}
+    virtual void   terminate() override
                             { m_xLockBytes->terminate(); }
 
     // XActiveDataStreamer
-    virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) override
+    virtual void   setStream( const Reference< XStream >& aStream ) override
                             { m_xStream = aStream; m_xLockBytes->setStream( aStream ); }
-    virtual Reference< XStream > SAL_CALL getStream() override
+    virtual Reference< XStream > getStream() override
                             { return m_xStream; }
 };
 
@@ -144,10 +144,10 @@ public:
                                 , m_xProgressHandler( rxProgressHandler )
                             {}
 
-    virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler() override
+    virtual Reference<XInteractionHandler> getInteractionHandler() override
     { return m_xInteractionHandler; }
 
-    virtual Reference<XProgressHandler> SAL_CALL    getProgressHandler() override
+    virtual Reference<XProgressHandler>    getProgressHandler() override
     { return m_xProgressHandler; }
 };
 
@@ -163,13 +163,13 @@ public:
         : m_xLockBytes(std::move( xRef ))
     {}
 
-    virtual void SAL_CALL   disposing ( const EventObject &/*rEvent*/) override {}
-    virtual void SAL_CALL   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) override;
+    virtual void   disposing ( const EventObject &/*rEvent*/) override {}
+    virtual void   propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent) override;
 };
 
 }
 
-void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent)
+void UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequence<PropertyChangeEvent> &rEvent)
 {
     for (const auto& rPropChangeEvent : rEvent)
     {
@@ -276,8 +276,8 @@ public:
     void setInputStream(const Reference<XInputStream> &rxInputStream);
 
 protected:
-    virtual void SAL_CALL run() override;
-    virtual void SAL_CALL onTerminated() override;
+    virtual void run() override;
+    virtual void onTerminated() override;
 
 private:
     osl::Mutex        m_aMutex;
@@ -306,12 +306,12 @@ public:
     explicit ModeratorsActiveDataStreamer(Moderator &theModerator);
 
     // XActiveDataStreamer
-    virtual void SAL_CALL
+    virtual void
     setStream(
         const Reference< XStream >& aStream
     ) override;
 
-    virtual Reference<XStream> SAL_CALL getStream () override
+    virtual Reference<XStream> getStream () override
     {
         std::scoped_lock aGuard(m_aMutex);
         return m_xStream;
@@ -332,12 +332,12 @@ public:
     explicit ModeratorsActiveDataSink(Moderator &theModerator);
 
     // XActiveDataSink.
-    virtual void SAL_CALL
+    virtual void
     setInputStream (
         const Reference<XInputStream> &rxInputStream
     ) override;
 
-    virtual Reference<XInputStream> SAL_CALL getInputStream() override
+    virtual Reference<XInputStream> getInputStream() override
     {
         std::scoped_lock aGuard(m_aMutex);
         return m_xStream;
@@ -357,7 +357,7 @@ ModeratorsActiveDataSink::ModeratorsActiveDataSink(Moderator &theModerator)
 }
 
 // XActiveDataSink.
-void SAL_CALL
+void
 ModeratorsActiveDataSink::setInputStream (
     const Reference<XInputStream> &rxInputStream
 )
@@ -375,7 +375,7 @@ ModeratorsActiveDataStreamer::ModeratorsActiveDataStreamer(
 }
 
 // XActiveDataStreamer.
-void SAL_CALL
+void
 ModeratorsActiveDataStreamer::setStream (
     const Reference<XStream> &rxStream
 )
@@ -394,7 +394,7 @@ public:
 
     explicit ModeratorsInteractionHandler(Moderator &theModerator);
 
-    virtual void SAL_CALL
+    virtual void
     handle( const Reference<XInteractionRequest >& Request ) override;
 
 private:
@@ -410,7 +410,7 @@ ModeratorsInteractionHandler::ModeratorsInteractionHandler(
 {
 }
 
-void SAL_CALL
+void
 ModeratorsInteractionHandler::handle(
     const Reference<XInteractionRequest >& Request
 )
@@ -568,7 +568,7 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
         setReply(EXIT);
 }
 
-void SAL_CALL Moderator::run()
+void Moderator::run()
 {
     osl_setThreadName("utl::Moderator");
 
@@ -611,7 +611,7 @@ void SAL_CALL Moderator::run()
     }
 }
 
-void SAL_CALL Moderator::onTerminated()
+void Moderator::onTerminated()
 {
     {
         salhelper::ConditionWaiter aWaiter(m_aRep);

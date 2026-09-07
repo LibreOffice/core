@@ -72,10 +72,10 @@ namespace utl{
             ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
 
         //XChangesListener
-        virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) override;
+        virtual void changesOccurred( const ChangesEvent& Event ) override;
 
         //XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) override;
+        virtual void disposing( const EventObject& Source ) override;
     };
 }
 

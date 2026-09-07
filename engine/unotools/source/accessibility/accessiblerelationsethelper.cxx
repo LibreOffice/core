@@ -68,7 +68,7 @@ AccessibleRelationSetHelper::~AccessibleRelationSetHelper()
         @return
             Returns the number of relations or zero if there are none.
     */
-sal_Int32 SAL_CALL
+sal_Int32
     AccessibleRelationSetHelper::getRelationCount(  )
 {
     std::scoped_lock aGuard (maMutex);
@@ -89,7 +89,7 @@ sal_Int32 SAL_CALL
             has the type INVALID.
 
     */
- AccessibleRelation SAL_CALL
+ AccessibleRelation
         AccessibleRelationSetHelper::getRelation( sal_Int32 nIndex )
 {
     std::scoped_lock aGuard (maMutex);
@@ -112,7 +112,7 @@ sal_Int32 SAL_CALL
             Returns <TRUE/> if there is a (at least one) relation of the
             given type and <FALSE/> if there is no such relation in the set.
     */
-bool SAL_CALL
+bool
     AccessibleRelationSetHelper::containsRelation(AccessibleRelationType eRelationType)
 {
     std::scoped_lock aGuard (maMutex);
@@ -132,7 +132,7 @@ bool SAL_CALL
             of) this relation is returned.  Otherwise a relation with the
             type INVALID is returned.
     */
-AccessibleRelation SAL_CALL
+AccessibleRelation
         AccessibleRelationSetHelper::getRelationByType(AccessibleRelationType eRelationType)
 {
     std::scoped_lock aGuard (maMutex);

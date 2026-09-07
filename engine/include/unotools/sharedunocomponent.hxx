@@ -184,7 +184,7 @@ namespace utl
         inline void set( const css::uno::Reference< INTERFACE >& _rRef, css::uno::UnoReference_SetThrow _setThrow );
         inline void set( const SharedUNOComponent& _rComp, css::uno::UnoReference_SetThrow _setThrow );
 
-        INTERFACE* SAL_CALL operator->() const;
+        INTERFACE* operator->() const;
 
         operator const css::uno::Reference< INTERFACE >&() const
         {
@@ -209,7 +209,7 @@ namespace utl
     };
 
     template < class INTERFACE, class COMPONENT >
-    INTERFACE* SAL_CALL SharedUNOComponent< INTERFACE, COMPONENT >::operator->() const
+    INTERFACE* SharedUNOComponent< INTERFACE, COMPONENT >::operator->() const
     {
         return m_xTypedComponent.operator->();
     }
@@ -231,7 +231,7 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    inline cpo::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
+    inline cpo::uno::Any makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
         return cpo::uno::Any( value.getTyped() );
     }

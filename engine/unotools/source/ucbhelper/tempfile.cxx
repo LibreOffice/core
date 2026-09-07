@@ -525,7 +525,7 @@ TempFileFastService::~TempFileFastService ()
 
 // XInputStream
 
-sal_Int32 SAL_CALL TempFileFastService::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 TempFileFastService::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
@@ -547,7 +547,7 @@ sal_Int32 SAL_CALL TempFileFastService::readBytes( cpo::uno::Sequence< sal_Int8 
     return nRead;
 }
 
-sal_Int32 SAL_CALL TempFileFastService::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 TempFileFastService::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     {
         std::unique_lock aGuard( maMutex );
@@ -591,7 +591,7 @@ sal_Int32 TempFileFastService::readSomeBytes( sal_Int8* aData, sal_Int32 nBytesT
     return nRead;
 }
 
-void SAL_CALL TempFileFastService::skipBytes( sal_Int32 nBytesToSkip )
+void TempFileFastService::skipBytes( sal_Int32 nBytesToSkip )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
@@ -603,7 +603,7 @@ void SAL_CALL TempFileFastService::skipBytes( sal_Int32 nBytesToSkip )
     checkError();
 }
 
-sal_Int32 SAL_CALL TempFileFastService::available()
+sal_Int32 TempFileFastService::available()
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
@@ -617,7 +617,7 @@ sal_Int32 SAL_CALL TempFileFastService::available()
     return std::min<sal_Int64>(SAL_MAX_INT32, nAvailable);
 }
 
-void SAL_CALL TempFileFastService::closeInput()
+void TempFileFastService::closeInput()
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
@@ -635,7 +635,7 @@ void SAL_CALL TempFileFastService::closeInput()
 
 // XOutputStream
 
-void SAL_CALL TempFileFastService::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
+void TempFileFastService::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
@@ -663,7 +663,7 @@ void TempFileFastService::writeBytes( const sal_Int8* aData, sal_Int32 nBytesToW
         throw css::io::BufferSizeExceededException( OUString(), getXWeak() );
 }
 
-void SAL_CALL TempFileFastService::flush()
+void TempFileFastService::flush()
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
@@ -674,7 +674,7 @@ void SAL_CALL TempFileFastService::flush()
     checkError();
 }
 
-void SAL_CALL TempFileFastService::closeOutput()
+void TempFileFastService::closeOutput()
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
@@ -710,7 +710,7 @@ void TempFileFastService::checkConnected()
 
 // XSeekable
 
-void SAL_CALL TempFileFastService::seek( sal_Int64 nLocation )
+void TempFileFastService::seek( sal_Int64 nLocation )
 {
     std::unique_lock aGuard( maMutex );
     checkConnected();
@@ -724,7 +724,7 @@ void SAL_CALL TempFileFastService::seek( sal_Int64 nLocation )
     checkError();
 }
 
-sal_Int64 SAL_CALL TempFileFastService::getPosition()
+sal_Int64 TempFileFastService::getPosition()
 {
     std::unique_lock aGuard( maMutex );
     checkConnected();
@@ -734,7 +734,7 @@ sal_Int64 SAL_CALL TempFileFastService::getPosition()
     return static_cast<sal_Int64>(nPos);
 }
 
-sal_Int64 SAL_CALL TempFileFastService::getLength()
+sal_Int64 TempFileFastService::getLength()
 {
     std::unique_lock aGuard( maMutex );
     checkConnected();
@@ -748,19 +748,19 @@ sal_Int64 SAL_CALL TempFileFastService::getLength()
 
 // XStream
 
-css::uno::Reference< css::io::XInputStream > SAL_CALL TempFileFastService::getInputStream()
+css::uno::Reference< css::io::XInputStream > TempFileFastService::getInputStream()
 {
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > SAL_CALL TempFileFastService::getOutputStream()
+css::uno::Reference< css::io::XOutputStream > TempFileFastService::getOutputStream()
 {
     return this;
 }
 
 // XTruncate
 
-void SAL_CALL TempFileFastService::truncate()
+void TempFileFastService::truncate()
 {
     std::unique_lock aGuard( maMutex );
     checkConnected();

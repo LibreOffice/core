@@ -327,19 +327,19 @@ GlobalEventConfig::~GlobalEventConfig()
     }
 }
 
-Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents()
+Reference< container::XNameReplace > GlobalEventConfig::getEvents()
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     Reference< container::XNameReplace > ret(this);
     return ret;
 }
 
-void SAL_CALL GlobalEventConfig::replaceByName( const OUString& aName, const Any& aElement )
+void GlobalEventConfig::replaceByName( const OUString& aName, const Any& aElement )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     m_pImpl->replaceByName( aName, aElement );
 }
-Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName )
+Any GlobalEventConfig::getByName( const OUString& aName )
 {
     return Any(getByName2(aName));
 }
@@ -348,22 +348,22 @@ cpo::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig::getByName2( 
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->getByName( aName );
 }
-Sequence< OUString > SAL_CALL GlobalEventConfig::getElementNames(  )
+Sequence< OUString > GlobalEventConfig::getElementNames(  )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->getElementNames( );
 }
-bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName )
+bool GlobalEventConfig::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasByName( aName );
 }
-Type SAL_CALL GlobalEventConfig::getElementType(  )
+Type GlobalEventConfig::getElementType(  )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return GlobalEventConfig_Impl::getElementType( );
 }
-bool SAL_CALL GlobalEventConfig::hasElements(  )
+bool GlobalEventConfig::hasElements(  )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasElements( );

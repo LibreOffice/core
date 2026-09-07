@@ -58,7 +58,7 @@ public:
         @return
             Returns the number of relations or zero if there are none.
     */
-    virtual sal_Int32 SAL_CALL getRelationCount() override;
+    virtual sal_Int32 getRelationCount() override;
 
     /** Returns the relation of this relation set that is specified by
         the given index.
@@ -73,7 +73,7 @@ public:
             has the type INVALID.
 
     */
-    virtual css::accessibility::AccessibleRelation SAL_CALL getRelation(sal_Int32 nIndex) override;
+    virtual css::accessibility::AccessibleRelation getRelation(sal_Int32 nIndex) override;
 
     /** Tests whether the relation set contains a relation matching the
         specified key.
@@ -85,7 +85,7 @@ public:
             Returns <TRUE/> if there is a (at least one) relation of the
             given type and <FALSE/> if there is no such relation in the set.
     */
-    virtual bool SAL_CALL
+    virtual bool
     containsRelation(css::accessibility::AccessibleRelationType eRelationType) override;
 
     /** Retrieve and return the relation with the given relation type.
@@ -98,7 +98,7 @@ public:
             of) this relation is returned.  Otherwise a relation with the
             type INVALID is returned.
     */
-    virtual css::accessibility::AccessibleRelation SAL_CALL
+    virtual css::accessibility::AccessibleRelation
     getRelationByType(AccessibleRelationType eRelationType) override;
 
     /// @throws uno::RuntimeException
@@ -108,7 +108,7 @@ public:
 
     /** Returns a sequence of all supported interfaces.
     */
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
 
 private:
     /// Mutex guarding this object.

@@ -57,7 +57,7 @@ OInputStreamWrapper::~OInputStreamWrapper()
         delete m_pSvStream;
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+sal_Int32 OInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     checkConnected();
 
@@ -94,7 +94,7 @@ sal_Int32 OInputStreamWrapper::readSomeBytes(sal_Int8* pData, sal_Int32 nBytesTo
     return nRead;
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+sal_Int32 OInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     checkError();
 
@@ -110,7 +110,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_In
         return readBytes(aData, nMaxBytesToRead);
 }
 
-void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
+void OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
     std::scoped_lock aGuard( m_aMutex );
     checkError();
@@ -119,7 +119,7 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
     checkError();
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::available()
+sal_Int32 OInputStreamWrapper::available()
 {
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
@@ -130,7 +130,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available()
     return std::min<sal_Int64>(SAL_MAX_INT32, nAvailable);
 }
 
-void SAL_CALL OInputStreamWrapper::closeInput()
+void OInputStreamWrapper::closeInput()
 {
     std::scoped_lock aGuard( m_aMutex );
     if (m_pSvStream)
@@ -172,7 +172,7 @@ OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, boo
     SetStream( _pStream, _bOwner );
 }
 
-void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
+void OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
 {
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
@@ -181,7 +181,7 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
     checkError();
 }
 
-sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
+sal_Int64 OSeekableInputStreamWrapper::getPosition(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
@@ -191,7 +191,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
     return static_cast<sal_Int64>(nPos);
 }
 
-sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  )
+sal_Int64 OSeekableInputStreamWrapper::getLength(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
@@ -211,7 +211,7 @@ OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
 
 OOutputStreamWrapper::~OOutputStreamWrapper() {}
 
-void SAL_CALL OOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
+void OOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt32 nWritten = rStream.WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = rStream.GetError();
@@ -223,13 +223,13 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int
     }
 }
 
-void SAL_CALL OOutputStreamWrapper::flush()
+void OOutputStreamWrapper::flush()
 {
     rStream.FlushBuffer();
     checkError();
 }
 
-void SAL_CALL OOutputStreamWrapper::closeOutput()
+void OOutputStreamWrapper::closeOutput()
 {
 }
 
@@ -249,7 +249,7 @@ OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
 
 OSeekableOutputStreamWrapper::~OSeekableOutputStreamWrapper() {}
 
-Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType )
+Any OSeekableOutputStreamWrapper::queryInterface( const Type& _rType )
 {
     Any aReturn = OOutputStreamWrapper::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -257,20 +257,20 @@ Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType )
     return aReturn;
 }
 
-void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation )
+void OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation )
 {
     rStream.Seek(static_cast<sal_uInt32>(_nLocation));
     checkError();
 }
 
-sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  )
+sal_Int64 OSeekableOutputStreamWrapper::getPosition(  )
 {
     sal_uInt64 nPos = rStream.Tell();
     checkError();
     return static_cast<sal_Int64>(nPos);
 }
 
-sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  )
+sal_Int64 OSeekableOutputStreamWrapper::getLength(  )
 {
     checkError();
 
@@ -296,17 +296,17 @@ OStreamWrapper::OStreamWrapper(SvStream* pStream, bool bOwner)
     SetStream( pStream, bOwner );
 }
 
-css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  )
+css::uno::Reference< css::io::XInputStream > OStreamWrapper::getInputStream(  )
 {
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  )
+css::uno::Reference< css::io::XOutputStream > OStreamWrapper::getOutputStream(  )
 {
     return this;
 }
 
-void SAL_CALL OStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
+void OStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt32 nWritten = m_pSvStream->WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = m_pSvStream->GetError();
@@ -318,18 +318,18 @@ void SAL_CALL OStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& a
     }
 }
 
-void SAL_CALL OStreamWrapper::flush()
+void OStreamWrapper::flush()
 {
     m_pSvStream->FlushBuffer();
     if (m_pSvStream->GetError() != ERRCODE_NONE)
         throw css::io::NotConnectedException(OUString(), getXWeak());
 }
 
-void SAL_CALL OStreamWrapper::closeOutput()
+void OStreamWrapper::closeOutput()
 {
 }
 
-void SAL_CALL OStreamWrapper::truncate()
+void OStreamWrapper::truncate()
 {
     m_pSvStream->SetStreamSize(0);
 }

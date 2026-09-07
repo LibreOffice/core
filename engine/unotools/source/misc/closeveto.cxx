@@ -54,11 +54,11 @@ namespace utl
         }
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& Source, bool GetsOwnership ) override;
-        virtual void SAL_CALL notifyClosing( const EventObject& Source ) override;
+        virtual void queryClosing( const EventObject& Source, bool GetsOwnership ) override;
+        virtual void notifyClosing( const EventObject& Source ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source) override;
+        virtual void disposing( const EventObject& Source) override;
 
         bool hasOwnership() const { return m_bHasOwnership; }
 
@@ -73,7 +73,7 @@ namespace utl
 
     }
 
-    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject&, bool i_deliverOwnership )
+    void CloseListener_Impl::queryClosing( const EventObject&, bool i_deliverOwnership )
     {
         if ( !m_bHasOwnership )
             m_bHasOwnership = i_deliverOwnership;
@@ -81,9 +81,9 @@ namespace utl
         throw CloseVetoException();
     }
 
-    void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& ) {}
+    void CloseListener_Impl::notifyClosing( const EventObject& ) {}
 
-    void SAL_CALL CloseListener_Impl::disposing( const EventObject& ) {}
+    void CloseListener_Impl::disposing( const EventObject& ) {}
 
     //= CloseVeto_Data
 
