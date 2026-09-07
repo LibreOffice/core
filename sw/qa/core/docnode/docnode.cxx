@@ -13,6 +13,8 @@
 #include <redline.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
+#include <node.hxx>
+#include <swtable.hxx>
 
 /// Covers sw/source/core/docnode/ fixes.
 class Test : public SwModelTestBase
@@ -64,6 +66,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156267)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableBoxKeepsItsCellSection)
+{
+    // Given a document whose tracked deletion carries on across a cell mark, so applying it at
+    // import empties one cell of the table:
+    createSwDoc("ofz515655013.doc");
+
+    // Then every box of the table still has a cell section of its own:
+    SwDoc* pDoc = getSwDoc();
+    SwNodes& rNodes = pDoc->GetNodes();
+    const SwTableNode* pTableNode = nullptr;
+    for (SwNodeOffset nNode(0); nNode < rNodes.Count(); ++nNode)
+    {
+        if (rNodes[nNode]->IsTableNode())
+        {
+            pTableNode = rNodes[nNode]->GetTableNode();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTableNode);
+    int nCellSections = 0;
+    for (SwNodeOffset nNode = pTableNode->GetIndex(); nNode < pTableNode->EndOfSectionIndex();
+         ++nNode)
+    {
+        const SwStartNode* pStartNode = rNodes[nNode]->GetStartNode();
+        if (pStartNode && pStartNode->GetStartNodeType() == SwTableBoxStartNode)
+            ++nCellSections;
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pTableNode->GetTable().GetTabSortBoxes().size());
+    CPPUNIT_ASSERT_EQUAL(6, nCellSections);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
