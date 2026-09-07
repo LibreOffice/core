@@ -182,6 +182,48 @@ describe(['tagdesktop'], 'Accessibility Impress Sidebar Tests', { testIsolation:
 		});
 	});
 
+	it('ShapesDeck', function () {
+		// Clicking a tab that is already selected collapses the notebookbar.
+		cy.cGet('#View-tab-label').then(function ($tab) {
+			if (!$tab.hasClass('selected')) cy.wrap($tab).click();
+		});
+		cy.cGet('#View-container').should('be.visible');
+		cy.cGet('#View-container [modelId="view-shapes-deck"] button').click();
+
+		cy.then(() => {
+			helper.processToIdle(win);
+		});
+		cy.cGet('#DefaultShapesPanel').should('exist');
+
+		runA11yValidation(win);
+
+		// The galleries are read from the panel itself: every shape has to reach
+		// the tree as a named item, which a single custom drawn area cannot do.
+		let shapeCount;
+		cy.then(() => {
+			const panel = win.document.querySelector('#DefaultShapesPanel');
+			const galleries = panel.querySelectorAll('.ui-iconview[id]');
+			expect(galleries, 'shape galleries in the panel').to.not.be.empty;
+
+			shapeCount = panel.querySelectorAll('.ui-iconview-entry').length;
+			expect(shapeCount, 'shapes across the galleries').to.be.greaterThan(galleries.length);
+		});
+
+		cy.then(() => {
+			a11yHelper.getAXNodesWithin('#DefaultShapesPanel').then(function (nodes) {
+				const named = nodes
+					.filter(function (node) { return !node.ignored; })
+					.filter(function (node) { return node.name.trim() !== ''; });
+				expect(named.length, 'named nodes for the shapes').to.be.at.least(shapeCount);
+			});
+		});
+
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
+			helper.processToIdle(win);
+		});
+	});
+
 	function runA11yValidation(win) {
 		a11yHelper.runA11yValidation(win, 'validatesidebara11y');
 	}
