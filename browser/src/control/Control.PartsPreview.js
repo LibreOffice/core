@@ -605,6 +605,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				});
 			}
 
+			if (that._pageLink(img) !== null) {
+				entries.push({
+					id: 'unlinkslide',
+					type: 'comboboxentry',
+					text: _('Unlink Slide'),
+					img: 'removehyperlink',
+					class: 'unlinkslide',
+					pos: 0,
+				});
+			}
+
 			// if not the first section slide then add entry for section
 			var isFirstSectionSlide = false;
 			const sections = app.impress.sections;
@@ -673,6 +684,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					break;
 				case 'addsection':
 					app.socket.sendMessage('uno .uno:AddSlideSection');
+					break;
+				case 'unlinkslide':
+					that._map.slideLinks.breakLink(img._part);
 					break;
 				}
 				JSDialog.CloseAllDropdowns();

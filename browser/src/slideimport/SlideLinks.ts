@@ -175,6 +175,14 @@ class SlideLinks {
 		for (const source of this.sources) this.updateSource(source);
 	}
 
+	// The page keeps the content it holds and becomes a regular page
+	// of this document.
+	public breakLink(part: string): void {
+		if (!this.map.isEditMode()) return;
+		if (!this.pages.has(part)) return;
+		app.socket.sendMessage('slidelink break part=' + part);
+	}
+
 	// Refreshes the pages of one source. A source that is already being read,
 	// or waiting for its turn, is left where it is, so asking twice refreshes
 	// it once.
