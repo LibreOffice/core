@@ -1421,15 +1421,6 @@ bool DocumentBroker::doDownloadDocument(const Authorization& auth,
 
     _docState.setStatus(DocumentState::Status::Loading); // Done downloading.
 
-#if !MOBILEAPP
-    if (!processPlugins(localPath))
-    {
-        // FIXME: Why don't we resume anyway?
-        LOG_WRN("Failed to process plugins on file [" << localPath << ']');
-        return false;
-    }
-#endif //!MOBILEAPP
-
     const std::string localFilePath =
 #if !MOBILEAPP
         // Without capabilities there is no chroot, so the storage gives a
@@ -2685,80 +2676,6 @@ bool DocumentBroker::parseBrowserSettings(const std::shared_ptr<ClientSession>& 
     return true;
 }
 
-bool DocumentBroker::processPlugins(std::string& localPath)
-{
-    // Check if we have a prefilter "plugin" for this document format
-    for (const auto& plugin : COOLWSD::PluginConfigurations)
-    {
-        try
-        {
-            const std::string extension(plugin->getString("prefilter.extension"));
-            const std::string newExtension(plugin->getString("prefilter.newextension"));
-            std::string commandLine(plugin->getString("prefilter.commandline"));
-
-            if (localPath.length() > extension.length() + 1 &&
-                strcasecmp(localPath.substr(localPath.length() - extension.length() - 1).data(),
-                           (std::string(".") + extension).data()) == 0)
-            {
-                // Extension matches, try the conversion. We convert the file to another one in
-                // the same (jail) directory, with just the new extension tacked on.
-
-                const std::string newRootPath = _storage->getRootFilePath() + '.' + newExtension;
-
-                // The commandline must contain the space-separated substring @INPUT@ that is
-                // replaced with the input file name, and @OUTPUT@ for the output file name.
-                int inputs(0), outputs(0);
-
-                std::string input("@INPUT");
-                std::size_t pos = commandLine.find(input);
-                if (pos != std::string::npos)
-                {
-                    commandLine.replace(pos, input.length(), _storage->getRootFilePath());
-                    ++inputs;
-                }
-
-                std::string output("@OUTPUT@");
-                pos = commandLine.find(output);
-                if (pos != std::string::npos)
-                {
-                    commandLine.replace(pos, output.length(), newRootPath);
-                    ++outputs;
-                }
-
-                StringVector args(StringVector::tokenize(commandLine, ' '));
-                std::string command(args[0]);
-                args.erase(args.begin()); // strip the command
-
-                if (inputs != 1 || outputs != 1)
-                    throw std::exception();
-
-                const int process = ProcUtil::spawnProcess(command, args);
-                int status = -1;
-                const int rc = ::waitpid(process, &status, 0);
-                if (rc != 0)
-                {
-                    LOG_ERR("Conversion from " << extension << " to " << newExtension << " failed ("
-                                               << rc << ") while running plugin [" << commandLine
-                                               << ']');
-                    return false;
-                }
-
-                _storage->setRootFilePath(newRootPath);
-                localPath += '.' + newExtension;
-            }
-
-            // We successfully converted the file to something LO can use; break out of the for
-            // loop.
-            break;
-        }
-        catch (const std::exception&)
-        {
-            // This plugin is not a proper prefilter one
-        }
-    }
-
-    return true;
-}
 #endif // !MOBILEAPP
 
 std::string DocumentBroker::handleRenameFileCommand(std::string sessionId,

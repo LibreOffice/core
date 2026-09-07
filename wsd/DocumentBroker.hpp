@@ -773,9 +773,6 @@ private:
                                           WopiStorage* wopiStorage,
                                           std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo);
 
-    /// Process the configured plugins, if any, after downloading the document file.
-    bool processPlugins(std::string& localPath);
-
     /// Start an asynchronous CheckFileInfo request.
     void checkFileInfo(const std::shared_ptr<ClientSession>& uri, int redirectLimit);
 #endif // !MOBILEAPP

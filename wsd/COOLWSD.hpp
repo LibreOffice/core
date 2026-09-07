@@ -85,7 +85,6 @@ public:
 #endif
     static std::string UserInterface;
     static std::string ConfigFile;
-    static std::string ConfigDir;
     static std::string SysTemplate;
     static std::string LoTemplate;
     static std::string CleanupChildRoot;
@@ -141,7 +140,6 @@ public:
     static unsigned MaxDocuments;
     static std::string HardwareResourceWarning;
     static std::string OverrideWatermark;
-    static std::set<const Poco::Util::AbstractConfiguration*> PluginConfigurations;
     static std::chrono::steady_clock::time_point StartTime;
     static std::string BuyProductUrl;
     static std::string LatestVersion;

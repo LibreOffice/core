@@ -79,7 +79,6 @@
 #include <wsd/TraceFile.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
 
-#include <Poco/DirectoryIterator.h>
 #include <Poco/Exception.h>
 #include <Poco/File.h>
 #include <Poco/Path.h>
@@ -835,7 +834,6 @@ std::string COOLWSD::ConfigFile =
 #else
     COOLWSD_CONFIGDIR "/coolwsd.xml";
 #endif
-std::string COOLWSD::ConfigDir = COOLWSD_CONFIGDIR "/conf.d";
 bool COOLWSD::EnableTraceEventLogging = false;
 bool COOLWSD::EnableAccessibility = false;
 bool COOLWSD::EnableMountNamespaces = false;
@@ -859,7 +857,6 @@ unsigned COOLWSD::MaxConnections;
 unsigned COOLWSD::MaxDocuments;
 std::string COOLWSD::HardwareResourceWarning = "ok";
 std::string COOLWSD::OverrideWatermark;
-std::set<const Poco::Util::AbstractConfiguration*> COOLWSD::PluginConfigurations;
 std::chrono::steady_clock::time_point COOLWSD::StartTime;
 bool COOLWSD::IsBindMountingEnabled = true;
 bool COOLWSD::IndirectionServerEnabled = false;
@@ -1620,24 +1617,6 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     ConfigUtil::initialize(&config());
 
 #if !MOBILEAPP
-    // Load extra ("plug-in") configuration files, if present
-    Poco::File dir(ConfigDir);
-    if (dir.exists() && dir.isDirectory())
-    {
-        const Poco::DirectoryIterator end;
-        for (Poco::DirectoryIterator configFileIterator(dir); configFileIterator != end;
-             ++configFileIterator)
-        {
-            // Only accept configuration files ending in .xml
-            const std::string configFile = configFileIterator.path().getFileName();
-            if (configFile.length() > 4 && strcasecmp(configFile.substr(configFile.length() - 4).data(), ".xml") == 0)
-            {
-                const std::string fullFileName = dir.path() + "/" + configFile;
-                PluginConfigurations.insert(new Poco::Util::XMLConfiguration(fullFileName));
-            }
-        }
-    }
-
     if (!UnitTestLibrary.empty())
     {
         UnitWSD::defaultConfigure(conf);
@@ -2695,11 +2674,6 @@ void COOLWSD::defineOptions(Poco::Util::OptionSet& optionSet)
                         .repeatable(false)
                         .argument("path"));
 
-    optionSet.addOption(Option("config-dir", "", "Override extra configuration directory path.")
-                        .required(false)
-                        .repeatable(false)
-                        .argument("path"));
-
     optionSet.addOption(Option("lo-template-path", "", "Override the COKit core installation directory path.")
                         .required(false)
                         .repeatable(false)
@@ -2798,8 +2772,6 @@ void COOLWSD::handleOption(const std::string& optionName,
     }
     else if (optionName == "config-file")
         ConfigFile = value;
-    else if (optionName == "config-dir")
-        ConfigDir = value;
     else if (optionName == "lo-template-path")
         LoTemplate = value;
     else if (optionName == "signal")
@@ -3725,7 +3697,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
        << "\n  ServiceRoot: " << COOLWSD::ServiceRoot
        << "\n  LOKitVersion: " << COOLWSD::LOKitVersion
        << "\n  HostIdentifier: " << Util::getProcessIdentifier()
-       << "\n  ConfigFile: " << COOLWSD::ConfigFile << "\n  ConfigDir: " << COOLWSD::ConfigDir
+       << "\n  ConfigFile: " << COOLWSD::ConfigFile
        << "\n  LogLevel: " << COOLWSD::LogLevel
        << "\n  LogDisabledAreas: " << COOLWSD::LogDisabledAreas
        << "\n  AnonymizeUserData: " << (Anonymizer::enabled() ? "yes" : "no")
