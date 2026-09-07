@@ -17,6 +17,7 @@
 #include <comphelper/hash.hxx>
 #include <sal/log.hxx>
 
+#include <atomic>
 #include <vector>
 
 struct BinaryDataContainer::Impl
@@ -27,6 +28,8 @@ struct BinaryDataContainer::Impl
     std::shared_ptr<std::vector<sal_uInt8>> mpData;
     /// 0 means "not computed yet".
     mutable BitmapChecksum mnChecksum = 0;
+    /// Holders that each account an equal share of the bytes.
+    std::atomic<size_t> mnSizeHolders = 0;
 
     Impl(SvStream& stream, size_t size) { readData(stream, size); }
 
@@ -189,6 +192,26 @@ size_t BinaryDataContainer::getSizeBytes() const
     return mpImpl && mpImpl->mpData ? mpImpl->mpData->size() : 0;
 }
 
+void BinaryDataContainer::addSizeHolder() const
+{
+    if (mpImpl)
+        ++mpImpl->mnSizeHolders;
+}
+
+void BinaryDataContainer::removeSizeHolder() const
+{
+    if (mpImpl)
+    {
+        assert(mpImpl->mnSizeHolders > 0);
+        --mpImpl->mnSizeHolders;
+    }
+}
+
+size_t BinaryDataContainer::getSizeHolderCount() const
+{
+    return mpImpl ? mpImpl->mnSizeHolders.load() : 0;
+}
+
 bool BinaryDataContainer::isEmpty() const
 {
     ensureSwappedIn();
@@ -217,6 +240,11 @@ void BinaryDataContainer::swapOut() const
 {
     // Only bother reducing memory footprint in kit mode - for mobile/online etc.
     if (!mpImpl || !comphelper::COKit::isActive())
+        return;
+
+    // Every registered size holder still reads these bytes from memory, so the swap to disk
+    // happens once the last holder is gone.
+    if (mpImpl->mnSizeHolders > 0)
         return;
 
     mpImpl->swapOut();

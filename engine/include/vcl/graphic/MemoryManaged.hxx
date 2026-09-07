@@ -135,6 +135,7 @@ protected:
 public:
     virtual bool canReduceMemory() const = 0;
     virtual bool reduceMemory() = 0;
+    virtual void refreshCurrentSizeInBytes() {} // Brings getCurrentSizeInBytes() up to date.
     virtual std::chrono::high_resolution_clock::time_point getLastUsed() const = 0;
     virtual void dumpState(rtl::OStringBuffer& rState) = 0;
 };

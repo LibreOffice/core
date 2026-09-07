@@ -1003,16 +1003,33 @@ void ImpGraphic::setPrefMapMode(const MapMode& rPrefMapMode)
     setValuesForPrefMapMod(rPrefMapMode);
 }
 
+sal_Int64 ImpGraphic::getAccountedSizeBytes() const
+{
+    sal_Int64 nSize = isAvailable() ? getSizeBytes() : 0;
+
+    // Copies of one graphic share the vector data of a PDF page, so each copy carries an
+    // equal share of the bytes and together the copies count the data once.
+    if (maVectorGraphicData && maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
+        nSize /= maVectorGraphicData.use_count();
+
+    return nSize;
+}
+
 void ImpGraphic::ensureCurrentSizeInBytes()
 {
-    if (isAvailable())
-        changeExisting(getSizeBytes());
-    else
-        changeExisting(0);
+    sal_Int64 nNewSize = getAccountedSizeBytes();
+
+    if (nNewSize != getCurrentSizeInBytes())
+        changeExisting(nNewSize);
 }
 
 sal_Int64 ImpGraphic::getSizeBytes() const
 {
+    // A PDF page carries a share of the file bytes that changes as other pages of the same
+    // file load and unload, so it is queried fresh every time instead of being cached.
+    if (maVectorGraphicData && maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
+        return maVectorGraphicData->getSizeBytes().second;
+
     if (mnSizeBytes > 0)
         return mnSizeBytes;
 
@@ -1382,6 +1399,10 @@ bool ImpGraphic::ensureAvailable() const
         bResult = pThis->swapIn();
     }
 
+    // the accounted size of a PDF page is recomputed on every access
+    if (maVectorGraphicData && maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
+        const_cast<ImpGraphic*>(this)->ensureCurrentSizeInBytes();
+
     resetLastUsed();
     return bResult;
 }
@@ -1436,7 +1457,7 @@ void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
 
 void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
 {
-    if (meType == GraphicType::NONE && mnSizeBytes == 0)
+    if (meType == GraphicType::NONE && getCurrentSizeInBytes() == 0)
         return; // uninteresting.
 
     rState.append("\n\t");
@@ -1448,7 +1469,7 @@ void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
 
     rState.append(static_cast<sal_Int32>(meType));
     rState.append("\tsize:\t");
-    rState.append(mnSizeBytes);
+    rState.append(getCurrentSizeInBytes());
     rState.append("\tgfxl:\t");
     rState.append(static_cast<sal_Int64>(mpGfxLink ? mpGfxLink->getSizeBytes() : -1));
     rState.append("\t");
@@ -1574,7 +1595,7 @@ bool ImpGraphic::swapIn()
 
     if (bReturn)
     {
-        swappedIn(getSizeBytes());
+        swappedIn(getAccountedSizeBytes());
     }
 
     return bReturn;
@@ -1797,6 +1818,13 @@ bool ImpGraphic::canReduceMemory() const
 bool ImpGraphic::reduceMemory()
 {
     return swapOut();
+}
+
+void ImpGraphic::refreshCurrentSizeInBytes()
+{
+    // only a PDF page has an accounted size that changes without an access
+    if (maVectorGraphicData && maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
+        ensureCurrentSizeInBytes();
 }
 
 std::chrono::high_resolution_clock::time_point ImpGraphic::getLastUsed() const

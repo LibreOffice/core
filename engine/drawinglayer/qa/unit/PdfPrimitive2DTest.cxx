@@ -160,6 +160,23 @@ CPPUNIT_TEST_FIXTURE(PdfPrimitive2DTest, testPdfPrimitiveDecomposition)
         }
     }
     CPPUNIT_ASSERT_MESSAGE("PDF should render non-white content", bHasNonWhite);
+
+    // the buffered bitmap of the rendered page is reported as memory in use
+    CPPUNIT_ASSERT(pPrimitive->estimateUsage() > 0);
+
+    CPPUNIT_ASSERT_EQUAL(pPrimitive->estimateUsage(), pPrimitive->getCurrentSizeInBytes());
+
+    // dropping the bitmap on the manager's request takes it out of the accounting again
+    CPPUNIT_ASSERT(pPrimitive->canReduceMemory());
+    CPPUNIT_ASSERT(pPrimitive->reduceMemory());
+    CPPUNIT_ASSERT(!pPrimitive->canReduceMemory());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), pPrimitive->estimateUsage());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), pPrimitive->getCurrentSizeInBytes());
+
+    // the next render brings the bitmap and its accounting back
+    pProcessor->process(aContainer);
+    CPPUNIT_ASSERT(pPrimitive->estimateUsage() > 0);
+    CPPUNIT_ASSERT_EQUAL(pPrimitive->estimateUsage(), pPrimitive->getCurrentSizeInBytes());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfPrimitive2DTest, testPdfPrimitiveEquality)

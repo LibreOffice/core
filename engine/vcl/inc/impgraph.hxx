@@ -146,6 +146,8 @@ private:
 
     sal_Int64 getSizeBytes() const;
 
+    sal_Int64 getAccountedSizeBytes() const;
+
     void ensureCurrentSizeInBytes();
 
     void                draw(OutputDevice& rOutDev, const Point& rDestPt,
@@ -202,6 +204,7 @@ private:
 
     bool canReduceMemory() const override;
     bool reduceMemory() override;
+    void refreshCurrentSizeInBytes() override;
     std::chrono::high_resolution_clock::time_point getLastUsed() const override;
     void resetLastUsed() const;
 

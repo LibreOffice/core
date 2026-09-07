@@ -21,11 +21,13 @@ namespace drawinglayer::primitive2d
 {
 PdfPrimitive2D::PdfPrimitive2D(BinaryDataContainer const& rDataContainer, sal_Int32 nPageIndex,
                                basegfx::B2DHomMatrix const& rTransform)
-    : maDataContainer(rDataContainer)
+    : vcl::graphic::MemoryManaged(true)
+    , maDataContainer(rDataContainer)
     , mnPageIndex(nPageIndex)
     , maTransform(rTransform)
     , mfPreviousDiscreteSizeX(0.0)
     , mfPreviousDiscreteSizeY(0.0)
+    , maLastUsed(std::chrono::high_resolution_clock::now())
 {
     mpPdfDocument = vcl::pdf::PDFiumLibrary::openDocumentShared(maDataContainer);
     activateFlushOnTimer();
@@ -85,6 +87,49 @@ bool PdfPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     }
 
     return false;
+}
+
+sal_Int64 PdfPrimitive2D::estimateUsage()
+{
+    // The buffered bitmap of the rendered page is the memory worth reporting.
+    if (Primitive2DReference xBuffered = getBuffered2DDecomposition())
+        return xBuffered->estimateUsage();
+    return 0;
+}
+
+void PdfPrimitive2D::buffered2DDecompositionChanged()
+{
+    const sal_Int64 nSize = estimateUsage();
+    if (nSize != getCurrentSizeInBytes())
+        changeExisting(nSize);
+}
+
+bool PdfPrimitive2D::canReduceMemory() const { return hasBuffered2DDecomposition(); }
+
+bool PdfPrimitive2D::reduceMemory()
+{
+    setBuffered2DDecomposition(nullptr);
+    return true;
+}
+
+void PdfPrimitive2D::refreshCurrentSizeInBytes()
+{
+    // The accounted size is pushed whenever the buffered bitmap changes, so this only has to
+    // line the manager up with the bitmap that exists right now.
+    buffered2DDecompositionChanged();
+}
+
+std::chrono::high_resolution_clock::time_point PdfPrimitive2D::getLastUsed() const
+{
+    return maLastUsed;
+}
+
+void PdfPrimitive2D::dumpState(rtl::OStringBuffer& rState)
+{
+    rState.append("\n\tpdfpage\t");
+    rState.append(mnPageIndex);
+    rState.append("\tsize:\t");
+    rState.append(getCurrentSizeInBytes());
 }
 
 basegfx::B2DRange
@@ -189,6 +234,8 @@ PdfPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewIn
 void PdfPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                                         const geometry::ViewInformation2D& rViewInformation) const
 {
+    maLastUsed = std::chrono::high_resolution_clock::now();
+
     basegfx::B2DRange aDiscreteRange;
     basegfx::B2DRange aUnitVisibleRange;
     bool bNeedToDecompose(false);

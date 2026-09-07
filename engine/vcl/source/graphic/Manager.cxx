@@ -197,23 +197,32 @@ void MemoryManager::loopAndReduceMemory(std::unique_lock<std::mutex>& rGuard, bo
 
     for (MemoryManaged* pMemoryManaged : aObjectListCopy)
     {
+        if (maObjectList.find(pMemoryManaged) == maObjectList.end())
+            continue;
+
         if (!pMemoryManaged->canReduceMemory())
             continue;
 
-        sal_Int64 nCurrentSizeInBytes = pMemoryManaged->getCurrentSizeInBytes();
-        if (nCurrentSizeInBytes > mnSmallFrySize || bDropAll) // ignore small-fry
-        {
-            auto aCurrent = std::chrono::high_resolution_clock::now();
-            auto aDeltaTime = aCurrent - pMemoryManaged->getLastUsed();
-            auto aSeconds = std::chrono::duration_cast<std::chrono::seconds>(aDeltaTime);
+        auto aCurrent = std::chrono::high_resolution_clock::now();
+        auto aDeltaTime = aCurrent - pMemoryManaged->getLastUsed();
+        auto aSeconds = std::chrono::duration_cast<std::chrono::seconds>(aDeltaTime);
+        if (aSeconds <= mnAllowedIdleTime)
+            continue;
 
-            if (aSeconds > mnAllowedIdleTime)
-            {
-                // unlock because svgio can call back into us
-                rGuard.unlock();
-                pMemoryManaged->reduceMemory();
-                rGuard.lock();
-            }
+        // the accounted size of an object can lag behind rendering and flushing, so each
+        // candidate is judged on a freshly refreshed value
+        rGuard.unlock();
+        pMemoryManaged->refreshCurrentSizeInBytes();
+        rGuard.lock();
+
+        if (maObjectList.find(pMemoryManaged) == maObjectList.end())
+            continue;
+
+        if (bDropAll || pMemoryManaged->getCurrentSizeInBytes() > mnSmallFrySize) // no small-fry
+        {
+            rGuard.unlock();
+            pMemoryManaged->reduceMemory();
+            rGuard.lock();
         }
     }
 }

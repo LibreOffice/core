@@ -261,6 +261,17 @@ void VectorGraphicData::ensureSequenceAndRange()
 
 std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() const
 {
+    if (meType == VectorGraphicDataType::Pdf)
+    {
+        // Every page of one PDF holds the same bytes and is registered as a size holder, so
+        // each page reports an equal share and together the pages count the file once.
+        const size_t nHolderCount = std::max<size_t>(1, maDataContainer.getSizeHolderCount());
+        const size_t nContainerSize = maDataContainer.getSizeBytes() / nHolderCount;
+        const State eState = maSequence.empty() ? State::UNPARSED : State::PARSED;
+
+        return std::make_pair(eState, nContainerSize);
+    }
+
     if (!maSequence.empty() && !maDataContainer.isEmpty())
     {
         return std::make_pair(State::PARSED, maDataContainer.getSize() + mNestedBitmapSize);
@@ -278,10 +289,14 @@ VectorGraphicData::VectorGraphicData(BinaryDataContainer aDataContainer, VectorG
     meType(eVectorDataType),
     mnPageIndex(nPageIndex)
 {
+    if (meType == VectorGraphicDataType::Pdf)
+        maDataContainer.addSizeHolder();
 }
 
 VectorGraphicData::~VectorGraphicData()
 {
+    if (meType == VectorGraphicDataType::Pdf)
+        maDataContainer.removeSizeHolder();
 }
 
 const basegfx::B2DRange& VectorGraphicData::getRange() const

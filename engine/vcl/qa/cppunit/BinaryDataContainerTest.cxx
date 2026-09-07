@@ -20,9 +20,11 @@ namespace
 class BinaryDataContainerTest : public CppUnit::TestFixture
 {
     void testConstruct();
+    void testSizeHolderCount();
 
     CPPUNIT_TEST_SUITE(BinaryDataContainerTest);
     CPPUNIT_TEST(testConstruct);
+    CPPUNIT_TEST(testSizeHolderCount);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -58,6 +60,39 @@ void BinaryDataContainerTest::testConstruct()
         CPPUNIT_ASSERT(aCopyOfContainer.isEmpty());
         CPPUNIT_ASSERT_EQUAL(size_t(0), aCopyOfContainer.getSize());
     }
+}
+
+// the size holder count follows the registered holders, not the number of container copies
+void BinaryDataContainerTest::testSizeHolderCount()
+{
+    {
+        BinaryDataContainer aEmpty;
+        CPPUNIT_ASSERT_EQUAL(size_t(0), aEmpty.getSizeHolderCount());
+        aEmpty.addSizeHolder();
+        CPPUNIT_ASSERT_EQUAL(size_t(0), aEmpty.getSizeHolderCount());
+    }
+
+    sal_uInt8 aTestByteArray[] = { 1, 2, 3, 4 };
+    SvMemoryStream aStream(aTestByteArray, std::size(aTestByteArray), StreamMode::READ);
+    BinaryDataContainer aContainer(aStream, std::size(aTestByteArray));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aContainer.getSizeHolderCount());
+
+    // copies alone do not count as holders
+    BinaryDataContainer aCopy = aContainer;
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aCopy.getSizeHolderCount());
+
+    // a holder registered through one copy is visible through every copy of the same bytes
+    aContainer.addSizeHolder();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aContainer.getSizeHolderCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCopy.getSizeHolderCount());
+
+    aCopy.addSizeHolder();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aContainer.getSizeHolderCount());
+
+    aContainer.removeSizeHolder();
+    aCopy.removeSizeHolder();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aContainer.getSizeHolderCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aCopy.getSizeHolderCount());
 }
 
 } // namespace

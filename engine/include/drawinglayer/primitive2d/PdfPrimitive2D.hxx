@@ -13,6 +13,9 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BinaryDataContainer.hxx>
+#include <vcl/graphic/MemoryManaged.hxx>
+#include <atomic>
+#include <chrono>
 #include <memory>
 
 namespace vcl::pdf
@@ -31,8 +34,12 @@ namespace drawinglayer::primitive2d
     the visible portion of the PDF page at the current discrete size.
     The cached result is invalidated when the view changes significantly
     (zoom or pan beyond the rendered area).
+
+    The rendered bitmap is registered with the graphic memory manager under this
+    primitive, which drops the bitmap again when the manager asks it to.
  */
-class DRAWINGLAYER_DLLPUBLIC PdfPrimitive2D final : public BufferedDecompositionPrimitive2D
+class DRAWINGLAYER_DLLPUBLIC PdfPrimitive2D final : public BufferedDecompositionPrimitive2D,
+                                                    public vcl::graphic::MemoryManaged
 {
 private:
     BinaryDataContainer maDataContainer;
@@ -53,10 +60,14 @@ private:
     /// the currently open page, empty between decompositions
     mutable std::unique_ptr<vcl::pdf::PDFiumPage> mpPdfPage;
 
+    /// time of the last decomposition request.
+    mutable std::atomic<std::chrono::high_resolution_clock::time_point> maLastUsed;
+
     /// ensures PDFium document and page are opened, returns false on failure
     bool ensurePdfium() const;
     virtual Primitive2DReference
     create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void buffered2DDecompositionChanged() override;
 
 public:
     PdfPrimitive2D(BinaryDataContainer const& rDataContainer, sal_Int32 nPageIndex,
@@ -74,6 +85,8 @@ public:
 
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
+    virtual sal_Int64 estimateUsage() override;
+
     virtual basegfx::B2DRange
     getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -82,6 +95,12 @@ public:
                        const geometry::ViewInformation2D& rViewInformation) const override;
 
     virtual sal_uInt32 getPrimitive2DID() const override;
+
+    virtual bool canReduceMemory() const override;
+    virtual bool reduceMemory() override;
+    virtual void refreshCurrentSizeInBytes() override;
+    virtual std::chrono::high_resolution_clock::time_point getLastUsed() const override;
+    virtual void dumpState(rtl::OStringBuffer& rState) override;
 };
 
 } // end of namespace drawinglayer::primitive2d

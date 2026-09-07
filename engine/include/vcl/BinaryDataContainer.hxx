@@ -47,6 +47,13 @@ public:
     bool isEmpty() const;
     const sal_uInt8* getData() const;
 
+    /// Adds one to the count of holders that each account an equal share of these bytes.
+    void addSizeHolder() const;
+    /// Takes one off the count of holders that each account an equal share of these bytes.
+    void removeSizeHolder() const;
+    /// Number of holders that each account an equal share of these bytes
+    size_t getSizeHolderCount() const;
+
     /// The bytes as a shared reference. The referenced bytes stay valid and in
     /// memory for the life of the reference, even if this container swaps its
     /// copy out to disk in the meantime.
@@ -63,9 +70,9 @@ public:
     std::size_t writeToStream(SvStream& rStream) const;
 
     /// return the in-memory size in bytes as of now.
-    SAL_DLLPRIVATE std::size_t getSizeBytes() const;
+    std::size_t getSizeBytes() const;
 
-    /// swap out to disk for now
+    /// swap out to disk for now. The bytes stay in memory while a size holder is registered.
     SAL_DLLPRIVATE void swapOut() const;
 
     size_t calculateHash() const;
