@@ -83,6 +83,14 @@ static BOOL isExternalKeyboardAttached()
 
 static IMP standardImpOfInputAccessoryView = nil;
 
+// The web UI's main background colour (--color-main-background) in its dark and light theme.
+static UIColor *mainBackgroundColor(BOOL dark)
+{
+    if (dark)
+        return [UIColor colorWithRed:0x12/255.0 green:0x12/255.0 blue:0x12/255.0 alpha:1.0];
+    return [UIColor colorWithRed:0xF8/255.0 green:0xF9/255.0 blue:0xFA/255.0 alpha:1.0];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -185,16 +193,21 @@ static IMP standardImpOfInputAccessoryView = nil;
         }
     }
 
+    // The web view stops above the home indicator strip. WebKit drops its automatic bottom inset
+    // while an editable element is focused, so ending the view at the safe area keeps the layout
+    // viewport height the same whatever has focus.
     WKWebView *webViewP = self.webView;
-    NSDictionary *views = NSDictionaryOfVariableBindings(webViewP);
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webViewP(>=0)]-0-|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webViewP(>=0)]-0-|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:views]];
+    [NSLayoutConstraint activateConstraints:@[
+        [webViewP.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [webViewP.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [webViewP.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [webViewP.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+    ]];
+
+    // The root view paints the strip in the web UI's main background colour, so it continues
+    // the bottom bar. The web UI starts in the light theme on iOS and reports every later change,
+    // so the strip starts light as well.
+    self.view.backgroundColor = mainBackgroundColor(NO);
 
     // Listener for keyboard dismissal. Calc needs to leave the in-cell edit so the
     // keyboard is not immediately reshown by the cursor-visible/resize refocus path
@@ -490,6 +503,10 @@ static IMP standardImpOfInputAccessoryView = nil;
                  ];
             }
 
+            return;
+        } else if ([message.body hasPrefix:@"SETDARKMODE "]) {
+            self.view.backgroundColor =
+                mainBackgroundColor([message.body isEqualToString:@"SETDARKMODE true"]);
             return;
         } else if ([message.body hasPrefix:@"HYPERLINK"]) {
             NSArray *messageBodyItems = [message.body componentsSeparatedByString:@" "];

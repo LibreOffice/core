@@ -294,6 +294,7 @@ class UIManager extends window.L.Control {
 		document.documentElement.setAttribute('data-theme','light');
 		this._map.fire('commandstatechanged', {commandName : 'toggledarktheme', state : 'false'});
 		this.map.fire('darkmodechanged');
+		this.reportThemeToIOSApp(false);
 	}
 
 	/**
@@ -303,6 +304,15 @@ class UIManager extends window.L.Control {
 		document.documentElement.setAttribute('data-theme','dark');
 		this._map.fire('commandstatechanged', {commandName : 'toggledarktheme', state : 'true'});
 		this.map.fire('darkmodechanged');
+		this.reportThemeToIOSApp(true);
+	}
+
+	/**
+	 * Tells the iOS app which theme the web UI is now rendering.
+	 */
+	reportThemeToIOSApp(dark: boolean): void {
+		if (window.ThisIsTheiOSApp)
+			window.postMobileMessage('SETDARKMODE ' + dark);
 	}
 
 	/**
