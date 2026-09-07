@@ -773,6 +773,13 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'command': '.uno:SidebarDeck.PropertyDeck',
 				'accessibility': { focusBack: true, combination: 'SD', de: null }
 			},
+			{
+				'id': 'view-shapes-deck',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:SidebarDeck.ShapesDeck', 'presentation'),
+				'command': '.uno:SidebarDeck.ShapesDeck',
+				'accessibility': { focusBack: true, combination: 'SH', de: null }
+			},
 			// Show the AI Assistant only to a non-anonymous user who may either
 			// configure AI or already has a configured provider. A guest can do
 			// neither, so they never see it.

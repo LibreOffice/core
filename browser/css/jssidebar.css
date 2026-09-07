@@ -1006,3 +1006,10 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 #SortDialog #box2 :is(#grid7, #grid5) {
 	align-items: center;
 }
+
+/* Six is what svx/ui/defaultshapespanel.ui asks each gallery for. */
+#DefaultShapesPanel .ui-iconview {
+	width: auto;
+	grid-template-columns: repeat(6, 1fr);
+	justify-content: start;
+}
