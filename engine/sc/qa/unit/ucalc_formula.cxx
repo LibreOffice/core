@@ -846,6 +846,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testGroupConverter3D)
 
 CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaTokenEquality)
 {
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
     struct FormulaTokenEqualityTest
     {
         const char* mpFormula1;
@@ -867,6 +869,11 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaTokenEquality)
         { "\"Test\"", "\"Test\"", true },
         { "CONCATENATE(\"Test1\")", "CONCATENATE(\"Test1\")", true },
         { "CONCATENATE(\"Test1\")", "CONCATENATE(\"Test2\")", false },
+        // Formulas that differ only in a LET or LAMBDA binding name compute
+        // different results, so they must not be treated as equal.
+        { "LET(x,1,x*2)", "LET(x,1,x*2)", true },
+        { "LET(x,1,x*2)", "LET(y,1,y*2)", false },
+        { "LET(x,5,f,LAMBDA(x,x*3),f(7))", "LET(x,5,f,LAMBDA(z,z*3),f(7))", false },
     };
 
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
@@ -897,6 +904,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaTokenEquality)
             }
         }
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefData)

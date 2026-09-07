@@ -4679,6 +4679,19 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaC
                     return NotEqual;
             }
             break;
+            case formula::svStringName:
+            case formula::svDPFieldName:
+            {
+                // A LET or LAMBDA binding name. Two formulas that differ only in
+                // such a name compute different results, so they must not share
+                // one token array.
+                assert(dynamic_cast<FormulaStringNameToken*>(pThisTok));
+                assert(dynamic_cast<FormulaStringNameToken*>(pOtherTok));
+                if (static_cast<FormulaStringNameToken*>(pThisTok)->GetString()
+                    != static_cast<FormulaStringNameToken*>(pOtherTok)->GetString())
+                    return NotEqual;
+            }
+            break;
             case formula::svIndex:
             {
                 if (pThisTok->GetOpCode() == ocName || pThisTok->GetOpCode() == ocDBArea)
