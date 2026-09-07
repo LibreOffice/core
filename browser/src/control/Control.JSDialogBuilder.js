@@ -2601,6 +2601,10 @@ window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard = function(menu
 	if (itemCommand.indexOf('sep') >= 0)
 		return null;
 
+	// An entry with a visible callback is only offered while that callback returns true.
+	if (typeof menu.visible === 'function' && !menu.visible())
+		return null;
+
 	var itemText = '';
 	if (menu.name) {
 		// An HTML name carries markup for the desktop menu widget. The mobile
