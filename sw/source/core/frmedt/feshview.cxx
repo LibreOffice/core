@@ -1365,6 +1365,67 @@ SdrObject* SwFEShell::GetObjAt( const Point& rPt )
     return pRet;
 }
 
+bool SwFEShell::IsTextOverBgObjectAt(const Point& rPt, const SdrObject* pObj)
+{
+    // Can return false in a number of cases, eg. when not background object
+    if (!pObj)
+        return false;
+
+    // #i89920#
+    // Do not select object in background which is overlapping this text
+    // at the given position.
+    const SwContact* pContact = ::GetUserCall(pObj);
+    if (!pContact)
+        return false;
+
+    const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj(pObj);
+    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+    const SwFormatSurround& rSurround = pFormat->GetSurround();
+    // Function only relevant for objects with Through wrap
+    if (rSurround.GetSurround() != css::text::WrapTextMode_THROUGH)
+        return false;
+
+    // Not background object
+    const SdrLayerID nLayerId = pObj->GetLayer();
+    const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
+    if (nLayerId != rIDDMA.GetHeaderFooterHellId() && nLayerId != rIDDMA.GetHellId())
+        return false;
+
+    const SwPageFrame* pPageFrame = GetLayout()->GetPageAtPos(rPt);
+    const SwContentFrame* pContentFrame(pPageFrame?pPageFrame->ContainsContent():nullptr);
+    while (pContentFrame)
+    {
+        if (pContentFrame->UnionFrame().Contains(rPt))
+        {
+            const SwTextFrame* pTextFrame = pContentFrame->DynCastTextFrame();
+            if (pTextFrame)
+            {
+                SwPosition aPos(GetDoc()->GetNodes());
+                Point aTmpPt(rPt);
+                if (pTextFrame->GetKeyCursorOfst(&aPos, aTmpPt))
+                {
+                    SwRect aCursorCharRect;
+                    if (pTextFrame->GetCharRect(aCursorCharRect, aPos))
+                    {
+                        if (aCursorCharRect.Overlaps(SwRect(pObj->GetLastBoundRect())))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return true;
+            }
+            break;
+        }
+
+        pContentFrame = pContentFrame->GetNextContentFrame();
+    }
+    return false;
+}
+
 // Test if there is an object at that position and if it should be selected.
 bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInsteadOfCroppedImage)
 {
@@ -1384,64 +1445,8 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInste
 
         if (pObj)
         {
-            bRet = true;
-            const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
-            // #i89920#
-            // Do not select object in background which is overlapping this text
-            // at the given position.
-            bool bObjInBackground( false );
-            if ( pObj->GetLayer() == rIDDMA.GetHellId() )
-            {
-                if (const SwContact* pContact = ::GetUserCall( pObj ))
-                {
-                    const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
-                    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
-                    const SwFormatSurround& rSurround = pFormat->GetSurround();
-                    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
-                    {
-                        bObjInBackground = true;
-                    }
-                }
-            }
-            if ( bObjInBackground )
-            {
-                const SwPageFrame* pPageFrame = GetLayout()->GetPageAtPos( rPt );
-                if( pPageFrame )
-                {
-                    const SwContentFrame* pContentFrame( pPageFrame->ContainsContent() );
-                    while ( pContentFrame )
-                    {
-                        if ( pContentFrame->UnionFrame().Contains( rPt ) )
-                        {
-                            const SwTextFrame* pTextFrame = pContentFrame->DynCastTextFrame();
-                            if ( pTextFrame )
-                            {
-                                SwPosition aPos(GetDoc()->GetNodes());
-                                Point aTmpPt( rPt );
-                                if (pTextFrame->GetKeyCursorOfst(&aPos, aTmpPt))
-                                {
-                                    SwRect aCursorCharRect;
-                                    if (pTextFrame->GetCharRect(aCursorCharRect,
-                                                aPos))
-                                    {
-                                        if ( aCursorCharRect.Overlaps( SwRect( pObj->GetLastBoundRect() ) ) )
-                                        {
-                                            bRet = false;
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                bRet = false;
-                            }
-                            break;
-                        }
-
-                        pContentFrame = pContentFrame->GetNextContentFrame();
-                    }
-                }
-            }
+            // Text in front takes precedence over background object
+            bRet = !IsTextOverBgObjectAt(rPt, pObj);
 
             // Don't select header / footer objects in body edition and vice-versa
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
@@ -1457,6 +1462,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInste
 
             if ( bRet )
             {
+                const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
                 const SdrPage* pPage = rIDDMA.GetDrawModel()->GetPage(0);
                 for(auto it = pPage->begin() + pObj->GetOrdNum() + 1; it != pPage->end(); ++it)
                 {

@@ -3346,8 +3346,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bool bHitHandle = pHdl && pHdl->GetKind() != SdrHdlKind::Anchor &&
                                                   pHdl->GetKind() != SdrHdlKind::Anchor_TR;
 
-                        if ((rSh.IsInsideSelectedObj(aDocPos) || bHitHandle)
-                            && (aMEvt.GetModifier() != KEY_SHIFT || bHitHandle))
+                        if ((rSh.IsInsideSelectedObj(aDocPos)
+                                 && !rSh.IsTextOverBgObjectAt(aDocPos, rSh.GetObjAt(aDocPos))
+                                 && aMEvt.GetModifier() != KEY_SHIFT) || bHitHandle)
                         {
                             rSh.EnterSelFrameMode( &aDocPos );
                             if ( !m_pApplyTempl )
@@ -3471,8 +3472,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             bOnlyText = KEY_MOD1 != aMEvt.GetModifier();
                     }
                     else if ( rSh.IsSelFrameMode() &&
-                              (m_aActHitType == SdrHitKind::NONE ||
-                               !rSh.IsInsideSelectedObj( aDocPos )))
+                              (m_aActHitType == SdrHitKind::NONE || !rSh.IsInsideSelectedObj(aDocPos)
+                                 || rSh.IsTextOverBgObjectAt(aDocPos, rSh.GetObjAt(aDocPos))) )
                     {
                         m_rView.NoRotate();
                         SdrHdl *pHdl;
@@ -3493,6 +3494,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             if (aMEvt.IsMod1())
                                 nFlag = nFlag | SW_ENTER_GROUP;
 
+                            // UnSelectFrame() might affect result, calculate here to agree
+                            // with previous IsInsideSelectedObj()
+                            const bool bTextOverBgObject
+                                = rSh.IsTextOverBgObjectAt(aDocPos, rSh.GetObjAt(aDocPos));
+
                             if ( rSh.IsSelFrameMode() )
                             {
                                 rSh.UnSelectFrame();
@@ -3500,7 +3506,17 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 m_rView.AttrChangedNotify(nullptr);
                             }
 
-                            bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
+                            bool bSelObj = false;
+                            if ( !bTextOverBgObject )
+                            {
+                                bSelObj = rSh.SelectObj(aDocPos, nFlag);
+                            }
+                            else
+                            {
+                                // to show caret
+                                bOnlyText = true;
+                            }
+
                             if( bUnLockView )
                                 rSh.LockView( false );
 
