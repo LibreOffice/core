@@ -18,6 +18,7 @@
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>
+#include <common/SaveResult.hpp>
 #include <common/SigUtil.hpp>
 #include <common/StringVector.hpp>
 #include <common/Util.hpp>
@@ -339,17 +340,10 @@ bool UnitBase::filterSendWebSocketMessage(const std::string_view data, const WSO
                 const auto& object = parsedJSON.extract<Poco::JSON::Object::Ptr>();
                 if (object->get("commandName").toString() == ".uno:Save")
                 {
-                    const bool success = object->get("success").toString() == "true";
-                    std::string result;
-                    if (object->has("result"))
-                    {
-                        const Poco::Dynamic::Var parsedResultJSON = object->get("result");
-                        const auto& resultObj = parsedResultJSON.extract<Poco::JSON::Object::Ptr>();
-                        if (resultObj->get("type").toString() == "string")
-                            result = resultObj->get("value").toString();
-                    }
+                    const SaveResult::Result saveResult = SaveResult::parse(object);
+                    const bool success = saveResult.outcome == SaveResult::Outcome::Saved;
 
-                    if (onDocumentSaved(message, success, result))
+                    if (onDocumentSaved(message, success, saveResult.text))
                         return false;
                 }
             }

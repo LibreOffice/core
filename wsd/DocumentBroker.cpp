@@ -31,6 +31,7 @@
 #include <common/Log.hpp>
 #include <common/Message.hpp>
 #include <common/Protocol.hpp>
+#include <common/SaveResult.hpp>
 #include <common/TilePrioritizer.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
@@ -3073,18 +3074,9 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
 {
     ASSERT_CORRECT_THREAD();
 
-    // When dontSaveIfUnmodified=true, there is a shortcut in LOKit
-    // that shortcuts saving when the document is not modified.
-    // In that case, success=false and result=unmodified.
-    const bool success = json->get("success").toString() == "true";
-    std::string result;
-    if (json->has("result"))
-    {
-        const Poco::Dynamic::Var parsedResultJSON = json->get("result");
-        const auto& resultObj = parsedResultJSON.extract<Poco::JSON::Object::Ptr>();
-        if (resultObj->get("type").toString() == "string")
-            result = resultObj->get("value").toString();
-    }
+    const SaveResult::Result saveResult = SaveResult::parse(json);
+    const bool wroteNewVersion = saveResult.outcome == SaveResult::Outcome::Saved;
+    const bool upToDate = saveResult.outcome != SaveResult::Outcome::Failed;
 
     // wasModified is only set when LOKit saves the document.
     // If the document was modified before saving, it would
@@ -3110,18 +3102,18 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     _nextStorageAttrs.reset();
 
     // Record that we got a response to avoid timing out on saving.
-    _saveManager.setLastSaveResult(success || result == "unmodified", /*newVersion=*/success);
+    _saveManager.setLastSaveResult(upToDate, /*newVersion=*/wroteNewVersion);
 
-    if (success)
+    if (wroteNewVersion)
         LOG_DBG("Save result from Core: saved (during " << DocumentState::name(_docState.activity())
                                                         << ") in "
                                                         << _saveManager.lastSaveDuration());
-    else if (result == "unmodified")
+    else if (upToDate)
         LOG_DBG("Save result from Core: unmodified (during "
                 << DocumentState::name(_docState.activity()) << ") in "
                 << _saveManager.lastSaveDuration());
     else // Failure with error.
-        LOG_WRN("Save result from Core (failure): " << result << " (during "
+        LOG_WRN("Save result from Core (failure): " << saveResult.text << " (during "
                                                     << DocumentState::name(_docState.activity())
                                                     << ") in " << _saveManager.lastSaveDuration());
 
@@ -3156,8 +3148,7 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     const bool wasBackgroundSave =
         json->has("background") && json->get("background").toString() == "true";
 
-    const bool backgroundSaveFailed =
-        wasBackgroundSave && !success && result != "unmodified";
+    const bool backgroundSaveFailed = wasBackgroundSave && !upToDate;
 
     // A background save can be aborted while running (for example an
     // interactive dialog appeared in the child).
@@ -3173,16 +3164,16 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     }
 
     // Let the clients know of any save failures.
-    if (!success && result != "unmodified")
+    if (!upToDate)
     {
         LOG_INF("Failed to save docKey [" << _docKey
                                           << "] as .uno:Save has failed in COKit. Notifying clients");
         session->sendTextFrameAndLogError(
-            COOLProtocol::buildErrorFrame("storage", "savefailed", result));
+            COOLProtocol::buildErrorFrame("storage", "savefailed", saveResult.text));
         broadcastSaveResult(false, "Could not save the document");
     }
 
-    checkAndUploadToStorage(session, /*justSaved=*/success || result == "unmodified");
+    checkAndUploadToStorage(session, /*justSaved=*/upToDate);
 }
 
 // This is called when either we just got save response, or,

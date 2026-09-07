@@ -23,6 +23,7 @@
 
 #include <common/Anonymizer.hpp>
 #include <common/JsonUtil.hpp>
+#include <common/SaveResult.hpp>
 #include <common/Seccomp.hpp>
 #include <common/SigUtil.hpp>
 #include <common/TraceEvent.hpp>
@@ -407,7 +408,8 @@ void BgSaveParentWebSocketHandler::handleBgSaveResult(Poco::JSON::Object::Ptr& o
 
     _document->sendFrame(newMsg, WSOpCode::Text);
 
-    if (object->get("success").toString() == "true")
+    const SaveResult::Result saveResult = SaveResult::parse(object);
+    if (saveResult.outcome == SaveResult::Outcome::Saved)
     {
         _document->notifySyntheticUnmodifiedState();
         _session->saveLogUiBackground();

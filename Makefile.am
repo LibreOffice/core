@@ -394,6 +394,7 @@ shared_headers = \
                  common/RegexUtil.hpp \
                  common/RenderTiles.hpp \
                  common/RotatingToken.hpp \
+                 common/SaveResult.hpp \
                  common/Seccomp.hpp \
                  common/Session.hpp \
                  common/SettingsStorage.hpp \
