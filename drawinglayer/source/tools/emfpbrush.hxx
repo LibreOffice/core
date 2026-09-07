@@ -114,7 +114,7 @@ namespace emfplushelper
         sal_uInt32 surroundColorsNumber;
         std::unique_ptr<::Color[]> surroundColors;
         std::unique_ptr<EMFPPath> path;
-        EmfPlusHatchStyle hatchStyle;
+        sal_uInt32 hatchStyle;
         std::unique_ptr<EMFPImage> textureImage;
 
         EMFPBrush();
