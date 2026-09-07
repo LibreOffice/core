@@ -60,6 +60,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -247,7 +248,9 @@ void Primitive2dJsonProcessor::writeGradient(
             break;
     }
 
-    mrWriter.put("angle", rGradient.getAngle());
+    // Two decimal places of a degree are finer than any angle the user
+    // interface offers, and keep a whole number of degrees whole.
+    mrWriter.put("angle", std::round(basegfx::rad2deg(rGradient.getAngle()) * 100.0) / 100.0);
     mrWriter.put("border", rGradient.getBorder());
     mrWriter.put("offsetX", rGradient.getOffsetX());
     mrWriter.put("offsetY", rGradient.getOffsetY());

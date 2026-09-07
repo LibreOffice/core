@@ -24,6 +24,28 @@ interface CanvasRecorderCall {
 	depth: number;
 }
 
+/// A gradient handed out by CanvasRecorder. The stops it was given are
+/// kept in the order they were added, so a test can check where along
+/// the ramp each color was placed.
+class GradientRecorder {
+	public readonly stops: { offset: number; color: string }[] = [];
+
+	constructor(
+		public readonly kind: string,
+		public readonly args: any[],
+	) {}
+
+	addColorStop(offset: number, color: string): void {
+		this.stops.push({ offset: offset, color: color });
+	}
+
+	/// The stops sorted the way the canvas reads them, which is by
+	/// offset regardless of the order they were added in.
+	sortedStops(): { offset: number; color: string }[] {
+		return this.stops.slice().sort((a, b) => a.offset - b.offset);
+	}
+}
+
 /// Test helper that mimics a CanvasRenderingContext2D. Pass an instance of
 /// CanvasRecorder wherever production code expects a context. Every method
 /// invocation is recorded into calls, and every assigned drawing-state
@@ -37,6 +59,8 @@ class CanvasRecorder {
 	public readonly calls: CanvasRecorderCall[] = [];
 	public readonly properties: Record<string, any> = {};
 	public readonly canvas: { width: number; height: number };
+	/// Every gradient handed out, in the order it was created.
+	public readonly gradients: GradientRecorder[] = [];
 	// Uniform scale of the recorded calls, reported by getTransform.
 	private _scale: number = 1;
 	private _scaleStack: number[] = [];
@@ -200,5 +224,25 @@ class CanvasRecorder {
 	}
 	setLineDash(...args: any[]): void {
 		this._record('setLineDash', args);
+	}
+	createLinearGradient(...args: any[]): GradientRecorder {
+		return this._makeGradient('linear', args);
+	}
+	createRadialGradient(...args: any[]): GradientRecorder {
+		return this._makeGradient('radial', args);
+	}
+	createPattern(...args: any[]): null {
+		this._record('createPattern', args);
+		return null;
+	}
+
+	private _makeGradient(kind: string, args: any[]): GradientRecorder {
+		this._record(
+			'create' + kind[0].toUpperCase() + kind.slice(1) + 'Gradient',
+			args,
+		);
+		const gradient = new GradientRecorder(kind, args);
+		this.gradients.push(gradient);
+		return gradient;
 	}
 }

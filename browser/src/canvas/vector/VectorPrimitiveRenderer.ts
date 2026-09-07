@@ -25,6 +25,8 @@ namespace cool {
 		// Slide size in twips. The background primitive fills this rectangle.
 		private _slideWidth = 0;
 		private _slideHeight = 0;
+		private _scratch = new VectorScratchCanvases();
+		private _gradients = new VectorGradientPrimitiveRenderer(this._scratch);
 
 		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
 			this._bitmapLookup = bitmapLookup;
@@ -88,6 +90,24 @@ namespace cool {
 					break;
 				case PointArrayPrimitive.type:
 					this._renderPointArray(context, primitive as PointArrayPrimitive);
+					break;
+				case FillGradientPrimitive.type:
+					this._gradients.renderFillGradient(
+						context,
+						primitive as FillGradientPrimitive,
+					);
+					break;
+				case PolyPolygonGradientPrimitive.type:
+					this._gradients.renderPolyPolygonGradient(
+						context,
+						primitive as PolyPolygonGradientPrimitive,
+					);
+					break;
+				case PolyPolygonAlphaGradientPrimitive.type:
+					this._gradients.renderPolyPolygonAlphaGradient(
+						context,
+						primitive as PolyPolygonAlphaGradientPrimitive,
+					);
 					break;
 				case BitmapPrimitive.type:
 					this._renderBitmap(context, primitive as BitmapPrimitive);
