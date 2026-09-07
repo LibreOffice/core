@@ -424,6 +424,8 @@ COOL_JS_LST =\
 	src/geometry/Point.ts \
 	src/geometry/Bounds.ts \
 	src/geometry/Transformation.ts \
+	src/geometry/Matrix2D.ts \
+	src/geometry/Range2D.ts \
 	src/app/dom/DomUtil.ts \
 	src/app/InternUtil.ts \
 	src/control/IFrameDialog.js \

@@ -887,9 +887,11 @@ describe('VectorPrimitiveRenderer', function () {
 			const transform = recorder.findCall('transform');
 			nodeassert.ok(transform, 'transform not called');
 			nodeassert.strictEqual(recorder.countOf('transform'), 1);
-			const cos30 = Math.cos(Math.PI / 6);
-			const sin30 = Math.sin(Math.PI / 6);
-			const expected = [cos30, sin30, -sin30, cos30, 0, 0];
+			const expected = cool.Matrix2D.IDENTITY.rotateAround(
+				0,
+				0,
+				Math.PI / 6,
+			).toArray();
 			nodeassert.strictEqual(transform.args.length, expected.length);
 			// The wire ships the matrix as fixed-precision strings, so
 			// the last digit can differ from Math.cos/Math.sin by a
@@ -1078,12 +1080,12 @@ describe('VectorPrimitiveRenderer', function () {
 
 			const fillRect = recorder.findCall('fillRect');
 			nodeassert.ok(fillRect, 'fillRect not called');
-			const [minX, minY, maxX, maxY] = primitive.bounds;
+			const bounds = cool.Range2D.fromArray(primitive.bounds);
 			nodeassert.deepStrictEqual(fillRect.args, [
-				minX,
-				minY,
-				maxX - minX,
-				maxY - minY,
+				bounds.minX,
+				bounds.minY,
+				bounds.width,
+				bounds.height,
 			]);
 			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
 			nodeassert.ok(recorder.findCall('save'), 'save not called');
@@ -1101,12 +1103,12 @@ describe('VectorPrimitiveRenderer', function () {
 
 			const strokeRect = recorder.findCall('strokeRect');
 			nodeassert.ok(strokeRect, 'strokeRect not called');
-			const [minX, minY, maxX, maxY] = primitive.bounds;
+			const bounds = cool.Range2D.fromArray(primitive.bounds);
 			nodeassert.deepStrictEqual(strokeRect.args, [
-				minX,
-				minY,
-				maxX - minX,
-				maxY - minY,
+				bounds.minX,
+				bounds.minY,
+				bounds.width,
+				bounds.height,
 			]);
 			nodeassert.strictEqual(recorder.properties.strokeStyle, primitive.color);
 			nodeassert.strictEqual(recorder.properties.lineWidth, 1);

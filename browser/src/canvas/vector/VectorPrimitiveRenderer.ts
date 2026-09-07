@@ -248,12 +248,12 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: FilledRectanglePrimitive,
 		): void {
-			if (!primitive.bounds || primitive.bounds.length < 4) return;
+			const bounds = Range2D.fromArray(primitive.bounds);
+			if (!bounds) return;
 
-			const [minX, minY, maxX, maxY] = primitive.bounds;
 			context.save();
 			context.fillStyle = primitive.color ?? '#000000';
-			context.fillRect(minX, minY, maxX - minX, maxY - minY);
+			context.fillRect(bounds.minX, bounds.minY, bounds.width, bounds.height);
 			context.restore();
 		}
 
@@ -261,13 +261,13 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: LineRectanglePrimitive,
 		): void {
-			if (!primitive.bounds || primitive.bounds.length < 4) return;
+			const bounds = Range2D.fromArray(primitive.bounds);
+			if (!bounds) return;
 
-			const [minX, minY, maxX, maxY] = primitive.bounds;
 			context.save();
 			context.strokeStyle = primitive.color ?? '#000000';
 			context.lineWidth = this._hairlineWidth(context);
-			context.strokeRect(minX, minY, maxX - minX, maxY - minY);
+			context.strokeRect(bounds.minX, bounds.minY, bounds.width, bounds.height);
 			context.restore();
 		}
 
@@ -324,8 +324,9 @@ namespace cool {
 			const fontSize = primitive.fontSize ?? 12;
 			if (!(fontSize > 0)) return null;
 			// A missing matrix defaults to the plain upright scale.
-			const [a = fontSize, b = 0, c = 0, d = fontSize, e = 0, f = 0] =
-				primitive.matrix ?? [];
+			const matrix =
+				Matrix2D.fromArray(primitive.matrix) ??
+				new Matrix2D(fontSize, 0, 0, fontSize, 0, 0);
 			let style = primitive.italic ? 'italic' : 'normal';
 			let weight =
 				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
@@ -348,23 +349,22 @@ namespace cool {
 			// A matrix that only scales by the font size moves the
 			// anchor and nothing else, so it skips the transform.
 			const transformed =
-				b !== 0 || c !== 0 || a !== fontSize || d !== fontSize;
+				matrix.b !== 0 ||
+				matrix.c !== 0 ||
+				matrix.a !== fontSize ||
+				matrix.d !== fontSize;
 			if (transformed) {
 				// The font size is the matrix's scale, so dividing it
 				// out leaves a unit transform that rotates, shears,
 				// flips or stretches the glyphs drawn at fontSize px.
-				context.transform(
-					a / fontSize,
-					b / fontSize,
-					c / fontSize,
-					d / fontSize,
-					e,
-					f,
-				);
+				// The scale goes first, so the translation stays as is.
+				Matrix2D.IDENTITY.scale(1 / fontSize, 1 / fontSize)
+					.then(matrix)
+					.applyTo(context);
 			}
 			return {
-				x: transformed ? 0 : e,
-				y: transformed ? 0 : f,
+				x: transformed ? 0 : matrix.e,
+				y: transformed ? 0 : matrix.f,
 				fontSize,
 				text,
 			};
@@ -482,11 +482,12 @@ namespace cool {
 		// has no entry yet, or the image is still decoding.
 		private _drawRaster(
 			context: CanvasRenderingContext2D,
-			matrix: number[] | undefined,
+			wireMatrix: number[] | undefined,
 			checksum: number,
 			options: DrawRasterOptions = {},
 		): void {
-			if (!matrix || matrix.length < 6) return;
+			const matrix = Matrix2D.fromArray(wireMatrix);
+			if (!matrix) return;
 			if (!this._bitmapLookup) return;
 
 			const image = this._bitmapLookup(checksum);
@@ -514,14 +515,7 @@ namespace cool {
 			// The matrix maps the unit square to the image's bounds,
 			// so we draw the image into the unit square and let the
 			// transform place it on the slide.
-			context.transform(
-				matrix[0],
-				matrix[1],
-				matrix[2],
-				matrix[3],
-				matrix[4],
-				matrix[5],
-			);
+			matrix.applyTo(context);
 
 			if (mirror) {
 				// Translate to the far edge of each flipped axis so
@@ -575,25 +569,17 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: TransformPrimitive,
 		): void {
-			const matrix = primitive.matrix;
-			const hasMatrix = matrix !== undefined && matrix.length >= 6;
+			const matrix = Matrix2D.fromArray(primitive.matrix);
 
-			if (hasMatrix) {
+			if (matrix) {
 				context.save();
-				context.transform(
-					matrix[0],
-					matrix[1],
-					matrix[2],
-					matrix[3],
-					matrix[4],
-					matrix[5],
-				);
+				matrix.applyTo(context);
 			}
 
 			if (primitive.children)
 				this._renderPrimitives(context, primitive.children);
 
-			if (hasMatrix) context.restore();
+			if (matrix) context.restore();
 		}
 
 		private _renderModifiedColor(
