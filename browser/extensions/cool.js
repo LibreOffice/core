@@ -290,18 +290,6 @@
 		delete listeners[proxyId];
 	};
 
-	// Open a modal dialog whose content is a page under the extension's own base URL, and
-	// return a Promise that resolves when the dialog closes.  The resolved value is
-	// { cancelled: true } if the user dismissed the dialog (titlebar close, Esc,
-	// cool.dialog.cancel()), otherwise { cancelled: false,
-	// value: <whatever cool.dialog.close(value) received> in the dialog iframe }.  Only one
-	// dialog is allowed at a time per extension; a second call while one is open resolves
-	// immediately as cancelled.
-	//
-	// The dialog iframe loads its own copy of this cool.js and uses cool.dialog.close/
-	// cool.dialog.cancel to dismiss itself.  It can also use cool.callRemote etc.
-	//
-	// opts: { url, title, width, height }.  url is relative to the extension's base URL.
 	// cool.onCommand = function (id) {...}: receives `panel: true` commands
 	// from the notebookbar, menus and shortcuts. Commands posted before the
 	// handler exists are queued and delivered on assignment.
@@ -356,6 +344,18 @@
 		return promise;
 	};
 
+	// Open a modal dialog whose content is a page under the extension's own base URL, and
+	// return a Promise that resolves when the dialog closes.  The resolved value is
+	// { cancelled: true } if the user dismissed the dialog (titlebar close, Esc,
+	// cool.dialog.cancel()), otherwise { cancelled: false,
+	// value: <whatever cool.dialog.close(value) received> in the dialog iframe }.  Only one
+	// dialog is allowed at a time per extension; a second call while one is open resolves
+	// immediately as cancelled.
+	//
+	// The dialog iframe loads its own copy of this cool.js and uses cool.dialog.close/
+	// cool.dialog.cancel to dismiss itself.  It can also use cool.callRemote etc.
+	//
+	// opts: { url, title, width, height }.  url is relative to the extension's base URL.
 	window.cool.dialog = {
 		open: function (opts) {
 			const dialogId = 'd' + (nextDialogId++);
