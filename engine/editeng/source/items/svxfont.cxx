@@ -42,34 +42,34 @@ static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr,
 
 SvxFont::SvxFont()
 {
-    nEsc = 0;
-    nPropr = 100;
-    eCaseMap = SvxCaseMap::NotMapped;
+    m_nEsc = 0;
+    m_nPropr = 100;
+    m_eCaseMap = SvxCaseMap::NotMapped;
     SetLanguage(LANGUAGE_SYSTEM);
 }
 
 SvxFont::SvxFont( const vcl::Font &rFont )
     : Font( rFont )
 {
-    nEsc = 0;
-    nPropr = 100;
-    eCaseMap = SvxCaseMap::NotMapped;
+    m_nEsc = 0;
+    m_nPropr = 100;
+    m_eCaseMap = SvxCaseMap::NotMapped;
     SetLanguage(LANGUAGE_SYSTEM);
 }
 
 SvxFont::SvxFont( const SvxFont &rFont )
     : Font( rFont )
 {
-    nEsc  = rFont.GetEscapement();
-    nPropr = rFont.GetPropr();
-    eCaseMap = rFont.GetCaseMap();
+    m_nEsc  = rFont.GetEscapement();
+    m_nPropr = rFont.GetPropr();
+    m_eCaseMap = rFont.GetCaseMap();
     SetLanguage(rFont.GetLanguage());
 }
 
 void SvxFont::SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev)
 {
-    nEsc = nNewEsc;
-    if ( abs(nEsc) == DFLT_ESC_AUTO_SUPER )
+    m_nEsc = nNewEsc;
+    if ( abs(m_nEsc) == DFLT_ESC_AUTO_SUPER )
     {
         double fAutoAscent = .8;
         double fAutoDescent = .2;
@@ -84,16 +84,16 @@ void SvxFont::SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev)
             }
         }
 
-        if ( nEsc == DFLT_ESC_AUTO_SUPER )
-            nEsc = fAutoAscent * (100 - nPropr);
+        if ( m_nEsc == DFLT_ESC_AUTO_SUPER )
+            m_nEsc = fAutoAscent * (100 - m_nPropr);
         else //DFLT_ESC_AUTO_SUB
-            nEsc = fAutoDescent * -(100 - nPropr);
+            m_nEsc = fAutoDescent * -(100 - m_nPropr);
     }
 
-    if ( nEsc > MAX_ESC_POS )
-        nEsc = MAX_ESC_POS;
-    else if  ( nEsc < -MAX_ESC_POS )
-        nEsc = -MAX_ESC_POS;
+    if ( m_nEsc > MAX_ESC_POS )
+        m_nEsc = MAX_ESC_POS;
+    else if  ( m_nEsc < -MAX_ESC_POS )
+        m_nEsc = -MAX_ESC_POS;
 }
 
 tools::Polygon SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
@@ -174,7 +174,7 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
 
     CharClass aCharClass(( LanguageTag(eLang) ));
 
-    switch( eCaseMap )
+    switch( m_eCaseMap )
     {
         case SvxCaseMap::SmallCaps:
         case SvxCaseMap::Uppercase:
@@ -348,7 +348,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 void SvxFont::SetPhysFont(OutputDevice& rOut) const
 {
     const vcl::Font& rCurrentFont = rOut.GetFont();
-    if ( nPropr == 100 )
+    if ( m_nPropr == 100 )
     {
         if ( !rCurrentFont.IsSameInstance( *this ) )
             rOut.SetFont( *this );
@@ -357,8 +357,8 @@ void SvxFont::SetPhysFont(OutputDevice& rOut) const
     {
         Font aNewFont( *this );
         Size aSize( aNewFont.GetFontSize() );
-        aNewFont.SetFontSize( Size( aSize.Width() * nPropr / 100,
-                                    aSize.Height() * nPropr / 100 ) );
+        aNewFont.SetFontSize( Size( aSize.Width() * m_nPropr / 100,
+                                    aSize.Height() * m_nPropr / 100 ) );
         if ( !rCurrentFont.IsSameInstance( aNewFont ) )
             rOut.SetFont( aNewFont );
     }
@@ -547,10 +547,10 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     Point aPos( rPos );
 
-    if ( nEsc )
+    if ( m_nEsc )
     {
         tools::Long nDiff = GetFontSize().Height();
-        nDiff *= nEsc;
+        nDiff *= m_nEsc;
         nDiff /= 100;
 
         if ( !IsVertical() )
@@ -597,23 +597,23 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         nTmp = rTxt.getLength();
     Point aPos( rPos );
 
-    if ( nEsc )
+    if ( m_nEsc )
     {
         short nTmpEsc;
-        if( DFLT_ESC_AUTO_SUPER == nEsc )
+        if( DFLT_ESC_AUTO_SUPER == m_nEsc )
         {
-            nTmpEsc = .8 * (100 - nPropr);
+            nTmpEsc = .8 * (100 - m_nPropr);
             assert (nTmpEsc == DFLT_ESC_SUPER && "I'm sure this formula needs to be changed, but how to confirm that???");
             nTmpEsc = DFLT_ESC_SUPER;
         }
-        else if( DFLT_ESC_AUTO_SUB == nEsc )
+        else if( DFLT_ESC_AUTO_SUB == m_nEsc )
         {
-            nTmpEsc = .2 * -(100 - nPropr);
+            nTmpEsc = .2 * -(100 - m_nPropr);
             assert (nTmpEsc == -20 && "I'm sure this formula needs to be changed, but how to confirm that???");
             nTmpEsc = -20;
         }
         else
-            nTmpEsc = nEsc;
+            nTmpEsc = m_nEsc;
         Size aSize = GetFontSize();
         aPos.AdjustY( -(( nTmpEsc * aSize.Height() ) / 100) );
     }
@@ -662,16 +662,16 @@ SvxFont& SvxFont::operator=( const vcl::Font& rFont )
 SvxFont& SvxFont::operator=( const SvxFont& rFont )
 {
     Font::operator=( rFont );
-    eCaseMap = rFont.eCaseMap;
-    nEsc = rFont.nEsc;
-    nPropr = rFont.nPropr;
+    m_eCaseMap = rFont.m_eCaseMap;
+    m_nEsc = rFont.m_nEsc;
+    m_nPropr = rFont.m_nPropr;
     return *this;
 }
 
 bool SvxFont::SvxFontSubsetEquals(const SvxFont& rFont) const
 {
-    return nEsc == rFont.GetEscapement() && nPropr == rFont.GetPropr()
-        && eCaseMap == rFont.GetCaseMap();
+    return m_nEsc == rFont.GetEscapement() && m_nPropr == rFont.GetPropr()
+        && m_eCaseMap == rFont.GetCaseMap();
 }
 
 namespace {

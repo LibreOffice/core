@@ -42,9 +42,9 @@ namespace tools { class Rectangle; }
 class Size;
 class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
 {
-    SvxCaseMap   eCaseMap;      // Text Markup
-    short nEsc;                 // Degree of Superscript/Subscript
-    sal_uInt8  nPropr;          // Degree of reduction of the font height
+    SvxCaseMap   m_eCaseMap;      // Text Markup
+    short m_nEsc;                 // Degree of Superscript/Subscript
+    sal_uInt8  m_nPropr;          // Degree of reduction of the font height
 
 public:
     SvxFont();
@@ -52,23 +52,23 @@ public:
     SvxFont( const SvxFont &rFont );
 
     // Methods for Superscript/Subscript
-    short GetEscapement() const { return nEsc; }
-    void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
+    short GetEscapement() const { return m_nEsc; }
+    void SetEscapement( const short nNewEsc ) { m_nEsc = nNewEsc; }
     // set specific values instead of automatic, and ensure valid value. Depends on nPropr being set already.
     void SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev = nullptr);
 
-    sal_uInt8 GetPropr() const { return nPropr; }
-    void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
+    sal_uInt8 GetPropr() const { return m_nPropr; }
+    void SetPropr( const sal_uInt8 nNewPropr ) { m_nPropr = nNewPropr; }
     void SetProprRel( const sal_uInt8 nNewPropr )
-        { SetPropr( static_cast<sal_uInt8>( static_cast<tools::Long>(nNewPropr) * static_cast<tools::Long>(nPropr) / 100 ) ); }
+        { SetPropr( static_cast<sal_uInt8>( static_cast<tools::Long>(nNewPropr) * static_cast<tools::Long>(m_nPropr) / 100 ) ); }
 
-    SvxCaseMap GetCaseMap() const { return eCaseMap; }
-    void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
+    SvxCaseMap GetCaseMap() const { return m_eCaseMap; }
+    void    SetCaseMap( const SvxCaseMap eNew ) { m_eCaseMap = eNew; }
 
     // Is-Methods:
-    bool IsCaseMap() const { return SvxCaseMap::NotMapped != eCaseMap; }
-    bool IsCapital() const { return SvxCaseMap::SmallCaps == eCaseMap; }
-    bool IsEsc() const { return 0 != nEsc; }
+    bool IsCaseMap() const { return SvxCaseMap::NotMapped != m_eCaseMap; }
+    bool IsCapital() const { return SvxCaseMap::SmallCaps == m_eCaseMap; }
+    bool IsEsc() const { return 0 != m_nEsc; }
 
     // Consider Upper case, Lower case letters etc.
     OUString CalcCaseMap(const OUString &rTxt) const;
