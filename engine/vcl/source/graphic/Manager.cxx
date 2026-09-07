@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <graphic/Manager.hxx>
+#include <vcl/graphic/Manager.hxx>
 #include <impgraph.hxx>
 #include <sal/log.hxx>
 

@@ -23,8 +23,8 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
-#include "graphic/Manager.hxx"
-#include "graphic/MemoryManaged.hxx"
+#include <vcl/graphic/Manager.hxx>
+#include <vcl/graphic/MemoryManaged.hxx>
 #include "graphic/GraphicID.hxx"
 #include "graphic/BitmapContainer.hxx"
 #include "graphic/AnimationContainer.hxx"

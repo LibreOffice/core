@@ -18,7 +18,7 @@
 #include <tools/stream.hxx>
 
 #include <impgraph.hxx>
-#include <graphic/MemoryManaged.hxx>
+#include <vcl/graphic/MemoryManaged.hxx>
 
 using namespace css;
 

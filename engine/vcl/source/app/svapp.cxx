@@ -57,7 +57,7 @@
 
 #include <dbggui.hxx>
 #include <salinst.hxx>
-#include <graphic/Manager.hxx>
+#include <vcl/graphic/Manager.hxx>
 #include <salframe.hxx>
 #include <salsys.hxx>
 #include <svdata.hxx>

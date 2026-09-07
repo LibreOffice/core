@@ -11,6 +11,7 @@
 
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
+#include <vcl/graphic/Manager.hxx>
 #include <vcl/timer.hxx>
 
 #include <memory>
