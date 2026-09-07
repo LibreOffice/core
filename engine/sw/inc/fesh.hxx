@@ -301,6 +301,8 @@ public:
     /// Same as IsObjSelectable(), but return the object as well.
     SdrObject* GetObjAt(const Point& rPt);
     bool IsInsideSelectedObj( const Point& rPt );    ///< returns enum values
+    /** Returns true if it is background object, and is covered by text at the given point. */
+    bool IsTextOverBgObjectAt(const Point& rPt, const SdrObject* pObj);
     /** Test if there is a draw object at that position and if it should be selected.
      The 'should' is aimed at Writer text fly frames which may be in front of
      the draw object. */
