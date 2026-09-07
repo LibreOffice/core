@@ -51,4 +51,11 @@ void reveal_in_file_manager(const char *uri);
  */
 void install_clipboard_provider(COKit &rOffice);
 
+/**
+ * Install the process-global file picker provider, so a command that needs the
+ * user to pick a file opens a native open panel instead of the engine's file
+ * dialog. Called once, while the engine's main loop starts.
+ */
+void install_filepicker_provider(COKit &rOffice);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

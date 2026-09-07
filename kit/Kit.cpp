@@ -3801,6 +3801,12 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
     install_clipboard_provider(*loKit);
 #endif
 
+    // The desktop apps show a native file picker where the engine would open
+    // its own file dialog.
+#if defined(MACOSAPP)
+    install_filepicker_provider(*loKit);
+#endif
+
     LOG_INF("Kit unipoll loop run");
 
     loKit->runLoop(pollCallback, wakeCallback, mainKit.get());
