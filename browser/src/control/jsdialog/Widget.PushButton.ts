@@ -179,6 +179,21 @@ JSDialog.pushButton = function (
 		);
 	}
 
+	// Prevent opening multiple dialogs via the quick fix buttons in the accessibility check panel.
+	if (data.id && data.id.startsWith('accessibilityCheckEntryFixButton')) {
+		const fixClickHandler = pushbutton.onclick;
+		pushbutton.onclick = function (ev: MouseEvent) {
+			if (
+				app.map.dialog.hasOpenedDialog() ||
+				(app.map.jsdialog && app.map.jsdialog.hasDialogOpened())
+			) {
+				app.map.dialog.blinkOpenDialog();
+				return;
+			}
+			fixClickHandler.call(pushbutton, ev);
+		};
+	}
+
 	JSDialog.SetupA11yLabelForLabelableElement(
 		parentContainer,
 		pushbutton,
