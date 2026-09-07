@@ -409,6 +409,8 @@ void TableManager::HandleSmallerRows()
     {
         rtl::Reference<SwXText> xTextAppendAndConvert = dynamic_cast<SwXText*>(
             mpTableDataHandler->getDomainMapperImpl().GetTopTextAppend().get());
+        if (!xTextAppendAndConvert.is())
+            return;
 
         for (unsigned int nRow = 0; nRow < nRows; ++nRow)
         {
