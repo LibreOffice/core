@@ -565,7 +565,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
             "UCBStorage::CopyStorageElement_Impl", "X11SalGraphicsImpl::drawAlphaBitmap",
             "MasterPagesSelector::ClearPageSet", "View::IsPresObjSelected",
             "SdDrawPagesAccess::remove", "SdMasterPagesAccess::remove", "View::InsertData",
-            "RemoteServer::execute", "Implementation::ReleaseOutlinerView",
+            "Implementation::ReleaseOutlinerView",
             "SwFormat::CopyAttrs", "FinitCore", "SwCursorShell::MoveFieldType", "SwExtraPainter::PaintExtra",
             "SwMarginPortion::AdjustRight", "SwPaintQueue::Repaint", "SwTOXMgr::UpdateOrInsertTOX",
             "SwBaseShell::Execute", "WW8Export::WriteSdrTextObj"))

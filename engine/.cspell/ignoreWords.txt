@@ -1,5 +1,4 @@
 # helper file to collect words that should be accepted, but not used for suggestions
-bluez
 CERTIFICATENAME
 CERTIFICATEPATH
 cpan
