@@ -62,6 +62,21 @@ function _getCurrentBorderNumber(builder) {
 	return 1;
 }
 
+// Returns the color for a border preset as a '#rrggbb' string. When the selection already has
+// borders this is their color. Otherwise it is the color last chosen in the line color picker,
+// falling back to black.
+function _getBorderLineColor(item, builder) {
+	const stateColor = builder.map['stateChangeHandler'].getItemValue(item.command);
+	if (parseInt(stateColor) >= 0)
+		return JSDialog.getCurrentColor(item, builder);
+
+	const lastColor = app.colorLastSelection[item.command];
+	if (typeof lastColor === 'string' && /^#?[0-9a-fA-F]{6}$/.test(lastColor))
+		return lastColor.startsWith('#') ? lastColor : '#' + lastColor;
+
+	return JSDialog.getCurrentColor(item, builder);
+}
+
 function _borderControlItem(parentContainer, data, builder, i, selected) {
 	var button = null;
 
@@ -75,11 +90,11 @@ function _borderControlItem(parentContainer, data, builder, i, selected) {
 		$(button).addClass('selected');
 
 	$(div).click(function () {
-		var color = 0;
+		var color;
 		// Find our associated color picker
 		var item = app.LOUtil.findItemWithAttributeRecursive(data.parent, 'command', '.uno:FrameLineColor');
 		if (item)
-			color = JSDialog.getCurrentColor(item, builder);
+			color = _getBorderLineColor(item, builder);
 		window.setBorderStyle(i, color);
 	});
 }
