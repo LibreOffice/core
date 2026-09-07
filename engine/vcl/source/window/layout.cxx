@@ -3117,6 +3117,17 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Control::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("type", "drawingarea");
 
+    // A tab page is laid out when it is shown for the first time, so before that a
+    // drawing area on it still has no size and would be dumped as an empty picture.
+    // Give it the size it asks for, which is the size it keeps once the page is laid
+    // out, so the picture and the space kept for it are the right ones from the start.
+    if (GetOutputSizePixel().IsEmpty())
+    {
+        Size aPreferredSize(get_preferred_size());
+        if (!aPreferredSize.IsEmpty())
+            SetSizePixel(aPreferredSize);
+    }
+
     ScopedVclPtrInstance<VirtualDevice> pDevice;
     OutputDevice* pRefDevice = GetOutDev();
     Size aRenderSize(pRefDevice->PixelToLogic(GetOutputSizePixel()));

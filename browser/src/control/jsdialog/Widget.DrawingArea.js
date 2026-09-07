@@ -190,9 +190,11 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			}
 		}
 
-		// Line width dialog is affected from delay on image render.
-		// So If the image render is delayed, use width and height of the data
-		if (JSDialog.isWidgetInModalPopup(data) && image.width == 0 && image.height == 0) {
+		// The picture arrives with the widget but is decoded later, so it has no
+		// size of its own yet. Take the size from the data, so the drawing area
+		// takes up the room the picture needs from the moment it is built, and
+		// a dialog measured right away comes out large enough for it.
+		if (image.width == 0 && image.height == 0) {
 			image.width = data.imagewidth;
 			image.height = data.imageheight;
 		}
