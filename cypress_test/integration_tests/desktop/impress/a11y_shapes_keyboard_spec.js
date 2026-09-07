@@ -79,4 +79,56 @@ describe(['tagdesktop'], 'Impress shapes deck keyboard navigation',
 	it('F6 leaves the deck from a widget inside it', function () {
 		a11yHelper.sidebarKeyboard.assertRingLeavesTheDeck(getWin);
 	});
+	// Last: showing the accelerators puts info boxes on the page.
+	it('every gallery carries the accelerator the definitions give it', function () {
+		cy.wrap(null, { timeout: 20000 }).should(function () {
+			if (!win.app.UI.notebookbarAccessibility.initialized)
+				throw new Error('accessibility not initialized yet');
+		});
+
+		// The attribute is put on when the accelerators are shown.
+		cy.then(function () {
+			const a11y = win.app.UI.notebookbarAccessibility;
+			a11y.mayShowAcceleratorInfoBoxes = true;
+			a11y.onDocumentKeyUp({ keyCode: 18 });
+		});
+
+		cy.then(function () {
+			const combinations = win.app.UI.notebookbarAccessibility.definitions
+				.sidebarCombinations[win.app.map.getDocType()] || {};
+			const panel = win.document.querySelector('#DefaultShapesPanel');
+			const galleries = Array.from(panel.querySelectorAll('.ui-iconview[id]'));
+
+			expect(galleries, 'galleries in the panel').to.not.be.empty;
+
+			galleries.forEach(function (gallery) {
+				expect(combinations, 'a combination for ' + gallery.id)
+					.to.have.property(gallery.id);
+				expect(gallery.getAttribute('accesskey'),
+					'accesskey of ' + gallery.id)
+					.to.equal(combinations[gallery.id]);
+			});
+		});
+	});
+	// The key being drawn is not the same as the key doing something.
+	it('the accelerator of a gallery reaches the gallery', function () {
+		cy.wrap(null, { timeout: 20000 }).should(function () {
+			if (!win.app.UI.notebookbarAccessibility.initialized)
+				throw new Error('accessibility not initialized yet');
+		});
+
+		cy.realPress('Alt');
+		cy.realPress('K');
+		cy.realPress('L');
+
+		cy.cGet('#LinesArrows').should(function () {
+			const gallery = win.document.getElementById('LinesArrows');
+			const active = win.document.activeElement;
+			const where = active ? active.tagName + '#' + active.id : 'nothing';
+
+			expect(gallery.contains(active),
+				'KL left the focus at ' + where + ', not inside LinesArrows')
+				.to.be.true;
+		});
+	});
 });

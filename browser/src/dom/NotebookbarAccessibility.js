@@ -148,7 +148,7 @@ var NotebookbarAccessibility = function() {
 	this.checkTabAccelerators = function() {
 		for (var tabId in this.tabInfoList) {
 			if (Object.prototype.hasOwnProperty.call(this.tabInfoList, tabId)) {
-				var element = document.querySelector('[id^="' + tabId + '"]');
+				var element = this.findDefinitionElement(tabId, this.tabInfoList[tabId]);
 				if (element && !element.classList.contains('hidden')) {
 					if (this.tabInfoList[tabId].combination === this.combination) {
 						this.filteredItem = this.tabInfoList[tabId];
@@ -183,7 +183,7 @@ var NotebookbarAccessibility = function() {
 		var itemWasClicked = false;
 
 		if (this.filteredItem !== null) {
-			var element = document.querySelector('[id^="' + this.filteredItem.id + '"]');
+			var element = this.findDefinitionElement(this.filteredItem.id, this.filteredItem);
 			if (element) {
 				// menu button & overflow button - prioritize dropdown arrow
 				var dropdownArrow = element.querySelector('.arrowbackground');
@@ -198,6 +198,17 @@ var NotebookbarAccessibility = function() {
 						this.accessibilityInputElement.blur();
 						listbox.focus();
 						listbox.showPicker();
+						this.filteredItem = null;
+						return true;
+					}
+
+					if (this.filteredItem.focusOnly) {
+						const target = element.querySelector('.ui-iconview-entry[tabindex="0"]')
+							|| JSDialog.FindFocusableWithin(element, 'next')
+							|| element;
+						// The blur handler resets the accelerator state.
+						this.accessibilityInputElement.blur();
+						target.focus();
 						this.filteredItem = null;
 						return true;
 					}
@@ -397,13 +408,20 @@ var NotebookbarAccessibility = function() {
 		}
 	};
 
+	/// Toolitems carry a counter after their id, so they are found by prefix.
+	this.findDefinitionElement = function(id, definition) {
+		if (definition && definition.exactId)
+			return document.querySelector('[id="' + id + '"]');
+		return document.querySelector('[id^="' + id + '"]');
+	};
+
 	this.addTabAccelerators = function() {
 		// Remove all info boxes first.
 		this.removeAllInfoBoxes();
 		this.tabInfoList = this.definitions.getDefinitions();
 		for (var tabId in this.tabInfoList) {
 			if (Object.prototype.hasOwnProperty.call(this.tabInfoList, tabId)) {
-				var element = document.querySelector('[id^="' + tabId + '"]');
+				var element = this.findDefinitionElement(tabId, this.tabInfoList[tabId]);
 				if (element && element.offsetParent !== null) {
 					element.accessKey = this.tabInfoList[tabId].combination;
 					this.addInfoBox(element);
@@ -414,7 +432,7 @@ var NotebookbarAccessibility = function() {
 
 	this.initTabListeners = function() {
 		Object.keys(this.tabInfoList).forEach(function(tabId) {
-			var element = document.querySelector('[id^="' + tabId + '"]');
+			var element = this.findDefinitionElement(tabId, this.tabInfoList[tabId]);
 			if (element) {
 				element.addEventListener('keydown', function(event) {
 					if (event.key === 'Alt') {

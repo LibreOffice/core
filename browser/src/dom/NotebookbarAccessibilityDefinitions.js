@@ -23,14 +23,34 @@ var NotebookbarAccessibilityDefinitions = function() {
 			'paperformat-input': 'KF',
 			'fillstyle-input': 'KB',
 			'orientation-input': 'KO',
-			'masterslide-input': 'KS'
+			'masterslide-input': 'KS',
+			'LinesArrows': 'KL',
+			'Curves': 'KC',
+			'Connectors': 'KN',
+			'BasicShapes': 'KA',
+			'SymbolShapes': 'KY',
+			'BlockArrows': 'KW',
+			'Flowcharts': 'KH',
+			'Callouts': 'KT',
+			'Stars': 'KR',
+			'3DObjects': 'KD'
 		},
 		drawing: {
 			'paperformat-input': 'KF',
 			'fillstyle-input': 'KB',
 			'orientation-input': 'KO',
 			'marginLB-input': 'KM',
-			'masterslide-input': 'KS'
+			'masterslide-input': 'KS',
+			'LinesArrows': 'KL',
+			'Curves': 'KC',
+			'Connectors': 'KN',
+			'BasicShapes': 'KA',
+			'SymbolShapes': 'KY',
+			'BlockArrows': 'KW',
+			'Flowcharts': 'KH',
+			'Callouts': 'KT',
+			'Stars': 'KR',
+			'3DObjects': 'KD'
 		},
 		text: {
 			'papersize-input': 'KF',
@@ -59,7 +79,11 @@ var NotebookbarAccessibilityDefinitions = function() {
 				selectedDefinitions[id] = {
 					focusBack: false,
 					combination: combinations[id],
-					contentList: []
+					contentList: [],
+					// The frame around a gallery is named after it, so a prefix finds the frame.
+					exactId: true,
+					// Reaching a sidebar widget means taking the focus, not opening a tab.
+					focusOnly: true
 				};
 			}
 		}
