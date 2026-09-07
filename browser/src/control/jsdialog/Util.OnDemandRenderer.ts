@@ -24,6 +24,7 @@ function onDemandRenderer(
 	placeholder: Element,
 	parentContainer: Element,
 	entryText: string | undefined,
+	counted: boolean = true,
 ) {
 	const setupOnDemandRenderer = () => {
 		// avoid races, might be already updated
@@ -71,7 +72,7 @@ function onDemandRenderer(
 						// flight - allow the retry send to go out
 						// (core may have dropped the first request)
 						// but do not double-count.
-						if (!app.pendingOnDemandRenderRequests.has(pendingKey)) {
+						if (counted && !app.pendingOnDemandRenderRequests.has(pendingKey)) {
 							app.pendingOnDemandRenderRequests.add(pendingKey);
 							app.pendingOnDemandRenders++;
 						}

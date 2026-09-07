@@ -26,6 +26,43 @@
 declare var JSDialog: any;
 declare var UNOKey: any;
 
+/// Falls back to the engine's render when this build ships no icon for it.
+function _createEntryImageFromCommand(
+	parent: HTMLElement,
+	builder: JSBuilder,
+	entryData: IconViewEntry,
+	command: string,
+	hasText: boolean,
+) {
+	const img = window.L.DomUtil.create(
+		'img',
+		builder.options.cssClass,
+		parent,
+	) as HTMLImageElement;
+
+	img.alt = hasText ? '' : entryData.text || entryData.tooltip || '';
+	if (entryData.tooltip) img.title = entryData.tooltip;
+	setupSize(entryData, img);
+
+	img.addEventListener(
+		'error',
+		function () {
+			window.L.DomUtil.remove(img);
+			const placeholder = window.L.DomUtil.create(
+				'span',
+				builder.options.cssClass,
+				parent,
+			);
+			setupSize(entryData, placeholder);
+			placeholder.innerText = entryData.text ? entryData.text : '';
+			(parent.parentNode as any).requestRenders(entryData, placeholder, parent);
+		},
+		{ once: true },
+	);
+
+	img.src = app.LOUtil.getImageURL(app.LOUtil.getIconNameOfCommand(command));
+}
+
 function _createEntryImage(
 	parent: HTMLElement,
 	builder: JSBuilder,
@@ -140,7 +177,15 @@ function _iconViewEntry(
 		entryContainer.setAttribute('tabindex', '-1');
 	}
 
-	if (entry.ondemand) {
+	if (entry.command) {
+		_createEntryImageFromCommand(
+			entryContainer,
+			builder,
+			entry,
+			entry.command,
+			hasText,
+		);
+	} else if (entry.ondemand) {
 		const placeholder = window.L.DomUtil.create(
 			'span',
 			builder.options.cssClass,
@@ -422,6 +467,7 @@ JSDialog.iconView = function (
 			placeholder,
 			entryContainer,
 			entry.text ? entry.text : entry.tooltip,
+			!entry.command,
 		);
 	};
 
