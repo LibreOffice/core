@@ -1122,6 +1122,7 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
         for (sal_uInt16 i = 0; i <= nDeepest; ++i)
         {
             SfxShell* pShell = m_pDispatcher->GetShell(i);
+            assert(pShell); // Pop does not touch the stack; the Flush does
             m_pDispatcher->Pop(*pShell, aSeen.insert(pShell).second
                                             ? SfxDispatcherPopFlags::POP_DELETE
                                             : SfxDispatcherPopFlags::NONE);
