@@ -450,7 +450,7 @@ namespace emfplushelper
         maMapTransform = maWorldTransform;
         maMapTransform.scale(mfPageScaleX, mfPageScaleY);
         maMapTransform *= basegfx::utils::createScaleTranslateB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY,
-                                                                           double(-mnFrameLeft), double(-mnFrameTop));
+                                                                           -double(mnFrameLeft), -double(mnFrameTop));
         maMapTransform *= maBaseTransform;
 
         // Used only for performance optimization, to do not calculate it every line draw
