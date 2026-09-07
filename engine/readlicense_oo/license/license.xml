@@ -595,7 +595,7 @@
     </div>
     <div class="CURL">
         <h2>libcurl</h2>
-        <!-- Name: curl, Vendor: curl_project, Source: CURL_TARBALL, URL: https://curl.se/, Declared: curl, Concluded: MPL-2.0 -->
+        <!-- Name: curl, Vendor: haxx, Source: CURL_TARBALL, URL: https://curl.se/, Declared: curl, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libcurl. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>Copyright (c) 1996 - 2009, Daniel Stenberg, &lt;daniel@haxx.se&gt;.</p>
@@ -1187,7 +1187,7 @@
     </div>
     <div class="WPD">
         <h2>libwpd</h2>
-        <!-- Name: libwpd, Vendor: libwpd_project, Source: WPD_TARBALL, URL: http://libwpd.sourceforge.net/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
+        <!-- Name: libwpd, Vendor: libwpd, Source: WPD_TARBALL, URL: http://libwpd.sourceforge.net/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libwpd. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
