@@ -62,7 +62,8 @@ SystemGraphicsData getiOSGraphicsData(unsigned char* pBuffer, long width, long h
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext
         = CGBitmapContextCreate(pBuffer, width, height, 8, width * 4, CGColorSpaceCreateDeviceRGB(),
-                                kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big);
+                                uint32_t(kCGImageAlphaPremultipliedLast)
+                                    | uint32_t(kCGImageByteOrder32Big));
 
     CGContextTranslateCTM(pCGContext, 0, height);
     CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);

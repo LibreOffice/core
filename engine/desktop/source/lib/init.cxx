@@ -5030,7 +5030,7 @@ static void doc_paintTile(COKitDocument* pThis,
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
-                                                    kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big);
+                                                    uint32_t(kCGImageAlphaPremultipliedLast) | uint32_t(kCGImageByteOrder32Big));
 
     CGContextTranslateCTM(pCGContext, 0, nCanvasHeight);
     CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
@@ -8712,7 +8712,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
 #if defined(IOS)
     // Online uses COKitTileMode::RGBA by default so flip the normal flags
     // to kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big
-    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big);
+    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), uint32_t(kCGImageAlphaNoneSkipLast) | uint32_t(kCGImageByteOrder32Big));
 
     CGContextTranslateCTM(cgc, 0, nHeight);
     CGContextScaleCTM(cgc, fDPIScale, -fDPIScale);
