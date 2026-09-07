@@ -2185,7 +2185,8 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob, IdleJo
                 {
                     // Idle spellcheck for the non-visible area: interrupt on user input.
                     bInterrupt = comphelper::COKit::anyInput();
-                    if (!bInterrupt)
+                    // Only consider the COKit anyInput callback result when COKit is active.
+                    if (comphelper::COKit::isActive() && !bInterrupt)
                         // comphelper::COKit::anyInput() never reports pending input in a
                         // forked kit child, so a spell checker whose per-word cost
                         // occasionally spikes (a compounding dictionary backtracking
