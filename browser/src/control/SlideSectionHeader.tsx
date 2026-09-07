@@ -20,16 +20,17 @@ interface SlideSectionHeaderCallbacks {
 }
 
 /*
- * A header row for a slide section: a chevron toggle and the section name.
- * The slide navigator and the slide import pane both build their section
- * headers here, so sections carry the same markup, classes and controls in
- * either panel.
+ * A header row for a slide section: a chevron toggle, the section name and,
+ * when one is given, how many slides the section holds. The slide navigator
+ * and the slide import pane both build their section headers here, so
+ * sections carry the same markup, classes and controls in either panel.
  */
 function buildSlideSectionHeader(
   name: string,
   sectionIndex: number,
   collapsed: boolean,
   callbacks: SlideSectionHeaderCallbacks,
+  count?: string,
 ): HTMLElement {
   return (
     <div
@@ -56,6 +57,7 @@ function buildSlideSectionHeader(
       <span class="slide-section-name" title={name}>
         {name}
       </span>
+      {count && <span class="slide-section-count">{count}</span>}
     </div>
   );
 }

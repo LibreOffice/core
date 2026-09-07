@@ -248,6 +248,14 @@
 	display: none;
 }
 
+/* How many slides a section holds, at the end of its header. */
+.slide-section-count {
+	flex-shrink: 0;
+	margin-inline-start: 8px;
+	color: var(--color-text-light);
+	white-space: nowrap;
+}
+
 .slide-section-name.selected {
 	color: rgb(var(--doc-type));
 	font-weight: 600;
