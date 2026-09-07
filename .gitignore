@@ -51,8 +51,7 @@ compile_commands.json
 macos/coolwsd/gmake-wrapper.sh
 macos/coda/coda/Assets.xcassets
 /qt/run-from-build
-scripts/__pycache__
-browser/introdocs/__pycache__
+__pycache__/
 
 # Test stuff
 systemplate
@@ -272,9 +271,6 @@ windows/coda/config.props
 qt/flatpak/build-dir/
 qt/flatpak/repo/
 qt/translations/*.qm
-
-# po2json.py
-browser/util/__pycache__
 
 # coplugin
 /clang/plugin.so
