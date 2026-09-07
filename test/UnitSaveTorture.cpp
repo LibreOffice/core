@@ -443,6 +443,120 @@ public:
     }
 };
 
+// A save of a document with no changes is skipped by Core and answered with
+// success false and the result string "unmodified". Background saving stays
+// available after such an answer, so every later save still runs in the
+// background child. A foreground save here would block the whole document
+// behind a "Saving document" dialog on every later save.
+class UnitBgSaveUnmodified : public UnitSaveTortureBase
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitFirstModified, WaitFirstSave, WaitSkippedSave,
+               WaitSecondModified, WaitSecondSave)
+    _phase;
+
+public:
+    UnitBgSaveUnmodified()
+        : UnitSaveTortureBase("UnitBgSaveUnmodified")
+        , _phase(Phase::Load)
+    {
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        // Any foreground save from here on means bgsave was wrongly disabled.
+        createStamp("abortonsyncsave");
+
+        forceAutosave();
+        TRANSITION_STATE(_phase, Phase::WaitFirstModified);
+        modifyDocument();
+        return true;
+    }
+
+    bool onDocumentSaved(const std::string& message, bool success,
+                         const std::string& result) override
+    {
+        TST_LOG("Save result: [" << result << "] for " << message);
+
+        switch (_phase)
+        {
+            case Phase::WaitFirstSave:
+                LOK_ASSERT_MESSAGE("The first save writes the document", success);
+                TRANSITION_STATE(_phase, Phase::WaitSkippedSave);
+                TST_LOG("Sending a save of the now unchanged document");
+                WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=1");
+                break;
+
+            case Phase::WaitSkippedSave:
+                LOK_ASSERT_MESSAGE("A skipped save reports no new version", !success);
+                LOK_ASSERT_EQUAL(std::string("unmodified"), result);
+                TRANSITION_STATE(_phase, Phase::WaitSecondModified);
+                TST_LOG("Typing again to make the document savable");
+                modifyDocument();
+                break;
+
+            case Phase::WaitSecondSave:
+                LOK_ASSERT_MESSAGE("The save after a skipped save writes the document", success);
+                passTest("Background saving survived a skipped save");
+                break;
+
+            default:
+                failTest("Unexpected save result in phase " + std::string(name(_phase)));
+                break;
+        }
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+
+        // The first save has to start from a document Core already knows is modified. A save sent
+        // before the typed text arrives leaves the document modified once that save finishes, and
+        // the next save then writes a new version instead of being skipped.
+        if (_phase == Phase::WaitFirstModified)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitFirstSave);
+            TST_LOG("Sending the first save, which writes the typed text");
+            WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+        else if (_phase == Phase::WaitSecondModified)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitSecondSave);
+            TST_LOG("Sending the save that must still run in the background");
+            WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                const std::string docName = "empty.ods";
+                TST_LOG("Loading document: " << docName);
+                connectAndLoadLocalDocument(docName);
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitFirstModified:
+            case Phase::WaitFirstSave:
+            case Phase::WaitSkippedSave:
+            case Phase::WaitSecondModified:
+            case Phase::WaitSecondSave:
+                break;
+        }
+    }
+};
+
 // An interactive dialog appearing in the background save child aborts that
 // save without writing a new version. The server must fall back to an
 // ordinary foreground save, and upload that, rather than uploading whatever
@@ -836,6 +950,7 @@ UnitBase** unit_create_wsd_multi(void)
     return new UnitBase* []
     {
         new UnitBgSaveCrash(), new UnitBgSaveDialogClose(), new UnitBgSaveDialogAbort(),
+            new UnitBgSaveUnmodified(),
             new UnitTileCombineRace(), new UnitModified(),
             new UnitSaveTortureOne("empty.ods", true, false, "simple_load-modify-bgsave"),
             new UnitSaveTortureOne("empty.odt", true, false, "simple_load-modify-bgsave"),

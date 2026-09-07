@@ -414,16 +414,23 @@ void BgSaveParentWebSocketHandler::handleBgSaveResult(Poco::JSON::Object::Ptr& o
     _document->sendFrame(newMsg, WSOpCode::Text);
 
     const SaveResult::Result saveResult = SaveResult::parse(object);
-    if (saveResult.outcome == SaveResult::Outcome::Saved)
+    switch (saveResult.outcome)
     {
-        _document->notifySyntheticUnmodifiedState();
-        _session->saveLogUiBackground();
-    }
-    else
-    {
-        _document->updateModifiedOnFailedBgSave();
-        LOG_DBG("Failed to save, not synthesizing modified state");
-        _document->disableBgSave("on failed save");
+        case SaveResult::Outcome::Saved:
+            _document->notifySyntheticUnmodifiedState();
+            _session->saveLogUiBackground();
+            break;
+
+        case SaveResult::Outcome::Unmodified:
+            LOG_DBG("Background save wrote nothing, the document is unmodified");
+            _document->notifySyntheticUnmodifiedState();
+            break;
+
+        case SaveResult::Outcome::Failed:
+            _document->updateModifiedOnFailedBgSave();
+            LOG_DBG("Failed to save, not synthesizing modified state");
+            _document->disableBgSave("on failed save");
+            break;
     }
     _saveCompleted = true;
 }
