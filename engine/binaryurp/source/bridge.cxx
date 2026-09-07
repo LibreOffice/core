@@ -75,7 +75,7 @@ sal_Int32 random() {
     return n;
 }
 
-OUString toString(css::uno::TypeDescription const & type) {
+OUString toString(cpo::uno::TypeDescription const & type) {
     typelib_TypeDescription * d = type.get();
     assert(d != nullptr && d->pTypeName != nullptr);
     return OUString(d->pTypeName);
@@ -352,7 +352,7 @@ BinaryAny Bridge::mapCppToBinaryAny(cpo::uno::Any const & cppAny) {
     out.~BinaryAny();
     uno_copyAndConvertData(
         &out.get(), &in,
-        css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).get(),
+        cpo::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).get(),
         cppToBinaryMapping_.get());
     return out;
 }
@@ -372,7 +372,7 @@ rtl::Reference< Writer > Bridge::getWriter() {
 }
 
 css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
-    OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     assert(type.is());
     if (oid.isEmpty()) {
@@ -406,7 +406,7 @@ css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
 
 OUString Bridge::registerOutgoingInterface(
     css::uno::UnoInterfaceReference const & object,
-    css::uno::TypeDescription const & type)
+    cpo::uno::TypeDescription const & type)
 {
     assert(type.is());
     if (!object.is()) {
@@ -452,7 +452,7 @@ OUString Bridge::registerOutgoingInterface(
 }
 
 css::uno::UnoInterfaceReference Bridge::findStub(
-    OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     assert(!oid.isEmpty() && type.is());
     std::lock_guard g(mutex_);
@@ -475,7 +475,7 @@ css::uno::UnoInterfaceReference Bridge::findStub(
 }
 
 void Bridge::releaseStub(
-    OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     assert(!oid.isEmpty() && type.is());
     css::uno::UnoInterfaceReference obj;
@@ -580,7 +580,7 @@ void Bridge::decrementActiveCalls() noexcept {
 }
 
 bool Bridge::makeCall(
-    OUString const & oid, css::uno::TypeDescription const & member,
+    OUString const & oid, cpo::uno::TypeDescription const & member,
     bool setter, std::vector< BinaryAny >&& inArguments,
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments)
 {
@@ -592,7 +592,7 @@ bool Bridge::makeCall(
             outgoingRequests_, att.getTid(),
             OutgoingRequest(OutgoingRequest::KIND_NORMAL, member, setter));
         sendRequest(
-            att.getTid(), oid, css::uno::TypeDescription(), member,
+            att.getTid(), oid, cpo::uno::TypeDescription(), member,
             std::move(inArguments));
         pop.clear();
         incrementCalls(true);
@@ -621,7 +621,7 @@ void Bridge::sendRequestChangeRequest() {
     random_ = random();
     std::vector< BinaryAny > a;
     a.emplace_back(
-            css::uno::TypeDescription(cppu::UnoType< sal_Int32 >::get()),
+            cpo::uno::TypeDescription(cppu::UnoType< sal_Int32 >::get()),
             &random_);
     sendProtPropRequest(OutgoingRequest::KIND_REQUEST_CHANGE, a);
 }
@@ -648,7 +648,7 @@ void Bridge::handleRequestChangeReply(
     }
     sal_Int32 n = *static_cast< sal_Int32 * >(
         returnValue.getValue(
-            css::uno::TypeDescription(cppu::UnoType< sal_Int32 >::get())));
+            cpo::uno::TypeDescription(cppu::UnoType< sal_Int32 >::get())));
     sal_Int32 exp = 0;
     switch (mode_) {
     case MODE_REQUESTED:
@@ -715,7 +715,7 @@ void Bridge::handleRequestChangeRequest(
         {
             sal_Int32 n2 = *static_cast< sal_Int32 * >(
                 inArguments[0].getValue(
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         cppu::UnoType< sal_Int32 >::get())));
             sal_Int32 ret;
             if (n2 > random_) {
@@ -731,7 +731,7 @@ void Bridge::handleRequestChangeRequest(
             getWriter()->sendDirectReply(
                 tid, protPropRequest_, false,
                 BinaryAny(
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         cppu::UnoType< sal_Int32 >::get()),
                     &ret),
             std::vector< BinaryAny >());
@@ -744,7 +744,7 @@ void Bridge::handleRequestChangeRequest(
             getWriter()->queueReply(
                 tid, protPropRequest_, false, false,
                 BinaryAny(
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         cppu::UnoType< sal_Int32 >::get()),
                     &ret),
             std::vector< BinaryAny >(), false);
@@ -815,7 +815,7 @@ OutgoingRequest Bridge::lastOutgoingRequest(rtl::ByteSequence const & tid) {
 }
 
 bool Bridge::isProtocolPropertiesRequest(
-    std::u16string_view oid, css::uno::TypeDescription const & type) const
+    std::u16string_view oid, cpo::uno::TypeDescription const & type) const
 {
     return oid == protPropOid_ && type.equals(protPropType_);
 }
@@ -858,17 +858,17 @@ css::uno::Reference< cpo::uno::XInterface > Bridge::getInstance(
                 " character"_ustr);
         }
     }
-    css::uno::TypeDescription ifc(cppu::UnoType<cpo::uno::XInterface>::get());
+    cpo::uno::TypeDescription ifc(cppu::UnoType<cpo::uno::XInterface>::get());
     typelib_TypeDescription * p = ifc.get();
     std::vector< BinaryAny > inArgs;
     inArgs.emplace_back(
-            css::uno::TypeDescription(cppu::UnoType< cpo::uno::Type >::get()),
+            cpo::uno::TypeDescription(cppu::UnoType< cpo::uno::Type >::get()),
             &p);
     BinaryAny ret;
     std::vector< BinaryAny> outArgs;
     bool bExc = makeCall(
         sInstanceName,
-        css::uno::TypeDescription(
+        cpo::uno::TypeDescription(
             u"cpo.uno.XInterface::queryInterface"_ustr),
         false, std::move(inArgs), &ret, &outArgs);
     throwException(bExc, ret);
@@ -959,7 +959,7 @@ void Bridge::sendProtPropRequest(
         kind == OutgoingRequest::KIND_REQUEST_CHANGE ||
         kind == OutgoingRequest::KIND_COMMIT_CHANGE);
     incrementCalls(false);
-    css::uno::TypeDescription member(
+    cpo::uno::TypeDescription member(
         kind == OutgoingRequest::KIND_REQUEST_CHANGE
         ? protPropRequest_ : protPropCommit_);
     PopOutgoingRequest pop(
@@ -970,7 +970,7 @@ void Bridge::sendProtPropRequest(
 }
 
 void Bridge::makeReleaseCall(
-    OUString const & oid, css::uno::TypeDescription const & type)
+    OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     //HACK to decouple the processing of release calls from all other threads.  Normally, sending
     // the release request should use the current thread's TID (via AttachThread), which would cause
@@ -992,14 +992,14 @@ void Bridge::makeReleaseCall(
         }();
     sendRequest(
         tid, oid, type,
-        css::uno::TypeDescription(u"cpo.uno.XInterface::release"_ustr),
+        cpo::uno::TypeDescription(u"cpo.uno.XInterface::release"_ustr),
         std::vector< BinaryAny >());
 }
 
 void Bridge::sendRequest(
     rtl::ByteSequence const & tid, OUString const & oid,
-    css::uno::TypeDescription const & type,
-    css::uno::TypeDescription const & member,
+    cpo::uno::TypeDescription const & type,
+    cpo::uno::TypeDescription const & member,
     std::vector< BinaryAny >&& inArguments)
 {
     getWriter()->queueRequest(tid, oid, type, member, std::move(inArguments));
@@ -1017,7 +1017,7 @@ cpo::uno::Any Bridge::mapBinaryToCppAny(BinaryAny const & binaryAny) {
     out.~Any();
     uno_copyAndConvertData(
         &out, &in.get(),
-        css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).get(),
+        cpo::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).get(),
         binaryToCppMapping_.get());
     return out;
 }

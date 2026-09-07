@@ -208,7 +208,7 @@ protected:
     css::uno::Reference<cpo::uno::XInterface> createAdapter(const cpo::uno::Sequence<cpo::uno::Type>& types, const css::uno::Reference<cpo::uno::XInterface>& receiver);
 
     // helper function for Sequence conversion
-    void getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim, cpo::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc);
+    void getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim, cpo::uno::Sequence< sal_Int32 >& seqElementCounts, cpo::uno::TypeDescription& typeDesc);
     // helper function for Sequence conversion
     static bool incrementMultidimensionalIndex(sal_Int32 dimensions, const sal_Int32 * parDimensionLength,
                                     sal_Int32 * parMultidimensionalIndex);
@@ -1056,7 +1056,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::
 
     //get the maximum number of elements per dimensions and the typedescription of the elements
     cpo::uno::Sequence<sal_Int32> seqElementCounts( dims);
-    css::uno::TypeDescription elementTypeDesc;
+    cpo::uno::TypeDescription elementTypeDesc;
     getElementCountAndTypeOfSequence( rSeq, 1, seqElementCounts, elementTypeDesc );
 
     if( elementTypeDesc.is() )
@@ -1271,7 +1271,7 @@ size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
 //                          Sequence< Sequence <Sequence <sal_Int32> > > - type is sal_Int32)
 template<class T>
 void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim,
-                                             cpo::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc)
+                                             cpo::uno::Sequence< sal_Int32 >& seqElementCounts, cpo::uno::TypeDescription& typeDesc)
 {
     sal_Int32 dimCount= (*static_cast<uno_Sequence* const *>(rSeq.getValue()))->nElements;
     if( dimCount > seqElementCounts[ dim-1])

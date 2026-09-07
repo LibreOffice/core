@@ -96,19 +96,19 @@ public:
 
     css::uno::UnoInterfaceReference registerIncomingInterface(
         OUString const & oid,
-        css::uno::TypeDescription const & type);
+        cpo::uno::TypeDescription const & type);
 
     OUString registerOutgoingInterface(
         css::uno::UnoInterfaceReference const & object,
-        css::uno::TypeDescription const & type);
+        cpo::uno::TypeDescription const & type);
 
     css::uno::UnoInterfaceReference findStub(
         OUString const & oid,
-        css::uno::TypeDescription const & type);
+        cpo::uno::TypeDescription const & type);
 
     void releaseStub(
         OUString const & oid,
-        css::uno::TypeDescription const & type);
+        cpo::uno::TypeDescription const & type);
 
     void resurrectProxy(Proxy & proxy);
 
@@ -126,7 +126,7 @@ public:
 
     bool makeCall(
         OUString const & oid,
-        css::uno::TypeDescription const & member, bool setter,
+        cpo::uno::TypeDescription const & member, bool setter,
         std::vector< BinaryAny >&& inArguments, BinaryAny * returnValue,
         std::vector< BinaryAny > * outArguments);
 
@@ -154,7 +154,7 @@ public:
 
     bool isProtocolPropertiesRequest(
         std::u16string_view oid,
-        css::uno::TypeDescription const & type) const;
+        cpo::uno::TypeDescription const & type) const;
 
     void setCurrentContextMode();
 
@@ -193,12 +193,12 @@ private:
 
     void makeReleaseCall(
         OUString const & oid,
-        css::uno::TypeDescription const & type);
+        cpo::uno::TypeDescription const & type);
 
     void sendRequest(
         rtl::ByteSequence const & tid, OUString const & oid,
-        css::uno::TypeDescription const & type,
-        css::uno::TypeDescription const & member,
+        cpo::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & member,
         std::vector< BinaryAny >&& inArguments);
 
     void throwException(bool exception, BinaryAny const & value);
@@ -220,7 +220,7 @@ private:
 
     struct SubStub;
 
-    typedef std::map< css::uno::TypeDescription, SubStub > Stub;
+    typedef std::map< cpo::uno::TypeDescription, SubStub > Stub;
 
     typedef std::map< OUString, Stub > Stubs;
 
@@ -241,9 +241,9 @@ private:
     css::uno::Mapping binaryToCppMapping_;
     rtl::ByteSequence protPropTid_;
     OUString protPropOid_;
-    css::uno::TypeDescription protPropType_;
-    css::uno::TypeDescription protPropRequest_;
-    css::uno::TypeDescription protPropCommit_;
+    cpo::uno::TypeDescription protPropType_;
+    cpo::uno::TypeDescription protPropRequest_;
+    cpo::uno::TypeDescription protPropCommit_;
     OutgoingRequests outgoingRequests_;
     osl::Condition passive_;
         // to guarantee that passive_ is eventually set (to avoid deadlock, see

@@ -166,7 +166,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         functionId = ((flags1 & 0x40) != 0) // bit 6: FUNCTIONID14
             ? ((flags1 & 0x3F) << 8) | unmarshal.read8() : flags1 & 0x3F;
     }
-    css::uno::TypeDescription type;
+    cpo::uno::TypeDescription type;
     if (newType) {
         type = unmarshal.readType();
         lastType_ = type;
@@ -208,7 +208,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             u"URP: request message with unknown function ID received"_ustr);
     }
     sal_Int32 memberId = itd->pMapFunctionIndexToMemberIndex[functionId];
-    css::uno::TypeDescription memberTd(itd->ppAllMembers[memberId]);
+    cpo::uno::TypeDescription memberTd(itd->ppAllMembers[memberId]);
     memberTd.makeComplete();
     assert(memberTd.is());
     bool protProps = bridge_->isProtocolPropertiesRequest(oid, type);
@@ -216,7 +216,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         bridge_->isCurrentContextMode();
     css::uno::UnoInterfaceReference cc;
     if (ccMode) {
-        css::uno::TypeDescription t(
+        cpo::uno::TypeDescription t(
             cppu::UnoType<cpo::uno::XCurrentContext>::get());
         cc.set(
             *static_cast< uno_Interface ** >(
@@ -242,7 +242,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         if (bSetter) {
             inArgs.push_back(
                 unmarshal.readValue(
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         reinterpret_cast<
                             typelib_InterfaceAttributeTypeDescription * >(
                                 memberTd.get())->
@@ -258,7 +258,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                 if (mtd->pParams[i].bIn) {
                     inArgs.push_back(
                         unmarshal.readValue(
-                            css::uno::TypeDescription(
+                            cpo::uno::TypeDescription(
                                 mtd->pParams[i].pTypeRef)));
                 }
             }
@@ -292,19 +292,19 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                 assert(
                     inArgs.size() == 1
                     && inArgs[0].getType().equals(
-                        css::uno::TypeDescription(
+                        cpo::uno::TypeDescription(
                             cppu::UnoType< cpo::uno::Type >::get())));
                 if (!(type.equals(
-                          css::uno::TypeDescription(
+                          cpo::uno::TypeDescription(
                               cppu::UnoType<
                                   css::uno::Reference<
                                       cpo::uno::XInterface > >::get()))
-                      && (css::uno::TypeDescription(
+                      && (cpo::uno::TypeDescription(
                               *static_cast<
                                   typelib_TypeDescriptionReference ** >(
                                       inArgs[0].getValue(inArgs[0].getType()))).
                           equals(
-                              css::uno::TypeDescription(
+                              cpo::uno::TypeDescription(
                                   cppu::UnoType<
                                       css::uno::Reference<
                                           cpo::uno::XInterface > >::get())))))
@@ -353,9 +353,9 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     std::vector< BinaryAny > outArgs;
     if (exc) {
         ret = unmarshal.readValue(
-            css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()));
+            cpo::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()));
         if (!typelib_typedescription_isAssignableFrom(
-                (css::uno::TypeDescription(
+                (cpo::uno::TypeDescription(
                     cppu::UnoType< cpo::uno::RuntimeException >::get()).
                  get()),
                 ret.getType().get()))
@@ -409,7 +409,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             if (!req.setter) {
                 ret = unmarshal.readValue(
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         reinterpret_cast<
                             typelib_InterfaceAttributeTypeDescription * >(
                                 req.member.get())->
@@ -423,12 +423,12 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                         typelib_InterfaceMethodTypeDescription * >(
                             req.member.get());
                 ret = unmarshal.readValue(
-                    css::uno::TypeDescription(mtd->pReturnTypeRef));
+                    cpo::uno::TypeDescription(mtd->pReturnTypeRef));
                 for (sal_Int32 i = 0; i != mtd->nParams; ++i) {
                     if (mtd->pParams[i].bOut) {
                         outArgs.push_back(
                             unmarshal.readValue(
-                                css::uno::TypeDescription(
+                                cpo::uno::TypeDescription(
                                     mtd->pParams[i].pTypeRef)));
                     }
                 }

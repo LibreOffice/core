@@ -23,7 +23,7 @@
 
 #include <uno/any2.h>
 
-namespace com::sun::star::uno { class TypeDescription; }
+namespace cpo::uno { class TypeDescription; }
 
 namespace binaryurp {
 
@@ -31,7 +31,7 @@ class BinaryAny {
 public:
     BinaryAny() noexcept;
 
-    BinaryAny(css::uno::TypeDescription const & type, void * value)
+    BinaryAny(cpo::uno::TypeDescription const & type, void * value)
         noexcept;
 
     explicit BinaryAny(uno_Any const & raw) noexcept;
@@ -50,9 +50,9 @@ public:
 
     uno_Any& get() noexcept { return data_; }
 
-    css::uno::TypeDescription getType() const noexcept;
+    cpo::uno::TypeDescription getType() const noexcept;
 
-    void * getValue(css::uno::TypeDescription const & type) const
+    void * getValue(cpo::uno::TypeDescription const & type) const
         noexcept;
 
 private:

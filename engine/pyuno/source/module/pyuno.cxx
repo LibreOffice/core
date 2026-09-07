@@ -51,7 +51,7 @@ using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::Type;
 using cpo::uno::TypeClass;
-using com::sun::star::uno::TypeDescription;
+using cpo::uno::TypeDescription;
 using cpo::uno::RuntimeException;
 using cpo::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;

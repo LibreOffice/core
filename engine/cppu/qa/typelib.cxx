@@ -87,7 +87,7 @@ public:
         typelib_typedescription_acquire(td);
         CPPUNIT_ASSERT(!td->bComplete);
         auto t = reinterpret_cast<typelib_StructTypeDescription*>(td);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->aBase.pBaseTypeDescription->aBase).equals(t0));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->aBase.pBaseTypeDescription->aBase).equals(t0));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), t->aBase.nMembers);
         auto const offsets = t->aBase.pMemberOffsets;
         CPPUNIT_ASSERT(offsets != nullptr);
@@ -102,7 +102,7 @@ public:
         CPPUNIT_ASSERT(td != nullptr);
         CPPUNIT_ASSERT(td->bComplete);
         t = reinterpret_cast<typelib_StructTypeDescription*>(td);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->aBase.pBaseTypeDescription->aBase).equals(t0));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->aBase.pBaseTypeDescription->aBase).equals(t0));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), t->aBase.nMembers);
         CPPUNIT_ASSERT(t->aBase.pMemberOffsets != nullptr);
         CPPUNIT_ASSERT(t->aBase.ppTypeRefs != nullptr);
@@ -189,7 +189,7 @@ public:
         typelib_typedescription_acquire(td);
         CPPUNIT_ASSERT(!td->bComplete);
         auto t = reinterpret_cast<typelib_InterfaceTypeDescription*>(td);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t0));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t0));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->nMembers);
         CPPUNIT_ASSERT(t->ppMembers == nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->nAllMembers);
@@ -200,12 +200,12 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), t->nBaseTypes);
         auto const basetypes = t->ppBaseTypes;
         CPPUNIT_ASSERT(basetypes != nullptr);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&basetypes[0]->aBase).equals(t0));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&basetypes[0]->aBase).equals(t0));
         CPPUNIT_ASSERT(typelib_typedescription_complete(&td));
         CPPUNIT_ASSERT(td != nullptr);
         CPPUNIT_ASSERT(td->bComplete);
         t = reinterpret_cast<typelib_InterfaceTypeDescription*>(td);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t0));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t0));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), t->nMembers);
         CPPUNIT_ASSERT(t->ppMembers != nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), t->nAllMembers);
@@ -215,10 +215,10 @@ public:
         CPPUNIT_ASSERT(t->pMapFunctionIndexToMemberIndex != nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), t->nBaseTypes);
         CPPUNIT_ASSERT(t->ppBaseTypes != nullptr);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->ppBaseTypes[0]->aBase).equals(t0));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->ppBaseTypes[0]->aBase).equals(t0));
         // `basetypes` must still be valid:
         CPPUNIT_ASSERT(
-            css::uno::TypeDescription(&basetypes[0]->aBase).equals(&t->ppBaseTypes[0]->aBase));
+            cpo::uno::TypeDescription(&basetypes[0]->aBase).equals(&t->ppBaseTypes[0]->aBase));
         typelib_typedescription_release(td);
         typelib_typedescriptionreference_release(ref);
     }
@@ -236,7 +236,7 @@ public:
         typelib_typedescription_acquire(td);
         CPPUNIT_ASSERT(!td->bComplete);
         auto t = reinterpret_cast<typelib_InterfaceTypeDescription*>(td);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t1));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->nMembers);
         CPPUNIT_ASSERT(t->ppMembers == nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->nAllMembers);
@@ -247,13 +247,13 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), t->nBaseTypes);
         auto const basetypes = t->ppBaseTypes;
         CPPUNIT_ASSERT(basetypes != nullptr);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&basetypes[0]->aBase).equals(t1));
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&basetypes[1]->aBase).equals(t2));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&basetypes[0]->aBase).equals(t1));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&basetypes[1]->aBase).equals(t2));
         CPPUNIT_ASSERT(typelib_typedescription_complete(&td));
         CPPUNIT_ASSERT(td != nullptr);
         CPPUNIT_ASSERT(td->bComplete);
         t = reinterpret_cast<typelib_InterfaceTypeDescription*>(td);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t1));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->pBaseTypeDescription->aBase).equals(t1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), t->nMembers);
         CPPUNIT_ASSERT(t->ppMembers == nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(14), t->nAllMembers);
@@ -263,13 +263,13 @@ public:
         CPPUNIT_ASSERT(t->pMapFunctionIndexToMemberIndex != nullptr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), t->nBaseTypes);
         CPPUNIT_ASSERT(t->ppBaseTypes != nullptr);
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->ppBaseTypes[0]->aBase).equals(t1));
-        CPPUNIT_ASSERT(css::uno::TypeDescription(&t->ppBaseTypes[1]->aBase).equals(t2));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->ppBaseTypes[0]->aBase).equals(t1));
+        CPPUNIT_ASSERT(cpo::uno::TypeDescription(&t->ppBaseTypes[1]->aBase).equals(t2));
         // `basetypes` must still be valid:
         CPPUNIT_ASSERT(
-            css::uno::TypeDescription(&basetypes[0]->aBase).equals(&t->ppBaseTypes[0]->aBase));
+            cpo::uno::TypeDescription(&basetypes[0]->aBase).equals(&t->ppBaseTypes[0]->aBase));
         CPPUNIT_ASSERT(
-            css::uno::TypeDescription(&basetypes[1]->aBase).equals(&t->ppBaseTypes[1]->aBase));
+            cpo::uno::TypeDescription(&basetypes[1]->aBase).equals(&t->ppBaseTypes[1]->aBase));
         typelib_typedescription_release(td);
         typelib_typedescriptionreference_release(ref);
     }

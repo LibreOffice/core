@@ -528,8 +528,8 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
         case cpo::uno::TypeClass_SEQUENCE:
         {
             auto const seq = *static_cast<uno_Sequence* const*>(value);
-            css::uno::TypeDescription desc(type);
-            css::uno::TypeDescription elemDesc(
+            cpo::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription elemDesc(
                 reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
             buf.append('[');
             for (sal_Int32 i = 0; i != seq->nElements; ++i)
@@ -547,7 +547,7 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
         case cpo::uno::TypeClass_ENUM:
         {
             auto const val = *static_cast<sal_Int32 const*>(value);
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto const enumDesc = reinterpret_cast<typelib_EnumTypeDescription const*>(desc.get());
             for (sal_Int32 i = 0; i != enumDesc->nEnumValues; ++i)
             {
@@ -564,7 +564,7 @@ void comphelper::appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type,
         case cpo::uno::TypeClass_STRUCT:
         case cpo::uno::TypeClass_EXCEPTION:
         {
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
             buf.append('{');
             bool first = true;
@@ -762,7 +762,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            css::uno::TypeDescription tdesc(*name);
+            cpo::uno::TypeDescription tdesc(*name);
             if (!tdesc.is())
             {
                 throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
@@ -799,7 +799,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            css::uno::TypeDescription tdesc(*tname);
+            cpo::uno::TypeDescription tdesc(*tname);
             if (!tdesc.is())
             {
                 throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
@@ -817,8 +817,8 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            css::uno::TypeDescription desc(type);
-            css::uno::TypeDescription elemDesc(
+            cpo::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription elemDesc(
                 reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
             cpo::uno::Type const elemType(elemDesc.get()->pWeakRef);
             uno_Sequence* seq;
@@ -837,7 +837,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
         }
         case cpo::uno::TypeClass_ENUM:
         {
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto const enumDesc = reinterpret_cast<typelib_EnumTypeDescription const*>(desc.get());
             if (auto const name = parseJsonStringValue(json))
             {
@@ -863,7 +863,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
             std::vector<cpo::uno::Any> mems;
             for (;;)
@@ -893,7 +893,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             {
                 for (sal_Int32 i = 0; i != compDesc->nMembers; ++i)
                 {
-                    css::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
+                    cpo::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
                     uno_copyData(static_cast<std::byte*>(buf) + compDesc->pMemberOffsets[i],
                                  const_cast<void*>(compDesc->ppTypeRefs[i]->eTypeClass
                                                            == typelib_TypeClass_ANY

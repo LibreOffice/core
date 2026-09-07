@@ -63,8 +63,8 @@ struct JNI_type_info
     JNI_type_info(const JNI_type_info&) = delete;
     const JNI_type_info& operator=(const JNI_type_info&) = delete;
 
-    ::com::sun::star::uno::TypeDescription      m_td;
-    jclass                                      m_class;
+    ::cpo::uno::TypeDescription      m_td;
+    jclass                           m_class;
 
     virtual void destroy( JNIEnv * jni_env ) = 0;
 protected:
@@ -197,7 +197,7 @@ public:
     jmethodID                   m_ctor_AsynchronousFinalizer;
     jmethodID                   m_method_AsynchronousFinalizer_drain;
 
-    ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
+    ::cpo::uno::TypeDescription m_XInterface_queryInterface_td;
     ::cpo::uno::Type const & m_Exception_type;
     ::cpo::uno::Type const & m_RuntimeException_type;
     ::cpo::uno::Type const & m_void_type;

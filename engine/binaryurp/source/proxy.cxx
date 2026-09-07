@@ -65,7 +65,7 @@ extern "C" void proxy_dispatchInterface(
 
 Proxy::Proxy(
     rtl::Reference< Bridge > const & bridge, OUString oid,
-    css::uno::TypeDescription type):
+    cpo::uno::TypeDescription type):
     bridge_(bridge), oid_(std::move(oid)), type_(std::move(type)), references_(1)
 {
     assert(bridge.is());
@@ -107,7 +107,7 @@ void Proxy::do_dispatch(
         cpo::uno::Any exc(cppu::getCaughtException());
         uno_copyAndConvertData(
             *exception, &exc,
-            (css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).
+            (cpo::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()).
              get()),
             bridge_->getCppToBinaryMapping().get());
     }
@@ -137,7 +137,7 @@ void Proxy::do_dispatch_throw(
         bSetter = returnValue == nullptr;
         if (bSetter) {
             inArgs.emplace_back(
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         reinterpret_cast<
                             typelib_InterfaceAttributeTypeDescription const * >(
                                 member)->
@@ -153,7 +153,7 @@ void Proxy::do_dispatch_throw(
             for (sal_Int32 i = 0; i != mtd->nParams; ++i) {
                 if (mtd->pParams[i].bIn) {
                     inArgs.emplace_back(
-                            css::uno::TypeDescription(mtd->pParams[i].pTypeRef),
+                            cpo::uno::TypeDescription(mtd->pParams[i].pTypeRef),
                             arguments[i]);
                 }
             }
@@ -167,7 +167,7 @@ void Proxy::do_dispatch_throw(
     std::vector< BinaryAny > outArgs;
     if (bridge_->makeCall(
             oid_,
-            css::uno::TypeDescription(
+            cpo::uno::TypeDescription(
                 const_cast< typelib_TypeDescription * >(member)),
             bSetter, std::move(inArgs), &ret, &outArgs))
     {
@@ -178,7 +178,7 @@ void Proxy::do_dispatch_throw(
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             if (!bSetter) {
-                css::uno::TypeDescription t(
+                cpo::uno::TypeDescription t(
                     reinterpret_cast<
                         typelib_InterfaceAttributeTypeDescription const * >(
                             member)->
@@ -192,14 +192,14 @@ void Proxy::do_dispatch_throw(
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription const * >(
                             member);
-                css::uno::TypeDescription t(mtd->pReturnTypeRef);
+                cpo::uno::TypeDescription t(mtd->pReturnTypeRef);
                 if (t.get()->eTypeClass != typelib_TypeClass_VOID) {
                     uno_copyData(returnValue, ret.getValue(t), t.get(), nullptr);
                 }
                 std::vector< BinaryAny >::iterator i(outArgs.begin());
                 for (sal_Int32 j = 0; j != mtd->nParams; ++j) {
                     if (mtd->pParams[j].bOut) {
-                        css::uno::TypeDescription pt(mtd->pParams[j].pTypeRef);
+                        cpo::uno::TypeDescription pt(mtd->pParams[j].pTypeRef);
                         if (mtd->pParams[j].bIn) {
                             (void) uno_assignData(
                                 arguments[j], pt.get(), i++->getValue(pt),

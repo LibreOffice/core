@@ -51,8 +51,8 @@ Writer::Item::Item()
 
 Writer::Item::Item(
     rtl::ByteSequence theTid, OUString theOid,
-    css::uno::TypeDescription theType,
-    css::uno::TypeDescription theMember,
+    cpo::uno::TypeDescription theType,
+    cpo::uno::TypeDescription theMember,
     std::vector< BinaryAny >&& inArguments,
     css::uno::UnoInterfaceReference theCurrentContext):
     tid(std::move(theTid)), oid(std::move(theOid)), type(std::move(theType)), member(std::move(theMember)),
@@ -62,7 +62,7 @@ Writer::Item::Item(
 
 Writer::Item::Item(
     rtl::ByteSequence theTid,
-    css::uno::TypeDescription theMember, bool theSetter,
+    cpo::uno::TypeDescription theMember, bool theSetter,
     bool theException, BinaryAny theReturnValue,
     std::vector< BinaryAny >&& outArguments,
     bool theSetCurrentContextMode):
@@ -81,8 +81,8 @@ Writer::Writer(rtl::Reference< Bridge > const  & bridge):
 
 void Writer::sendDirectRequest(
     rtl::ByteSequence const & tid, OUString const & oid,
-    css::uno::TypeDescription const & type,
-    css::uno::TypeDescription const & member,
+    cpo::uno::TypeDescription const & type,
+    cpo::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments)
 {
     assert(!unblocked_.check());
@@ -92,7 +92,7 @@ void Writer::sendDirectRequest(
 }
 
 void Writer::sendDirectReply(
-    rtl::ByteSequence const & tid, css::uno::TypeDescription const & member,
+    rtl::ByteSequence const & tid, cpo::uno::TypeDescription const & member,
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny > const & outArguments)
 {
@@ -102,8 +102,8 @@ void Writer::sendDirectReply(
 
 void Writer::queueRequest(
     rtl::ByteSequence const & tid, OUString const & oid,
-    css::uno::TypeDescription const & type,
-    css::uno::TypeDescription const & member,
+    cpo::uno::TypeDescription const & type,
+    cpo::uno::TypeDescription const & member,
     std::vector< BinaryAny >&& inArguments)
 {
     css::uno::UnoInterfaceReference cc(current_context::get());
@@ -114,7 +114,7 @@ void Writer::queueRequest(
 
 void Writer::queueReply(
     rtl::ByteSequence const & tid,
-    css::uno::TypeDescription const & member, bool setter,
+    cpo::uno::TypeDescription const & member, bool setter,
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny >&& outArguments, bool setCurrentContextMode)
 {
@@ -166,7 +166,7 @@ void Writer::execute() {
                     item.tid, item.oid, item.type, item.member, item.arguments,
                     (item.oid != "UrpProtocolProperties" &&
                      !item.member.equals(
-                         css::uno::TypeDescription(
+                         cpo::uno::TypeDescription(
                              u"cpo.uno.XInterface::release"_ustr)) &&
                      bridge_->isCurrentContextMode()),
                     item.currentContext);
@@ -190,15 +190,15 @@ void Writer::execute() {
 
 void Writer::sendRequest(
     rtl::ByteSequence const & tid, OUString const & oid,
-    css::uno::TypeDescription const & type,
-    css::uno::TypeDescription const & member,
+    cpo::uno::TypeDescription const & type,
+    cpo::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
     css::uno::UnoInterfaceReference const & currentContext)
 {
     assert(tid.getLength() != 0);
     assert(!oid.isEmpty());
     assert(member.is());
-    css::uno::TypeDescription t(type);
+    cpo::uno::TypeDescription t(type);
     sal_Int32 functionId = 0;
     bool bForceSynchronous = false;
     member.makeComplete();
@@ -210,7 +210,7 @@ void Writer::sendRequest(
                     member.get());
             assert(atd->pInterface != nullptr);
             if (!t.is()) {
-                t = css::uno::TypeDescription(&atd->pInterface->aBase);
+                t = cpo::uno::TypeDescription(&atd->pInterface->aBase);
             }
             t.makeComplete();
             functionId = atd->pInterface->pMapMemberIndexToFunctionIndex[
@@ -227,7 +227,7 @@ void Writer::sendRequest(
                     member.get());
             assert(mtd->pInterface != nullptr);
             if (!t.is()) {
-                t = css::uno::TypeDescription(&mtd->pInterface->aBase);
+                t = cpo::uno::TypeDescription(&mtd->pInterface->aBase);
             }
             t.makeComplete();
             functionId = mtd->pInterface->pMapMemberIndexToFunctionIndex[
@@ -288,11 +288,11 @@ void Writer::sendRequest(
         css::uno::UnoInterfaceReference cc(currentContext);
         marshal_.writeValue(
             &buf,
-            css::uno::TypeDescription(
+            cpo::uno::TypeDescription(
                 cppu::UnoType<
                     css::uno::Reference< cpo::uno::XCurrentContext > >::get()),
             BinaryAny(
-                css::uno::TypeDescription(
+                cpo::uno::TypeDescription(
                     cppu::UnoType<
                         css::uno::Reference<
                             cpo::uno::XCurrentContext > >::get()),
@@ -304,7 +304,7 @@ void Writer::sendRequest(
             assert(inArguments.size() == 1);
             marshal_.writeValue(
                 &buf,
-                css::uno::TypeDescription(
+                cpo::uno::TypeDescription(
                     reinterpret_cast<
                         typelib_InterfaceAttributeTypeDescription * >(
                             member.get())->
@@ -322,7 +322,7 @@ void Writer::sendRequest(
                 if (mtd->pParams[j].bIn) {
                     marshal_.writeValue(
                         &buf,
-                        css::uno::TypeDescription(mtd->pParams[j].pTypeRef),
+                        cpo::uno::TypeDescription(mtd->pParams[j].pTypeRef),
                         *i++);
                 }
             }
@@ -341,7 +341,7 @@ void Writer::sendRequest(
 
 void Writer::sendReply(
     rtl::ByteSequence const & tid,
-    css::uno::TypeDescription const & member, bool setter,
+    cpo::uno::TypeDescription const & member, bool setter,
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny > const & outArguments)
 {
@@ -358,7 +358,7 @@ void Writer::sendReply(
     if (exception) {
         marshal_.writeValue(
             &buf,
-            css::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()),
+            cpo::uno::TypeDescription(cppu::UnoType< cpo::uno::Any >::get()),
             returnValue);
     } else {
         switch (member.get()->eTypeClass) {
@@ -366,7 +366,7 @@ void Writer::sendReply(
             if (!setter) {
                 marshal_.writeValue(
                     &buf,
-                    css::uno::TypeDescription(
+                    cpo::uno::TypeDescription(
                         reinterpret_cast<
                             typelib_InterfaceAttributeTypeDescription * >(
                                 member.get())->
@@ -381,7 +381,7 @@ void Writer::sendReply(
                         typelib_InterfaceMethodTypeDescription * >(
                             member.get());
                 marshal_.writeValue(
-                    &buf, css::uno::TypeDescription(mtd->pReturnTypeRef),
+                    &buf, cpo::uno::TypeDescription(mtd->pReturnTypeRef),
                     returnValue);
                 std::vector< BinaryAny >::const_iterator i(
                     outArguments.begin());
@@ -389,7 +389,7 @@ void Writer::sendReply(
                     if (mtd->pParams[j].bOut) {
                         marshal_.writeValue(
                             &buf,
-                            css::uno::TypeDescription(mtd->pParams[j].pTypeRef),
+                            cpo::uno::TypeDescription(mtd->pParams[j].pTypeRef),
                             *i++);
                     }
                 }

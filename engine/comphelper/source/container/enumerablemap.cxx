@@ -73,7 +73,7 @@ namespace comphelper
     using ::com::sun::star::lang::XServiceInfo;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::container::XEnumeration;
-    using ::com::sun::star::uno::TypeDescription;
+    using ::cpo::uno::TypeDescription;
     using ::com::sun::star::lang::DisposedException;
 
     namespace {

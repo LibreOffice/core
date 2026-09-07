@@ -30,7 +30,7 @@
 
 #include "lessoperators.hxx"
 
-namespace com::sun::star::uno {
+namespace cpo::uno {
 
 bool operator <(TypeDescription const & left, TypeDescription const & right) {
     assert(left.is() && right.is());

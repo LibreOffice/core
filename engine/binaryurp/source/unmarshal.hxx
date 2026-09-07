@@ -33,7 +33,7 @@ namespace binaryurp {
     class Bridge;
     struct ReaderState;
 }
-namespace com::sun::star::uno { class TypeDescription; }
+namespace cpo::uno { class TypeDescription; }
 
 namespace binaryurp {
 
@@ -51,13 +51,13 @@ public:
 
     sal_uInt32 read32();
 
-    css::uno::TypeDescription readType();
+    cpo::uno::TypeDescription readType();
 
     OUString readOid();
 
     rtl::ByteSequence readTid();
 
-    BinaryAny readValue(css::uno::TypeDescription const & type);
+    BinaryAny readValue(cpo::uno::TypeDescription const & type);
 
     void done() const;
 
@@ -75,10 +75,10 @@ private:
 
     OUString readString();
 
-    BinaryAny readSequence(css::uno::TypeDescription const & type);
+    BinaryAny readSequence(cpo::uno::TypeDescription const & type);
 
     void readMemberValues(
-        css::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & type,
         std::vector< BinaryAny > * values);
 
     rtl::Reference< Bridge > bridge_;

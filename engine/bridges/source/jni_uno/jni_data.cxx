@@ -422,7 +422,7 @@ void Bridge::map_to_uno(
         }
         OUString type_name(
             jstring_to_oustring( jni, static_cast<jstring>(jo_type_name.get()) ) );
-        ::com::sun::star::uno::TypeDescription td( type_name );
+        ::cpo::uno::TypeDescription td( type_name );
         if (! td.is())
         {
             throw BridgeRuntimeError(
@@ -496,7 +496,7 @@ void Bridge::map_to_uno(
         OUString type_name(
             jstring_to_oustring( jni, static_cast<jstring>(jo_type_name.get()) ) );
 
-        ::com::sun::star::uno::TypeDescription value_td( type_name );
+        ::cpo::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
         {
             throw BridgeRuntimeError(

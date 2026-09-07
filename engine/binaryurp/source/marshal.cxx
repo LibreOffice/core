@@ -113,7 +113,7 @@ void Marshal::write32(std::vector< unsigned char > * buffer, sal_uInt32 value) {
 
 void Marshal::writeValue(
     std::vector< unsigned char > * buffer,
-    css::uno::TypeDescription const & type, BinaryAny const & value)
+    cpo::uno::TypeDescription const & type, BinaryAny const & value)
 {
     assert(
         type.is() &&
@@ -124,7 +124,7 @@ void Marshal::writeValue(
 
 void Marshal::writeType(
     std::vector< unsigned char > * buffer,
-    css::uno::TypeDescription const & value)
+    cpo::uno::TypeDescription const & value)
 {
     value.makeComplete();
     assert(value.is());
@@ -175,7 +175,7 @@ void Marshal::writeTid(
         sal_Sequence * p = tid.getHandle();
         writeValue(
             buffer,
-            css::uno::TypeDescription(
+            cpo::uno::TypeDescription(
                 cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get()), &p);
     }
     write16(buffer, idx);
@@ -183,7 +183,7 @@ void Marshal::writeTid(
 
 void Marshal::writeValue(
     std::vector< unsigned char > * buffer,
-    css::uno::TypeDescription const & type, void const * value)
+    cpo::uno::TypeDescription const & type, void const * value)
 {
     assert(buffer != nullptr && type.is());
     type.makeComplete();
@@ -220,14 +220,14 @@ void Marshal::writeValue(
     case typelib_TypeClass_TYPE:
         writeType(
             buffer,
-            css::uno::TypeDescription(
+            cpo::uno::TypeDescription(
                 *static_cast< typelib_TypeDescriptionReference * const * >(
                     value)));
         break;
     case typelib_TypeClass_ANY:
         {
             uno_Any const * p = static_cast< uno_Any const * >(value);
-            css::uno::TypeDescription t(p->pType);
+            cpo::uno::TypeDescription t(p->pType);
             writeType(buffer, t);
             writeValue(buffer, t, p->pData);
             break;
@@ -236,7 +236,7 @@ void Marshal::writeValue(
         {
             sal_Sequence * p = *static_cast< sal_Sequence * const * >(value);
             writeCompressed(buffer, static_cast< sal_uInt32 >(p->nElements));
-            css::uno::TypeDescription ctd(
+            cpo::uno::TypeDescription ctd(
                 reinterpret_cast< typelib_IndirectTypeDescription * >(
                     type.get())->
                 pType);
@@ -271,7 +271,7 @@ void Marshal::writeValue(
 
 void Marshal::writeMemberValues(
     std::vector< unsigned char > * buffer,
-    css::uno::TypeDescription const & type, void const * aggregateValue)
+    cpo::uno::TypeDescription const & type, void const * aggregateValue)
 {
     assert(
         type.is() &&
@@ -284,12 +284,12 @@ void Marshal::writeMemberValues(
     if (ctd->pBaseTypeDescription != nullptr) {
         writeMemberValues(
             buffer,
-            css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),
+            cpo::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),
             aggregateValue);
     }
     for (sal_Int32 i = 0; i != ctd->nMembers; ++i) {
         writeValue(
-            buffer, css::uno::TypeDescription(ctd->ppTypeRefs[i]),
+            buffer, cpo::uno::TypeDescription(ctd->ppTypeRefs[i]),
             (static_cast< char const * >(aggregateValue) +
              ctd->pMemberOffsets[i]));
     }

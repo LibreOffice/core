@@ -55,7 +55,7 @@ private:
     rtl::ByteSequence getTid(Unmarshal& unmarshal, bool newTid) const;
 
     rtl::Reference<Bridge> bridge_;
-    css::uno::TypeDescription lastType_;
+    cpo::uno::TypeDescription lastType_;
     OUString lastOid_;
     rtl::ByteSequence lastTid_;
     ReaderState state_;

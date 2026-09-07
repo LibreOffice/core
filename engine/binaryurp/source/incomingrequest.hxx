@@ -46,9 +46,9 @@ public:
         rtl::Reference< Bridge > const & bridge, rtl::ByteSequence tid,
         OUString oid,
         css::uno::UnoInterfaceReference object,
-        css::uno::TypeDescription type,
+        cpo::uno::TypeDescription type,
         sal_uInt16 functionId, bool synchronous,
-        css::uno::TypeDescription const & member, bool setter,
+        cpo::uno::TypeDescription const & member, bool setter,
         std::vector< BinaryAny >&& inArguments, bool currentContextMode,
         css::uno::UnoInterfaceReference currentContext);
 
@@ -64,8 +64,8 @@ private:
     rtl::ByteSequence tid_;
     OUString oid_; // initial object queryInterface; release
     css::uno::UnoInterfaceReference object_;
-    css::uno::TypeDescription type_;
-    css::uno::TypeDescription member_;
+    cpo::uno::TypeDescription type_;
+    cpo::uno::TypeDescription member_;
     css::uno::UnoInterfaceReference currentContext_;
     std::vector< BinaryAny > inArguments_;
     sal_uInt16 functionId_;

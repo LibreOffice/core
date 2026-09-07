@@ -48,7 +48,7 @@ namespace {
 
 void call(
     bridges::cpp_uno::shared::CppInterfaceProxy * proxy,
-    css::uno::TypeDescription const & description,
+    cpo::uno::TypeDescription const & description,
     typelib_TypeDescriptionReference * returnType, sal_Int32 count,
     typelib_MethodParameter * parameters, unsigned long * gpr,
     unsigned long * fpr, unsigned long * stack, void * indirectRet)
@@ -401,7 +401,7 @@ void vtableCall(
     typelib_InterfaceTypeDescription * type = proxy->getTypeDescr();
     assert(functionIndex < type->nMapFunctionIndexToMemberIndex);
     sal_Int32 pos = type->pMapFunctionIndexToMemberIndex[functionIndex];
-    css::uno::TypeDescription desc(type->ppAllMembers[pos]);
+    cpo::uno::TypeDescription desc(type->ppAllMembers[pos]);
     switch (desc.get()->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         if (type->pMapMemberIndexToFunctionIndex[pos] == functionIndex) {

@@ -54,7 +54,7 @@ BinaryAny::BinaryAny() noexcept {
     uno_any_construct(&data_, nullptr, nullptr, nullptr);
 }
 
-BinaryAny::BinaryAny(css::uno::TypeDescription const & type, void * value)
+BinaryAny::BinaryAny(cpo::uno::TypeDescription const & type, void * value)
     noexcept
 {
     assert(type.is());
@@ -94,17 +94,17 @@ BinaryAny & BinaryAny::operator =(BinaryAny && other) noexcept {
     return *this;
 }
 
-css::uno::TypeDescription BinaryAny::getType() const noexcept {
-    return css::uno::TypeDescription(data_.pType);
+cpo::uno::TypeDescription BinaryAny::getType() const noexcept {
+    return cpo::uno::TypeDescription(data_.pType);
 }
 
-void * BinaryAny::getValue(css::uno::TypeDescription const & type) const
+void * BinaryAny::getValue(cpo::uno::TypeDescription const & type) const
     noexcept
 {
     assert(type.is());
     assert(
         type.get()->eTypeClass == typelib_TypeClass_ANY ||
-         type.equals(css::uno::TypeDescription(data_.pType)));
+         type.equals(cpo::uno::TypeDescription(data_.pType)));
     return type.get()->eTypeClass == typelib_TypeClass_ANY
         ? &data_ : data_.pData;
 }

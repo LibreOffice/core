@@ -310,7 +310,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 {
                     throw std::invalid_argument("bad non-sequence type");
                 }
-                css::uno::TypeDescription desc;
+                cpo::uno::TypeDescription desc;
                 self.getDescription(reinterpret_cast<typelib_TypeDescription**>(&desc));
                 if (!desc.is())
                 {
@@ -380,7 +380,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case cpo::uno::TypeClass_STRUCT:
                 case cpo::uno::TypeClass_EXCEPTION:
                 {
-                    css::uno::TypeDescription desc(self.getValueType().getTypeLibType());
+                    cpo::uno::TypeDescription desc(self.getValueType().getTypeLibType());
                     assert(desc.is());
                     auto const td = reinterpret_cast<typelib_CompoundTypeDescription*>(desc.get());
                     auto const copy = std::malloc(td->aBase.nSize);

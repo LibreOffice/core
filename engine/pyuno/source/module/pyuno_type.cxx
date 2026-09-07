@@ -27,7 +27,7 @@ using cpo::uno::TypeClass;
 using cpo::uno::Type;
 using cpo::uno::RuntimeException;
 using cpo::uno::Any;
-using com::sun::star::uno::TypeDescription;
+using cpo::uno::TypeDescription;
 
 namespace pyuno
 {

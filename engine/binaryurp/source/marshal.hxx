@@ -53,12 +53,12 @@ public:
 
     void writeValue(
         std::vector< unsigned char > * buffer,
-        css::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & type,
         BinaryAny const & value);
 
     void writeType(
         std::vector< unsigned char > * buffer,
-        css::uno::TypeDescription const & value);
+        cpo::uno::TypeDescription const & value);
 
     void writeOid(
         std::vector< unsigned char > * buffer, OUString const & oid);
@@ -72,11 +72,11 @@ private:
 
     void writeValue(
         std::vector< unsigned char > * buffer,
-        css::uno::TypeDescription const & type, void const * value);
+        cpo::uno::TypeDescription const & type, void const * value);
 
     void writeMemberValues(
         std::vector< unsigned char > * buffer,
-        css::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & type,
         void const * aggregateValue);
 
     rtl::Reference< Bridge > bridge_;

@@ -536,7 +536,7 @@ std::vector<OUString> findOverloads(
     std::set<OUString> visited;
     std::vector<OUString> members;
     for (auto const & type: tp->getTypes()) {
-        css::uno::TypeDescription desc(type);
+        cpo::uno::TypeDescription desc(type);
         if (!desc.is() || desc.get()->eTypeClass != typelib_TypeClass_INTERFACE) {
             throw cpo::uno::RuntimeException(
                 u"findOverloads: XTypeProvider returned a non-interface type"_ustr);
@@ -1266,7 +1266,7 @@ JSValue exceptionCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValue
         }
         cpo::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
             JS_GetOpaque(data, getRuntimeData(ctx)->exceptionClassId)));
-        css::uno::TypeDescription desc(type);
+        cpo::uno::TypeDescription desc(type);
         auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
         ValueRef proto(ctx, JS_GetPropertyStr(ctx, new_target, "prototype"));
         if (JS_IsException(proto))
@@ -1488,7 +1488,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
 #if defined DBG_UTIL
             getRuntimeData(ctx)->toFinalize.inc();
 #endif
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto const enumDesc = reinterpret_cast<typelib_EnumTypeDescription const*>(desc.get());
             for (sal_Int32 i = 0; i != enumDesc->nEnumValues; ++i)
             {
@@ -1695,7 +1695,7 @@ ValueRef createDefaultValue(JSContext* ctx, cpo::uno::Type const& type)
             return ValueRef(ctx, JS_NewArray(ctx));
         case cpo::uno::TypeClass_ENUM:
         {
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto const enumDesc = reinterpret_cast<typelib_EnumTypeDescription const*>(desc.get());
             auto val = getUnoidlRepresentation(
                 ctx, Concat2View(type.getTypeName() + "."
@@ -1840,8 +1840,8 @@ cpo::uno::Any fromJsSequence(JSContext* ctx, cpo::uno::Type const& type, JSValue
         JS_ThrowTypeError(ctx, "TODO: BAD UNO SEQUENCE VALUE");
         throw JsException();
     }
-    css::uno::TypeDescription desc(type);
-    css::uno::TypeDescription elemDesc(
+    cpo::uno::TypeDescription desc(type);
+    cpo::uno::TypeDescription elemDesc(
         reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
     uno_Sequence* seq;
     uno_sequence_construct(&seq, desc.get(), nullptr, len2, cpo::uno::cpp_acquire);
@@ -2241,7 +2241,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
         case cpo::uno::TypeClass_STRUCT:
         case cpo::uno::TypeClass_EXCEPTION:
         {
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
             std::vector<cpo::uno::Any> mems;
             for (;;)
@@ -2264,7 +2264,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                         }
                         else
                         {
-                            css::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
+                            cpo::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
                             memDesc.makeComplete();
                             std::vector<char> buf(memDesc.get()->nSize, 0);
                             uno_constructData(buf.data(), memDesc.get());
@@ -2294,7 +2294,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
             {
                 for (sal_Int32 i = 0; i != compDesc->nMembers; ++i)
                 {
-                    css::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
+                    cpo::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
                     uno_copyData(static_cast<std::byte*>(buf) + compDesc->pMemberOffsets[i],
                                  const_cast<void*>(compDesc->ppTypeRefs[i]->eTypeClass
                                                            == typelib_TypeClass_ANY
@@ -2350,8 +2350,8 @@ ValueRef mapTypeToJs(JSContext* ctx, cpo::uno::Type const& type)
         }
         case cpo::uno::TypeClass_SEQUENCE:
         {
-            css::uno::TypeDescription desc(type);
-            css::uno::TypeDescription elemDesc(
+            cpo::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription elemDesc(
                 reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
             auto elem = mapTypeToJs(ctx, elemDesc.get()->pWeakRef);
             ValueRef val(ctx, unoTypeSequence(ctx, JS_NULL, 1, elem.ptr()));
@@ -2455,8 +2455,8 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
         case cpo::uno::TypeClass_SEQUENCE:
         {
             auto const seq = *static_cast<uno_Sequence* const*>(value);
-            css::uno::TypeDescription desc(type);
-            css::uno::TypeDescription elemDesc(
+            cpo::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription elemDesc(
                 reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
             std::vector<ValueRef> refs;
             for (sal_Int32 i = 0; i != seq->nElements; ++i)
@@ -2483,7 +2483,7 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
         case cpo::uno::TypeClass_ENUM:
         {
             auto const val = *static_cast<sal_Int32 const*>(value);
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto const enumDesc = reinterpret_cast<typelib_EnumTypeDescription const*>(desc.get());
             sal_Int32 i = 0;
             for (; i != enumDesc->nEnumValues; ++i)
@@ -2508,7 +2508,7 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
             {
                 throw JsException();
             }
-            css::uno::TypeDescription desc(type);
+            cpo::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
             for (;;)
             {

@@ -440,7 +440,7 @@ JNI_type_info const * JNI_info::get_type_info(
     if (iFind == m_type_map.end())
     {
         guard.unlock();
-        css::uno::TypeDescription td( uno_name );
+        cpo::uno::TypeDescription td( uno_name );
         if (! td.is())
         {
             throw BridgeRuntimeError(
@@ -465,7 +465,7 @@ JNI_info::JNI_info(
       m_class_JNI_proxy( nullptr ),
       m_XInterface_queryInterface_td(
         (reinterpret_cast< typelib_InterfaceTypeDescription * >(
-            css::uno::TypeDescription(
+            cpo::uno::TypeDescription(
                 cppu::UnoType<cpo::uno::XInterface>::get())
             .get())->ppMembers[ 0 ] ) ),
       m_Exception_type(cppu::UnoType<cpo::uno::Exception>::get()),
@@ -842,7 +842,7 @@ JNI_info::JNI_info(
 
     try
     {
-        css::uno::TypeDescription XInterface_td(
+        cpo::uno::TypeDescription XInterface_td(
             cppu::UnoType<cpo::uno::XInterface>::get());
         // coverity[ctor_dtor_leak] - on purpose
         m_XInterface_type_info =

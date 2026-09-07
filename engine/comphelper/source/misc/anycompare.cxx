@@ -32,7 +32,7 @@ namespace comphelper
 {
     using ::com::sun::star::uno::Reference;
     using ::cpo::uno::Type;
-    using ::com::sun::star::uno::TypeDescription;
+    using ::cpo::uno::TypeDescription;
     using ::cpo::uno::TypeClass_CHAR;
     using ::cpo::uno::TypeClass_BOOLEAN;
     using ::cpo::uno::TypeClass_BYTE;

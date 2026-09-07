@@ -51,7 +51,7 @@
 using com::sun::star::uno::Reference;
 using cpo::uno::XInterface;
 using cpo::uno::Any;
-using com::sun::star::uno::TypeDescription;
+using cpo::uno::TypeDescription;
 using cpo::uno::Sequence;
 using cpo::uno::Type;
 using com::sun::star::uno::UNO_QUERY;

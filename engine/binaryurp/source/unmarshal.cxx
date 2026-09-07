@@ -62,7 +62,7 @@ void * allocate(sal_Size size) {
 }
 
 std::vector< BinaryAny >::iterator copyMemberValues(
-    css::uno::TypeDescription const & type,
+    cpo::uno::TypeDescription const & type,
     std::vector< BinaryAny >::iterator const & it, void * buffer) noexcept
 {
     assert(
@@ -76,13 +76,13 @@ std::vector< BinaryAny >::iterator copyMemberValues(
         reinterpret_cast< typelib_CompoundTypeDescription * >(type.get());
     if (ctd->pBaseTypeDescription != nullptr) {
         i = copyMemberValues(
-            css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase), i,
+            cpo::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase), i,
             buffer);
     }
     for (sal_Int32 j = 0; j != ctd->nMembers; ++j) {
         uno_type_copyData(
             static_cast< char * >(buffer) + ctd->pMemberOffsets[j],
-            i++->getValue(css::uno::TypeDescription(ctd->ppTypeRefs[j])),
+            i++->getValue(cpo::uno::TypeDescription(ctd->ppTypeRefs[j])),
             ctd->ppTypeRefs[j], nullptr);
     }
     return i;
@@ -120,7 +120,7 @@ sal_uInt32 Unmarshal::read32() {
     return n | *data_++;
 }
 
-css::uno::TypeDescription Unmarshal::readType() {
+cpo::uno::TypeDescription Unmarshal::readType() {
     sal_uInt8 flags = read8();
     typelib_TypeClass tc = static_cast< typelib_TypeClass >(flags & 0x7F);
     switch (tc) {
@@ -143,7 +143,7 @@ css::uno::TypeDescription Unmarshal::readType() {
             throw css::io::IOException(
                 u"binaryurp::Unmarshal: cache flag of simple type is set"_ustr);
         }
-        return css::uno::TypeDescription(
+        return cpo::uno::TypeDescription(
             *typelib_static_type_getByTypeClass(tc));
     case typelib_TypeClass_SEQUENCE:
     case typelib_TypeClass_ENUM:
@@ -160,17 +160,17 @@ css::uno::TypeDescription Unmarshal::readType() {
                 return state_.typeCache[idx];
             } else {
                 OUString const str(readString());
-                css::uno::TypeDescription t(str);
+                cpo::uno::TypeDescription t(str);
                 if (!t.is() || t.get()->eTypeClass != tc) {
 
                     throw css::io::IOException(
                         "binaryurp::Unmarshal: type with unknown name: " + str);
                 }
-                for (css::uno::TypeDescription t2(t);
+                for (cpo::uno::TypeDescription t2(t);
                      t2.get()->eTypeClass == typelib_TypeClass_SEQUENCE;)
                 {
                     t2.makeComplete();
-                    t2 = css::uno::TypeDescription(
+                    t2 = cpo::uno::TypeDescription(
                         reinterpret_cast< typelib_IndirectTypeDescription * >(
                             t2.get())->pType);
                     if (!t2.is()) {
@@ -226,10 +226,10 @@ rtl::ByteSequence Unmarshal::readTid() {
     rtl::ByteSequence tid(
         *static_cast< sal_Sequence * const * >(
             readSequence(
-                css::uno::TypeDescription(
+                cpo::uno::TypeDescription(
                     cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get())).
             getValue(
-                css::uno::TypeDescription(
+                cpo::uno::TypeDescription(
                     cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get()))));
     sal_uInt16 idx = readCacheIndex();
     if (tid.getLength() == 0) {
@@ -245,7 +245,7 @@ rtl::ByteSequence Unmarshal::readTid() {
     return tid;
 }
 
-BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
+BinaryAny Unmarshal::readValue(cpo::uno::TypeDescription const & type) {
     assert(type.is());
     switch (type.get()->eTypeClass) {
     default:
@@ -295,13 +295,13 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
         }
     case typelib_TypeClass_TYPE:
         {
-            css::uno::TypeDescription v(readType());
+            cpo::uno::TypeDescription v(readType());
             typelib_TypeDescription * p = v.get();
             return BinaryAny(type, &p);
         }
     case typelib_TypeClass_ANY:
         {
-            css::uno::TypeDescription t(readType());
+            cpo::uno::TypeDescription t(readType());
             if (t.get()->eTypeClass == typelib_TypeClass_ANY) {
                 throw css::io::IOException(
                     u"binaryurp::Unmarshal: any of type ANY"_ustr);
@@ -415,7 +415,7 @@ OUString Unmarshal::readString() {
     return s;
 }
 
-BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
+BinaryAny Unmarshal::readSequence(cpo::uno::TypeDescription const & type) {
     assert(type.is() && type.get()->eTypeClass == typelib_TypeClass_SEQUENCE);
     sal_uInt32 n = readCompressed();
     if (n > SAL_MAX_INT32) {
@@ -425,7 +425,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     if (n == 0) {
         return BinaryAny(type, nullptr);
     }
-    css::uno::TypeDescription ctd(
+    cpo::uno::TypeDescription ctd(
         reinterpret_cast< typelib_IndirectTypeDescription * >(
             type.get())->pType);
     if (ctd.get()->eTypeClass == typelib_TypeClass_BYTE) {
@@ -464,7 +464,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
 }
 
 void Unmarshal::readMemberValues(
-    css::uno::TypeDescription const & type, std::vector< BinaryAny > * values)
+    cpo::uno::TypeDescription const & type, std::vector< BinaryAny > * values)
 {
     assert(
         type.is() &&
@@ -476,13 +476,13 @@ void Unmarshal::readMemberValues(
         reinterpret_cast< typelib_CompoundTypeDescription * >(type.get());
     if (ctd->pBaseTypeDescription != nullptr) {
         readMemberValues(
-            css::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),
+            cpo::uno::TypeDescription(&ctd->pBaseTypeDescription->aBase),
             values);
     }
     values->reserve(values->size() + ctd->nMembers);
     for (sal_Int32 i = 0; i != ctd->nMembers; ++i) {
         values->push_back(
-            readValue(css::uno::TypeDescription(ctd->ppTypeRefs[i])));
+            readValue(cpo::uno::TypeDescription(ctd->ppTypeRefs[i])));
     }
 }
 

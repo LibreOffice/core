@@ -21,10 +21,10 @@
 
 #include <sal/config.h>
 
-namespace com::sun::star::uno { class TypeDescription; }
+namespace cpo::uno { class TypeDescription; }
 namespace rtl { class ByteSequence; }
 
-namespace com::sun::star::uno {
+namespace cpo::uno {
 
 bool operator <(TypeDescription const & left, TypeDescription const & right);
 

@@ -61,7 +61,7 @@ using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
 using cpo::uno::Any;
 using cpo::uno::RuntimeException;
-using com::sun::star::uno::TypeDescription;
+using cpo::uno::TypeDescription;
 using cpo::uno::XComponentContext;
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::reflection::XIdlClass;

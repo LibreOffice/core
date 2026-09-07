@@ -39,7 +39,7 @@ struct PyUNO_service_constructor_Internals
     // The parameter types are lazily converted to TypeDescriptions when the constructor is first
     // called.
     bool bTypesInitialized = false;
-    std::vector<css::uno::TypeDescription> xParamTypes;
+    std::vector<cpo::uno::TypeDescription> xParamTypes;
     // Whether the last parameter is a rest parameter
     bool bHasRest = false;
 

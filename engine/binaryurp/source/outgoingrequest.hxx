@@ -30,12 +30,12 @@ struct OutgoingRequest {
     enum Kind { KIND_NORMAL, KIND_REQUEST_CHANGE, KIND_COMMIT_CHANGE };
 
     OutgoingRequest(
-        Kind theKind, css::uno::TypeDescription theMember,
+        Kind theKind, cpo::uno::TypeDescription theMember,
         bool theSetter):
         member(std::move(theMember)), kind(theKind), setter(theSetter)
     {}
 
-    css::uno::TypeDescription member;
+    cpo::uno::TypeDescription member;
 
     Kind kind;
 

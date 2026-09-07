@@ -50,27 +50,27 @@ public:
     // thread is unblocked:
     void sendDirectRequest(
         rtl::ByteSequence const & tid, OUString const & oid,
-        css::uno::TypeDescription const & type,
-        css::uno::TypeDescription const & member,
+        cpo::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments);
 
     // Only called from Bridge::reader_ thread, and only before Bridge::writer_
     // thread is unblocked:
     void sendDirectReply(
         rtl::ByteSequence const & tid,
-        css::uno::TypeDescription const & member,
+        cpo::uno::TypeDescription const & member,
         bool exception, BinaryAny const & returnValue,
         std::vector< BinaryAny > const & outArguments);
 
     void queueRequest(
         rtl::ByteSequence const & tid, OUString const & oid,
-        css::uno::TypeDescription const & type,
-        css::uno::TypeDescription const & member,
+        cpo::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & member,
         std::vector< BinaryAny >&& inArguments);
 
     void queueReply(
         rtl::ByteSequence const & tid,
-        css::uno::TypeDescription const & member, bool setter,
+        cpo::uno::TypeDescription const & member, bool setter,
         bool exception, BinaryAny const & returnValue,
         std::vector< BinaryAny >&& outArguments,
         bool setCurrentContextMode);
@@ -86,14 +86,14 @@ private:
 
     void sendRequest(
         rtl::ByteSequence const & tid, OUString const & oid,
-        css::uno::TypeDescription const & type,
-        css::uno::TypeDescription const & member,
+        cpo::uno::TypeDescription const & type,
+        cpo::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments, bool currentContextMode,
         css::uno::UnoInterfaceReference const & currentContext);
 
     void sendReply(
         rtl::ByteSequence const & tid,
-        css::uno::TypeDescription const & member, bool setter,
+        cpo::uno::TypeDescription const & member, bool setter,
         bool exception, BinaryAny const & returnValue,
         std::vector< BinaryAny > const & outArguments);
 
@@ -105,23 +105,23 @@ private:
         // Request:
         Item(
             rtl::ByteSequence theTid, OUString theOid,
-            css::uno::TypeDescription theType,
-            css::uno::TypeDescription theMember,
+            cpo::uno::TypeDescription theType,
+            cpo::uno::TypeDescription theMember,
             std::vector< BinaryAny >&& inArguments,
             css::uno::UnoInterfaceReference theCurrentContext);
 
         // Reply:
         Item(
             rtl::ByteSequence theTid,
-            css::uno::TypeDescription theMember,
+            cpo::uno::TypeDescription theMember,
             bool theSetter, bool theException, BinaryAny theReturnValue,
             std::vector< BinaryAny >&& outArguments,
             bool theSetCurrentContextMode);
 
         rtl::ByteSequence tid; // request + reply
         OUString oid; // request
-        css::uno::TypeDescription type; // request
-        css::uno::TypeDescription member; // request + reply
+        cpo::uno::TypeDescription type; // request
+        cpo::uno::TypeDescription member; // request + reply
         css::uno::UnoInterfaceReference currentContext; // request
         BinaryAny returnValue; // reply
         std::vector< BinaryAny > arguments; // request: inArguments; reply: outArguments
@@ -134,7 +134,7 @@ private:
     rtl::Reference< Bridge > bridge_;
     WriterState state_;
     Marshal marshal_;
-    css::uno::TypeDescription lastType_;
+    cpo::uno::TypeDescription lastType_;
     OUString lastOid_;
     rtl::ByteSequence lastTid_;
     osl::Condition unblocked_;

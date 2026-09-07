@@ -251,7 +251,7 @@ typelib_TypeClass __cdecl cpp_mediate(void** pCallStack, const sal_Int32 nFuncti
     sal_Int32 nMemberPos = pInterfaceTD->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     assert(nMemberPos < pInterfaceTD->nAllMembers);
 
-    uno::TypeDescription aMemberDescr(pInterfaceTD->ppAllMembers[nMemberPos]);
+    cpo::uno::TypeDescription aMemberDescr(pInterfaceTD->ppAllMembers[nMemberPos]);
 
     SAL_INFO("bridges", "Calling " << OUString::unacquired(&aMemberDescr.get()->pTypeName));
 

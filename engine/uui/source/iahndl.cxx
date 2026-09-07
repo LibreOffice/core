@@ -267,7 +267,7 @@ namespace
 
     bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, std::u16string_view i_rPropagation )
     {
-        const css::uno::TypeDescription aTypeDesc( i_rTypeName );
+        const cpo::uno::TypeDescription aTypeDesc( i_rTypeName );
         const typelib_TypeDescription* pTypeDesc = aTypeDesc.get();
         if ( !pTypeDesc || !pTypeDesc->pWeakRef )
         {

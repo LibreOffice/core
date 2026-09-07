@@ -54,11 +54,11 @@ template <typename T> OUString hex(T value, sal_Int32 width)
     return buf.makeStringAndClear();
 }
 
-css::uno::TypeDescription getTypeDescription(cpo::uno::Type const& type)
+cpo::uno::TypeDescription getTypeDescription(cpo::uno::Type const& type)
 {
     typelib_TypeDescription* d = nullptr;
     type.getDescription(&d);
-    return css::uno::TypeDescription(d);
+    return cpo::uno::TypeDescription(d);
 }
 
 OUString

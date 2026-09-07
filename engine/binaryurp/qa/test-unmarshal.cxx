@@ -60,10 +60,10 @@ void Test::testTypeOfBooleanSequence() {
         RTL_CONSTASCII_LENGTH("[]boolean"),
        '[', ']', 'b', 'o', 'o', 'l', 'e', 'a', 'n' };
     binaryurp::Unmarshal m(rtl::Reference< binaryurp::Bridge >(), state, buf);
-    css::uno::TypeDescription t(m.readType());
+    cpo::uno::TypeDescription t(m.readType());
     CPPUNIT_ASSERT(
         t.equals(
-            css::uno::TypeDescription(
+            cpo::uno::TypeDescription(
                 cppu::UnoType< cpo::uno::Sequence< bool > >::get())));
     m.done();
 }

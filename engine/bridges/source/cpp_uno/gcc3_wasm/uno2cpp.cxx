@@ -44,7 +44,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
           sal_Int32 count, typelib_MethodParameter* parameters, void* returnValue, void** arguments,
           uno_Any** exception)
 {
-    css::uno::TypeDescription rtd(returnType);
+    cpo::uno::TypeDescription rtd(returnType);
     auto const retConv = bridges::cpp_uno::shared::relatesToInterfaceType(rtd.get());
     auto const ret = retConv ? alloca(rtd.get()->nSize) : returnValue;
     OStringBuffer sig;
@@ -116,7 +116,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
         = reinterpret_cast<sal_uInt32 const* const*>(proxy->getCppI()) + slot.offset;
     args.push_back(reinterpret_cast<sal_uInt32>(thisPtr));
     std::vector<void*> cppArgs(count);
-    std::vector<css::uno::TypeDescription> ptds(count);
+    std::vector<cpo::uno::TypeDescription> ptds(count);
     for (sal_Int32 i = 0; i != count; ++i)
     {
         if (!parameters[i].bOut && bridges::cpp_uno::shared::isSimpleType(parameters[i].pTypeRef))
@@ -175,7 +175,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
         else
         {
             sig.append('i');
-            css::uno::TypeDescription ptd(parameters[i].pTypeRef);
+            cpo::uno::TypeDescription ptd(parameters[i].pTypeRef);
             if (!parameters[i].bIn)
             {
                 cppArgs[i] = alloca(ptd.get()->nSize);

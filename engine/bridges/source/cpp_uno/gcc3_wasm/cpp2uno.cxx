@@ -179,7 +179,7 @@ void raiseException(uno_Any* any, uno_Mapping* mapping)
 }
 
 sal_uInt64 call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
-                css::uno::TypeDescription const& description,
+                cpo::uno::TypeDescription const& description,
                 typelib_TypeDescriptionReference* returnType, sal_Int32 count,
                 typelib_MethodParameter* parameters, std::vector<sal_uInt64> arguments,
                 unsigned indirectRet)
@@ -306,7 +306,7 @@ sal_uInt64 vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned 
     typelib_InterfaceTypeDescription* type = proxy->getTypeDescr();
     assert(functionIndex < type->nMapFunctionIndexToMemberIndex);
     sal_Int32 pos = type->pMapFunctionIndexToMemberIndex[functionIndex];
-    css::uno::TypeDescription desc(type->ppAllMembers[pos]);
+    cpo::uno::TypeDescription desc(type->ppAllMembers[pos]);
     switch (desc.get()->eTypeClass)
     {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -422,7 +422,7 @@ void appendSignatureReturnType(OStringBuffer& buffer, typelib_TypeDescriptionRef
             break;
         case typelib_TypeClass_STRUCT:
         {
-            css::uno::TypeDescription td(type);
+            cpo::uno::TypeDescription td(type);
             switch (abi_wasm::getKind(
                 reinterpret_cast<typelib_CompoundTypeDescription const*>(td.get())))
             {
@@ -503,14 +503,14 @@ unsigned char* VtableFactory::addLocalFunctions(Slot** slots, unsigned char* cod
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             {
                 auto const atd = reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(
-                    css::uno::TypeDescription(type->ppMembers[i]).get());
+                    cpo::uno::TypeDescription(type->ppMembers[i]).get());
                 OStringBuffer sigGetter;
                 appendSignatureOffsets(sigGetter, functionOffset, vtableOffset);
                 appendSignatureReturnType(sigGetter, atd->pAttributeTypeRef);
                 (s++)->fn = getVtableSlotFunction(sigGetter);
                 ++functionOffset;
                 if (!reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(
-                         css::uno::TypeDescription(type->ppMembers[i]).get())
+                         cpo::uno::TypeDescription(type->ppMembers[i]).get())
                          ->bReadOnly)
                 {
                     OStringBuffer sigSetter;
@@ -525,7 +525,7 @@ unsigned char* VtableFactory::addLocalFunctions(Slot** slots, unsigned char* cod
             case typelib_TypeClass_INTERFACE_METHOD:
             {
                 auto const mtd = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(
-                    css::uno::TypeDescription(type->ppMembers[i]).get());
+                    cpo::uno::TypeDescription(type->ppMembers[i]).get());
                 OStringBuffer sig;
                 appendSignatureOffsets(sig, functionOffset, vtableOffset);
                 appendSignatureReturnType(sig, mtd->pReturnTypeRef);

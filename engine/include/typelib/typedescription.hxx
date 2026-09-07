@@ -30,7 +30,7 @@
 #include "typelib/typedescription.h"
 
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** C++ wrapper for typelib_TypeDescription.

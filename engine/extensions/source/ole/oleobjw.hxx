@@ -149,11 +149,11 @@ protected:
     // These functions are for the case if an object of this class wraps an IDispatch
     // object that implements UNO interfaces. In that case the member m_seqTypes
     // is set through XInitialization::initialize.
-    void getMethodInfo(std::u16string_view sName, css::uno::TypeDescription& methodDescription);
+    void getMethodInfo(std::u16string_view sName, cpo::uno::TypeDescription& methodDescription);
     // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
-    void getAttributeInfo(std::u16string_view sName, css::uno::TypeDescription& attributeInfo);
+    void getAttributeInfo(std::u16string_view sName, cpo::uno::TypeDescription& attributeInfo);
     // used by get MethodInfo
-    css::uno::TypeDescription  getInterfaceMemberDescOfCurrentCall(std::u16string_view sName);
+    cpo::uno::TypeDescription  getInterfaceMemberDescOfCurrentCall(std::u16string_view sName);
     /** Returns always a valid ITypeInfo interface or throws a BridgeRuntimeError.
         The returned interface does not need to be AddRef'ed as long as it is locally
         used. The interface is kept in the instance of this class.
