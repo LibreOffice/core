@@ -115,10 +115,6 @@ function _createEntryImage(
 		});
 	}
 
-	if (entryData.tooltip) img.title = entryData.tooltip;
-	else if (entryData.text) img.title = entryData.text;
-	else img.title = '';
-
 	setupSize(entryData, img);
 }
 
