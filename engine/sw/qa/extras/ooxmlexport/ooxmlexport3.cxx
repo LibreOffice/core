@@ -284,6 +284,112 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelRemove)
     CPPUNIT_ASSERT_EQUAL(OUString(), xHeader->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelHeaderCoexist)
+{
+    // The marking coexists with the user's own header content, survives a DOCX round-trip,
+    // and removing it after a reopen clears only our marking -- the char-style marker
+    // (unlike a header bookmark) round-trips, so the sweep still finds it.
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xHeader(xPageStyle->getPropertyValue(u"HeaderText"_ustr),
+                                        uno::UNO_QUERY);
+    xHeader->setString(u"My Header"_ustr);
+
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+
+    // Marking on top, the user's content preserved below.
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(1, xHeader)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"My Header"_ustr, getParagraphOfText(2, xHeader)->getString());
+
+    saveAndReload(TestFilter::DOCX);
+    uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
+    xPageStyle.set(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xHeader.set(xPageStyle->getPropertyValue(u"HeaderText"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(1, xHeader)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"My Header"_ustr, getParagraphOfText(2, xHeader)->getString());
+
+    // Remove after the reopen: only our marking goes, the user content stays.
+    sw::seclabel::removeLabel(xReloaded, u"Standard"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"My Header"_ustr, getParagraphOfText(1, xHeader)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelFooterCoexist)
+{
+    // Same as the header case, but for the footer: the marking is appended below the
+    // user's own footer content rather than replacing it, survives a DOCX round-trip,
+    // and removal after a reopen clears only our marking.
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xFooter(xPageStyle->getPropertyValue(u"FooterText"_ustr),
+                                        uno::UNO_QUERY);
+    xFooter->setString(u"My Footer"_ustr);
+
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+
+    // The user's content stays on top, the marking is appended below.
+    CPPUNIT_ASSERT_EQUAL(u"My Footer"_ustr, getParagraphOfText(1, xFooter)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(2, xFooter)->getString());
+
+    saveAndReload(TestFilter::DOCX);
+    uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
+    xPageStyle.set(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xFooter.set(xPageStyle->getPropertyValue(u"FooterText"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"My Footer"_ustr, getParagraphOfText(1, xFooter)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, getParagraphOfText(2, xFooter)->getString());
+
+    // Remove after the reopen: only our marking goes, the user content stays.
+    sw::seclabel::removeLabel(xReloaded, u"Standard"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"My Footer"_ustr, getParagraphOfText(1, xFooter)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelFooterFieldCoexist)
+{
+    // A footer whose only content is a page-number field: getString() reports empty even
+    // though the footer is not really empty. The marking must coexist as its own paragraph,
+    // not merge into the field's paragraph (which is what a getString()-based empty check does).
+    createSwDoc();
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xFooter(xPageStyle->getPropertyValue(u"FooterText"_ustr),
+                                        uno::UNO_QUERY);
+
+    uno::Reference<text::XTextContent> xField(
+        xFactory->createInstance(u"com.sun.star.text.TextField.PageNumber"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xFieldCursor = xFooter->createTextCursor();
+    xFooter->insertTextContent(xFieldCursor, xField, false);
+
+    // A field-only footer has empty getString() but real content.
+    CPPUNIT_ASSERT(xFooter->getString().isEmpty());
+
+    sw::seclabel::applyMarking(xModel, u"SECRET//X"_ustr, 0xC00000, u"Standard"_ustr);
+
+    std::vector<OUString> aParas;
+    uno::Reference<container::XEnumerationAccess> xEA(xFooter, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xE = xEA->createEnumeration();
+    while (xE->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xP(xE->nextElement(), uno::UNO_QUERY);
+        aParas.push_back(xP.is() ? xP->getString() : OUString());
+    }
+
+    // Two paragraphs: the field's and the marking's -- not merged into one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), static_cast<sal_Int32>(aParas.size()));
+    CPPUNIT_ASSERT_EQUAL(u"SECRET//X"_ustr, aParas[1]);
+    CPPUNIT_ASSERT(aParas[0].indexOf(u"SECRET//X"_ustr) < 0); // field paragraph untouched
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelBodyMarking)
 {
     // Cover (documentStart) and end-page (documentEnd) markings bracket the body,

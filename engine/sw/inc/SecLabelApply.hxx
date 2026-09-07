@@ -25,11 +25,13 @@ class XModel;
 // <svx/seclabel/SecLabelStore.hxx>.
 namespace sw::seclabel
 {
-/// Set the page style's header and footer to the marking text (bold, coloured,
-/// centred), replacing any existing content (v1 pageTopBottom behaviour).
+/// Mark the header and footer (bold, coloured, centred) of every in-use page style, plus
+/// rPageStyleName. The marking is its own paragraph tagged with the "Security Label"
+/// character style, coexisting with the user's own header/footer content (not replacing
+/// it); a prior marking is cleared first, so re-labelling never stacks banners.
 SW_DLLPUBLIC void applyMarking(const css::uno::Reference<css::frame::XModel>& xModel,
                                const OUString& rMarking, sal_Int32 nColor,
-                               const OUString& rPageStyleName);
+                               std::u16string_view rPageStyleName);
 
 /// Place the marking as a cover (bStart) and/or end-page (bEnd) paragraph in the
 /// document body, bookmarked so re-applying replaces rather than duplicates. A
@@ -49,10 +51,12 @@ SW_DLLPUBLIC void applyPortionMarking(const css::uno::Reference<css::frame::XMod
                                       std::u16string_view rMarking, sal_Int32 nColor);
 
 /// Clear the label's Writer markings: the body (cover/end-page) markings and the
-/// page style's header and footer marking. The customXml part is removed separately
-/// (svx::seclabel::removeLabelPart); the watermark by the caller.
+/// header/footer markings of every page style (identified by the "Security Label"
+/// character style, so the user's own header/footer content is left intact). The
+/// customXml part is removed separately (svx::seclabel::removeLabelPart); the watermark
+/// by the caller. rPageStyleName is unused (all styles are swept).
 SW_DLLPUBLIC void removeLabel(const css::uno::Reference<css::frame::XModel>& xModel,
-                              const OUString& rPageStyleName);
+                              std::u16string_view rPageStyleName);
 
 } // namespace sw::seclabel
 
