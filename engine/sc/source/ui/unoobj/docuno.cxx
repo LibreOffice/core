@@ -1210,6 +1210,14 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
 
     if (ScDrawView* pDrawView = pViewData->GetScDrawView())
         pDrawView->resetGridOffsetsForAllSdrPageViews();
+
+    // The grid offset of an object in edit mode and the pixel size of its window both depend on
+    // the zoom, so both follow the new zoom here.
+    if (ScTabViewShell* pViewShell = pViewData->GetViewShell())
+    {
+        pViewShell->UpdateInPlaceClientGridOffset();
+        pViewShell->VisAreaChanged();
+    }
 }
 
 void ScModelObj::setExportZoom(int nExportZoom)

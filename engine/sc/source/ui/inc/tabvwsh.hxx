@@ -37,6 +37,7 @@
 #include <memory>
 #include <map>
 
+class SdrObject;
 class SdrOle2Obj;
 class SfxAbstractTabDialog;
 class SfxBindings;
@@ -400,7 +401,9 @@ public:
     virtual std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rOptions) override;
 
     void            ConnectObject( const SdrOle2Obj* pObj );
-    void            ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb);
+    SC_DLLPUBLIC void ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb);
+    void            SetInPlaceClientGridOffset(SfxInPlaceClient& rClient, SdrObject& rObject);
+    void            UpdateInPlaceClientGridOffset();
 
     void            DeactivateOle();
 

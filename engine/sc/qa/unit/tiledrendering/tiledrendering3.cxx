@@ -29,6 +29,11 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/ipclient.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdoole2.hxx>
+#include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <vcl/virdev.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editview.hxx>
@@ -50,6 +55,7 @@
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 #include <gridwin.hxx>
+#include <drwlayer.hxx>
 #include <sctestviewcallback.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <cstdlib>
@@ -2880,6 +2886,65 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartSelectionCoords)
     lcl_getShapeRectangle(aView1.m_ShapeSelection, aActualChartWall);
     CPPUNIT_ASSERT_MESSAGE("Actual chart wall area spills out of the expected bounds",
                            aChartAreaPtwips.Contains(aActualChartWall));
+}
+
+namespace
+{
+// The top left corner of a cell in display twips, which is where the grid draws the cell at the
+// current zoom.
+Point lcl_getCellTileTwipsPos(const ScViewData& rViewData, SCCOL nCol, SCROW nRow)
+{
+    const Point aPixelPos = rViewData.GetScrPos(nCol, nRow, rViewData.GetActivePart(), true);
+    return Point(aPixelPos.X() / rViewData.GetPPTX(), aPixelPos.Y() / rViewData.GetPPTY());
+}
+}
+
+// A chart in edit mode stays on its anchor cell when the zoom changes while it is being edited.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartEditModeFollowsZoom)
+{
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("chartsel.ods");
+    auto* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pTabViewShell);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    const ScViewData& rViewData = pTabViewShell->GetViewData();
+
+    SdrPage* pPage = pDoc->GetDrawLayer()->GetPage(0);
+    auto* pChart = dynamic_cast<SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pChart);
+    constexpr SCCOL nAnchorCol = 1;
+    constexpr SCROW nAnchorRow = 500;
+    const Point aAnchorPrintTwips = rViewData.GetPrintTwipsPos(nAnchorCol, nAnchorRow);
+    tools::Rectangle aLogicRect = pChart->GetLogicRect();
+    aLogicRect.SetPos(o3tl::convert(aAnchorPrintTwips, o3tl::Length::twip, o3tl::Length::mm100));
+    pChart->SetLogicRect(aLogicRect);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pChart, *pDoc, 0, false);
+
+    // 256 pixel tiles cover 3840 twips at 100% zoom.
+    pModelObj->setClientZoom(256, 256, 3840, 3840);
+    pTabViewShell->ActivateObject(pChart, embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
+    Scheduler::ProcessEventsToIdle();
+    SfxInPlaceClient* pClient = pTabViewShell->GetIPClient();
+    CPPUNIT_ASSERT(pClient);
+    CPPUNIT_ASSERT(pClient->IsObjectInPlaceActive());
+
+    // The tiles paint the chart at this bounding box, in tile twips.
+    KitChartHelper aChartHelper(pTabViewShell);
+    Point aChartPos = aChartHelper.GetChartBoundingBox().TopLeft();
+    Point aAnchorPos = lcl_getCellTileTwipsPos(rViewData, nAnchorCol, nAnchorRow);
+    constexpr tools::Long nTolerance = 15;
+    CPPUNIT_ASSERT_LESSEQUAL(nTolerance, std::abs(aChartPos.X() - aAnchorPos.X()));
+    CPPUNIT_ASSERT_LESSEQUAL(nTolerance, std::abs(aChartPos.Y() - aAnchorPos.Y()));
+
+    // Zoom to 120% while the chart is still in edit mode.
+    pModelObj->setClientZoom(256, 256, 3200, 3200);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pClient->IsObjectInPlaceActive());
+
+    aChartPos = aChartHelper.GetChartBoundingBox().TopLeft();
+    aAnchorPos = lcl_getCellTileTwipsPos(rViewData, nAnchorCol, nAnchorRow);
+    CPPUNIT_ASSERT_LESSEQUAL(nTolerance, std::abs(aChartPos.X() - aAnchorPos.X()));
+    CPPUNIT_ASSERT_LESSEQUAL(nTolerance, std::abs(aChartPos.Y() - aAnchorPos.Y()));
 }
 
 // Filling a cell that a neighbour's text overflows across must invalidate the

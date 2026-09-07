@@ -3630,6 +3630,8 @@ void ScTabView::ZoomChanged()
 
     SyncGridWindowMapModeFromDrawMapMode();
 
+    aViewData.GetViewShell()->UpdateInPlaceClientGridOffset();
+
     // VisArea...
     SetNewVisArea();
 
