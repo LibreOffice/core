@@ -57,6 +57,53 @@ function findLabelElementById(
 	return null;
 }
 
+function findLabelElements(
+	parentContainer: HTMLElement,
+	content: HTMLElement,
+	data: WidgetJSON,
+	builder: JSBuilder,
+): HTMLElement[] {
+	if (!data.labelledBy) return [];
+
+	const labelledByIds: string[] = Array.isArray(data.labelledBy)
+		? data.labelledBy
+		: [data.labelledBy];
+
+	const foundElements: HTMLElement[] = [];
+	for (const labelId of labelledByIds) {
+		const element =
+			findLabelElementById(
+				parentContainer,
+				labelId,
+				builder.options.suffix,
+				content,
+			) ||
+			findLabelElementById(document, labelId, builder.options.suffix, content);
+		if (element) {
+			foundElements.push(element);
+		}
+	}
+
+	return foundElements;
+}
+
+/// The text of the labels a widget is labelled by, which is the name the engine
+/// gives it. Empty when the widget carries no labelledBy, or when none of the
+/// ids it names is in the document.
+JSDialog.GetA11yLabelText = function (
+	parentContainer: HTMLElement,
+	content: HTMLElement,
+	data: WidgetJSON,
+	builder: JSBuilder,
+): string {
+	return findLabelElements(parentContainer, content, data, builder)
+		.map((element) =>
+			(element.textContent || '').trim().replace(/:$/, '').trim(),
+		)
+		.filter((text) => text !== '')
+		.join(' ');
+};
+
 JSDialog.SetupA11yLabelForLabelableElement = function (
 	parentContainer: HTMLElement,
 	content: HTMLElement,
@@ -65,34 +112,12 @@ JSDialog.SetupA11yLabelForLabelableElement = function (
 ) {
 	app.layoutingService.appendLayoutingTask(function () {
 		app.layoutingService.appendLayoutingTask(function () {
-			if (!data.labelledBy) {
-				JSDialog.AddAriaLabel(content, data, builder);
-				return;
-			}
-
-			const labelledByIds: string[] = Array.isArray(data.labelledBy)
-				? data.labelledBy
-				: [data.labelledBy];
-
-			const foundElements: HTMLElement[] = [];
-			for (const labelId of labelledByIds) {
-				const element =
-					findLabelElementById(
-						parentContainer,
-						labelId,
-						builder.options.suffix,
-						content,
-					) ||
-					findLabelElementById(
-						document,
-						labelId,
-						builder.options.suffix,
-						content,
-					);
-				if (element) {
-					foundElements.push(element);
-				}
-			}
+			const foundElements = findLabelElements(
+				parentContainer,
+				content,
+				data,
+				builder,
+			);
 
 			if (foundElements.length === 0) {
 				JSDialog.AddAriaLabel(content, data, builder);

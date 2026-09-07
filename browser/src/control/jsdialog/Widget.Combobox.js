@@ -281,17 +281,15 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	var button = window.L.DomUtil.create('button', 'ui-combobox-button ' + builder.options.cssClass, container);
 	button.setAttribute('aria-expanded', false);
 
-	const dataAriaLabel = data.aria && data.aria.label ? data.aria.label : '';
-	const buttonARIALabel = dataAriaLabel
-		? _('Open ') + dataAriaLabel + _(' list')
-		: _('Open list');
-	const updatedAriaLabelData = {
-		labelledBy: data.labelledBy,
-		aria: {
-			label: buttonARIALabel
-		}
-	}
-	JSDialog.SetupA11yLabelForLabelableElement(parentContainer, button, updatedAriaLabelData, builder);
+	app.layoutingService.appendLayoutingTask(function () {
+		app.layoutingService.appendLayoutingTask(function () {
+			const name = JSDialog.GetA11yLabelText(parentContainer, content, data, builder) ||
+				(data.aria && data.aria.label ? data.aria.label : '');
+			button.setAttribute('aria-label', name
+				? _('Open {name}').replace('{name}', name)
+				: _('Open list'));
+		});
+	});
 
 	var arrow = window.L.DomUtil.create('span', builder.options.cssClass + ' ui-listbox-arrow', button);
 	arrow.id = 'listbox-arrow-' + data.id;
