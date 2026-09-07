@@ -48,11 +48,8 @@ namespace graphic
 {
 class XGraphic;
 }
-namespace uno
-{
-class XComponentContext;
 }
-}
+namespace cpo::uno { class XComponentContext; }
 namespace svl::crypto
 {
 class SigningContext;

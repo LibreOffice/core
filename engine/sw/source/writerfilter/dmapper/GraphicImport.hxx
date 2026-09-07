@@ -40,10 +40,6 @@
 
 class SwXTextGraphicObject;
 namespace com::sun::star {
-    namespace uno
-    {
-        class XComponentContext;
-    }
     namespace lang
     {
         class XMultiServiceFactory;
@@ -61,6 +57,7 @@ namespace com::sun::star {
         struct PropertyValue;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace writerfilter::dmapper
 {

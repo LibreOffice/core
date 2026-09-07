@@ -40,9 +40,6 @@ namespace com::sun::star{
     namespace io{
         class XInputStream;
     }
-    namespace uno{
-        class XComponentContext;
-    }
     namespace lang{
         class XMultiServiceFactory;
     }
@@ -50,6 +47,7 @@ namespace com::sun::star{
         class XTextRange;
     }
 }
+namespace cpo::uno { class XComponentContext; }
 
 namespace comphelper
 {
