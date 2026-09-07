@@ -1,9 +1,13 @@
 /* -*- typescript-indent-level: 8 -*- */
+/* global __dirname */
 import { defineConfig } from 'cypress';
 import plugin from './plugins/index.js';
+import path from 'path';
 import process from 'process';
 import installLogsPrinter from 'cypress-terminal-report/src/installLogsPrinter';
 import { configureVisualRegression } from 'cypress-visual-regression';
+
+const SNAPSHOTS = path.join(__dirname, 'integration_tests/snapshots');
 
 export default defineConfig({
 	video: false,
@@ -12,7 +16,10 @@ export default defineConfig({
 	fixturesFolder: 'data',
 	chromeWebSecurity: false,
 	screenshotOnRunFailure: true,
-	screenshotsFolder: './integration_tests/snapshots/actual',
+	// Absolute, so the snapshots are found whatever directory cypress was
+	// started from: out of tree the builddir is the working directory while
+	// the baselines are versioned next to the specs, in the source tree.
+	screenshotsFolder: path.join(SNAPSHOTS, 'actual'),
 	// Parallel specs each run their own cypress process against this one
 	// screenshotsFolder. The default per-run asset trashing would wipe a
 	// concurrent spec's in-flight screenshot before its comparison reads it.
@@ -25,7 +32,7 @@ export default defineConfig({
 		// Absolute path of the presets the dev WOPI server offers, in the builddir.
 		PRESETS_ROOT: process.env.PRESETS_ROOT,
 		visualRegressionType: 'regression',
-		visualRegressionBaseDirectory: './integration_tests/snapshots/base',
+		visualRegressionBaseDirectory: path.join(SNAPSHOTS, 'base'),
 	},
 	retries: {
 		runMode: 1,

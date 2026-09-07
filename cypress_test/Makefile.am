@@ -316,7 +316,7 @@ define cleanup_before_run
 	$(V)rm -f $(ERROR_LOG)
 	$(V)rm -f $(PID_FILE)
 	$(V)rm -rf cypress
-	$(V)rm -rf integration_tests/snapshots/actual
+	$(V)rm -rf $(abs_srcdir)/integration_tests/snapshots/actual
 	$(V)rm -rf $(PRESETS_ROOT)
 	$(V)mkdir -p $(dir $(PRESETS_ROOT))
 	$(V)cp -r $(abs_top_srcdir)/test/data/presets-default $(PRESETS_ROOT)
@@ -340,12 +340,18 @@ $(NPM_INSTALLED): package.json eslint_plugin/index.js eslint_plugin/package.json
 	$(V)ls node_modules
 	$(V)mkdir -p $(dir $(NPM_INSTALLED))
 	$(V)touch $(NPM_INSTALLED)
+#	The cypress project root is the source directory, since that is where the
+#	specs, the support file and the snapshot baselines live - but npm installs
+#	into the builddir. Out of tree the source tree has to reach them, and
+#	cypress_test/.gitignore already covers the link.
+	$(V)$(if $(filter $(abs_builddir),$(abs_srcdir)),,\
+		ln -sfn $(abs_builddir)/node_modules $(abs_srcdir)/node_modules)
 
 clean-local:
 	rm -rf node_modules
 	rm -rf workdir
 	rm -rf cypress
-	rm -rf integration_tests/snapshots/actual
+	rm -rf $(abs_srcdir)/integration_tests/snapshots/actual
 	rm -rf package-lock.json
 	rm -rf .nyc_output
 	rm -rf coverage
@@ -450,6 +456,7 @@ define run_lighthouse_tests
 		--browser $(LIGHTHOUSE_BROWSER) \
 		--headless \
 		--config-file $(CYPRESS_CONFIG) \
+		--project $(abs_srcdir) \
 		--config $(LIGHTHOUSE_CONFIG) \
 		--env $(LIGHTHOUSE_ENV) \
 		$(if $(SPEC_FILE),--spec=$(SPEC_FILE)) \
@@ -913,6 +920,7 @@ define run_interactive_all
 	DEBUG='cypress:*' \
 		$(CYPRESS_BINARY) open \
 		--config-file $(CYPRESS_CONFIG) \
+		--project $(abs_srcdir) \
 		--config $(1) \
 		--env $(2)
 endef
@@ -933,6 +941,7 @@ define run_interactive_single
 		--browser $(BROWSER) \
 		--headed --no-exit \
 		--config-file $(CYPRESS_CONFIG) \
+		--project $(abs_srcdir) \
 		--config $(1),retries=0 \
 		--env $(2) \
 		--spec=$(3)
@@ -957,7 +966,8 @@ define run_test_buffered
 		--type $(4) \
 		--log-file $(5) \
 		$(if $(CYPRESS_NO_SECOND_CHANCE),,--second-chance) \
-		--config-file $(CYPRESS_CONFIG)
+		--config-file $(CYPRESS_CONFIG) \
+		--project $(abs_srcdir)
 endef
 
 # Shell commands for CPU load generation (expanded conditionally based on ENABLE_CPULOAD)
@@ -990,6 +1000,7 @@ define run_test_headless
 		--browser $(BROWSER) \
 		--headless \
 		--config-file $(CYPRESS_CONFIG) \
+		--project $(abs_srcdir) \
 		--config $(1) \
 		--env $(2) \
 		$(if $(3),--spec=$(3)); \
