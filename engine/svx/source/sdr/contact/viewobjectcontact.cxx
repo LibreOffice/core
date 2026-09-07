@@ -196,6 +196,15 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         basegfx::B2DRange aTempRange = GetViewContact().getRange(rViewInfo2D);
         if (!aTempRange.isEmpty())
         {
+            // The range is the area where this view paints the object, so it includes the grid
+            // offset of the view (Calc only). Far from the top left of a sheet that offset grows
+            // to many rows.
+            if (GetObjectContact().supportsGridOffsets())
+            {
+                const basegfx::B2DVector& rGridOffset(getGridOffset());
+                if (0.0 != rGridOffset.getX() || 0.0 != rGridOffset.getY())
+                    aTempRange.transform(basegfx::utils::createTranslateB2DHomMatrix(rGridOffset));
+            }
             const_cast< ViewObjectContact* >(this)->maObjectRange = aTempRange;
         }
         else

@@ -33,6 +33,7 @@
 #include <sfx2/ipclient.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <drawview.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <vcl/virdev.hxx>
 #include <editeng/colritem.hxx>
@@ -2945,6 +2946,59 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartEditModeFollowsZoom)
     aAnchorPos = lcl_getCellTileTwipsPos(rViewData, nAnchorCol, nAnchorRow);
     CPPUNIT_ASSERT_LESSEQUAL(nTolerance, std::abs(aChartPos.X() - aAnchorPos.X()));
     CPPUNIT_ASSERT_LESSEQUAL(nTolerance, std::abs(aChartPos.Y() - aAnchorPos.Y()));
+}
+
+// A click on a chart far down the sheet selects it, also after the zoom changed.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartClickSelectsAfterZoom)
+{
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("chartsel.ods");
+    auto* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pTabViewShell);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    const ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScDrawView* pDrawView = pTabViewShell->GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+
+    SdrPage* pPage = pDoc->GetDrawLayer()->GetPage(0);
+    auto* pChart = dynamic_cast<SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pChart);
+    constexpr SCCOL nAnchorCol = 1;
+    constexpr SCROW nAnchorRow = 500;
+    const Point aAnchorPrintTwips = rViewData.GetPrintTwipsPos(nAnchorCol, nAnchorRow);
+    tools::Rectangle aLogicRect = pChart->GetLogicRect();
+    aLogicRect.SetPos(o3tl::convert(aAnchorPrintTwips, o3tl::Length::twip, o3tl::Length::mm100));
+    pChart->SetLogicRect(aLogicRect);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pChart, *pDoc, 0, false);
+    const Size aChartSizeTwips
+        = o3tl::convert(aLogicRect.GetSize(), o3tl::Length::mm100, o3tl::Length::twip);
+
+    // Clicks in the middle of the chart, in tile twips of the current zoom.
+    auto clickChart = [&]() {
+        const Point aAnchorPos = lcl_getCellTileTwipsPos(rViewData, nAnchorCol, nAnchorRow);
+        const Point aCenter(aAnchorPos.X() + aChartSizeTwips.Width() / 2,
+                            aAnchorPos.Y() + aChartSizeTwips.Height() / 2);
+        pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aCenter.X(), aCenter.Y(), 1, 1,
+                                  0);
+        pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, aCenter.X(), aCenter.Y(), 1, 1, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+    // Clicks on the top left cell, which drops any drawing selection.
+    auto clickAwayFromChart = [&]() {
+        pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, 100, 100, 1, 1, 0);
+        pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, 100, 100, 1, 1, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    pModelObj->setClientZoom(256, 256, 3840, 3840);
+    clickChart();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawView->GetMarkedObjectList().GetMarkCount());
+    clickAwayFromChart();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDrawView->GetMarkedObjectList().GetMarkCount());
+
+    pModelObj->setClientZoom(256, 256, 3200, 3200);
+    clickChart();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawView->GetMarkedObjectList().GetMarkCount());
 }
 
 // Filling a cell that a neighbour's text overflows across must invalidate the
