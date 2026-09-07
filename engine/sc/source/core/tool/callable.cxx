@@ -208,8 +208,10 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                                 for (short nJump = 2; nJump < nJumpCount - 1; nJump += 2)
                                 {
                                     aStartPoints.push(pJump[nJump + 1]);
+                                    // The name token of a binding sits one position after
+                                    // the end of the previous subformula.
                                     pSubToken = formula::GetStringNameToken(
-                                        rTokens.GetCode()[pJump[nJump]]);
+                                        rTokens.GetCode()[pJump[nJump] + 1]);
                                     if (pSubToken
                                         && pSubToken->GetString().getString().equalsIgnoreAsciiCase(
                                                aStrName))
@@ -229,8 +231,10 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                             bool bFound = false;
                             for (short nJump = 1; nJump < nJumpCount - 1; ++nJump)
                             {
-                                auto pSubToken
-                                    = formula::GetStringNameToken(rTokens.GetCode()[pJump[nJump]]);
+                                // The parameter name token sits one position after the
+                                // jump target.
+                                auto pSubToken = formula::GetStringNameToken(
+                                    rTokens.GetCode()[pJump[nJump] + 1]);
                                 if (pSubToken
                                     && pSubToken->GetString().getString().equalsIgnoreAsciiCase(
                                            aStrName))

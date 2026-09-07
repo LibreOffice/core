@@ -7036,6 +7036,47 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLetWithOdffParameters)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLetNameShadowing)
+{
+    // A name bound inside a LET subformula hides an outer LET name of the same
+    // spelling, so the inner formula computes with its own binding.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // The LAMBDA parameter x hides the LET name x, so f(7) is 7*3.
+    ScAddress aPos(0, 0, 0);
+    m_pDoc->SetString(aPos, u"=LET(x;5;f;LAMBDA(x;x*3);f(7))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+
+    // A parameter of another spelling computes the same value.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=LET(x;5;f;LAMBDA(z;z*3);f(7))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+
+    // A LET name that no parameter rebinds stays visible in the lambda body.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=LET(x;5;f;LAMBDA(z;z*3+x);f(7))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(26.0, m_pDoc->GetValue(aPos));
+
+    // A nested LET rebinding x in its first binding: the inner result uses the
+    // inner x, the rest of the outer formula still the outer one.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=LET(x;5;LET(x;7;x*2)+x)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(19.0, m_pDoc->GetValue(aPos));
+
+    // The same with the rebinding in the second binding of the inner LET.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=LET(x;5;LET(y;1;x;7;x*2)+x)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(19.0, m_pDoc->GetValue(aPos));
+
+    // The value expression of the rebinding sees the outer x.
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, u"=LET(x;5;LET(y;1;x;x+2;x*9)+x)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(68.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testCallBuiltInThroughCallable)
 {
     // A built-in function used as a value and then called gets routed through
