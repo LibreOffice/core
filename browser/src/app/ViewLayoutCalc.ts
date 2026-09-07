@@ -350,6 +350,16 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		RenderManager.requestVisibleTiles(this.currentCoordList);
 	}
 
+	// Calc scrolls by moving the viewed rectangle. It holds the plain scroll
+	// offset in core pixels, with no centring, so it is the viewport.
+	public override getViewportCorePixelBounds(): cool.Bounds {
+		const rect = this._viewedRectangle;
+		return new cool.Bounds(
+			new cool.Point(rect.pX1, rect.pY1),
+			new cool.Point(rect.pX1 + rect.pWidth, rect.pY1 + rect.pHeight),
+		);
+	}
+
 	// pX, pY are absolute view-space positions in canvas (core) pixels. This is
 	// an absolute document-space move, so it bypasses scroll()'s RTL screen
 	// mirroring and applies the delta directly.
