@@ -137,6 +137,7 @@ Util::LoadTimings KitLoadTimings;
 
 #ifdef QTAPP
 #include <qt/QtFileManager.hpp>
+#include <qt/QtFilePicker.hpp>
 #endif
 
 using Poco::Exception;
@@ -3803,7 +3804,7 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
 
     // The desktop apps show a native file picker where the engine would open
     // its own file dialog.
-#if defined(MACOSAPP)
+#if defined(MACOSAPP) || defined(QTAPP)
     install_filepicker_provider(*loKit);
 #endif
 

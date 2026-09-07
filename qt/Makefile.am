@@ -87,7 +87,7 @@ endif
 # path and needs the flags libsimd gets. Empty in a pure qtapp build.
 coda_qt_CFLAGS = $(AM_CFLAGS) $(SIMD_CFLAGS)
 
-coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp CursorFix.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp IntegratorFilePicker.cpp RemoteOpen.cpp StandaloneWindow.cpp TabbedWindow.cpp TabManager.cpp TabShellBridge.cpp WindowUtils.cpp $(cmake_list)
+coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp CursorFix.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp QtFilePicker.cpp IntegratorFilePicker.cpp RemoteOpen.cpp StandaloneWindow.cpp TabbedWindow.cpp TabManager.cpp TabShellBridge.cpp WindowUtils.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
