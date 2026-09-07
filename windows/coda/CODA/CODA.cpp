@@ -170,6 +170,17 @@ static HWND hiddenOwnerWindow;
 static const int CODA_WM_EXECUTESCRIPT = WM_APP + 1;
 static const int CODA_WM_LOADNEXTDOCUMENT = WM_APP + 2;
 static const int CODA_WM_POSTWEBMESSAGE = WM_APP + 3;
+static const int CODA_WM_SHOWFILEPICKER = WM_APP + 4;
+
+// One file pick the engine asked for, posted as CODA_WM_SHOWFILEPICKER to the hidden owner
+// window; the wide strings own the dialog's title and filter text.
+struct FilePickerRequest
+{
+    std::wstring title;
+    std::vector<std::pair<std::wstring, std::wstring>> filters;
+    void (*pfnPicked)(void* pContext, const char* pUrl);
+    void* pContext;
+};
 
 static HMONITOR primaryMonitor;
 
@@ -1050,7 +1061,9 @@ static std::string pathToURI(const Poco::Path& path)
     return uri.toString();
 }
 
-static std::vector<FilenameAndUri> fileOpenDialog()
+static std::vector<FilenameAndUri> fileOpenDialog(const std::wstring& title,
+                                                  const std::vector<COMDLG_FILTERSPEC>& filters,
+                                                  bool multiSelect)
 {
     IFileOpenDialog* dialog;
 
@@ -1058,19 +1071,18 @@ static std::vector<FilenameAndUri> fileOpenDialog()
                                     IID_IFileOpenDialog, reinterpret_cast<void**>(&dialog))))
         fatal("CoCreateInstance(CLSID_FileOpenDialog) failed");
 
-    COMDLG_FILTERSPEC filter[] = {
-        { L"",
-          L"*.odt;*.docx;*.doc;*.rtf;*.txt;*.md;*.ods;*.xlsx;*.xls;*.odp;*.pptx;*.ppt" },
-        { L"", L"*.*" }
-    };
+    if (!title.empty())
+        dialog->SetTitle(title.c_str());
 
-    if (!SUCCEEDED(dialog->SetFileTypes(sizeof(filter) / sizeof(filter[0]), &filter[0])))
-        fatal("dialog->SetFileTypes() failed");
+    if (!filters.empty())
+        if (!SUCCEEDED(dialog->SetFileTypes(filters.size(), filters.data())))
+            fatal("dialog->SetFileTypes() failed");
 
     FILEOPENDIALOGOPTIONS options;
     if (SUCCEEDED(dialog->GetOptions(&options)))
     {
-        options |= FOS_ALLOWMULTISELECT;
+        if (multiSelect)
+            options |= FOS_ALLOWMULTISELECT;
         options &= ~FOS_DONTADDTORECENT;
         dialog->SetOptions(options);
     }
@@ -1614,6 +1626,26 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
         case WM_DESTROYCLIPBOARD:
             weOwnTheClipboard = false;
             return 0;
+
+        case CODA_WM_SHOWFILEPICKER:
+        {
+            // The engine asked for a file (see filePickerProviderPick). Show the open
+            // dialog here on the UI thread and answer the engine's completion; the
+            // engine's main loop keeps running while the dialog is open.
+            std::unique_ptr<FilePickerRequest> request(
+                reinterpret_cast<FilePickerRequest*>(wParam));
+
+            std::vector<COMDLG_FILTERSPEC> filterSpecs;
+            for (auto const& f : request->filters)
+                filterSpecs.push_back({ f.first.c_str(), f.second.c_str() });
+
+            auto openResult = fileOpenDialog(request->title, filterSpecs, false);
+            if (!openResult.empty())
+                request->pfnPicked(request->pContext, openResult[0].uri.c_str());
+            else
+                request->pfnPicked(request->pContext, nullptr);
+            return 0;
+        }
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -3248,6 +3280,34 @@ void install_clipboard_provider(COKit& kitOffice)
     kitOffice.installClipboardProvider(&provider);
 }
 
+// The engine asks the user for a file. Copy the details, hand them to the hidden owner
+// window's thread, and let CODA_WM_SHOWFILEPICKER show the dialog there; the completion
+// answers from the dialog result.
+static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilter* pFilters,
+                                   size_t nFilters,
+                                   void (*pfnPicked)(void* pContext, const char* pUrl),
+                                   void* pContext)
+{
+    auto request = std::make_unique<FilePickerRequest>();
+    if (pTitle)
+        request->title = Util::string_to_wide_string(pTitle);
+    for (size_t i = 0; i < nFilters; ++i)
+        request->filters.push_back({ Util::string_to_wide_string(pFilters[i].pName),
+                                     Util::string_to_wide_string(pFilters[i].pWildcards) });
+    request->pfnPicked = pfnPicked;
+    request->pContext = pContext;
+
+    PostMessageW(hiddenOwnerWindow, CODA_WM_SHOWFILEPICKER,
+                 reinterpret_cast<WPARAM>(request.release()), 0);
+}
+
+void install_filepicker_provider(COKit& kitOffice)
+{
+    static COKitFilePickerProvider provider{};
+    provider.pick = filePickerProviderPick;
+    kitOffice.installFilePickerProvider(&provider);
+}
+
 void materialize_clipboard_formats()
 {
     static bool beenHere = false;
@@ -3562,7 +3622,12 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         }
         else if (s == L"uno .uno:Open")
         {
-            auto openResult = fileOpenDialog();
+            auto openResult = fileOpenDialog(
+                L"",
+                { { L"",
+                    L"*.odt;*.docx;*.doc;*.rtf;*.txt;*.md;*.ods;*.xlsx;*.xls;*.odp;*.pptx;*.ppt" },
+                  { L"", L"*.*" } },
+                true);
             if (openResult.size() > 0)
             {
                 for (const auto& i: openResult)

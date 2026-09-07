@@ -3804,7 +3804,7 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
 
     // The desktop apps show a native file picker where the engine would open
     // its own file dialog.
-#if defined(MACOSAPP) || defined(QTAPP)
+#if defined(MACOSAPP) || defined(QTAPP) || defined(_WIN32)
     install_filepicker_provider(*loKit);
 #endif
 

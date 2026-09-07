@@ -29,6 +29,11 @@ void reveal_in_file_manager(const char* uri);
 // every document. Called once, while the engine's main loop starts.
 void install_clipboard_provider(COKit& rOffice);
 
+// Install the process-global file picker provider, so a command that needs the user to pick a
+// file opens a native open dialog instead of the engine's file dialog. Called once, while the
+// engine's main loop starts.
+void install_filepicker_provider(COKit& rOffice);
+
 // Materialise all clipboard formats we have advertised
 void materialize_clipboard_formats();
 
