@@ -27,12 +27,17 @@ namespace drawinglayer::primitive2d
 {
 bool BufferedDecompositionPrimitive2D::hasBuffered2DDecomposition() const
 {
+    return getBuffered2DDecomposition().is();
+}
+
+Primitive2DReference BufferedDecompositionPrimitive2D::getBuffered2DDecomposition() const
+{
     if (!mbFlushOnTimer)
-        return maBuffered2DDecomposition.is();
+        return maBuffered2DDecomposition;
     else
     {
         std::lock_guard Guard(maCallbackLock);
-        return maBuffered2DDecomposition.is();
+        return maBuffered2DDecomposition;
     }
 }
 
@@ -56,6 +61,9 @@ void BufferedDecompositionPrimitive2D::setBuffered2DDecomposition(Primitive2DRef
         std::lock_guard Guard(maCallbackLock);
         maBuffered2DDecomposition = std::move(rNew);
     }
+
+    // the lock is released again here, so the hook may take it itself
+    buffered2DDecompositionChanged();
 }
 
 BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
@@ -75,19 +83,25 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
+    auto* pMutable = const_cast<BufferedDecompositionPrimitive2D*>(this);
+
     if (BufferedDecompositionGroupPrimitive2D::isExporting())
     {
         if (!maBuffered2DDecomposition)
             maBuffered2DDecomposition = create2DDecomposition(rViewInformation);
         rVisitor.visit(maBuffered2DDecomposition);
         maBuffered2DDecomposition.clear();
+        pMutable->buffered2DDecompositionChanged();
         return;
     }
     if (!mbFlushOnTimer)
     {
         // no flush/multithreading is in use, just call
         if (!maBuffered2DDecomposition)
+        {
             maBuffered2DDecomposition = create2DDecomposition(rViewInformation);
+            pMutable->buffered2DDecompositionChanged();
+        }
         rVisitor.visit(maBuffered2DDecomposition);
     }
     else
@@ -96,6 +110,7 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
         // so that the local non-ref-Counted instance of the decomposition gets not
         // manipulated (e.g. deleted)
         Primitive2DReference xTmp;
+        bool bCreated(false);
         {
             maLastAccess = std::chrono::steady_clock::now();
             // only hold the lock for long enough to get a valid reference
@@ -104,9 +119,12 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
             {
                 maBuffered2DDecomposition = create2DDecomposition(rViewInformation);
                 BufferedDecompositionFlusher::update(this);
+                bCreated = true;
             }
             xTmp = maBuffered2DDecomposition;
         }
+        if (bCreated)
+            pMutable->buffered2DDecompositionChanged();
         rVisitor.visit(xTmp);
     }
 }

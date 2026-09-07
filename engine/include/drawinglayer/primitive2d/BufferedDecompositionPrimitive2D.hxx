@@ -84,6 +84,13 @@ protected:
      */
     bool hasBuffered2DDecomposition() const;
     void setBuffered2DDecomposition(Primitive2DReference rNew);
+    /// the buffered last create2DDecomposition() result, empty when nothing is buffered
+    Primitive2DReference getBuffered2DDecomposition() const;
+
+    /** Called after the buffered decomposition was created, replaced or dropped. Runs with
+        the callback lock released, so it may call back into this primitive.
+     */
+    virtual void buffered2DDecompositionChanged() {}
 
     /** method which is to be used to implement the local decomposition of a 2D primitive. */
     virtual Primitive2DReference
