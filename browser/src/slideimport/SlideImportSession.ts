@@ -13,8 +13,9 @@
  * SlideImportSession - the state model behind the slide import pane.
  *
  * Owns the lifecycle of one import: the questions asked of the related
- * document the slides come from, the per-slide thumbnail store, the slide
- * selection, the keep-design flag and the link-to-source flag.
+ * document the slides come from, the slide selection, the keep-design flag
+ * and the link-to-source flag. What each source answered about its slides is
+ * the pane's own.
  * Every state change is announced as a slideimport:* event on app.events.
  *
  * A question of a related document carries an id, and its answer comes back
@@ -55,14 +56,9 @@ interface SlideImportError {
 class SlideImportSession {
 	public state: SlideImportState = 'idle';
 	public fileName: string = '';
+	// How many slides the source holds, which bounds every index a selection
+	// or an insert names.
 	public slideCount: number = 0;
-	public slides: SlideImportSlide[] = [];
-	// The sections of the opened file, in slide order; empty when the file
-	// groups no slides into sections.
-	public sections: SlideImportSection[] = [];
-	// The slide size of the opened file, in twips. Zero until a file is open.
-	public size: { width: number; height: number } = { width: 0, height: 0 };
-	public thumbnails: Map<number, SlideImportThumbnail> = new Map();
 	public selection: Set<number> = new Set();
 	public keepDesign: boolean = false;
 	// Whether the inserted slides stay bound to the file they came from, so
@@ -256,11 +252,7 @@ class SlideImportSession {
 	}
 
 	private resetImportState(): void {
-		this.thumbnails.clear();
-		this.slides = [];
-		this.sections = [];
 		this.slideCount = 0;
-		this.size = { width: 0, height: 0 };
 		this.selection.clear();
 		this.pendingInsert = null;
 	}

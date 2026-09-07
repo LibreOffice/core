@@ -270,17 +270,15 @@
 	flex-direction: column;
 }
 
-/* Grid layout for a slide list while the panels are maximized. The slide
- * navigator's list and the slide import pane's list flow through the same
- * rules, so the two grids always look alike. The slides flow into as many
- * columns as the wide panel fits; the reorder drop site and the section
- * headers take a whole row of their own. The grid takes the space left
- * above the toolbar and scrolls on its own. The rows pack at their content
- * height from the top: left to the default stretch, a short deck's row
- * tracks would inflate to fill the panel and any fixed-height cell added
- * to a row would redistribute that slack, moving every row. */
-.parts-preview-grid #slide-sorter,
-.parts-preview-grid .slide-import-list {
+/* Grid layout for the slide navigator's list while the panels are
+ * maximized. The slides flow into as many columns as the wide panel fits;
+ * the reorder drop site and the section headers take a whole row of their
+ * own. The grid takes the space left above the toolbar and scrolls on its
+ * own. The rows pack at their content height from the top: left to the
+ * default stretch, a short deck's row tracks would inflate to fill the panel
+ * and any fixed-height cell added to a row would redistribute that slack,
+ * moving every row. */
+.parts-preview-grid #slide-sorter {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	align-content: start;
@@ -292,6 +290,12 @@
 	flex: 1;
 	min-height: 0;
 	max-height: none;
+}
+
+/* The slide import pane lays its slides out in the same grid whatever the
+ * panel width; the wide panel only takes wider columns. */
+.parts-preview-grid .slide-import-list {
+	grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
 }
 
 /* Out of the grid the toolbar flows at the end of the column rather than

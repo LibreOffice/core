@@ -52,72 +52,342 @@
 	gap: 8px;
 }
 
-/* A plain content-sized secondary button, as the design system specifies;
- * the shared .button rule provides the look and the max-content width. The
- * pane's own column gap replaces the button margin. */
-.slide-import-choose {
+/* The source list at the top: the presentations this document can take
+ * slides from, each with what the pane says of it and a menu of what can be
+ * done with it. The list keeps to a third of the pane so the slides below it
+ * stay in sight, and scrolls when it holds more than that. */
+.slide-import-sources {
+	flex: 0 0 auto;
+	max-height: 40%;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	overflow: hidden;
+}
+
+/* The title lines up with the icons below it: a row insets its contents by
+ * its own padding, its border and the border its button keeps room for. */
+.slide-import-sources-title {
+	flex-shrink: 0;
+	padding-inline: calc(var(--spacing-m) + 2px);
+	color: var(--color-text-dark);
+	font-weight: 600;
+}
+
+/* Adding a presentation reads as a link beside the list title, and as a
+ * plain secondary button in the empty pane, where it is the one thing to do.
+ * The link carries the shared ui-linkbutton class, which keeps the box of a
+ * plain button off it; the colour of a link comes from here, over the dark
+ * text that class paints. */
+.slide-import-add-link {
+	display: inline-flex;
+	align-self: end;
+	align-items: center;
+	gap: var(--spacing-s);
+	flex-shrink: 0;
+	/* Its text ends where the rows above it end: the difference between the
+	 * inset of a row and the button's own padding. */
+	margin: 0 calc(var(--spacing-m) - var(--spacing-s));
+	padding: var(--spacing-xs) var(--spacing-s);
+	/* A hovered button takes a border of its own from the desktop rules. The
+	 * room for it is there from the start, so nothing below moves when the
+	 * pointer arrives. */
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
+	background: transparent;
+	color: var(--color-primary) !important;
+	font-family: var(--cool-font);
+	font-size: inherit;
+	cursor: pointer;
+}
+
+.slide-import-add-link:hover {
+	color: var(--color-primary-dark) !important;
+	background-color: var(--color-btn-primary-hover-bg) !important;
+}
+
+.slide-import-add-link:disabled {
+	color: var(--color-text-light) !important;
+	background: transparent;
+	cursor: default;
+}
+
+.slide-import-add {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-s);
 	margin: 0;
 }
 
-.slide-import-choose:disabled {
+.slide-import-add:disabled,
+.slide-import-insert:disabled {
 	opacity: 0.5;
 	cursor: default;
 }
 
-.slide-import-filename {
-	color: var(--color-text-dark);
-	font-weight: 600;
-	overflow-wrap: anywhere;
-}
-
-.slide-import-related-title {
-	color: var(--color-text-dark);
+.slide-import-add-plus {
 	font-weight: 600;
 }
 
-.slide-import-related-list {
+/* The rows scroll inside the list, so the title above them and the button
+ * below them stay where they are however many files are listed. */
+.slide-import-source-list {
 	list-style: none;
-	margin: 4px 0 0;
+	margin: 0;
 	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+	min-height: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-width: var(--scrollbar-width);
+	scrollbar-color: var(--scrollbar-color);
 }
 
-.slide-import-related-item {
+/* A row draws no line of its own until the pointer is over it, so the list
+ * reads as a plain list of files. The transparent border is there to keep
+ * the rows where they are once one shows. */
+.slide-import-source {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	padding: 4px 0;
+	gap: var(--spacing-s);
+	padding: var(--spacing-s) var(--spacing-m);
+	box-sizing: border-box;
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
+	background: var(--color-background-lighter);
 }
 
-.slide-import-related-name {
+.slide-import-source:hover {
+	border-color: var(--color-border);
+	background: var(--color-background-hover);
+}
+
+/* The keyboard marks the whole row, which is what the buttons inside it act
+ * on. */
+.slide-import-source:focus-within {
+	border-color: rgba(var(--doc-type), 1);
+}
+
+.slide-import-source-main:focus-visible,
+.slide-import-source-menu:focus-visible {
+	outline: none;
+}
+
+.slide-import-source-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-s);
+	margin: 0;
+	padding: 0;
+	/* Room for the border a hovered button takes from the desktop rules, so
+	 * the row's contents do not move when the pointer arrives. */
+	border: 1px solid transparent;
+	background: transparent;
 	color: var(--color-text-dark);
+	font-family: var(--cool-font);
+	font-size: inherit;
+	text-align: start;
+	cursor: pointer;
+}
+
+/* The row's own hover marks the whole row, so the button that fills most of
+ * it shows nothing of its own: it keeps the row's surface and its text
+ * colour. */
+.slide-import-source-main:hover {
+	border-color: transparent !important;
+	background-color: transparent !important;
+	color: var(--color-text-dark) !important;
+}
+
+.slide-import-source-icon {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
+.slide-import-source-name {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.slide-import-related-state {
+.slide-import-source.expanded .slide-import-source-name {
+	font-weight: 600;
+}
+
+.slide-import-source[data-state='missing'] .slide-import-source-name,
+.slide-import-source[data-state='noaccess'] .slide-import-source-name {
 	color: var(--color-text-light);
-	flex-shrink: 0;
 }
 
-.slide-import-related-subscribe,
-.slide-import-related-open {
-	margin: 0;
-	min-width: 0;
-	flex-shrink: 0;
+.slide-import-source[data-state='missing'] .slide-import-source-icon,
+.slide-import-source[data-state='noaccess'] .slide-import-source-icon {
+	opacity: 0.5;
 }
 
-.slide-import-related-item[data-state='connected'] .slide-import-related-state {
+/* What the pane says of a source: a dot and a word, in the colour of what it
+ * says. */
+.slide-import-source-badge {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-s);
+	padding: 0 var(--spacing-m);
+	height: 20px;
+	box-sizing: border-box;
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	color: var(--color-status-badge);
+	white-space: nowrap;
+}
+
+.slide-import-source-badge::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--color-status-badge);
+}
+
+.slide-import-source-badge.linked {
 	color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
-.slide-import-related-item[data-state='failed'] .slide-import-related-state,
-.slide-import-related-item[data-state='missing'] .slide-import-related-state {
+.slide-import-source-badge.linked::before {
+	background: var(--color-primary);
+}
+
+.slide-import-source-badge.missing {
 	color: var(--color-error);
+	border-color: var(--color-error);
 }
 
-.slide-import-hint,
+.slide-import-source-badge.missing::before {
+	background: var(--color-error);
+}
+
+.slide-import-source-menu {
+	flex-shrink: 0;
+	width: var(--btn-size-m);
+	height: var(--btn-size-m);
+	padding: 0;
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
+	background: transparent url('images/lc_more.svg') no-repeat center;
+	background-size: 16px 16px;
+	cursor: pointer;
+}
+
+[data-theme='dark'] .slide-import-source-menu {
+	background-image: url('images/dark/lc_more.svg');
+}
+
+/* The pane of a document that has no presentation to import from: what the
+ * pane is for, and the one thing to do about it. */
+.slide-import-empty {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	align-items: center;
+	padding: var(--spacing-xl);
+	box-sizing: border-box;
+}
+
+/* The invitation is a block in the middle of the pane rather than a frame
+ * around all of it, and grows with what it holds. */
+.slide-import-empty-box {
+	flex: 1;
+	min-height: 320px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-l);
+	padding: var(--spacing-xl);
+	box-sizing: border-box;
+	text-align: center;
+	border: 1px dashed var(--color-border);
+	border-radius: var(--border-radius);
+}
+
+.slide-import-empty-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	background: var(--color-background-dark);
+}
+
+.slide-import-empty-icon img {
+	width: 32px;
+	height: 32px;
+}
+
+.slide-import-empty-title {
+	color: var(--color-text-dark);
+	font-size: var(--medium-font-size);
+	font-weight: 600;
+}
+
+.slide-import-empty-text {
+	color: var(--color-text-light);
+}
+
+/* The scrolling frame of source panels, between the source list and the
+ * options. A line across the whole pane marks each end of it: the frame
+ * reaches past the body's padding for them, and puts that padding back
+ * inside so the panels stay where they are. */
+.slide-import-panels {
+	flex: 1;
+	min-height: 0;
+	margin-inline: calc(-1 * var(--spacing-m));
+	padding-inline: var(--spacing-m);
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-width: var(--scrollbar-width);
+	scrollbar-color: var(--scrollbar-color);
+	border-block: 1px solid var(--color-border);
+	background: var(--color-background-lighter);
+}
+
+/* The panel header is a slide section header, so the file and the sections
+ * inside it carry the same chevron and name. The file's own row stands out
+ * by its weight and by the slide count at its end. */
+.slide-import-panel-header.slide-section-header {
+	margin-inline: var(--spacing-m);
+}
+
+.slide-import-panel-header .slide-section-name {
+	font-weight: 600;
+}
+
+.slide-import-panel-count {
+	flex-shrink: 0;
+	margin-inline-start: var(--spacing-m);
+	color: var(--color-text-light);
+	white-space: nowrap;
+}
+
+.slide-import-panel-message {
+	padding: var(--spacing-m);
+	color: var(--color-text-light);
+}
+
+.slide-import-options {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	padding-block-start: var(--spacing-s);
+}
+
 .slide-import-status {
 	color: var(--color-text-light);
 }
@@ -150,6 +420,8 @@
 	padding-inline-start: 18px;
 }
 
+.slide-import-keepdesign:has(input:disabled),
+.slide-import-linksource:has(input:disabled),
 .slide-import-linkposition:has(input:disabled) {
 	opacity: 0.5;
 	cursor: default;
@@ -157,16 +429,42 @@
 
 /* The slides carry the slide navigator's preview classes, so
  * partsPreviewControl.css styles the thumbnails of both panels; the rules
- * here only lay the list out inside the pane. The counter behind the
- * navigator's slide numbers restarts per list. */
+ * here only lay the slides out inside a source's panel. They flow into as
+ * many columns as the pane fits, with the section headers taking a row of
+ * their own. The scrolling is the panel frame's, so a list grows to the
+ * height of its slides. */
 .slide-import-list {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	overflow-y: auto;
-	scrollbar-width: var(--scrollbar-width);
-	scrollbar-color: var(--scrollbar-color);
-	counter-reset: slide-number;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(120px, 100%), 1fr));
+	align-content: start;
+	gap: var(--spacing-m);
+	padding: var(--spacing-m);
+	white-space: normal;
+}
+
+.slide-import-list .slide-section-header {
+	grid-column: 1 / -1;
+}
+
+/* The picture fills its column and keeps the slide's shape, in place of the
+ * fixed width the preview classes give a thumbnail in the navigator's
+ * strip. */
+.slide-import-list .preview-frame {
+	padding: 0;
+	justify-content: stretch;
+}
+
+.slide-import-list .preview-helper,
+.slide-import-list .preview-slide-number {
+	display: none;
+}
+
+.slide-import-list .preview-img {
+	min-width: 0;
+	max-width: none;
+	width: 100%;
+	height: auto;
+	margin: 0;
 }
 
 /* The roving tab stop sits on the frame; it shows on the thumbnail's ring,
@@ -180,14 +478,11 @@
 }
 
 /* The thumbnail picture and its selection checkbox share this box, so the
- * checkbox sits over the picture's corner. In the maximized grid the box
- * takes the full column and the picture keeps filling it. */
+ * checkbox sits over the picture's corner. The box takes the full column and
+ * the picture fills it. */
 .slide-import-thumb {
 	position: relative;
 	display: inline-flex;
-}
-
-.parts-preview-grid .slide-import-thumb {
 	width: 100%;
 }
 
@@ -201,17 +496,12 @@
 	position: absolute;
 	/* The drawn box sits 8px inside the picture's corner: 5px of this
 	 * span's own inset here, 3px more from the before pseudo-element,
-	 * past the picture's 10px strip margin and 3px transparent border. */
+	 * past the picture's 3px transparent border. */
 	inset-block-start: 5px;
-	inset-inline-start: 15px;
+	inset-inline-start: 5px;
 	width: 22px;
 	height: 22px;
 	cursor: pointer;
-}
-
-/* In the grid the picture starts at the box edge (no strip margin). */
-.parts-preview-grid .slide-import-checkbox {
-	inset-inline-start: 5px;
 }
 
 .slide-import-checkbox::before {
@@ -286,11 +576,6 @@
 	max-width: none;
 	margin: 0;
 	font-weight: 600;
-}
-
-.slide-import-insert:disabled {
-	opacity: 0.5;
-	cursor: default;
 }
 
 /* The divider between the two maximized slide grids. It sits on their
