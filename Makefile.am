@@ -1017,7 +1017,7 @@ collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml coolkitconfig.xcu \
 		$(abs_top_srcdir)/scripts/sbom-externals.json \
 		$(abs_top_builddir)/browser/npm-shrinkwrap.json
 	@$(MAKE) $(AM_MAKEFLAGS) -C browser sbom-shipped-js.txt
-	$(QUIET_SBOM) python3 $(abs_top_srcdir)/scripts/create-sbom.py \
+	$(QUIET_SBOM) $(PYTHON) $(abs_top_srcdir)/scripts/create-sbom.py \
 		--srcdir $(abs_top_srcdir) \
 		--builddir $(abs_top_builddir) \
 		--engine-builddir $(ENGINE_BUILDDIR) \
@@ -1028,7 +1028,7 @@ collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml coolkitconfig.xcu \
 # shrinkwrap, and the direct-dependency policy for THIRDPARTYLICENSES.
 sbom-check:
 	@$(MAKE) $(AM_MAKEFLAGS) -C browser sbom-shipped-js.txt
-	python3 $(abs_top_srcdir)/scripts/create-sbom.py \
+	$(PYTHON) $(abs_top_srcdir)/scripts/create-sbom.py \
 		--srcdir $(abs_top_srcdir) \
 		--builddir $(abs_top_builddir) \
 		--engine-builddir $(ENGINE_BUILDDIR) \

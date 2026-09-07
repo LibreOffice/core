@@ -54,7 +54,7 @@ $(L10N_ALL_JS) : $(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*
 		if test -f $(srcdir)/po/help-$$lang.po; then $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(srcdir)/po/help-$$lang.po.json || exit 1; fi; \
 	done
 	@mkdir -p $(dir $@)
-	python3 $(srcdir)/util/create-l10n-all-js.py >$@
+	$(PYTHON) $(srcdir)/util/create-l10n-all-js.py >$@
 	@find $(srcdir)/po -name 'ui-*.po.json' -delete
 	@find $(srcdir)/po -name 'help-*.po.json' -delete
 
@@ -72,7 +72,7 @@ $(SETTINGS_L10N_JS): \
 		$(wildcard $(srcdir)/po/ui-*.po) \
 		$(srcdir)/util/create-settings-l10n-js.py
 	@mkdir -p $(dir $@)
-	python3 $(srcdir)/util/create-settings-l10n-js.py --srcdir $(srcdir) >$@
+	$(PYTHON) $(srcdir)/util/create-settings-l10n-js.py --srcdir $(srcdir) >$@
 endif
 
 QUIET_TSC = $(QUIET_TSC_$(V))
@@ -1127,7 +1127,7 @@ endif
 		cp $(srcdir)/introdocs/introdocs.js $(DIST_FOLDER)/introdocs/introdocs.js ; \
 		for doc in Calc-Intro-Template.ods Impress-Intro-Template.odp ; do \
 			cp $(srcdir)/introdocs/$$doc $(DIST_FOLDER)/introdocs/$$doc && \
-			python3 $(srcdir)/introdocs/create_l10n_intro_docs.py $(srcdir)/introdocs/po $(DIST_FOLDER)/introdocs/$$doc >/dev/null || exit 1 ; \
+			$(PYTHON) $(srcdir)/introdocs/create_l10n_intro_docs.py $(srcdir)/introdocs/po $(DIST_FOLDER)/introdocs/$$doc >/dev/null || exit 1 ; \
 			unzip -p $(DIST_FOLDER)/introdocs/$$doc Thumbnails/thumbnail.png > $(DIST_FOLDER)/introdocs/preview/$${doc%.*}.png 2>/dev/null || echo "  (no embedded thumbnail in $$doc)" ; \
 		done ; \
 	fi

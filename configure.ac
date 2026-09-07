@@ -124,10 +124,19 @@ if test "$external_toolchain_app" != "yes"; then
 fi
 AM_CONDITIONAL([CXX_CLANG], [test "$cxx_clang" = true])
 
+# The Python 3 interpreter for the build scripts. Distributions that
+# install only a versioned binary, such as python3.12 on FreeBSD, can
+# pass PYTHON=... to configure.
+AC_ARG_VAR([PYTHON], [Python 3 interpreter used by the build scripts])
+AC_PATH_PROGS([PYTHON], [python3 python3.14 python3.13 python3.12 python3.11], [no])
+if test "$PYTHON" = "no"; then
+    AC_MSG_ERROR([python3 is needed to build])
+fi
+
 # check for python modules
 for MODULE in lxml polib; do
     AC_MSG_CHECKING([for ${MODULE} for python3])
-    if /usr/bin/env python3 -c "import ${MODULE}" 2> /dev/null ; then
+    if $PYTHON -c "import ${MODULE}" 2> /dev/null ; then
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
