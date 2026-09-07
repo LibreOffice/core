@@ -202,7 +202,8 @@ input, button {
 	display: block;
 }
 
-.activate-info-boxes .accessibility-info-box.filtered_out {
+.activate-info-boxes .accessibility-info-box.filtered_out,
+.activate-info-boxes .accessibility-info-box.scrolled_out {
 	display: none;
 }
 

@@ -178,6 +178,71 @@ describe(['tagdesktop'], 'Impress shapes deck keyboard navigation',
 			});
 		});
 	});
+
+	// The attribute being right is not the same as the key being on screen.
+	it('the accelerator of every gallery is drawn beside it and follows the scroll', function () {
+		function galleryBoxes() {
+			const panel = win.document.querySelector('#DefaultShapesPanel');
+			const boxes = Array.from(
+				win.document.querySelectorAll('.accessibility-info-box'));
+
+			return Array.from(panel.querySelectorAll('.ui-iconview[id]')).map(
+				function (gallery) {
+					const key = gallery.getAttribute('accesskey');
+					return {
+						gallery: gallery,
+						box: boxes.filter(function (box) {
+							return box.textContent === key;
+						})[0]
+					};
+				});
+		}
+
+		cy.then(function () {
+			const a11y = win.app.UI.notebookbarAccessibility;
+			a11y.mayShowAcceleratorInfoBoxes = true;
+			a11y.onDocumentKeyUp({ keyCode: 18 });
+		});
+
+		cy.then(function () {
+			galleryBoxes().forEach(function (pair) {
+				expect(pair.box, 'accelerator drawn for ' + pair.gallery.id).to.exist;
+				expect(Math.round(parseFloat(pair.box.style.top)),
+					'top of the accelerator of ' + pair.gallery.id)
+					.to.equal(Math.round(pair.gallery.getBoundingClientRect().top));
+			});
+		});
+
+		// The deck is taller than the dock, so the last gallery starts below it.
+		cy.then(function () {
+			const dock = win.document.getElementById('sidebar-dock-wrapper');
+			expect(dock.scrollHeight, 'a deck taller than the dock')
+				.to.be.greaterThan(dock.clientHeight);
+
+			const last = galleryBoxes().pop();
+			expect(last.box.classList.contains('scrolled_out'),
+				last.gallery.id + ' is out of sight before scrolling').to.be.true;
+
+			dock.scrollTop = dock.scrollHeight - dock.clientHeight;
+			dock.dispatchEvent(new Event('scroll'));
+		});
+
+		cy.then(function () {
+			const last = galleryBoxes().pop();
+			expect(last.box.classList.contains('scrolled_out'),
+				last.gallery.id + ' is out of sight after scrolling').to.be.false;
+			expect(Math.round(parseFloat(last.box.style.top)),
+				'the accelerator followed ' + last.gallery.id)
+				.to.equal(Math.round(last.gallery.getBoundingClientRect().top));
+		});
+
+		cy.then(function () {
+			const dock = win.document.getElementById('sidebar-dock-wrapper');
+			dock.scrollTop = 0;
+			dock.dispatchEvent(new Event('scroll'));
+		});
+	});
+
 	// The key being drawn is not the same as the key doing something.
 	it('the accelerator of a gallery reaches the gallery', function () {
 		cy.wrap(null, { timeout: 20000 }).should(function () {

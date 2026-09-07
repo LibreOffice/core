@@ -82,6 +82,8 @@ var NotebookbarAccessibilityDefinitions = function() {
 					contentList: [],
 					// The frame around a gallery is named after it, so a prefix finds the frame.
 					exactId: true,
+					// A gallery is a block, not a button: its key belongs by the caption.
+					anchorTop: true,
 					// Reaching a sidebar widget means taking the focus, not opening a tab.
 					focusOnly: true
 				};

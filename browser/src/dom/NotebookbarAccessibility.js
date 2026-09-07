@@ -26,27 +26,75 @@ var NotebookbarAccessibility = function() {
 	this.filteredItem = null;
 	this.state = 0; // 0: User needs to select a tab. 1: User needs to either select an access key of tab content, or navigate by arrow keys.
 
-	this.addInfoBox = function(anchorElement) {
+	this.infoBoxAnchors = [];
+	this.infoBoxScrollParents = [];
+	this.onInfoBoxScroll = null;
+
+	this.getScrollParent = function(element) {
+		for (let node = element.parentElement; node; node = node.parentElement) {
+			const overflow = window.getComputedStyle(node).overflowY;
+			if (node.scrollHeight > node.clientHeight &&
+				(overflow === 'auto' || overflow === 'scroll'))
+				return node;
+		}
+		return null;
+	};
+
+	this.placeInfoBox = function(entry) {
+		const rectangle = entry.anchor.getBoundingClientRect();
+		const clip = entry.scrollParent ?
+			entry.scrollParent.getBoundingClientRect() : null;
+
+		entry.box.classList.toggle('scrolled_out', !!clip &&
+			(rectangle.top < clip.top || rectangle.top > clip.bottom));
+		entry.box.style.top =
+			(entry.anchorTop ? rectangle.top : rectangle.bottom - 5) + 'px';
+		entry.box.style.left = rectangle.left + 'px';
+	};
+
+	this.repositionInfoBoxes = function() {
+		for (let i = 0; i < this.infoBoxAnchors.length; i++)
+			this.placeInfoBox(this.infoBoxAnchors[i]);
+	};
+
+	this.listenToInfoBoxScroll = function(scrollParent) {
+		if (!scrollParent || this.infoBoxScrollParents.indexOf(scrollParent) !== -1)
+			return;
+
+		if (!this.onInfoBoxScroll)
+			this.onInfoBoxScroll = this.repositionInfoBoxes.bind(this);
+
+		this.infoBoxScrollParents.push(scrollParent);
+		scrollParent.addEventListener('scroll', this.onInfoBoxScroll);
+	};
+
+	this.addInfoBox = function(anchorElement, definition) {
 		var visible = anchorElement.id.replace('-button', '');
 		visible = document.querySelector('[id^="' + visible + '"]');
 
 		if (visible)
 			visible = visible.style.display !== 'none';
 
-		if (visible) {
-			var infoBox = document.createElement('div');
-			infoBox.classList.add('accessibility-info-box');
-			infoBox.textContent = anchorElement.accessKey;
-			var rectangle = anchorElement.getBoundingClientRect();
-			infoBox.style.top = (rectangle.bottom - 5) + 'px';
-			infoBox.style.left = rectangle.left + 'px';
-			document.body.appendChild(infoBox);
-
-			return infoBox;
-		}
-		else {
+		if (!visible)
 			return null;
-		}
+
+		const infoBox = document.createElement('div');
+		infoBox.classList.add('accessibility-info-box');
+		infoBox.textContent = anchorElement.accessKey;
+		document.body.appendChild(infoBox);
+
+		const entry = {
+			box: infoBox,
+			anchor: anchorElement,
+			anchorTop: !!(definition && definition.anchorTop),
+			scrollParent: this.getScrollParent(anchorElement)
+		};
+
+		this.infoBoxAnchors.push(entry);
+		this.placeInfoBox(entry);
+		this.listenToInfoBoxScroll(entry.scrollParent);
+
+		return infoBox;
 	};
 
 	this.setupAcceleratorsForCurrentTab = function(id) {
@@ -73,7 +121,8 @@ var NotebookbarAccessibility = function() {
 			var element = document.querySelector('[id^="' + this.activeTabPointers.contentList[i].id + '"]');
 			if (element && element.offsetParent !== null) {
 				element.accessKey = this.activeTabPointers.contentList[i].combination;
-				this.activeTabPointers.infoBoxList.push(this.addInfoBox(element));
+				this.activeTabPointers.infoBoxList.push(
+					this.addInfoBox(element, this.activeTabPointers.contentList[i]));
 			}
 			else if(!element) // element is null
 				console.warn('NotebookbarAccessibility: Element with id ' + this.activeTabPointers.contentList[i].id + ' doesn\'t exist.');
@@ -406,6 +455,12 @@ var NotebookbarAccessibility = function() {
 		for (var i = infoBoxes.length - 1; i > -1; i--) {
 			document.body.removeChild(infoBoxes[i]);
 		}
+
+		for (let i = 0; i < this.infoBoxScrollParents.length; i++)
+			this.infoBoxScrollParents[i].removeEventListener('scroll', this.onInfoBoxScroll);
+
+		this.infoBoxScrollParents = [];
+		this.infoBoxAnchors = [];
 	};
 
 	/// Toolitems carry a counter after their id, so they are found by prefix.
@@ -424,7 +479,7 @@ var NotebookbarAccessibility = function() {
 				var element = this.findDefinitionElement(tabId, this.tabInfoList[tabId]);
 				if (element && element.offsetParent !== null) {
 					element.accessKey = this.tabInfoList[tabId].combination;
-					this.addInfoBox(element);
+					this.addInfoBox(element, this.tabInfoList[tabId]);
 				}
 			}
 		}
