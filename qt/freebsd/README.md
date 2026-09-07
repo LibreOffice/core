@@ -104,6 +104,13 @@ release. Two more things worth knowing for local tests outside poudriere:
   names the ports packages install, so a major bump of a port such as
   liborcus needs the entry updated.
 
+## Releasing
+
+`RELEASE.md` next to this file describes the release process end to end: the
+FreeBSD concepts a reader without background needs, the one-time setup of a
+submission machine with poudriere, the first submission to the FreeBSD ports
+tree, and the routine for later releases.
+
 ## Not done yet
 
 - `distinfo` is generated once the first release tarball is published;
