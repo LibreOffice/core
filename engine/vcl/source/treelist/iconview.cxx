@@ -327,9 +327,15 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
             Size i = pBmpItem->GetBitmap1().GetSizePixel();
             if (pBmpItem)
             {
-                rJsonWriter.put("ondemand", true);
                 rJsonWriter.put("width", i.getWidth());
                 rJsonWriter.put("height", i.getHeight());
+
+                // The client draws a command's icon itself.
+                const OUString* pId = static_cast<const OUString*>(pEntry->GetUserData());
+                if (pId && pId->startsWith(".uno:"))
+                    rJsonWriter.put("command", *pId);
+                else
+                    rJsonWriter.put("ondemand", true);
             }
         }
 

@@ -5659,6 +5659,9 @@ SalInstanceIconView::~SalInstanceIconView()
     m_xIconView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
     m_xIconView->SetSelectHdl(Link<SvTreeListBox*, void>());
     m_xIconView->SetDeselectHdl(Link<SvTreeListBox*, void>());
+
+    for (SvTreeListEntry* pEntry = m_xIconView->First(); pEntry; pEntry = m_xIconView->Next(pEntry))
+        pEntry->SetUserData(nullptr);
 }
 
 IMPL_LINK_NOARG(SalInstanceIconView, SelectHdl, SvTreeListBox*, void)
