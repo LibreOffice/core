@@ -49,13 +49,23 @@ BUILD_DEPENDS=	bash:shells/bash \
 		${LOCALBASE}/include/sqlext.h:databases/unixODBC \
 		${PYTHON_PKGNAMEPREFIX}lxml>0:devel/py-lxml@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}polib>0:devel/py-polib@${PY_FLAVOR}
-LIB_DEPENDS=	libCoinMP.so:math/coinmp \
+# CoinMP links the rest of the COIN-OR stack, and the engine's solver
+# library ends up linked against each of them directly.
+LIB_DEPENDS=	libCgl.so:math/cgl \
+		libClp.so:math/clp \
+		libClpSolver.so:math/clp \
+		libCoinMP.so:math/coinmp \
+		libCoinUtils.so:math/coinutils \
+		libOsi.so:math/osi \
+		libOsiClp.so:math/clp \
 		libZXing.so:textproc/zxing-cpp \
 		libabsl_strings.so:devel/abseil \
 		libabw-0.1.so:textproc/libabw \
 		libboost_date_time.so:devel/boost-libs \
 		libcdr-0.1.so:graphics/libcdr01 \
 		libcmis-0.6.so:net/libcmis \
+		libcoinasl.so:math/asl \
+		libcoinmumps.so:math/coin-or-mumps \
 		libcurl.so:ftp/curl \
 		libe-book-0.1.so:textproc/libe-book \
 		libepubgen-0.1.so:textproc/libepubgen \
