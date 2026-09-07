@@ -37,6 +37,7 @@ BUILD_DEPENDS=	bash:shells/bash \
 		frozen>=1:devel/frozen \
 		gpatch:devel/patch \
 		gperf>=3.1:devel/gperf \
+		libtoolize:devel/libtool \
 		mdds>=3.0:devel/mdds \
 		nasm:devel/nasm \
 		node:www/node \
