@@ -2352,7 +2352,8 @@ bool ChildSession::insertFile(const StringVector& tokens)
         }
         else
         {
-            assert(type == "graphic" || type == "multimedia");
+            assert(type == "graphic" || type == "multimedia" || type == "selectbackground" ||
+                   type == "comparedocuments");
             std::string binaryData;
             macaron::Base64::Decode(data, binaryData);
             url = writeFileToJail(FileUtil::createRandomTmpDir() + '/' + name, binaryData.data(),
