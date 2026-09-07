@@ -41,7 +41,7 @@ function _createEntryImageFromCommand(
 	) as HTMLImageElement;
 
 	img.alt = hasText ? '' : entryData.text || entryData.tooltip || '';
-	if (entryData.tooltip) img.title = entryData.tooltip;
+	_setEntryTooltip(img, builder, entryData);
 	setupSize(entryData, img);
 
 	img.addEventListener(
@@ -63,6 +63,20 @@ function _createEntryImageFromCommand(
 	img.src = app.LOUtil.getImageURL(app.LOUtil.getIconNameOfCommand(command));
 }
 
+/// What the pointer shows on an entry. The placeholder carries it while the
+/// image is on its way, and the image has to keep it once it arrives.
+function _setEntryTooltip(
+	element: HTMLElement,
+	builder: JSBuilder,
+	entryData: IconViewEntry,
+) {
+	const text = entryData.tooltip || entryData.text;
+	if (!text) return;
+
+	element.setAttribute('data-cooltip', text);
+	window.L.control.attachTooltipEventListener(element, builder.map);
+}
+
 function _createEntryImage(
 	parent: HTMLElement,
 	builder: JSBuilder,
@@ -82,6 +96,8 @@ function _createEntryImage(
 	} else {
 		img.alt = '';
 	}
+
+	_setEntryTooltip(img, builder, entryData);
 
 	// FIXME: not beautiful - would be great to know the dimensions
 	// for all of these up-front and do this nicely @ dpiscale for
@@ -194,9 +210,7 @@ function _iconViewEntry(
 		setupSize(entry, placeholder);
 
 		placeholder.innerText = entry.text ? entry.text : '';
-		if (entry.tooltip) placeholder.title = entry.tooltip;
-		else if (entry.text) placeholder.title = entry.text;
-		else placeholder.title = '';
+		_setEntryTooltip(placeholder, builder, entry);
 
 		parentContainer.requestRenders(entry, placeholder, entryContainer);
 	} else {
