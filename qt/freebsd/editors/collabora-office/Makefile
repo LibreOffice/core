@@ -125,6 +125,9 @@ USE_QT=		base tools:build webchannel webengine websockets:build
 
 SHEBANG_GLOB=	*.py
 BINARY_ALIAS=	make=gmake
+# The jail has only the versioned interpreter; the app's configure and
+# makefiles run the one named here.
+CONFIGURE_ENV=	PYTHON=${PYTHON_CMD}
 # The engine refuses to build as root unless it sees a container marker.
 # poudriere builds as root inside a jail.
 MAKE_ENV+=	container=port
