@@ -47,7 +47,7 @@
 #include <osl/detail/component-mapping.h>
 #endif
 
-css::uno::Environment cppuhelper::detail::getEnvironment(
+cpo::uno::Environment cppuhelper::detail::getEnvironment(
     OUString const & name, std::u16string_view implementation)
 {
     OUString n(name);
@@ -64,19 +64,19 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
             }
         }
     }
-    return css::uno::Environment(n);
+    return cpo::uno::Environment(n);
 }
 
 namespace {
 
 #if !defined DISABLE_DYNLOADING
 
-css::uno::Environment getEnvironmentFromModule(
-    osl::Module const & module, css::uno::Environment const & target,
+cpo::uno::Environment getEnvironmentFromModule(
+    osl::Module const & module, cpo::uno::Environment const & target,
     std::u16string_view implementation, OUString const & prefix)
 {
     char const * name = nullptr;
-    css::uno::Environment env;
+    cpo::uno::Environment env;
     OUString fullPrefix(prefix);
     if (!fullPrefix.isEmpty()) {
         fullPrefix += "_";
@@ -118,7 +118,7 @@ extern "C" void getFactory(va_list * args) {
 }
 
 css::uno::Reference<cpo::uno::XInterface> invokeComponentFactory(
-    css::uno::Environment const & source, css::uno::Environment const & target,
+    cpo::uno::Environment const & source, cpo::uno::Environment const & target,
     component_getFactoryFunc function, std::u16string_view uri,
     std::u16string_view implementation,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager)
@@ -183,7 +183,7 @@ extern "C" void getInstance(va_list * args) {
 }
 
 cppuhelper::WrapperConstructorFn mapConstructorFn(
-    css::uno::Environment const & source, css::uno::Environment const & target,
+    cpo::uno::Environment const & source, cpo::uno::Environment const & target,
     cppuhelper::ImplementationConstructorFn *const constructorFunction)
 {
     if (!(source.is() && target.is())) {
@@ -252,8 +252,8 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 #if defined DISABLE_DYNLOADING
     assert(!environment.isEmpty());
     if (constructor.isEmpty()) {
-        css::uno::Environment curEnv(css::uno::Environment::getCurrent());
-        css::uno::Environment env(getEnvironment(environment, implementation));
+        cpo::uno::Environment curEnv(cpo::uno::Environment::getCurrent());
+        cpo::uno::Environment env(getEnvironment(environment, implementation));
         if (!(curEnv.is() && env.is())) {
             throw css::loader::CannotActivateFactoryException(
                 "cannot get environments",
@@ -281,7 +281,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
                 css::uno::Reference<cpo::uno::XInterface>());
         }
         *factory = invokeComponentFactory(
-            css::uno::Environment::getCurrent(),
+            cpo::uno::Environment::getCurrent(),
             getEnvironment(environment, implementation), fp, uri,
             implementation, serviceManager);
     } else {
@@ -325,7 +325,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
                  + uri + ">"),
                 css::uno::Reference<cpo::uno::XInterface>());
         }
-        css::uno::Environment curEnv(css::uno::Environment::getCurrent());
+        cpo::uno::Environment curEnv(cpo::uno::Environment::getCurrent());
         *factory = invokeComponentFactory(
             curEnv,
             (environment.isEmpty()
@@ -342,7 +342,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
                  + "\" in component library <" + uri + ">"),
                 css::uno::Reference<cpo::uno::XInterface>());
         }
-        css::uno::Environment curEnv(css::uno::Environment::getCurrent());
+        cpo::uno::Environment curEnv(cpo::uno::Environment::getCurrent());
         *constructorFunction = mapConstructorFn(
             curEnv,
             (environment.isEmpty()
@@ -397,8 +397,8 @@ void cppu::writeSharedLibComponentInfo(
              + uri + ">"),
             css::uno::Reference<cpo::uno::XInterface>());
     }
-    css::uno::Environment curEnv(css::uno::Environment::getCurrent());
-    css::uno::Environment env(getEnvironmentFromModule(mod, curEnv, u"", u""_ustr));
+    cpo::uno::Environment curEnv(cpo::uno::Environment::getCurrent());
+    cpo::uno::Environment env(getEnvironmentFromModule(mod, curEnv, u"", u""_ustr));
     if (!(curEnv.is() && env.is())) {
         throw css::registry::CannotRegisterImplementationException(
             u"cannot get environments"_ustr,

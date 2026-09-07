@@ -1814,7 +1814,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 #else
     OUString aUri;
     std::unique_lock g(m_aMutex);
-    css::uno::Environment aSourceEnv(css::uno::Environment::getCurrent());
+    cpo::uno::Environment aSourceEnv(cpo::uno::Environment::getCurrent());
 
     std::cerr << "preload:";
     std::vector<OUString> aReported;
@@ -1893,7 +1893,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             !rEntry.second->environment.isEmpty())
         {
             oslGenericFunction fpFactory;
-            css::uno::Environment aTargetEnv;
+            cpo::uno::Environment aTargetEnv;
             css::uno::Reference<cpo::uno::XInterface> xFactory;
 
             if(rEntry.second->constructorName.isEmpty())

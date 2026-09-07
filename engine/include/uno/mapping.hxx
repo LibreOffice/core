@@ -78,7 +78,7 @@ public:
         @param rTo           destination environment
         @param rAddPurpose  additional purpose
     */
-    inline Mapping(const css::uno::Environment & rFrom, const css::uno::Environment & rTo,
+    inline Mapping(const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo,
                    const ::rtl::OUString & rAddPurpose = ::rtl::OUString() );
 
     /** Constructor.
@@ -207,7 +207,7 @@ inline Mapping::Mapping(
 }
 
 inline Mapping::Mapping(
-    const css::uno::Environment & rFrom, const css::uno::Environment & rTo, const ::rtl::OUString & rAddPurpose )
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo, const ::rtl::OUString & rAddPurpose )
         : _pMapping(NULL)
 {
     uno_getMapping( &_pMapping, rFrom.get(), rTo.get(), rAddPurpose.pData );

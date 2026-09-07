@@ -49,7 +49,6 @@
 #include "loadmodule.hxx"
 
 using namespace osl;
-using namespace com::sun::star::uno;
 
 namespace cppu
 {
@@ -184,8 +183,8 @@ struct uno_Mediate_Mapping : public uno_Mapping
 {
     sal_Int32   nRef;
 
-    Environment aFrom;
-    Environment aTo;
+    cpo::uno::Environment aFrom;
+    cpo::uno::Environment aTo;
 
     Mapping     aFrom2Uno;
     Mapping     aUno2To;
@@ -193,7 +192,7 @@ struct uno_Mediate_Mapping : public uno_Mapping
     OUString    aAddPurpose;
 
     uno_Mediate_Mapping(
-        Environment aFrom_, Environment aTo_,
+        cpo::uno::Environment aFrom_, cpo::uno::Environment aTo_,
         Mapping aFrom2Uno_, Mapping aUno2To_,
         OUString aAddPurpose );
 };
@@ -266,7 +265,7 @@ static void mediate_mapInterface(
 }
 
 uno_Mediate_Mapping::uno_Mediate_Mapping(
-    Environment aFrom_, Environment aTo_,
+    cpo::uno::Environment aFrom_, cpo::uno::Environment aTo_,
     Mapping aFrom2Uno_, Mapping aUno2To_,
     OUString aAddPurpose_ )
     : nRef( 1 )
@@ -283,7 +282,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
 
 
 static OUString getMappingName(
-    const Environment & rFrom, const Environment & rTo, std::u16string_view rAddPurpose )
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo, std::u16string_view rAddPurpose )
 {
     return
         OUString::Concat(rAddPurpose)
@@ -299,7 +298,7 @@ static OUString getMappingName(
 }
 
 static OUString getBridgeName(
-    const Environment & rFrom, const Environment & rTo, std::u16string_view rAddPurpose )
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo, std::u16string_view rAddPurpose )
 {
     OUStringBuffer aBridgeName( 16 );
     if (!rAddPurpose.empty())
@@ -383,7 +382,7 @@ static bool loadModule(osl::Module & rModule, const OUString & rBridgeName)
 
 
 static Mapping loadExternalMapping(
-    const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo, const OUString & rAddPurpose )
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
@@ -471,7 +470,7 @@ static Mapping loadExternalMapping(
 
 
 static Mapping getDirectMapping(
-    const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo, const OUString & rAddPurpose = OUString() )
 
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
@@ -496,7 +495,7 @@ static Mapping getDirectMapping(
 
 
 static Mapping createMediateMapping(
-    const Environment & rFrom, const Environment & rTo,
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo,
     const Mapping & rFrom2Uno, const Mapping & rUno2To,
     const OUString & rAddPurpose )
 {
@@ -510,9 +509,9 @@ static Mapping createMediateMapping(
 }
 
 static Mapping getMediateMapping(
-    const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    const cpo::uno::Environment & rFrom, const cpo::uno::Environment & rTo, const OUString & rAddPurpose )
 {
-    Environment aUno;
+    cpo::uno::Environment aUno;
     Mapping aUno2To;
 
     // backwards: from dest to source of mapping chain
@@ -539,7 +538,7 @@ static Mapping getMediateMapping(
     if (!rAddPurpose.isEmpty()) // insert purpose mapping between new ano_uno <-> uno
     {
         // create anonymous uno env
-        Environment aAnUno;
+        cpo::uno::Environment aAnUno;
         ::uno_createEnvironment( reinterpret_cast<uno_Environment **>(&aAnUno), aUnoEnvTypeName.pData, nullptr );
 
         Mapping aAnUno2Uno( getDirectMapping( aAnUno, aUno, rAddPurpose ) );
@@ -590,7 +589,7 @@ void uno_getMapping(
     }
 
     Mapping aRet;
-    Environment aFrom( pFrom ), aTo( pTo );
+    cpo::uno::Environment aFrom( pFrom ), aTo( pTo );
 
     OUString aAddPurpose;
     if (pAddPurpose)

@@ -32,8 +32,8 @@ class Proxy : public uno_Interface
 {
     oslInterlockedCount                 m_nRef;
 
-    css::uno::Environment                   m_from;
-    css::uno::Environment                   m_to;
+    cpo::uno::Environment                   m_from;
+    cpo::uno::Environment                   m_to;
 
     cpo::uno::Mapping                       m_from_to;
     cpo::uno::Mapping                       m_to_from;

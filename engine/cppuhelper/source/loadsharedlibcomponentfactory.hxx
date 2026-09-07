@@ -17,15 +17,13 @@
 
 namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
-    namespace uno {
-        class Environment;
-    }
 }
+namespace cpo::uno { class Environment; }
 namespace cpo::uno { class XInterface; }
 
 namespace cppuhelper::detail {
 
-css::uno::Environment getEnvironment(
+cpo::uno::Environment getEnvironment(
     OUString const & name, std::u16string_view implementation);
 
 void loadSharedLibComponentFactory(

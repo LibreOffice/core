@@ -366,7 +366,7 @@ int uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason) noex
     {
         OUString envDcp = UNO_LB_UNO + cppu::EnvDcp::getPurpose(pEnv->pTypeName);
 
-        uno::Environment env(envDcp);
+        cpo::uno::Environment env(envDcp);
 
         result = env.isValid(reinterpret_cast<OUString *>(pReason));
     }

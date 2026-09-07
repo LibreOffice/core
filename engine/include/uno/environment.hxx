@@ -30,7 +30,7 @@
 
 #include "uno/lbnames.h"
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** C++ wrapper for binary C uno_Environment.

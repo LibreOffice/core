@@ -33,8 +33,8 @@ namespace {
 
 class Mapping : public uno_Mapping
 {
-    uno::Environment   m_from;
-    uno::Environment   m_to;
+    cpo::uno::Environment   m_from;
+    cpo::uno::Environment   m_to;
 
     oslInterlockedCount m_nCount;
 

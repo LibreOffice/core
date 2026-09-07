@@ -113,9 +113,9 @@ cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:36
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:37
     (anonymous namespace)::Mapping m_to uno::Environment
 cppu/source/helper/purpenv/Proxy.hxx:35
-    Proxy m_from css::uno::Environment
+    Proxy m_from cpo::uno::Environment
 cppu/source/helper/purpenv/Proxy.hxx:36
-    Proxy m_to css::uno::Environment
+    Proxy m_to cpo::uno::Environment
 cppu/source/uno/cascade_mapping.cxx:43
     (anonymous namespace)::MediatorMapping m_from uno::Environment
 cppu/source/uno/cascade_mapping.cxx:44

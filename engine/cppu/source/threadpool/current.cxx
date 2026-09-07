@@ -165,12 +165,12 @@ extern "C" bool uno_getCurrentContext(
 {
     IdContainer& id = getIdContainer();
 
-    Environment target_env;
+    cpo::uno::Environment target_env;
 
     // release inout parameter
     if (*ppCurrentContext)
     {
-        target_env = Environment(OUString(pEnvTypeName), pEnvContext);
+        target_env = cpo::uno::Environment(OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return false;
@@ -189,7 +189,7 @@ extern "C" bool uno_getCurrentContext(
 
     if (! target_env.is())
     {
-        target_env = Environment(OUString(pEnvTypeName), pEnvContext);
+        target_env = cpo::uno::Environment(OUString(pEnvTypeName), pEnvContext);
         OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return false;

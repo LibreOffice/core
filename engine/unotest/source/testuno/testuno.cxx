@@ -1509,12 +1509,12 @@ private:
             throw css::lang::IllegalArgumentException(u"BridgeTest execute args not empty"_ustr, {},
                                                       0);
         }
-        auto const envCppOrig = css::uno::Environment::getCurrent();
-        css::uno::Environment envUno;
+        auto const envCppOrig = cpo::uno::Environment::getCurrent();
+        cpo::uno::Environment envUno;
         uno_createEnvironment(reinterpret_cast<uno_Environment**>(&envUno),
                               u"" UNO_LB_UNO ""_ustr.pData, nullptr);
         cpo::uno::Mapping cpp2uno(envCppOrig.get(), envUno.get());
-        css::uno::Environment envCpp;
+        cpo::uno::Environment envCpp;
         if (!cpp2uno.is())
         {
             throw cpo::uno::RuntimeException(u"cannot get C++ to UNO mapping"_ustr);

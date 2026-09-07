@@ -80,7 +80,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         oslGenericFunction pSym = lib.getFunctionSymbol(COMPONENT_GETENV);
         if (pSym)
         {
-            Environment java_env, loader_env;
+            cpo::uno::Environment java_env, loader_env;
 
             const char * pEnvTypeName = nullptr;
             (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
@@ -169,7 +169,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
         oslGenericFunction pSym = lib.getFunctionSymbol(COMPONENT_GETENV);
         if (pSym)
         {
-            Environment java_env, loader_env;
+            cpo::uno::Environment java_env, loader_env;
 
             const char * pEnvTypeName = nullptr;
             (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(

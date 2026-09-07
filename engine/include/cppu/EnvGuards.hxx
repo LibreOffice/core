@@ -32,14 +32,14 @@ namespace cppu
     */
     class EnvGuard
     {
-        css::uno::Environment m_env;
+        cpo::uno::Environment m_env;
 
     public:
-        explicit EnvGuard(css::uno::Environment const & env)
+        explicit EnvGuard(cpo::uno::Environment const & env)
         {
             if (env.is())
             {
-                m_env = css::uno::Environment::getCurrent();
+                m_env = cpo::uno::Environment::getCurrent();
                 env.enter();
             }
         }
@@ -78,11 +78,11 @@ namespace cppu
     */
     class AntiEnvGuard
     {
-        css::uno::Environment m_env;
+        cpo::uno::Environment m_env;
 
     public:
         explicit AntiEnvGuard()
-            : m_env(css::uno::Environment::getCurrent())
+            : m_env(cpo::uno::Environment::getCurrent())
         {
             uno_Environment_enter(NULL);
         }

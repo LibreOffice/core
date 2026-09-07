@@ -236,7 +236,7 @@ private:
         connection_;
     css::uno::Reference< css::bridge::XInstanceProvider >
         provider_;
-    css::uno::Environment binaryUno_;
+    cpo::uno::Environment binaryUno_;
     cpo::uno::Mapping cppToBinaryMapping_;
     cpo::uno::Mapping binaryToCppMapping_;
     rtl::ByteSequence protPropTid_;

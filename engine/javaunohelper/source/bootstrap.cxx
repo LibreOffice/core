@@ -133,7 +133,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         // get uno envs
         OUString cpp_env_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
         OUString java_env_name = u"" UNO_LB_JAVA ""_ustr;
-        Environment java_env, cpp_env;
+        cpo::uno::Environment java_env, cpp_env;
         uno_getEnvironment(reinterpret_cast<uno_Environment **>(&cpp_env), cpp_env_name.pData, nullptr);
         uno_getEnvironment(reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 

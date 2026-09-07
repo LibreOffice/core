@@ -638,8 +638,8 @@ void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 bool installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
 {
-    uno::Environment curr_env(Environment::getCurrent());
-    uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+    cpo::uno::Environment curr_env(Environment::getCurrent());
+    cpo::uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 
     cpo::uno::Mapping curr2target(curr_env, target_env);
 

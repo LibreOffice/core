@@ -21,11 +21,11 @@
 
 #include <uno/mapping.h>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Environment;
 }
 
-uno_Mapping* createIdentityMapping(const css::uno::Environment& rEnv);
+uno_Mapping* createIdentityMapping(const cpo::uno::Environment& rEnv);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

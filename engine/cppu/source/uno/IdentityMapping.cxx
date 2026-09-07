@@ -34,9 +34,9 @@ namespace {
 struct IdentityMapping : public uno_Mapping
 {
     sal_Int32        m_nRef;
-    uno::Environment m_env;
+    cpo::uno::Environment m_env;
 
-    explicit IdentityMapping(uno::Environment aEnv);
+    explicit IdentityMapping(cpo::uno::Environment aEnv);
 };
 
 }
@@ -87,7 +87,7 @@ static void s_mapInterface(uno_Mapping                       * pMapping,
 }
 
 
-IdentityMapping::IdentityMapping(uno::Environment aEnv)
+IdentityMapping::IdentityMapping(cpo::uno::Environment aEnv)
     : m_nRef(0),
       m_env(std::move(aEnv))
 {
@@ -97,7 +97,7 @@ IdentityMapping::IdentityMapping(uno::Environment aEnv)
 }
 
 
-uno_Mapping * createIdentityMapping(uno::Environment const & rEnv)
+uno_Mapping * createIdentityMapping(cpo::uno::Environment const & rEnv)
 {
     return new IdentityMapping(rEnv);
 }
