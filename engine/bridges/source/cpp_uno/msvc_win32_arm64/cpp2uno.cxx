@@ -267,7 +267,7 @@ extern "C" void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, sal_
                         &td, (reinterpret_cast<cpo::uno::Type*>(gpr[2])->getTypeLibType()));
                     if (td != 0 && td->eTypeClass == typelib_TypeClass_INTERFACE)
                     {
-                        uno::XInterface* ifc = nullptr;
+                        cpo::uno::XInterface* ifc = nullptr;
                         proxy->getBridge()->getCppEnv()->getRegisteredInterface(
                             proxy->getBridge()->getCppEnv(), reinterpret_cast<void**>(&ifc),
                             proxy->getOid().pData,
