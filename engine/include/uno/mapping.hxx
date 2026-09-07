@@ -38,7 +38,7 @@ typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Interface uno_Interface;
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** C++ wrapper for C uno_Mapping.
@@ -78,7 +78,7 @@ public:
         @param rTo           destination environment
         @param rAddPurpose  additional purpose
     */
-    inline Mapping(const Environment & rFrom, const Environment & rTo,
+    inline Mapping(const css::uno::Environment & rFrom, const css::uno::Environment & rTo,
                    const ::rtl::OUString & rAddPurpose = ::rtl::OUString() );
 
     /** Constructor.
@@ -207,7 +207,7 @@ inline Mapping::Mapping(
 }
 
 inline Mapping::Mapping(
-    const Environment & rFrom, const Environment & rTo, const ::rtl::OUString & rAddPurpose )
+    const css::uno::Environment & rFrom, const css::uno::Environment & rTo, const ::rtl::OUString & rAddPurpose )
         : _pMapping(NULL)
 {
     uno_getMapping( &_pMapping, rFrom.get(), rTo.get(), rAddPurpose.pData );

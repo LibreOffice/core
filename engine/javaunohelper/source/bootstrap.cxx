@@ -138,7 +138,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         uno_getEnvironment(reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
         // map to java
-        Mapping mapping( cpp_env.get(), java_env.get() );
+        cpo::uno::Mapping mapping( cpp_env.get(), java_env.get() );
         if (! mapping.is())
         {
             Reference< lang::XComponent > xComp( xContext, UNO_QUERY );

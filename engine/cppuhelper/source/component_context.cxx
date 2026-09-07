@@ -516,7 +516,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
     sal_Int32                  nEntries     = va_arg(*pParam, sal_Int32);
     XComponentContext        * pDelegatee   = va_arg(*pParam, XComponentContext *);
     void                    ** ppContext    = va_arg(*pParam, void **);
-    uno::Mapping             * pTarget2curr = va_arg(*pParam, uno::Mapping *);
+    cpo::uno::Mapping        * pTarget2curr = va_arg(*pParam, cpo::uno::Mapping *);
 
     Reference<XComponentContext> xDelegate(pDelegatee, SAL_NO_ACQUIRE);
     Reference<XComponentContext> xContext;
@@ -551,8 +551,8 @@ Reference< XComponentContext > createComponentContext(
     uno::Environment curr_env(Environment::getCurrent());
     uno::Environment source_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 
-    uno::Mapping curr2source(curr_env, source_env);
-    uno::Mapping source2curr(source_env, curr_env);
+    cpo::uno::Mapping curr2source(curr_env, source_env);
+    cpo::uno::Mapping source2curr(source_env, curr_env);
 
     std::unique_ptr<ContextEntry_Init[]> mapped_entries(new ContextEntry_Init[nEntries]);
     for (sal_Int32 nPos = 0; nPos < nEntries; ++ nPos)

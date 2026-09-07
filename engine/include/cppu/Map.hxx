@@ -37,7 +37,7 @@ namespace cppu
      */
     template<class T> inline T * mapOut(T * pT, css::uno::Environment const & outerEnv)
     {
-        css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
+        cpo::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
         return reinterpret_cast<T *>(curr2outer.mapInterface(pT, cppu::UnoType<T>::get()));
     }
@@ -51,7 +51,7 @@ namespace cppu
      */
     template<class T> inline T * mapIn(T * pT, css::uno::Environment const & outerEnv)
     {
-        css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
+        cpo::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 
         return reinterpret_cast<T *>(outer2curr.mapInterface(pT, cppu::UnoType<T>::get()));
     }
@@ -66,7 +66,7 @@ namespace cppu
     // Problem: any gets assigned to something, acquire/releases may be called in wrong env.
     inline void mapOutAny(cpo::uno::Any const & any, cpo::uno::Any * res, css::uno::Environment const & outerEnv)
     {
-        css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
+        cpo::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
         uno_any_destruct(res, cpo::uno::cpp_release);
         uno_type_any_constructAndConvert(
@@ -85,7 +85,7 @@ namespace cppu
      */
     inline void mapInAny(cpo::uno::Any const & any, cpo::uno::Any * res, css::uno::Environment const & outerEnv)
     {
-        css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
+        cpo::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 
         uno_any_destruct(res, cpo::uno::cpp_release);
         uno_type_any_constructAndConvert(

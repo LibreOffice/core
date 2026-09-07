@@ -1513,7 +1513,7 @@ private:
         css::uno::Environment envUno;
         uno_createEnvironment(reinterpret_cast<uno_Environment**>(&envUno),
                               u"" UNO_LB_UNO ""_ustr.pData, nullptr);
-        css::uno::Mapping cpp2uno(envCppOrig.get(), envUno.get());
+        cpo::uno::Mapping cpp2uno(envCppOrig.get(), envUno.get());
         css::uno::Environment envCpp;
         if (!cpp2uno.is())
         {
@@ -1521,7 +1521,7 @@ private:
         }
         uno_createEnvironment(reinterpret_cast<uno_Environment**>(&envCpp),
                               envCppOrig.getTypeName().pData, nullptr);
-        css::uno::Mapping uno2cpp(envUno.get(), envCpp.get());
+        cpo::uno::Mapping uno2cpp(envUno.get(), envCpp.get());
         if (!uno2cpp.is())
         {
             throw cpo::uno::RuntimeException(u"cannot get UNO to C++ mapping"_ustr);

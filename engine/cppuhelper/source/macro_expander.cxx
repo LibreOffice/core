@@ -145,7 +145,7 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
     uno::Environment curr_env(Environment::getCurrent());
     uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 
-    uno::Mapping target2curr(target_env, curr_env);
+    cpo::uno::Mapping target2curr(target_env, curr_env);
 
     return Reference<lang::XSingleComponentFactory>(
         static_cast<lang::XSingleComponentFactory *>(

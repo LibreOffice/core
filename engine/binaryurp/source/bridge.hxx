@@ -86,7 +86,7 @@ public:
     const css::uno::Reference< css::bridge::XInstanceProvider >&
     getProvider() const { return provider_;}
 
-    css::uno::Mapping & getCppToBinaryMapping() { return cppToBinaryMapping_;}
+    cpo::uno::Mapping & getCppToBinaryMapping() { return cppToBinaryMapping_;}
 
     BinaryAny mapCppToBinaryAny(cpo::uno::Any const & cppAny);
 
@@ -237,8 +237,8 @@ private:
     css::uno::Reference< css::bridge::XInstanceProvider >
         provider_;
     css::uno::Environment binaryUno_;
-    css::uno::Mapping cppToBinaryMapping_;
-    css::uno::Mapping binaryToCppMapping_;
+    cpo::uno::Mapping cppToBinaryMapping_;
+    cpo::uno::Mapping binaryToCppMapping_;
     rtl::ByteSequence protPropTid_;
     OUString protPropOid_;
     cpo::uno::TypeDescription protPropType_;

@@ -37,8 +37,8 @@ class MediatorMapping : public uno_Mapping
 {
     oslInterlockedCount m_refCount;
 
-    uno::Mapping        m_from2uno;
-    uno::Mapping        m_uno2to;
+    cpo::uno::Mapping   m_from2uno;
+    cpo::uno::Mapping   m_uno2to;
 
     uno::Environment    m_from;
     uno::Environment    m_interm;

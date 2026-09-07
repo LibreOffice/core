@@ -103,7 +103,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             {
                 if (loader_env.is() && java_env.is())
                 {
-                    Mapping java2dest(java_env.get(), loader_env.get());
+                    cpo::uno::Mapping java2dest(java_env.get(), loader_env.get());
 
                     if ( java2dest.is() )
                     {
@@ -193,8 +193,8 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             {
                 if (loader_env.is() && java_env.is())
                 {
-                    Mapping java2dest( java_env.get(), loader_env.get() );
-                    Mapping dest2java( loader_env.get(), java_env.get() );
+                    cpo::uno::Mapping java2dest( java_env.get(), loader_env.get() );
+                    cpo::uno::Mapping dest2java( loader_env.get(), java_env.get() );
 
                     if (dest2java.is() && java2dest.is())
                     {

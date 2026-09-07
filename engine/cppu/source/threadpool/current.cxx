@@ -195,7 +195,7 @@ extern "C" bool uno_getCurrentContext(
             return false;
     }
 
-    Mapping mapping(&id.pCurrentContextEnv->aBase, target_env.get());
+    cpo::uno::Mapping mapping(&id.pCurrentContextEnv->aBase, target_env.get());
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
         return false;

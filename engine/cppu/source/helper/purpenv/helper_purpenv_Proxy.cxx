@@ -188,7 +188,7 @@ static void s_acquireAndRegister_v(va_list * pParam)
 }
 }
 
-Proxy::Proxy(uno::Mapping                          to_from,
+Proxy::Proxy(cpo::uno::Mapping                     to_from,
              uno_Environment                     * pTo,
              uno_Environment                     * pFrom,
              uno_Interface                       * pUnoI,

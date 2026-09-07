@@ -2004,10 +2004,10 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         { u"uno"_ustr,  u"gcc3"_ustr, u""_ustr },
     };
 
-    static std::vector<css::uno::Mapping> maMaps;
+    static std::vector<cpo::uno::Mapping> maMaps;
     for (auto &it : aMappingLoad)
     {
-        maMaps.push_back(css::uno::Mapping(it.maFrom, it.maTo, it.maPurpose));
+        maMaps.push_back(cpo::uno::Mapping(it.maFrom, it.maTo, it.maPurpose));
     }
 #endif
 }

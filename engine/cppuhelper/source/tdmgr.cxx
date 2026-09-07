@@ -626,7 +626,7 @@ bool installTypeDescriptionManager(
     uno::Environment curr_env(Environment::getCurrent());
     uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 
-    uno::Mapping curr2target(curr_env, target_env);
+    cpo::uno::Mapping curr2target(curr_env, target_env);
 
 
     Reference<container::XHierarchicalNameAccess> xTDMgr(

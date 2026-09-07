@@ -84,16 +84,16 @@ class IdlReflectionServiceImpl
     // caching
     LRU_CacheAnyByOUString                  _aElements;
 
-    css::uno::Mapping                     _aCpp2Uno;
-    css::uno::Mapping                     _aUno2Cpp;
+    cpo::uno::Mapping                     _aCpp2Uno;
+    cpo::uno::Mapping                     _aUno2Cpp;
 
     inline css::uno::Reference< css::reflection::XIdlClass > constructClass( typelib_TypeDescription * pTypeDescr );
 
 public:
     /// @throws cpo::uno::RuntimeException
-    const css::uno::Mapping & getCpp2Uno();
+    const cpo::uno::Mapping & getCpp2Uno();
     /// @throws cpo::uno::RuntimeException
-    const css::uno::Mapping & getUno2Cpp();
+    const cpo::uno::Mapping & getUno2Cpp();
     /// @throws cpo::uno::RuntimeException
     uno_Interface * mapToUno( const cpo::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo );
 

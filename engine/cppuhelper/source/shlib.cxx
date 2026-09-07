@@ -136,8 +136,8 @@ css::uno::Reference<cpo::uno::XInterface> invokeComponentFactory(
                 (*function)(impl.getStr(), serviceManager.get(), nullptr)),
             SAL_NO_ACQUIRE);
     }
-    css::uno::Mapping mapTo(source, target);
-    css::uno::Mapping mapFrom(target, source);
+    cpo::uno::Mapping mapTo(source, target);
+    cpo::uno::Mapping mapFrom(target, source);
     if (!(mapTo.is() && mapFrom.is())) {
         throw css::loader::CannotActivateFactoryException(
             u"cannot get mappings"_ustr,
@@ -197,8 +197,8 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
     // note: it should be valid to capture these mappings because they are
     // ref-counted, and the returned closure will always be invoked in the
     // "source" environment
-    css::uno::Mapping mapTo(source, target);
-    css::uno::Mapping mapFrom(target, source);
+    cpo::uno::Mapping mapTo(source, target);
+    cpo::uno::Mapping mapFrom(target, source);
     if (!(mapTo.is() && mapFrom.is())) {
         throw css::loader::CannotActivateFactoryException(
             u"cannot get mappings"_ustr,
@@ -404,7 +404,7 @@ void cppu::writeSharedLibComponentInfo(
             u"cannot get environments"_ustr,
             css::uno::Reference<cpo::uno::XInterface>());
     }
-    css::uno::Mapping map(curEnv, env);
+    cpo::uno::Mapping map(curEnv, env);
     if (!map.is()) {
         throw css::registry::CannotRegisterImplementationException(
             u"cannot get mapping"_ustr, css::uno::Reference<cpo::uno::XInterface>());
