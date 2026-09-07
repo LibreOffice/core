@@ -30,44 +30,41 @@ LICENSE=	MPL20
 ONLY_FOR_ARCHS=	aarch64 amd64
 
 # clucene is only checked by configure; nothing links it while help is disabled
-BUILD_DEPENDS=	bash:shells/bash \
-		cppunit-config:devel/cppunit \
+BUILD_DEPENDS=	${LOCALBASE}/include/glm/glm.hpp:math/glm \
+		${LOCALBASE}/include/sane/sane.h:graphics/sane-backends \
+		${LOCALBASE}/include/sqlext.h:databases/unixODBC \
 		${LOCALBASE}/libdata/pkgconfig/libclucene-core.pc:textproc/clucene \
+		${PYTHON_PKGNAMEPREFIX}lxml>0:devel/py-lxml@${PY_FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}polib>0:devel/py-polib@${PY_FLAVOR} \
+		bash:shells/bash \
+		cppunit-config:devel/cppunit \
 		fast_float>=0:math/fast_float \
 		frozen>=1:devel/frozen \
 		gpatch:devel/patch \
 		gperf>=3.1:devel/gperf \
-		libtoolize:devel/libtool \
+		libtool>0:devel/libtool \
 		mdds>=3.0:devel/mdds \
 		nasm:devel/nasm \
 		node:www/node \
 		npm:www/npm \
 		rsync:net/rsync \
-		zip:archivers/zip \
-		${LOCALBASE}/include/glm/glm.hpp:math/glm \
-		${LOCALBASE}/include/sane/sane.h:graphics/sane-backends \
-		${LOCALBASE}/include/sqlext.h:databases/unixODBC \
-		${PYTHON_PKGNAMEPREFIX}lxml>0:devel/py-lxml@${PY_FLAVOR} \
-		${PYTHON_PKGNAMEPREFIX}polib>0:devel/py-polib@${PY_FLAVOR}
+		zip:archivers/zip
 # CoinMP links the rest of the COIN-OR stack, and the engine's solver
 # library ends up linked against each of them directly.
-LIB_DEPENDS=	libCbc.so:math/cbc \
+LIB_DEPENDS=	libabsl_strings.so:devel/abseil \
+		libabw-0.1.so:textproc/libabw \
+		libboost_date_time.so:devel/boost-libs \
+		libCbc.so:math/cbc \
 		libCbcSolver.so:math/cbc \
+		libcdr-0.1.so:graphics/libcdr01 \
 		libCgl.so:math/cgl \
 		libClp.so:math/clp \
 		libClpSolver.so:math/clp \
-		libCoinMP.so:math/coinmp \
-		libCoinUtils.so:math/coinutils \
-		libOsi.so:math/osi \
-		libOsiClp.so:math/clp \
-		libZXing.so:textproc/zxing-cpp \
-		libabsl_strings.so:devel/abseil \
-		libabw-0.1.so:textproc/libabw \
-		libboost_date_time.so:devel/boost-libs \
-		libcdr-0.1.so:graphics/libcdr01 \
 		libcmis-0.6.so:net/libcmis \
 		libcoinasl.so:math/asl \
+		libCoinMP.so:math/coinmp \
 		libcoinmumps.so:math/coin-or-mumps \
+		libCoinUtils.so:math/coinutils \
 		libcurl.so:ftp/curl \
 		libe-book-0.1.so:textproc/libe-book \
 		libepubgen-0.1.so:textproc/libepubgen \
@@ -98,6 +95,8 @@ LIB_DEPENDS=	libCbc.so:math/cbc \
 		libopenblas.so:math/openblas \
 		libopenjp2.so:graphics/openjpeg \
 		liborcus-0.21.so:devel/liborcus \
+		libOsi.so:math/osi \
+		libOsiClp.so:math/clp \
 		libpagemaker-0.0.so:print/libpagemaker \
 		libplc4.so:devel/nspr \
 		libplds4.so:devel/nspr \
@@ -115,7 +114,8 @@ LIB_DEPENDS=	libCbc.so:math/cbc \
 		libwps-0.4.so:textproc/libwps \
 		libxmlsec1-nss.so:security/xmlsec1 \
 		libzmf-0.0.so:graphics/libzmf \
-		libzstd.so:archivers/zstd
+		libzstd.so:archivers/zstd \
+		libZXing.so:textproc/zxing-cpp
 
 # The engine is built without its bundled fonts; these packages provide the
 # families documents most often expect.
@@ -139,16 +139,17 @@ USES=		autoreconf:build bison compiler:c++20-lang desktop-file-utils \
 		pkgconfig python qt:6 shebangfix ssl tar:xz
 USE_GNOME=	libxml2 libxslt
 # configure checks for Qt WebSockets, but the app does not end up linked to it
-USE_QT=		base tools:build webchannel webengine websockets:build
+USE_QT=		base webchannel webengine tools:build websockets:build
 
 SHEBANG_GLOB=	*.py
-BINARY_ALIAS=	make=gmake
 # The jail has only the versioned interpreter; the app's configure and
 # makefiles run the one named here.
 CONFIGURE_ENV=	PYTHON=${PYTHON_CMD}
 # The engine refuses to build as root unless it sees a container marker.
 # poudriere builds as root inside a jail.
 MAKE_ENV+=	container=port
+
+BINARY_ALIAS=	make=gmake
 
 BRAND_VERSION=	26.04.2.3
 BRAND_WRKSRC=	${WRKDIR}/collabora-office-brand
@@ -157,34 +158,26 @@ ENGINE_WRKSRC=	${WRKSRC}/engine
 # which is what the app is configured with as --with-lo-path.
 LO_PATH=	${PREFIX}/lib/collaboraoffice
 
-ENGINE_CONFIGURE_ARGS=	--with-distro=CPFreeBSDQt \
-			--prefix=${PREFIX} \
+ENGINE_CONFIGURE_ARGS=	--with-distro=CPFreeBSDQt --prefix=${PREFIX} \
 			--with-external-tar=${DISTDIR}/${DIST_SUBDIR} \
 			--disable-fetch-external \
 			--with-parallelism=${MAKE_JOBS_NUMBER} \
 			--with-os-version=${OSVERSION}
 
-APP_CONFIGURE_ARGS=	--prefix=${PREFIX} \
-			--enable-qtapp \
+APP_CONFIGURE_ARGS=	--prefix=${PREFIX} --enable-qtapp \
 			--with-lo-path=${LO_PATH} \
 			--with-lokit-path=${ENGINE_WRKSRC}/include \
 			--with-lo-builddir=${ENGINE_WRKSRC} \
 			--with-vendor="Collabora Productivity Limited" \
 			--with-app-name="Collabora Office" \
 			--with-info-url=https://collaboraoffice.com/ \
-			--with-app-branding=${BRAND_WRKSRC} \
-			MAKE=${MAKE_CMD}
+			--with-app-branding=${BRAND_WRKSRC} MAKE=${MAKE_CMD}
 
-ENGINE_SRC_TARBALLS=	afdko-5.0.1.tar.gz \
-			antlr4-cpp-runtime-4.13.2-source.zip \
-			cairo-1.18.4.tar.xz \
-			dragonbox-1.1.3.tar.gz \
-			libjpeg-turbo-3.1.3.tar.gz \
-			meson-1.8.3.tar.gz \
-			pdfium-7988.tar.bz2 \
-			phc-winner-argon2-20190702.tar.gz \
-			pixman-0.46.4.tar.xz \
-			quickjs-v0.14.0.tar.gz \
+ENGINE_SRC_TARBALLS=	afdko-5.0.1.tar.gz antlr4-cpp-runtime-4.13.2-source.zip \
+			cairo-1.18.4.tar.xz dragonbox-1.1.3.tar.gz \
+			libjpeg-turbo-3.1.3.tar.gz meson-1.8.3.tar.gz \
+			pdfium-7988.tar.bz2 phc-winner-argon2-20190702.tar.gz \
+			pixman-0.46.4.tar.xz quickjs-v0.14.0.tar.gz \
 			zxcvbn-c-2.6.tar.gz
 
 do-configure:
