@@ -1707,6 +1707,17 @@ img.ui-combobox-value-preview {
 	width: 100%;
 }
 
+/* The minimum above is meant for the value a box shows. A combobox spends part of its
+   width on the dropdown button, so it carries that minimum on its text field and the
+   button adds its own width on top of it. */
+.jsdialog-window .ui-combobox {
+	min-width: auto;
+}
+
+.jsdialog-window .ui-combobox-content {
+	min-width: 50px;
+}
+
 .jsdialog .ui-combobox {
 	line-height: 22px;
 }
