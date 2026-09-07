@@ -155,7 +155,7 @@ type ExtensionNotebookbarItem =
 	| ExtensionNotebookbarSeparator
 	| ExtensionNotebookbarMenu;
 
-// A labeled cluster of notebookbar items, corresponding to one ribbon group
+// A labeled cluster of notebookbar items, corresponding to one built-in group
 // (e.g. Writer's "Clipboard" or "Font" group).  `label` is the caption shown
 // under the group; `id` only identifies the group in a console warning about
 // one of its own items (an unknown command or item type) - it does not need
@@ -171,12 +171,12 @@ interface ExtensionNotebookbarGroup {
 // `menus` maps an existing top-level menu id (the `id` field already used in
 // each doc type's static menu array in Control.Menubar.ts, e.g. 'insert') to
 // the command ids appended to the end of that menu.  `notebookbar` is a list
-// of brand-new tabs the extension adds to the ribbon; each names its own
-// `tab` label, positions itself relative to an existing tab via
+// of brand-new tabs the extension adds to the notebookbar; each names its
+// own `tab` label, positions itself relative to an existing tab via
 // `insertBefore`/`insertAfter` (mutually exclusive; omitting both appends it
 // at the end), and lays out its own content as `groups` of the three item
 // kinds above - not raw notebookbar item JSON, so an extension can't place
-// arbitrary layout into the ribbon.
+// arbitrary layout into the notebookbar.
 interface ExtensionNotebookbarTab {
 	tab: string;
 	insertBefore?: string;

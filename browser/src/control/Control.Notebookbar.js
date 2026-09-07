@@ -514,7 +514,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	// the page array from its getTabsJSON()) into arr, positioned by matching
 	// insertBefore/insertAfter against an existing entry's `name` (both label objects
 	// and, since getTabPage now tags its return value with `name` too, tabpage objects
-	// carry one), defaulting to the end of the ribbon when neither is given or the
+	// carry one), defaulting to the end of the notebookbar when neither is given or the
 	// named anchor isn't found.  buildEntry turns one descriptor into whichever shape
 	// this particular array needs.  The caller decides which of the two tab-list
 	// getters to call - taking the already-built list as a parameter, rather than this
@@ -525,9 +525,10 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	// `validate`, when true, warns about the manifest-authoring mistakes this function
 	// can actually detect - a contributed tab name colliding with an existing tab, both
 	// insertBefore and insertAfter set on the same tab (insertBefore silently wins), or
-	// either one naming a tab that doesn't exist (silently falls back to the end of the
-	// ribbon).  Pass true from exactly one of the two calls per doc type (getTabsJSON's)
-	// so a misconfigured tab is reported once per rebuild, not twice.
+	// either one naming a tab that doesn't exist (silently falls back to the end
+	// of the notebookbar).  Pass true from exactly one of the two calls per doc
+	// type (getTabsJSON's) so a misconfigured tab is reported once per rebuild,
+	// not twice.
 	_insertContributedNotebookbarTabs: function(arr, tabs, buildEntry, validate) {
 		var builtInNames = null;
 		if (validate) {

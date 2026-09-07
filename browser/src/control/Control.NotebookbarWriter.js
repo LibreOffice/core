@@ -3417,8 +3417,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 		});
 	},
 
-	// `name` is not consumed by the ribbon renderer - it exists so a tabpage returned
-	// here can be found by name later (e.g. by
+	// `name` is not consumed by the notebookbar renderer - it exists so a tabpage
+	// returned here can be found by name later (e.g. by
 	// Control.Notebookbar.js's _insertContributedNotebookbarTabs, positioning a
 	// contributed tab relative to this one) without relying on this array staying
 	// index-aligned with the separate getTabs() labels array.

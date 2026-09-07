@@ -21,8 +21,8 @@ of whether the extension also declares commands.
 
 ## contributes
 
-Lets an extension put commands directly into the classic menu and/or the notebookbar
-(ribbon), without needing its sidebar panel (if it has one) to ever be opened.
+Lets an extension put commands directly into the classic menu and/or the
+notebookbar, without needing its sidebar panel (if it has one) to ever be opened.
 `contributes` is a string naming a separate JSON file (relative to the manifest,
 resolved the same way `entry`/`icon` are) holding the object described below -
 kept out of `manifest.json` itself so an extension's UI wiring, however long it
@@ -96,8 +96,8 @@ ui.json:
   Use this when the extension's logic lives in the panel (an interpreter, an
   editor, anything with state or UI) rather than in the kit. Panel commands
   still get their label and icon from `contributes.commands` and can be placed
-  on the ribbon, in menus, in the context menu and on key bindings like any other
-  command; only the target differs.
+  in the notebookbar, in menus, in the context menu and on key bindings like
+  any other command; only the target differs.
   A referenced function runs when its command is chosen from the menu or
   notebookbar. It only has access to the UNO API shown above - no DOM, no network,
   no other browser capability - and it runs without ever loading a visible panel,
@@ -109,11 +109,11 @@ ui.json:
   `view`, `insert`, `format`, and so on, depending on the document type) to a list of
   command ids appended to the end of that menu.
 
-- `contributes.notebookbar` is a list of brand-new ribbon tabs the extension adds -
+- `contributes.notebookbar` is a list of brand-new notebookbar tabs the extension adds -
   `{ tab, insertBefore?, insertAfter?, groups }`. `tab` is the new tab's own
   label and must not collide with an existing tab's name (`Home`, `Insert`, `Format`,
   ...). `insertBefore`/`insertAfter` (mutually exclusive) name an *existing* tab to
-  position the new one next to; omitting both appends it at the end of the ribbon.
+  position the new one next to; omitting both appends it at the end of the notebookbar.
   There is no way to name an existing tab and land content inside it - an extension
   only ever gets its own tab(s), never a foothold in Home/Insert/etc. - matching how
   Microsoft's modern Office Add-ins platform restricts ribbon extensibility to "your
@@ -179,7 +179,7 @@ ui.json:
   Every extension that contributes at least one matching entry gets its own
   group at the end of the menu, after a separator - an entry is never
   inserted among the document's own items, the same "own space only" rule
-  `contributes.notebookbar` follows for the ribbon. `contexts` (optional;
+  `contributes.notebookbar` follows for the notebookbar. `contexts` (optional;
   omitting it, or passing an empty array, always shows the entry) narrows
   which right-click menu the entry appears in, using one of:
   - `"text-selection"` - shown only when text is selected.
@@ -241,7 +241,7 @@ Where the strings live and how they are picked up:
 
 - `manifest.json` `name`, and in the contributes file every command `title`,
   notebookbar `tab`, group `label` and dropdown menu `title`, are message ids.
-  Discovery translates them in place for the UI language, so the ribbon, menus,
+  Discovery translates them in place for the UI language, so the notebookbar, menus,
   context menu, selection toolbar and panel header all show translated text.
 - Panel and dialog pages are opened as `entry?lang=<UI language>&dir=<ltr|rtl>`.
   `cool.js` exposes `cool.lang` and `cool.dir`, loads the catalog, and offers
@@ -267,7 +267,7 @@ Files:
   zip includes these JSON files directly. The lookup tries `pt_BR` then `pt`
   for a `pt-BR` UI, and English needs no catalog.
 
-`com.collaboraoffice.demo-commands` (ribbon and menu strings) and
+`com.collaboraoffice.demo-commands` (notebookbar and menu strings) and
 `com.collaboraoffice.demo-wordcloud` (a panel) show the pattern.
 
 ## Saving a generated file

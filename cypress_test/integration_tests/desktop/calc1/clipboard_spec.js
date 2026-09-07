@@ -320,7 +320,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', { 
 			};
 		});
 
-		// Paste using the ribbon button.
+		// Paste using the notebookbar button.
 		cy.cGet('#Home .ui-overflow-group-content > .unoPaste .arrowbackground').click();
 		helper.getMenuEntry(0).click();
 
