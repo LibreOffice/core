@@ -59,23 +59,23 @@ public:
     virtual ~VbaEventsHelperBase() override;
 
     // script::vba::XVBAEventProcessor
-    virtual bool SAL_CALL hasVbaEventHandler( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
-    virtual bool SAL_CALL processVbaEvent( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+    virtual bool hasVbaEventHandler( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+    virtual bool processVbaEvent( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // document::XEventListener
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& rEvent ) override;
+    virtual void notifyEvent( const css::document::EventObject& rEvent ) override;
 
     // util::XChangesListener
-    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& rEvent ) override;
+    virtual void changesOccurred( const css::util::ChangesEvent& rEvent ) override;
 
     // lang::XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
+    virtual void disposing( const css::lang::EventObject& rEvent ) override;
     using WeakComponentImplHelperBase::disposing;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
     // ::cppu::OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // little helpers ---------------------------------------------------------
 

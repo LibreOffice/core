@@ -44,11 +44,11 @@ public:
         uno::Reference< container::XNameAccess > xNameAccess = m_pCBarHelper->getPersistentWindowState();
         m_sNames = xNameAccess->getElementNames();
     }
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return m_nCurrentPosition < m_sNames.getLength();
     }
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         // FIXME: should be add menubar
         if( !hasMoreElements() )
@@ -82,7 +82,7 @@ ScVbaCommandBars::~ScVbaCommandBars()
 }
 
 // XEnumerationAccess
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaCommandBars::getElementType()
 {
     return cppu::UnoType<XCommandBar>::get();
@@ -152,7 +152,7 @@ ScVbaCommandBars::createCollectionObject( const cpo::uno::Any& aSource )
 }
 
 // XCommandBars
-uno::Reference< XCommandBar > SAL_CALL
+uno::Reference< XCommandBar >
 ScVbaCommandBars::Add( const cpo::uno::Any& Name, const cpo::uno::Any& /*Position*/, const cpo::uno::Any& /*MenuBar*/, const cpo::uno::Any& /*Temporary*/ )
 {
     // FIXME: only support to add Toolbar
@@ -180,7 +180,7 @@ ScVbaCommandBars::Add( const cpo::uno::Any& Name, const cpo::uno::Any& /*Positio
     xCBar->setName( sName );
     return xCBar;
 }
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaCommandBars::getCount()
 {
     // Filter out all toolbars from the window collection
@@ -192,7 +192,7 @@ ScVbaCommandBars::getCount()
 }
 
 // ScVbaCollectionBaseImpl
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaCommandBars::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
     if( aIndex.getValueTypeClass() == cpo::uno::TypeClass_STRING )

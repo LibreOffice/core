@@ -33,7 +33,7 @@ ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, c
 }
 
 // Attributes
-void SAL_CALL
+void
 ScVbaListBox::setListIndex( const cpo::uno::Any& _value )
 {
     sal_Int32 nIndex = 0;
@@ -42,7 +42,7 @@ ScVbaListBox::setListIndex( const cpo::uno::Any& _value )
     xPropVal->setValue( cpo::uno::Any( true ) );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaListBox::getListIndex()
 {
     cpo::uno::Sequence< sal_Int16 > sSelection;
@@ -52,7 +52,7 @@ ScVbaListBox::getListIndex()
     return cpo::uno::Any( sSelection[ 0 ] );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaListBox::getValue()
 {
     cpo::uno::Sequence< sal_Int16 > sSelection;
@@ -67,7 +67,7 @@ ScVbaListBox::getValue()
     return aRet;
 }
 
-void SAL_CALL
+void
 ScVbaListBox::setValue( const cpo::uno::Any& _value )
 {
     if( getMultiSelect() )
@@ -89,7 +89,7 @@ ScVbaListBox::setValue( const cpo::uno::Any& _value )
         fireClickEvent();
 }
 
-OUString SAL_CALL
+OUString
 ScVbaListBox::getText()
 {
     OUString result;
@@ -97,13 +97,13 @@ ScVbaListBox::getText()
     return result;
 }
 
-void SAL_CALL
+void
 ScVbaListBox::setText( const OUString& _text )
 {
     setValue( cpo::uno::Any( _text ) ); // seems the same
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaListBox::getMultiSelect()
 {
     bool bMultiSelect = false;
@@ -112,7 +112,7 @@ ScVbaListBox::getMultiSelect()
     return bMultiSelect ? msforms::fmMultiSelect::fmMultiSelectMulti : msforms::fmMultiSelect::fmMultiSelectSingle;
 }
 
-void SAL_CALL
+void
 ScVbaListBox::setMultiSelect( sal_Int32 _multiselect )
 {
     bool bBoolVal = false;
@@ -133,7 +133,7 @@ ScVbaListBox::setMultiSelect( sal_Int32 _multiselect )
 }
 
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaListBox::Selected( sal_Int32 index )
 {
     cpo::uno::Sequence< OUString > sList;
@@ -149,19 +149,19 @@ ScVbaListBox::Selected( sal_Int32 index )
 }
 
 // Methods
-void SAL_CALL
+void
 ScVbaListBox::AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex )
 {
     maListHelper.AddItem( pvargItem, pvargIndex );
 }
 
-void SAL_CALL
+void
 ScVbaListBox::removeItem( const cpo::uno::Any& index )
 {
     maListHelper.removeItem( index );
 }
 
-void SAL_CALL
+void
 ScVbaListBox::Clear(  )
 {
     maListHelper.Clear();
@@ -232,26 +232,26 @@ ScVbaListBox::getValueEvent()
     return cpo::uno::Any( bRet );
 }
 
-void SAL_CALL
+void
 ScVbaListBox::setRowSource( const OUString& _rowsource )
 {
     ScVbaControl::setRowSource( _rowsource );
     maListHelper.setRowSource( _rowsource );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaListBox::getListCount()
 {
     return maListHelper.getListCount();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaListBox::List( const ::cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn )
 {
     return maListHelper.List( pvargIndex, pvarColumn );
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaListBox::getFont()
+uno::Reference< msforms::XNewFont > ScVbaListBox::getFont()
 {
     return new VbaNewFont( m_xProps );
 }

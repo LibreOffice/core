@@ -37,7 +37,7 @@ void ScVbaCommandBarControl::ApplyChange()
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaCommandBarControl::getCaption()
 {
     // "Label" always empty
@@ -46,7 +46,7 @@ ScVbaCommandBarControl::getCaption()
     return sCaption;
 }
 
-void SAL_CALL
+void
 ScVbaCommandBarControl::setCaption( const OUString& _caption )
 {
     OUString sCaption = _caption.replace('&','~');
@@ -54,7 +54,7 @@ ScVbaCommandBarControl::setCaption( const OUString& _caption )
     ApplyChange();
 }
 
-OUString SAL_CALL
+OUString
 ScVbaCommandBarControl::getOnAction()
 {
     OUString sCommandURL;
@@ -62,7 +62,7 @@ ScVbaCommandBarControl::getOnAction()
     return sCommandURL;
 }
 
-void SAL_CALL
+void
 ScVbaCommandBarControl::setOnAction( const OUString& _onaction )
 {
     // get the current model
@@ -77,7 +77,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaCommandBarControl::getVisible()
 {
     bool bVisible = true;
@@ -86,7 +86,7 @@ ScVbaCommandBarControl::getVisible()
         aValue >>= bVisible;
     return bVisible;
 }
-void SAL_CALL
+void
 ScVbaCommandBarControl::setVisible( bool _visible )
 {
     cpo::uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
@@ -97,7 +97,7 @@ ScVbaCommandBarControl::setVisible( bool _visible )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaCommandBarControl::getEnabled()
 {
     bool bEnabled = true;
@@ -115,7 +115,7 @@ ScVbaCommandBarControl::getEnabled()
     return bEnabled;
 }
 
-void SAL_CALL
+void
 ScVbaCommandBarControl::setEnabled( bool _enabled )
 {
     cpo::uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
@@ -131,7 +131,7 @@ ScVbaCommandBarControl::setEnabled( bool _enabled )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaCommandBarControl::getBeginGroup()
 {
     // TODO: need to check if the item before this item is of type 'separator'
@@ -139,7 +139,7 @@ ScVbaCommandBarControl::getBeginGroup()
     return false;
 }
 
-void SAL_CALL
+void
 ScVbaCommandBarControl::setBeginGroup( bool _begin )
 {
     if( getBeginGroup() != _begin )
@@ -148,7 +148,7 @@ ScVbaCommandBarControl::setBeginGroup( bool _begin )
     }
 }
 
-void SAL_CALL
+void
 ScVbaCommandBarControl::Delete(  )
 {
     if( m_xCurrentSettings.is() )
@@ -160,7 +160,7 @@ ScVbaCommandBarControl::Delete(  )
     }
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaCommandBarControl::Controls( const cpo::uno::Any& aIndex )
 {
     // only Popup Menu has controls

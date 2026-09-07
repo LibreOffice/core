@@ -73,12 +73,12 @@ public:
             css::uno::Reference< css::container::XIndexAccess > xIndexAccess ) :
         mxIndexAccess(std::move( xIndexAccess )), mnIndex( 0 ) {}
 
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return mnIndex < mxIndexAccess->getCount();
     }
 
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         if( !hasMoreElements() )
             throw css::container::NoSuchElementException();
@@ -106,12 +106,12 @@ public:
             const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) :
         mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
 
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return mxEnumeration->hasMoreElements();
     }
 
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         return createCollectionObject( mxEnumeration->nextElement() );
     }
@@ -135,7 +135,7 @@ protected:
 public:
     /// @throws cpo::uno::RuntimeException
     EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< cpo::uno::XComponentContext >  xContext, css::uno::Reference< css::container::XEnumeration > xEnumeration ) : m_xParent( xParent ), m_xContext(std::move( xContext )),  m_xEnumeration(std::move( xEnumeration )) { }
-    virtual bool SAL_CALL hasMoreElements(  ) override { return m_xEnumeration->hasMoreElements(); }
+    virtual bool hasMoreElements(  ) override { return m_xEnumeration->hasMoreElements(); }
 };
 
 // a wrapper class for a providing a XIndexAccess, XNameAccess, XEnumerationAccess impl based on providing a vector of interfaces
@@ -158,12 +158,12 @@ private:
     public:
             XNamedEnumerationHelper( XNamedVec sMap ) : mXNamedVec(std::move( sMap )), mIt( mXNamedVec.begin() ) {}
 
-            virtual bool SAL_CALL hasMoreElements(  ) override
+            virtual bool hasMoreElements(  ) override
             {
             return ( mIt != mXNamedVec.end() );
             }
 
-            virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+            virtual cpo::uno::Any nextElement(  ) override
             {
                 if ( hasMoreElements() )
                     return cpo::uno::Any( *mIt++ );
@@ -176,16 +176,16 @@ private:
 public:
     XNamedObjectCollectionHelper( XNamedVec sMap ) : mXNamedVec(std::move( sMap )), cachePos(mXNamedVec.begin()) {}
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
-    virtual bool SAL_CALL hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
+    virtual cpo::uno::Type getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
+    virtual bool hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any getByName( const OUString& aName ) override
     {
         if ( !hasByName(aName) )
             throw css::container::NoSuchElementException();
         return cpo::uno::Any( *cachePos );
     }
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override
     {
         cpo::uno::Sequence< OUString > sNames( mXNamedVec.size() );
         OUString* pString = sNames.getArray();
@@ -199,7 +199,7 @@ public:
         }
         return sNames;
     }
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool hasByName( const OUString& aName ) override
     {
         cachePos = mXNamedVec.begin();
         typename XNamedVec::iterator it_end = mXNamedVec.end();
@@ -213,8 +213,8 @@ public:
     }
 
     // XElementAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) override { return mXNamedVec.size(); }
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual ::sal_Int32 getCount(  ) override { return mXNamedVec.size(); }
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
@@ -223,7 +223,7 @@ public:
 
     }
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override
     {
         return new XNamedEnumerationHelper( mXNamedVec );
     }
@@ -284,12 +284,12 @@ public:
     ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess > xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess(std::move( xIndexAccess )), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
 
     //XCollection
-    virtual ::sal_Int32 SAL_CALL getCount() override
+    virtual ::sal_Int32 getCount() override
     {
         return m_xIndexAccess->getCount();
     }
 
-    virtual cpo::uno::Any SAL_CALL Item(const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/) override
+    virtual cpo::uno::Any Item(const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/) override
     {
         OUString aStringSheet;
         if (Index1.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE)
@@ -317,17 +317,17 @@ public:
     }
 
     // XDefaultMethod
-    OUString SAL_CALL getDefaultMethodName(  ) override
+    OUString getDefaultMethodName(  ) override
     {
         return u"Item"_ustr;
     }
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override = 0;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override = 0;
+    virtual cpo::uno::Type getElementType() override = 0;
     // XElementAccess
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
     {
         return ( m_xIndexAccess->getCount() > 0 );
     }

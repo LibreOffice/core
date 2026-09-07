@@ -42,32 +42,32 @@ public:
     ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     // Attributes
-    virtual sal_Int32 SAL_CALL getBeginArrowheadStyle() override;
-    virtual void SAL_CALL setBeginArrowheadStyle( sal_Int32 _beginarrowheadstyle ) override;
-    virtual sal_Int32 SAL_CALL getBeginArrowheadLength() override;
-    virtual void SAL_CALL setBeginArrowheadLength( sal_Int32 _beginarrowheadlength ) override;
-    virtual sal_Int32 SAL_CALL getBeginArrowheadWidth() override;
-    virtual void SAL_CALL setBeginArrowheadWidth( sal_Int32 _beginarrowheadwidth ) override;
-    virtual sal_Int32 SAL_CALL getEndArrowheadStylel() override;
-    virtual void SAL_CALL setEndArrowheadStylel( sal_Int32 _endarrowheadstylel ) override;
-    virtual sal_Int32 SAL_CALL getEndArrowheadLength() override;
-    virtual void SAL_CALL setEndArrowheadLength( sal_Int32 _endarrowheadlength ) override;
-    virtual sal_Int32 SAL_CALL getEndArrowheadWidth() override;
-    virtual void SAL_CALL setEndArrowheadWidth( sal_Int32 _endarrowheadwidth ) override;
-    virtual double SAL_CALL getWeight() override;
-    virtual void SAL_CALL setWeight( double _weight ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual double SAL_CALL getTransparency() override;
-    virtual void SAL_CALL setTransparency( double _transparency ) override;
-    virtual sal_Int16 SAL_CALL getStyle() override;
-    virtual void SAL_CALL setStyle( sal_Int16 _style ) override;
-    virtual sal_Int32 SAL_CALL getDashStyle() override;
-    virtual void SAL_CALL setDashStyle( sal_Int32 _dashstyle ) override;
+    virtual sal_Int32 getBeginArrowheadStyle() override;
+    virtual void setBeginArrowheadStyle( sal_Int32 _beginarrowheadstyle ) override;
+    virtual sal_Int32 getBeginArrowheadLength() override;
+    virtual void setBeginArrowheadLength( sal_Int32 _beginarrowheadlength ) override;
+    virtual sal_Int32 getBeginArrowheadWidth() override;
+    virtual void setBeginArrowheadWidth( sal_Int32 _beginarrowheadwidth ) override;
+    virtual sal_Int32 getEndArrowheadStylel() override;
+    virtual void setEndArrowheadStylel( sal_Int32 _endarrowheadstylel ) override;
+    virtual sal_Int32 getEndArrowheadLength() override;
+    virtual void setEndArrowheadLength( sal_Int32 _endarrowheadlength ) override;
+    virtual sal_Int32 getEndArrowheadWidth() override;
+    virtual void setEndArrowheadWidth( sal_Int32 _endarrowheadwidth ) override;
+    virtual double getWeight() override;
+    virtual void setWeight( double _weight ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual double getTransparency() override;
+    virtual void setTransparency( double _transparency ) override;
+    virtual sal_Int16 getStyle() override;
+    virtual void setStyle( sal_Int16 _style ) override;
+    virtual sal_Int32 getDashStyle() override;
+    virtual void setDashStyle( sal_Int32 _dashstyle ) override;
 
     // Methods
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > BackColor() override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > ForeColor() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBALINEFORMAT_HXX

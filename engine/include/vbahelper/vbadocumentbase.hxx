@@ -53,22 +53,22 @@ public:
     VbaDocumentBase(    cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     // Attributes
-    virtual OUString SAL_CALL getName() override;
-    virtual OUString SAL_CALL getPath() override;
-    virtual OUString SAL_CALL getFullName() override;
-    virtual bool SAL_CALL getSaved() override;
-    virtual void SAL_CALL setSaved( bool bSave ) override;
-    virtual cpo::uno::Any SAL_CALL getVBProject() override;
+    virtual OUString getName() override;
+    virtual OUString getPath() override;
+    virtual OUString getFullName() override;
+    virtual bool getSaved() override;
+    virtual void setSaved( bool bSave ) override;
+    virtual cpo::uno::Any getVBProject() override;
 
     // Methods
-    virtual void SAL_CALL Close( const cpo::uno::Any &bSaveChanges,
+    virtual void Close( const cpo::uno::Any &bSaveChanges,
                                  const cpo::uno::Any &aFileName,
                                  const cpo::uno::Any &bRouteWorkbook ) override;
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL Protect( const cpo::uno::Any &aPassword );
-    virtual void SAL_CALL Unprotect( const cpo::uno::Any &aPassword ) override;
-    virtual void SAL_CALL Save() override;
-    virtual void SAL_CALL Activate() override;
+    virtual void Protect( const cpo::uno::Any &aPassword );
+    virtual void Unprotect( const cpo::uno::Any &aPassword ) override;
+    virtual void Save() override;
+    virtual void Activate() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

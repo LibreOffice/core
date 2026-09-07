@@ -100,42 +100,42 @@ public:
 
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type getElementType(  ) override
     {
         return cppu::UnoType<awt::XControl>::get();
     }
 
-    virtual bool SAL_CALL hasElements(  ) override
+    virtual bool hasElements(  ) override
     {
         return ( !mControls.empty() );
     }
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any getByName( const OUString& aName ) override
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
         return getByIndex( mIndices[ aName ] );
     }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override
     {
         return msNames;
     }
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool hasByName( const OUString& aName ) override
     {
         ControlIndexMap::iterator it = mIndices.find( aName );
         return it != mIndices.end();
     }
 
     // XElementAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) override
+    virtual ::sal_Int32 getCount(  ) override
     {
         return mControls.size();
     }
 
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || o3tl::make_unsigned(Index) >= mControls.size() )
             throw lang::IndexOutOfBoundsException();
@@ -170,12 +170,12 @@ public:
     mfOffsetY( fOffsetY ),
     nIndex( 0 ) {}
 
-    virtual bool SAL_CALL hasMoreElements(  ) override
+    virtual bool hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any nextElement(  ) override
     {
         if ( nIndex < m_xIndexAccess->getCount() )
         {
@@ -232,7 +232,7 @@ ScVbaControls::createCollectionObject( const cpo::uno::Any& aSource )
     return cpo::uno::Any( xVBAControl );
 }
 
-void SAL_CALL
+void
 ScVbaControls::Move( double cx, double cy )
 {
     uno::Reference< container::XEnumeration > xEnum( createEnumeration() );
@@ -244,7 +244,7 @@ ScVbaControls::Move( double cx, double cy )
     }
 }
 
-cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cpo::uno::Any& StringKey, const cpo::uno::Any& /*Before*/, const cpo::uno::Any& /*After*/ )
+cpo::uno::Any ScVbaControls::Add( const cpo::uno::Any& Object, const cpo::uno::Any& StringKey, const cpo::uno::Any& /*Before*/, const cpo::uno::Any& /*After*/ )
 {
     cpo::uno::Any aResult;
     OUString aComServiceName;
@@ -423,7 +423,7 @@ cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cp
     return aResult;
 }
 
-void SAL_CALL ScVbaControls::Remove( const cpo::uno::Any& StringKeyOrIndex )
+void ScVbaControls::Remove( const cpo::uno::Any& StringKeyOrIndex )
 {
     try
     {

@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-void SAL_CALL VbaDialogBase::Show()
+void VbaDialogBase::Show()
 {
     if (auto xModel = getModel())
     {

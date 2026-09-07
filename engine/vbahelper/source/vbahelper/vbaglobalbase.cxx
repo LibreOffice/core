@@ -122,7 +122,7 @@ VbaGlobalsBase::init(  const cpo::uno::Sequence< beans::PropertyValue >& aInitAr
     }
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface >
 VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier )
 {
     uno::Reference< cpo::uno::XInterface > xReturn;
@@ -137,7 +137,7 @@ VbaGlobalsBase::createInstance( const OUString& aServiceSpecifier )
     return xReturn;
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface >
 VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
 
@@ -153,7 +153,7 @@ VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, 
     return xReturn;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 VbaGlobalsBase::getAvailableServiceNames(  )
 {
     cpo::uno::Sequence< OUString > serviceNames { u"ooo.vba.msforms.UserForm"_ustr };

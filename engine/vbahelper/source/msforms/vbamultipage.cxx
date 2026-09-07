@@ -34,21 +34,21 @@ class PagesImpl : public cppu::WeakImplHelper< container::XIndexAccess >
     sal_Int32 mnPages;
 public:
     explicit PagesImpl( sal_Int32 nPages ) : mnPages( nPages ) {}
-    virtual ::sal_Int32 SAL_CALL getCount() override { return mnPages; }
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual ::sal_Int32 getCount() override { return mnPages; }
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index > mnPages )
             throw lang::IndexOutOfBoundsException();
         return cpo::uno::Any( uno::Reference< cpo::uno::XInterface >() );
     }
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type getElementType() override
     {
         // no Pages object yet #FIXME
         //return cppu::UnoType<msforms::XPage>::get();
         return cppu::UnoType<cpo::uno::XInterface>::get();
     }
-    virtual bool SAL_CALL hasElements( ) override
+    virtual bool hasElements( ) override
     {
         return ( mnPages > 0 );
     }
@@ -67,7 +67,7 @@ ScVbaMultiPage::ScVbaMultiPage(
 }
 
 // Attributes
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaMultiPage::getValue()
 {
     sal_Int32 nValue = 0;
@@ -76,7 +76,7 @@ ScVbaMultiPage::getValue()
     return nValue - 1;
 }
 
-void SAL_CALL
+void
 ScVbaMultiPage::setValue( const sal_Int32 _value )
 {
     // Openoffice 1 based tab index
@@ -93,7 +93,7 @@ ScVbaMultiPage::getServiceImplName()
     return u"ScVbaMultiPage"_ustr;
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaMultiPage::Pages( const cpo::uno::Any& index )
 {
     // get the container model

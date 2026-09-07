@@ -40,16 +40,16 @@ public:
         css::uno::Reference< css::awt::XControl > xDialog );
 
     // XFrame attributes
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
 
-    virtual sal_Int32 SAL_CALL getSpecialEffect() override;
-    virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) override;
-    virtual sal_Int32 SAL_CALL getBorderStyle() override;
-    virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
+    virtual sal_Int32 getSpecialEffect() override;
+    virtual void setSpecialEffect( sal_Int32 nSpecialEffect ) override;
+    virtual sal_Int32 getBorderStyle() override;
+    virtual void setBorderStyle( sal_Int32 nBorderStyle ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
     // XFrame methods
-    cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& rIndex ) override;
+    cpo::uno::Any Controls( const cpo::uno::Any& rIndex ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

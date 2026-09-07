@@ -32,22 +32,22 @@ class ScVbaLabel : public LabelImpl_BASE
 public:
     ScVbaLabel( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
    // Attributes
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual OUString SAL_CALL getAccelerator() override;
-    virtual void SAL_CALL setAccelerator( const OUString& _accelerator ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
-    virtual sal_Int32 SAL_CALL getBackColor() override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
-    virtual bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
+    virtual OUString getAccelerator() override;
+    virtual void setAccelerator( const OUString& _accelerator ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual sal_Int32 getBackColor() override;
+    virtual void setBackColor( sal_Int32 nBackColor ) override;
+    virtual bool getAutoSize() override;
+    virtual void setAutoSize( bool bAutoSize ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
+    OUString getDefaultPropertyName(  ) override { return u"Value"_ustr; }
 };
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
 

@@ -46,7 +46,7 @@ public:
     VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ) {}
 
     // Methods
-    virtual void SAL_CALL Show() override;
+    virtual void Show() override;
     virtual OUString mapIndexToName( sal_Int32 nIndex ) = 0;
 
     virtual css::uno::Reference< css::frame::XModel > getModel() const = 0;

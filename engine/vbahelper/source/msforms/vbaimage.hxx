@@ -30,8 +30,8 @@ class ScVbaImage : public ImageImpl_BASE
 {
 public:
     ScVbaImage( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
-    virtual sal_Int32 SAL_CALL getBackColor() override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
+    virtual sal_Int32 getBackColor() override;
+    virtual void setBackColor( sal_Int32 nBackColor ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

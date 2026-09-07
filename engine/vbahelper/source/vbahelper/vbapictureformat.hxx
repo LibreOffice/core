@@ -43,14 +43,14 @@ public:
     ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape );
 
     // Attributes
-    virtual double SAL_CALL getBrightness() override;
-    virtual void SAL_CALL setBrightness( double _brightness ) override;
-    virtual double SAL_CALL getContrast() override;
-    virtual void SAL_CALL setContrast( double _contrast ) override;
+    virtual double getBrightness() override;
+    virtual void setBrightness( double _brightness ) override;
+    virtual double getContrast() override;
+    virtual void setContrast( double _contrast ) override;
 
     // Methods
-    virtual void SAL_CALL IncrementBrightness( double increment ) override;
-    virtual void SAL_CALL IncrementContrast( double increment ) override;
+    virtual void IncrementBrightness( double increment ) override;
+    virtual void IncrementContrast( double increment ) override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAPICTUREFORMAT_HXX

@@ -56,13 +56,13 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
 
 // Value, [read] e.g. getValue returns the value of ooo Text property e.g. the value in
 // the drop down
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaComboBox::getValue()
 {
     return m_xProps->getPropertyValue( sSourceName );
 }
 
-void SAL_CALL
+void
 ScVbaComboBox::setListIndex( const cpo::uno::Any& _value )
 {
     sal_Int16 nIndex = 0;
@@ -84,7 +84,7 @@ ScVbaComboBox::setListIndex( const cpo::uno::Any& _value )
     }
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaComboBox::getListIndex()
 {
     cpo::uno::Sequence< OUString > sItems;
@@ -110,7 +110,7 @@ ScVbaComboBox::getListIndex()
 
 // Value, [write]e.g. setValue sets the value in the drop down, and if the value is one
 // of the values in the list then the selection is also set
-void SAL_CALL
+void
 ScVbaComboBox::setValue( const cpo::uno::Any& _value )
 {
     // booleans are converted to uppercase strings
@@ -131,7 +131,7 @@ ScVbaComboBox::setValue( const cpo::uno::Any& _value )
 
 // see Value
 
-OUString SAL_CALL
+OUString
 ScVbaComboBox::getText()
 {
     OUString result;
@@ -139,110 +139,110 @@ ScVbaComboBox::getText()
     return result;
 }
 
-void SAL_CALL
+void
 ScVbaComboBox::setText( const OUString& _text )
 {
     setValue( cpo::uno::Any( _text ) ); // seems the same
 }
 
 // Methods
-void SAL_CALL
+void
 ScVbaComboBox::AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex )
 {
     maListHelper.AddItem( pvargItem, pvargIndex );
 }
 
-void SAL_CALL
+void
 ScVbaComboBox::removeItem( const cpo::uno::Any& index )
 {
     maListHelper.removeItem( index );
 }
 
-void SAL_CALL
+void
 ScVbaComboBox::Clear(  )
 {
     maListHelper.Clear();
 }
 
-void SAL_CALL
+void
 ScVbaComboBox::setRowSource( const OUString& _rowsource )
 {
     ScVbaControl::setRowSource( _rowsource );
     maListHelper.setRowSource( _rowsource );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaComboBox::getListCount()
 {
     return maListHelper.getListCount();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaComboBox::List( const ::cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn )
 {
     return maListHelper.List( pvargIndex, pvarColumn );
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getStyle()
+sal_Int32 ScVbaComboBox::getStyle()
 {
     return msforms::fmStyle::fmStyleDropDownCombo;
 }
 
-void SAL_CALL ScVbaComboBox::setStyle( sal_Int32 /*nStyle*/ )
+void ScVbaComboBox::setStyle( sal_Int32 /*nStyle*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getDropButtonStyle()
+sal_Int32 ScVbaComboBox::getDropButtonStyle()
 {
     return msforms::fmDropButtonStyle::fmDropButtonStyleArrow;
 }
 
-void SAL_CALL ScVbaComboBox::setDropButtonStyle( sal_Int32 /*nDropButtonStyle*/ )
+void ScVbaComboBox::setDropButtonStyle( sal_Int32 /*nDropButtonStyle*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getDragBehavior()
+sal_Int32 ScVbaComboBox::getDragBehavior()
 {
     return msforms::fmDragBehavior::fmDragBehaviorDisabled;
 }
 
-void SAL_CALL ScVbaComboBox::setDragBehavior( sal_Int32 /*nDragBehavior*/ )
+void ScVbaComboBox::setDragBehavior( sal_Int32 /*nDragBehavior*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getEnterFieldBehavior()
+sal_Int32 ScVbaComboBox::getEnterFieldBehavior()
 {
     return msforms::fmEnterFieldBehavior::fmEnterFieldBehaviorSelectAll;
 }
 
-void SAL_CALL ScVbaComboBox::setEnterFieldBehavior( sal_Int32 /*nEnterFieldBehavior*/ )
+void ScVbaComboBox::setEnterFieldBehavior( sal_Int32 /*nEnterFieldBehavior*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getListStyle()
+sal_Int32 ScVbaComboBox::getListStyle()
 {
     return msforms::fmListStyle::fmListStylePlain;
 }
 
-void SAL_CALL ScVbaComboBox::setListStyle( sal_Int32 /*nListStyle*/ )
+void ScVbaComboBox::setListStyle( sal_Int32 /*nListStyle*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getTextAlign()
+sal_Int32 ScVbaComboBox::getTextAlign()
 {
     return msforms::fmTextAlign::fmTextAlignLeft;
 }
 
-void SAL_CALL ScVbaComboBox::setTextAlign( sal_Int32 /*nTextAlign*/ )
+void ScVbaComboBox::setTextAlign( sal_Int32 /*nTextAlign*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getTextLength()
+sal_Int32 ScVbaComboBox::getTextLength()
 {
     return getText().getLength();
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont()
+uno::Reference< msforms::XNewFont > ScVbaComboBox::getFont()
 {
     return new VbaNewFont( m_xProps );
 }
@@ -253,42 +253,42 @@ ScVbaComboBox::getServiceImplName()
     return u"ScVbaComboBox"_ustr;
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getBackColor()
+sal_Int32 ScVbaComboBox::getBackColor()
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaComboBox::setBackColor( sal_Int32 nBackColor )
+void ScVbaComboBox::setBackColor( sal_Int32 nBackColor )
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-bool SAL_CALL ScVbaComboBox::getAutoSize()
+bool ScVbaComboBox::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaComboBox::setAutoSize( bool bAutoSize )
+void ScVbaComboBox::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-bool SAL_CALL ScVbaComboBox::getLocked()
+bool ScVbaComboBox::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaComboBox::setLocked( bool bLocked )
+void ScVbaComboBox::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }
 
-OUString SAL_CALL ScVbaComboBox::getLinkedCell()
+OUString ScVbaComboBox::getLinkedCell()
 {
     return ScVbaControl::getControlSource();
 }
 
-void SAL_CALL ScVbaComboBox::setLinkedCell( const OUString& _linkedcell )
+void ScVbaComboBox::setLinkedCell( const OUString& _linkedcell )
 {
     ScVbaControl::setControlSource( _linkedcell );
 }

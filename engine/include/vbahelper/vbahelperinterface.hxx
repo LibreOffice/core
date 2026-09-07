@@ -71,13 +71,13 @@ public:
     virtual cpo::uno::Sequence<OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
-    virtual ::sal_Int32 SAL_CALL getCreator() override
+    virtual ::sal_Int32 getCreator() override
     {
         return 0x53756E4F;
     }
-    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) override { return mxParent; }
+    virtual css::uno::Reference< ov::XHelperInterface > getParent(  ) override { return mxParent; }
 
-    virtual cpo::uno::Any SAL_CALL Application(  ) override {
+    virtual cpo::uno::Any Application(  ) override {
             // The application could certainly be passed around in the context - seems
             // to make sense
             css::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, css::uno::UNO_QUERY_THROW );
@@ -85,13 +85,13 @@ public:
     }
 
     // XServiceInfo Methods
-    virtual OUString SAL_CALL getImplementationName(  ) override { return getServiceImplName(); }
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override
+    virtual OUString getImplementationName(  ) override { return getServiceImplName(); }
+    virtual bool supportsService( const OUString& ServiceName ) override
     {
         cpo::uno::Sequence< OUString > sServices = getSupportedServiceNames();
         return std::find(sServices.begin(), sServices.end(), ServiceName) != sServices.end();
     }
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override
     {
         cpo::uno::Sequence< OUString > aNames = getServiceNames();
         return aNames;

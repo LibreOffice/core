@@ -31,12 +31,12 @@ class ScVbaSpinButton : public SpinButtonImpl_BASE
 public:
     ScVbaSpinButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
    // Attributes
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-    virtual ::sal_Int32 SAL_CALL getMax() override;
-    virtual void SAL_CALL setMax( ::sal_Int32 _max ) override;
-    virtual ::sal_Int32 SAL_CALL getMin() override;
-    virtual void SAL_CALL setMin( ::sal_Int32 _min ) override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
+    virtual ::sal_Int32 getMax() override;
+    virtual void setMax( ::sal_Int32 _max ) override;
+    virtual ::sal_Int32 getMin() override;
+    virtual void setMin( ::sal_Int32 _min ) override;
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;

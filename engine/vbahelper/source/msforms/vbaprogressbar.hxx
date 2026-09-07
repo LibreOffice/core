@@ -34,13 +34,13 @@ class ScVbaProgressBar : public ProgressBarImpl_BASE
 public:
     ScVbaProgressBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
    // Attributes
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
+    OUString getDefaultPropertyName(  ) override { return u"Value"_ustr; }
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPROGRESSBAR_HXX

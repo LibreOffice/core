@@ -31,7 +31,7 @@ VbaPageSetupBase::VbaPageSetupBase(const uno::Reference< XHelperInterface >& xPa
 {
 }
 
-double SAL_CALL VbaPageSetupBase::getTopMargin()
+double VbaPageSetupBase::getTopMargin()
 {
     sal_Int32 topMargin = 0;
 
@@ -60,7 +60,7 @@ double SAL_CALL VbaPageSetupBase::getTopMargin()
     return Millimeter::getInPoints( topMargin );
 }
 
-void SAL_CALL VbaPageSetupBase::setTopMargin( double margin )
+void VbaPageSetupBase::setTopMargin( double margin )
 {
     sal_Int32 topMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
 
@@ -86,7 +86,7 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin )
     }
 }
 
-double SAL_CALL VbaPageSetupBase::getBottomMargin()
+double VbaPageSetupBase::getBottomMargin()
 {
     sal_Int32 bottomMargin = 0;
 
@@ -115,7 +115,7 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin()
     return Millimeter::getInPoints( bottomMargin );
 }
 
-void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin )
+void VbaPageSetupBase::setBottomMargin( double margin )
 {
     sal_Int32 bottomMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
 
@@ -141,7 +141,7 @@ void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin )
     }
 }
 
-double SAL_CALL VbaPageSetupBase::getRightMargin()
+double VbaPageSetupBase::getRightMargin()
 {
     sal_Int32 rightMargin = 0;
     try
@@ -156,7 +156,7 @@ double SAL_CALL VbaPageSetupBase::getRightMargin()
     return Millimeter::getInPoints( rightMargin );
 }
 
-void SAL_CALL VbaPageSetupBase::setRightMargin( double margin )
+void VbaPageSetupBase::setRightMargin( double margin )
 {
     sal_Int32 rightMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
@@ -169,7 +169,7 @@ void SAL_CALL VbaPageSetupBase::setRightMargin( double margin )
 
 }
 
-double SAL_CALL VbaPageSetupBase::getLeftMargin()
+double VbaPageSetupBase::getLeftMargin()
 {
     sal_Int32 leftMargin = 0;
     try
@@ -184,7 +184,7 @@ double SAL_CALL VbaPageSetupBase::getLeftMargin()
     return Millimeter::getInPoints( leftMargin );
 }
 
-void SAL_CALL VbaPageSetupBase::setLeftMargin( double margin )
+void VbaPageSetupBase::setLeftMargin( double margin )
 {
     sal_Int32 leftMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
     try
@@ -250,7 +250,7 @@ void VbaPageSetupBase::setFooterMargin( double margin )
     }
 }
 
-sal_Int32 SAL_CALL VbaPageSetupBase::getOrientation()
+sal_Int32 VbaPageSetupBase::getOrientation()
 {
     sal_Int32 orientation = mnOrientPortrait;
     try
@@ -270,7 +270,7 @@ sal_Int32 SAL_CALL VbaPageSetupBase::getOrientation()
     return orientation;
 }
 
-void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation )
+void VbaPageSetupBase::setOrientation( sal_Int32 orientation )
 {
     if( ( orientation != mnOrientPortrait ) &&
         ( orientation != mnOrientLandscape ) )

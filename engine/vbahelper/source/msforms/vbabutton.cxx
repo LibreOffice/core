@@ -29,7 +29,7 @@ VbaButton::VbaButton( const uno::Reference< XHelperInterface >& xParent, const u
 }
 
 // Attributes
-OUString SAL_CALL
+OUString
 VbaButton::getCaption()
 {
     OUString Label;
@@ -37,74 +37,74 @@ VbaButton::getCaption()
     return Label;
 }
 
-void SAL_CALL
+void
 VbaButton::setCaption( const OUString& _caption )
 {
     m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
-bool SAL_CALL VbaButton::getAutoSize()
+bool VbaButton::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL VbaButton::setAutoSize( bool bAutoSize )
+void VbaButton::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-bool SAL_CALL VbaButton::getLocked()
+bool VbaButton::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL VbaButton::setLocked( bool bLocked )
+void VbaButton::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }
 
-bool SAL_CALL VbaButton::getCancel()
+bool VbaButton::getCancel()
 {
     return false;
 }
 
-void SAL_CALL VbaButton::setCancel( bool /*bCancel*/ )
+void VbaButton::setCancel( bool /*bCancel*/ )
 {
     // #STUB
 }
 
-bool SAL_CALL VbaButton::getDefault()
+bool VbaButton::getDefault()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL VbaButton::setDefault( bool /*bDefault*/ )
+void VbaButton::setDefault( bool /*bDefault*/ )
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL VbaButton::getBackColor()
+sal_Int32 VbaButton::getBackColor()
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL VbaButton::setBackColor( sal_Int32 nBackColor )
+void VbaButton::setBackColor( sal_Int32 nBackColor )
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Int32 SAL_CALL VbaButton::getForeColor()
+sal_Int32 VbaButton::getForeColor()
 {
     return ScVbaControl::getForeColor();
 }
 
-void SAL_CALL VbaButton::setForeColor( sal_Int32 /*nForeColor*/ )
+void VbaButton::setForeColor( sal_Int32 /*nForeColor*/ )
 {
     // #STUB
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL VbaButton::getFont()
+uno::Reference< msforms::XNewFont > VbaButton::getFont()
 {
     return new VbaNewFont( m_xProps );
 }

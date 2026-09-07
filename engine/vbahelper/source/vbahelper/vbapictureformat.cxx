@@ -45,7 +45,7 @@ ScVbaPictureFormat::checkParameterRangeInDouble( double nRange, double nMin, dou
 }
 
 // Attributes
-double SAL_CALL
+double
 ScVbaPictureFormat::getBrightness()
 {
     sal_Int16 nLuminance = 0;
@@ -55,7 +55,7 @@ ScVbaPictureFormat::getBrightness()
     return fBrightness;
 }
 
-void SAL_CALL
+void
 ScVbaPictureFormat::setBrightness( double _brightness )
 {
     checkParameterRangeInDouble( _brightness, 0.0, 1.0 );
@@ -64,7 +64,7 @@ ScVbaPictureFormat::setBrightness( double _brightness )
     m_xPropertySet->setPropertyValue( u"AdjustLuminance"_ustr , cpo::uno::Any( nLuminance ) );
 }
 
-double SAL_CALL
+double
 ScVbaPictureFormat::getContrast()
 {
     sal_Int16 nContrast = 0;
@@ -74,7 +74,7 @@ ScVbaPictureFormat::getContrast()
     return fContrast;
 }
 
-void SAL_CALL
+void
 ScVbaPictureFormat::setContrast( double _contrast )
 {
     checkParameterRangeInDouble( _contrast, 0.0, 1.0 );
@@ -85,7 +85,7 @@ ScVbaPictureFormat::setContrast( double _contrast )
 
 
 // Methods
-void SAL_CALL
+void
 ScVbaPictureFormat::IncrementBrightness( double increment )
 {
     double fBrightness = getBrightness();
@@ -101,7 +101,7 @@ ScVbaPictureFormat::IncrementBrightness( double increment )
     setBrightness( fBrightness );
 }
 
-void SAL_CALL
+void
 ScVbaPictureFormat::IncrementContrast( double increment )
 {
     double nContrast = getContrast();

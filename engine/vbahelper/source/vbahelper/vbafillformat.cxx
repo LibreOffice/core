@@ -73,7 +73,7 @@ ScVbaFillFormat::setForeColorAndInternalStyle( sal_Int32 nForeColor )
 }
 
 // Attributes
-bool SAL_CALL
+bool
 ScVbaFillFormat::getVisible()
 {
     drawing::FillStyle nFillStyle;
@@ -83,7 +83,7 @@ ScVbaFillFormat::getVisible()
     return true;
 }
 
-void SAL_CALL
+void
 ScVbaFillFormat::setVisible( bool _visible )
 {
     drawing::FillStyle aFillStyle;
@@ -101,7 +101,7 @@ ScVbaFillFormat::setVisible( bool _visible )
     }
 }
 
-double SAL_CALL
+double
 ScVbaFillFormat::getTransparency()
 {
     sal_Int16 nTransparence = 0;
@@ -112,7 +112,7 @@ ScVbaFillFormat::getTransparency()
     return dTransparence;
 }
 
-void SAL_CALL
+void
 ScVbaFillFormat::setTransparency( double _transparency )
 {
     sal_Int16 nTransparence = static_cast< sal_Int16 >( _transparency * 100 );
@@ -121,13 +121,13 @@ ScVbaFillFormat::setTransparency( double _transparency )
 
 
 // Methods
-void SAL_CALL
+void
 ScVbaFillFormat::Solid()
 {
     setFillStyle( drawing::FillStyle_SOLID );
 }
 
-void SAL_CALL
+void
 ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ )
 {
     if( style == office::MsoGradientStyle::msoGradientHorizontal )
@@ -152,7 +152,7 @@ ScVbaFillFormat::TwoColorGradient( sal_Int32 style, sal_Int32 /*variant*/ )
     }
 }
 
-uno::Reference< msforms::XColorFormat > SAL_CALL
+uno::Reference< msforms::XColorFormat >
 ScVbaFillFormat::BackColor()
 {
     if( !m_xColorFormat.is() )
@@ -160,7 +160,7 @@ ScVbaFillFormat::BackColor()
     return m_xColorFormat;
 }
 
-uno::Reference< msforms::XColorFormat > SAL_CALL
+uno::Reference< msforms::XColorFormat >
 ScVbaFillFormat::ForeColor()
 {
     if( !m_xColorFormat.is() )

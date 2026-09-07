@@ -32,19 +32,19 @@ class ScVbaCheckbox : public CheckBoxImpl_BASE
 public:
     ScVbaCheckbox(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
    // Attributes
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
-    virtual sal_Int32 SAL_CALL getBackColor() override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
-    virtual bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
-    virtual bool SAL_CALL getLocked() override;
-    virtual void SAL_CALL setLocked( bool bAutoSize ) override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual sal_Int32 getBackColor() override;
+    virtual void setBackColor( sal_Int32 nBackColor ) override;
+    virtual bool getAutoSize() override;
+    virtual void setAutoSize( bool bAutoSize ) override;
+    virtual bool getLocked() override;
+    virtual void setLocked( bool bAutoSize ) override;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
+    OUString getDefaultPropertyName(  ) override { return u"Value"_ustr; }
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

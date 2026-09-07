@@ -50,27 +50,27 @@ protected:
     virtual css::frame::XModel* getCurrentDocument() = 0;
 public:
     // XHelperInterface ( parent is itself )
-    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) override { return this; }
+    virtual css::uno::Reference< ov::XHelperInterface > getParent(  ) override { return this; }
 
-    virtual bool SAL_CALL getScreenUpdating() override;
-    virtual void SAL_CALL setScreenUpdating(bool bUpdate) override;
-    virtual bool SAL_CALL getDisplayStatusBar() override;
-    virtual void SAL_CALL setDisplayStatusBar(bool bDisplayStatusBar) override;
-    virtual bool SAL_CALL getInteractive() override;
-    virtual void SAL_CALL setInteractive( bool bInteractive ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool bVisible ) override;
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& sCaption ) override;
-    virtual void SAL_CALL OnKey( const OUString& Key, const cpo::uno::Any& Procedure ) override;
-    virtual cpo::uno::Any SAL_CALL CommandBars( const cpo::uno::Any& aIndex ) override;
-    virtual OUString SAL_CALL getVersion() override;
-    virtual cpo::uno::Any SAL_CALL getVBE() override;
+    virtual bool getScreenUpdating() override;
+    virtual void setScreenUpdating(bool bUpdate) override;
+    virtual bool getDisplayStatusBar() override;
+    virtual void setDisplayStatusBar(bool bDisplayStatusBar) override;
+    virtual bool getInteractive() override;
+    virtual void setInteractive( bool bInteractive ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool bVisible ) override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& sCaption ) override;
+    virtual void OnKey( const OUString& Key, const cpo::uno::Any& Procedure ) override;
+    virtual cpo::uno::Any CommandBars( const cpo::uno::Any& aIndex ) override;
+    virtual OUString getVersion() override;
+    virtual cpo::uno::Any getVBE() override;
 
-    virtual cpo::uno::Any SAL_CALL Run( const OUString& MacroName, const cpo::uno::Any& varg1, const cpo::uno::Any& varg2, const cpo::uno::Any& varg3, const cpo::uno::Any& varg4, const cpo::uno::Any& varg5, const cpo::uno::Any& varg6, const cpo::uno::Any& varg7, const cpo::uno::Any& varg8, const cpo::uno::Any& varg9, const cpo::uno::Any& varg10, const cpo::uno::Any& varg11, const cpo::uno::Any& varg12, const cpo::uno::Any& varg13, const cpo::uno::Any& varg14, const cpo::uno::Any& varg15, const cpo::uno::Any& varg16, const cpo::uno::Any& varg17, const cpo::uno::Any& varg18, const cpo::uno::Any& varg19, const cpo::uno::Any& varg20, const cpo::uno::Any& varg21, const cpo::uno::Any& varg22, const cpo::uno::Any& varg23, const cpo::uno::Any& varg24, const cpo::uno::Any& varg25, const cpo::uno::Any& varg26, const cpo::uno::Any& varg27, const cpo::uno::Any& varg28, const cpo::uno::Any& varg29, const cpo::uno::Any& varg30 ) override;
-    virtual void SAL_CALL OnTime( const cpo::uno::Any& aEarliestTime, const OUString& aFunction, const cpo::uno::Any& aLatestTime, const cpo::uno::Any& aSchedule ) override;
-    virtual void SAL_CALL Undo() override;
-    virtual void SAL_CALL Quit() override;
+    virtual cpo::uno::Any Run( const OUString& MacroName, const cpo::uno::Any& varg1, const cpo::uno::Any& varg2, const cpo::uno::Any& varg3, const cpo::uno::Any& varg4, const cpo::uno::Any& varg5, const cpo::uno::Any& varg6, const cpo::uno::Any& varg7, const cpo::uno::Any& varg8, const cpo::uno::Any& varg9, const cpo::uno::Any& varg10, const cpo::uno::Any& varg11, const cpo::uno::Any& varg12, const cpo::uno::Any& varg13, const cpo::uno::Any& varg14, const cpo::uno::Any& varg15, const cpo::uno::Any& varg16, const cpo::uno::Any& varg17, const cpo::uno::Any& varg18, const cpo::uno::Any& varg19, const cpo::uno::Any& varg20, const cpo::uno::Any& varg21, const cpo::uno::Any& varg22, const cpo::uno::Any& varg23, const cpo::uno::Any& varg24, const cpo::uno::Any& varg25, const cpo::uno::Any& varg26, const cpo::uno::Any& varg27, const cpo::uno::Any& varg28, const cpo::uno::Any& varg29, const cpo::uno::Any& varg30 ) override;
+    virtual void OnTime( const cpo::uno::Any& aEarliestTime, const OUString& aFunction, const cpo::uno::Any& aLatestTime, const cpo::uno::Any& aSchedule ) override;
+    virtual void Undo() override;
+    virtual void Quit() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -31,22 +31,22 @@ public:
     explicit VbaNewFont(const css::uno::Reference<css::beans::XPropertySet>& rxModelProps);
 
     // XNewFont attributes
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName(const OUString& rName) override;
-    virtual double SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize(double fSize) override;
-    virtual sal_Int16 SAL_CALL getCharset() override;
-    virtual void SAL_CALL setCharset(sal_Int16 nCharset) override;
-    virtual sal_Int16 SAL_CALL getWeight() override;
-    virtual void SAL_CALL setWeight(sal_Int16 nWeight) override;
-    virtual bool SAL_CALL getBold() override;
-    virtual void SAL_CALL setBold(bool bBold) override;
-    virtual bool SAL_CALL getItalic() override;
-    virtual void SAL_CALL setItalic(bool bItalic) override;
-    virtual bool SAL_CALL getUnderline() override;
-    virtual void SAL_CALL setUnderline(bool bUnderline) override;
-    virtual bool SAL_CALL getStrikethrough() override;
-    virtual void SAL_CALL setStrikethrough(bool bStrikethrough) override;
+    virtual OUString getName() override;
+    virtual void setName(const OUString& rName) override;
+    virtual double getSize() override;
+    virtual void setSize(double fSize) override;
+    virtual sal_Int16 getCharset() override;
+    virtual void setCharset(sal_Int16 nCharset) override;
+    virtual sal_Int16 getWeight() override;
+    virtual void setWeight(sal_Int16 nWeight) override;
+    virtual bool getBold() override;
+    virtual void setBold(bool bBold) override;
+    virtual bool getItalic() override;
+    virtual void setItalic(bool bItalic) override;
+    virtual bool getUnderline() override;
+    virtual void setUnderline(bool bUnderline) override;
+    virtual bool getStrikethrough() override;
+    virtual void setStrikethrough(bool bStrikethrough) override;
 
 private:
     css::uno::Reference<css::beans::XPropertySet> mxProps;

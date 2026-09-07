@@ -41,46 +41,46 @@ public:
     ScVbaComboBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
 
     // Attributes
-    virtual cpo::uno::Any SAL_CALL getListIndex() override;
-    virtual ::sal_Int32 SAL_CALL getListCount() override;
-    virtual void SAL_CALL setListIndex( const cpo::uno::Any& _value ) override;
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-    virtual OUString SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const OUString& _text ) override;
-    virtual sal_Int32 SAL_CALL getStyle() override;
-    virtual void SAL_CALL setStyle( sal_Int32 nStyle ) override;
-    virtual sal_Int32 SAL_CALL getDropButtonStyle() override;
-    virtual void SAL_CALL setDropButtonStyle( sal_Int32 nDropButtonStyle ) override;
-    virtual sal_Int32 SAL_CALL getDragBehavior() override;
-    virtual void SAL_CALL setDragBehavior( sal_Int32 nDragBehavior ) override;
-    virtual sal_Int32 SAL_CALL getEnterFieldBehavior() override;
-    virtual void SAL_CALL setEnterFieldBehavior( sal_Int32 nEnterFieldBehavior ) override;
-    virtual sal_Int32 SAL_CALL getListStyle() override;
-    virtual void SAL_CALL setListStyle( sal_Int32 nListStyle ) override;
-    virtual sal_Int32 SAL_CALL getTextAlign() override;
-    virtual void SAL_CALL setTextAlign( sal_Int32 nTextAlign ) override;
-    virtual sal_Int32 SAL_CALL getTextLength() override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
-    virtual sal_Int32 SAL_CALL getBackColor() override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
-    virtual bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
-    virtual bool SAL_CALL getLocked() override;
-    virtual void SAL_CALL setLocked( bool bAutoSize ) override;
-    virtual OUString SAL_CALL getLinkedCell() override;
-    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) override;
+    virtual cpo::uno::Any getListIndex() override;
+    virtual ::sal_Int32 getListCount() override;
+    virtual void setListIndex( const cpo::uno::Any& _value ) override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
+    virtual OUString getText() override;
+    virtual void setText( const OUString& _text ) override;
+    virtual sal_Int32 getStyle() override;
+    virtual void setStyle( sal_Int32 nStyle ) override;
+    virtual sal_Int32 getDropButtonStyle() override;
+    virtual void setDropButtonStyle( sal_Int32 nDropButtonStyle ) override;
+    virtual sal_Int32 getDragBehavior() override;
+    virtual void setDragBehavior( sal_Int32 nDragBehavior ) override;
+    virtual sal_Int32 getEnterFieldBehavior() override;
+    virtual void setEnterFieldBehavior( sal_Int32 nEnterFieldBehavior ) override;
+    virtual sal_Int32 getListStyle() override;
+    virtual void setListStyle( sal_Int32 nListStyle ) override;
+    virtual sal_Int32 getTextAlign() override;
+    virtual void setTextAlign( sal_Int32 nTextAlign ) override;
+    virtual sal_Int32 getTextLength() override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual sal_Int32 getBackColor() override;
+    virtual void setBackColor( sal_Int32 nBackColor ) override;
+    virtual bool getAutoSize() override;
+    virtual void setAutoSize( bool bAutoSize ) override;
+    virtual bool getLocked() override;
+    virtual void setLocked( bool bAutoSize ) override;
+    virtual OUString getLinkedCell() override;
+    virtual void setLinkedCell( const OUString& _linkedcell ) override;
 
     // Methods
-    virtual void SAL_CALL AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex ) override;
-    virtual void SAL_CALL removeItem( const cpo::uno::Any& index ) override;
-    virtual void SAL_CALL Clear(  ) override;
-    virtual cpo::uno::Any SAL_CALL List( const cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn ) override;
+    virtual void AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex ) override;
+    virtual void removeItem( const cpo::uno::Any& index ) override;
+    virtual void Clear(  ) override;
+    virtual cpo::uno::Any List( const cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn ) override;
     // XControl
-    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
+    virtual void setRowSource( const OUString& _rowsource ) override;
 
     // XDefaultProperty
-        OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
+        OUString getDefaultPropertyName(  ) override { return u"Value"_ustr; }
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

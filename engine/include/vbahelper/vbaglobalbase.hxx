@@ -50,9 +50,9 @@ public:
     VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const OUString& sDocCtxName );
     virtual ~VbaGlobalsBase() override;
     // XMultiServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 };
 #endif
 

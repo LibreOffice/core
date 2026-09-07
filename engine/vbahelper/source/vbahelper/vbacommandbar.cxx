@@ -37,7 +37,7 @@ ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface >& 
 {
 }
 
-OUString SAL_CALL
+OUString
 ScVbaCommandBar::getName()
 {
     // This will get a "NULL length string" when Name is not set.
@@ -69,7 +69,7 @@ ScVbaCommandBar::getName()
     }
     return sName;
 }
-void SAL_CALL
+void
 ScVbaCommandBar::setName( const OUString& _name )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
@@ -77,7 +77,7 @@ ScVbaCommandBar::setName( const OUString& _name )
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
-bool SAL_CALL
+bool
 ScVbaCommandBar::getVisible()
 {
     // menu bar is always visible in OOo
@@ -100,7 +100,7 @@ ScVbaCommandBar::getVisible()
     }
     return bVisible;
 }
-void SAL_CALL
+void
 ScVbaCommandBar::setVisible( bool _visible )
 {
     try
@@ -123,21 +123,21 @@ ScVbaCommandBar::setVisible( bool _visible )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaCommandBar::getEnabled()
 {
     // emulated with Visible
     return getVisible();
 }
 
-void SAL_CALL
+void
 ScVbaCommandBar::setEnabled( bool _enabled )
 {
     // emulated with Visible
     setVisible( _enabled );
 }
 
-void SAL_CALL
+void
 ScVbaCommandBar::Delete(  )
 {
     pCBarHelper->removeSettings( m_sResourceUrl );
@@ -147,7 +147,7 @@ ScVbaCommandBar::Delete(  )
         xNameContainer->removeByName( m_sResourceUrl );
     }
 }
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaCommandBar::Controls( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl ) );
@@ -158,7 +158,7 @@ ScVbaCommandBar::Controls( const cpo::uno::Any& aIndex )
     return cpo::uno::Any( xCommandBarControls );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaCommandBar::Type()
 {
     // #FIXME support msoBarTypePopup
@@ -167,7 +167,7 @@ ScVbaCommandBar::Type()
     return nType;
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaCommandBar::FindControl( const cpo::uno::Any& /*aType*/, const cpo::uno::Any& /*aId*/, const cpo::uno::Any& /*aTag*/, const cpo::uno::Any& /*aVisible*/, const cpo::uno::Any& /*aRecursive*/ )
 {
     // always fail to find control
@@ -200,46 +200,46 @@ VbaDummyCommandBar::VbaDummyCommandBar(
 {
 }
 
-OUString SAL_CALL VbaDummyCommandBar::getName()
+OUString VbaDummyCommandBar::getName()
 {
     return maName;
 }
 
-void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name )
+void VbaDummyCommandBar::setName( const OUString& _name )
 {
     maName = _name;
 }
 
-bool SAL_CALL VbaDummyCommandBar::getVisible()
+bool VbaDummyCommandBar::getVisible()
 {
     // #STUB
     return true;
 }
 
-void SAL_CALL VbaDummyCommandBar::setVisible( bool /*_visible*/ )
+void VbaDummyCommandBar::setVisible( bool /*_visible*/ )
 {
     // #STUB
 }
 
-bool SAL_CALL VbaDummyCommandBar::getEnabled()
+bool VbaDummyCommandBar::getEnabled()
 {
     // emulated with Visible
     return getVisible();
 }
 
-void SAL_CALL VbaDummyCommandBar::setEnabled( bool _enabled )
+void VbaDummyCommandBar::setEnabled( bool _enabled )
 {
     // emulated with Visible
     setVisible( _enabled );
 }
 
-void SAL_CALL VbaDummyCommandBar::Delete(  )
+void VbaDummyCommandBar::Delete(  )
 {
     // no-op
     // #STUB
 }
 
-cpo::uno::Any SAL_CALL VbaDummyCommandBar::Controls( const cpo::uno::Any& aIndex )
+cpo::uno::Any VbaDummyCommandBar::Controls( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( new VbaDummyCommandBarControls( this, mxContext ) );
     if( aIndex.hasValue() )
@@ -247,12 +247,12 @@ cpo::uno::Any SAL_CALL VbaDummyCommandBar::Controls( const cpo::uno::Any& aIndex
     return cpo::uno::Any( xCommandBarControls );
 }
 
-sal_Int32 SAL_CALL VbaDummyCommandBar::Type()
+sal_Int32 VbaDummyCommandBar::Type()
 {
     return office::MsoBarType::msoBarTypePopup;
 }
 
-cpo::uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const cpo::uno::Any& /*aType*/, const cpo::uno::Any& /*aId*/, const cpo::uno::Any& /*aTag*/, const cpo::uno::Any& /*aVisible*/, const cpo::uno::Any& /*aRecursive*/ )
+cpo::uno::Any VbaDummyCommandBar::FindControl( const cpo::uno::Any& /*aType*/, const cpo::uno::Any& /*aId*/, const cpo::uno::Any& /*aTag*/, const cpo::uno::Any& /*aVisible*/, const cpo::uno::Any& /*aRecursive*/ )
 {
     return cpo::uno::Any( uno::Reference< XCommandBarControl >() );
 }

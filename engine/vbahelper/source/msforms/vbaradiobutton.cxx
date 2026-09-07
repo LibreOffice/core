@@ -29,7 +29,7 @@ ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< XHelperInterface >& xP
 }
 
 // Attributes
-OUString SAL_CALL
+OUString
 ScVbaRadioButton::getCaption()
 {
     OUString Label;
@@ -37,13 +37,13 @@ ScVbaRadioButton::getCaption()
     return Label;
 }
 
-void SAL_CALL
+void
 ScVbaRadioButton::setCaption( const OUString& _caption )
 {
     m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaRadioButton::getValue()
 {
     sal_Int16 nValue = -1;
@@ -57,7 +57,7 @@ ScVbaRadioButton::getValue()
 
 }
 
-void SAL_CALL
+void
 ScVbaRadioButton::setValue( const cpo::uno::Any& _value )
 {
     sal_Int16 nValue = 0;
@@ -86,7 +86,7 @@ ScVbaRadioButton::setValue( const cpo::uno::Any& _value )
     }
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaRadioButton::getFont()
+uno::Reference< msforms::XNewFont > ScVbaRadioButton::getFont()
 {
     return new VbaNewFont( m_xProps );
 }

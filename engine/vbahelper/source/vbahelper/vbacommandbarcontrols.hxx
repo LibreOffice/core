@@ -47,13 +47,13 @@ public:
     ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef  pHelper, css::uno::Reference< css::container::XIndexAccess >  xBarSettings, const OUString& sResourceUrl );
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // Methods
-    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
-    virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
+    virtual cpo::uno::Any Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
+    virtual css::uno::Reference< ov::XCommandBarControl > Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
@@ -68,13 +68,13 @@ public:
         const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // Methods
-    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
-    virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
+    virtual cpo::uno::Any Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
+    virtual css::uno::Reference< ov::XCommandBarControl > Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

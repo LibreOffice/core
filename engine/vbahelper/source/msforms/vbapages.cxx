@@ -25,7 +25,7 @@ ScVbaPages::ScVbaPages( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaPages::getElementType()
 {
     // return cppu::UnoType<msforms::XPage>::get();
@@ -44,7 +44,7 @@ ScVbaPages::getServiceImplName()
     return u"ScVbaPages"_ustr;
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration >
 ScVbaPages::createEnumeration()
 {
     // #STUB

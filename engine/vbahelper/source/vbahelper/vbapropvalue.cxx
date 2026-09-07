@@ -24,13 +24,13 @@ ScVbaPropValue::ScVbaPropValue( PropListener* pListener ) : m_pListener( pListen
 {
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaPropValue::getValue()
 {
     return m_pListener->getValueEvent();
 }
 
-void SAL_CALL
+void
 ScVbaPropValue::setValue( const cpo::uno::Any& _value )
 {
     m_pListener->setValueEvent( _value );

@@ -77,15 +77,15 @@ public:
     static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
     //XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
-    virtual void SAL_CALL SelectAll() override;
+    virtual void SelectAll() override;
     //helper::calc
-    virtual cpo::uno::Any SAL_CALL AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) override;
-    virtual cpo::uno::Any SAL_CALL AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
-    virtual cpo::uno::Any SAL_CALL AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
-    virtual css::uno::Reference< ov::msforms::XShapeRange > SAL_CALL Range( const cpo::uno::Any& shapes ) override;
+    virtual cpo::uno::Any AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) override;
+    virtual cpo::uno::Any AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
+    virtual cpo::uno::Any AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
+    virtual css::uno::Reference< ov::msforms::XShapeRange > Range( const cpo::uno::Any& shapes ) override;
     // ScVbaCollectionBaseImpl
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 };

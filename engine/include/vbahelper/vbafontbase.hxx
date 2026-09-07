@@ -85,28 +85,28 @@ public:
     virtual ~VbaFontBase() override;// {}
 
     // Attributes
-    virtual cpo::uno::Any SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const cpo::uno::Any& _size ) override;
-    virtual cpo::uno::Any SAL_CALL getColorIndex() override;
-    virtual void SAL_CALL setColorIndex( const cpo::uno::Any& _colorindex ) override;
-    virtual cpo::uno::Any SAL_CALL getBold() override;
-    virtual void SAL_CALL setBold( const cpo::uno::Any& _bold ) override;
-    virtual cpo::uno::Any SAL_CALL getUnderline() override = 0;
-    virtual void SAL_CALL setUnderline( const cpo::uno::Any& _underline ) override = 0;
-    virtual cpo::uno::Any SAL_CALL getStrikethrough() override;
-    virtual void SAL_CALL setStrikethrough( const cpo::uno::Any& _strikethrough ) override;
-    virtual cpo::uno::Any SAL_CALL getShadow() override;
-    virtual void SAL_CALL setShadow( const cpo::uno::Any& _shadow ) override;
-    virtual cpo::uno::Any SAL_CALL getItalic() override;
-    virtual void SAL_CALL setItalic( const cpo::uno::Any& _italic ) override;
-    virtual cpo::uno::Any SAL_CALL getSubscript() override;
-    virtual void SAL_CALL setSubscript( const cpo::uno::Any& _subscript ) override;
-    virtual cpo::uno::Any SAL_CALL getSuperscript() override;
-    virtual void SAL_CALL setSuperscript( const cpo::uno::Any& _superscript ) override;
-    virtual cpo::uno::Any SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const cpo::uno::Any& _name ) override;
-    virtual cpo::uno::Any SAL_CALL getColor() override ;
-    virtual void SAL_CALL setColor( const cpo::uno::Any& _color ) override ;
+    virtual cpo::uno::Any getSize() override;
+    virtual void setSize( const cpo::uno::Any& _size ) override;
+    virtual cpo::uno::Any getColorIndex() override;
+    virtual void setColorIndex( const cpo::uno::Any& _colorindex ) override;
+    virtual cpo::uno::Any getBold() override;
+    virtual void setBold( const cpo::uno::Any& _bold ) override;
+    virtual cpo::uno::Any getUnderline() override = 0;
+    virtual void setUnderline( const cpo::uno::Any& _underline ) override = 0;
+    virtual cpo::uno::Any getStrikethrough() override;
+    virtual void setStrikethrough( const cpo::uno::Any& _strikethrough ) override;
+    virtual cpo::uno::Any getShadow() override;
+    virtual void setShadow( const cpo::uno::Any& _shadow ) override;
+    virtual cpo::uno::Any getItalic() override;
+    virtual void setItalic( const cpo::uno::Any& _italic ) override;
+    virtual cpo::uno::Any getSubscript() override;
+    virtual void setSubscript( const cpo::uno::Any& _subscript ) override;
+    virtual cpo::uno::Any getSuperscript() override;
+    virtual void setSuperscript( const cpo::uno::Any& _superscript ) override;
+    virtual cpo::uno::Any getName() override;
+    virtual void setName( const cpo::uno::Any& _name ) override;
+    virtual cpo::uno::Any getColor() override ;
+    virtual void setColor( const cpo::uno::Any& _color ) override ;
 };
 
 #endif

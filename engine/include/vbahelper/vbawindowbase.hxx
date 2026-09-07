@@ -59,16 +59,16 @@ public:
         css::uno::Reference< cpo::uno::XComponentContext > const& xContext );
 
     // XWindowBase
-    virtual sal_Int32 SAL_CALL getHeight() override ;
-    virtual void SAL_CALL setHeight( sal_Int32 _height ) override ;
-    virtual sal_Int32 SAL_CALL getLeft() override ;
-    virtual void SAL_CALL setLeft( sal_Int32 _left ) override ;
-    virtual sal_Int32 SAL_CALL getTop() override ;
-    virtual void SAL_CALL setTop( sal_Int32 _top ) override ;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual sal_Int32 SAL_CALL getWidth() override ;
-    virtual void SAL_CALL setWidth( sal_Int32 _width ) override ;
+    virtual sal_Int32 getHeight() override ;
+    virtual void setHeight( sal_Int32 _height ) override ;
+    virtual sal_Int32 getLeft() override ;
+    virtual void setLeft( sal_Int32 _left ) override ;
+    virtual sal_Int32 getTop() override ;
+    virtual void setTop( sal_Int32 _top ) override ;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual sal_Int32 getWidth() override ;
+    virtual void setWidth( sal_Int32 _width ) override ;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

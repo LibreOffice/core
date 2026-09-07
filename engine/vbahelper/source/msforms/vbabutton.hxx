@@ -32,21 +32,21 @@ class VbaButton : public ButtonImpl_BASE
 public:
     VbaButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
    // Attributes
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( bool bAutoSize ) override;
-    virtual bool SAL_CALL getCancel() override;
-    virtual void SAL_CALL setCancel( bool bCancel ) override;
-    virtual bool SAL_CALL getDefault() override;
-    virtual void SAL_CALL setDefault( bool bDefault ) override;
-    virtual sal_Int32 SAL_CALL getBackColor() override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
-    virtual sal_Int32 SAL_CALL getForeColor() override;
-    virtual void SAL_CALL setForeColor( sal_Int32 nForeColor ) override;
-    virtual bool SAL_CALL getLocked() override;
-    virtual void SAL_CALL setLocked( bool bAutoSize ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
+    virtual bool getAutoSize() override;
+    virtual void setAutoSize( bool bAutoSize ) override;
+    virtual bool getCancel() override;
+    virtual void setCancel( bool bCancel ) override;
+    virtual bool getDefault() override;
+    virtual void setDefault( bool bDefault ) override;
+    virtual sal_Int32 getBackColor() override;
+    virtual void setBackColor( sal_Int32 nBackColor ) override;
+    virtual sal_Int32 getForeColor() override;
+    virtual void setForeColor( sal_Int32 nForeColor ) override;
+    virtual bool getLocked() override;
+    virtual void setLocked( bool bAutoSize ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

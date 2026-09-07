@@ -54,7 +54,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
 }
 
 // Attribute
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaColorFormat::getRGB()
 {
     sal_Int32 nRGB = 0;
@@ -80,7 +80,7 @@ ScVbaColorFormat::getRGB()
     return nRGB;
 }
 
-void SAL_CALL
+void
 ScVbaColorFormat::setRGB( sal_Int32 _rgb )
 {
     sal_Int32 nRGB = XLRGBToOORGB( _rgb );
@@ -111,7 +111,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb )
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaColorFormat::getSchemeColor()
 {
     sal_Int32 nColor = getRGB();
@@ -141,7 +141,7 @@ ScVbaColorFormat::getSchemeColor()
 */
 }
 
-void SAL_CALL
+void
 ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor )
 {
     // the table is 0 based

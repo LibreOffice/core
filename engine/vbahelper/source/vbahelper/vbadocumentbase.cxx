@@ -278,7 +278,7 @@ VbaDocumentBase::Activate()
     xFrame->activate();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 VbaDocumentBase::getVBProject()
 {
     if( !mxVBProject.is() ) try

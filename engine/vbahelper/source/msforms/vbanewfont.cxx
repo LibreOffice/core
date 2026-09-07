@@ -37,35 +37,35 @@ VbaNewFont::VbaNewFont(
 
 // XNewFont attributes
 
-OUString SAL_CALL VbaNewFont::getName()
+OUString VbaNewFont::getName()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontName"_ustr );
     return aAny.get< OUString >();
 }
 
-void SAL_CALL VbaNewFont::setName( const OUString& rName )
+void VbaNewFont::setName( const OUString& rName )
 {
     mxProps->setPropertyValue( u"FontName"_ustr , cpo::uno::Any( rName ) );
 }
 
-double SAL_CALL VbaNewFont::getSize()
+double VbaNewFont::getSize()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontHeight"_ustr );
     return aAny.get< float >();
 }
 
-void SAL_CALL VbaNewFont::setSize( double fSize )
+void VbaNewFont::setSize( double fSize )
 {
     mxProps->setPropertyValue( u"FontHeight"_ustr , cpo::uno::Any( static_cast< float >( fSize ) ) );
 }
 
-sal_Int16 SAL_CALL VbaNewFont::getCharset()
+sal_Int16 VbaNewFont::getCharset()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontCharset"_ustr );
     return rtl_getBestWindowsCharsetFromTextEncoding( static_cast< rtl_TextEncoding >( aAny.get< sal_Int16 >() ) );
 }
 
-void SAL_CALL VbaNewFont::setCharset( sal_Int16 nCharset )
+void VbaNewFont::setCharset( sal_Int16 nCharset )
 {
     rtl_TextEncoding eFontEnc = RTL_TEXTENCODING_DONTKNOW;
     if( (0 <= nCharset) && (nCharset <= SAL_MAX_UINT8) )
@@ -75,56 +75,56 @@ void SAL_CALL VbaNewFont::setCharset( sal_Int16 nCharset )
     mxProps->setPropertyValue( u"FontCharset"_ustr , cpo::uno::Any( static_cast< sal_Int16 >( eFontEnc ) ) );
 }
 
-sal_Int16 SAL_CALL VbaNewFont::getWeight()
+sal_Int16 VbaNewFont::getWeight()
 {
     return getBold() ? 700 : 400;
 }
 
-void SAL_CALL VbaNewFont::setWeight( sal_Int16 nWeight )
+void VbaNewFont::setWeight( sal_Int16 nWeight )
 {
     setBold( nWeight >= 700 );
 }
 
-bool SAL_CALL VbaNewFont::getBold()
+bool VbaNewFont::getBold()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontWeight"_ustr );
     return aAny.get< float >() > awt::FontWeight::NORMAL;
 }
 
-void SAL_CALL VbaNewFont::setBold( bool bBold )
+void VbaNewFont::setBold( bool bBold )
 {
     mxProps->setPropertyValue( u"FontWeight"_ustr , cpo::uno::Any( bBold ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL ) );
 }
 
-bool SAL_CALL VbaNewFont::getItalic()
+bool VbaNewFont::getItalic()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontSlant"_ustr );
     return aAny.get< awt::FontSlant >() != awt::FontSlant_NONE;
 }
 
-void SAL_CALL VbaNewFont::setItalic( bool bItalic )
+void VbaNewFont::setItalic( bool bItalic )
 {
     mxProps->setPropertyValue( u"FontSlant"_ustr , cpo::uno::Any( bItalic ? awt::FontSlant_ITALIC : awt::FontSlant_NONE ) );
 }
 
-bool SAL_CALL VbaNewFont::getUnderline()
+bool VbaNewFont::getUnderline()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue(u"FontUnderline"_ustr );
     return aAny.get< sal_Int16 >() != awt::FontUnderline::NONE;
 }
 
-void SAL_CALL VbaNewFont::setUnderline( bool bUnderline )
+void VbaNewFont::setUnderline( bool bUnderline )
 {
     mxProps->setPropertyValue(u"FontUnderline"_ustr , cpo::uno::Any( bUnderline ? awt::FontUnderline::SINGLE : awt::FontUnderline::NONE ) );
 }
 
-bool SAL_CALL VbaNewFont::getStrikethrough()
+bool VbaNewFont::getStrikethrough()
 {
     cpo::uno::Any aAny = mxProps->getPropertyValue( u"FontStrikeout"_ustr );
     return aAny.get< sal_Int16 >() != awt::FontStrikeout::NONE;
 }
 
-void SAL_CALL VbaNewFont::setStrikethrough( bool bStrikethrough )
+void VbaNewFont::setStrikethrough( bool bStrikethrough )
 {
     mxProps->setPropertyValue( u"FontStrikeout"_ustr ,cpo::uno::Any( bStrikethrough ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
 }

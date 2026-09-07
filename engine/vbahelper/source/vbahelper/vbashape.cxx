@@ -65,7 +65,7 @@ ScVbaShape::~ScVbaShape()
 {
 }
 
-void SAL_CALL
+void
 ScVbaShape::disposing( const lang::EventObject& rEventObject )
 {
     try
@@ -201,7 +201,7 @@ sal_Int32 ScVbaShape::getAutoShapeType(const css::uno::Reference< drawing::XShap
 }
 
 // Attributes
-OUString SAL_CALL
+OUString
 ScVbaShape::getName()
 {
     OUString sName;
@@ -210,14 +210,14 @@ ScVbaShape::getName()
     return sName;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setName( const OUString& _name )
 {
     uno::Reference< container::XNamed > xNamed( m_xShape, uno::UNO_QUERY_THROW );
     xNamed->setName( _name );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaShape::getAlternativeText()
 {
     OUString sAltText;
@@ -226,38 +226,38 @@ ScVbaShape::getAlternativeText()
     return sAltText;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setAlternativeText( const OUString& sAltText )
 {
     uno::Reference< beans::XPropertySet > xProps( m_xShape, uno::UNO_QUERY_THROW );
     xProps->setPropertyValue(u"Title"_ustr, cpo::uno::Any( sAltText ) );
 }
 
-double SAL_CALL
+double
 ScVbaShape::getHeight()
 {
     return m_aShapeHelper.getHeight();
 }
 
-void SAL_CALL
+void
 ScVbaShape::setHeight(double _height)
 {
     m_aShapeHelper.setHeight( _height );
 }
 
-double SAL_CALL
+double
 ScVbaShape::getWidth()
 {
     return m_aShapeHelper.getWidth();
 }
 
-void SAL_CALL
+void
 ScVbaShape::setWidth(double _width)
 {
     m_aShapeHelper.setWidth( _width );
 }
 
-double SAL_CALL
+double
 ScVbaShape::getLeft()
 {
     double left = 0;
@@ -275,7 +275,7 @@ ScVbaShape::getLeft()
     return left;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setLeft( double _left )
 {
     try
@@ -289,7 +289,7 @@ ScVbaShape::setLeft( double _left )
     }
 }
 
-double SAL_CALL
+double
 ScVbaShape::getTop()
 {
     double top = 0;
@@ -306,7 +306,7 @@ ScVbaShape::getTop()
     return top;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setTop( double _top )
 {
     try
@@ -320,7 +320,7 @@ ScVbaShape::setTop( double _top )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaShape::getVisible()
 {
     // #STUB
@@ -328,14 +328,14 @@ ScVbaShape::getVisible()
     return true;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setVisible( bool /*_visible*/ )
 {
     // #STUB
     //UNO Shapes are always visible
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaShape::getZOrderPosition()
 {
     sal_Int32 nZOrderPosition = 0;
@@ -344,13 +344,13 @@ ScVbaShape::getZOrderPosition()
     return nZOrderPosition + 1;
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaShape::getType()
 {
     return m_nType;
 }
 
-double SAL_CALL
+double
 ScVbaShape::getRotation()
 {
     double dRotation = 0;
@@ -360,34 +360,34 @@ ScVbaShape::getRotation()
     return dRotation;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setRotation( double _rotation )
 {
     sal_Int32 nRotation = static_cast < sal_Int32 > ( _rotation * 100 );
     m_xPropertySet->setPropertyValue( u"RotateAngle"_ustr , cpo::uno::Any( nRotation ) );
 }
 
-uno::Reference< msforms::XLineFormat > SAL_CALL
+uno::Reference< msforms::XLineFormat >
 ScVbaShape::getLine()
 {
     // TODO should only return line
     return uno::Reference< msforms::XLineFormat >( new ScVbaLineFormat( this, mxContext, m_xShape ) );
 }
 
-uno::Reference< msforms::XFillFormat > SAL_CALL
+uno::Reference< msforms::XFillFormat >
 ScVbaShape::getFill()
 {
     return uno::Reference< msforms::XFillFormat >( new ScVbaFillFormat( this, mxContext, m_xShape ) );
 }
 
-uno::Reference<  msforms::XPictureFormat > SAL_CALL
+uno::Reference<  msforms::XPictureFormat >
 ScVbaShape::getPictureFormat()
 {
     return uno::Reference< msforms::XPictureFormat >( new ScVbaPictureFormat( this, mxContext, m_xShape ) );
 }
 
 // Methods
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaShape::TextFrame()
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
@@ -401,14 +401,14 @@ ScVbaShape::TextFrame()
     return cpo::uno::Any( uno::Reference< msforms::XTextFrame >( new VbaTextFrame( this, mxContext, m_xShape ) ) );
 }
 
-void SAL_CALL
+void
 ScVbaShape::Delete()
 {
     SolarMutexGuard aGuard;
     m_xShapes->remove( m_xShape );
 }
 
-void SAL_CALL
+void
 ScVbaShape::ZOrder( sal_Int32 ZOrderCmd )
 {
     sal_Int32 nOrderPosition;
@@ -442,7 +442,7 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd )
     }
 }
 
-void SAL_CALL
+void
 ScVbaShape::IncrementRotation( double Increment )
 {
     double nCurrentRotation = getRotation();
@@ -450,7 +450,7 @@ ScVbaShape::IncrementRotation( double Increment )
     setRotation(nCurrentRotation);
 }
 
-void SAL_CALL
+void
 ScVbaShape::IncrementLeft( double Increment )
 {
     double nCurrentLeft = getLeft();
@@ -458,7 +458,7 @@ ScVbaShape::IncrementLeft( double Increment )
     setLeft(nCurrentLeft);
 }
 
-void SAL_CALL
+void
 ScVbaShape::IncrementTop( double Increment )
 {
     double nCurrentTop = getTop();
@@ -466,7 +466,7 @@ ScVbaShape::IncrementTop( double Increment )
     setTop(nCurrentTop);
 }
 
-void SAL_CALL
+void
 ScVbaShape::ScaleHeight( double Factor, bool /*RelativeToOriginalSize*/, sal_Int32 Scale )
 {
     double nHeight = getHeight();
@@ -495,7 +495,7 @@ ScVbaShape::ScaleHeight( double Factor, bool /*RelativeToOriginalSize*/, sal_Int
     }
 }
 
-void SAL_CALL
+void
 ScVbaShape::ScaleWidth( double Factor, bool /*RelativeToOriginalSize*/, sal_Int32 Scale )
 {
     double nWidth = getWidth();
@@ -524,7 +524,7 @@ ScVbaShape::ScaleWidth( double Factor, bool /*RelativeToOriginalSize*/, sal_Int3
     }
 }
 
-void SAL_CALL
+void
 ScVbaShape::Select( const cpo::uno::Any& /*Replace*/ )
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -534,7 +534,7 @@ ScVbaShape::Select( const cpo::uno::Any& /*Replace*/ )
 // This method should not be part of Shape, what we really need to do is...
 // dynamically create the appropriate objects e.g. TextBox, Oval, Picture etc.
 // ( e.g. the ones that really do have ShapeRange as an attribute )
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaShape::ShapeRange( const cpo::uno::Any& index )
 {
     // perhaps we should store a reference to the Shapes Collection
@@ -553,33 +553,33 @@ ScVbaShape::ShapeRange( const cpo::uno::Any& index )
     return cpo::uno::Any( xShapeRange );
 }
 
-bool SAL_CALL
+bool
 ScVbaShape::getLockAspectRatio()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setLockAspectRatio( bool /*_lockaspectratio*/ )
 {
     // #STUB
 }
 
-bool SAL_CALL
+bool
 ScVbaShape::getLockAnchor()
 {
     // #STUB
     return true;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setLockAnchor( bool /*_lockanchor*/ )
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaShape::getRelativeHorizontalPosition()
 {
     sal_Int32 nRelativeHorizontalPosition = word::WdRelativeHorizontalPosition::wdRelativeHorizontalPositionMargin;
@@ -616,7 +616,7 @@ ScVbaShape::getRelativeHorizontalPosition()
     return nRelativeHorizontalPosition;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalposition)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
@@ -650,7 +650,7 @@ ScVbaShape::setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalpositio
     m_xPropertySet->setPropertyValue( u"HoriOrientRelation"_ustr , cpo::uno::Any( nType ) );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaShape::getRelativeVerticalPosition()
 {
     sal_Int32 nRelativeVerticalPosition = word::WdRelativeVerticalPosition::wdRelativeVerticalPositionMargin;
@@ -687,7 +687,7 @@ ScVbaShape::getRelativeVerticalPosition()
     return nRelativeVerticalPosition;
 }
 
-void SAL_CALL
+void
 ScVbaShape::setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
 {
     sal_Int16 nType = text::RelOrientation::PAGE_FRAME;
@@ -721,7 +721,7 @@ ScVbaShape::setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
     m_xPropertySet->setPropertyValue( u"VertOrientRelation"_ustr , cpo::uno::Any( nType ) );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaShape::WrapFormat()
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );

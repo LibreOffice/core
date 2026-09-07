@@ -59,8 +59,8 @@ public:
     VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType );
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override = 0;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;
+    virtual cpo::uno::Type getElementType() override = 0;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override = 0;
 
     // VbaDocumentsBase_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override = 0;

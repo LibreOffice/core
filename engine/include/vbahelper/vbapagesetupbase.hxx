@@ -51,24 +51,24 @@ protected:
 public:
 
     // Attribute
-    virtual double SAL_CALL getTopMargin() override;
-    virtual void SAL_CALL setTopMargin( double margin ) override;
-    virtual double SAL_CALL getBottomMargin() override;
-    virtual void SAL_CALL setBottomMargin( double margin ) override;
-    virtual double SAL_CALL getRightMargin() override;
-    virtual void SAL_CALL setRightMargin( double margin ) override;
-    virtual double SAL_CALL getLeftMargin() override;
-    virtual void SAL_CALL setLeftMargin( double margin ) override;
+    virtual double getTopMargin() override;
+    virtual void setTopMargin( double margin ) override;
+    virtual double getBottomMargin() override;
+    virtual void setBottomMargin( double margin ) override;
+    virtual double getRightMargin() override;
+    virtual void setRightMargin( double margin ) override;
+    virtual double getLeftMargin() override;
+    virtual void setLeftMargin( double margin ) override;
     /// @throws cpo::uno::RuntimeException
-    virtual double SAL_CALL getHeaderMargin();
+    virtual double getHeaderMargin();
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setHeaderMargin( double margin );
+    virtual void setHeaderMargin( double margin );
     /// @throws cpo::uno::RuntimeException
-    virtual double SAL_CALL getFooterMargin();
+    virtual double getFooterMargin();
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setFooterMargin( double margin );
-    virtual sal_Int32 SAL_CALL getOrientation() override;
-    virtual void SAL_CALL setOrientation( sal_Int32 orientation ) override;
+    virtual void setFooterMargin( double margin );
+    virtual sal_Int32 getOrientation() override;
+    virtual void setOrientation( sal_Int32 orientation ) override;
 };
 #endif
 

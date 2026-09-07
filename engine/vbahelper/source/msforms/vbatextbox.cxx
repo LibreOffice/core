@@ -32,13 +32,13 @@ ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParen
 }
 
 // Attributes
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaTextBox::getValue()
 {
     return cpo::uno::Any( getText() );
 }
 
-void SAL_CALL
+void
 ScVbaTextBox::setValue( const cpo::uno::Any& _value )
 {
     // booleans are converted to uppercase strings
@@ -47,7 +47,7 @@ ScVbaTextBox::setValue( const cpo::uno::Any& _value )
 }
 
 //getString() will cause some info lose.
-OUString SAL_CALL
+OUString
 ScVbaTextBox::getText()
 {
     cpo::uno::Any aValue = m_xProps->getPropertyValue( u"Text"_ustr );
@@ -56,7 +56,7 @@ ScVbaTextBox::getText()
     return sString;
 }
 
-void SAL_CALL
+void
 ScVbaTextBox::setText( const OUString& _text )
 {
     OUString oldText( getText() );
@@ -71,7 +71,7 @@ ScVbaTextBox::setText( const OUString& _text )
         fireChangeEvent();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaTextBox::getMaxLength()
 {
     cpo::uno::Any aValue = m_xProps->getPropertyValue( u"MaxTextLen"_ustr );
@@ -80,7 +80,7 @@ ScVbaTextBox::getMaxLength()
     return static_cast<sal_Int32>(nMaxLength);
 }
 
-void SAL_CALL
+void
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength )
 {
     sal_Int16 nTmp( _maxlength );
@@ -88,7 +88,7 @@ ScVbaTextBox::setMaxLength( sal_Int32 _maxlength )
     m_xProps->setPropertyValue( u"MaxTextLen"_ustr , aValue);
 }
 
-bool SAL_CALL
+bool
 ScVbaTextBox::getMultiline()
 {
     cpo::uno::Any aValue = m_xProps->getPropertyValue( u"MultiLine"_ustr );
@@ -97,69 +97,69 @@ ScVbaTextBox::getMultiline()
     return bRet;
 }
 
-void SAL_CALL
+void
 ScVbaTextBox::setMultiline( bool _multiline )
 {
     cpo::uno::Any aValue( _multiline );
     m_xProps->setPropertyValue( u"MultiLine"_ustr , aValue);
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect()
+sal_Int32 ScVbaTextBox::getSpecialEffect()
 {
     return msforms::fmSpecialEffect::fmSpecialEffectSunken;
 }
 
-void SAL_CALL ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ )
+void ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ )
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle()
+sal_Int32 ScVbaTextBox::getBorderStyle()
 {
     return msforms::fmBorderStyle::fmBorderStyleNone;
 }
 
-void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ )
+void ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ )
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getTextLength()
+sal_Int32 ScVbaTextBox::getTextLength()
 {
     return getText().getLength();
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont()
+uno::Reference< msforms::XNewFont > ScVbaTextBox::getFont()
 {
     return new VbaNewFont( m_xProps );
 }
 
-sal_Int32 SAL_CALL ScVbaTextBox::getBackColor()
+sal_Int32 ScVbaTextBox::getBackColor()
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaTextBox::setBackColor( sal_Int32 nBackColor )
+void ScVbaTextBox::setBackColor( sal_Int32 nBackColor )
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-bool SAL_CALL ScVbaTextBox::getAutoSize()
+bool ScVbaTextBox::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaTextBox::setAutoSize( bool bAutoSize )
+void ScVbaTextBox::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-bool SAL_CALL ScVbaTextBox::getLocked()
+bool ScVbaTextBox::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaTextBox::setLocked( bool bLocked )
+void ScVbaTextBox::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }

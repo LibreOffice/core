@@ -103,10 +103,10 @@ public:
     ScVbaColorFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XHelperInterface >& xInternalParent, const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int16 nColorFormatType );
 
     // Attributes
-    virtual sal_Int32 SAL_CALL getRGB() override;
-    virtual void SAL_CALL setRGB( sal_Int32 _rgb ) override;
-    virtual sal_Int32 SAL_CALL getSchemeColor() override;
-    virtual void SAL_CALL setSchemeColor( sal_Int32 _schemecolor ) override;
+    virtual sal_Int32 getRGB() override;
+    virtual void setRGB( sal_Int32 _rgb ) override;
+    virtual sal_Int32 getSchemeColor() override;
+    virtual void setSchemeColor( sal_Int32 _schemecolor ) override;
 
 };
 

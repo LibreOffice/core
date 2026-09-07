@@ -38,18 +38,18 @@ public:
     ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl, bool bIsMenu );
 
     // Attributes
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& _name ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( bool _enabled ) override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& _name ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual bool getEnabled() override;
+    virtual void setEnabled( bool _enabled ) override;
 
     // Methods
-    virtual void SAL_CALL Delete(  ) override;
-    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& aIndex ) override;
-    virtual sal_Int32 SAL_CALL Type(  ) override;
-    virtual cpo::uno::Any SAL_CALL FindControl( const cpo::uno::Any& aType, const cpo::uno::Any& aId, const cpo::uno::Any& aTag, const cpo::uno::Any& aVisible, const cpo::uno::Any& aRecursive ) override;
+    virtual void Delete(  ) override;
+    virtual cpo::uno::Any Controls( const cpo::uno::Any& aIndex ) override;
+    virtual sal_Int32 Type(  ) override;
+    virtual cpo::uno::Any FindControl( const cpo::uno::Any& aType, const cpo::uno::Any& aId, const cpo::uno::Any& aTag, const cpo::uno::Any& aVisible, const cpo::uno::Any& aRecursive ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -67,18 +67,18 @@ public:
             OUString aName );
 
     // Attributes
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& _name ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( bool _enabled ) override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& _name ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual bool getEnabled() override;
+    virtual void setEnabled( bool _enabled ) override;
 
     // Methods
-    virtual void SAL_CALL Delete(  ) override;
-    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& aIndex ) override;
-    virtual sal_Int32 SAL_CALL Type(  ) override;
-    virtual cpo::uno::Any SAL_CALL FindControl( const cpo::uno::Any& aType, const cpo::uno::Any& aId, const cpo::uno::Any& aTag, const cpo::uno::Any& aVisible, const cpo::uno::Any& aRecursive ) override;
+    virtual void Delete(  ) override;
+    virtual cpo::uno::Any Controls( const cpo::uno::Any& aIndex ) override;
+    virtual sal_Int32 Type(  ) override;
+    virtual cpo::uno::Any FindControl( const cpo::uno::Any& aType, const cpo::uno::Any& aId, const cpo::uno::Any& aTag, const cpo::uno::Any& aVisible, const cpo::uno::Any& aRecursive ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -34,8 +34,8 @@ public:
     /// @throws css::lang::IllegalArgumentException
     ScVbaPages( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPages );
         // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
      // ScVbaPages_BASE
      virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

@@ -48,16 +48,16 @@ public:
     /// @throws cpo::uno::RuntimeException
     void setForeColorAndInternalStyle( sal_Int32 nForeColor );
     // Attributes
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual double SAL_CALL getTransparency() override;
-    virtual void SAL_CALL setTransparency( double _transparency ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual double getTransparency() override;
+    virtual void setTransparency( double _transparency ) override;
 
     // Methods
-    virtual void SAL_CALL Solid() override;
-    virtual void SAL_CALL TwoColorGradient( sal_Int32 style, sal_Int32 variant ) override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() override;
+    virtual void Solid() override;
+    virtual void TwoColorGradient( sal_Int32 style, sal_Int32 variant ) override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > BackColor() override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > ForeColor() override;
 
 };
 

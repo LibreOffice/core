@@ -57,11 +57,11 @@ class VbShapeEnumHelper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
     VbShapeEnumHelper( rtl::Reference< ScVbaShapes > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
-        virtual bool SAL_CALL hasMoreElements(  ) override
+        virtual bool hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
-        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any nextElement(  ) override
         {
                 ScVbaShapes* pShapes = m_xParent.get();
                 if ( pShapes && hasMoreElements() )
@@ -171,7 +171,7 @@ ScVbaShapes::getShapesByArrayIndices( const cpo::uno::Any& Index  )
     return xIndexAccess;
 }
 
-uno::Reference< msforms::XShapeRange > SAL_CALL
+uno::Reference< msforms::XShapeRange >
 ScVbaShapes::Range( const cpo::uno::Any& shapes )
 {
     // shapes, can be an index or an array of indices
@@ -189,7 +189,7 @@ ScVbaShapes::Range( const cpo::uno::Any& shapes )
     return new ScVbaShapeRange(  getParent(), mxContext, xShapes, m_xDrawPage, m_xModel );
 }
 
-void SAL_CALL
+void
 ScVbaShapes::SelectAll()
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -286,7 +286,7 @@ ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth
 }
 
 //helperapi calc
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY )
 {
     sal_Int32 nLineWidth = endX - StartX;
@@ -320,7 +320,7 @@ ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_In
     return cpo::uno::Any( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaShapes::AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
     if (_nType == office::MsoAutoShapeType::msoShapeRectangle)
@@ -334,7 +334,7 @@ ScVbaShapes::AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_
     return cpo::uno::Any();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaShapes::AddTextbox( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );

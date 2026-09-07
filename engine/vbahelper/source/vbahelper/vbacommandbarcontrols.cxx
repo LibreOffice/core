@@ -36,13 +36,13 @@ class CommandBarControlEnumeration : public ::cppu::WeakImplHelper< container::X
     sal_Int32 m_nCurrentPosition;
 public:
     explicit CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         if( m_nCurrentPosition < m_pCommandBarControls->getCount() )
             return true;
         return false;
     }
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -101,7 +101,7 @@ cpo::uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolba
 }
 
 // XEnumerationAccess
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaCommandBarControls::getElementType()
 {
     return cppu::UnoType<XCommandBarControl>::get();
@@ -132,7 +132,7 @@ ScVbaCommandBarControls::createCollectionObject( const cpo::uno::Any& aSource )
 }
 
 // Methods
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaCommandBarControls::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex*/ )
 {
     sal_Int32 nPosition = -1;
@@ -155,7 +155,7 @@ ScVbaCommandBarControls::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any&
     return createCollectionObject( cpo::uno::Any( nPosition ) );
 }
 
-uno::Reference< XCommandBarControl > SAL_CALL
+uno::Reference< XCommandBarControl >
 ScVbaCommandBarControls::Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, SAL_UNUSED_PARAMETER const cpo::uno::Any& )
 {
     // Parameter is not supported
@@ -243,14 +243,14 @@ class VbaDummyIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAcce
 public:
     VbaDummyIndexAccess() {}
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) override
+    virtual ::sal_Int32 getCount(  ) override
         { return 0; }
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) override
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 /*Index*/ ) override
         { throw lang::IndexOutOfBoundsException(); }
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type getElementType(  ) override
         { return cppu::UnoType<XCommandBarControl>::get(); }
-    virtual bool SAL_CALL hasElements(  ) override
+    virtual bool hasElements(  ) override
         { return false; }
 };
 
@@ -264,7 +264,7 @@ VbaDummyCommandBarControls::VbaDummyCommandBarControls(
 }
 
 // XEnumerationAccess
-cpo::uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType()
+cpo::uno::Type VbaDummyCommandBarControls::getElementType()
 {
     return cppu::UnoType<XCommandBarControl>::get();
 }
@@ -280,12 +280,12 @@ cpo::uno::Any VbaDummyCommandBarControls::createCollectionObject( const cpo::uno
 }
 
 // Methods
-cpo::uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const cpo::uno::Any& /*aIndex*/, const cpo::uno::Any& /*aIndex*/ )
+cpo::uno::Any VbaDummyCommandBarControls::Item( const cpo::uno::Any& /*aIndex*/, const cpo::uno::Any& /*aIndex*/ )
 {
     return cpo::uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
-uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
+uno::Reference< XCommandBarControl > VbaDummyCommandBarControls::Add(
         const cpo::uno::Any& /*Type*/, const cpo::uno::Any& /*Id*/, const cpo::uno::Any& /*Parameter*/, const cpo::uno::Any& /*Before*/, const cpo::uno::Any& /*Temporary*/ )
 {
     return uno::Reference< XCommandBarControl >();

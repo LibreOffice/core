@@ -43,12 +43,12 @@ ScVbaImage::getServiceNames()
     return aServiceNames;
 }
 
-sal_Int32 SAL_CALL ScVbaImage::getBackColor()
+sal_Int32 ScVbaImage::getBackColor()
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaImage::setBackColor( sal_Int32 nBackColor )
+void ScVbaImage::setBackColor( sal_Int32 nBackColor )
 {
     ScVbaControl::setBackColor( nBackColor );
 }

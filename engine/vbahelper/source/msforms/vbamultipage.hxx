@@ -40,9 +40,9 @@ public:
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper);
 
    // Attributes
-    virtual sal_Int32 SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( sal_Int32 _value ) override;
-    virtual cpo::uno::Any SAL_CALL Pages( const cpo::uno::Any& index ) override;
+    virtual sal_Int32 getValue() override;
+    virtual void setValue( sal_Int32 _value ) override;
+    virtual cpo::uno::Any Pages( const cpo::uno::Any& index ) override;
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;

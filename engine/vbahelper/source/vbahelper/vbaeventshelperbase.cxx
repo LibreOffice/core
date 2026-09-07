@@ -56,7 +56,7 @@ VbaEventsHelperBase::~VbaEventsHelperBase()
 {
 }
 
-bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
+bool VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
 {
     /*  Derived classes may add new event identifiers to be processed while
         processing the original event. All unprocessed events are collected in
@@ -133,14 +133,14 @@ bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const cp
     return bExecuted;
 }
 
-void SAL_CALL VbaEventsHelperBase::notifyEvent( const document::EventObject& rEvent )
+void VbaEventsHelperBase::notifyEvent( const document::EventObject& rEvent )
 {
     SAL_INFO("vbahelper", "VbaEventsHelperBase::notifyEvent( \"" << rEvent.EventName << "\" )");
     if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
         stopListening();
 }
 
-void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rEvent )
+void VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rEvent )
 {
     // make sure the VBA library exists
     try
@@ -177,14 +177,14 @@ void SAL_CALL VbaEventsHelperBase::changesOccurred( const util::ChangesEvent& rE
     }
 }
 
-void SAL_CALL VbaEventsHelperBase::disposing( const lang::EventObject& rEvent )
+void VbaEventsHelperBase::disposing( const lang::EventObject& rEvent )
 {
     uno::Reference< frame::XModel > xSender( rEvent.Source, uno::UNO_QUERY );
     if( xSender.is() )
         stopListening();
 }
 
-void SAL_CALL VbaEventsHelperBase::disposing()
+void VbaEventsHelperBase::disposing()
 {
     stopListening();
     mxModel.clear();
@@ -248,7 +248,7 @@ void VbaEventsHelperBase::stopListening()
     maEventInfos.clear();
 }
 
-bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
+bool VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
 {
     EventHandlerInfoMap::const_iterator aIt = maEventInfos.find( nEventId );
     if( aIt == maEventInfos.end() )

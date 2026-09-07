@@ -29,37 +29,37 @@ VbaSystemAXControl::VbaSystemAXControl(  const uno::Reference< ov::XHelperInterf
 }
 
 
-uno::Reference< beans::XIntrospectionAccess > SAL_CALL VbaSystemAXControl::getIntrospection()
+uno::Reference< beans::XIntrospectionAccess > VbaSystemAXControl::getIntrospection()
 {
     return m_xControlInvocation->getIntrospection();
 }
 
 
-cpo::uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam )
+cpo::uno::Any VbaSystemAXControl::invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam )
 {
     return m_xControlInvocation->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
 }
 
 
-void SAL_CALL VbaSystemAXControl::setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void VbaSystemAXControl::setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     m_xControlInvocation->setValue( aPropertyName, aValue );
 }
 
 
-cpo::uno::Any SAL_CALL VbaSystemAXControl::getValue( const OUString& aPropertyName )
+cpo::uno::Any VbaSystemAXControl::getValue( const OUString& aPropertyName )
 {
     return m_xControlInvocation->getValue( aPropertyName );
 }
 
 
-bool SAL_CALL VbaSystemAXControl::hasMethod( const OUString& aName )
+bool VbaSystemAXControl::hasMethod( const OUString& aName )
 {
     return m_xControlInvocation->hasMethod( aName );
 }
 
 
-bool SAL_CALL VbaSystemAXControl::hasProperty( const OUString& aName )
+bool VbaSystemAXControl::hasProperty( const OUString& aName )
 {
     return m_xControlInvocation->hasProperty( aName );
 }

@@ -64,42 +64,42 @@ public:
     void setLibraryAndCodeName( const OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
 
     // XControl
-    virtual bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( bool _enabled ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual double SAL_CALL getHeight() override;
-    virtual void SAL_CALL setHeight( double _height ) override;
-    virtual double SAL_CALL getWidth() override;
-    virtual void SAL_CALL setWidth( double _width ) override;
-    virtual double SAL_CALL getLeft() override;
-    virtual void SAL_CALL setLeft( double _left ) override;
-    virtual double SAL_CALL getTop() override;
-    virtual void SAL_CALL setTop( double _top ) override;
-    virtual void SAL_CALL SetFocus(  ) override;
-    virtual void SAL_CALL Move( double Left, double Top, const cpo::uno::Any& Width, const cpo::uno::Any& Height ) override;
-    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) override;
+    virtual bool getEnabled() override;
+    virtual void setEnabled( bool _enabled ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual double getHeight() override;
+    virtual void setHeight( double _height ) override;
+    virtual double getWidth() override;
+    virtual void setWidth( double _width ) override;
+    virtual double getLeft() override;
+    virtual void setLeft( double _left ) override;
+    virtual double getTop() override;
+    virtual void setTop( double _top ) override;
+    virtual void SetFocus(  ) override;
+    virtual void Move( double Left, double Top, const cpo::uno::Any& Width, const cpo::uno::Any& Height ) override;
+    virtual void fireEvent( const css::script::ScriptEvent& evt ) override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getObject() override;
-    virtual OUString SAL_CALL getControlSource() override;
-    virtual void SAL_CALL setControlSource( const OUString& _controlsource ) override;
-    virtual OUString SAL_CALL getRowSource() override;
-    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& _name ) override;
-    virtual OUString SAL_CALL getControlTipText() override;
-    virtual void SAL_CALL setControlTipText( const OUString& ) override;
-    virtual OUString SAL_CALL getTag() override;
-    virtual void SAL_CALL setTag( const OUString& aTag ) override;
-    virtual sal_Int32 SAL_CALL getTabIndex() override;
-    virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) override;
-    virtual ::sal_Int32 SAL_CALL getMousePointer() override;
-    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) override;
+    virtual css::uno::Reference< cpo::uno::XInterface > getObject() override;
+    virtual OUString getControlSource() override;
+    virtual void setControlSource( const OUString& _controlsource ) override;
+    virtual OUString getRowSource() override;
+    virtual void setRowSource( const OUString& _rowsource ) override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& _name ) override;
+    virtual OUString getControlTipText() override;
+    virtual void setControlTipText( const OUString& ) override;
+    virtual OUString getTag() override;
+    virtual void setTag( const OUString& aTag ) override;
+    virtual sal_Int32 getTabIndex() override;
+    virtual void setTabIndex( sal_Int32 nTabIndex ) override;
+    virtual ::sal_Int32 getMousePointer() override;
+    virtual void setMousePointer( ::sal_Int32 _mousepointer ) override;
     //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     /// @throws cpo::uno::RuntimeException
     void removeResource();
     /// @throws cpo::uno::RuntimeException
-    virtual ::sal_Int32 SAL_CALL getForeColor();
+    virtual ::sal_Int32 getForeColor();
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -35,12 +35,12 @@ public:
     VbaSystemAXControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
 
     // XInvocation
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
+    virtual cpo::uno::Any invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual void setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getValue( const OUString& aPropertyName ) override;
+    virtual bool hasMethod( const OUString& aName ) override;
+    virtual bool hasProperty( const OUString& aName ) override;
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;

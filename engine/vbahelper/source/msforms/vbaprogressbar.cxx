@@ -30,13 +30,13 @@ ScVbaProgressBar::ScVbaProgressBar( const uno::Reference< ov::XHelperInterface >
 }
 
 // Attributes
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaProgressBar::getValue()
 {
     return m_xProps->getPropertyValue( SVALUE );
 }
 
-void SAL_CALL
+void
 ScVbaProgressBar::setValue( const cpo::uno::Any& _value )
 {
     m_xProps->setPropertyValue( SVALUE,  _value );

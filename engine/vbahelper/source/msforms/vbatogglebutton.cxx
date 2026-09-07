@@ -37,7 +37,7 @@ ScVbaToggleButton::~ScVbaToggleButton()
 }
 
 // Attributes
-OUString SAL_CALL
+OUString
 ScVbaToggleButton::getCaption()
 {
     OUString Label;
@@ -45,13 +45,13 @@ ScVbaToggleButton::getCaption()
     return Label;
 }
 
-void SAL_CALL
+void
 ScVbaToggleButton::setCaption( const OUString& _caption )
 {
     m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaToggleButton::getValue()
 {
     sal_Int16 nState = 0;
@@ -60,7 +60,7 @@ ScVbaToggleButton::getValue()
 }
 
 
-void SAL_CALL
+void
 ScVbaToggleButton::setValue( const cpo::uno::Any& _value )
 {
     sal_Int16 nState = 0;
@@ -77,70 +77,70 @@ ScVbaToggleButton::setValue( const cpo::uno::Any& _value )
     m_xProps->setPropertyValue( u"State"_ustr, cpo::uno::Any(   nState ) );
 }
 
-bool SAL_CALL ScVbaToggleButton::getAutoSize()
+bool ScVbaToggleButton::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaToggleButton::setAutoSize( bool bAutoSize )
+void ScVbaToggleButton::setAutoSize( bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-bool SAL_CALL ScVbaToggleButton::getCancel()
+bool ScVbaToggleButton::getCancel()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL ScVbaToggleButton::setCancel( bool /*bCancel*/ )
+void ScVbaToggleButton::setCancel( bool /*bCancel*/ )
 {
     // #STUB
 }
 
-bool SAL_CALL ScVbaToggleButton::getDefault()
+bool ScVbaToggleButton::getDefault()
 {
     // #STUB
     return false;
 }
 
-void SAL_CALL ScVbaToggleButton::setDefault( bool /*bDefault*/ )
+void ScVbaToggleButton::setDefault( bool /*bDefault*/ )
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaToggleButton::getBackColor()
+sal_Int32 ScVbaToggleButton::getBackColor()
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaToggleButton::setBackColor( sal_Int32 nBackColor )
+void ScVbaToggleButton::setBackColor( sal_Int32 nBackColor )
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Int32 SAL_CALL ScVbaToggleButton::getForeColor()
+sal_Int32 ScVbaToggleButton::getForeColor()
 {
     // #STUB
     return 0;
 }
 
-void SAL_CALL ScVbaToggleButton::setForeColor( sal_Int32 /*nForeColor*/ )
+void ScVbaToggleButton::setForeColor( sal_Int32 /*nForeColor*/ )
 {
     // #STUB
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont()
+uno::Reference< msforms::XNewFont > ScVbaToggleButton::getFont()
 {
     return new VbaNewFont( m_xProps );
 }
 
-bool SAL_CALL ScVbaToggleButton::getLocked()
+bool ScVbaToggleButton::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaToggleButton::setLocked( bool bLocked )
+void ScVbaToggleButton::setLocked( bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }

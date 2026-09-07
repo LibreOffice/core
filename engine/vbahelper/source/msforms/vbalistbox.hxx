@@ -43,28 +43,28 @@ public:
     ScVbaListBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
 
     // Attributes
-    virtual cpo::uno::Any SAL_CALL getListIndex() override;
-    virtual void SAL_CALL setListIndex( const cpo::uno::Any& _value ) override;
-    virtual ::sal_Int32 SAL_CALL getListCount() override;
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-    virtual OUString SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const OUString& _text ) override;
-    virtual sal_Int32 SAL_CALL getMultiSelect() override;
-    virtual void SAL_CALL setMultiSelect( sal_Int32 _multiselect ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
+    virtual cpo::uno::Any getListIndex() override;
+    virtual void setListIndex( const cpo::uno::Any& _value ) override;
+    virtual ::sal_Int32 getListCount() override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
+    virtual OUString getText() override;
+    virtual void setText( const OUString& _text ) override;
+    virtual sal_Int32 getMultiSelect() override;
+    virtual void setMultiSelect( sal_Int32 _multiselect ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
 
     // Methods
-    virtual cpo::uno::Any SAL_CALL Selected( ::sal_Int32 index ) override;
-    virtual void SAL_CALL AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex ) override;
-    virtual void SAL_CALL removeItem( const cpo::uno::Any& index ) override;
-    virtual void SAL_CALL Clear(  ) override;
-    virtual cpo::uno::Any SAL_CALL List( const cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn ) override;
+    virtual cpo::uno::Any Selected( ::sal_Int32 index ) override;
+    virtual void AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex ) override;
+    virtual void removeItem( const cpo::uno::Any& index ) override;
+    virtual void Clear(  ) override;
+    virtual cpo::uno::Any List( const cpo::uno::Any& pvargIndex, const cpo::uno::Any& pvarColumn ) override;
     // XControl
-    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
+    virtual void setRowSource( const OUString& _rowsource ) override;
 
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
+    OUString getDefaultPropertyName(  ) override { return u"Value"_ustr; }
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;

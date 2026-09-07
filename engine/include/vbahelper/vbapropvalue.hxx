@@ -45,10 +45,10 @@ public:
     ScVbaPropValue( PropListener* pListener );
 
     // Attributes
-    virtual cpo::uno::Any SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
+    virtual cpo::uno::Any getValue() override;
+    virtual void setValue( const cpo::uno::Any& _value ) override;
 
-    OUString SAL_CALL getDefaultPropertyName() override { return u"Value"_ustr; }
+    OUString getDefaultPropertyName() override { return u"Value"_ustr; }
 
 };
 #endif //SC_VBA_PROPVALULE_HXX

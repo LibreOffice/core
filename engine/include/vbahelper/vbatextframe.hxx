@@ -53,19 +53,19 @@ protected:
 public:
     VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     // Attributes
-    virtual bool SAL_CALL getAutoSize() override;
-    virtual void SAL_CALL setAutoSize( bool _autosize ) override;
-    virtual float SAL_CALL getMarginBottom() override;
-    virtual void SAL_CALL setMarginBottom( float _marginbottom ) override;
-    virtual float SAL_CALL getMarginTop() override;
-    virtual void SAL_CALL setMarginTop( float _margintop ) override;
-    virtual float SAL_CALL getMarginLeft() override;
-    virtual void SAL_CALL setMarginLeft( float _marginleft ) override;
-    virtual float SAL_CALL getMarginRight() override;
-    virtual void SAL_CALL setMarginRight( float _marginright ) override;
+    virtual bool getAutoSize() override;
+    virtual void setAutoSize( bool _autosize ) override;
+    virtual float getMarginBottom() override;
+    virtual void setMarginBottom( float _marginbottom ) override;
+    virtual float getMarginTop() override;
+    virtual void setMarginTop( float _margintop ) override;
+    virtual float getMarginLeft() override;
+    virtual void setMarginLeft( float _marginleft ) override;
+    virtual float getMarginRight() override;
+    virtual void setMarginRight( float _marginright ) override;
 
     // Methods
-    virtual cpo::uno::Any SAL_CALL Characters(  ) override;
+    virtual cpo::uno::Any Characters(  ) override;
 
 };
 

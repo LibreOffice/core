@@ -50,24 +50,24 @@ public:
     ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess > xSettings, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl );
 
     // Attributes
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual OUString SAL_CALL getOnAction() override;
-    virtual void SAL_CALL setOnAction( const OUString& _onaction ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual bool SAL_CALL getEnabled() override;
-    virtual void SAL_CALL setEnabled( bool _enabled ) override;
-    virtual bool SAL_CALL getBeginGroup() override;
-    virtual void SAL_CALL setBeginGroup( bool _begin ) override;
-    virtual sal_Int32 SAL_CALL getType() override
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
+    virtual OUString getOnAction() override;
+    virtual void setOnAction( const OUString& _onaction ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual bool getEnabled() override;
+    virtual void setEnabled( bool _enabled ) override;
+    virtual bool getBeginGroup() override;
+    virtual void setBeginGroup( bool _begin ) override;
+    virtual sal_Int32 getType() override
     {
         return ov::office::MsoControlType::msoControlButton;
     }
 
     // Methods
-    virtual void SAL_CALL Delete(  ) override;
-    virtual cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& aIndex ) override;
+    virtual void Delete(  ) override;
+    virtual cpo::uno::Any Controls( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -81,7 +81,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
 
-    virtual sal_Int32 SAL_CALL getType() override
+    virtual sal_Int32 getType() override
     {
         return ov::office::MsoControlType::msoControlPopup;
     }
@@ -97,7 +97,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
 
-    virtual sal_Int32 SAL_CALL getType() override
+    virtual sal_Int32 getType() override
     {
         return ov::office::MsoControlType::msoControlButton;
     }

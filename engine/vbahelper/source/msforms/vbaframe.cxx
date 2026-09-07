@@ -41,47 +41,47 @@ ScVbaFrame::ScVbaFrame(
 
 // XFrame attributes
 
-OUString SAL_CALL ScVbaFrame::getCaption()
+OUString ScVbaFrame::getCaption()
 {
     OUString Label;
     m_xProps->getPropertyValue( u"Label"_ustr ) >>= Label;
     return Label;
 }
 
-void SAL_CALL ScVbaFrame::setCaption( const OUString& _caption )
+void ScVbaFrame::setCaption( const OUString& _caption )
 {
     m_xProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( _caption ) );
 }
 
-sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect()
+sal_Int32 ScVbaFrame::getSpecialEffect()
 {
     return msforms::fmSpecialEffect::fmSpecialEffectEtched;
 }
 
 
-void SAL_CALL ScVbaFrame::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ )
+void ScVbaFrame::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ )
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaFrame::getBorderStyle()
+sal_Int32 ScVbaFrame::getBorderStyle()
 {
     return msforms::fmBorderStyle::fmBorderStyleNone;
 }
 
-void SAL_CALL ScVbaFrame::setBorderStyle( sal_Int32 /*nBorderStyle*/ )
+void ScVbaFrame::setBorderStyle( sal_Int32 /*nBorderStyle*/ )
 {
     // #STUB
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaFrame::getFont()
+uno::Reference< msforms::XNewFont > ScVbaFrame::getFont()
 {
     return new VbaNewFont( m_xProps );
 }
 
 // XFrame methods
 
-cpo::uno::Any SAL_CALL ScVbaFrame::Controls( const cpo::uno::Any& rIndex )
+cpo::uno::Any ScVbaFrame::Controls( const cpo::uno::Any& rIndex )
 {
     // horizontal anchor of frame children is inside border line (add one unit to compensate border line width)
     double fOffsetX = mpGeometryHelper->getOffsetX() + getLeft() + 1.0;
