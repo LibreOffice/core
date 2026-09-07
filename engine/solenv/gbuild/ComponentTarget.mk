@@ -66,7 +66,7 @@ $(call gb_ComponentTarget_get_target,%).optionals : \
 # %.filtered : list of all optional implementations we don't build
 .PRECIOUS: $(call gb_ComponentTarget_get_target,%).filtered
 $(call gb_ComponentTarget_get_target,%).filtered : $(call gb_ComponentTarget_get_target,%).optionals
-	cat $< $(COMPONENTIMPL) | sed -e '/^#\|^\s*$$/d' | sort | uniq -u > $@
+	cat $< $(COMPONENTIMPL) | sed -e '/^#/d' -e '/^[[:space:]]*$$/d' | sort | uniq -u > $@
 
 # when a library is renamed, the component file needs to be rebuilt to match.
 # hence simply depend on Repository{,Fixes}.mk since the command runs quickly.
