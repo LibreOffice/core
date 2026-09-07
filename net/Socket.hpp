@@ -351,7 +351,7 @@ public:
         return -1;
 #else
         int size;
-        unsigned int len = sizeof(size);
+        socklen_t len = sizeof(size);
         const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, &len);
         return rc == 0 ? size : -1;
 #endif
@@ -366,7 +366,7 @@ public:
         return -1;
 #else
         int error;
-        unsigned int len = sizeof(error);
+        socklen_t len = sizeof(error);
         const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_ERROR, &error, &len);
         if (rc == 0)
         {
