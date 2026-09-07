@@ -23,6 +23,9 @@
 
 #slide-import-panel {
 	height: 100%;
+	font-family: var(--cool-font);
+	font-size: var(--default-font-size);
+	color: var(--color-main-text);
 }
 
 /* The header at the top is the slide navigator's (navigation-header with
@@ -96,8 +99,7 @@
 	border-radius: var(--border-radius);
 	background: transparent;
 	color: var(--color-primary) !important;
-	font-family: var(--cool-font);
-	font-size: inherit;
+	font: inherit;
 	cursor: pointer;
 }
 
@@ -188,8 +190,7 @@
 	border: 1px solid transparent;
 	background: transparent;
 	color: var(--color-text-dark);
-	font-family: var(--cool-font);
-	font-size: inherit;
+	font: inherit;
 	text-align: start;
 	cursor: pointer;
 }
@@ -371,7 +372,12 @@ span.slide-import-source-main {
 }
 
 .slide-import-panel-header .slide-section-name {
+	font-size: var(--medium-font-size);
 	font-weight: 600;
+}
+
+.slide-import-list .slide-section-name {
+	font-size: var(--default-font-size);
 }
 
 .slide-import-panel-count {
