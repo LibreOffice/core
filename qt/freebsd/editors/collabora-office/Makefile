@@ -32,6 +32,8 @@ ONLY_FOR_ARCHS=	aarch64 amd64
 # clucene is only checked by configure; nothing links it while help is disabled
 BUILD_DEPENDS=	bash:shells/bash \
 		cppunit-config:devel/cppunit \
+		${LOCALBASE}/include/absl/strings/string_view.h:devel/abseil \
+		${LOCALBASE}/include/png.h:graphics/png \
 		${LOCALBASE}/libdata/pkgconfig/libclucene-core.pc:textproc/clucene \
 		fast_float>=0:math/fast_float \
 		frozen>=1:devel/frozen \
@@ -51,7 +53,9 @@ BUILD_DEPENDS=	bash:shells/bash \
 		${PYTHON_PKGNAMEPREFIX}polib>0:devel/py-polib@${PY_FLAVOR}
 # CoinMP links the rest of the COIN-OR stack, and the engine's solver
 # library ends up linked against each of them directly.
-LIB_DEPENDS=	libCgl.so:math/cgl \
+LIB_DEPENDS=	libCbc.so:math/cbc \
+		libCbcSolver.so:math/cbc \
+		libCgl.so:math/cgl \
 		libClp.so:math/clp \
 		libClpSolver.so:math/clp \
 		libCoinMP.so:math/coinmp \
@@ -59,7 +63,6 @@ LIB_DEPENDS=	libCgl.so:math/cgl \
 		libOsi.so:math/osi \
 		libOsiClp.so:math/clp \
 		libZXing.so:textproc/zxing-cpp \
-		libabsl_strings.so:devel/abseil \
 		libabw-0.1.so:textproc/libabw \
 		libboost_date_time.so:devel/boost-libs \
 		libcdr-0.1.so:graphics/libcdr01 \
@@ -83,10 +86,13 @@ LIB_DEPENDS=	libCgl.so:math/cgl \
 		libicuuc.so:devel/icu \
 		liblangtag.so:devel/liblangtag \
 		liblcms2.so:graphics/lcms2 \
+		libltdl.so:devel/libltdl \
 		libmd4c.so:textproc/md4c \
 		libmspub-0.1.so:print/libmspub01 \
 		libmwaw-0.3.so:textproc/libmwaw03 \
 		libmythes-1.2.so:textproc/mythes \
+		libnauty.so:math/nauty \
+		libnspr4.so:devel/nspr \
 		libnss3.so:security/nss \
 		libnumbertext-1.0.so:textproc/libnumbertext \
 		libodfgen-0.1.so:textproc/libodfgen01 \
@@ -94,8 +100,10 @@ LIB_DEPENDS=	libCgl.so:math/cgl \
 		libopenjp2.so:graphics/openjpeg \
 		liborcus-0.21.so:devel/liborcus \
 		libpagemaker-0.0.so:print/libpagemaker \
-		libpng.so:graphics/png \
+		libplc4.so:devel/nspr \
+		libplds4.so:devel/nspr \
 		libqxp-0.0.so:textproc/libqxp \
+		libraptor2.so:textproc/raptor2 \
 		librdf.so:textproc/redland \
 		librevenge-0.0.so:textproc/librevenge \
 		libstaroffice-0.0.so:textproc/libstaroffice \
@@ -127,8 +135,8 @@ RUN_DEPENDS=	${LOCALBASE}/share/fonts/Alef/Alef-Bold.ttf:x11-fonts/alef \
 		${LOCALBASE}/share/fonts/SourceSans/SourceSans3-Black.ttf:x11-fonts/source-sans-ttf
 
 USES=		autoreconf:build bison compiler:c++20-lang desktop-file-utils \
-		gettext-tools gmake gnome ninja:build perl5 pkgconfig python \
-		qt:6 shebangfix ssl tar:xz
+		gettext-runtime gettext-tools gmake gnome ninja:build perl5 \
+		pkgconfig python qt:6 shebangfix ssl tar:xz
 USE_GNOME=	libxml2 libxslt
 # configure checks for Qt WebSockets, but the app does not end up linked to it
 USE_QT=		base tools:build webchannel webengine websockets:build
