@@ -108,8 +108,9 @@ void RustFile::createGeneratedModFile(const std::filesystem::path& outputDir)
         modStream << "// We include its lib.rs as a module here\n";
         modStream << "#[path = \"rustmaker/src/lib.rs\"]\n";
         modStream << "pub mod rustmaker;\n\n";
-        modStream << "// Re-export the UNO namespace for easier access\n";
-        modStream << "pub use rustmaker::com;\n\n";
+        modStream << "// Re-export the UNO namespaces for easier access\n";
+        modStream << "pub use rustmaker::com;\n";
+        modStream << "pub use rustmaker::cpo;\n\n";
         modStream << "// Note: cpp_rustmaker directory contains C++ bridge files\n";
         modStream << "// These are compiled separately and linked via build.rs\n";
         modStream.close();

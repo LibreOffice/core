@@ -41,7 +41,8 @@ SAL_DLLPUBLIC_EXPORT void* defaultBootstrap_InitialComponentContext()
     {
         // Call the actual LibreOffice bootstrap function
         SAL_INFO("rustuno", "Calling cppu::defaultBootstrap_InitialComponentContext");
-        Reference<XComponentContext> xContext = cppu::defaultBootstrap_InitialComponentContext();
+        Reference<cpo::uno::XComponentContext> xContext
+            = cppu::defaultBootstrap_InitialComponentContext();
 
         if (!xContext.is())
         {
@@ -51,7 +52,7 @@ SAL_DLLPUBLIC_EXPORT void* defaultBootstrap_InitialComponentContext()
 
         SAL_INFO("rustuno", "Component context created successfully");
 
-        auto res = new Reference<XComponentContext>(xContext);
+        auto res = new Reference<cpo::uno::XComponentContext>(xContext);
 
         if (!res->is())
         {
