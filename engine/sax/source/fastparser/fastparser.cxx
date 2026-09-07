@@ -1365,7 +1365,7 @@ void FastSaxParserImpl::sendPendingCharacters()
     Entity& rEntity = getEntity();
     OUString sChars( pendingCharacters.data(), pendingCharacters.size(), RTL_TEXTENCODING_UTF8 );
 
-    if (sChars[0] == '_' && mxMap)
+    if (mxMap && !sChars.isEmpty() && sChars[0] == '_')
         mxMap->get(cpo::uno::Any(sChars)) >>= sChars;
 
     if (rEntity.mbEnableThreads)
