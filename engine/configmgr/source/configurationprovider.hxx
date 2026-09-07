@@ -23,11 +23,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star {
-    namespace uno {
-        class XInterface;
-    }
-}
+namespace cpo::uno { class XInterface; }
 namespace cpo::uno { class XComponentContext; }
 
 namespace configmgr::configuration_provider {

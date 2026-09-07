@@ -19,9 +19,9 @@ namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno {
         class Environment;
-        class XInterface;
     }
 }
+namespace cpo::uno { class XInterface; }
 
 namespace cppuhelper::detail {
 

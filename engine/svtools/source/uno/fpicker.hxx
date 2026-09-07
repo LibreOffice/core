@@ -26,9 +26,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 
-namespace com::sun::star {
-    namespace uno { class XInterface; }
-}
+namespace cpo::uno { class XInterface; }
 
 css::uno::Reference<cpo::uno::XInterface> FilePicker_CreateInstance(
         css::uno::Reference< cpo::uno::XComponentContext > const & context);
