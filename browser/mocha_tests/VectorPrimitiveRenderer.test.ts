@@ -1415,11 +1415,14 @@ describe('VectorPrimitiveRenderer', function () {
 
 		const scale = 0.05;
 		recorder.scale(scale, scale);
-		renderer.renderPrimitive(recorder as any, {
-			type: 'polygonStroke',
-			path: 'm0 0h1000v1000h-1000z',
-			line: { color: '#000000', width: 5 },
-		} as any);
+		renderer.renderPrimitive(
+			recorder as any,
+			{
+				type: 'polygonStroke',
+				path: 'm0 0h1000v1000h-1000z',
+				line: { color: '#000000', width: 5 },
+			} as any,
+		);
 
 		const stroke = recorder.calls.find((call: any) => call.method === 'stroke');
 		nodeassert.ok(stroke, 'nothing was stroked');
