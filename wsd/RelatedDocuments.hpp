@@ -45,6 +45,11 @@ public:
     /// listed no related document for, so nothing can reach it. The same for every view.
     void setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names);
 
+    /// Drops one related document: the record of it, which is the same for every view, and in
+    /// every view the token and the live link that reach it. Reports whether one was recorded
+    /// at that address.
+    bool removeSource(DocumentBroker& docBroker, const std::string& wopiSrc);
+
     /// Records the access token one view holds for a related document. Private
     /// to that view.
     void setViewToken(DocumentBroker& docBroker, const std::string& tag,

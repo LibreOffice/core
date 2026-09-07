@@ -99,7 +99,8 @@ remotedocunsubscribe wopisrc=<encoded-WOPISrc>
     view and is opened with that view's own access token for the remote
     document; the token comes from that view's UserPrivateInfo in
     CheckFileInfo, or from a POST to /cool/relateddocument. A view without a
-    token for the source is refused. A view holds at most one subscription
+    token for the source is refused. A DELETE to that address drops the
+    document for every view, and the subscriptions to it go down with it. A view holds at most one subscription
     per source. The command is handled inside wsd and never given to this
     document's kit. Requires the remote_documents feature to be enabled.
 
@@ -808,9 +809,10 @@ clipboardkey: <token>
 relateddocumenttoken: <token>
 
     A one-time token that authorizes this view to register a related document
-    over POST /cool/relateddocument. Sent when the view joins a document with
-    remote_documents enabled, and again with a fresh token after each accepted
-    POST, so a token is never accepted twice. Keep only the latest.
+    over POST /cool/relateddocument, or to drop one over DELETE to the same
+    address. Sent when the view joins a document with remote_documents
+    enabled, and again with a fresh token after each accepted request, so a
+    token is never accepted twice. Keep only the latest.
 
 contextmenu: <json description of the context menu>
 
@@ -839,7 +841,8 @@ relateddocuments: <json>
     The related documents the server tracks for this document, from the
     RelatedDocuments field of CheckFileInfo, from POST
     /cool/relateddocument, and from the sources the document's own slide
-    links name. Built for the receiving view: the source list and
+    links name. A DELETE to /cool/relateddocument takes one off the list,
+    for every view, and the fresh list goes out to all of them. Built for the receiving view: the source list and
     last-modified times are the same for every view, but the state is that
     view's own. Sent to a view when it joins and again when the shared list
     or that view's own access or subscription state changes. Access tokens

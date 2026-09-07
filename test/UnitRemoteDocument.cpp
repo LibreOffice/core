@@ -520,6 +520,179 @@ public:
     }
 };
 
+/// Drops a related document over DELETE /cool/relateddocument: the request is
+/// authorized by the view's own one-time token the way the registering POST
+/// is, a wrong token is refused, and the document leaves the list the views
+/// are sent.
+class UnitRelatedDocumentDelete : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitToken, Registering, WaitFreshToken, Dropping, WaitDropped, Done)
+    _phase;
+
+    /// The latest one-time token the view was handed.
+    std::string _oneTimeToken;
+    /// The token the registering POST consumed.
+    std::string _usedToken;
+    bool _documentLoaded = false;
+    /// Whether the list the views are sent has named the remote document.
+    bool _listed = false;
+
+    std::thread _postThread;
+    std::thread _deleteThread;
+
+    std::string documentWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/1"; }
+
+    std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
+
+    /// Sends the given request body to the endpoint and returns the response status.
+    unsigned sendRelatedDocument(const std::string& verb, const std::string& body)
+    {
+        http::Request request("/cool/relateddocument?WOPISrc=" + Uri::encode(documentWopiSrc()),
+                              verb);
+        request.setBody(body, "application/json");
+
+        auto session = http::Session::create(helpers::getTestServerURI());
+        session->setTimeout(std::chrono::seconds(10));
+        const std::shared_ptr<const http::Response> response = session->syncRequest(request);
+        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+    }
+
+    unsigned postRelatedDocument(const std::string& oneTimeToken)
+    {
+        return sendRelatedDocument(http::Request::VERB_POST,
+                                   "{\"Nonce\":\"" + oneTimeToken +
+                                       "\",\"RelatedDocument\":{\"WOPISrc\":\"" +
+                                       remoteWopiSrc() +
+                                       "\",\"AccessToken\":\"remotetoken\"}}");
+    }
+
+    /// A drop names the document by its WOPISrc alone.
+    unsigned deleteRelatedDocument(const std::string& oneTimeToken, const std::string& wopiSrc)
+    {
+        return sendRelatedDocument(http::Request::VERB_DELETE,
+                                   "{\"Nonce\":\"" + oneTimeToken +
+                                       "\",\"RelatedDocument\":{\"WOPISrc\":\"" + wopiSrc +
+                                       "\"}}");
+    }
+
+    /// Registers the document once the view has a token and the document is up.
+    void maybeStartPost()
+    {
+        if (_phase != Phase::WaitToken || _oneTimeToken.empty() || !_documentLoaded ||
+            _postThread.joinable())
+            return;
+
+        TRANSITION_STATE(_phase, Phase::Registering);
+        _usedToken = _oneTimeToken;
+        _postThread = std::thread(
+            [this, oneTimeToken = _oneTimeToken]
+            {
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                 postRelatedDocument(oneTimeToken));
+                TRANSITION_STATE(_phase, Phase::WaitFreshToken);
+            });
+    }
+
+    /// Drops the document again, once the accepted POST has rotated the token.
+    void maybeStartDelete()
+    {
+        if (_phase != Phase::WaitFreshToken || !_listed || _oneTimeToken == _usedToken ||
+            _deleteThread.joinable())
+            return;
+
+        TRANSITION_STATE(_phase, Phase::Dropping);
+        _deleteThread = std::thread(
+            [this, oneTimeToken = _oneTimeToken]
+            {
+                // A token no view holds is refused, and the document stays.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                 deleteRelatedDocument("wrongtoken", remoteWopiSrc()));
+
+                TRANSITION_STATE(_phase, Phase::WaitDropped);
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                 deleteRelatedDocument(oneTimeToken, remoteWopiSrc()));
+            });
+    }
+
+public:
+    UnitRelatedDocumentDelete()
+        : WopiTestServer("UnitRelatedDocumentDelete")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitRelatedDocumentDelete()
+    {
+        if (_postThread.joinable())
+            _postThread.join();
+        if (_deleteThread.joinable())
+            _deleteThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        _documentLoaded = true;
+        maybeStartPost();
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("relateddocumenttoken:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            _oneTimeToken = std::string(message.substr(message.find(' ') + 1));
+            maybeStartPost();
+            maybeStartDelete();
+            return false;
+        }
+
+        if (message.starts_with("relateddocuments:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            const bool names = message.find(remoteWopiSrc()) != std::string_view::npos;
+
+            if (names)
+            {
+                _listed = true;
+                maybeStartDelete();
+                return false;
+            }
+
+            // The list that follows the accepted drop names the document no more.
+            if (_phase == Phase::WaitDropped && _listed)
+            {
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("The dropped related document left the list");
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitToken);
+
+            initWebsocket("/wopi/files/1?access_token=firsttoken");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 /// Two documents subscribe to each other at the same moment. Exactly one
 /// link survives and the other is refused as a cycle, so the pair cannot
 /// keep each other loaded forever.
@@ -1414,7 +1587,8 @@ public:
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
-                              new UnitRelatedDocumentPost(), new UnitRemoteDocumentMutual(),
+                              new UnitRelatedDocumentPost(), new UnitRelatedDocumentDelete(),
+                              new UnitRemoteDocumentMutual(),
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
                               new UnitRemoteDocumentIsolation(), new UnitRemoteDocumentSaved(),
                               new UnitRemoteDocumentNoChain(), nullptr };

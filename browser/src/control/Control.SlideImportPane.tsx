@@ -363,6 +363,28 @@ class SlideImportPane {
     });
   }
 
+  // "Remove from list" asks the integration to drop a file from the related
+  // documents of this one.
+  private removeFromList(source: SlideImportPaneSource): void {
+    if (!app.relatedDocumentToken || !source.wopiSrc) return;
+
+    app.map.fire('postMessage', {
+      msgId: 'UI_RemoveRelatedDocument',
+      args: {
+        Nonce: app.relatedDocumentToken,
+        WOPISrc: window.wopiSrc,
+        Endpoint:
+          window.makeHttpUrl('/cool/relateddocument') +
+          '?WOPISrc=' +
+          encodeURIComponent(window.wopiSrc),
+        RelatedDocument: {
+          WOPISrc: source.wopiSrc,
+          BaseFileName: source.name,
+        },
+      },
+    });
+  }
+
   // Sends a read-only client command to a subscribed source. Its reply
   // arrives as a remotedoccommandresult map event carrying the same wopiSrc.
   private sendRemoteCommand(
@@ -976,6 +998,14 @@ class SlideImportPane {
         text: _('Update the slides linked to this file'),
       });
 
+    if (!linked && source.wopiSrc)
+      entries.push({
+        id: 'remove',
+        type: 'comboboxentry',
+        text: _('Remove from list'),
+        enabled: !!app.relatedDocumentToken,
+      });
+
     this.showSourceMenu(e, entries, source);
   }
 
@@ -1009,6 +1039,9 @@ class SlideImportPane {
           break;
         case 'update':
           this.map.slideLinks.updateSource(linked);
+          break;
+        case 'remove':
+          this.removeFromList(source);
           break;
       }
       JSDialog.CloseAllDropdowns();

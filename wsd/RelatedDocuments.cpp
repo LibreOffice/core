@@ -56,6 +56,51 @@ void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& w
     }
 }
 
+bool RelatedDocuments::removeSource(DocumentBroker& docBroker, const std::string& wopiSrc)
+{
+    docBroker.assertCorrectThread();
+
+    std::string docKey;
+    try
+    {
+        docKey = RequestDetails::getDocKey(wopiSrc);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Cannot drop the invalid related document WOPISrc ["
+                << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
+        return false;
+    }
+
+    if (_entries.erase(docKey) == 0)
+    {
+        LOG_INF("No related document of [" << docBroker.getDocKey() << "] at ["
+                                           << Anonymizer::anonymizeUrl(wopiSrc) << ']');
+        return false;
+    }
+
+    // The document is gone for every view, so the live links to it go down and the tokens that
+    // opened them go with it.
+    for (auto& itView : _views)
+    {
+        const auto itSubscription = itView.second.subscriptions.find(docKey);
+        if (itSubscription != itView.second.subscriptions.end())
+        {
+            if (RemoteDocumentBroker::isInitialized())
+                RemoteDocumentBroker::instance().unsubscribeAsync(
+                    itSubscription->second.wopiSrc, itSubscription->second.accessToken,
+                    docBroker.getDocKey(), itView.first);
+            itView.second.subscriptions.erase(itSubscription);
+        }
+        itView.second.tokens.erase(docKey);
+    }
+
+    LOG_INF("Dropped the related document [" << Anonymizer::anonymizeUrl(wopiSrc) << "] of ["
+                                             << docBroker.getDocKey() << ']');
+    refreshAllViews(docBroker);
+    return true;
+}
+
 void RelatedDocuments::setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names)
 {
     docBroker.assertCorrectThread();

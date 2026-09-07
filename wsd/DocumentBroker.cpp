@@ -5085,6 +5085,26 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
     return false;
 }
 
+DocumentBroker::RelatedDocumentRemoval
+DocumentBroker::removeRemoteDocumentSource(const std::string& oneTimeToken,
+                                           const std::string& wopiSrc)
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (const auto& it : _sessions)
+    {
+        if (it.second->matchesRelatedDocumentToken(oneTimeToken))
+        {
+            const bool removed = _relatedDocuments.removeSource(*this, wopiSrc);
+            // Consume the one-time token and hand the view its next one.
+            it.second->rotateRelatedDocumentToken(/*notifyClient=*/true);
+            return removed ? RelatedDocumentRemoval::Removed : RelatedDocumentRemoval::NotFound;
+        }
+    }
+
+    return RelatedDocumentRemoval::BadToken;
+}
+
 void DocumentBroker::handleRemoteDocumentSubscribe(const std::string& tag,
                                                    const std::string& encodedWopiSrc,
                                                    const bool subscribe)

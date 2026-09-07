@@ -816,6 +816,7 @@ public:
     static constexpr int64_t MinRequestHeaderLen = sizeof("GET / HTTP/0.0\r\n") - 1;
     static constexpr const char* VERB_GET = "GET";
     static constexpr const char* VERB_POST = "POST";
+    static constexpr const char* VERB_DELETE = "DELETE";
     static constexpr const char* VERS_1_1 = "HTTP/1.1";
 
     /// Create a Request given a @url, http @verb, @header, and http @version.
