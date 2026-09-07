@@ -32,8 +32,6 @@ ONLY_FOR_ARCHS=	aarch64 amd64
 # clucene is only checked by configure; nothing links it while help is disabled
 BUILD_DEPENDS=	bash:shells/bash \
 		cppunit-config:devel/cppunit \
-		${LOCALBASE}/include/absl/strings/string_view.h:devel/abseil \
-		${LOCALBASE}/include/png.h:graphics/png \
 		${LOCALBASE}/libdata/pkgconfig/libclucene-core.pc:textproc/clucene \
 		fast_float>=0:math/fast_float \
 		frozen>=1:devel/frozen \
@@ -63,6 +61,7 @@ LIB_DEPENDS=	libCbc.so:math/cbc \
 		libOsi.so:math/osi \
 		libOsiClp.so:math/clp \
 		libZXing.so:textproc/zxing-cpp \
+		libabsl_strings.so:devel/abseil \
 		libabw-0.1.so:textproc/libabw \
 		libboost_date_time.so:devel/boost-libs \
 		libcdr-0.1.so:graphics/libcdr01 \
@@ -102,6 +101,7 @@ LIB_DEPENDS=	libCbc.so:math/cbc \
 		libpagemaker-0.0.so:print/libpagemaker \
 		libplc4.so:devel/nspr \
 		libplds4.so:devel/nspr \
+		libpng.so:graphics/png \
 		libqxp-0.0.so:textproc/libqxp \
 		libraptor2.so:textproc/raptor2 \
 		librdf.so:textproc/redland \
