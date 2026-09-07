@@ -31,9 +31,7 @@
 
 #include "type.hxx"
 
-namespace com::sun::star::uno {
-    class Any;
-}
+namespace cpo::uno { class Any; }
 namespace xmlreader { struct Span; }
 
 namespace configmgr {

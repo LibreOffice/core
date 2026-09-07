@@ -38,9 +38,7 @@
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno {
-    class Any;
-}
+namespace cpo::uno { class Any; }
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 

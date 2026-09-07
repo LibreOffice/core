@@ -17,7 +17,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Any;
 class Type;
