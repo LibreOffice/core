@@ -126,6 +126,14 @@ from scratch, see scripts/clone-online.sh.
 
 See also README-gbuild.md for an ongoing merge of the two-step engine and online builds.
 
+## Software Bill of Materials
+
+Collabora Online generates SBOMs for the server, the browser client, the
+engine and the container images. [SBOM.md](SBOM.md) describes how they are
+generated, how to check them (`make sbom-check`, `make sbom-audit`,
+`make sbom-freshness`), how to scan them for known vulnerabilities, and what
+a clean scan does *not* tell you.
+
 ## Further recommended reading with build details
 
 * **[Build Collabora Online](https://www.collaboraoffice.org/post/build-code/)**

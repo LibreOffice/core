@@ -490,6 +490,7 @@ EXTRA_DIST = \
              $(man_MANS) \
              $(gbuild_sources) \
              README.md \
+             SBOM.md \
              THIRDPARTYLICENSES \
              coolkitconfig.xcu.in \
              coolwsd.service \
