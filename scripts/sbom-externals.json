@@ -12,6 +12,13 @@
         "npm_thirdparty: direct npm dependencies that ship to the browser, mapped to",
         "  the heading text used in THIRDPARTYLICENSES (policy: direct dependencies",
         "  are listed in THIRDPARTYLICENSES, transitive ones only in the SBOM).",
+        "cpe_name overrides the CPE product name when NVD uses a different one",
+        "  (expat -> libexpat, zstd -> zstandard); a product or vendor no CPE uses",
+        "  matches no CVE, and a scan of such an SBOM comes back clean rather than",
+        "  failing - see scripts/audit-sbom-cpes.py, which checks these against a",
+        "  vulnerability database. A wrong vendor is worse than an empty one: an",
+        "  empty Vendor becomes the '*' wildcard, which matches every vendor of",
+        "  that product.",
         "'thirdparty' strings are verified against THIRDPARTYLICENSES by --check."
     ],
     "engine_externals": {
@@ -46,7 +53,8 @@
             "url": "https://facebook.github.io/zstd/",
             "declared": "BSD-3-Clause OR GPL-2.0-only",
             "concluded": "MPL-2.0",
-            "thirdparty": "Zstandard"
+            "thirdparty": "Zstandard",
+            "cpe_name": "zstandard"
         },
         "libpng": {
             "tarball_var": "LIBPNG",
@@ -62,7 +70,8 @@
             "url": "https://libexpat.github.io/",
             "declared": "MIT",
             "concluded": "MPL-2.0",
-            "thirdparty": "Expat"
+            "thirdparty": "Expat",
+            "cpe_name": "libexpat"
         }
     },
     "bundled": [
@@ -106,7 +115,9 @@
             "url": "https://github.com/piscisaureus/wepoll",
             "declared": "BSD-2-Clause",
             "concluded": "MPL-2.0",
-            "platforms": ["WNT"]
+            "platforms": [
+                "WNT"
+            ]
         }
     ],
     "vendored": [

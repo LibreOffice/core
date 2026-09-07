@@ -565,8 +565,13 @@ def sbom_skeleton(version, root_license):
 
 
 def make_component(graph, fragment, name, vendor, version, homepage, locator,
-                   sha256, declared, concluded, sha512=None, purl=None):
-    """Emit a software_Package + source artifact, engine-shape."""
+                   sha256, declared, concluded, sha512=None, purl=None,
+                   cpe_name=None):
+    """Emit a software_Package + source artifact, engine-shape.
+
+    cpe_name overrides the CPE product name where it differs from the name we
+    use (NVD calls expat 'libexpat'); a product name no CPE uses matches no
+    CVE, and unlike a wrong vendor it cannot be saved by the '*' wildcard."""
     pkg_spdx_id = make_spdx_id(fragment)
     pkg_element = {
         "type": "software_Package",
@@ -576,7 +581,7 @@ def make_component(graph, fragment, name, vendor, version, homepage, locator,
         "name": name,
         "externalIdentifiers": [{
             "externalIdentifierType": "cpe23",
-            "identifier": cpe23(vendor, name, version),
+            "identifier": cpe23(vendor, cpe_name or name, version),
         }],
     }
     if purl:
@@ -794,7 +799,8 @@ def main():
         external_ids[name] = make_component(
             graph, f"SPDXRef-{name}", name, entry["vendor"],
             version, entry["url"], locator, sha256,
-            entry["declared"], entry["concluded"])
+            entry["declared"], entry["concluded"],
+            cpe_name=entry.get("cpe_name"))
         emit_licenses(entry["declared"], entry["concluded"])
         add_contains(graph, root_spdx_id, external_ids[name])
 
