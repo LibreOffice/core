@@ -1028,4 +1028,23 @@ sbom-check:
 		--engine-builddir $(ENGINE_BUILDDIR) \
 		--check
 
-.PHONY: sbom-check
+# Check the SBOM's cpe23 identifiers against a vulnerability database: an
+# identifier that matches nothing hides every CVE of that component, which is
+# not visible in a scan - the scan just comes back clean. Needs grype's
+# database ('grype db update'), so this is a maintainer target, not part of
+# the build or 'make check'.
+sbom-audit: collabora-online-sbom.spdx.json
+	python3 $(abs_top_srcdir)/scripts/audit-sbom-cpes.py \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
+		$(abs_top_builddir)/collabora-online-sbom.spdx.json
+
+# Report bundled components that are behind their latest upstream release.
+# A vulnerability scan cannot answer this: a component several releases old
+# with no CVEs yet scans clean. Queries release-monitoring.org, so it needs
+# network access.
+sbom-freshness: collabora-online-sbom.spdx.json
+	python3 $(abs_top_srcdir)/scripts/check-external-freshness.py \
+		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/collaboraofficebasis-core-sbom.spdx.json \
+		$(abs_top_builddir)/collabora-online-sbom.spdx.json
+
+.PHONY: sbom-check sbom-audit sbom-freshness
