@@ -104,6 +104,16 @@ class SlideLinks {
 		return this.sources.length > 0;
 	}
 
+	// The source of this document's links that names the given related
+	// document, or an empty string when no page is linked to it.
+	public linkedSourceOf(doc: { wopiSrc: string; name?: string }): string {
+		return (
+			this.sources.find((source) =>
+				SlideImportSession.matchesDocument(doc, source),
+			) || ''
+		);
+	}
+
 	// The source document a page was made from and the slide of it, or null
 	// for a page that is linked to nothing.
 	public getPageLink(part: string): { source: string; name: string } | null {
@@ -161,14 +171,19 @@ class SlideLinks {
 			this.say(_('No slide of this presentation is linked to another file.'));
 			return;
 		}
-		// This run covers the sources the document holds now. One that is
-		// already waiting for its turn is left where it is, so asking twice
-		// refreshes each source once.
-		for (const source of this.sources) {
-			if (this.running && this.running.source === source) continue;
-			if (this.queue.some((refresh) => refresh.source === source)) continue;
-			this.enqueue(source);
-		}
+		// This run covers the sources the document holds now.
+		for (const source of this.sources) this.updateSource(source);
+	}
+
+	// Refreshes the pages of one source. A source that is already being read,
+	// or waiting for its turn, is left where it is, so asking twice refreshes
+	// it once.
+	public updateSource(source: string): void {
+		if (!this.map.isEditMode()) return;
+		if (this.sources.indexOf(source) < 0) return;
+		if (this.running && this.running.source === source) return;
+		if (this.queue.some((refresh) => refresh.source === source)) return;
+		this.enqueue(source);
 	}
 
 	private say(message: string): void {
