@@ -9,7 +9,7 @@ Before building Collabora Online as WASM you only need to build the
 CollaboraOffice core. (POCO, zstd and libpng are built as part of the
 CollaboraOffice core engine, so they no longer need to be built separately.)
 
-The toolchain used is Emscripten. Versions >= 3.1.58 should generally work.
+The toolchain used is Emscripten. Versions >= 4.0.0 should generally work.
 
 Below we assume that the Emscripten environment is already set up,
 that you have sourced the emsdk_env.sh file in your shell.

@@ -1494,9 +1494,9 @@ dnl ===================================================================
 dnl Sanity checks for Emscripten SDK setup
 dnl ===================================================================
 
-EMSCRIPTEN_MIN_MAJOR=3
-EMSCRIPTEN_MIN_MINOR=1
-EMSCRIPTEN_MIN_TINY=46
+EMSCRIPTEN_MIN_MAJOR=4
+EMSCRIPTEN_MIN_MINOR=0
+EMSCRIPTEN_MIN_TINY=0
 EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRIPTEN_MIN_TINY}"
 
 EMSCRIPTEN_WORKERJS=
