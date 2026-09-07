@@ -194,6 +194,12 @@
 	cursor: pointer;
 }
 
+/* The name of a file whose slides cannot be read is not a button: there is
+ * nothing to show or hide. */
+span.slide-import-source-main {
+	cursor: default;
+}
+
 /* The row's own hover marks the whole row, so the button that fills most of
  * it shows nothing of its own: it keeps the row's surface and its text
  * colour. */

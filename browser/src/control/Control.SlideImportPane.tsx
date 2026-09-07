@@ -839,7 +839,9 @@ class SlideImportPane {
           {this.renderAddButton('ui-linkbutton slide-import-add-link')}
         </div>
         <div class="slide-import-panels">
-          {this.sources.map((source) => this.renderSourcePanel(source))}
+          {this.sources
+            .filter((source) => this.canShowSlides(source))
+            .map((source) => this.renderSourcePanel(source))}
         </div>
         <div
           class="slide-import-status"
@@ -876,28 +878,44 @@ class SlideImportPane {
     );
   }
 
+  // Whether the pane can read the slides of a source. A file the storage
+  // lists no address for cannot be reached at all.
+  private canShowSlides(source: SlideImportPaneSource): boolean {
+    return source.wopiSrc !== '';
+  }
+
   // One row of the source list: the file, what the pane says of it, and the
-  // menu of what can be done with it.
+  // menu of what can be done with it. The file is a button while there are
+  // slides to show or hide, and the name alone when there are none.
   private renderSourceRow(source: SlideImportPaneSource): HTMLElement {
     const badge = this.sourceBadge(source);
+    const file = [
+      <img
+        class="slide-import-source-icon"
+        src={app.LOUtil.getImageURL('lc_presentinwindow.svg')}
+        alt=""
+      />,
+      <span class="slide-import-source-name">{source.name}</span>,
+    ];
     return (
       <li
         class={'slide-import-source' + (source.expanded ? ' expanded' : '')}
         data-state={source.state}
       >
-        <button
-          class="slide-import-source-main"
-          aria-expanded={source.expanded ? 'true' : 'false'}
-          title={source.name}
-          onClick={() => this.toggleSource(source)}
-        >
-          <img
-            class="slide-import-source-icon"
-            src={app.LOUtil.getImageURL('lc_presentinwindow.svg')}
-            alt=""
-          />
-          <span class="slide-import-source-name">{source.name}</span>
-        </button>
+        {this.canShowSlides(source) ? (
+          <button
+            class="slide-import-source-main"
+            aria-expanded={source.expanded ? 'true' : 'false'}
+            title={source.name}
+            onClick={() => this.toggleSource(source)}
+          >
+            {file}
+          </button>
+        ) : (
+          <span class="slide-import-source-main" title={source.name}>
+            {file}
+          </span>
+        )}
         <span class={'slide-import-source-badge ' + badge.kind}>
           {badge.label}
         </span>
@@ -912,31 +930,35 @@ class SlideImportPane {
   }
 
   private openSourceMenu(e: MouseEvent, source: SlideImportPaneSource): void {
-    const entries: any[] = [
-      {
-        id: 'toggle',
-        type: 'comboboxentry',
-        text: source.expanded ? _('Hide slides') : _('Show slides'),
-      },
-    ];
+    const entries: any[] = [];
 
-    if (source.state === 'connected')
+    // A file the storage lists no address for cannot be reached, so there is
+    // nothing to do with it but name it to the integration, which is what
+    // adding a presentation does.
+    if (source.state === 'missing') {
+      entries.push({
+        id: 'locate',
+        type: 'comboboxentry',
+        text: _('Locate file'),
+        enabled: !!app.relatedDocumentToken,
+      });
+      this.showSourceMenu(e, entries, source);
+      return;
+    }
+
+    entries.push({
+      id: 'toggle',
+      type: 'comboboxentry',
+      text: source.expanded ? _('Hide slides') : _('Show slides'),
+    });
+
+    // Reading the slides again also reaches a file that is not open yet, or
+    // whose last read failed, so that is the way back from either.
+    if (this.canShowSlides(source))
       entries.push({
         id: 'reload',
         type: 'comboboxentry',
         text: _('Reload slides'),
-      });
-
-    if (
-      source.wopiSrc &&
-      (source.state === 'available' ||
-        source.state === 'disconnected' ||
-        source.state === 'failed')
-    )
-      entries.push({
-        id: 'connect',
-        type: 'comboboxentry',
-        text: _('Open the file'),
       });
 
     if (source.slides.length)
@@ -954,6 +976,15 @@ class SlideImportPane {
         text: _('Update the slides linked to this file'),
       });
 
+    this.showSourceMenu(e, entries, source);
+  }
+
+  private showSourceMenu(
+    e: MouseEvent,
+    entries: any[],
+    source: SlideImportPaneSource,
+  ): void {
+    const linked = this.linkedSource(source);
     const callback = (
       objectType: any,
       eventType: string,
@@ -963,16 +994,14 @@ class SlideImportPane {
     ) => {
       if (eventType !== 'selected') return false;
       switch (entry.id) {
+        case 'locate':
+          this.browseForImport();
+          break;
         case 'toggle':
           this.toggleSource(source);
           break;
         case 'reload':
           this.reloadSource(source);
-          break;
-        case 'connect':
-          this.forget(source);
-          this.expandSource(source);
-          this.render();
           break;
         case 'selectall':
           this.activate(source);
