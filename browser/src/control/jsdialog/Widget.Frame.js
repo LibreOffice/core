@@ -112,7 +112,7 @@ function buildFrame(parentContainer, data, builder) {
 	const groupControl = isGroupControl(data);
 	const fieldsetLegend = groupControl ? shouldUseFieldsetLegend(data) : false;
 
-	let container, frame, label, groupLabelCandidateId;
+	let container, frame, label, groupLabelCandidateId, groupLabelText;
 
 	if (groupControl) {
 		container = window.L.DomUtil.create(
@@ -145,6 +145,7 @@ function buildFrame(parentContainer, data, builder) {
 				window.L.DomUtil.addClass(label, 'hidden');
 			} else {
 				groupLabelCandidateId = fixedText.id;
+				groupLabelText = label.innerText;
 			}
 
 			builder.postProcess(frame, fixedText);
@@ -176,11 +177,31 @@ function buildFrame(parentContainer, data, builder) {
 	const children = groupControl ? data.children.slice(1) : data.children;
 	builder.build(frameChildren, children);
 
+	// The caption names the group the reader lands on, not the frame around it.
+	// By its text and not by its id: the .ui files name their labels label1,
+	// label2 and so on, so an id reference resolves to another panel's caption.
+	let namedGroup = false;
+	if (groupControl && !fieldsetLegend && groupLabelText) {
+		const groups = frameChildren.querySelectorAll(
+			'[role="radiogroup"], [role="listbox"]',
+		);
+		const group = groups.length === 1 ? groups[0] : null;
+		if (
+			group &&
+			!group.getAttribute('aria-labelledby') &&
+			!group.getAttribute('aria-label')
+		) {
+			group.setAttribute('aria-label', groupLabelText);
+			namedGroup = true;
+		}
+	}
+
 	// Markup, not live focus: the frame is still detached while it is being
 	// built, so nothing inside it is visible yet.
 	if (
 		groupControl &&
 		!fieldsetLegend &&
+		!namedGroup &&
 		frameChildren.querySelector(JSDialog.FocusableSelector)
 	) {
 		frame.setAttribute('role', 'group');

@@ -200,21 +200,34 @@ describe(['tagdesktop'], 'Accessibility Impress Sidebar Tests', { testIsolation:
 		// The galleries are read from the panel itself: every shape has to reach
 		// the tree as a named item, which a single custom drawn area cannot do.
 		let shapeCount;
+		let galleryCount;
 		cy.then(() => {
 			const panel = win.document.querySelector('#DefaultShapesPanel');
 			const galleries = panel.querySelectorAll('.ui-iconview[id]');
 			expect(galleries, 'shape galleries in the panel').to.not.be.empty;
 
+			galleryCount = galleries.length;
 			shapeCount = panel.querySelectorAll('.ui-iconview-entry').length;
 			expect(shapeCount, 'shapes across the galleries').to.be.greaterThan(galleries.length);
 		});
 
 		cy.then(() => {
 			a11yHelper.getAXNodesWithin('#DefaultShapesPanel').then(function (nodes) {
-				const named = nodes
-					.filter(function (node) { return !node.ignored; })
-					.filter(function (node) { return node.name.trim() !== ''; });
-				expect(named.length, 'named nodes for the shapes').to.be.at.least(shapeCount);
+				const live = nodes.filter(function (node) { return !node.ignored; });
+				const groups = live.filter(function (node) { return node.role === 'radiogroup'; });
+				const shapes = live.filter(function (node) { return node.role === 'radio'; });
+
+				expect(groups.length, 'galleries in the tree').to.equal(galleryCount);
+				expect(shapes.length, 'shapes in the tree').to.equal(shapeCount);
+
+				// What a reader announces on entering a gallery and on each
+				// shape, so neither may come through nameless.
+				groups.forEach(function (group, at) {
+					expect(group.name.trim(), 'name of gallery ' + at).to.not.be.empty;
+				});
+				shapes.forEach(function (shape, at) {
+					expect(shape.name.trim(), 'name of shape ' + at).to.not.be.empty;
+				});
 			});
 		});
 
