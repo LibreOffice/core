@@ -29,8 +29,8 @@
 
 namespace binaryurp::current_context {
 
-css::uno::UnoInterfaceReference get() {
-    css::uno::UnoInterfaceReference cc;
+cpo::uno::UnoInterfaceReference get() {
+    cpo::uno::UnoInterfaceReference cc;
     if (!uno_getCurrentContext(
             reinterpret_cast< void ** >(&cc.m_pUnoI),
             u"" UNO_LB_UNO ""_ustr.pData, nullptr))
@@ -40,7 +40,7 @@ css::uno::UnoInterfaceReference get() {
     return cc;
 }
 
-void set(css::uno::UnoInterfaceReference const & value) {
+void set(cpo::uno::UnoInterfaceReference const & value) {
     if (!uno_setCurrentContext(
             value.m_pUnoI,
             u"" UNO_LB_UNO ""_ustr.pData, nullptr))

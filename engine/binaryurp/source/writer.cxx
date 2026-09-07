@@ -54,7 +54,7 @@ Writer::Item::Item(
     cpo::uno::TypeDescription theType,
     cpo::uno::TypeDescription theMember,
     std::vector< BinaryAny >&& inArguments,
-    css::uno::UnoInterfaceReference theCurrentContext):
+    cpo::uno::UnoInterfaceReference theCurrentContext):
     tid(std::move(theTid)), oid(std::move(theOid)), type(std::move(theType)), member(std::move(theMember)),
     currentContext(std::move(theCurrentContext)), arguments(std::move(inArguments)),
     request(true), setter(false), exception(false), setCurrentContextMode(false)
@@ -88,7 +88,7 @@ void Writer::sendDirectRequest(
     assert(!unblocked_.check());
     sendRequest(
         tid, oid, type, member, inArguments, false,
-        css::uno::UnoInterfaceReference());
+        cpo::uno::UnoInterfaceReference());
 }
 
 void Writer::sendDirectReply(
@@ -106,7 +106,7 @@ void Writer::queueRequest(
     cpo::uno::TypeDescription const & member,
     std::vector< BinaryAny >&& inArguments)
 {
-    css::uno::UnoInterfaceReference cc(current_context::get());
+    cpo::uno::UnoInterfaceReference cc(current_context::get());
     std::lock_guard g(mutex_);
     queue_.emplace_back(tid, oid, type, member, std::move(inArguments), cc);
     items_.set();
@@ -193,7 +193,7 @@ void Writer::sendRequest(
     cpo::uno::TypeDescription const & type,
     cpo::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
-    css::uno::UnoInterfaceReference const & currentContext)
+    cpo::uno::UnoInterfaceReference const & currentContext)
 {
     assert(tid.getLength() != 0);
     assert(!oid.isEmpty());
@@ -285,7 +285,7 @@ void Writer::sendRequest(
         Marshal::write8(&buf, functionId & 0xFF);
     }
     if (currentContextMode) {
-        css::uno::UnoInterfaceReference cc(currentContext);
+        cpo::uno::UnoInterfaceReference cc(currentContext);
         marshal_.writeValue(
             &buf,
             cpo::uno::TypeDescription(

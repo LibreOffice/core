@@ -115,7 +115,7 @@ void Proxy::do_dispatch(
 
 bool Proxy::isProxy(
     rtl::Reference< Bridge > const & bridge,
-    css::uno::UnoInterfaceReference const & object, OUString * oid)
+    cpo::uno::UnoInterfaceReference const & object, OUString * oid)
 {
     assert(object.is());
     return object.m_pUnoI->acquire == &proxy_acquireInterface &&

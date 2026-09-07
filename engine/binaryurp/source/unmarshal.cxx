@@ -346,7 +346,7 @@ BinaryAny Unmarshal::readValue(cpo::uno::TypeDescription const & type) {
         }
     case typelib_TypeClass_INTERFACE:
         {
-            css::uno::UnoInterfaceReference obj(
+            cpo::uno::UnoInterfaceReference obj(
                 bridge_->registerIncomingInterface(readOid(), type));
             return BinaryAny(type, &obj.m_pUnoI);
         }

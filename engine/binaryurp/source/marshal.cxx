@@ -259,7 +259,7 @@ void Marshal::writeValue(
         writeOid(
             buffer,
             bridge_->registerOutgoingInterface(
-                css::uno::UnoInterfaceReference(
+                cpo::uno::UnoInterfaceReference(
                     *static_cast< uno_Interface * const * >(value)),
                 type));
         break;

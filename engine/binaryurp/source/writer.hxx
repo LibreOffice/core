@@ -89,7 +89,7 @@ private:
         cpo::uno::TypeDescription const & type,
         cpo::uno::TypeDescription const & member,
         std::vector< BinaryAny > const & inArguments, bool currentContextMode,
-        css::uno::UnoInterfaceReference const & currentContext);
+        cpo::uno::UnoInterfaceReference const & currentContext);
 
     void sendReply(
         rtl::ByteSequence const & tid,
@@ -108,7 +108,7 @@ private:
             cpo::uno::TypeDescription theType,
             cpo::uno::TypeDescription theMember,
             std::vector< BinaryAny >&& inArguments,
-            css::uno::UnoInterfaceReference theCurrentContext);
+            cpo::uno::UnoInterfaceReference theCurrentContext);
 
         // Reply:
         Item(
@@ -122,7 +122,7 @@ private:
         OUString oid; // request
         cpo::uno::TypeDescription type; // request
         cpo::uno::TypeDescription member; // request + reply
-        css::uno::UnoInterfaceReference currentContext; // request
+        cpo::uno::UnoInterfaceReference currentContext; // request
         BinaryAny returnValue; // reply
         std::vector< BinaryAny > arguments; // request: inArguments; reply: outArguments
         bool request;

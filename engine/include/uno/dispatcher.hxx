@@ -28,7 +28,7 @@
 
 /// @cond INTERNAL
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** C++ holder reference for binary C uno_Interface.  Not for public use, may be

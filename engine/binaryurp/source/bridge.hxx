@@ -52,10 +52,10 @@ namespace com::sun::star {
     namespace bridge { class XInstanceProvider; }
     namespace connection { class XConnection; }
     namespace lang { class XEventListener; }
-    namespace uno {
-        class Any;
-        class UnoInterfaceReference;
-    }
+}
+namespace cpo::uno {
+    class Any;
+    class UnoInterfaceReference;
 }
 
 namespace binaryurp {
@@ -94,15 +94,15 @@ public:
 
     rtl::Reference< Writer > getWriter();
 
-    css::uno::UnoInterfaceReference registerIncomingInterface(
+    cpo::uno::UnoInterfaceReference registerIncomingInterface(
         OUString const & oid,
         cpo::uno::TypeDescription const & type);
 
     OUString registerOutgoingInterface(
-        css::uno::UnoInterfaceReference const & object,
+        cpo::uno::UnoInterfaceReference const & object,
         cpo::uno::TypeDescription const & type);
 
-    css::uno::UnoInterfaceReference findStub(
+    cpo::uno::UnoInterfaceReference findStub(
         OUString const & oid,
         cpo::uno::TypeDescription const & type);
 

@@ -1526,7 +1526,7 @@ private:
         {
             throw cpo::uno::RuntimeException(u"cannot get UNO to C++ mapping"_ustr);
         }
-        css::uno::UnoInterfaceReference ifcUno;
+        cpo::uno::UnoInterfaceReference ifcUno;
         cpp2uno.mapInterface(reinterpret_cast<void**>(&ifcUno.m_pUnoI),
                              css::testuno::Test::create(context_).get(),
                              cppu::UnoType<css::testuno::XTest>::get());

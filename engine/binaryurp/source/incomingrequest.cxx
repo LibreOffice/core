@@ -45,11 +45,11 @@ namespace binaryurp {
 
 IncomingRequest::IncomingRequest(
     rtl::Reference< Bridge > const & bridge, rtl::ByteSequence tid,
-    OUString oid, css::uno::UnoInterfaceReference object,
+    OUString oid, cpo::uno::UnoInterfaceReference object,
     cpo::uno::TypeDescription type, sal_uInt16 functionId,
     bool synchronous, cpo::uno::TypeDescription const & member, bool setter,
     std::vector< BinaryAny >&& inArguments, bool currentContextMode,
-    css::uno::UnoInterfaceReference currentContext):
+    cpo::uno::UnoInterfaceReference currentContext):
     bridge_(bridge), tid_(std::move(tid)), oid_(std::move(oid)), object_(std::move(object)), type_(std::move(type)),
     member_(member), currentContext_(std::move(currentContext)),
     inArguments_(std::move(inArguments)), functionId_(functionId),
@@ -68,7 +68,7 @@ void IncomingRequest::execute() const {
     bool isExc;
     try {
         bool resetCc = false;
-        css::uno::UnoInterfaceReference oldCc;
+        cpo::uno::UnoInterfaceReference oldCc;
         if (currentContextMode_) {
             oldCc = current_context::get();
             current_context::set(currentContext_);
@@ -150,7 +150,7 @@ bool IncomingRequest::execute_throw(
                 }
             }
             if (ifc.is()) {
-                css::uno::UnoInterfaceReference unoIfc(
+                cpo::uno::UnoInterfaceReference unoIfc(
                     static_cast< uno_Interface * >(
                         bridge_->getCppToBinaryMapping().mapInterface(
                             ifc.get(),

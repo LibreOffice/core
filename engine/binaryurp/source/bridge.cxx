@@ -162,7 +162,7 @@ void PopOutgoingRequest::clear() {
 }
 
 struct Bridge::SubStub {
-    css::uno::UnoInterfaceReference object;
+    cpo::uno::UnoInterfaceReference object;
 
     sal_uInt32 references;
 };
@@ -371,14 +371,14 @@ rtl::Reference< Writer > Bridge::getWriter() {
     return writer_;
 }
 
-css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
+cpo::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
     OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     assert(type.is());
     if (oid.isEmpty()) {
-        return css::uno::UnoInterfaceReference();
+        return cpo::uno::UnoInterfaceReference();
     }
-    css::uno::UnoInterfaceReference obj(findStub(oid, type));
+    cpo::uno::UnoInterfaceReference obj(findStub(oid, type));
     if (!obj.is()) {
         binaryUno_.get()->pExtEnv->getRegisteredInterface(
             binaryUno_.get()->pExtEnv,
@@ -405,7 +405,7 @@ css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
 }
 
 OUString Bridge::registerOutgoingInterface(
-    css::uno::UnoInterfaceReference const & object,
+    cpo::uno::UnoInterfaceReference const & object,
     cpo::uno::TypeDescription const & type)
 {
     assert(type.is());
@@ -451,7 +451,7 @@ OUString Bridge::registerOutgoingInterface(
     return oid;
 }
 
-css::uno::UnoInterfaceReference Bridge::findStub(
+cpo::uno::UnoInterfaceReference Bridge::findStub(
     OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     assert(!oid.isEmpty() && type.is());
@@ -471,14 +471,14 @@ css::uno::UnoInterfaceReference Bridge::findStub(
             }
         }
     }
-    return css::uno::UnoInterfaceReference();
+    return cpo::uno::UnoInterfaceReference();
 }
 
 void Bridge::releaseStub(
     OUString const & oid, cpo::uno::TypeDescription const & type)
 {
     assert(!oid.isEmpty() && type.is());
-    css::uno::UnoInterfaceReference obj;
+    cpo::uno::UnoInterfaceReference obj;
     bool unused;
     {
         std::lock_guard g(mutex_);

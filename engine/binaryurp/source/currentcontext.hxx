@@ -21,16 +21,16 @@
 
 #include <sal/config.h>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class UnoInterfaceReference;
 }
 
 namespace binaryurp::current_context
 {
-css::uno::UnoInterfaceReference get();
+cpo::uno::UnoInterfaceReference get();
 
-void set(css::uno::UnoInterfaceReference const& value);
+void set(cpo::uno::UnoInterfaceReference const& value);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

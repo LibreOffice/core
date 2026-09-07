@@ -214,7 +214,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     bool protProps = bridge_->isProtocolPropertiesRequest(oid, type);
     bool ccMode = !protProps && functionId != SPECIAL_FUNCTION_ID_RELEASE &&
         bridge_->isCurrentContextMode();
-    css::uno::UnoInterfaceReference cc;
+    cpo::uno::UnoInterfaceReference cc;
     if (ccMode) {
         cpo::uno::TypeDescription t(
             cppu::UnoType<cpo::uno::XCurrentContext>::get());
@@ -284,7 +284,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                 " unknown function ID received"_ustr);
         }
     } else {
-        css::uno::UnoInterfaceReference obj;
+        cpo::uno::UnoInterfaceReference obj;
         switch (functionId) {
         case SPECIAL_FUNCTION_ID_QUERY_INTERFACE:
             obj = bridge_->findStub(oid, type);
