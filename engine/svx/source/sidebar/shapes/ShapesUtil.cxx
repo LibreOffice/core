@@ -87,7 +87,7 @@ const std::map<sal_uInt16, OUString> gaBasicShapes {
         {21, u".uno:BasicShapes.paper"_ustr},
         {22, u".uno:BasicShapes.frame"_ustr},
         {23, u".uno:BasicShapes.ring"_ustr},
-        {24, u".uno:SymbolShapes.sinusoid"_ustr}
+        {24, u".uno:BasicShapes.sinusoid"_ustr}
     };
 
 const std::map<sal_uInt16, OUString> gaSymbolShapes {
