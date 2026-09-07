@@ -138,6 +138,14 @@ private:
     Link<FileDialogHelper*,void>  m_aDialogClosedLink;
     ErrCode m_nError;
 
+    // The files a COKit app's native picker delivered. While this holds a value the
+    // result accessors answer from it, and the UNO file picker was never run.
+    std::optional<cpo::uno::Sequence<OUString>> m_oKitPickedFiles;
+
+    // Alive as long as this helper is. The native picker's completion holds a weak
+    // reference and drops its answer when the helper is gone by the time the user picks.
+    std::shared_ptr<void> m_xKitPickToken;
+
     rtl::Reference< FileDialogHelper_Impl > mpImpl;
 
 

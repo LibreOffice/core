@@ -194,13 +194,14 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
     if ( ERRCODE_NONE == m_nError )
         impl_FillURLList( m_pFileDlg.get(), m_pURLList );
 
+    // always create a new itemset; with a COKit app's native picker there is no UNO
+    // picker and so no control access, but CreateMedium still wants an itemset
+    m_xItemSet = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
+
     Reference < XFilePicker3 > xFP = m_pFileDlg->GetFilePicker();
     Reference < XFilePickerControlAccess > xCtrlAccess( xFP, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {
-        // always create a new itemset
-        m_xItemSet = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
-
         short nDlgType = m_pFileDlg->GetDialogType();
         bool bHasPassword = (
                TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD == nDlgType

@@ -27,6 +27,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -215,6 +216,32 @@ const FilterNameVector & MediaWindow::getMediaFilters()
 
 bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink)
 {
+    // In a COKit app the picker for the insert variant runs natively, and the picked file
+    // arrives as a new dispatch of .uno:InsertAVMedia carrying the URL. Without an IsLink
+    // parameter that dispatch inserts the media as a link, which suits a file that stays
+    // on the machine.
+    if (o_pbLink != nullptr && sfx2::COKitFilePicker::isAvailable())
+    {
+        std::vector<sfx2::COKitFilePicker::Filter> aPickerFilters;
+        for (const auto& rFilter : getMediaFilters())
+        {
+            OUStringBuffer aWildcards;
+            for (sal_Int32 nIndex = 0; nIndex >= 0;)
+            {
+                if (!aWildcards.isEmpty())
+                    aWildcards.append(';');
+                aWildcards.append(OUString::Concat(u"*.")
+                                  + o3tl::getToken(rFilter.second, 0, ';', nIndex));
+            }
+            aPickerFilters.push_back({ rFilter.first, aWildcards.makeStringAndClear() });
+        }
+
+        if (sfx2::COKitFilePicker::requestAndRedispatch(u".uno:InsertAVMedia"_ustr, u"URL"_ustr,
+                                                        aPickerFilters,
+                                                        AvmResId(AVMEDIA_STR_INSERTMEDIA_DLG)))
+            return false;
+    }
+
     ::sfx2::FileDialogHelper        aDlg(o_pbLink != nullptr
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,

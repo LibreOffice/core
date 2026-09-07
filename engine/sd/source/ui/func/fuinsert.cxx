@@ -35,6 +35,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 
 #include <svl/stritem.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/msgpool.hxx>
@@ -142,6 +143,14 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         }
 
         nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
+    }
+    // In a COKit app the picker runs natively, and the picked image arrives as a new dispatch
+    // of the command carrying FileName.
+    else if (sfx2::COKitFilePicker::requestAndRedispatch(
+                 u".uno:InsertGraphic"_ustr, u"FileName"_ustr,
+                 sfx2::COKitFilePicker::graphicImportFilters(), SdResId(STR_INSERTGRAPHIC)))
+    {
+        return;
     }
     else
     {

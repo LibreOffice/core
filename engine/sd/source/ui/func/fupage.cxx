@@ -27,6 +27,7 @@
 #include <svx/svxids.hrc>
 #include <svl/itempool.hxx>
 #include <svl/grabbagitem.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/request.hxx>
 #include <tools/debug.hxx>
 #include <vcl/prntypes.hxx>
@@ -319,6 +320,15 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
 
             nError = GraphicFilter::LoadGraphic(aFileName, aFilterName, aGraphic,
                                                 &GraphicFilter::GetGraphicFilter());
+        }
+        // In a COKit app the picker runs natively, and the picked image arrives as a new
+        // dispatch of the command carrying FileName.
+        else if (sfx2::COKitFilePicker::requestAndRedispatch(
+                     u".uno:SelectBackground"_ustr, u"FileName"_ustr,
+                     sfx2::COKitFilePicker::graphicImportFilters(),
+                     SdResId(STR_SET_BACKGROUND_PICTURE)))
+        {
+            return;
         }
         else
         {

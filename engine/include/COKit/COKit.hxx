@@ -71,6 +71,39 @@ struct COKitClipboardProvider
     bool (*getDataForMimeType)(const char* pMimeType, std::vector<char>* pOutData);
 };
 
+/**
+ * One file-type filter for a native file picker: a name the picker can show, and the
+ * wildcards that match the type, separated by semicolons ("*.png;*.jpg").
+ */
+struct COKitFilePickerFilter
+{
+    const char* pName;
+    const char* pWildcards;
+};
+
+/**
+ * A native file picker the in-process desktop app provides to the engine.
+ *
+ * When the provider is installed, a command that needs the user to pick a file calls it
+ * instead of opening the engine's own file dialog.
+ *
+ * @see COKit::installFilePickerProvider().
+ */
+struct COKitFilePickerProvider
+{
+    /**
+     * Show a native open-file picker. Called on the engine's main-loop thread and must
+     * not block: marshal to the app's UI thread, show the picker there, and return at
+     * once. Call pfnPicked exactly once, from any thread: pass pContext and the picked
+     * file's URL ("file://..."), or nullptr for the URL when the user cancelled.
+     *
+     * pTitle names the purpose of the pick, translated. pFilters is an array of
+     * nFilters entries; an empty array means any file can be picked.
+     */
+    void (*pick)(const char* pTitle, const COKitFilePickerFilter* pFilters, size_t nFilters,
+                 void (*pfnPicked)(void* pContext, const char* pUrl), void* pContext);
+};
+
 // getDocumentType is part of the API whether or not the unstable half is asked for, so the
 // type it returns sits outside that guard.
 enum class COKitDocumentType
@@ -1873,6 +1906,15 @@ struct COKit
      * clipboards (as used by the collaborative server).
      */
     virtual void installClipboardProvider(const COKitClipboardProvider* pProvider) = 0;
+
+    /**
+     * Give the engine a native file picker for the in-process desktop app. With a
+     * provider installed, a command that needs the user to pick a file - compare
+     * documents, insert an image - asks the provider instead of opening the engine's
+     * own file dialog, and continues with the picked file when the provider delivers
+     * it. Pass nullptr to remove the provider.
+     */
+    virtual void installFilePickerProvider(const COKitFilePickerProvider* pProvider) = 0;
 
     /**
      * Read the desktop app's single process-wide clipboard. See

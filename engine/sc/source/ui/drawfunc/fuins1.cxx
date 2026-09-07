@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <svx/svdograf.hxx>
@@ -315,6 +316,13 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
 
             xWarn->runAsync(xWarn, [](sal_uInt32) {});
         }
+    }
+    // In a COKit app the picker runs natively, and the picked image arrives as a new dispatch
+    // of the command carrying FileName.
+    else if (sfx2::COKitFilePicker::requestAndRedispatch(
+                 u".uno:InsertGraphic"_ustr, u"FileName"_ustr,
+                 sfx2::COKitFilePicker::graphicImportFilters(), ScResId(STR_INSERTGRAPHIC)))
+    {
     }
     else
     {

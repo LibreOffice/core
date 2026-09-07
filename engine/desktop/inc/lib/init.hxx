@@ -489,6 +489,7 @@ namespace desktop {
         void
         registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) override;
         void installClipboardProvider(const COKitClipboardProvider* pProvider) override;
+        void installFilePickerProvider(const COKitFilePickerProvider* pProvider) override;
         bool getGlobalClipboard(const char **pMimeTypes,
                                 std::vector<std::string>& rOutMimeTypes,
                                 std::vector<std::vector<char>>& rOutStreams) override;

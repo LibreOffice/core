@@ -169,6 +169,7 @@
 #ifdef IOS
 #include <sfx2/app.hxx>
 #endif
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -3212,6 +3213,8 @@ static int lo_getDocsCount(COKit* pThis);
 
 static void lo_installClipboardProvider(COKit* pThis, const COKitClipboardProvider* pProvider);
 
+static void lo_installFilePickerProvider(COKit* pThis, const COKitFilePickerProvider* pProvider);
+
 static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes,
                                   std::vector<std::string>& rOutMimeTypes, std::vector<std::vector<char>>& rOutStreams);
 
@@ -3362,6 +3365,11 @@ void COKitImpl::registerRevealInFileManagerCallback(COKitRevealInFileManagerCall
 void COKitImpl::installClipboardProvider(const COKitClipboardProvider* pProvider)
 {
     lo_installClipboardProvider(this, pProvider);
+}
+
+void COKitImpl::installFilePickerProvider(const COKitFilePickerProvider* pProvider)
+{
+    lo_installFilePickerProvider(this, pProvider);
 }
 
 bool COKitImpl::getGlobalClipboard(const char **pMimeTypes,
@@ -7672,6 +7680,16 @@ static void lo_installClipboardProvider(COKit* /*pThis*/, const COKitClipboardPr
     SetLastExceptionMsg();
 
     KitClipboardFactory::installGlobalProvider(pProvider);
+}
+
+// Office-level: remember the desktop app's native file picker. A command that needs
+// the user to pick a file then asks the app instead of opening a file dialog.
+static void lo_installFilePickerProvider(COKit* /*pThis*/, const COKitFilePickerProvider* pProvider)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    sfx2::COKitFilePicker::installProvider(pProvider);
 }
 
 // Renders the shared clipboard's formats now, so its contents survive the close

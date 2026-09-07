@@ -21,6 +21,7 @@
 #include <optional>
 #include <string_view>
 
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sal/types.h>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -2537,10 +2538,73 @@ ErrCode FileDialogHelper::Execute( std::optional<SfxAllItemSet>& rpSet,
     return nRet;
 }
 
+namespace
+{
+// Whether the template describes a dialog that opens a file. The COKit app's native
+// picker only opens files; saving goes through its own export flow.
+bool lclIsOpenDialog(short nDialogType)
+{
+    switch (nDialogType)
+    {
+        case TemplateDescription::FILEOPEN_SIMPLE:
+        case TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+        case TemplateDescription::FILEOPEN_PLAY:
+        case TemplateDescription::FILEOPEN_READONLY_VERSION:
+        case TemplateDescription::FILEOPEN_LINK_PREVIEW:
+        case TemplateDescription::FILEOPEN_PREVIEW:
+        case TemplateDescription::FILEOPEN_LINK_PLAY:
+        case TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+        case TemplateDescription::FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
+            return true;
+        default:
+            return false;
+    }
+}
+}
+
 void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rEndDialogHdl )
 {
     m_aDialogClosedLink = rEndDialogHdl;
     m_nError = ERRCODE_NONE;
+    m_oKitPickedFiles.reset();
+
+    // With a native file picker installed by the COKit app, ask it instead of the UNO
+    // picker. The picked file lands in m_oKitPickedFiles and the result accessors answer
+    // from there, so the dialog-closed handler runs the same way as after the UNO picker.
+    if (lclIsOpenDialog(mpImpl->m_nDialogType) && sfx2::COKitFilePicker::isAvailable())
+    {
+        std::vector<sfx2::COKitFilePicker::Filter> aFilters;
+        for (const css::beans::StringPair& rFilter : mpImpl->maFilters)
+            aFilters.push_back({ rFilter.First, rFilter.Second });
+
+        if (!m_xKitPickToken)
+            m_xKitPickToken = std::make_shared<int>(0);
+        std::weak_ptr<void> xAlive = m_xKitPickToken;
+
+        sfx2::COKitFilePicker::pick(
+            OUString(), aFilters,
+            [this, xAlive](const std::optional<OUString>& roUrl)
+            {
+                // The helper can be gone by the time the user picks; the pick then
+                // belongs to nobody.
+                if (xAlive.expired())
+                    return;
+
+                if (roUrl)
+                {
+                    m_oKitPickedFiles = cpo::uno::Sequence<OUString>{ *roUrl };
+                    m_nError = ERRCODE_NONE;
+                }
+                else
+                {
+                    m_oKitPickedFiles = cpo::uno::Sequence<OUString>();
+                    m_nError = ERRCODE_ABORT;
+                }
+                m_aDialogClosedLink.Call(this);
+            });
+        return;
+    }
+
     if (!mpImpl->isAsyncFilePicker())
         Application::PostUserEvent( LINK( this, FileDialogHelper, ExecuteSystemFilePicker ) );
     else
@@ -2584,6 +2648,10 @@ OUString FileDialogHelper::GetPath() const
 
 Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 {
+    // A COKit app's native picker delivers here; the UNO picker never ran.
+    if (m_oKitPickedFiles)
+        return *m_oKitPickedFiles;
+
     uno::Reference<XFilePicker3> xFileDlg(mpImpl->mxFileDlg, uno::UNO_SET_THROW);
     return xFileDlg->getSelectedFiles();
 }

@@ -44,6 +44,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/linkwarn.hxx>
@@ -399,6 +400,14 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     const SfxStringItem* pName = rReq.GetArg(SID_INSERT_GRAPHIC);
     bool bShowError = !pName || comphelper::COKit::isActive();
+
+    // In a COKit app the picker runs natively, and the picked image arrives as a new dispatch
+    // of the command carrying FileName.
+    if (!pName
+        && sfx2::COKitFilePicker::requestAndRedispatch(
+               u".uno:InsertGraphic"_ustr, u"FileName"_ustr,
+               sfx2::COKitFilePicker::graphicImportFilters(), SwResId(STR_INSERT_GRAPHIC)))
+        return false;
 
     // No file pickers in a non-desktop (mobile app) build.
 

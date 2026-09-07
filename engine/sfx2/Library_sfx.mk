@@ -292,6 +292,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/toolbox/weldutils \
     sfx2/source/view/classificationcontroller \
     sfx2/source/view/classificationhelper \
+    sfx2/source/view/cokitfilepicker \
     sfx2/source/view/frame \
     sfx2/source/view/frame2 \
     sfx2/source/view/frmload \
